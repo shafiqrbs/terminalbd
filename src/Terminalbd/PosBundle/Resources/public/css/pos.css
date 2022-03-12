@@ -327,9 +327,8 @@ li.active > a {
     width:auto;
     padding: 15px 25px;
     border: 1px solid black;
-    margin-top: 10px;
-    margin-bottom: 10px;
     border-radius: 5px;
+    margin: 2px;
 }
 
 .bs-calltoaction > .row{
@@ -931,7 +930,7 @@ input[class*="span"].payment{
 .calltoaction-gray {
     color: #000333;
     background-color: #f4f6f8;
-    border-color: #e9ecef;
+    border-color: #0052cc;
 }
 
 .table th.product-title {

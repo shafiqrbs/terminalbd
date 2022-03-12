@@ -203,15 +203,18 @@ class ItemRepository extends EntityRepository
 
     public function  getApiStock(GlobalOption $option , $data = '')
     {
-
+        $em = $this->_em;
         $config = $option->getInventoryConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.masterItem','m');
         $qb->join('m.category','c');
+        $qb->leftJoin('e.purchaseItems','pi');
         $qb->leftJoin('m.productUnit','u');
-        $qb->select('e.id as stockId','e.barcode as barcode','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.purchaseAvgPrice as purchasePrice','e.path as path');
+        $qb->select('e.id as stockId','e.barcode as barcode','e.name as name','e.remainingQnt as quantity','e.salesPrice as salesPrice','e.salesPrice as price','e.purchaseAvgPrice as purchasePrice','e.path as path');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->addSelect('c.id as categoryId','c.name as categoryName');
+        $qb->addSelect('GROUP_CONCAT(CONCAT(pi.id,\'*#*\',pi.updated,\'*#*\',pi.barcode,\'*#*\',pi.quantity,\'*#*\',pi.purchasePrice)) AS purchaseItems');
+      //  $qb->addSelect("CASE WHEN (pi.serialNo IS NOT NULL OR pi.serialNo != '') THEN GROUP_CONCAT(CONCAT(pi.id,'*#*',pi.serialNo,'*#*',pi.quantity))  ELSE  '' END  as serialNos");
         $qb->where('e.inventoryConfig = :config');
         $qb->setParameter('config',$config);
         if(isset($data['category']) and !empty($data['category'])){
@@ -219,6 +222,7 @@ class ItemRepository extends EntityRepository
             $qb->andWhere('c.id = :catid');
             $qb->setParameter('catid',$catid);
         }
+        $qb->groupBy('e.id');
         $qb->orderBy('e.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
@@ -226,7 +230,7 @@ class ItemRepository extends EntityRepository
 
             $data[$key]['global_id']            = (int) $option->getId();
             $data[$key]['item_id']              = (int) $row['stockId'];
-
+            $data[$key]['barcode']                    = $row['barcode'];
             $data[$key]['category_id']          = $row['categoryId'];
             $data[$key]['categoryName']         = $row['categoryName'];
             if ($row['unitId']){
@@ -247,6 +251,21 @@ class ItemRepository extends EntityRepository
                 $data[$key]['imagePath']            =  $path;
             }else{
                 $data[$key]['imagePath']            = "";
+            }
+            $subProducts = explode(',', $row['purchaseItems']);
+            if(!empty($row['purchaseItems'])){
+                for ($i = 0 ; count($subProducts) > $i ; $i++ ){
+                    $subs  = explode("*#*",$subProducts[$i]);
+                    $serialNo = $em->getRepository(PurchaseItem::class)->getExistingSerialNo($subs[0]);
+                    $data[$key]['measurement']['subItemId'][$i] = (integer)$subs[0];
+                    $data[$key]['measurement']['created'][$i] = (string)$subs[1];
+                    $data[$key]['measurement']['barcode'][$i] = (string)$subs[2];
+                    $data[$key]['measurement']['subQuantity'][$i] = (string)$subs[3];
+                    $data[$key]['measurement']['subPrice'][$i] = (string)$subs[4];
+                    $data[$key]['measurement']['serialNo'][$i] = (array)$serialNo;
+                }
+            }else{
+                $data[$key]['measurement'] = array();
             }
 
         }
@@ -491,7 +510,7 @@ class ItemRepository extends EntityRepository
         $query = $this->createQueryBuilder('i');
         $query->join('i.inventoryConfig', 'ic');
         $query->select('i.id as id');
-	    $query->addSelect('CONCAT(i.sku, \' - \', i.name) AS name');
+	    $query->addSelect('CONCAT(i.barcode, \' - \', i.name) AS name');
 	   // $query->addSelect('CONCAT(i.sku, \' - \', i.name) AS text');
 	    $query->addSelect('i.sku as sku');
         $query->where($query->expr()->like("i.name", "'%$search%'"  ));
@@ -971,13 +990,15 @@ class ItemRepository extends EntityRepository
     public function getExistCategory($inventory,$name)
     {
         $em = $this->_em;
-        $exist = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name,'level'=>2));
+        $exist = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name,'permission'=>'private'));
         if($exist){
             return $exist;
         }else{
             $entity = new Category();
             $entity->setInventoryConfig($inventory);
             $entity->setName($name);
+            $entity->setStatus(true);
+            $entity->setPermission('private');
             $em->persist($entity);
             $em->flush();
             return  $entity;

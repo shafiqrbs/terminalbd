@@ -920,7 +920,7 @@ class CategoryRepository extends MaterializedPathRepository
 
     function categoryInventoryTree($config){
 
-        $sql = "SELECT name FROM categories WHERE  inventoryConfig_id ={$config->getId()}";
+        $sql = "SELECT name FROM categories WHERE  inventoryConfig_id ={$config->getId()}  and  permission = 'private' ";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();
         $results =  $stmt->fetchAll();

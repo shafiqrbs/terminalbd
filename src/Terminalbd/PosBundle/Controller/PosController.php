@@ -4,6 +4,7 @@ namespace Terminalbd\PosBundle\Controller;
 
 
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -64,11 +65,10 @@ class PosController extends Controller
             $response->sendHeaders();
             $invoiceMode = $request->cookies->get('invoiceMode');
         }
-
         return $this->render('PosBundle:Pos:new.html.twig', array(
             'globalOption'          => $terminal,
             'config'                => '',
-            'invoiceMode'           => $invoiceMode,
+            'invoiceMode'           => (string)$invoiceMode,
             'categories'            => $categories,
             'cart'                  => $cart,
             'tables'                => '',
@@ -105,11 +105,15 @@ class PosController extends Controller
         $response->headers->set('invoiceMode', 'list', false);
         $invoiceMode = $request->cookies->get('invoiceMode');
         $cart = new Cart($request->getSession());
+        $arries = array();
+        foreach ($cart->contents() as $row){
+            $arries[$row['id']] = $row;
+        }
         $html = $this->renderView(
             'PosBundle:Pos:item.html.twig', array(
                 'entities' => $data,
                 'invoiceMode' => $invoiceMode,
-                'cart' => $cart,
+                'cart' => $arries,
                 'config' => $config
             )
         );
@@ -140,12 +144,33 @@ class PosController extends Controller
         $response->headers->set('invoiceMode', 'list', false);
         $invoiceMode = $request->cookies->get('invoiceMode');
         $cart = new Cart($request->getSession());
+        $arries = array();
+        foreach ($cart->contents() as $row){
+            $arries[$row['id']] = $row;
+        }
         $html = $this->renderView(
             'PosBundle:Pos:item.html.twig', array(
                 'entities' => $data,
                 'invoiceMode' => $invoiceMode,
-                'cart' => $cart,
+                'cart' => $arries,
                 'config' => $config
+            )
+        );
+        return new Response($html);
+    }
+
+
+    public function posSerialNoAction(Request $request,$id){
+
+        $response = new Response();
+        $user = $this->getUser();
+        $barcode = $_REQUEST['batch'];
+        $config = $user->getGlobalOptoion()->getInventoryConfig();
+        $purchaseItem = $this->getDoctrine()->getRepository(PurchaseItem::class)->find($barcode);
+        $terminal = $user->getGlobalOption();
+        $html = $this->renderView(
+            'PosBundle:Pos:serialNo.html.twig', array(
+                'entities' => $purchaseItem,
             )
         );
         return new Response($html);
@@ -156,14 +181,24 @@ class PosController extends Controller
 
         $cart = new Cart($request->getSession());
         $quantity = $_REQUEST['quantity'];
-        $salesPrice = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
+        $purchaseItem = $_REQUEST['purchaseItem'];
+        $salesPrice = (isset($_REQUEST['price']) and $_REQUEST['price']) ? $_REQUEST['price']:'';
+        $purchaseItem = (isset($_REQUEST['purchaseItem']) and $_REQUEST['purchaseItem']) ? $_REQUEST['purchaseItem']:'';
+        $serial = (isset($_REQUEST['serial']) and $_REQUEST['serial']) ? $_REQUEST['serial']:'';
+        if($salesPrice > 0){
+            $price = $salesPrice;
+        }else{
+            $price = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
+        }
         $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit(): '';
         $data = array(
             'id' => $product->getId(),
             'name' => $product->getName(),
             'unit' => $productUnit,
-            'price' => $salesPrice,
+            'price' => $price,
             'quantity' => $quantity,
+            'purchaseItem' => $purchaseItem,
+            'serial' => $serial,
         );
         $cart->insert($data);
         $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);

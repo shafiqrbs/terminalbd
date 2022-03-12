@@ -97,7 +97,7 @@
                     {% else %}
                         <div class="span8">
                             <div class="row-fluid">
-                                <div class="tabbable tabbable-custom" style="float: left; width: 80%">
+                                <div class="tabbable tabbable-custom" style="float: left; width: 100%">
                                     <div class="tab-content">
                                         <div class="tab-pane tab-height active" id="all-product">
                                             <div class="row-fluid productBox" >
@@ -107,12 +107,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul  class="nav nav-tabs tabs-left categoryBox" id="category-nav" style="width: 20%; float:left; background-color:#444d58">
+                                {#<ul  class="nav nav-tabs tabs-left categoryBox" id="category-nav" style="width: 20%; float:left; background-color:#444d58">
                                     <li class="active span12"><a href="#all-product" data-toggle="tab" class="saveButton" id="allproduct" aria-expanded="false">All Products</a></li>
                                     {% for category in categories %}
                                         <li><a href="#{{ category.slug }}" data-action="{{ path('pos_category_stock_item',{'id':category.category_id}) }}" data-toggle="tab" class="saveButton category" aria-expanded="false">{{ category.name }}</a></li>
                                     {% endfor %}
-                                </ul>
+                                </ul>#}
                             </div>
 
                         </div>
@@ -150,9 +150,9 @@
                                                                 <td class="product-quantity text-center">
                                                                     <div class="input-append" style="margin-bottom: 0!important;">
                                                                 <span class="input-group-btn">
-              <a href="javascript:" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" class="btn black btn-number-pos mini" data-type="minus" data-id="{{ item.rowid }}"  data-text="{{ item.rowid }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
+              <a href="javascript:" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" class="btn green btn-number-pos mini" data-type="minus" data-id="{{ item.rowid }}"  data-text="{{ item.rowid }}"  data-field="quantity"> <span class="fa fa-minus"></span> </a>
                                                                    <input type="text" class="form-control inline-m-wrap updateProduct btn-qnt-particular" data-id="{{ item.rowid }}"  id="quantity-{{ item.rowid }}" name="quantity-{{ item.rowid }}"  value="{{ item.quantity }}" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" min="1" max="100">
-                                                                  <a href="javascript:" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" class="btn black btn-number-pos mini"  data-type="plus" data-id="{{ item.rowid }}" data-title="{{ item.price }}"  data-text="{{ item.rowid }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
+                                                                  <a href="javascript:" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" class="btn green btn-number-pos mini"  data-type="plus" data-id="{{ item.rowid }}" data-title="{{ item.price }}"  data-text="{{ item.rowid }}" data-field="quantity"> <span class="fa fa-plus"></span></a></span>
                                                                     </div>
                                                                 </td>
                                                                 <td class="numeric product-price"><strong id="subTotal-{{ item.rowid }}">{{ (item.quantity * item.price)|number_format(2) }}</strong></td>
@@ -160,6 +160,13 @@
                                                                     <a id="{{ item.rowid }}" data-id="{{ item.rowid }}" data-url="{{ path('pos_item_remove',{'product':item.rowid}) }}" href="javascript:" class="btn red mini particularDelete"><i class="icon-trash"></i></a>
                                                                 </td>
                                                             </tr>
+                                                            {% if item.serial is not empty %}
+                                                            <tr><td></td><td colspan="3">Serial No:
+                                                                    {% for imc in item.serial %}
+                                                                        {{ imc }} {{ not loop.last ? ',' }}
+                                                                    {% endfor %}
+                                                                </td><td></td><td></td></tr>
+                                                            {% endif %}
                                                         {% endfor %}
                                                     {% endif %}
 
@@ -379,13 +386,24 @@
                    </div>
                </div>
                <div class="span4">
-                   <div class="switch-progress">
-                       <input type="radio" data-id="cancel" id="Order" data-action="{{ path('pos_order',{'mode':'order'}) }}" class="list-load" name="list" value="order">
-                       <label for="Order" class="order"><i class="icon-th-large"></i> Orders</label>
-                       <input type="radio" data-id="hold" id="Hold" data-action="{{ path('pos_hold',{'mode':'hold'}) }}" class="list-load" name="list" value="hold">
-                       <label for="Hold" class="hold"><i class="icon-hand-up"></i> Holds</label>
-                       <input type="radio" data-id="order" id="Cancel" data-action="{{ path('pos_cancel',{'mode':'cancel'}) }}" class="invoice-process" name="progress" value="cancel">
-                       <label for="Cancel" class="cancel"><i class="icon-trash"></i> Cancel</label>
+                   <div class="pull-right">
+                       <div class="btn-group">
+                           {% if invoiceMode != 'search' %} %}
+                           <div id="menu">
+                               <ul>
+                                   <li><center><a href="#all-product" data-toggle="tab"  id="allproduct" aria-expanded="false">All Products</a></center>
+                                       <ul>
+                                           {% for category in categories %}
+                                               <li><a href="#{{ category.slug }}" data-action="{{ path('pos_category_stock_item',{'id':category.category_id}) }}" data-toggle="tab" class="saveButton category" aria-expanded="false">{{ category.name }}</a></li>
+                                           {% endfor %}
+                                       </ul>
+                                   </li>
+                               </ul>
+                           </div>
+                           <a href="javascript:" id="item-reload"  class="btn red big"><i class="icon-refresh"></i> Stock Reload</a>
+                           {% endif %}
+                           <a href="javascript:" id="item-reload"  class="btn green big"><i class="icon-eye-open"></i> Preview</a>
+                       </div>
                    </div>
                </div>
                <div class="span4">
@@ -404,8 +422,10 @@
            </div>
        </div>
     </div>
+
     {% if globalOption.inventoryConfig.isPos == 1 %}
         <script>
+
             (function(d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) return;
@@ -416,6 +436,79 @@
         </script>
     {% endif %}
 <style>
+
+    #menu * {
+        padding:0;
+        margin: 0;
+        list-style-type:none;
+        font-size: 14px;
+    }
+    #menu {
+        float: left;
+        line-height:30px;
+      }
+    #menu a {
+        display: block;
+        text-decoration: none;
+        color: #ffffff;
+    }
+    #menu a:hover { background: #158bdc;}
+    #menu ul li ul li a:hover {
+        background: #158bdc;
+        color:#ffffff;
+    }
+    #menu ul li ul li {
+        width: 244px;
+        border: none;
+        color: #000000;
+        padding: 3px;
+        background:#dddddd;
+        z-index: 1;
+        height: 36px;
+        border-top: 1px solid #b1b2b3;
+        line-height:30px;
+    }
+    #menu ul li ul li a {
+        padding-top:3px;
+        padding-bottom:3px;
+        color: #000000;
+    }
+    #menu ul li {
+        float: left;
+        width: 250px;
+        font-weight: bold;
+        border-top: solid 1px #283923;
+        border-bottom: solid 1px #283923;
+        background:#3598dc;
+    }
+    #menu ul li a {
+        padding: 16px 10px;
+    }
+    #menu li{
+        position:relative;
+        float:left;}
+    #menu ul li ul, #menu:hover ul li ul, #menu:hover ul li:hover ul li ul{
+        display: none;
+        list-style-type: none;
+        width: 244px;
+        max-height: 500px;
+        overflow: scroll;
+        border: 2px solid #158bdc;
+    }
+    #menu:hover ul, #menu:hover ul li:hover ul, #menu:hover ul li:hover ul li:hover ul {
+        display:block;}
+    #menu:hover ul li:hover ul li:hover ul {
+        position: absolute;
+        margin-left: 145px;
+        margin-top: -22px;
+    }
+    #menu:hover ul li:hover ul {
+        position: absolute;
+    }
+    #menu>ul>li:hover>ul {
+        bottom:100%;
+        border-bottom: 1px solid transparent
+    }
 
     .product-price input[type="text"].inline-m-wrap{
         width: 75px!important;

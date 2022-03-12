@@ -909,5 +909,43 @@ class ItemController extends Controller
 
     }
 
+    public function inventoryItemDownloadAction()
+    {
+        $data = "";
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $array = array();
+        $config = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getEcommerceItem($config->getId());
+        $array[] = 'ProductName,Unit,Category,Brand,BrandCode,Vendor,VendorCode,Size,Quantity,SalesPrice,PurchasePrice';
+        foreach ($entities as $key => $entity){
+            $size = "{$entity['Size']}  {$entity['SizeUnit']}";
+            $rows = array(
+                $entity['ProductName'],
+                $entity['Unit'],
+                $entity['Category'],
+                $entity['Brand'],
+                $entity['Brand'],
+                $entity['Brand'],
+                $entity['Brand'],
+                $size,
+                $entity['Quantity'],
+                $entity['SalesPrice'],
+                $entity['PurchasePrice']
+            );
+            $array[] = implode(',', $rows);
+        }
+        $compareStart = new \DateTime("now");
+        $start =  $compareStart->format('d-m-Y');
+        $fileName = $start.'stock.xls';
+        $content = implode("\n", $array);
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'text/xls');
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        return $response;
+
+    }
+
 
 }

@@ -48,14 +48,6 @@ class EditItemType extends AbstractType
 
         $builder
 
-            ->add('category', 'entity', array(
-                'required'    => false,
-                'empty_value' => '---Select item category---',
-                'attr'=>array('class'=>'category m-wrap span12 select2'),
-                'class' => 'ProductProductBundle:Category',
-                'property' => 'nestedLabel',
-                'choices'=> $this->categoryChoiceList()
-            ))
             ->add('name', 'text', array(
                 'required'    => true,
                 'attr'=>array('class'=>'span12'),
@@ -105,22 +97,4 @@ class EditItemType extends AbstractType
         return 'item';
     }
 
-    /**
-     * @return mixed
-     */
-    protected function ItemGroupChoiceList()
-    {
-        return $itemTypeTree = $this->itemGroup->getFlatInventoryItemGroupTree($this->inventoryConfig);
-
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function categoryChoiceList()
-    {
-
-        return $categoryTree = $this->category->getFlatInventoryCategoryTree($this->inventoryConfig);
-
-    }
 }

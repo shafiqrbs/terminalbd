@@ -4,9 +4,9 @@ namespace Appstore\Bundle\InventoryBundle\Importer;
 
 use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Product\Bundle\ProductBundle\Entity\Category;
-use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 
@@ -101,16 +101,21 @@ class ProductExcel
         $config = $this->excelImport->getInventoryConfig();
         $categoryRepository = $this->getCategoryRepository();
 
-        $category = $categoryRepository->findOneBy(array(
-            'inventoryConfig'   => $config,
-            'name'              => $item
-        ));
+        $category = $categoryRepository->findOneBy(
+            array(
+                'inventoryConfig'   => $config,
+                'name' => $item['Category'],
+                'permission' => 'private',
+            )
+        );
         if($category){
             return $category;
         }else{
             $category = new Category();
             $category->setName($item);
             $category->setinventoryConfig($config);
+            $category->setPermission('private');
+            $category->setStatus(true);
             $category = $this->save($category);
             return $category;
         }
@@ -133,7 +138,7 @@ class ProductExcel
         }else{
             $brand = new \Appstore\Bundle\InventoryBundle\Entity\ItemBrand();
             $brand->setName($item);
-            $brand->setinventoryConfig($config);
+            $brand->setinventoryConfig($config); $brand->setinventoryConfig($config);
             $brand = $this->save($brand);
             return $brand;
         }
@@ -142,17 +147,19 @@ class ProductExcel
 
     private function getSize($item)
     {
-
+        $config = $this->excelImport->getInventoryConfig();
         $sizeRepository = $this->getSizeRepository();
 
         $size = $sizeRepository->findOneBy(array(
+            'inventoryConfig'   => $config,
             'name'              => $item
         ));
 
         if($size){
             return $size;
         }else{
-            $size = new ProductSize();
+            $size = new ItemSize();
+            $size->setinventoryConfig($config);
             $size->setName($item);
             $size = $this->save($size);
             return $size;
@@ -207,7 +214,7 @@ class ProductExcel
     }
 
     /**
-     * @return  @return \Appstore\Bundle\InventoryBundle\Repository\ItemBrandRepository
+     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemBrandRepository
      */
     private function getBrandRepository()
     {
@@ -216,11 +223,11 @@ class ProductExcel
     
 
     /**
-     * @return  @return \Appstore\Bundle\SettingToolBundle\Repository\ProductSizeRepository
+    * @return \Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository
      */
     private function getSizeRepository()
     {
-        return $this->getDoctrain()->getRepository('SettingToolBundle:ProductSize');
+        return $this->getDoctrain()->getRepository(ItemSize::class);
     }
 
     /**

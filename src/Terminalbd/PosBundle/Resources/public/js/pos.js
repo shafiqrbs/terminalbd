@@ -28,9 +28,26 @@ $.ajax({
     success:  function (data) {
         $("#items").html(data);
         tableSearch();
+        $('.multiselect').multiselect();
     }
 });
 
+$(document).on('click', '#item-reload', function() {
+    $.ajax({
+        url: Routing.generate('pos_stock_item'),
+        beforeSend: function(){
+            $('.loader-double').fadeIn(1000).addClass('is-active');
+        },
+        complete: function(){
+            $('.loader-double').fadeIn(1000).removeClass('is-active');
+        },
+        success:  function (data) {
+            $("#items").html(data);
+            tableSearch();
+            $('.multiselect').multiselect();
+        }
+    });
+});
 $(document).on('click', '#allproduct', function() {
 
     $.ajax({
@@ -122,6 +139,14 @@ $(document).on('change', '.updateProductPrice', function() {
             setTimeout(jsonResult(response),100);
     });
 
+});
+
+$(document).on('change', '.purchaseBatch', function() {
+
+    var batch = $(this).val();
+    var id = $(this).attr('data-id');
+    $('.serial').hide();
+    $('#serialBox-'+batch).show();
 });
 
 $(document).on( "click", ".btn-number-pos", function(e){
@@ -345,12 +370,18 @@ $(document).on('click', '.addToCart', function() {
 
     var id = $(this).attr('data-id');
     var quantity = $("#quantity-"+id).val();
+    var price = $("#price-"+id).val();
+    var purchaseItem = $("#batch-"+id).val();
+    var serial = "serial-"+purchaseItem;
+    var serialNo = $("#"+serial).val();
+    if(typeof(serialNo) === "undefined" || serialNo === null) {
+        serialNo = '';
+    }
     var url = $(this).attr('data-action');
-    $.get(url, {quantity: quantity} , function(response){
+    $.get(url, {quantity: quantity,price:price,purchaseItem:purchaseItem,serial:serialNo} , function(response){
         setTimeout(jsonResult(response),100);
     });
 });
-
 
 $(document).on('click', '.invoice-mode', function() {
     url = $(this).attr('data-action');

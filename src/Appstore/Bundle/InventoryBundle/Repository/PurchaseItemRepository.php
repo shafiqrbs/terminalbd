@@ -7,6 +7,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
@@ -426,6 +427,24 @@ class PurchaseItemRepository extends EntityRepository
         $qb->groupBy('item.id');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
+
+    }
+
+    public function getExistingSerialNo($id)
+    {
+
+        $purchaseItem = $this->find($id);
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.salesItems','s');
+        $qb->select('e.serialNo as serialNo');
+        $qb->addSelect('GROUP_CONCAT(s.serialNo) as salesSerialNo');
+        $qb->where("e.id = {$id}");
+        $qb->groupBy('e.id');
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $array1 = explode(',', $result['serialNo']);
+        $array2 = explode(',', $result['salesSerialNo']);
+        $array = array_diff($array1, $array2);
+        return $array;
 
     }
 

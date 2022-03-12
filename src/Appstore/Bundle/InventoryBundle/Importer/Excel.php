@@ -40,7 +40,6 @@ class Excel
             }
 
             $vendor = $this->getCachedData('Vendor', $item['Vendor']);
-
             if($vendor == null) {
                 $vendor = $vendorRepository->findOneBy(array(
                     'inventoryConfig'   => $this->getInventoryConfig(),
@@ -109,6 +108,7 @@ class Excel
             $stockItem->setCreatedBy($purchaseItem->getPurchase()->getCreatedBy());
             $stockItem->setProduct($purchaseItem->getItem()->getMasterItem());
             $stockItem->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
+            $stockItem->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
             $stockItem->setVendor($purchaseItem->getPurchase()->getVendor());
             $stockItem->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
             if(!empty($purchaseItem->getItem()->getMasterItem()->getCategory())){
@@ -167,6 +167,7 @@ class Excel
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['ProductName']));
                 $itemObj->setMasterItem($masterItem);
+                $itemObj->setCategory($masterItem->getCategory());
                 if (trim($item['Barcode'])){
                     $itemObj->setBarcode(trim($item['Barcode']));
                 }else{
@@ -318,7 +319,6 @@ class Excel
         $colorRepository = $this->getColorRepository();
         if($color == NULL) {
             $color = $colorRepository->findOneBy(array(
-                'isValid'             => 1,
                 'name'                => $item['Color']
             ));
             if($color == NULL) {
@@ -339,13 +339,14 @@ class Excel
         if($size == NULL) {
 
             $size = $sizeRepository->findOneBy(array(
-                'isValid'             => 1,
+                'inventoryConfig'   => $this->getInventoryConfig(),
                 'name'                => $item['Size']
             ));
 
             if($size == null) {
                 $size = new ItemSize();
                 $size->setName($item['Size']);
+                $size->setInventoryConfig($this->getInventoryConfig());
                 $size = $this->save($size);
 
             }
@@ -360,7 +361,6 @@ class Excel
         $unit = $this->getCachedData('Unit', $item['Unit']);
         $unitRepository = $this->getUnitRepository();
         if($unit == NULL) {
-
             $unit = $unitRepository->findOneBy(array(
                 'name'  => $item['Unit']
             ));
@@ -416,15 +416,20 @@ class Excel
         $category = $this->getCachedData('Category', $item['Category']);
         $categoryRepository = $this->getCategoryRepository();
         if($category == NULL) {
-            $category = $categoryRepository->findOneByName($item['Category']);
+            $category = $categoryRepository->findOneBy(
+                array(
+                    'inventoryConfig'   => $this->getInventoryConfig(),
+                    'name' => $item['Category'],
+                    'permission' => 'private'
+                )
+            );
             $this->setCachedData('Category', $item['Category'], $category);
-
             if($category == null) {
                 $category = new Category();
                 $category->setName($item['Category']);
                 $category->setInventoryConfig($this->getInventoryConfig());
                 $category->setPermission('private');
-                $category->setStatus(false);
+                $category->setStatus(true);
                 $category = $this->save($category);
             }
             $this->setCachedData('Category',  $item['Category'] , $category);
@@ -545,19 +550,19 @@ class Excel
     }
 
     /**
-     * @return \Appstore\Bundle\InventoryBundle\Repository\ProductColorRepository
+     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemColorRepository
      */
     private function getColorRepository()
     {
-        return $this->getDoctrain()->getRepository('InventoryBundle:ItemColor');
+        return $this->getDoctrain()->getRepository(ItemColor::class);
     }
 
     /**
-     * @return \Appstore\Bundle\InventoryBundle\Repository\productSizeRepository
+     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository
      */
     private function getSizeRepository()
     {
-        return $this->getDoctrain()->getRepository('InventoryBundle:ItemSize');
+        return $this->getDoctrain()->getRepository(ItemSize::class);
     }
 
     /**

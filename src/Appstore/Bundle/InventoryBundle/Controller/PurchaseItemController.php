@@ -251,9 +251,7 @@ class PurchaseItemController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('InventoryBundle:PurchaseItem')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
@@ -343,6 +341,11 @@ class PurchaseItemController extends Controller
                 $entity->$process($data['value']);
                 $em->flush();
             }
+        }
+        if($data['name'] == 'SerialNo'){
+            $entity->setSerialNo($data['value']);
+            $em->flush();
+
         }
         exit;
 

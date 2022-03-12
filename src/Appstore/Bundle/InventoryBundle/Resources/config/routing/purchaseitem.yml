@@ -31,6 +31,13 @@ inventory_purchaseitem_inline_update:
     options:
             expose: true
 
+inventory_purchaseitem_serialno_update:
+    path:     /inline-serialno-update
+    defaults: { _controller: "InventoryBundle:PurchaseItem:inlineSerialUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 inventory_purchaseitem_inline_item_update:
     path:     /inline-item-update
     defaults: { _controller: "InventoryBundle:PurchaseItem:inlineItemUpdate" }

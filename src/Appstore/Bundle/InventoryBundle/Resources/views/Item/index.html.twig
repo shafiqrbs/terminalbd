@@ -124,7 +124,7 @@
                                             <input id="action-{{ entity.id }}" {% if  entity.remainingQnt ==  0  %} disabled="disabled" {% endif %} data-id="{{ entity.id }}" class="itemBarcode"   type="checkbox" name="item[]" value="{{ entity.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;
                                             <a class="editableText" data-name="Barcode" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add product barcode">{{ entity.barcode }}</a>
                                         </td>
-                                        <td class="numeric" >
+                                        <td class="" >
                                             <a class="editableText" data-name="Name" href="#"  data-url="{{ path('inventory_item_web_price') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add product name">{{ entity.name }}</a>
                                         </td>
                                         <td class="numeric" >{% if entity.category %}{{ entity.category.name }}{% endif %}</td>

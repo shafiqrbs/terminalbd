@@ -103,17 +103,14 @@
                                                         <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="quantity inputs td-inline-input" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
                                                     </td>
                                                     <td>
-                                                        <div class="input-prepend">
-                                                                    <span class="add-on-inline add-on-box">
-                                                                        <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
-                                                                        <input type="checkbox" {% if salesitem.customPrice == 1 and salesitem.salesPrice != salesitem.estimatePrice %} checked="checked" {% endif %} name="customPrice" rel="{{ salesitem.id }}" id="customPrice-{{ salesitem.id }}" class="customPrice" value="1" >
-                                                                    </span>
-                                                            <input class="numeric salesPrice inputs td-inline-input" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
-                                                        </div>
+                                                        <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
+                                                        <input class="numeric salesPrice inputs td-inline-input"  rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
                                                     </td>
                                                     <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                     <td>
-                                                        <div class="btn-group">
+                                                        <div class="btn-group">         <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
+                                                            <input class="numeric salesPrice inputs td-inline-input"  rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
+
                                                             {% if entity.inventoryConfig.isAttribute == 1 and salesitem.purchaseItem.serialNo is not empty %}
                                                                 <a title="Save" id="{{ salesitem.id }}" data-url="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id}) }}" href="javascript:" class="btn blue mini serialSave" ><i class="icon-save"></i></a>
                                                             {% endif %}

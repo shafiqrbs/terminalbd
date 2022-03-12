@@ -170,6 +170,7 @@ function InventoryPurchasePage(){
                     $('#purchaseItemForm')[0].reset();
                     $('#addPurchaseForm').html('<i class="fa fa-save"></i> Add').attr("disabled", true);
                     $('.addPurchaseForm').prop("disabled", false);
+                    $(".editable").editable(initEditables());
                 }
             });
         }
@@ -189,12 +190,14 @@ function InventoryPurchasePage(){
             type: 'POST',
             data:'id='+id+'&quantity='+ quantity +'&price='+ price+'&salesPrice='+ salesPrice,
             success: function(response) {
+                $(".editable").editable(initEditables());
                 obj = JSON.parse(response);
                 $('#purchaseItem').html(obj['invoiceItems']);
                 $('.subTotal').html(obj['subTotal']);
                 $('#due').html(obj['due']);
                 $("#salesTemporaryItem_stockName").select2("val", "");
                 $('#purchaseitem')[0].reset();
+
             },
 
         })

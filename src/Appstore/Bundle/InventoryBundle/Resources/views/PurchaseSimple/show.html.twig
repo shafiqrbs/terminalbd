@@ -124,14 +124,17 @@
                                     <tbody>
                                     {% for purchaseItem in entity.purchaseItems %}
                                         <tr>
-                                            <td class="numeric" >
+                                            <td>
                                                 <a class="editableText" data-name="Barcode" href="#"  data-url="{{ path('inventory_purchaseitem_barcode',{'id':purchaseItem.id}) }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Add product barcode">{{ purchaseItem.barcode }}</a>
                                             </td>
                                             <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                             {% if entity.inventoryConfig.isAttribute == 1 %}
-                                            <td class="numeric" >{{ purchaseItem.serialNo|raw }}</td>
-                                            <td class="numeric" >{% if purchaseItem.expiredDate %}{{ purchaseItem.expiredDate|date('m-Y') }}{% endif %}</td>
+                                            <td class="span3">
+                                                <a href="#" id="serialNo" data-name="SerialNo" data-url="{{ path('inventory_purchaseitem_inline_update',{'id':purchaseItem.id}) }}"  data-type="textarea" data-pk="{{ purchaseItem.id }}" value="{{ purchaseItem.serialNo }}" data-placeholder="Enter product IME/Serial no" data-title="Enter IME/Serial no" class="editable">{% if purchaseItem.serialNo is not empty %}{% set serialNos = purchaseItem.serialNo|split(',')  %}{% for serial in serialNos %}{{ serial }}{{ not loop.last ? ',<br/>' }}{% endfor %}{% endif %}</a></td>
+                                            {% else %}
+                                            <td></td>
                                             {% endif %}
+                                            <td class="numeric" >{% if purchaseItem.expiredDate %}{{ purchaseItem.expiredDate|date('m-Y') }}{% endif %}</td>
                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                             <td class="numeric" >{% if processItem[purchaseItem.id] is defined %}{{ processItem[purchaseItem.id] }}{% endif %}</td>
                                             <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
@@ -194,6 +197,7 @@
     {{ parent() }}
     ApproveProcess();
     InventoryPurchasePage();
+    EditableInit();
     $('.editableText').editable({
     type: 'text',
     inputclass: 'span12 m-wrap',

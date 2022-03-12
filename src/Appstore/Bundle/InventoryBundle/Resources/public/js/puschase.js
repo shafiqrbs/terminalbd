@@ -43,7 +43,8 @@ function InventoryPurchasePage(){
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $('#purchaseItemForm').submit()
+                $('#purchaseItemForm').submit();
+                EditableInit();
             }
         });
         e.preventDefault();

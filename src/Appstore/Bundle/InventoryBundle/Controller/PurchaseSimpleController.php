@@ -383,6 +383,7 @@ class PurchaseSimpleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all()['purchaseitem'];
         $item = $data['item'];
+        $serialNo = $request->request->get('serialNo');
         $stock = $this->getDoctrine()->getRepository("InventoryBundle:Item")->find($item);
         $exist = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('purchase'=>$purchase,'item'=>$item));
         if(empty($exist)){
@@ -392,6 +393,7 @@ class PurchaseSimpleController extends Controller
             $purchaseItem->setInventoryConfig($purchase->getInventoryConfig());
             $purchaseItem->setPurchase($purchase);
             $purchaseItem->setItem($stock);
+            $purchaseItem->setSerialNo($serialNo);
             $purchaseItem->setName($purchaseItem->getItem()->getName());
             $purchasePrice = ($purchaseItem->getPurchaseSubTotal()/$purchaseItem->getQuantity());
             $purchaseItem->setPurchasePrice($purchasePrice);

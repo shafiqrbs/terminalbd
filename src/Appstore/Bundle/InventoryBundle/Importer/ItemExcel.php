@@ -270,7 +270,7 @@ class ItemExcel
     }
 
     /**
-     * @return  @return \Appstore\Bundle\EcommerceBundle\Repository\PromotionRepository
+     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository
      */
     private function getPromotionRepository()
     {
@@ -278,11 +278,11 @@ class ItemExcel
     }
 
     /**
-     * @return  @return \Appstore\Bundle\SettingToolBundle\Repository\ProductSizeRepository
+     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository
      */
     private function getSizeRepository()
     {
-        return $this->getDoctrain()->getRepository('SettingToolBundle:ProductSize');
+        return $this->getDoctrain()->getRepository();
     }
 
     /**

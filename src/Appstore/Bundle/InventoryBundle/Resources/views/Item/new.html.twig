@@ -292,6 +292,10 @@
         var mrp = $(this).val();
         $('#item_barcode').val(mrp);
     });
+    $("#item_model").on("keydown change", function(e) {
+        var mrp = $(this).val();
+        $('#item_barcode').val(mrp);
+    });
     $("input").keydown(function(){
         $("input").css("background-color", "#f5f5f5");
     });
