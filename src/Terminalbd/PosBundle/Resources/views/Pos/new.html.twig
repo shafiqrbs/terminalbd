@@ -16,7 +16,8 @@
                             </div>
                             <form name="stockItem" id="stockItem" method="post" action="{{ path('pos_item_create') }}">
                                 <div class="input-prepend input-append span9">
-                                    <input type="text" id="item" name="item" class="span9 m-wrap m-wrap-bg sele select2StockItem" value="" autocomplete="off"  placeholder="Search product">
+                                    <input type="text" id="item" name="item" class="span7 m-wrap m-wrap-bg sele select2StockItem" value="" autocomplete="off"  placeholder="Search product">
+                                    <input type="text" id="price" name="price" class="span2 m-wrap m-wrap-bg pull-center amount" value="" autocomplete="on"  placeholder="Price" >
                                     <input type="text" id="quantity" name="quantity" class="span2 m-wrap m-wrap-bg pull-center amount" value="1" autocomplete="on"  placeholder="QYT" >
                                     <button type="submit" style="height: 50px" class="btn yellow big" id="addItem" name="addItem" value="addItem"><i class="icon-print"></i> Add Item</button>
                                 </div>

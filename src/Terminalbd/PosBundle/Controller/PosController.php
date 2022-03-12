@@ -181,10 +181,9 @@ class PosController extends Controller
 
         $cart = new Cart($request->getSession());
         $quantity = $_REQUEST['quantity'];
-        $purchaseItem = $_REQUEST['purchaseItem'];
-        $salesPrice = (isset($_REQUEST['price']) and $_REQUEST['price']) ? $_REQUEST['price']:'';
         $purchaseItem = (isset($_REQUEST['purchaseItem']) and $_REQUEST['purchaseItem']) ? $_REQUEST['purchaseItem']:'';
         $serial = (isset($_REQUEST['serial']) and $_REQUEST['serial']) ? $_REQUEST['serial']:'';
+        $salesPrice = (isset($_REQUEST['price']) and $_REQUEST['price']) ? $_REQUEST['price']:'';
         if($salesPrice > 0){
             $price = $salesPrice;
         }else{
@@ -223,6 +222,8 @@ class PosController extends Controller
                     'unit' => $productUnit,
                     'price' => $salesPrice,
                     'quantity' => 1,
+                    'purchaseItem' => '',
+                    'serial' => '',
                 );
             }elseif($config->isEmptySales() == 1){
                 $data = array(
@@ -231,6 +232,8 @@ class PosController extends Controller
                     'unit' => $productUnit,
                     'price' => $salesPrice,
                     'quantity' => 1,
+                    'purchaseItem' => '',
+                    'serial' => '',
                 );
             }
             $cart->insert($data);
@@ -274,25 +277,39 @@ class PosController extends Controller
         $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'id' => $item));
         if($product){
             if ($config->isEmptySales() != 1 and $product->getRemainingQnt() > 0) {
-                $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+                $salesPrice = (isset($_REQUEST['price']) and $_REQUEST['price']) ? $_REQUEST['price']:'';
+                if($salesPrice > 0){
+                    $price = $salesPrice;
+                }else{
+                    $price = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
+                }
                 $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
                 $data = array(
                     'id' => $product->getId(),
                     'name' => $product->getName(),
                     'unit' => $productUnit,
-                    'price' => $salesPrice,
+                    'price' => $price,
                     'quantity' => $quantity,
+                    'purchaseItem' => '',
+                    'serial' => '',
                 );
                 $cart->insert($data);
             }elseif ($config->isEmptySales() == 1){
-                $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+                $salesPrice = (isset($_REQUEST['price']) and $_REQUEST['price']) ? $_REQUEST['price']:'';
+                if($salesPrice > 0){
+                    $price = $salesPrice;
+                }else{
+                    $price = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
+                }
                 $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
                 $data = array(
                     'id' => $product->getId(),
                     'name' => $product->getName(),
                     'unit' => $productUnit,
-                    'price' => $salesPrice,
+                    'price' => $price,
                     'quantity' => $quantity,
+                    'purchaseItem' => '',
+                    'serial' => '',
                 );
                 $cart->insert($data);
             }
