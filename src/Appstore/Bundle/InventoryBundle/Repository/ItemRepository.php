@@ -181,15 +181,14 @@ class ItemRepository extends EntityRepository
             $qb->andWhere('item.model = :itemModel');
             $qb->setParameter('itemModel', $itemModel);
         }
-        $count = $qb->getQuery()->getOneOrNullResult();
-        $result = array('masterItem'=> $product , 'count' => $count['totalNumber']);
+        $count = $qb->getQuery()->getSingleScalarResult();
+        $result = array('masterItem'=> $product , 'count' => $count);
         return $result;
 
     }
 
     public function getExistBarcode($inventory,$barcode)
     {
-
         $qb = $this->createQueryBuilder('item');
         $qb->select('COUNT(item.id) AS totalNumber');
         $qb->where("item.inventoryConfig = :inventory");

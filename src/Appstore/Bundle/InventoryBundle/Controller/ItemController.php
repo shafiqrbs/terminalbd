@@ -97,7 +97,7 @@ class ItemController extends Controller
         $vendorName = (isset($data['item']['vendor']) and $data['item']['vendor']) ? $data['item']['vendor'] :'';
         if ($form->isValid()) {
             $checkData = $this->getDoctrine()->getRepository('InventoryBundle:Item')->checkDuplicateSKU($inventory,$data);
-            $barcode = isset($data['item']['barcode']) and $data['item']['barcode'] ? $data['item']['barcode']:'';
+            $barcode = (isset($data['item']['barcode']) and $data['item']['barcode']) ? $data['item']['barcode']:'';
             $barcodeCount = $this->getDoctrine()->getRepository('InventoryBundle:Item')->getExistBarcode($inventory->getId(),$barcode);
             if($checkData['count'] != 0 ) {
                 $this->get('session')->getFlashBag()->add(

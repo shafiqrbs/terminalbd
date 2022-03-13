@@ -66,8 +66,8 @@ class AccountSalesType extends AbstractType
 		        'choices' => array(
                     'Due' => 'Receive from Due',
                     'Advance' => 'Receive of Advance',
-                    'Debit' => 'Debit Adjustment',
-                    'Credit' => 'Credit Adjustment',
+                    'Debit' => 'Debit Adjustment(Receive)',
+                    'Credit' => 'Credit Adjustment(Payment)',
 		        ),
 	        ))
             ->add('accountMobileBank', 'entity', array(

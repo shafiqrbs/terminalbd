@@ -114,14 +114,14 @@ class ProductRepository extends EntityRepository
     {
         $em = $this->_em;
         $masterItem = $data['item']['name'];
-        $find = $this->findOneBy(array('name' => $masterItem));
+        $find = $this->findOneBy(array('inventoryConfig'=>$inventory,'name' => $masterItem));
         if(empty($find)){
             $entity = new Product();
             $entity->setInventoryConfig($inventory);
             $entity->setName($masterItem);
             $category = isset($data['item']['category']) ? $data['item']['category'] :'';
             if($category){
-                $cat = $em->getRepository("ProductProductBundle:Category")->find($category);
+                $cat = $em->getRepository("ProductProductBundle:Category")->findOneBy(array('inventoryConfig'=>$inventory,'name' => $category,'permission'=>'private'));
                 $entity->setCategory($cat);
             }
             $itemUnit = isset($data['item']['itemUnit']) ? $data['item']['itemUnit'] :4;
