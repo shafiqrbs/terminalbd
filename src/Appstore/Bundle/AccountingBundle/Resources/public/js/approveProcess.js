@@ -106,6 +106,7 @@ $(document).on( "click", ".androidProcess", function( e ) {
 
     });
 
+
     $(".select2User").select2({
         ajax: {
             url: Routing.generate('domain_user_search'),

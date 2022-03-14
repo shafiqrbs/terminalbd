@@ -62,11 +62,17 @@
                         </select>
                     </div>
                     <div class="col-md-3 margin-top">
-                        <label>Start Date</label>
-                        <input type="date" class="m-wrap datepicker"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                        <label>Diseases Profile</label>
+                        <select class="search-input span12 m-wrap" id="diseases" name="diseases">
+                            <option value="">--Diseases Profile--</option>
+                            {% for diseas in diseases %}
+                                <option {% if searchForm.diseas is defined and searchForm.diseas == employee.id %} selected="selected" {% endif %} value="{{ diseas.id }}">{{ diseas.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class="col-md-2 margin-top">
-                        <label>End Date</label>
+                     <div class="col-md-3 margin-top">
+                        <label>Start To End Date</label>
+                        <input type="date" class="m-wrap datepicker"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                         <input type="date" class="m-wrap datepicker"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>
                     <div class="col-md-1 margin-top">

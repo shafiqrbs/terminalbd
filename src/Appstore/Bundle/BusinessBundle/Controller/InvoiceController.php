@@ -1035,7 +1035,7 @@ class InvoiceController extends Controller
     {
         $config = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository(Customer::class)->findBy(
-            array('globalOption' => $config)
+            array('globalOption' => $config),array('name'=>'ASC')
         );
         $type = '';
         $items = array();

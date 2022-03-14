@@ -403,20 +403,20 @@ class ReportController extends Controller
         $hotline = $global->getHotline();
         $mobile = "+88".$invoice->getMobile();
 
-       // $mobile = "+8801828148148"; //.$invoice->getCustomer()->getMobile();
+       // $mobile = "+8801746406712"; //.$invoice->getCustomer()->getMobile();
         $date = date('d-m-Y');
         $balance = $this->getDoctrine()->getRepository(AccountSales::class)->customerSingleOutstanding( $invoice->getGlobalOption(),$invoice->getId());
         $outstanding = number_format($balance,2);
-        $msg = "Dear Sir As-salamu Alaykum, Your present Due Balance TK. {$outstanding}. Please Contact:  {$hotline}.Thanks for being with our.";
+        $msg = "Sir As-salamu Alaykum, Your present Due Balance TK. {$outstanding}. Please Contact:  {$hotline}.Thanks for being with our.";
         $msg = $orgName .'\nDear '.$msg;
         if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
-            $status = $this->send($msg,$mobile);
-            $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->insertCustomerOutstandingSms($invoice, $status);
+            $this->send($msg,$mobile);
+            $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->insertCustomerOutstandingSms($invoice,$msg,'success');
             $this->get('session')->getFlashBag()->add(
-                'success',"{ $name } SMS has benn sent successfully"
+                'success'," $name SMS has benn sent successfully"
             );
         }
-        return new Response($status);
+        return new Response('success');
 	}
     function send($msg, $phone, $sender = ""){
 

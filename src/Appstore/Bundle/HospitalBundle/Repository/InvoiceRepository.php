@@ -207,6 +207,17 @@ class InvoiceRepository extends EntityRepository
         return $result;
     }
 
+    public function getFindDiseases($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.diseasesProfile','d');
+        $qb->select('d.id as id, d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->groupBy("d.id");
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function salesSummary(User $user,$data)
     {
 
@@ -718,6 +729,7 @@ class InvoiceRepository extends EntityRepository
         $department = isset($data['department'])? $data['department'] :'';
         $assistantDoctor = isset($data['assistantDoctor'])? $data['assistantDoctor'] :'';
         $anesthesiaDoctor = isset($data['anesthesiaDoctor'])? $data['anesthesiaDoctor'] :'';
+        $diseasesProfile = isset($data['diseases'])? $data['diseases'] :'';
         $user = isset($data['user'])? $data['user'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $qb = $this->createQueryBuilder('e');
@@ -743,6 +755,10 @@ class InvoiceRepository extends EntityRepository
         if(!empty($department)){
             $qb->andWhere("e.department = :department");
             $qb->setParameter('department', $department);
+        }
+        if(!empty($diseasesProfile)){
+            $qb->andWhere("e.diseasesProfile = :diseasesProfile");
+            $qb->setParameter('diseasesProfile', $diseasesProfile);
         }
         if(!empty($assistantDoctor)){
             $qb->andWhere("e.assistantDoctor = :assistantDoctor");

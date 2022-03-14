@@ -1,0 +1,26 @@
+{% set balance = 0 %}
+{% set totalDebit = 0 %}
+{% set totalCredit = 0 %}
+{% for entity in entities %}
+    {% set balance = balance + entity.balance %}
+    {% set totalDebit = totalDebit + entity.debit %}
+    {% set totalCredit = totalCredit + entity.credit %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+        <td class="numeric" >{{ entity.name }}</td>
+        <td class="numeric" >{{ entity.mobile }}</td>
+        <td class="numeric" >{{ entity.invoice }}</td>
+        <td class="numeric" >{{ entity.mode }}</td>
+        <td class="numeric" >{{ entity.method }}</td>
+        <td class="text-right" >{{ entity.debit|number_format(2) }}</td>
+        <td class="text-right" >{{ entity.credit|number_format(2) }}</td>
+        <td class="text-right" >{{ entity.balance|number_format(2) }}</td>
+    </tr
+{% endfor %}
+<tr>
+    <th class="text-right" colspan="7">Grand Balance</th>
+    <th class="text-right">{{ totalDebit|number_format(2) }}</th>
+    <th class="text-right">{{ totalCredit|number_format(2) }}</th>
+    <th class="text-right"></th>
+</tr>

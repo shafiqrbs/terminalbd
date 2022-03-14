@@ -135,9 +135,141 @@ class ReportController extends Controller
             'option' => $globalOption,
             'searchForm' => $data,
         ));
+    }
 
+    /**
+     * @Route("/balanch-sheet", methods={"GET", "POST"}, name="accounting_report_balanch_sheet")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
 
+    public function balanchSheetAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
 
+    /**
+     * @Route("/journal-head-subhead", methods={"GET", "POST"}, name="accounting_report_head_subhead")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
+
+    public function journalHeadSubheadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/monthly-profit", methods={"GET", "POST"}, name="accounting_report_monthly_profit")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
+
+    public function monthlyProfitAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/monthly-profit", methods={"GET", "POST"}, name="accounting_report_monthly_profit")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
+
+    public function yearlyProfitAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/stakeholder-profit", methods={"GET", "POST"}, name="accounting_report_stakeholder_profit")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
+
+    public function stakeholderProfitAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
     }
 
     /**
@@ -441,12 +573,14 @@ class ReportController extends Controller
         $assistantDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssistantDoctor($hospital);
         $departments = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDepartments($hospital);
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        $diseases = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindDiseases($hospital);
         return $this->render('ReportBundle:Hospital/Sales:admission-invoice.html.twig', array(
             'employees' => $employees,
             'anesthesiaDoctor' => $anesthesiaDoctor,
             'assignDoctors' => $assignDoctors,
             'assistantDoctor' => $assistantDoctor,
             'departments' => $departments,
+            'diseases' => $diseases,
             'entities' => $entities,
             'searchForm' => $data,
             'option' => $globalOption,
