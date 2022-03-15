@@ -5,13 +5,18 @@
             <form action="" method="get">
                 <div class="row">
                     <div class="col-md-5 margin-top">
-                        <label>Customer</label>
-                        <select class="search-input col-md-12 m-wrap select2" name="customerId" id="customerId">
-                            {% if customers is not empty %}
-                                {% for customer in customers %}
-                                    <option {% if searchForm.customer is defined and searchForm.customer is not empty and customer.customerId == searchForm.customer %} selected="selected" {% endif %} value="{{ customer.customerId }}">{{ customer.customerMobile }} - {{ customer.customerName }} Balance: ({{ customer.customerBalance }}) </option>
-                                {% endfor %}
-                            {% endif %}
+                        <label>Journal Account Head</label>
+                        <select style="width: 100%!important;" class="search-input select2  span12 m-wrap" id="accountHead" name="accountHead">
+                            <option value="">Choose Account Head</option>
+                            {% for account in accountHead %}
+                                {% if heads[account.id] is defined and heads[account.id] is not empty %}
+                                    <optgroup label="{{ account.name }}">
+                                        {% for head in heads[account.id] %}
+                                            <option {% if searchForm.accountHead is defined and searchForm.accountHead == head.id %} selected="selected" {% endif %} value="{{ head.id }}">{{ head.name }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                {% endif %}
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-3 margin-top">
@@ -31,24 +36,6 @@
         </div>
     </div>
     <div id="print-area">
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4 text-center">
-                <p><strong style="font-size: 16px">{{ option.name }}</strong></p>
-                <p>Name of Report: Customer Ledger</p>
-                {% if customer is not empty %}
-                <p><strong>{{ customer.name }}</strong>,{{ customer.mobile }}</p>
-                <p>{{ customer.address }}</p>
-                {% endif %}
-            </div>
-            <div class="col-md-4 text-right">
-                Printed: {{ "now"|date('d-m-Y') }}
-                <p><strong>Start Date:&nbsp;</strong><strong>{% if data['startDate'] is defined and data['startDate'] is not empty %}{{ data['startDate']|date('d-m-Y') }}{% endif %}</strong>
-                    <strong>End Date:&nbsp;<strong>{% if data['endDate'] is defined and data['endDate'] is not empty %}{{ data['endDate']|date('d-m-Y') }}{% endif %}</strong></strong>
-                </p>
-                <p></p>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <table  class="table table-bordered table-striped table-condensed flip-content " style="width: 100%">

@@ -89,13 +89,10 @@
         </ul>
         <ul class="nav pull-right" style="margin-top: -5px!important;">
             <li class="" id="header_notification_bar">
-                <a href="javascript:" id="Order" data-action="{{ path('pos_order',{'mode':'order'}) }}" class="btn blue mini"><i class="icon-th-large"></i> Orders</a>
+                <a href="javascript:" data-id="Order" data-action="{{ path('pos_order',{'mode':'order'}) }}" value="order" class="btn blue invoice-list mini list-load"><i class="icon-th-large"></i> Orders</a>
             </li>
             <li class="" id="header_notification_bar">
-                <a  href="javascript:" id="Hold" data-action="{{ path('pos_hold',{'mode':'hold'}) }}" class="btn yellow mini"><i class="icon-file"></i> Holds</a>
-            </li>
-            <li class="" id="header_notification_bar">
-                <a  href="javascript:" id="Cancel" data-action="{{ path('pos_cancel',{'mode':'cancel'}) }}" class="btn purple mini"><i class="icon-th-large"></i> Cancel</a>
+                <a  href="javascript:" data-id="Hold" data-action="{{ path('pos_hold',{'mode':'hold'}) }}" value="hold" class="btn yellow invoice-list mini list-load"><i class="icon-file"></i> Holds</a>
             </li>
             <li class="dropdown user" style="margin-top: 11px!important;">
                 <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"

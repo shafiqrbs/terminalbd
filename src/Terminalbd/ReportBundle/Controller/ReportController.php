@@ -165,11 +165,11 @@ class ReportController extends Controller
     }
 
     /**
-     * @Route("/journal-head-subhead", methods={"GET", "POST"}, name="accounting_report_head_subhead")
+     * @Route("/trail-balanch", methods={"GET", "POST"}, name="accounting_report_trail_balanch")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
 
-    public function journalHeadSubheadAction()
+    public function trailBalanchAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
@@ -192,6 +192,86 @@ class ReportController extends Controller
     }
 
     /**
+     * @Route("/journal-head", methods={"GET", "POST"}, name="accounting_report_head")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
+
+    public function journalHeadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+   /**
+     * @Route("/journal-head-subhead", methods={"GET", "POST"}, name="accounting_report_subhead")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
+
+    public function journalSubheadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/monthly-profit", methods={"GET", "POST"}, name="accounting_report_daily_profit")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
+     */
+
+    public function dailyProfitAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $transactionMethods = array(1,2,3,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
+        $pagination = $entities->getResult();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'employees' => $employees,
+            'option' => $globalOption,
+            'searchForm' => $data,
+        ));
+    }
+ /**
      * @Route("/monthly-profit", methods={"GET", "POST"}, name="accounting_report_monthly_profit")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
@@ -219,7 +299,7 @@ class ReportController extends Controller
     }
 
     /**
-     * @Route("/monthly-profit", methods={"GET", "POST"}, name="accounting_report_monthly_profit")
+     * @Route("/yearly-profit", methods={"GET", "POST"}, name="accounting_report_yearly_profit")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
 
@@ -263,14 +343,19 @@ class ReportController extends Controller
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $globalOption = $this->getUser()->getGlobalOption();
         $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $accountSubHeads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('globalOption' => $option),array('name'=>'ASC'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
+
+        return $this->render('ReportBundle:Accounting/Sales:ledger.html.twig', array(
+            'accountHead' => $accountHead,
+            'accountSubHeads' => $accountSubHeads,
+            'heads' => $heads,
             'entities' => $pagination,
-            'overview' => $overview,
-            'employees' => $employees,
-            'option' => $globalOption,
             'searchForm' => $data,
         ));
     }
+
 
     /**
      * @Route("/customer-ledger", methods={"GET", "POST"}, name="accounting_report_sales_customer_ledger")

@@ -686,6 +686,10 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
+        $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
+        $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
+
         $user = isset($data['user'])? $data['user'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $qb = $this->createQueryBuilder('e');
@@ -700,6 +704,10 @@ class InvoiceRepository extends EntityRepository
         if(!empty($assignDoctor)){
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if(!empty($diseasesProfile)){
+            $qb->andWhere("e.diseasesProfile = :diseasesProfile");
+            $qb->setParameter('diseasesProfile', $diseasesProfile);
         }
         if(!empty($user)){
             $qb->andWhere("e.createdBy = :user");

@@ -241,9 +241,10 @@ class MedicineSalesTemporaryController extends Controller
         }
         if (isset($data['process']) and ($data['process'] == 'Hold')) {
             $entity->setProcess('Hold');
+        }else{
+            $entity->setProcess('Done');
         }
         $entity->setApprovedBy($this->getUser());
-        $entity->setProcess('Done');
         if(empty($entity->getSalesBy())){
             $entity->setSalesBy($this->getUser());
         }

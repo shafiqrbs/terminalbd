@@ -388,40 +388,46 @@ $(document).on('click', '.invoice-mode', function() {
     });
 });
 
+$(document).on('click', '.invoice-list', function() {
+
+    var process = $(this).attr('data-id');
+    var url = $(this).attr('data-action');
+    if(process === 'Order'){
+        $.get(url, function( response ) {
+            $("#invoice").html(data);
+        });
+    }else if(process === 'Cancel'){
+        $.get(url, function( response ) {
+            resetInvoice();
+        });
+    }else if(process === 'Hold'){
+        $.get(url, function( response ) {
+            $("#invoice").html(data);
+        });
+    }
+});
+
 $(document).on('click', '.invoice-process', function() {
 
     var process = $(this).val();
     var url = $(this).attr('data-action');
-    if(process === 'order'){
-        $.get(url, function( response ) {
-            $("#invoice").html(data);
-        });
-    }else if(process === 'cancel'){
-        $.get(url, function( response ) {
-            resetInvoice();
-        });
-    }else if(process === 'hold'){
-        $.get(url, function( response ) {
-            $("#invoice").html(data);
-        });
-    }else{
-        $.ajax({
-            url         : url,
-            type        : 'POST',
-            data        : new FormData($('form#invoiceForm')[0]),
-            processData : false,
-            contentType : false,
-            success     : function(response){
-                if(process === 'print'){
-                    var salesId = response;
-                    window.open('/app-pos/desktop/'+ salesId +'/print', '_blank');
-                }else if(process === 'pos'){
-                    jsPostPrint(response);
-                }
-                resetInvoice();
+    $.ajax({
+        url         : url,
+        type        : 'POST',
+        data        : new FormData($('form#invoiceForm')[0]),
+        processData : false,
+        contentType : false,
+        success     : function(response){
+            if(process === 'print'){
+                var salesId = response;
+                window.open('/app-pos/desktop/'+ salesId +'/print', '_blank');
+            }else if(process === 'pos'){
+                jsPostPrint(response);
             }
-        });
-    }
+            resetInvoice();
+        }
+    });
+
 });
 
 function resetInvoice(){
