@@ -49,21 +49,14 @@ class MyProfileType extends AbstractType
                     new Length(array('max'=>200))
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile number', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input user mobile no'))
-                )
-            ))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile number', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover')))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
             ->add('permanentAddress','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter permanent address')))
             ->add('designation', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Designation',
-                'empty_value' => '---Choose a designation---',
+                'empty_value' => '---Choose a Designation---',
                 'property' => 'name',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select user designation'))
-                ),
                 'attr'=>array('class'=>'m-wrap span1q select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -71,7 +64,6 @@ class MyProfileType extends AbstractType
                         ->orderBy("e.name", "ASC");
                 },
             ))
-
             ->add('postalCode','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter postal code')))
             ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your additional phone ')))
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
@@ -80,7 +72,7 @@ class MyProfileType extends AbstractType
             ->add('bank', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
-                'empty_value' => '---Choose a bank---',
+                'empty_value' => '---Choose a Bank---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -96,13 +88,12 @@ class MyProfileType extends AbstractType
                 'attr'=>array('class'=>'select2 span12'),
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Select user location'))
+                    new NotBlank(array('message'=>'Select User Location'))
                 ),
                 'choices'=> $this->LocationChoiceList(),
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
             ))
-
             ->add('bloodGroup', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
