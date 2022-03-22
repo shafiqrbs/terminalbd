@@ -399,6 +399,14 @@ class Particular
     /**
      * @var boolean
      *
+     * @ORM\Column(name="reportUnitHide", type="boolean", nullable=true)
+     */
+    private $reportUnitHide = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="status", type="boolean" )
      */
     private $status= true;
@@ -1441,6 +1449,24 @@ class Particular
     {
         $this->surgeryDepartment = $surgeryDepartment;
     }
+
+    /**
+     * @return bool
+     */
+    public function isReportUnitHide()
+    {
+        return $this->reportUnitHide;
+    }
+
+    /**
+     * @param bool $reportUnitHide
+     */
+    public function setReportUnitHide($reportUnitHide)
+    {
+        $this->reportUnitHide = $reportUnitHide;
+    }
+
+
 
 }
 

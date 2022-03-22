@@ -44,7 +44,7 @@
                     <li><label>Report No:</label> {{ entity.particular.particularCode }}-{{ entity.reportCode }}</li>
                     <li><label>Invoice Date:</label> {{ entity.hmsInvoice.updated|date('d-m-Y') }}</li>
                     <li><label>Delivery Date:</label> {{ entity.hmsInvoice.deliveryDateTime }}</li>
-                    <li><label>Coll. Time:</label> {{ entity.collectionDate|date('d-m-Y h:i:s A') }}</li>
+                    <li><label>Coll. Time:</label> {{ entity.collectionDate|date('d-m-Y h:i A') }}</li>
                     <li><label>Coll. By:</label> {{ entity.sampleCollectedBy }}</li>
                 </ul>
             </td>
@@ -64,7 +64,9 @@
                                             <ul class="unstyled span12">
                                                 <li><h2><strong>{{ item.name }}</strong></h2></li>
                                                 {% for child in item.children %}
-                                                    <li><span class="span3" style="display:inline-block;width:180px">{{ child.name }}</span> {% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %} {{ child.unit }}</li>
+                                                    <li><span class="span3" style="display:inline-block;width:180px">{{ child.name }}</span> {% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}
+                                                        {% if entity.particular.reportUnitHide != 1 %}  {{ child.unit }} {% endif %}
+                                                    </li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -92,7 +94,9 @@
                 <tr class="head-black">
                     <th class="span3">Name</th>
                     <th class="span1">Result</th>
+                    {% if entity.particular.reportUnitHide == 1 %}
                     <th class="span2">Unit</th>
+                    {% endif %}
                     <th class="span4">Reference</th>
                 </tr>
                 </thead>
@@ -107,7 +111,9 @@
                                 <tr>
                                     <td  class="span3">{{ child.name }}</td>
                                     <td class="span1">{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</td>
+                                    {% if entity.particular.reportUnitHide != 1 %}
                                     <td class="span2">{{ child.unit }}</td>
+                                    {% endif %}
                                     <td class="span4">{{ child.referenceValue }}</td>
                                 </tr>
                             {% endfor %}
@@ -115,7 +121,9 @@
                             <tr id="remove-{{ item.id }}">
                                 <td  class="span4">{{ item.name }}</td>
                                 <td class="span1">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
+                                {% if entity.particular.reportUnitHide != 1 %}
                                 <td class="span2">{{ item.unit }}</td>
+                                {% endif %}
                                 <td class="span4">{{ item.referenceValue }}</td>
                             </tr>
                         {% endif %}
