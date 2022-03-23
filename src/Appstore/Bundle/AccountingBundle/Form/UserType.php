@@ -37,16 +37,17 @@ class UserType extends AbstractType
                         new NotBlank(array('message'=>'Please enter mobile no'))
                     ))
             )
-            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
+             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Email address'),
+                    'constraints' =>array(
+                        new NotBlank(array('message'=>'Please enter email address'))
+                    ))
+            )
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>4,'placeholder'=>'Enter customer address')))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',
                 'attr'=>array('class'=>'select2 m-wrap span12'),
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select customer location'))
-                ),
                 'choices'=> $this->LocationChoiceList(),
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
