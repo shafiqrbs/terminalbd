@@ -473,15 +473,10 @@ class UserRepository extends EntityRepository
     {
         $user = new User();
         $em = $this->_em;
-        if(empty($data['profile']['email'])){
-            $email = $mobile."@gmail.com";
-        }else{
-            $email = $data['profile']['email'];
-        }
         $email = $mobile."@gmail.com";
         $user->setUsername($mobile);
         $user->setEmail($email);
-        $user->setPassword('*4848#');
+        $user->setPassword('@123456');
         $user->setUserGroup('account');
         $user->setGlobalOption($option);
         $user->setDomainOwner(2);

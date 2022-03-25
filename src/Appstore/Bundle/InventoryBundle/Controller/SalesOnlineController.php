@@ -681,6 +681,7 @@ class SalesOnlineController extends Controller
         }else{
             $print = 'invoice';
         }
+
         return $this->render('InventoryBundle:SalesPrint:'.$print.'.html.twig', array(
             'entity'      => $entity,
             'inventory'   => $inventory,

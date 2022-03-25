@@ -120,12 +120,12 @@ class UserController extends Controller
      */
     private function createCreateForm(Profile $entity)
     {
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new UserType($location), $entity, array(
+
+        $form = $this->createForm(new UserType(), $entity, array(
             'action' => $this->generateUrl('account_user_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -182,8 +182,8 @@ class UserController extends Controller
     */
     private function createEditForm(Profile $entity)
     {
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new UserType($location), $entity, array(
+
+        $form = $this->createForm(new UserType(), $entity, array(
             'action' => $this->generateUrl('account_user_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

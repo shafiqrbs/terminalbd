@@ -112,6 +112,7 @@ class GlobalOptionModifyType extends AbstractType
 			            'medicine'      => 'Medicine'
 		            ),
 	            ))
+                ->add('file','file', array('attr'=>array('class'=>'default')))
                 ->add('subDomain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub-domain name'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please input required')),
