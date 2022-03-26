@@ -51,6 +51,11 @@ class TransactionRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
+        $accountHead = isset($data['accountHead']) ? $data['accountHead'] :'';
+        $accountSubHead = isset($data['accountSubHead']) ? $data['accountSubHead'] :'';
+        $startDate = isset($data['startDate']) ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate']) ? $data['endDate'] : '';
+
         if(empty($data)){
             $datetime = new \DateTime("now");
             $startDate = $datetime->format('Y-m-d 00:00:00');
@@ -69,12 +74,41 @@ class TransactionRepository extends EntityRepository
             $qb->andWhere("ex.created <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
+        if (!empty($accountHead)) {
+            $qb->andWhere("ex.accountHead = :accountHead");
+            $qb->setParameter('accountHead', $accountHead);
+        }
+        if (!empty($accountSubHead)) {
+            $qb->andWhere("ex.subAccountHead = :accountSubHead");
+            $qb->setParameter('accountSubHead', $accountSubHead);
+        }
     }
+
 
     public function removeTransaction($option,$process)
     {
 	    $transaction = $this->_em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = {$option->getId()} AND e.processHead ='{$process}'");
 	    $transaction->execute();
+    }
+
+
+    public function reportAccountHead(GlobalOption $globalOption,$data)
+    {
+
+        $qb = $this->createQueryBuilder('ex');
+        $qb->join('ex.accountHead','head');
+        $qb->leftJoin('ex.subAccountHead','sub');
+        $qb->leftJoin('ex.accountJournal','aj');
+        $qb->leftJoin('aj.accountJournalItems','aji');
+        $qb->select('ex.created as created ,head.name as accountHead , sub.name as subAccountHead , ex.processHead as processHead , COALESCE(ex.debit,0) as debit , COALESCE(ex.credit,0) as credit');
+        $qb->addSelect('aji.narration as narration','aj.accountRefNo as accountRefNo');
+        $qb->where("ex.globalOption = :globalOption");
+        $qb->setParameter('globalOption',$globalOption->getId());
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('ex.created','DESC');
+        $result = $qb->getQuery();
+        $res = $result->getArrayResult();
+        return $res;
     }
 
 	public function finalTransaction(GlobalOption $globalOption)

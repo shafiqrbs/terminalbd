@@ -139,8 +139,10 @@
                                     <td colspan="11">
                                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                             <tr>
-                                                <th class="numeric" >Serial No</th>
-                                                <td class="numeric" colspan="5" >{{ entity.serialNo|raw }}</td>
+                                                <th class="numeric" >IME/Serial No</th>
+                                                <td class="" colspan="5" >
+                                                    <a href="#" id="serialNo" data-name="SerialNo" data-url="{{ path('inventory_purchaseitem_inline_update',{'id':entity.id}) }}"  data-type="textarea" data-pk="{{ entity.id }}" value="{{ entity.serialNo }}" data-placeholder="Enter product IME/Serial no" data-title="Enter IME/Serial no" class="editable">{% if entity.serialNo is not empty %}{% set serialNos = entity.serialNo|split(',')  %}{% for serial in serialNos %}{{ serial }}{{ not loop.last ? ',<br/>' }}{% endfor %}{% endif %}</a></td>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th class="numeric" >Assurance Type</th>

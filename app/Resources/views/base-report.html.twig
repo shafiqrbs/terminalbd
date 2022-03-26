@@ -62,7 +62,6 @@
     jQuery(document).ready(function () {
         {% block documentready %}
         $('.select2').select2();
-
         $(document).on('click', '.ajax-btn', function() {
             $.ajax({
                 url         : $('form#searchForm').attr( 'action' ),
@@ -80,6 +79,14 @@
                     $('#data-load').html(response);
                 }
             });
+        });
+
+        $(document).on("change", ".accountHead", function(event) {
+            account = $(this).val();
+            $.get( Routing.generate('account_sub_account_select',{ id:account}))
+                .done(function( data ) {
+                    $('.subAccountHead').html(data);
+                });
         });
         {% endblock %}
     });

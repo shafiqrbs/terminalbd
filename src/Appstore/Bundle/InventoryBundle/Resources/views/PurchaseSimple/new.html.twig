@@ -106,14 +106,64 @@
                                     </div>
                                 </div>
                                 {% if entity.inventoryConfig.isAttribute == 1 %}
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="controls">
-                                            <input type="text" id="serialNo" name="serialNo" class="itemInput m-wrap span12" placeholder="Serial no" aria-required="true">
-                                            <p class="help-block">Using serial no. E.g: 0xxxx,1yyyy,2zzzz</p>
+                                    <div class="row-fluid">
+                                        <div class="span4">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">IME/Serial No</label>
+                                                <div class="controls">
+                                                    {{ form_widget(purchaseItemForm.serialNo) }}
+                                                    {{ form_errors(purchaseItemForm.serialNo) }}
+                                                    <p class="help-block">Using serial no. E.g: 0xxxx,1yyyy,2zzzz</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span8">
+                                            <div class="row-fluid">
+                                                <div class="span6">
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="firstName">Assurance Type</label>
+                                                        <div class="controls">
+                                                            {{ form_widget(purchaseItemForm.assuranceType) }}
+                                                            {{ form_errors(purchaseItemForm.assuranceType) }}
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="span6">
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="firstName">Assurance From Vendor</label>
+                                                        <div class="controls">
+                                                            {{ form_widget(purchaseItemForm.assuranceFromVendor) }}
+                                                            {{ form_errors(purchaseItemForm.assuranceFromVendor) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span6">
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="firstName">Assurance To Customer</label>
+                                                        <div class="controls">
+                                                            {{ form_widget(purchaseItemForm.assuranceToCustomer) }}
+                                                            {{ form_errors(purchaseItemForm.assuranceToCustomer) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="span6">
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="firstName">Expired Date</label>
+                                                        <div class="controls">
+                                                            <div class="input-icon left">
+                                                                <i class="icon-calendar"></i>
+                                                                {{ form_widget(purchaseItemForm.expiredDate) }}
+                                                                {{ form_errors(purchaseItemForm.expiredDate) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 {% endif %}
                             </div>
                             {{ form_end(purchaseItemForm) }}
@@ -368,7 +418,9 @@
         .ui-menu-item{
             border-bottom:1px solid #000000;
         }
-
+        .select2-container .select2-choice {
+            height: 28px!important;
+        }
         .ui-menu-item a{
             text-decoration: none;
             background: #d0dde4;
@@ -401,11 +453,11 @@
             background: #fff;
             height: 18px;
         }
-        input[class*="span"].m-wrap,select[class*="span"].m-wrap, .purchaseInput select {
-            height: 36px!important;
+        input[class*="span"].m-wrap, select[class*="span"].m-wrap, .purchaseInput select {
+            height: 34px!important;
             border: 2px solid #2a2828!important;
         }
-        .select2-container,.select2-search input {
+        .select2-container,.select2-search input , textarea[class*="span"].m-wrap {
             border: 2px solid #2a2828!important;
         }
         .table th.product-list, .table td.product-list {

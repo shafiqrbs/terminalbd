@@ -31,6 +31,7 @@ class AccountJournalItemRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
+
         if(!empty($data))
         {
 
@@ -82,8 +83,6 @@ class AccountJournalItemRepository extends EntityRepository
     {
         $em = $this->_em;
 
-
-
         foreach ($data['accountHead'] as $key => $value):
 
            if(($value and $data['debit'][$key]) or ($value and $data['credit'][$key]) ) {
@@ -112,11 +111,9 @@ class AccountJournalItemRepository extends EntityRepository
         endforeach;
     }
 
-
     public function findDoubleEntrySearch(User $user,$data = '')
     {
         $globalOption = $user->getGlobalOption()->getId();
-
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.debit','e.credit','e.narration');
         $qb->addSelect('j.created','j.accountRefNo');

@@ -210,6 +210,10 @@
                             <i class="icon-bar-chart"></i>
                             <div> Stock </div>
                         </a>
+                        <a href="{{ path('inventory_purchaseitem') }}" class="icon-btn">
+                            <i class="icon-th"></i>
+                            <div> Purchase Item </div>
+                        </a>
                         <a href="{{ path('inventory_stockitem_short_list') }}" class="icon-btn">
                             <i class="icon-signal"></i>
                             <div> Short List </div>
@@ -220,10 +224,7 @@
                             <div> Damage </div>
                             {#<span class="badge badge-important">{{ expiryMedicineCount }}</span>#}
                         </a>
-                        <a href="{{ path('inventory_stockitem') }}" class="icon-btn">
-                            <i class="icon-th"></i>
-                            <div> Stock Details </div>
-                        </a>
+
                         {% endif %}
                     </div>
                 </div>

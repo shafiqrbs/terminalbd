@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 
 /**
  * @Route("/mis")
@@ -192,7 +193,7 @@ class ReportController extends Controller
     }
 
     /**
-     * @Route("/journal-head", methods={"GET", "POST"}, name="accounting_report_head")
+     * @Route("/account-head", methods={"GET", "POST"}, name="accounting_report_head")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
 
@@ -202,24 +203,44 @@ class ReportController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $user = $this->getUser();
-        $transactionMethods = array(1,2,3,4);
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
-        $pagination = $entities->getResult();
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
-            'entities' => $pagination,
-            'overview' => $overview,
-            'employees' => $employees,
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
+        return $this->render('ReportBundle:Accounting/Financial:account-head.html.twig', array(
+            'accountHead' => $accountHead,
+            'heads' => $heads,
             'option' => $globalOption,
             'searchForm' => $data,
         ));
     }
 
+    /**
+     * @Route("/account-head-ajax", methods={"GET", "POST"}, name="accounting_report_head_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function journalHeadAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $entities = "";
+        if(isset($data['startDate']) and $data['startDate'] and isset($data['endDate']) and $data['endDate'] ) {
+            $entities = $em->getRepository(Transaction::class)->reportAccountHead($globalOption,$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Accounting/Financial:account-head-ajax.html.twig', array(
+                    'entities' => $entities,
+                )
+            );
+            return new Response($htmlProcess);
+        }
+        return new Response('Record Does not found');
+    }
+
    /**
-     * @Route("/journal-head-subhead", methods={"GET", "POST"}, name="accounting_report_subhead")
+     * @Route("/account-head-subhead", methods={"GET", "POST"}, name="accounting_report_subhead")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
 
@@ -227,26 +248,46 @@ class ReportController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
-        $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $user = $this->getUser();
-        $transactionMethods = array(1,2,3,4);
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
-        $pagination = $entities->getResult();
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
-            'entities' => $pagination,
-            'overview' => $overview,
-            'employees' => $employees,
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->findBy(array('isParent' => 1),array('name'=>'ASC'));
+        $heads = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getAllChildrenAccount( $this->getUser()->getGlobalOption()->getId());
+        return $this->render('ReportBundle:Accounting/Financial:account-subhead.html.twig', array(
+            'accountHead' => $accountHead,
+            'heads' => $heads,
             'option' => $globalOption,
             'searchForm' => $data,
         ));
     }
 
     /**
-     * @Route("/monthly-profit", methods={"GET", "POST"}, name="accounting_report_daily_profit")
+     * @Route("/account-subhead-ajax", methods={"GET", "POST"}, name="accounting_report_subhead_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function journalSubHeadAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $data = $_REQUEST;
+        $entities = "";
+        if(isset($data['startDate']) and $data['startDate'] and isset($data['endDate']) and $data['endDate'] ) {
+            $entities = $em->getRepository(Transaction::class)->reportAccountHead($globalOption,$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Accounting/Financial:account-head-ajax.html.twig', array(
+                    'entities' => $entities,
+                )
+            );
+            return new Response($htmlProcess);
+
+        }
+        return new Response('Record Does not found');
+    }
+
+    /**
+     * @Route("/daily-profit", methods={"GET", "POST"}, name="accounting_report_daily_profit")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
 
@@ -254,24 +295,41 @@ class ReportController extends Controller
     {
         set_time_limit(0);
         ignore_user_abort(true);
-        $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $user = $this->getUser();
-        $transactionMethods = array(1,2,3,4);
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
-        $pagination = $entities->getResult();
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        return $this->render('ReportBundle:Accounting/Cash:cashFlow.html.twig', array(
-            'entities' => $pagination,
-            'overview' => $overview,
-            'employees' => $employees,
+        $ajaxPath = $this->generateUrl('accounting_report_daily_profit_ajax');
+        return $this->render('ReportBundle:Accounting/Financial:income.html.twig', array(
             'option' => $globalOption,
+            'ajaxPath' => $ajaxPath,
             'searchForm' => $data,
         ));
     }
- /**
+
+    /**
+     * @Route("/daily-profit-ajax", methods={"GET", "POST"}, name="accounting_report_daily_profit_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function dailyProfitAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $data = $_REQUEST;
+        if(isset($data['startDate']) and $data['startDate'] and isset($data['endDate']) and $data['endDate'] ) {
+            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportSalesIncome($this->getUser(),$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Accounting/Financial:income-ajax.html.twig', array(
+                    'overview' => $overview,
+                    'searchForm' => $data,
+                )
+            );
+            return new Response($htmlProcess);
+
+        }
+        return new Response('Record Does not found');
+    }
+
+    /**
      * @Route("/monthly-profit", methods={"GET", "POST"}, name="accounting_report_monthly_profit")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_DOMAIN")
      */
