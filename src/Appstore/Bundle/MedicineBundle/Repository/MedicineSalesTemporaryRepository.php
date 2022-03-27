@@ -34,7 +34,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
     {
         $quantity = empty($data['quantity']) ? 1 : $data['quantity'];
         $isShort = empty($data['isShort']) ? 0 : 1;
-        $purchaseItem = isset($data['purchaseItem']) and !empty($data['purchaseItem']) ? $data['purchaseItem'] : '';
+        $purchaseItem = (isset($data['purchaseItem']) and !empty($data['purchaseItem'])) ? $data['purchaseItem'] : '';
         /* @var $stockItem MedicineStock */
         $stockItem = $this->_em->getRepository('MedicineBundle:MedicineStock')->find($data['stockName']);
         $purchaseStockItem = $this->_em->getRepository('MedicineBundle:MedicinePurchaseItem')->find($purchaseItem);

@@ -177,7 +177,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		        $entity->setSubTotal($item->getSubTotal());
 	            $entity->setPurchasePrice( $item->getPurchasePrice() );
 	            $entity->setIsShort($item->isShort());
-	            if(!empty($item->getMedicinePurchaseItem())) {
+	            if($item->getMedicinePurchaseItem()) {
 		            $entity->setMedicinePurchaseItem( $item->getMedicinePurchaseItem() );
 		        }
 		        if ( $sales->getDiscountType() == 'percentage' ) {
@@ -187,7 +187,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		        }
 		        $em->persist( $entity );
 		        $em->flush();
-	            if(!empty($item->getMedicinePurchaseItem())) {
+	            if($item->getMedicinePurchaseItem()) {
 		            $em->getRepository( 'MedicineBundle:MedicinePurchaseItem' )->updateRemovePurchaseItemQuantity( $item->getMedicinePurchaseItem(), 'sales' );
 	            }
 		        $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $item->getMedicineStock(), 'sales' );

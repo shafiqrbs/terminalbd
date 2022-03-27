@@ -93,15 +93,17 @@
                                 <th class="numeric" >PP</th>
                                 <th class="numeric" >MRP</th>
                                 <th class="numeric" >Quantity</th>
+                                <th class="numeric" >Sales QTY</th>
+                                <th class="numeric" >Remain QTY</th>
                                 <th class="numeric" >Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for entity in entities %}
                                 <tr {% if entity.expirationEndDate is not empty and "now"|date('Y-m-d') >= entity.expirationEndDate|date('Y-m-d') %} class="red-alert" {% endif %} >
-                                    <th class="numeric" >{% if  entity.expirationEndDate is not empty %}
-                                            <a href="javascript:" id="expirationDate" data-url="{{ path('medicine_purchaseitem_inline_update') }}"  data-name="expirationDate" data-type="date" data-viewformat="dd-mm-yyyy" data-pk="{{ entity.id }}" data-placement="right" data-original-title="Change medicine expiration date" class="editable editable-click" style="background-color: rgba(0, 0, 0, 0);">{{ entity.expirationEndDate|date('d-m-Y') }}</a>
-                                        {% endif %}</th>
+                                    <th>
+                                        <a href="javascript:" id="expirationDate" data-url="{{ path('medicine_purchaseitem_inline_update') }}"  data-name="expirationDate" data-type="date" data-viewformat="dd-mm-yyyy" data-pk="{{ entity.id }}" data-placement="right" data-original-title="Change medicine expiration date" class="editable editable-click" style="background-color: rgba(0, 0, 0, 0);">{% if entity.expirationEndDate %}{{ entity.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
+                                    </th>
                                     <td class="numeric" >{{ entity.barcode }}</td>
                                     <td class="numeric" >{{ entity.medicineStock.name }}</td>
                                     <td class="numeric" >{% if entity.medicineStock.rackNo is not empty %}{{ entity.medicineStock.rackNo.name }}{% endif %}</td>
@@ -114,6 +116,8 @@
                                     </td>
                                     <td class="numeric" >{{ entity.salesPrice }}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
+                                    <td class="numeric" >{{ entity.salesQuantity }}</td>
+                                    <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                     <td class="numeric" >
                                         {% if entity.status == 1 %}
                                             <a class="btn yellow mini confirm" data-url="{{ path('medicine_purchaseitem_status',{'id':entity.id}) }}" href="javascript:">In-active</a>
