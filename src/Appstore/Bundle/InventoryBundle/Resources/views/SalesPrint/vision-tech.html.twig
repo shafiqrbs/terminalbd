@@ -49,10 +49,11 @@ setTimeout(function () {
             <td>
                 <ul class="unstyled">
                     <li><strong>Invoice No:</strong>&nbsp;{{ entity.invoice }}</li>
+                    {% if entity.customer.name != "Default" %}
                     {% if entity.customer is not empty %}<li><strong>Buyer Name:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                     {% if entity.customer is not empty %}<li><strong>Address:</strong>&nbsp;{{ entity.customer.address }}</li>{% endif %}
-                    {% if entity.customer is not empty and entity.customer.location is not empty %}<li style="padding-left: 16px!important;">{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
                     {% if entity.customer is not empty %}<li><strong>Mobile:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
+                    {% endif %}
                 </ul>
             </td>
             <td class="pull-right">
