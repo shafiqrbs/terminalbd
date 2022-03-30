@@ -71,6 +71,7 @@ class AccountProfitRepository extends EntityRepository
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
         $salesPurchasePrice = $this->reportSalesItemPurchaseSalesOverview($profit, $data);
+
         if($journalAccountPurchase) {
             foreach ($journalAccountPurchase as $row):
                 if (in_array($row['processType'], array('Credit','Outstanding', 'Opening'))) {
@@ -91,14 +92,13 @@ class AccountProfitRepository extends EntityRepository
         if($journalAccountSales){
 
             foreach ($journalAccountSales as $row):
-
                 if(in_array($row['processHead'],array('Debit','Outstanding','Opening'))){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyOpeningTransaction($profit,$row);
                 }elseif($row['amount'] > 0 and $row['processHead'] == 'Credit' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDiscountTransaction($profit,$row);
                 }elseif($row['amount'] > 0 and $row['processHead'] == 'Due' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDueTransaction($profit,$row);
-                }elseif($row['total'] > 0 and in_array($row['processHead'],array('medicine','business','inventory','restaurant','hotel'))){
+                }elseif($row['total'] > 0 and in_array($row['processHead'],array('medicine','business','inventory','restaurant','hotel','diagnostic','admission','visit'))){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyTransaction($profit,$row);
                 }
             endforeach;
