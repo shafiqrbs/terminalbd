@@ -233,6 +233,13 @@ class Particular
     /**
      * @var string
      *
+     * @ORM\Column(name="reportContent", type="text", nullable=true)
+     */
+    private $reportContent;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="instruction", type="text", nullable=true)
      */
     private $instruction;
@@ -1465,6 +1472,24 @@ class Particular
     {
         $this->reportUnitHide = $reportUnitHide;
     }
+
+    /**
+     * @return string
+     */
+    public function getReportContent()
+    {
+        return $this->reportContent;
+    }
+
+    /**
+     * @param string $reportContent
+     */
+    public function setReportContent($reportContent)
+    {
+        $this->reportContent = $reportContent;
+    }
+
+
 
 
 

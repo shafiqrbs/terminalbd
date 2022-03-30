@@ -68,6 +68,7 @@ class InvoiceParticularType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array('Done' => 'Done', 'In-progress' => 'In-progress','Damage' => 'Damage', 'Impossible' => 'Impossible'),
             ))
+            ->add('reportContent','textarea', array('attr'=>array('class'=>'ckeditor m-wrap textarea-large span12','rows'=>'3','placeholder'=>'Enter test related any instruction for patient')))
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add any comment','autocomplete'=>'off')))
 	        ->add('file')
         ;

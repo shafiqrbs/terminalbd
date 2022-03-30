@@ -140,6 +140,14 @@ class InvoiceParticular
     private $comment;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="reportContent", type="text", nullable=true)
+     */
+    private $reportContent;
+
+
     /**
      * @var \DateTime
      * @ORM\Column(name="collectionDate", type="datetime", nullable=true)
@@ -582,6 +590,24 @@ class InvoiceParticular
     {
         $this->assignLabuser = $assignLabuser;
     }
+
+    /**
+     * @return string
+     */
+    public function getReportContent()
+    {
+        return $this->reportContent;
+    }
+
+    /**
+     * @param string $reportContent
+     */
+    public function setReportContent($reportContent)
+    {
+        $this->reportContent = $reportContent;
+    }
+
+
 
 }
 

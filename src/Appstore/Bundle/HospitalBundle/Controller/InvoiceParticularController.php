@@ -159,7 +159,10 @@ class InvoiceParticularController extends Controller
         $reportArr = array();
 
         /** @var InvoicePathologicalReport $row */
-
+        $em = $this->getDoctrine()->getManager();
+        $entity->setReportContent($entity->getParticular()->getReportContent());
+        $em->persist($entity);
+        $em->flush();
         if (!empty($entity->getInvoicePathologicalReports())){
             foreach ($entity->getInvoicePathologicalReports() as $row):
                 if(!empty($row->getPathologicalReport())){
