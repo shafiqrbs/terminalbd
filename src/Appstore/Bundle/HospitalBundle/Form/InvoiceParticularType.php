@@ -76,7 +76,7 @@ class InvoiceParticularType extends AbstractType
         if($particular->isAttachment() == 1){
             $builder->add('file');
         }
-        if($particular->isReportFormat() == 1){
+        if($particular->isReportContent() == 1){
             $height = $particular->getReportHeight() > 0 ? $particular->getReportHeight():10;
             $builder->add('reportContent','textarea', array('attr'=>array('class'=>'ckeditor m-wrap span12','rows' => $height,'placeholder'=>'Enter test related any instruction for patient')));
         }
