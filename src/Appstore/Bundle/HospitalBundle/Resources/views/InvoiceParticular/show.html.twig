@@ -115,6 +115,7 @@
                                                         <a target="_blank" class="btn mini green"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
                                                     {% elseif item.particular.service.slug == 'diagnostic' %}
                                                         <a target="_blank" class="btn mini blue"  href="{{ path('hms_invoice_particular_report_print',{'id':item.id}) }}" ><i class="icon-print"></i> Report Print</a>
+                                                        <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': item.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
                                                         {% if  item.webPath is not empty %}
                                                             <a class="btn red pull-right mini" target="_blank" href="/{{ item.webPath }}"><i class="icon-download"></i> Download Report</a>
                                                         {% endif %}

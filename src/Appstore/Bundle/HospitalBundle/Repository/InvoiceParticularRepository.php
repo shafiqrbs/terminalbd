@@ -159,6 +159,7 @@ class InvoiceParticularRepository extends EntityRepository
                 $invoiceParticular->setSalesPrice($entity->getSalesPrice());
                 $invoiceParticular->setSubTotal($entity->getSubTotal());
                 $invoiceParticular->setParticular($entity->getParticular());
+                $invoiceParticular->setReportContent($entity->getParticular()->getReportContent());
 	            if($entity->getParticular()->getService()->getSlug() == 'diagnostic'){
 		            $datetime = new \DateTime("now");
 		            $lastCode = $this->getLastCode($invoice,$datetime);
@@ -209,6 +210,7 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setReportCode($reportCode);
         }
         $entity->setParticular($particular);
+        $entity->setReportContent($particular->getReportContent());
         $entity->setEstimatePrice($particular->getPrice());
         if($particular->getCommission()){
             $entity->setCommission($particular->getCommission() * $entity->getQuantity());

@@ -160,11 +160,6 @@ class InvoiceParticularController extends Controller
 
         /** @var InvoicePathologicalReport $row */
         $em = $this->getDoctrine()->getManager();
-        if(empty($entity->getReportContent())){
-            $entity->setReportContent($entity->getParticular()->getReportContent());
-            $em->persist($entity);
-            $em->flush();
-        }
         if (!empty($entity->getInvoicePathologicalReports())){
             foreach ($entity->getInvoicePathologicalReports() as $row):
                 if(!empty($row->getPathologicalReport())){
@@ -219,7 +214,6 @@ class InvoiceParticularController extends Controller
         $data = $request->request->all();
 
         if ($editForm->isValid()) {
-            
             $entity->setParticularPreparedBy($this->getUser());
             $entity->upload();
             $em->flush();
