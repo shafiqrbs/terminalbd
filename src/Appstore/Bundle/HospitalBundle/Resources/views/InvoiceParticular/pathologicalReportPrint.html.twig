@@ -84,7 +84,9 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
+                {% if entity.comment %}
                 <tr><td>Comment: {{ entity.comment|raw }}</td></tr>
+                {% endif %}
                 </tbody>
             </table>
         {% else %}
@@ -137,7 +139,9 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                <tr><td class="numeric">Comment: </td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
+                {% if entity.comment %}
+                    <tr><td class="numeric">Comment: </td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
+                {% endif %}
                 </tbody>
             </table>
         {% endif %}
@@ -176,13 +180,13 @@
         </table>
     </div>
 <style>
-    table.report-table{
+    table.reportTable{
         width: 100%!important;
         collapse: 0;
         border-collapse: collapse;
         border: 1px solid #000000;
     }
-    table.report-table tr td , table.report-table tr th{
+    table.reportTable tr td , table.reportTable tr th{
         text-align: center;
         border: 1px solid #000000;
     }
