@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Form;
 
 
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,6 +33,8 @@ class InvoiceParticularType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /* @var $particular Particular */
+        $particular =  $options['data']->getParticular();
         $builder
 
             ->add('assignDoctor', 'entity', array(
@@ -68,10 +71,15 @@ class InvoiceParticularType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array('Done' => 'Done', 'In-progress' => 'In-progress','Damage' => 'Damage', 'Impossible' => 'Impossible'),
             ))
-            ->add('reportContent','textarea', array('attr'=>array('class'=>'ckeditor m-wrap textarea-large span12','rows'=>'3','placeholder'=>'Enter test related any instruction for patient')))
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add any comment','autocomplete'=>'off')))
-	        ->add('file')
         ;
+        if($particular->isAttachment() == 1){
+            $builder->add('file');
+        }
+        if($particular->isReportFormat() == 1){
+            $height = $particular->getReportHeight() > 0 ? $particular->getReportHeight():10;
+            $builder->add('reportContent','textarea', array('attr'=>array('class'=>'ckeditor m-wrap span12','rows' => $height,'placeholder'=>'Enter test related any instruction for patient')));
+        }
     }
     
     /**
@@ -89,7 +97,7 @@ class InvoiceParticularType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_invoice_particular';
+        return 'invoiceParticular';
     }
 
 

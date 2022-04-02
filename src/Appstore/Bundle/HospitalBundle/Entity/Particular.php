@@ -360,6 +360,13 @@ class Particular
     private $code;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="reportHeight", type="integer",  nullable=true)
+     */
+    private $reportHeight = 8;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="particularCode", type="string", length=10, nullable=true)
@@ -424,6 +431,30 @@ class Particular
      * @ORM\Column(name="isDelete", type="boolean", nullable=true)
      */
     private $isDelete = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isReportContent", type="boolean", nullable=true)
+     */
+    private $isReportContent = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isAttachment", type="boolean", nullable=true)
+     */
+    private $isAttachment = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="additionalField", type="boolean", nullable=true)
+     */
+    private $additionalField = false;
 
 
     /**
@@ -1487,6 +1518,71 @@ class Particular
     public function setReportContent($reportContent)
     {
         $this->reportContent = $reportContent;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isAttachment()
+    {
+        return $this->isAttachment;
+    }
+
+    /**
+     * @param bool $isAttachment
+     */
+    public function setIsAttachment($isAttachment)
+    {
+        $this->isAttachment = $isAttachment;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReportHeight()
+    {
+        return $this->reportHeight;
+    }
+
+    /**
+     * @param int $reportHeight
+     */
+    public function setReportHeight($reportHeight)
+    {
+        $this->reportHeight = $reportHeight;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdditionalField()
+    {
+        return $this->additionalField;
+    }
+
+    /**
+     * @param bool $additionalField
+     */
+    public function setAdditionalField($additionalField)
+    {
+        $this->additionalField = $additionalField;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReportContent()
+    {
+        return $this->isReportContent;
+    }
+
+    /**
+     * @param bool $isReportContent
+     */
+    public function setIsReportContent($isReportContent)
+    {
+        $this->isReportContent = $isReportContent;
     }
 
 

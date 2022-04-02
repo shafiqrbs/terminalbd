@@ -74,6 +74,51 @@ class MedicineConfigRepository extends EntityRepository
         $q->execute();
     }
 
+    public function medicineDelete(GlobalOption $option)
+    {
+
+        $em = $this->_em;
+        $config = $option->getMedicineConfig()->getId();
+
+        $sales = $em->createQuery('DELETE MedicineBundle:MedicineSales e WHERE e.medicineConfig = '.$config);
+        $sales->execute();
+
+        $sales = $em->createQuery('DELETE MedicineBundle:MedicineSalesReturn e WHERE e.medicineConfig = '.$config);
+        $sales->execute();
+
+        $purchase = $em->createQuery('DELETE MedicineBundle:MedicinePrepurchase e WHERE e.medicineConfig = '.$config);
+        $purchase->execute();
+
+        $purchase = $em->createQuery('DELETE MedicineBundle:MedicinePurchaseReturn e WHERE e.medicineConfig = '.$config);
+        $purchase->execute();
+
+        $purchase = $em->createQuery('DELETE MedicineBundle:MedicinePurchase e WHERE e.medicineConfig = '.$config);
+        $purchase->execute();
+
+        $house = $em->createQuery('DELETE MedicineBundle:MedicineStockHouse e WHERE e.medicineConfig = '.$config);
+        $house->execute();
+
+        $house = $em->createQuery('DELETE MedicineBundle:MedicineStockHouse e WHERE e.medicineConfig = '.$config);
+        $house->execute();
+
+        $damage = $em->createQuery('DELETE MedicineBundle:MedicineDamage e WHERE e.medicineConfig = '.$config);
+        $damage->execute();
+
+        $adjustment = $em->createQuery('DELETE MedicineBundle:MedicineStockAdjustment e WHERE e.medicineConfig = '.$config);
+        $adjustment->execute();
+
+        $android = $em->createQuery('DELETE MedicineBundle:MedicineAndroidProcess e WHERE e.medicineConfig = '.$config);
+        $android->execute();
+
+        $delete = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
+        $delete->execute();
+
+        $delete = $em->createQuery('DELETE MedicineBundle:MedicineVendor e WHERE e.medicineConfig = '.$config);
+        $delete->execute();
+
+
+    }
+
     public function discountPercentList()
     {
         $array = array(
