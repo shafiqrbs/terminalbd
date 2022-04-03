@@ -113,9 +113,9 @@
 <!-- END TOP NAVIGATION BAR -->
 </div>
 <!-- END HEADER -->
-<div id="print-container" style="display:none"><div id="print-area"></div></div>
 <div class="page-container row-fluid" style="background:#ffffff!important;">
     {% block body %}{% endblock %}
+    <div id="print-container" style="display:none"><div id="print-area"></div></div>
     <div id="confirm-content" style="display:none">
         <div class="confirmModal_content">
             Are you sure to confirm this record?
@@ -174,14 +174,8 @@
         if(docHeight > winHeight){
             $(".page-container").height(winHeight-30).css({'overflow':'hidden'});
         }
-        var invoiceMode = "{{ app.request.cookies.get('invoiceMode') }}";
-        {% if invoiceMode == 'search'  %}
-            var productBox      = (winHeight-220);
-            var transactionBox  = (winHeight-320);
-        {% else %}
-            var productBox      = (winHeight-160);
-            var transactionBox  = (winHeight-220);
-        {% endif %}
+        var productBox      = (winHeight-220);
+        var transactionBox  = (winHeight-320);
 
         $('.productBox').slimScroll({
             height: productBox+'px'
@@ -290,6 +284,9 @@
     .select2-results .select2-highlighted {
         background: #217ebd !important;
         color: #ffffff;
+    }
+    #print-container{
+        display: none;
     }
     input[type="text"].inline-medium-wrap {
         width: 60px;

@@ -24,11 +24,8 @@
     <div class="page-content">
         {% block body %}{% endblock %}
     </div>
+    <div id="print-container" style="display:none"><div id="print-area"></div></div>
 </div>
-<style>
-
-</style>
-
 {#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
 <script type="text/javascript">
     window.print();
@@ -40,6 +37,7 @@
 {% javascripts
 'assets/plugins/jquery-1.10.2.min.js'
 'assets/template/plugin/matchHeight/height-match.js'
+'assets/print/js/kinzi.print.min.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}

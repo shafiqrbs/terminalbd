@@ -1,0 +1,61 @@
+<html>
+<head>
+    <title>Diagonestic Report Format</title>
+    <style>
+        table.reportTable{
+            width: 100%!important;
+            collapse: 0;
+            border-collapse: collapse;
+            border: 1px solid #000000;
+        }
+        table.reportTable tr td , table.reportTable tr th{
+            text-align: center;
+            border: 1px solid #000000;
+        }
+        table.reportTable tr:first-child td , table.reportTable tr:first-child th{
+            font-weight: bold;
+        }
+        table.reportTable tr td.left{
+            text-align: left;
+            padding-left: 15px;
+        }
+        table.reportTable tr td.right{
+            text-align: right;
+            padding-right: 15px;
+        }
+        table label{
+            width: 72px;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 11px!important;
+        }
+
+    </style>
+</head>
+<body>
+<table border="1" cellspacing="1" cellpadding="1" style="width:100%;" class="reportTable">
+    <tbody>
+    <tr><td>Description</td><td>Result-1</td><td>Unit</td><td>Result-2</td><td>Unit</td><td class="left">Reference</td></tr>
+    <tr><td>CT</td><td>4</td><td>Min</td><td>5</td><td>Sec</td><td class="left">1-7</td></tr>
+    <tr><td class="left" colspan="6">Comment</td></tr>
+    </tbody>
+</table>
+<br/>
+<br/>
+<table border="1" cellspacing="1" cellpadding="1" style="width:100%;" class="reportTable">
+    <tbody>
+    <tr><td>Description</td><td>Result</td><td>Unit</td><td class="left">Reference</td></tr>
+    <tr><td>CT</td><td>4</td><td>Min</td><td class="left">1-7</td></tr>
+    <tr><td class="left" colspan="4">Comment</td></tr>
+    </tbody>
+</table>
+
+<table border="1" cellspacing="1" cellpadding="1" style="width:100%;" class="reportTable">
+    <tbody>
+    <tr><td>Description</td><td>Result</td><td>Unit</td><td class="left">Reference</td></tr>
+    <tr><td>CT</td><td>4</td><td>Min</td><td class="left">1-7</td></tr>
+    <tr><td class="left" colspan="4">Comment</td></tr>
+    </tbody>
+</table>
+</body>
+</html>

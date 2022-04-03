@@ -338,7 +338,7 @@ $(document).on('click', '#saveButton', function() {
 });
 
 $(document).on('click', '#posButton', function() {
-    $('#buttonType').val('posBtn');
+    var btn = $('#buttonType').val();
     $.ajax({
         url         : $('form#invoiceForm').attr( 'action' ),
         type        : $('form#invoiceForm').attr( 'method' ),
@@ -360,11 +360,15 @@ $(document).on('click', '#posButton', function() {
             $('#posButton').html("<i class='icon-print'></i> BILL PAY").attr('disabled','disabled');
             $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();
-            jsPostPrint(response);
+            if(btn === 'posBtn'){
+                jsPostPrint(response);
+            }
+            if(btn === 'posDelivery'){
+               $('#print-area').html(response).kinziPrint();
+            }
         }
     });
 });
-
 
 function calcNumbers(result){
     restaurant_invoice.restaurant_invoice_payment.value = restaurant_invoice.restaurant_invoice_payment.value+result;

@@ -252,9 +252,23 @@ class TableInvoiceController extends Controller
         if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($entity);
         }
+
         if($btn == "posBtn" and $entity->isHold() != 1 ){
-            $pos = $this->posPrint($entity);
-            return new Response($pos);
+            /*$pos = $this->posPrint($entity);
+            return new Response($pos);*/
+            $htmlProcess = $this->renderView(
+                'RestaurantBundle:TableInvoice:htmlPrint.html.twig', array(
+                    'entity'         => $entity
+                )
+            );
+            return new Response($htmlProcess);
+        }elseif($btn == "posDelivery" and $entity->isHold() != 1 ){
+            $htmlProcess = $this->renderView(
+                'RestaurantBundle:TableInvoice:htmlPrint.html.twig', array(
+                    'entity'         => $entity
+                )
+            );
+            return new Response($htmlProcess);
         }
         return new Response('success');
     }
