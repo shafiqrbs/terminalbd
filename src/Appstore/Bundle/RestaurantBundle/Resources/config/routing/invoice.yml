@@ -105,6 +105,13 @@ restaurant_invoice_pos:
     options:
             expose: true
 
+restaurant_invoice_delivery_print:
+    path:     /{id}/invoice-delivery-print
+    defaults: { _controller: "RestaurantBundle:Invoice:PosDeliveryPrint" }
+    methods:  [GET]
+    options:
+            expose: true
+
 
 restaurant_invoice_save:
     path:     /{invoice}/invoice-save

@@ -122,6 +122,10 @@ business_invoice_print:
     path:     /{id}/print
     defaults: { _controller: "BusinessBundle:Invoice:invoicePrint" }
 
+business_invoice_posprint:
+    path:     /{id}/pos-print
+    defaults: { _controller: "BusinessBundle:Invoice:posPrint" }
+
 business_invoice_chalan:
     path:     /{id}/chalan
     defaults: { _controller: "BusinessBundle:Invoice:invoiceChalan" }

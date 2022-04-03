@@ -202,6 +202,13 @@ class BusinessConfig
      */
     private $isDescription = false;
 
+      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="posPrint", type="boolean",  nullable=true)
+     */
+    private $posPrint = false;
+
      /**
      * @var boolean
      *
@@ -1618,6 +1625,24 @@ class BusinessConfig
     {
         $this->bonusFromStock = $bonusFromStock;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPosPrint()
+    {
+        return $this->posPrint;
+    }
+
+    /**
+     * @param bool $posPrint
+     */
+    public function setPosPrint($posPrint)
+    {
+        $this->posPrint = $posPrint;
+    }
+
+
 
 
 }

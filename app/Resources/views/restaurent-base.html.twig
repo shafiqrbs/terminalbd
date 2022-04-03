@@ -75,25 +75,19 @@
 <div class="navbar-inner">
     <div class="container-fluid">
     <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <ul class="nav pull-center" style="margin-top: -5px!important;">
+        <ul class="nav pull-center">
             <li class="" id="header_notification_bar">
                 <a href="{{ path('homepage') }}" class="btn blue mini"><i class="icon-th-large"></i> Dashboard</a>
             </li>
             <li class="" id="header_notification_bar">
-                <a  href="{{ path('inventory_stockitem') }}" class="btn yellow mini"><i class="icon-file"></i> Stock Item</a>
+                <a  href="{{ path('restaurant_stock') }}" class="btn yellow mini"><i class="icon-file"></i> Stock Item</a>
             </li>
             <li class="" id="header_notification_bar">
-                <a  href="{{ path('inventory_salesonline') }}" class="btn purple mini"><i class="icon-th-large"></i> Sales</a>
+                <a  href="{{ path('restaurant_invoice') }}" class="btn purple mini"><i class="icon-th-large"></i> Sales</a>
             </li>
             <!-- END USER LOGIN DROPDOWN -->
         </ul>
         <ul class="nav pull-right" style="margin-top: -5px!important;">
-            <li class="" id="header_notification_bar">
-                <a href="javascript:" data-id="Order" data-action="{{ path('pos_order',{'mode':'order'}) }}" value="order" class="btn blue invoice-list mini list-load"><i class="icon-th-large"></i> Orders</a>
-            </li>
-            <li class="" id="header_notification_bar">
-                <a  href="javascript:" data-id="Hold" data-action="{{ path('pos_hold',{'mode':'hold'}) }}" value="hold" class="btn yellow invoice-list mini list-load"><i class="icon-file"></i> Holds</a>
-            </li>
             <li class="dropdown user" style="margin-top: 11px!important;">
                 <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                    data-close-others="true">
@@ -115,7 +109,6 @@
 <!-- END HEADER -->
 <div class="page-container row-fluid" style="background:#ffffff!important;">
     {% block body %}{% endblock %}
-    <div id="print-container" style="display:none"><div id="print-area"></div></div>
     <div id="confirm-content" style="display:none">
         <div class="confirmModal_content">
             Are you sure to confirm this record?
@@ -299,5 +292,6 @@
     }
 
 </style>
+<div id="print-container" style="display:none"><div id="print-area"></div></div>
 </body>
 </html>

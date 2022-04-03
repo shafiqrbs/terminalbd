@@ -166,8 +166,6 @@ class RestaurantTemporaryController extends Controller
         if($entity->getSubTotal()){
             $em->persist($entity);
             $em->flush();
-        }else{
-            return new Response("failed");
         }
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->initialInvoiceItems($user,$entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
@@ -178,10 +176,20 @@ class RestaurantTemporaryController extends Controller
         if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($entity);
         }
-        if($btn == "posBtn" and $entity->isHold() != 1 ){
+        if($btn != 'saveBtn' and $entity->getRestaurantConfig()->isPosPrint() == 1 and $entity->isHold() != 1 ){
             $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
             $pos = $this->posPrint($entity,$invoiceParticulars);
             return new Response($pos);
+        }elseif($btn != 'saveBtn' and $entity->getRestaurantConfig()->isDeliveryPrint() == 1 and $entity->isHold() != 1 ) {
+            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
+            $htmlProcess = $this->renderView(
+                'RestaurantBundle:Invoice:posPrint.html.twig', array(
+                    'entity'         => $entity,
+                    'printMode'         => 'print',
+                    'invoiceParticulars'         => $invoiceParticulars
+                )
+            );
+            return new Response($htmlProcess);
         }
         return new Response("success");
 

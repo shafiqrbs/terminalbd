@@ -456,6 +456,24 @@ class InvoiceController extends Controller
 
 
 
+     public function PosDeliveryPrintAction(Request $request,$id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig'=>$config,'id'=>$id));
+        $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
+        $response = $this->renderView(
+            'RestaurantBundle:Invoice:posPrint.html.twig', array(
+                'entity'         => $entity,
+                'printMode'         => 'print',
+                'invoiceParticulars'         => $invoiceParticulars
+            )
+        );
+        return new Response($response);
+    }
+
+
+
     public function approvedOrderAction(Invoice $entity)
     {
         $globalOption = $entity->getRestaurantConfig()->getGlobalOption();

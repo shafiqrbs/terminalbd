@@ -15,17 +15,32 @@ $(document).on("click", "#kitchenBtn", function() {
 $(document).on("click", ".paymentReceive", function() {
     var url = $(this).attr('data-url');
     var id = $(this).attr('data-id');
+    var process = $(this).attr('data-value');
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $('#paymentDone-'+id).remove();
             $.get(url, function( response ) {
-               jsPostPrint(response);
+                if(process === 'pos-print'){
+                    jsPostPrint(response);
+                }
+                if(process === 'delivery-print'){
+                   // $('#print-area').html(response).kinziPrint();
+                    htmlPrint(response);
+                }
             });
         }
     });
 });
+
+function htmlPrint(response) {
+    w = window.open(window.location.href,"_blank");
+    w.document.open();
+    w.document.write(response);
+    w.window.print();
+
+}
 
 function pageRedirect() {
     window.location.href = "/restaurant/invoice/new";

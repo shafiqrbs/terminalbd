@@ -241,8 +241,6 @@ class TableInvoiceController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->tableInvoiceItems($entity,$invoice);
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTableInvoice')->resetData($invoice);
-        }else{
-            return new Response("failed");
         }
         $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantTemporary')->removeInitialParticular($this->getUser());
         if($entity->isHold() != 1){
@@ -252,20 +250,16 @@ class TableInvoiceController extends Controller
         if($entity->getRestaurantConfig()->isStockHistory() == 1 ) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantStockHistory')->processInsertSalesItem($entity);
         }
-
-        if($btn == "posBtn" and $entity->isHold() != 1 ){
-            /*$pos = $this->posPrint($entity);
-            return new Response($pos);*/
+        if($btn != 'saveBtn' and $entity->getRestaurantConfig()->isPosPrint() == 1 and $entity->isHold() != 1 ){
+            $pos = $this->posPrint($entity);
+            return new Response($pos);
+        }elseif($btn != 'saveBtn' and $entity->getRestaurantConfig()->isDeliveryPrint() == 1 and $entity->isHold() != 1 ){
+            $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->findBy(array('invoice' => $entity->getId()));
             $htmlProcess = $this->renderView(
-                'RestaurantBundle:TableInvoice:htmlPrint.html.twig', array(
-                    'entity'         => $entity
-                )
-            );
-            return new Response($htmlProcess);
-        }elseif($btn == "posDelivery" and $entity->isHold() != 1 ){
-            $htmlProcess = $this->renderView(
-                'RestaurantBundle:TableInvoice:htmlPrint.html.twig', array(
-                    'entity'         => $entity
+                'RestaurantBundle:Invoice:posPrint.html.twig', array(
+                    'entity'         => $entity,
+                    'printMode'         => '',
+                    'invoiceParticulars'         => $invoiceParticulars
                 )
             );
             return new Response($htmlProcess);

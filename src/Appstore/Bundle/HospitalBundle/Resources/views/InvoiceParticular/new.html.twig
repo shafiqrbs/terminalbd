@@ -337,7 +337,16 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
+    CKEDITOR.replace( 'invoiceParticular_reportContent', {
+    toolbarGroups: [
+        { name: 'basicstyles', groups: [ 'basicstyles'] },
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+        { name: 'insert' },
+        { name: 'styles' },
+        { name: 'colors' },
+        { name: 'tools' },
+    ]
+    });
     var count = 0;
     $('.addMore').click(function(){
 

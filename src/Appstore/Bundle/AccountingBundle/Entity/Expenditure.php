@@ -183,6 +183,13 @@ class Expenditure
 
     /**
      * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="generatedDate", type="datetime", nullable=true)
+     */
+    private $generatedDate;
+
+    /**
+     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated", type="datetime")
      */
@@ -687,5 +694,23 @@ class Expenditure
     {
         $this->androidProcess = $androidProcess;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getGeneratedDate()
+    {
+        return $this->generatedDate;
+    }
+
+    /**
+     * @param \DateTime $generatedDate
+     */
+    public function setGeneratedDate($generatedDate)
+    {
+        $this->generatedDate = $generatedDate;
+    }
+
+
 }
 

@@ -353,11 +353,6 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $data .= "<a id='{$entity->getId()}' data-id='{$entity->getId()}' data-url='/business/invoice/{$sales->getId()}/{$entity->getId()}/particular-delete' href='javascript:' class='btn red mini particularDelete' ><i class='icon-trash'></i></a>";
             $data .= "</td>";
             $data .= '</tr>';
-            $data .= "<tr id='remove-{$entity->getId()}'>";
-            if($entity->getDescription()){
-                $data .= "<td colspan='7'>{$entity->getDescription()}</td>";
-            }
-            $data .= '</tr>';
 
             $i++;
         }

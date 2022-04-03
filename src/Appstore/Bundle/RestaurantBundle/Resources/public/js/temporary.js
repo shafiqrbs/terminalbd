@@ -262,7 +262,9 @@ function formSubmit() {
                 $('#subTotal').html('');
                 $('#restaurant_invoice_vat').val(0);
                 $('#restaurant_invoice_payment').val('');
-                $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
+                $('#buttonType').val('');
+                $('#saveButton').html("<i class='icon-save'></i> Save");
+                $('.receiveBtn').attr('disabled','disabled');
                 $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                 $('#invoiceParticulars').hide();
             }
@@ -270,7 +272,7 @@ function formSubmit() {
     });
 
     $(document).on('click', '#posButton', function() {
-        $('#buttonType').val('posBtn');
+        var printMode = $('#printMode').val();
         $.ajax({
             url         : $('form#invoiceForm').attr( 'action' ),
             type        : $('form#invoiceForm').attr( 'method' ),
@@ -286,13 +288,29 @@ function formSubmit() {
                 $('#subTotal').html('');
                 $('#restaurant_invoice_vat').val(0);
                 $('#restaurant_invoice_payment').val(0);
-                $('#posButton').html("<i class='icon-print'></i> POS PRINT").attr('disabled','disabled');
+                $('#posButton').html("<i class='icon-print'></i> POS PRINT");
+                $('.receiveBtn').attr('disabled','disabled');
                 $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                 $('#invoiceParticulars').hide();
-                jsPostPrint(response);
+                if(printMode === "posPrint" && response != "success"){
+                    jsPostPrint(response);
+                }
+                if(printMode === "deliveryPrint" && response != "success"){
+                    // $('#print-area').html(response).kinziPrint();
+                    htmlPrint(response);
+                }
+
             }
         });
     });
+
+    function htmlPrint(response) {
+        w = window.open(window.location.href,"_blank");
+        w.document.open();
+        w.document.write(response);
+        w.window.print();
+
+    }
 
     $('form#invoiceForm').on('keypress', 'input,select,textarea', function (e) {
 

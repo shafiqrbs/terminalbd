@@ -75,6 +75,7 @@ class ConfigType extends AbstractType
             ->add('showStock')
             ->add('isPrintHeader')
             ->add('isDescription')
+            ->add('posPrint')
             ->add('isPrintFooter')
             ->add('isStockHistory')
             ->add('srCommission')

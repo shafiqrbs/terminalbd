@@ -222,6 +222,13 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 {{ form_widget(form.posPrint) }} POS Print
+                                                <p>Using only  pos print or delivery print</p>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                {{ form_widget(form.deliveryPrint) }} Delivery Print
+                                                <p>Using only delivery print or pos print</p>
                                             </div>
                                         </div>
                                          <div class="row-fluid">
@@ -274,11 +281,7 @@
                                                 {{ form_widget(form.printToken) }} Token Print
                                             </div>
                                         </div>
-                                         <div class="row-fluid">
-                                            <div class="span12">
-                                                {{ form_widget(form.deliveryPrint) }} Delivery Print
-                                            </div>
-                                        </div>
+
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 {{ form_widget(form.tablePlan) }} Table Plan

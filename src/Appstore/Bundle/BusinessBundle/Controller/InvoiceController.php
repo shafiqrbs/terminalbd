@@ -829,6 +829,25 @@ class InvoiceController extends Controller
 
     }
 
+    public function posPrintAction(BusinessInvoice $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        /* @var $config BusinessConfig */
+        $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+        if ($config->getId() == $entity->getBusinessConfig()->getId()) {
+            $response = $this->renderView(
+                'BusinessBundle:PosPrint:print.html.twig', array(
+                    'entity'         => $entity,
+                    'printMode'         => 'print',
+                )
+            );
+            return new Response($response);
+        }
+
+    }
+
     public function invoiceChalanAction(BusinessInvoice $entity)
 	{
 		$em = $this->getDoctrine()->getManager();

@@ -329,8 +329,10 @@ $(document).on('click', '#saveButton', function() {
             $('.sd').html(0);
             $('.discount').html(0);
             $('#restaurant_invoice_vat').val(0);
+            $('#buttonType').val('');
             $('#restaurant_invoice_payment').val('');
-            $('#saveButton').html("<i class='icon-save'></i> Save").attr('disabled','disabled');
+            $('#saveButton').html("<i class='icon-save'></i> Save");
+            $('.receiveBtn').attr('disabled','disabled');
             $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();
         }
@@ -338,7 +340,7 @@ $(document).on('click', '#saveButton', function() {
 });
 
 $(document).on('click', '#posButton', function() {
-    var btn = $('#buttonType').val();
+    var btn = $('#printMode').val();
     $.ajax({
         url         : $('form#invoiceForm').attr( 'action' ),
         type        : $('form#invoiceForm').attr( 'method' ),
@@ -357,7 +359,8 @@ $(document).on('click', '#posButton', function() {
             $('.discount').html(0);
             $('#restaurant_invoice_vat').val(0);
             $('#restaurant_invoice_payment').val(0);
-            $('#posButton').html("<i class='icon-print'></i> BILL PAY").attr('disabled','disabled');
+            $('#posButton').html("<i class='icon-print'></i> POS PRINT");
+            $('.receiveBtn').attr('disabled','disabled');
             $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount, .initialDiscount,#balance').html('');
             $('#invoiceParticulars').hide();
             if(btn === 'posBtn'){

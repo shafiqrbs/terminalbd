@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                             <div class="row-fluid">
-                                <div class="span12">
+                                <div class="span12" style="height: 620px; overflow-y: scroll">
                                     <ul class="unstyled">
                                         {% if categories is not empty %}
                                             {% for category in categories %}
@@ -414,15 +414,20 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="row-fluid">
-                            <div class="form-actions portlet box">
+                            <div class="">
                                 <div class="pull-center">
                                     {{ form_widget(form.discount) }}
                                     <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="{{ initialTotal }}" >
                                     <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
                                     <input type="hidden" name="buttonType" id="buttonType" value="">
-                                    <button type="button" class="btn blue big  receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
+                                    <button type="button" style="margin-left: 0!important;" class="btn span6 blue big  receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
                                     {% if config.posPrint == 1 %}
-                                    <button type="button" class="btn yellow big receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> POS PRINT</button>
+                                        <input type="hidden" name="printMode" id="printMode" value="posPrint">
+                                        <button type="button" class="btn span6 yellow big receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> POS PRINT</button>
+                                    {% endif %}
+                                    {% if config.deliveryPrint == 1 %}
+                                        <input type="hidden" name="printMode" id="printMode" value="deliveryPrint">
+                                        <button type="button" class="btn span6 yellow big receiveBtn" {% if temporarySubTotal is empty %} disabled="disabled" {% endif %} id="posButton"><i class="icon-print"></i> POS PRINT</button>
                                     {% endif %}
 
                                 </div>
@@ -441,6 +446,10 @@
 
     #calBorder, .select2-drop , .select2-drop-mask{
         z-index: 999999!important;
+    }
+
+    .portlet-body form{
+        margin: 0!important;
     }
 
     .select2-container .select2-choice {
@@ -508,5 +517,4 @@
     .bankHide , .mobileBankHide , .customer{
         display: none;
     }
-
 </style>

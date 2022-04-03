@@ -99,6 +99,12 @@ class PettyCash
      **/
     private  $createdBy;
 
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="generatedDate", type="datetime", nullable=true)
+     */
+    private $generatedDate;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="pettyCashToUser" )
@@ -507,6 +513,22 @@ class PettyCash
     public function setBalance($balance)
     {
         $this->balance = $balance;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getGeneratedDate()
+    {
+        return $this->generatedDate;
+    }
+
+    /**
+     * @param \DateTime $generatedDate
+     */
+    public function setGeneratedDate($generatedDate)
+    {
+        $this->generatedDate = $generatedDate;
     }
 
 
