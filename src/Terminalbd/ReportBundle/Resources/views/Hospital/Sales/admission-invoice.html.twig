@@ -66,7 +66,7 @@
                         <select class="search-input span12 m-wrap" id="diseases" name="diseases">
                             <option value="">--Diseases Profile--</option>
                             {% for diseas in diseases %}
-                                <option {% if searchForm.diseas is defined and searchForm.diseas == employee.id %} selected="selected" {% endif %} value="{{ diseas.id }}">{{ diseas.name }}</option>
+                                <option {% if searchForm.diseases is defined and searchForm.diseases == diseas.id %} selected="selected" {% endif %} value="{{ diseas.id }}">{{ diseas.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -153,6 +153,7 @@
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>
                             <td class="numeric" >{{ entity.department }}</td>
+                            <td class="numeric" >{{ entity.diseasesProfile }}</td>
                             <td class="numeric" >{{ entity.assignDoctor }}</td>
                             <td class="numeric" >{{ entity.anesthesiaDoctor }}</td>
                             <td class="numeric" >{{ entity.assistantDoctor }}</td>

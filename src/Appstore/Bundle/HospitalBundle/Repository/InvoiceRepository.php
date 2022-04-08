@@ -743,11 +743,13 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
         $qb->leftJoin('e.department','dep');
+        $qb->leftJoin('e.diseasesProfile','dp');
         $qb->leftJoin('e.assignDoctor','d');
         $qb->leftJoin('e.anesthesiaDoctor','ad');
         $qb->leftJoin('e.assistantDoctor','assist');
         $qb->select('e.created as created','e.updated as updated','e.invoice as invoice','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
         $qb->addSelect('c.name as name','c.mobile as mobile');
+        $qb->addSelect('dp.name as diseasesProfile');
         $qb->addSelect('d.name as assignDoctor');
         $qb->addSelect('dep.name as department');
         $qb->addSelect('ad.name as anesthesiaDoctor');
