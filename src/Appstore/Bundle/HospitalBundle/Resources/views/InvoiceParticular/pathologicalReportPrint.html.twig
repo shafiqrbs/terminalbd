@@ -53,9 +53,9 @@
     </table>
         {% if entity.particular.reportFormat == 1 %}
             <table class="table" style="margin-top:20px;min-height:{{  entity.hmsInvoice.hospitalConfig.reportHeight }}px">
-                <tbody>
                 {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
-                    <tr>
+                <tbody>
+                <tr>
                         <td>
                             {% if entity.particular.pathologicalReports is not empty %}
                                 {% for item in entity.particular.pathologicalReports %}
@@ -75,7 +75,6 @@
                             {% endif %}
                         </td>
                     </tr>
-                {% endif %}
                 {% if  entity.invoicePathologicalReports is defined and entity.invoicePathologicalReports is not empty %}
                     <tr><td>&nbsp;</td></tr>
                     {% for meta in entity.invoicePathologicalReports %}
@@ -86,6 +85,7 @@
                 {% endif %}
                 <tr><td class="numeric">Comment: </td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
                 </tbody>
+                {% endif %}
             </table>
         {% else %}
             <table class="table table-bordered" style="margin-top:20px;">
@@ -129,7 +129,6 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                {% endif %}
                 {% if  entity.invoicePathologicalReports is defined and entity.invoicePathologicalReports is not empty %}
                     {% for meta in entity.invoicePathologicalReports %}
                         {% if meta.metaValue is not empty %}
@@ -138,6 +137,7 @@
                     {% endfor %}
                 {% endif %}
                 <tr><td class="numeric">Comment: </td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
+                {% endif %}
                 </tbody>
             </table>
         {% endif %}

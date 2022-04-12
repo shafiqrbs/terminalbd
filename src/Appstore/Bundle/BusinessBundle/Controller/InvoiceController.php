@@ -836,9 +836,15 @@ class InvoiceController extends Controller
 
         /* @var $config BusinessConfig */
         $config = $this->getUser()->getGlobalOption()->getBusinessConfig();
+
+        if($config->isCustomInvoicePrint() == 1){
+            $template = $config->getGlobalOption()->getSubDomain();
+        }else{
+            $template = 'print';
+        }
         if ($config->getId() == $entity->getBusinessConfig()->getId()) {
             $response = $this->renderView(
-                'BusinessBundle:PosPrint:print.html.twig', array(
+                "BusinessBundle:PosPrint:{$template}.html.twig", array(
                     'entity'         => $entity,
                     'printMode'         => 'print',
                 )
