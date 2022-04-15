@@ -183,15 +183,19 @@
         border: 1px solid #000000;
     }
     table.reportTable tr td , table.reportTable tr th{
-        text-align: center;
+        text-align: left;
+        padding-left: 8px;
         border: 1px solid #000000;
     }
     table.reportTable tr:first-child td , table.reportTable tr:first-child th{
         font-weight: bold;
     }
+    table.reportTable tr th.center, table.reportTable tr td.center{
+        text-align: center;
+    }
     table.reportTable tr td.left{
         text-align: left;
-        padding-left: 15px;
+        padding-left: 8px;
     }
     table.reportTable tr td.right{
         text-align: right;
