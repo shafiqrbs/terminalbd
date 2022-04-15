@@ -56,7 +56,7 @@ class MedicineStockRepository extends EntityRepository
         if (!empty($keyword)) {
             $qb->leftJoin('e.medicineBrand','mb');
             $qb->leftJoin('mb.medicineGeneric','mg');
-            $qb->andWhere('e.name LIKE :searchTerm OR e.brandName LIKE :searchTerm OR mg.name LIKE :searchTerm');
+            $qb->andWhere('e.name LIKE :searchTerm OR e.brandName LIKE :searchTerm OR mg.name LIKE :searchTerm OR e.slug LIKE :searchTerm OR c.slug LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.$keyword.'%');
         }
     }
@@ -279,23 +279,15 @@ class MedicineStockRepository extends EntityRepository
         $brand = isset($data['brandName'])? $data['brandName'] :'';
         $sku = isset($data['sku'])? $data['sku'] :'';
         $minQnt = isset($data['minQnt'])? $data['minQnt'] :'';
-        $qb = $this->createQueryBuilder('item');
-        $qb->where("item.medicineConfig = :config");
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.medicineConfig = :config");
         $qb->setParameter('config', $config);
-        $qb->andWhere("item.minQuantity > 0");
+        $qb->andWhere("e.minQuantity > 0");
         if($minQnt == 'minimum') {
-            $qb->andWhere("item.minQuantity > item.remainingQuantity");
+            $qb->andWhere("e.minQuantity > e.remainingQuantity");
         }
-        if (!empty($sku)) {
-            $qb->andWhere($qb->expr()->like("item.sku", "'%$sku%'"  ));
-        }
-        if (!empty($brand)) {
-            $qb->andWhere($qb->expr()->like("item.brandName", "'%$brand%'"  ));
-        }
-        if (!empty($name)) {
-             $qb->andWhere($qb->expr()->like("item.name", "'%$name%'"  ));
-        }
-        $qb->orderBy('item.name','ASC');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.name','ASC');
         $qb->getQuery();
         return  $qb;
 
