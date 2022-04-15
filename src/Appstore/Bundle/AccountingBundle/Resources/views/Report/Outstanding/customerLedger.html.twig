@@ -35,6 +35,7 @@
                                 {% set startDate = searchForm.startDate is defined ? searchForm.startDate : "now"|date("d-m-Y") %}
                                 {% set endDate = searchForm.endDate is defined ? searchForm.endDate :"now"|date("d-m-Y") %}
                                 <a target="_blank" href="{{ path('report_customer_ledger',{'pdf':'pdf','startDate':startDate,'endDate':endDate,'mobile':mobile}) }}" class="btn purple"><i class="icon icon-download"></i> Download</a>
+                                <a  data-action="{{ path('report_customer_ledger_print',{'startDate':startDate,'endDate':endDate,'mobile':mobile}) }}" href="javascript:" class="btn blue ledger-print"><i class="icon icon-print"></i> Print</a>
                             </div>
                         </div>
                     </div>
@@ -209,12 +210,6 @@
 {% block documentready %}
     {{ parent() }}
     AccountingApproveProcess();
-    $('#printLedger').on('click', function(e)  {
-        $('#DivIdToPrint').printThis({
-            loadCSS: "{{ asset('assets/css/print.css') }}",
-            printDelay: 500,
-        });
-    });
 {% endblock %}
 
 

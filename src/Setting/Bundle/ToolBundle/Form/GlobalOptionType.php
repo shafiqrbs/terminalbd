@@ -45,7 +45,6 @@ class GlobalOptionType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
-
                 ->add('location', 'entity', array(
                     'required'    => false,
                     'empty_value' => '---Select Location---',
@@ -79,6 +78,8 @@ class GlobalOptionType extends AbstractType
                     )
                 ))
                 ->add('hotline','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Hotline no')
+                ))
+                ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')
                 ))
                 ->add('subDomain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub-domain name'),
                     'constraints' =>array(

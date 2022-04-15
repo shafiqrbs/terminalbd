@@ -2465,7 +2465,7 @@ class GlobalOption
     /**
      * Sets file.
      *
-     * @param Page $file
+     * @param GlobalOption $file
      */
     public function setFile(UploadedFile $file = null)
     {
@@ -2475,7 +2475,7 @@ class GlobalOption
     /**
      * Get file.
      *
-     * @return Page
+     * @return GlobalOption
      */
     public function getFile()
     {

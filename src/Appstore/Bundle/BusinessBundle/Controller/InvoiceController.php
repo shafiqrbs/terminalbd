@@ -802,7 +802,8 @@ class InvoiceController extends Controller
         if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 
 	        if($config->isCustomInvoicePrint() == 1){
-                $template = 'invoice-'.$config->getGlobalOption()->getId();
+              //  $template = 'invoice-'.$config->getGlobalOption()->getId();
+                $template = $config->getGlobalOption()->getSubDomain();
 	        }else{
                 $template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
             }

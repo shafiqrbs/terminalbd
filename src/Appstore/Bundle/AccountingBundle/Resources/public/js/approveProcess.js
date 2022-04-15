@@ -41,6 +41,26 @@ function AccountingApproveProcess(){}
         location.reload();
     }
 
+$(document).on("click", ".ledger-print", function(e) {
+    var url = $(this).attr("data-action");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            htmlPrint(response);
+           // $('#print-area').html(response).kinziPrint();
+        },
+    })
+});
+
+function htmlPrint(response) {
+    w = window.open(window.location.href,"_blank");
+    w.document.open();
+    w.document.write(response);
+    w.window.print();
+
+}
+
 $(document).on("click", ".delete", function(e) {
 
     var id = $(this).attr("data-id");

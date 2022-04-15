@@ -354,7 +354,7 @@ class AccountSalesRepository extends EntityRepository
 			$qb->setParameter('endDate',$end);
 		}
 		$qb->orderBy('e.id','ASC');
-		$result = $qb->getQuery();
+		$result = $qb->getQuery()->getResult();
 		return $result;
 
 	}

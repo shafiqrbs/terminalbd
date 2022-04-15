@@ -212,7 +212,7 @@ class GlobalOptionController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
+            $entity->upload();
             $em->flush();
             //$this->getDoctrine()->getRepository('SettingContentBundle:HomePage')->globalOptionHome($user);
             //$this->getDoctrine()->getRepository('SettingContentBundle:ContactPage')->globalOptionContact($user);
@@ -285,7 +285,7 @@ class GlobalOptionController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
+            $entity->upload();
             $em->flush();
             //$this->getDoctrine()->getRepository('SettingContentBundle:HomePage')->globalOptionHome($user);
             //$this->getDoctrine()->getRepository('SettingContentBundle:ContactPage')->globalOptionContact($user);

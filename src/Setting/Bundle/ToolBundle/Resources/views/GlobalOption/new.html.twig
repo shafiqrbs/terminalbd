@@ -253,9 +253,9 @@
                                             <div data-provides="fileupload" class="fileupload fileupload-new">
                                                 <div  class="fileupload-new thumbnail">
                                                     {% if(entity.webPath) %}
-                                                        <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.webPath).resize(250,150) }}">
+                                                        <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.webPath).resize(200,150) }}">
                                                     {% else %}
-                                                        <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                        <img alt="" src="https://via.placeholder.com/150">
                                                     {% endif %}
                                                 </div>
                                                 <div  class="fileupload-preview fileupload-exists thumbnail"></div>
@@ -276,6 +276,17 @@
 
                             </div>
                             <!--/span-->
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label" >Address</label>
+                                    <div class="controls">
+                                        {{ form_widget(edit_form.address) }}
+                                        {{ form_errors(edit_form.address) }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!--/row-->
                         <div class="form-actions portlet box grey">

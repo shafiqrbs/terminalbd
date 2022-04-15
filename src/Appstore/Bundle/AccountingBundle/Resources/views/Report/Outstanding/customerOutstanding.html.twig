@@ -102,15 +102,15 @@
                                         <th class="numeric" >{{ entity.totalAmount|number_format }}</th>
                                         <th class="numeric" >{{ entity.amount|number_format }}</th>
                                         <th class="numeric" >{{ entity.customerBalance|number_format }}</th>
-                                        <th class="numeric" >
+                                        <td class="numeric" >
                                             <div class="btn-group">
-                                            <a class="btn mini blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
-                                            <a target="_blank" class="btn mini yellow" href="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}"><i class="icon-print"></i> Print</a>
-                                            {% if global.notificationConfig.smsActive == 1 %}
-                                            <a  class="btn mini purple approve" href="javascript:" data-url="{{ path('report_sales_customer_sms',{'id':entity.customerId}) }}"><i class="icon-phone"></i> SMS</a>
+                                            <a class="btn blue" href="{{ path('report_customer_ledger',{'mobile':entity.customerMobile}) }}"><i class="icon-plus-sign"></i> Ledger</a>
+                                            <a  class="btn yellow ledger-print" data-action="{{ path('report_customer_ledger_print',{'mobile':entity.customerMobile}) }}" href="javascript:"><i class="icon-print"></i> Print</a>
+                                            {% if global.notificationConfig is not empty and global.notificationConfig.smsActive == 1 %}
+                                            <a  class="btn purple approve" href="javascript:" data-url="{{ path('report_sales_customer_sms',{'id':entity.customerId}) }}"><i class="icon-phone"></i> SMS</a>
                                             {% endif %}
                                             </div>
-                                        </th>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -143,12 +143,6 @@
 {% block documentready %}
     {{ parent() }}
     AccountingApproveProcess();
-    $('#printLedger').on('click', function(e)  {
-    $('#DivIdToPrint').printThis({
-    styles: ['{{ asset('assets/css/print.css') }}'],
-    header: "<h1>Customer Outstanding</h1>"
-    });
-    });
 {% endblock %}
 
 

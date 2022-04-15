@@ -44,7 +44,8 @@ class GlobalOptionModifyType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
-
+                ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')
+                ))
                 ->add('location', 'entity', array(
                     'required'    => false,
                     'empty_value' => '---Select Location---',

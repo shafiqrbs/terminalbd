@@ -506,11 +506,10 @@ class ReportController extends Controller
 			$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
 		}
 		$entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
-
         if(empty($data['pdf'])) {
 
             return $this->render('AccountingBundle:Report/Outstanding:customerLedger.html.twig', array(
-                'entities' => $entities->getResult(),
+                'entities' => $entities,
                 'globalOption' => $this->getUser()->getGlobalOption(),
                 'overview' => $overview,
                 'customer' => $customer,
@@ -522,7 +521,7 @@ class ReportController extends Controller
             $html = $this->renderView(
                 'AccountingBundle:Report/Outstanding:customerLedgerPdf.html.twig', array(
                     'globalOption' => $this->getUser()->getGlobalOption(),
-                    'entities' => $entities->getResult(),
+                    'entities' => $entities,
                     'overview' => $overview,
                     'customer' => $customer,
                     'searchForm' => $data,
@@ -553,18 +552,15 @@ class ReportController extends Controller
 			$customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$data['mobile']));
 			$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data);
 		}
-
-		$amount = ($overview['totalAmount'] - $overview['receiveAmount']);
-        $amountInWord = $this->get('settong.toolManageRepo')->intToWords($amount);
-
-        return $this->render('AccountingBundle:Report/Outstanding:customerOutstandingPrint.html.twig', array(
+        $entities = $em->getRepository('AccountingBundle:AccountSales')->customerLedger($user,$data);
+        $print = $this->renderView('AccountingBundle:Report/Outstanding:customerOutstandingPrint.html.twig', array(
             'globalOption' => $this->getUser()->getGlobalOption(),
-            'config' => $this->getUser()->getGlobalOption()->getAccountingConfig(),
             'overview' => $overview,
-            'entity' => $customer,
-            'amountInWord' => $amountInWord,
+            'customer' => $customer,
+            'entities' => $entities,
             'searchForm' => $data,
         ));
+        return  new Response($print);
 
 
 	}
