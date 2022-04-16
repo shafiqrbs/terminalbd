@@ -50,13 +50,10 @@ class MedicineStockRepository extends EntityRepository
         if(!empty($mode)){
             $qb->andWhere("e.mode = :mode")->setParameter('mode', $mode);
         }
-        if(!empty($category)){
-            $qb->andWhere($qb->expr()->like("c.slug", "'%$category%'"  ));
-        }
         if (!empty($keyword)) {
             $qb->leftJoin('e.medicineBrand','mb');
             $qb->leftJoin('mb.medicineGeneric','mg');
-            $qb->andWhere('e.name LIKE :searchTerm OR e.brandName LIKE :searchTerm OR mg.name LIKE :searchTerm OR e.slug LIKE :searchTerm OR c.slug LIKE :searchTerm');
+            $qb->andWhere('e.name LIKE :searchTerm OR e.brandName LIKE :searchTerm OR mg.name LIKE :searchTerm OR e.slug LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.$keyword.'%');
         }
     }
