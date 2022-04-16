@@ -183,6 +183,8 @@
                                                 {% endif %}
                                                 {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and  entity.process in processIntArr )  %}
                                                     <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn green mini tooltips" data-trigger = "hover" data-original-title = "Edit" ><i class="icon-pencil"></i></a>
+                                                {% endif %}
+                                                {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and  entity.process in processIntArr )  %}
                                                     <a  id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                                 {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
