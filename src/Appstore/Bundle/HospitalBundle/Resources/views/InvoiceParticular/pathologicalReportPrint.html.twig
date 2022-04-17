@@ -52,8 +52,9 @@
         </tr>
     </table>
         {% if entity.particular.reportFormat == 1 %}
-            <table class="table" style="margin-top:20px;min-height:{{  entity.hmsInvoice.hospitalConfig.reportHeight }}px">
-                {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+            {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+
+                <table class="table" style="margin-top:20px;min-height:{{  entity.hmsInvoice.hospitalConfig.reportHeight }}px">
                 <tbody>
                 <tr>
                         <td>
@@ -83,13 +84,14 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                <tr><td class="numeric">Comment: </td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
+                <tr><td colspan="4">Comment: {{ entity.comment|raw }}</td></tr>
                 </tbody>
-                {% endif %}
             </table>
+            {% endif %}
         {% else %}
-            <table class="table table-bordered" style="margin-top:20px;">
-                {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+            {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+
+                <table class="table table-bordered" style="margin-top:20px;">
                 <thead class="flip-content ">
                 <tr class="head-black">
                     <th class="span3">Name</th>
@@ -136,14 +138,20 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                <tr><td class="numeric">Comment: </td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
-                {% endif %}
+                <tr><td colspan="4">Comment: {{ entity.comment|raw }}</td></tr>
+
                 </tbody>
             </table>
-        {% endif %}
-            {% if entity.reportContent and entity.particular.isReportContent == 1 %}
-                {{ entity.reportContent|raw }}
             {% endif %}
+        {% endif %}
+        {% if entity.reportContent and entity.particular.isReportContent == 1 %}
+            {{ entity.reportContent|raw }}
+        {% endif %}
+        {% if  entity.particular.isReportContent != 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is empty %}
+            <table class="reportTable">
+                <tr><td>Comment: {{ entity.comment|raw }}</td></tr>
+            </table>
+        {% endif %}
             <table class="table print-footer" style="position: fixed; bottom: 40px"  >
             <tr>
                 <td class="left span4">
