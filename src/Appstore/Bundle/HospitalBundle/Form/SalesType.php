@@ -111,7 +111,7 @@ class SalesType extends AbstractType
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
-                'empty_value' => '---Choose Sales by---',
+                'empty_value' => '---Choose Issue by---',
                 'attr'=>array('class'=>'span12 m-wrap salesInput'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
@@ -120,11 +120,17 @@ class SalesType extends AbstractType
                         ->orderBy("u.username", "ASC");
                 }
             ))
-
-            ->add('doctor','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor name','data-original-title'=>'Enter prescribe doctor name','autocomplete'=>'off')))
-            ->add('doctorMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Enter doctor mobile no','data-original-title'=>'Enter doctor mobile no','autocomplete'=>'off')))
-            ->add('doctorAddress','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor address','data-original-title'=>'Enter prescribe doctor address','autocomplete'=>'off')))
-
+            ->add('process', 'choice', array(
+                'attr'=>array('class'=>'m-wrap  span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'empty_value' => '--- Choose an issue process ---',
+                'choices' => array(
+                    'Created' => 'Created',
+                    'Done' => 'Done',
+                    'Complete' => 'Complete'
+                ),
+            ))
         ;
       //  $builder->add('customer', new CustomerForMedicineType());
     }

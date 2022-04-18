@@ -131,6 +131,13 @@ class HospitalConfig
      */
     private $isBranch = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isInventory", type="boolean",  nullable = true)
+     */
+    private $isInventory = false;
+
     /**
      * @var boolean
      *
@@ -1138,12 +1145,22 @@ class HospitalConfig
     }
 
     /**
-     * @return smallint
+     * @return bool
      */
-    public function getPrintReportTopMargin()
+    public function isInventory()
     {
-        return $this->printReportTopMargin;
+        return $this->isInventory;
     }
+
+    /**
+     * @param bool $isPrintReportHeader
+     */
+    public function setisInventory(bool $isInventory)
+    {
+        $this->isInventory = $isInventory;
+    }
+
+
 
     /**
      * @param smallint $printReportTopMargin
@@ -1160,6 +1177,12 @@ class HospitalConfig
     {
         return $this->hmsInvoiceReturns;
     }
+
+
+
+
+
+
 
 
 }

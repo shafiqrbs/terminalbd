@@ -44,6 +44,7 @@ class ConfigType extends AbstractType
             ->add('isInvoiceTitle')
             ->add('isPrintHeader')
             ->add('isPrintReportHeader')
+            ->add('isInventory')
             ->add('isPrintFooter')
             ->add('printInstruction')
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','rows'=>5)))

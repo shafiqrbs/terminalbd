@@ -44,8 +44,17 @@
                                                 <div class="control-group">
                                                     <label class="control-label " for="invoiceProcess">&nbsp;</label>
                                                     <div class="control">
-                                                        {{ form_widget(form.initialDiagnosticShow) }}
-                                                        {{ form_errors(form.initialDiagnosticShow) }} Initial Diagnostic Show
+                                                        {{ form_widget(form.initialDiagnosticShow) }} Initial Diagnostic Show
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label " for="invoiceProcess"></label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.isInventory) }} Is Inventory
                                                     </div>
                                                 </div>
                                             </div>
@@ -59,6 +68,7 @@
                                                 {{ form_errors(form.invoiceProcess) }}
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="span2">
                                         <div class="row-fluid">
@@ -122,7 +132,7 @@
                                             <div class="row-fluid">
                                                 <div class="span6">
                                                     <div class="control-group">
-                                                        <label class="control-label " for="vatPercentage">Vat Registration No &nbsp;</label>
+                                                        <label class="control-label" for="vatPercentage">Vat Registration No &nbsp;</label>
                                                         <div class="control">
                                                             {{ form_widget(form.vatRegNo) }}
                                                             {{ form_errors(form.vatRegNo) }}

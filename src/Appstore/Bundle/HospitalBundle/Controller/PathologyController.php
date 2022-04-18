@@ -203,7 +203,7 @@ class PathologyController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_pathology'));
+            return $this->redirect($this->generateUrl('hms_pathology_edit',array('id' => $entity->getId())));
         }
 
         return $this->render('HospitalBundle:Pathology:new.html.twig', array(

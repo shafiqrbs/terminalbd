@@ -37,20 +37,7 @@ class SalesItemType extends AbstractType
                 'mapped' => false,
                 'multiple'      =>false,
                 'choices' => array(1,2,3,4,5,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,),
-            ))
-            /* ->add('medicineStock', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineStock',
-                'empty_value' => '---Choose a medicine ---',
-                'property' => 'medicineStockSkuQuantity',
-                'attr'=>array('class'=>'span12 select2 input'),
-                'constraints' =>array( new NotBlank(array('message'=>'Please select medicine name')) ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                        ->where("wt.status = 1")
-                        ->andWhere("wt.medicineConfig =".$this->option->getMedicineConfig()->getId());
-                },
-            ))*/;
+            ));
     }
 
     /**

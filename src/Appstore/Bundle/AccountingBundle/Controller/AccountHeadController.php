@@ -52,7 +52,7 @@ class AccountHeadController extends Controller
 
     /**
      * Creates a new AccountHead entity.
-     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_CONFIG")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN_ACCOUNTING")
      */
     public function createAction(Request $request)
     {
@@ -90,7 +90,7 @@ class AccountHeadController extends Controller
             'action' => $this->generateUrl('accounthead_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -99,7 +99,7 @@ class AccountHeadController extends Controller
 
     /**
      * Displays a form to create a new AccountHead entity.
-     * @Secure(roles="ROLE_ACCOUNTING")
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN_ACCOUNTING")
      */
     public function newAction()
     {
@@ -135,7 +135,7 @@ class AccountHeadController extends Controller
 
     /**
      * Displays a form to edit an existing AccountHead entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN_ACCOUNTING")
      */
     public function editAction($id)
     {
@@ -167,7 +167,7 @@ class AccountHeadController extends Controller
             'action' => $this->generateUrl('accounthead_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'form-horizontal purchase',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -206,7 +206,7 @@ class AccountHeadController extends Controller
     }
     /**
      * Deletes a AccountHead entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_JOURNAL,ROLE_DOMAIN_ACCOUNTING")
      */
     public function deleteAction(Request $request, $id)
     {

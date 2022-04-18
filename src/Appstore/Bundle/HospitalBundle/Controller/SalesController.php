@@ -39,7 +39,7 @@ class SalesController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_SALES")
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ISSUE")
      */
 
     public function indexAction()
@@ -62,7 +62,7 @@ class SalesController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_SALES")
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ISSUE")
      */
 
     public function holdAction()
@@ -103,7 +103,7 @@ class SalesController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_SALES")
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ISSUE")
      */
 
     public function newAction()
@@ -125,7 +125,7 @@ class SalesController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_SALES")
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ISSUE")
      */
 
     public function editAction($id)
@@ -369,7 +369,6 @@ class SalesController extends Controller
                 $entity->setCustomer($invoice->getCustomer());
             }
             $entity->setApprovedBy($this->getUser());
-            $entity->setProcess('Done');
             if($entity->getInvoiceFor() == "customer"){
                 if ($entity->getNetTotal() <= $entity->getReceived()) {
                     $entity->setReceived($entity->getNetTotal());
@@ -496,7 +495,7 @@ class SalesController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_SALES")
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ISSUE")
      */
 
     public function deleteAction(MedicineSales $entity)

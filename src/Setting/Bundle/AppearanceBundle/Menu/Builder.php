@@ -1079,29 +1079,27 @@ class Builder extends ContainerAware
     {
 
         $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
-        $config = $securityContext->getGlobalOption()->getHospitalConfig()->getInvoiceProcess();
+        $config = $securityContext->getGlobalOption()->getHospitalConfig();
+        $process = $securityContext->getGlobalOption()->getHospitalConfig()->getInvoiceProcess();
         $menu
             ->addChild('Hospital & Diagnostic')
             ->setAttribute('icon', 'fa fa-hospital-o')
             ->setAttribute('dropdown', true);
-
-
-
         $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
             ->setAttribute('dropdown', true);
-        if (!empty($config) and in_array('diagnostic', $config) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
+        if (!empty($config) and in_array('diagnostic', $process) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Report Delivery', array('route' => 'hms_invoice_particular'));
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'));
         }
-        if (!empty($config) and in_array('admission', $config) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ADMISSION')) {
+        if (!empty($config) and in_array('admission', $process) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ADMISSION')) {
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
         }
-        if (!empty($config) and in_array('visit', $config) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_VISIT')) {
+        if (!empty($config) and in_array('visit', $process) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_VISIT')) {
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Visit', array('route' => 'hms_prescription'));
         }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_COMMISSION')) {
-            if (!empty($config) and in_array('commission', $config)) {
+            if (!empty($config) and in_array('commission', $process)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'));
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Payment', array('route' => 'hms_doctor_invoice'));
             }
@@ -1115,18 +1113,16 @@ class Builder extends ContainerAware
            $menu['Hospital & Diagnostic']->addChild('Pathological & Process', array('route' => 'hms_invoice_report_process'))
                 ;
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_SALES')) {
-            $menu['Hospital & Diagnostic']->addChild('Sales & Issue', array('route' => 'hms_sales'))
-            ;
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ISSUE') &&  $config->isInventory() == 1) {
+            $menu['Hospital & Diagnostic']->addChild('Sales & Issue', array('route' => 'hms_sales'));
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_PURCHASE')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_PURCHASE') &&  $config->isInventory() == 1) {
             $menu['Hospital & Diagnostic']->addChild('Manage Purchase')->setAttribute('dropdown', true);
             $menu['Hospital & Diagnostic']['Manage Purchase']->addChild('Purchase', array('route' => 'hms_purchase'));
             $menu['Hospital & Diagnostic']['Manage Purchase']->addChild('Vendor/Supplier', array('route' => 'hms_vendor'));
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_STOCK')) {
-            $menu['Hospital & Diagnostic']->addChild('Manage Stock', array('route' => 'hms_stock'))
-            ;
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_STOCK') &&  $config->isInventory() == 1) {
+            $menu['Hospital & Diagnostic']->addChild('Manage Stock', array('route' => 'hms_stock'));
 
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MASTERDATA')) {

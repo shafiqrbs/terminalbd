@@ -52,10 +52,9 @@ hms_sales_update:
     defaults: { _controller: "HospitalBundle:Sales:update" }
     methods:  [POST, PUT]
 
-hms_sales_status:
+hms_sales_reverse:
     path:     /{id}/status
-    defaults: { _controller: "HospitalBundle:Sales:edit" }
-
+    defaults: { _controller: "HospitalBundle:Sales:reverse" }
 
 hms_sales_approve:
     path:     /{id}/approve

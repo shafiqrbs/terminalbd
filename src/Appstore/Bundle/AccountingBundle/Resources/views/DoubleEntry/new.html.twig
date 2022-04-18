@@ -36,8 +36,11 @@
                         <div class="caption"><i class="icon-reorder"></i>Journal Double Entry Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a href="javascript:" class="btn red pull-right addmore"><i class="icon-plus"></i> Add Account Head</a>
+                                <a href="javascript:" class="btn red  addmore"><i class="icon-plus"></i> Add Account Head</a>
                                 <a class="btn" href="{{ path('account_double_entry') }}"><i class="icon-th-list"></i>&nbsp; Double Entry</a>
+                                {% if app.user.granted("ROLE_SUPER_ADMIN") or app.user.granted("ROLE_DOMAIN_ACCOUNTING_JOURNAL") or app.user.granted("ROLE_DOMAIN_ACCOUNTING") %}
+                                <a target="_blank" class="btn blue" href="{{ path('accounthead_new') }}"><i class="icon-plus-sign"></i>&nbsp; New Sub-head</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

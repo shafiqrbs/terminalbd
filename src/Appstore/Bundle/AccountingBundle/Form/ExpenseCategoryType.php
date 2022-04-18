@@ -50,7 +50,7 @@ class ExpenseCategoryType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
                 'empty_value' => '---Choose a account head---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12  m-wrap'),
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),

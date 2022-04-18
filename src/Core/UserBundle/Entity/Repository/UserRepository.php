@@ -273,7 +273,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_HOSPITAL_DUTY_NURSE'            => 'Duty Nurse',
                 'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Doctor',
                 'ROLE_DOMAIN_HOSPITAL_PURCHASE'              => 'Purchase',
-                'ROLE_DOMAIN_HOSPITAL_SALES'                 => 'Stock Issue',
+                'ROLE_DOMAIN_HOSPITAL_ISSUE'                 => 'Stock Issue',
                 'ROLE_DOMAIN_HOSPITAL_STOCK'                 => 'Stock',
                 'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Configuration',
                 'ROLE_DOMAIN_HOSPITAL_MASTERDATA'            => 'Master Data',
