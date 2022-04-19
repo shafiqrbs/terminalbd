@@ -81,8 +81,16 @@
                                     </ul>
                                     {% endif %}
                                 </div>
-
-
+                                <div class="span4">
+                                    <h4>Tables:</h4>
+                                    <ul class="unstyled">
+                                    {% if entity.tableNos is not empty %}
+                                        {% for tableNo in entity.tableNos %}
+                                            <li>{{ tableNo }}</li>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </ul>
+                                </div>
                             </div>
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid box green">
