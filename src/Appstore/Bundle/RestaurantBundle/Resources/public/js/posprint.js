@@ -21,7 +21,8 @@ $(document).on("click", ".paymentReceive", function() {
             jsPostPrint(response);
         }
         if(process === 'delivery-print'){
-            $('#print-area').html(response).kinziPrint();
+           // $('#print-area').html(response).kinziPrint();
+            htmlPrint(response);
         }
     });
 });

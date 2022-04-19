@@ -84,14 +84,14 @@
             text-align: right;
         }
     </style>
-   {# {% if printMode == 'print' %}
+    {% if printMode == 'print' %}
         <script type="text/javascript">
             setTimeout(function () {
                 window.open('', '_self', '');
                 window.close();
             }, 2000);
         </script>
-    {% endif %}#}
+    {% endif %}
 </head>
 <body style="width: 100%; margin: 0 auto;">
 <table class="posPrint">
@@ -117,23 +117,23 @@
     </tr>
     <tr><td colspan="4"><br/></td></tr>
     {% if entity.tableNos is not empty  %}
-    <tr>
-        <td colspan="4" class="label"><div class="row"><span class="span3 right"><strong>Table</strong></span><span class="span1 center">:</span>
-                <span class="span5 left">
+        <tr>
+            <td colspan="4" class="label"><div class="row"><span class="span4 right"><strong>Table</strong></span><span class="span1 center">:</span>
+                    <span class="span6 left">
                     {% for tableNo in entity.tableNos %}
                         {{ tableNo }}
                         {% if loop.last %}{% else %},{% endif %}
                     {% endfor %}
                 </span>
-            </div>
-        </td>
-    </tr>
+                </div>
+            </td>
+        </tr>
     {% endif %}
     <tr>
-        <td colspan="4" class="label"><div class="row"><span class="span3 right">Sales By</span><span class="span1 center">:</span><span class="span6 left">{{ entity.salesBy.profile.name }}</span></div></td>
+        <td colspan="4" class="label"><div class="row"><span class="span4 right">Sales By</span><span class="span1 center">:</span><span class="span6 left">{{ entity.salesBy.profile.name }}</span></div></td>
     </tr>
     <tr>
-        <td colspan="4" class="label"><div class="row"><span class="span3 right">Date & Time</span><span class="span1 center">:</span><span class="span6 left">{{ entity.created|date('d-m-Y H:m A') }}</span></div></td>
+        <td colspan="4" class="label"><div class="row"><span class="span4 right">Date & Time</span><span class="span1 center">:</span><span class="span6 left">{{ entity.created|date('d-m-Y H:m A') }}</span></div></td>
     </tr>
     {# <tr>
          <td colspan="3" class="label"><div class="row"><span class="span3 right">Pay Mode</span><span class="span1 center">:</span><span class="span8">{{ entity.transactionMethod.name }}</span></div></td>
