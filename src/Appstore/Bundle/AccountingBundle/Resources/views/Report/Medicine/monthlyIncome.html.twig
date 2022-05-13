@@ -33,10 +33,10 @@
                             <div class="btn-group">
                                 {% set currentMonth = "now"|date("m") %}
                                 {% set currentYear = "now"|date("Y") %}
-                                {% set startMonth = (searchForm.startMonth is defined and searchForm.startMonth is empty) ? searchForm.startMonth :"now"|date("m") %}
-                                {% set endMonth = (searchForm.endMonth is defined and searchForm.endMonth is empty) ? searchForm.endMonth :"now"|date("m") %}
+                                {% set startMonth = (searchForm.startMonth is defined and searchForm.startMonth is not empty) ? searchForm.startMonth :"now"|date("m") %}
+                                {% set endMonth = (searchForm.endMonth is defined and searchForm.endMonth is not empty) ? searchForm.endMonth :"now"|date("m") %}
                                 {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
-                                <a class="btn purple" target="_blank" href="{{ path('account_business_income_monthly',{'pdf':'pdf','startMonth':startMonth,'endMonth':endMonth,'year':year}) }}" >
+                                <a class="btn purple" target="_blank" href="{{ path('account_medicine_income_monthly',{'pdf':'pdf','startMonth':startMonth,'endMonth':endMonth,'year':year}) }}" >
                                     <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
 
