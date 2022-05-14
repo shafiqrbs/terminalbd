@@ -313,6 +313,13 @@ class MedicineSales
     /**
      * @var boolean
      *
+     * @ORM\Column(name="printWithoutDiscount", type="boolean" )
+     */
+    private $printWithoutDiscount = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="deviceApproved", type="boolean" )
      */
     private $deviceApproved = false;
@@ -1101,7 +1108,21 @@ class MedicineSales
         $this->hmsInvoice = $hmsInvoice;
     }
 
+    /**
+     * @return bool
+     */
+    public function isPrintWithoutDiscount()
+    {
+        return $this->printWithoutDiscount;
+    }
 
+    /**
+     * @param bool $printWithoutDiscount
+     */
+    public function setPrintWithoutDiscount($printWithoutDiscount)
+    {
+        $this->printWithoutDiscount = $printWithoutDiscount;
+    }
 
 
 }

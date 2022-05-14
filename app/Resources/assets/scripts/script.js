@@ -148,5 +148,4 @@ var AppScript = function () {
             }
         ]
     });
-
-}();
+};

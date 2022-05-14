@@ -269,6 +269,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Manager',
                 'ROLE_DOMAIN_HOSPITAL_COMMISSION'            => 'Doctor/Referred Commission',
                 'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Lab Assistant',
+                'ROLE_DOMAIN_HOSPITAL_REPORT_PRINT'          => 'Report Print',
                 'ROLE_DOMAIN_HOSPITAL_DUTY_DOCTOR'           => 'Duty Doctor',
                 'ROLE_DOMAIN_HOSPITAL_DUTY_NURSE'            => 'Duty Nurse',
                 'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Doctor',

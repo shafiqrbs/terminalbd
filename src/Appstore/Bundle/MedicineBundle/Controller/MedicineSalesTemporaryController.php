@@ -244,6 +244,9 @@ class MedicineSalesTemporaryController extends Controller
         }else{
             $entity->setProcess('Done');
         }
+        if (isset($data['printWithoutDiscount']) and ($data['printWithoutDiscount'] == 1)) {
+            $entity->setPrintWithoutDiscount(1);
+        }
         $entity->setApprovedBy($this->getUser());
         if(empty($entity->getSalesBy())){
             $entity->setSalesBy($this->getUser());

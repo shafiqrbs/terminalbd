@@ -128,7 +128,7 @@
                                             {% if entity.process == 'Done' and entity.particularDeliveredBy is not empty %}
                                                 <a class="btn mini red confirm"   href="javascript:"><i class="icon-truck"></i>&nbsp;Delivered </a>
                                             {% endif %}
-                                            {% if entity.process == 'Done' %}
+                                            {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.process == 'Done' and entity.particularDeliveredBy is empty %}
                                                 <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
                                             {% endif %}
                                             </div>

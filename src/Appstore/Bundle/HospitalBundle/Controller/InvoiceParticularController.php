@@ -9,6 +9,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceParticularType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -259,17 +260,23 @@ class InvoiceParticularController extends Controller
         return $this->redirect($this->generateUrl('hms_invoice_particular_preparation',['id'=> $entity->getId()]));
     }
 
-     public function pathologicalReportPrintAction(InvoiceParticular $entity)
+     public function pathologicalReportPrintAction(Request $request ,InvoiceParticular $entity)
     {
         /** @var  $reportArr */
         $reportArr = array();
 
         /** @var InvoicePathologicalReport $row */
+        $global = $this->getUser()->getGlobalOption();
+        $config = $global->getHospitalConfig();
+        if($config->getId() != $entity->getHmsInvoice()->getHospitalConfig()->getId()){
+             $referer = $request->headers->get('referer');
+             return new RedirectResponse($referer);
+        }
         $barcodePrint = $entity->getHmsInvoice()->getInvoice();
         $barcodeInvoice = $this->getBarcode($barcodePrint);
         $barcodePrint = $entity->getParticular()->getParticularCode().'-'.$entity->getReportCode();
         $barcodeReport = $this->getBarcode($barcodePrint);
-        
+
         if (!empty($entity->getInvoicePathologicalReports())){
             foreach ($entity->getInvoicePathologicalReports() as $row):
                 if(!empty($row->getPathologicalReport())){
@@ -277,14 +284,15 @@ class InvoiceParticularController extends Controller
                 }
             endforeach;
         }
-        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $hospital = $global->getHospitalConfig();
         if($hospital->isCustomPrint() == 1){
-            $template = "Print/{$this->getUser()->getGlobalOption()->getId()}:pathological";
+            $template = "Print/{$global->getId()}:pathological";
         }else{
             $template = "InvoiceParticular:pathologicalReportPrint";
         }
         return $this->render("HospitalBundle:{$template}.html.twig", array(
             'entity'            => $entity,
+            'global'            => $global,
             'printUser'         => $this->getUser(),
             'barcodeInvoice'    => $barcodeInvoice,
             'barcodeReport'     => $barcodeReport,
