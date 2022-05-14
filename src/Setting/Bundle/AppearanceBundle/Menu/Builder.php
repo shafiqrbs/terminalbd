@@ -1109,8 +1109,10 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'));
             }
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_LAB') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_DOCTOR')) {
-           $menu['Hospital & Diagnostic']->addChild('Pathological & Process', array('route' => 'hms_invoice_report_process'))
+
+        if ((in_array('diagnostic', $process) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_LAB')) || (in_array('diagnostic', $process) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_DOCTOR'))) {
+
+                $menu['Hospital & Diagnostic']->addChild('Pathological & Process', array('route' => 'hms_invoice_report_process'))
                 ;
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ISSUE') &&  $config->isInventory() == 1) {
@@ -1127,24 +1129,23 @@ class Builder extends ContainerAware
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MASTERDATA')) {
 
-                $menu['Hospital & Diagnostic']->addChild('Master Data')
-
-                    ->setAttribute('dropdown', true);
+                $menu['Hospital & Diagnostic']->addChild('Master Data')->setAttribute('dropdown', true);
+                if(in_array('diagnostic', $process)){
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Pathology Test', array('route' => 'hms_pathology'))
                     ;
+                }
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Doctor', array('route' => 'hms_doctor'))
                     ;
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Lab User', array('route' => 'hms_labuser'))
                     ;
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Referred', array('route' => 'hms_referreddoctor'))
                     ;
-                $menu['Hospital & Diagnostic']['Master Data']->addChild('Cabin/Ward', array('route' => 'hms_cabin'))
-                    ;
-                $menu['Hospital & Diagnostic']['Master Data']->addChild('Surgery', array('route' => 'hms_surgery'))
-                    ;
-                $menu['Hospital & Diagnostic']['Master Data']->addChild('Other Service', array('route' => 'hms_other_service'))
-                    ;
+                if(in_array('admission', $process)) {
+                $menu['Hospital & Diagnostic']['Master Data']->addChild('Cabin/Ward', array('route' => 'hms_cabin'));
+                $menu['Hospital & Diagnostic']['Master Data']->addChild('Surgery', array('route' => 'hms_surgery'));
+                $menu['Hospital & Diagnostic']['Master Data']->addChild('Other Service', array('route' => 'hms_other_service'));
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Service Group', array('route' => 'hms_service_group'));
+                }
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Commission', array('route' => 'hms_commission'));
                 /* $menu['Hospital & Diagnostic']['Master Data']->addChild('Category', array('route' => 'hms_category'));
                 */

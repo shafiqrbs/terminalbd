@@ -27,6 +27,7 @@ class InvoiceRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
+        $department = isset($data['department'])? $data['department'] :'';
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
@@ -100,6 +101,11 @@ class InvoiceRepository extends EntityRepository
         if(!empty($referred)){
             $qb->andWhere("e.referredDoctor = :referredDoctor");
             $qb->setParameter('referredDoctor', $referred);
+        }
+
+        if(!empty($department)){
+            $qb->andWhere("e.department = :department");
+            $qb->setParameter('department', $department);
         }
 
         if (!empty($released)) {

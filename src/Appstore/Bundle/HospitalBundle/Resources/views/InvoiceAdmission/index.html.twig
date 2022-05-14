@@ -68,27 +68,29 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <select name="process" id="process" class="m-wrap span12">
+                                            <select name="cabinNo" id="cabinNo" class="m-wrap select2 span12">
+                                                <option value="" >--Cabin/Ward No--</option>
+                                                {% for cabin in cabins %}
+                                                    <option {% if searchForm.cabinNo is defined and searchForm.cabinNo == cabin.id %} selected="selected" {% endif %} value="{{ cabin.id }}" >{{ cabin.name }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                        <div class="span3">
+                                            <select name="department" id="department" class="m-wrap span6">
+                                                <option value="" >--Department--</option>
+                                                {% for group in departments %}
+                                                    <option {% if searchForm.department is defined and searchForm.department == group.id %} selected="selected" {% endif %} value="{{ group.id }}" >{{ group.name }}</option>
+                                                {% endfor %}
+                                             </select>
+                                            <select name="process" id="process" class="m-wrap span6">
                                                 <option value="" >--Process--</option>
                                                 <option value="Admitted" {% if searchForm.process is defined and searchForm.process == 'Admitted' %} selected="selected" {% endif %} >Admitted</option>
                                                 <option value="Released"  {% if searchForm.process is defined and searchForm.process == 'Released' %} selected="selected" {% endif %} >Released</option>
                                                 <option value="Dead"  {% if searchForm.process is defined and searchForm.process == 'Dead' %} selected="selected" {% endif %} >Death</option>
                                                 <option value="Cancel"  {% if searchForm.process is defined and searchForm.process == 'Cancel' %} selected="selected" {% endif %} >Cancel</option>
                                             </select>
-                                        </div>
-                                        <div class="span3">
-                                            <select name="cabinGroup" id="cabinGroup" class="m-wrap span6">
-                                                <option value="" >--Cabin/Ward--</option>
-                                                {% for group in cabinGroups %}
-                                                    <option {% if searchForm.cabinGroup is defined and searchForm.cabinGroup == group.id %} selected="selected" {% endif %} value="{{ group.id }}" >{{ group.name }}</option>
-                                                {% endfor %}
-                                             </select>
-                                            <select name="cabinNo" id="cabinNo" class="m-wrap span6">
-                                                <option value="" >--Cabin/Ward No--</option>
-                                                {% for cabin in cabins %}
-                                                    <option {% if searchForm.cabinNo is defined and searchForm.cabinNo == cabin.id %} selected="selected" {% endif %} value="{{ cabin.id }}" >{{ cabin.name }}</option>
-                                                {% endfor %}
-                                            </select>
+
                                         </div>
 
                                     </div>

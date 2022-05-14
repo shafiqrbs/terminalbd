@@ -27,6 +27,10 @@ class HospitalConfigController extends Controller
 {
 
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN");
+     */
+
     public function manageAction()
     {
 
@@ -44,8 +48,7 @@ class HospitalConfigController extends Controller
     /**
      * Creates a form to edit a Invoice entity.wq
      *
-     * @param Invoice $entity The entity
-     *
+     * @param HospitalConfig $entity The entity
      * @return \Symfony\Component\Form\Form The form
      */
     private function createEditForm(HospitalConfig $entity)
@@ -65,7 +68,7 @@ class HospitalConfigController extends Controller
 
     /**
      * Edits an existing Particular entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN");
      */
     public function updateAction(Request $request)
     {

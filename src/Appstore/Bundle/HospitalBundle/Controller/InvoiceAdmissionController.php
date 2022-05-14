@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -52,6 +53,7 @@ class InvoiceAdmissionController extends Controller
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
         $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
         $cabinGroups = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=>$hospital,'service'=>2),array('name'=>'ASC'));
+        $departments = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDepartments($hospital);
 
         return $this->render('HospitalBundle:InvoiceAdmission:index.html.twig', array(
             'entities' => $pagination,
@@ -60,6 +62,7 @@ class InvoiceAdmissionController extends Controller
             'assignDoctors'                     => $referredDoctors,
             'employees'                         => $employees,
             'cabinGroups' => $cabinGroups,
+            'departments' => $departments,
             'cabins' => $cabins,
             'option' => $user->getGlobalOption(),
             'searchForm' => $data,
