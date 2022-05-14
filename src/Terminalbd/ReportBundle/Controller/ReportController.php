@@ -74,6 +74,48 @@ class ReportController extends Controller
     }
 
     /**
+     * @Route("/monthly-statement", methods={"GET", "POST"}, name="accounting_report_monthly_statement")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+    public function monthlyStatementAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $data =$_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $ajaxPath = $this->generateUrl('accounting_report_monthly_statement_ajax');
+        return $this->render('ReportBundle:Accounting/Financial:monthly-statement.html.twig', array(
+            'option' => $globalOption,
+            'ajaxPath' => $ajaxPath,
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/monthly-statement-ajax", methods={"GET", "POST"}, name="accounting_report_monthly_statement_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function monthlyStatementAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $data = $_REQUEST;
+        if(isset($data['startDate']) and $data['startDate'] and isset($data['endDate']) and $data['endDate'] ) {
+            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportSalesIncome($this->getUser(),$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Accounting/Financial:income-ajax.html.twig', array(
+                    'overview' => $overview,
+                    'searchForm' => $data,
+                )
+            );
+            return new Response($htmlProcess);
+
+        }
+        return new Response('Record Does not found');
+    }
+
+    /**
      * @Route("/customer-outstanding", methods={"GET", "POST"}, name="accounting_report_sales_outstanding")
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */

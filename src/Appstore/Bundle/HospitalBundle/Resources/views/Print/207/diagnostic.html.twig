@@ -1,9 +1,8 @@
 {% extends '::hms-print.html.twig' %}
 {% block body %}
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
-        {%  if entity.hospitalConfig.isPrintHeader == 1 %}
-        {% if global.webPath('file') is not empty %}   <img style="max-width: 1024px; max-height:80px" src="/{{ global.webPath('file') }}">{% endif %}
-        {% endif %}
+        <div style="height: 19.7466666667cm!important; display: block">
+        {% if global.webPath('file') is not empty %}<img style="max-height:100px" src="/{{ global.webPath('file') }}">{% endif %}
         <table class="table table-border" >
             <tr>
                 <td>
@@ -91,6 +90,8 @@
              <tr><td>&nbsp;</td></tr>
         </table>
         {% endif %}
+        </div>
+        <div style="height: 9.87cm!important;display: block">
         <table class="table table-border" >
             <tr>
                 <td>
@@ -142,7 +143,7 @@
                </tfoot>
             </table>
         {% endif %}
-
+        </div>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
