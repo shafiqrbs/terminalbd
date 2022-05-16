@@ -32,7 +32,7 @@ class PurchaseItemType extends AbstractType
             ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar input','placeholder'=>'Expiry date','autoComplete'=>'off')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap purchase-input span10 input','placeholder'=>'Total MRP','autoComplete'=>'off')))
             ->add('bonusQuantity','text', array('attr'=>array('class'=>'m-wrap span9','placeholder'=>'Bonus QTY','autoComplete'=>'off')))
-            ->add('batchno','text', array('attr'=>array('class'=>'m-wrap purchase-input span12 form-control input-number input','placeholder'=>'Batch no','autoComplete'=>'off')))
+          //  ->add('batchno','text', array('attr'=>array('class'=>'m-wrap purchase-input span12 form-control input-number input','placeholder'=>'Batch no','autoComplete'=>'off')))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap purchase-input span12 form-control input-number input red-border','placeholder'=>'Quantity','autoComplete'=>'off')));
     }
     
