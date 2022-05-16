@@ -1371,6 +1371,8 @@ class Builder extends ContainerAware
                     ;
         	    $menu['Medicine']['Manage Sales']->addChild('Android Sales', array('route' => 'medicine_sales_android'))
                     ;
+                $menu['Medicine']['Manage Sales']->addChild('Add Sales Return', array('route' => 'medicine_sales_item'))
+                    ;
                 $menu['Medicine']['Manage Sales']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
                     ;
                 if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {

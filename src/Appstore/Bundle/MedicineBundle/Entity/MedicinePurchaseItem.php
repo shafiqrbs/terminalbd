@@ -221,6 +221,13 @@ class MedicinePurchaseItem
     private $expirationEndDate;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="batchno", type="string", nullable=true)
+     */
+    private $batchno;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean",  nullable=true)
@@ -691,6 +698,22 @@ class MedicinePurchaseItem
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBatchno()
+    {
+        return $this->batchno;
+    }
+
+    /**
+     * @param string $batchno
+     */
+    public function setBatchno($batchno)
+    {
+        $this->batchno = $batchno;
     }
 
 

@@ -92,8 +92,11 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+        $pagination = '';
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->salesItemLists($this->getUser(),$data);
-        $pagination = $this->paginate($entities);
+        if($entities){
+            $pagination = $this->paginate($entities);
+        }
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('MedicineBundle:Sales:salesItem.html.twig', array(
             'entities' => $pagination,

@@ -264,11 +264,12 @@ var form = $("#purchaseItemForm").validate({
         "purchaseItem[salesPrice]": {required: false},
         "purchaseItem[quantity]": {required: false},
         "purchaseItem[expirationEndDate]": {required: false},
+        "purchaseItem[batchno]": {required: false},
         "purchaseItem[bonusQuantity]": {required: false}
     },
 
     messages: {
-        "purchaseItem[stockName]":"Enter medicine name",
+        "purchaseItem[stockName]":"Enter medicine/item name",
         "purchaseItem[salesPrice]":"Enter sales price",
         "purchaseItem[quantity]":"Enter medicine quantity"
     },
@@ -302,6 +303,7 @@ var form = $("#purchaseItemForm").validate({
                 $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
                 $('#opening-box').hide();
                 $('.expirationDate').editable();
+                EditableWithLoadInit();
             }
         });
     }

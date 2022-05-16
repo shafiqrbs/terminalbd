@@ -18,6 +18,7 @@
             <ul class="dropdown-menu pull-right">
                 <li><a  target="_blank" href="{{ path('medicine_sales_hold') }}">Hold Sales</a></li>
                 <li><a  target="_blank" href="{{ path('medicine_sales') }}">Sales List </a></li>
+                <li><a  target="_blank" href="{{ path('medicine_sales_item') }}">Add Sales Return </a></li>
                 <li> {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                         <a  href="{{ path('report_customer_outstanding') }}" target="_blank">Outstanding </a>
                     {% endif %}

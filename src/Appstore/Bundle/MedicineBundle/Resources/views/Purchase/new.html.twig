@@ -45,23 +45,30 @@
                             </div>
                         </div>
                     </div>
+                    <style>
+                        .form form.particular-info{
+                            padding-top: 15px!important;
+                        }
+                        .row-fluid label {
+                            line-height: 12px!important;
+                            margin-top: 0!important;
+                        }
+                    </style>
                     <div class="portlet-body">
                         <div class="portlet-body form">
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
-                            <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid" id="generic-hide">
                                 <div class="span12">
                                     <input type="text" id="select2GenericMedicine" name="select2GenericMedicine"  class="m-wrap span12 input select2GenericMedicine" placeholder="Search medicine name" aria-required="true">
                                 </div>
                             </div>
-                            <div class="clearfix">&nbsp;</div>
                             <div class="" id="hide">
                                 {{ form_start(stockItemForm) }}
                                 {{ form_row(stockItemForm._token) }}
                                 <div class="row-fluid" >
                                     <!--/span-->
-                                    <div class="span5">
+                                    <div class="span5" style="padding-left: 15px!important;">
                                         <div class="control-group">
                                             <label class="control-label"  for="category" >Name<span class="required">*</span></label>
                                             <div class="controls">
@@ -71,31 +78,37 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span4">
+                                    <div class="span3">
                                         <div class="control-group">
-                                            <label class="control-label" for="name">Unit  & Brand Name</label>
+                                            <label class="control-label" for="name">Brand Name</label>
                                             <div class="controls">
-                                                {{ form_widget(stockItemForm.unit) }}&nbsp;
-                                            <input type="text" id="medicineCompany" name="medicineCompany" list="brands"  class="m-wrap span9 input" placeholder="Brand name" aria-required="true" value="{% if entity.brandName is defined %}{{ entity.brandName }}{% endif %}">
-                                        <datalist id="brands" >
-                                            {% if brands is not empty %}
-                                            {% for item in brands %}
-                                            <option value="{{ item.name }}">
-                                                {% endfor %}
-                                                {% endif %}
-                                        </datalist>
+                                            <input type="text" id="medicineCompany" name="medicineCompany" list="brands"  class="m-wrap span12 input" placeholder="Brand name" aria-required="true" value="{% if entity.brandName is defined %}{{ entity.brandName }}{% endif %}">
+                                            <datalist id="brands" >
+                                                {% if brands is not empty %}
+                                                {% for item in brands %}
+                                                <option value="{{ item.name }}">
+                                                    {% endfor %}
+                                                    {% endif %}
+                                            </datalist>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span1">
+                                        <div class="control-group">
+                                            <label class="control-label" for="name">Total MRP</label>
+                                            <div class="controls">
+                                                {{ form_widget(stockItemForm.salesPrice) }}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="span3">
                                         <div class="control-group">
-                                            <label class="control-label" for="name"> QTY & Total MRP</label>
+                                            <label class="control-label" for="name"> Total QTY</label>
                                             <div class="controls">
                                                 <div class="input-append">
                                                     <div class="input-group">
                                                         {{ form_widget(stockItemForm.purchaseQuantity) }}
-                                                        {{ form_widget(stockItemForm.salesPrice) }}
-                                                        <button type="submit" class="btn green" id="stockItemCreate"><i class="icon-save"></i> Add Stock</button>
+                                                        <button type="submit" class="btn blue" id="stockItemCreate"><i class="icon-save"></i> Stock with Purchase</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -108,36 +121,59 @@
                                 </div>
                                 {{ form_end(stockItemForm) }}
                             </div>
-                            <div class="clearfix">&nbsp;</div>
                             {{ form_start(purchaseItem) }}
                             {{ form_row(purchaseItem._token) }}
-                            {% if entity.medicineConfig.openingQuantity == 1 %}
-                                <div class="row-fluid particular-label" >
-                                    <div class="span4">Select Stock Item </div>
-                                    <div class="span2 pull-center">Opening QTY</div>
-                                    <div class="span2 pull-left">Quantity & Bonus QTY</div>
-                                    <div class="span1 pull-center">Min Qty</div>
-                                    <div class="span1 pull-left">Total MRP</div>
-                                </div>
-                            {% else %}
-                                <div class="row-fluid particular-label" >
-                                    <div class="span6">Select Stock Item </div>
-                                    <div class="span2 pull-left">Quantity & Bonus QTY</div>
-                                    <div class="span1 pull-center">Pack QTY</div>
-                                    <div class="span2 pull-left">Total MRP</div>
-                                </div>
-                            {% endif %}
-                            {% if entity.medicineConfig.openingQuantity == 1 %}
-                                <div class="row-fluid particular-info" >
-                                    <div class="span4" style="padding-left:15px">
-                                        {{ form_widget(purchaseItem.stockName) }}
-                                        {{ form_errors(purchaseItem.stockName) }}
+                            <div class="row-fluid" >
+                                <div class="span6" style="padding-left:15px">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Search Stock Item Name</label>
+                                        <div class="controls">
+                                            {{ form_widget(purchaseItem.stockName) }}
+                                            {{ form_errors(purchaseItem.stockName) }}
+                                        </div>
                                     </div>
-                                    <div class="span2">
-                                        <div id="opening-box">
+                                </div>
+
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Quantity</label>
+                                        <div class="controls">
+                                            {{ form_widget(purchaseItem.quantity) }}
+                                            {{ form_errors(purchaseItem.quantity) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Bonus Quantity</label>
+                                        <div class="controls">
                                             <div class="input-append">
-                                                <div class="input-group">
-                                                    <button class="btn">Sales</button>
+                                                {{ form_widget(purchaseItem.bonusQuantity) }}
+                                                <button class="btn green" id="unit green">Unit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Total MRP</label>
+                                        <div class="controls">
+                                            <div class="input-group">
+                                                {{ form_widget(purchaseItem.salesPrice) }}
+                                                <input type="hidden" id="particularId" name="particularId" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid" >
+                                <div class="span4">
+                                    {% if entity.medicineConfig.openingQuantity == 1 %}
+                                        <div id="opening-box" style="padding-left: 15px">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Opening Quantity</label>
+                                                <div class="input-append">
+                                                    <button class="btn purple">Current Sales</button>
                                                     <button class="btn red" id="currentSalesQty">0</button>
                                                     <input type="text" id="currentQty" name="currentQty" class="m-wrap purchase-input span4" placeholder="Current Qty" autocomplete="off" value="">
                                                     <input type="hidden" id="openingQuantity" name="openingQuantity"  value="0">
@@ -146,46 +182,45 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    {% endif %}
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Batch No</label>
+                                        <div class="controls">
+                                            {{ form_widget(purchaseItem.batchno) }}
+                                        </div>
                                     </div>
-                                    <div class="span6">
-                                        <div class="input-append">
-                                            <div class="input-group">
-                                                {{ form_widget(purchaseItem.quantity) }}
-                                                {{ form_widget(purchaseItem.bonusQuantity) }}
-                                                <button class="btn" id="unit green">Unit</button>
-                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span2" placeholder="Per Pack" autocomplete="off">
-                                                {{ form_widget(purchaseItem.salesPrice) }}
-                                                {{ form_widget(purchaseItem.expirationEndDate) }}
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Expiration Date</label>
+                                        <div class="controls">
+                                            {{ form_widget(purchaseItem.expirationEndDate) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Min Quantity</label>
+                                        <div class="controls">
+                                            <input type="text" id="minQuantity" name="minQuantity" class="m-wrap purchase-input span12" placeholder="Minimum QTY" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Pack Quantity</label>
+                                        <div class="controls">
+                                            <div class="input-append">
+                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span6" placeholder="Pack QTY" autocomplete="off">
                                                 <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
                                                 <input type="hidden" id="particularId" name="particularId" value="">
                                             </div>
                                         </div>
-                                        {{ form_errors(purchaseItem.quantity) }}
                                     </div>
                                 </div>
-                            {% else %}
-                                <div class="row-fluid particular-info" >
-                                    <div class="span6" style="padding-left:15px">
-                                        {{ form_widget(purchaseItem.stockName) }}
-                                        {{ form_errors(purchaseItem.stockName) }}
-                                    </div>
-                                    <div class="span6">
-                                        <div class="input-append">
-                                            <div class="input-group">
-                                                {{ form_widget(purchaseItem.quantity) }}
-                                                {{ form_widget(purchaseItem.bonusQuantity) }}
-                                                <button class="btn green" id="unit green">Unit</button>
-                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span2" placeholder="Pack QTY" autocomplete="off">
-                                                {{ form_widget(purchaseItem.salesPrice) }}
-                                                {{ form_widget(purchaseItem.expirationEndDate) }}
-                                                <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
-                                                <input type="hidden" id="particularId" name="particularId" value="">
-                                            </div>
-                                        </div>
-                                        {{ form_errors(purchaseItem.quantity) }}
-                                    </div>
-                                </div>
-                            {% endif %}
+                            </div>
                             {{ form_end(purchaseItem) }}
                             <div class="clearfix">&nbsp;</div>
                             {{ form_start(form) }}
@@ -198,6 +233,7 @@
                                             <th class="span1">S/N</th>
                                             <th class="span3">Name</th>
                                             <th class="">Rack</th>
+                                            <th class="">Batch no</th>
                                             <th class="">Expiry</th>
                                             <th class="span1">AVGPP</th>
                                             <th class="">Last PP</th>
@@ -221,6 +257,9 @@
                                                     <td>{{ loop.index }}</td>
                                                     <td class="span3"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
                                                     <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+                                                    <td class="span1">
+                                                        <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
+                                                    </td>
                                                     <td class="">
                                                         <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
                                                     </td>
@@ -247,26 +286,26 @@
                                                 </tr>
                                             {% endfor %}
                                         {% endif %}
-                                        </tbody>
-                                        <tfoot>
                                         <tr>
-                                            <td colspan="14" class="span12" style="border: 1px double #000"></td>
+                                            <td colspan="15" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
-                                            <th colspan="6">AVG Purchase Price</th>
+                                            <th colspan="7">AVG Purchase Price</th>
                                             <td colspan="5" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                             <td class="span1">{{ (entity.subTotal - ((entity.subTotal*12.5)/100))|number_format(2) }}</td>
                                             <td class="span1">12.5%</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="11" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
+                                            <td colspan="12" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
                                             <td class="span1"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
                                             <td class="span1"></td>
                                             <td class="span1"></td>
                                         </tr>
+                                        </tbody>
+                                        <tfoot>
                                         <tr>
-                                            <td colspan="14">
+                                            <td colspan="15">
                                                 <table class="table">
                                                     <tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Vendor/Supplier</strong></span></td>
@@ -380,7 +419,6 @@
                                     <div class="clearfix">&nbsp;</div>
                                 </div>
                             </div>
-                            <div class="clearfix">&nbsp;</div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 </div>
@@ -499,11 +537,13 @@
 {% block javascriptBlock %}
     {{ parent() }}
     <script type="application/javascript" src="{{ asset('bundles/medicine/js/purchase.js') }}"></script>
+    <script type="application/javascript" src="{{ asset('bundles/medicine/js/editable.js') }}"></script>
     <script type="application/javascript" src="{{ asset('bundles/medicine/js/approveProcess.js') }}"></script>
     <script type="application/javascript" src="{{ asset('bundles/medicine/js/medicine.js') }}"></script>
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    EditableWithLoadInit();
     $('.expirationDate').editable({
         format: 'yyyy-mm-dd',
         viewformat: 'dd-mm-yyyy',

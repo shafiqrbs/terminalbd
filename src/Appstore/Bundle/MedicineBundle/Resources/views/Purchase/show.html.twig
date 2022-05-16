@@ -30,26 +30,19 @@
         <!-- BEGIN purchase_order CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Purchase Details</div>
-
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('medicine_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
                                 <a class="btn" href="{{ path('medicine_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="portlet-body">
-
                         <div class="portlet-body form">
                             <div class="row-fluid">
-
                                 <div class="span4">
                                     <h4>About:</h4>
                                     <ul class="unstyled">
@@ -93,7 +86,8 @@
                                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
                                             <th class="span3">Name</th>
                                             <th class="span1">Rack</th>
-                                            <th class="span1">Expiration Date</th>
+                                            <th class="span1">Batch no</th>
+                                            <th class="span1">Expiry Date</th>
                                             <th class="span1">PP</th>
                                             <th class="span1">MRP</th>
                                             <th class="span1">Qnt</th>
@@ -109,8 +103,12 @@
                                                     <td class="span3">{{ item.medicineStock.name }}</td>
                                                     <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                                     <td class="span1">
+                                                        <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
+                                                    </td>
+                                                    <td class="span1">
                                                         <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
                                                     </td>
+
                                                     <td class="span1">{{ item.purchasePrice }}</td>
                                                     <td class="span1">{{ item.salesPrice }}</td>
                                                     <td class="span1">{{ item.quantity }}</td>
@@ -174,13 +172,15 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@DmsBundle/Resources/public/js/purchase.js'
+    '@MedicineBundle/Resources/public/js/purchase.js'
+    '@MedicineBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    EditableWithLoadInit();
     $('.expirationDate').editable({
         format: 'yyyy-mm-dd',
         viewformat: 'dd-mm-yyyy',

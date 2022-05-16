@@ -315,33 +315,32 @@ class MedicineSalesItemRepository extends EntityRepository
 
     public function salesItemLists(User $user, $data)
     {
-        $userBranch = $user->getProfile()->getBranches();
-        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
 
+        $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('si');
         $qb->join('si.medicineSales','s');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
-        if ($userBranch){
-            $qb->andWhere("s.branch = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
-        $qb->getQuery();
-        return  $qb;
+        if(empty($data)){
+            return '';
+        }else{
+            $res = $qb->getQuery();
+            return  $res;
+        }
+
     }
 
     public function currentShortList($config, $data)
     {
-
         $qb = $this->createQueryBuilder('si');
         $qb->join('si.medicineSales','s');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('si.isShort = 1');
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
-        $qb->getQuery();
-        return  $qb;
+        $res = $qb->getQuery();
+        return  $res;
     }
 
 

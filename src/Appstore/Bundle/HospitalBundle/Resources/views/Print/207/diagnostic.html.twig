@@ -74,21 +74,24 @@
                         </table>
                     </td></tr>
                 {% if entity.payment > 0 %}<tr><td colspan="4" style="text-align:right"><strong>Paid In word TK. </strong>({{ inWords|raw }} only).</td></tr>{% endif %}
-                <tr><td colspan="4"><strong>Remarks</strong> {{ entity.comment|raw }}.</td></tr>
                </tfoot>
             </table>
-        <table class="table">
-            <tr>
-                <td class="span4 text-center">
-                    <ul class="unstyled">
-                        <li>Printed By</li>
-                        <li>{{ entity.createdBy.profile.name }}, {{ "now"|date("d-m-Y") }}</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr><td style="text-align:right"> <p>Customer Copy<br/><br/><br/></p></td></tr>
-             <tr><td>&nbsp;</td></tr>
-        </table>
+            <table class="table">
+                    <tr>
+                        <td class="span4 text-center">
+                            <ul class="unstyled">
+                                <li>Printed By</li>
+                                <li>{{ entity.createdBy }}, {{ "now"|date("d-m-Y") }}</li>
+                            </ul>
+                        </td>
+                        <td class="span4 text-right">
+                            <ul class="unstyled">
+                                <li>&nbsp;</li>
+                                <li>Customer Copy</li>
+                            </ul>
+                        </td>
+                    </tr>
+            </table>
         {% endif %}
         </div>
         <div style="height: 9.87cm!important;display: block">
@@ -137,10 +140,23 @@
                     <tr><td colspan="3" class="span11"><strong class="pull-right">Sub-Total</strong></td><td class="span1" style="text-align: right!important;">{{ serviceDetails.total|number_format }}</td></tr>
                 {% endfor %}
                 </tbody>
-                <tfoot>
-                <tr><td colspan="4"><strong>Remarks</strong> {{ entity.comment|raw }}.</td></tr>
-                <tr><td colspan="5" style="text-align:right"><p>Lab Copy</p></td></tr>
-               </tfoot>
+
+            </table>
+            <table class="table">
+                    <tr>
+                        <td class="span4 text-center">
+                            <ul class="unstyled">
+                                <li>Printed By</li>
+                                <li>{{ entity.createdBy }}, {{ "now"|date("d-m-Y") }}</li>
+                            </ul>
+                        </td>
+                        <td class="span4 text-right">
+                            <ul class="unstyled">
+                                 <li>&nbsp;</li>
+                                <li>Lab Copy</li>
+                            </ul>
+                        </td>
+                    </tr>
             </table>
         {% endif %}
         </div>

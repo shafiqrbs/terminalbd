@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Medicine Sales Invoice
+                   Manage Sales Item
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('medicine_sales') }}">Medicine Sales</a>
+                        <a href="{{ path('medicine_sales') }}">Sales Sales Item</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,10 +33,10 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Medicine Sales</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Sales Item</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red"  href="{{ path('medicine_sales_return') }}" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-th-list"></i> Sales Return</a>
+                                <a class="btn red"  href="{{ path('medicine_sales_return') }}"><i class="icon-th-list"></i> Sales Return</a>
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% if entities is not empty %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.medicineSales.created|date('d-m-Y') }}</td>
@@ -105,10 +105,13 @@
                                         </td>
                                     </tr>
                                 {% endfor %}
+                                {% endif %}
                                 </tbody>
                             </table>
                             <div class="pagination pull-center" >
-                                {{ knp_pagination_render(entities) }}
+                                {% if entities is not empty %}
+                                    {{ knp_pagination_render(entities) }}
+                                {% endif %}
                             </div>
                         </div>
                     </div>

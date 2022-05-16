@@ -34,20 +34,9 @@ class MedicineStockItemType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
-            ->add('unit', 'entity', array(
-                'required'    => false,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
-                'property' => 'name',
-                'empty_value' => 'An unit',
-                'attr'=>array('class'=>'span3 select2 stockInput'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->orderBy("p.name","ASC");
-                },
-            ));
+            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'Total MRP','autoComplete'=>'off')))
+            ;
     }
 
     /**

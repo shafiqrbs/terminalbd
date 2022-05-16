@@ -178,9 +178,10 @@ class PurchaseController extends Controller
 	/**
 	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
 	 */
-    public function newAction()
+    public function newAction(Request $request)
     {
 
+        $invoiceMode = (isset($_REQUEST['invoiceMode']) and !empty($_REQUEST['invoiceMode'])) ? $_REQUEST['invoiceMode']:'';
         $em = $this->getDoctrine()->getManager();
         $entity = new MedicinePurchase();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
@@ -194,6 +195,9 @@ class PurchaseController extends Controller
             $entity->setUpdated($datetime);
         }
         $entity->setReceiveDate($receiveDate);
+        if($invoiceMode){
+            $entity->setInvoiceMode($invoiceMode);
+        }
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $em->persist($entity);
@@ -233,6 +237,7 @@ class PurchaseController extends Controller
         ));
     }
 
+
     /**
      * Creates a form to edit a Invoice entity.wq
      *
@@ -262,7 +267,7 @@ class PurchaseController extends Controller
             'action' => $this->generateUrl('medicine_purchase_particular_add', array('invoice' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'custom-form',
+                'class' => 'horizontal-form particular-info',
                 'id' => 'purchaseItemForm',
                 'novalidate' => 'novalidate',
             )
@@ -277,7 +282,7 @@ class PurchaseController extends Controller
             'action' => $this->generateUrl('medicine_stock_item_create', array('id' => $purchase->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'custom-form',
+                'class' => 'horizontal-form particular-info',
                 'id' => 'medicineStock',
                 'novalidate' => 'novalidate',
             )
@@ -500,7 +505,7 @@ class PurchaseController extends Controller
         }else{
             $msg = "{$stockMedicine->getName()} already exist";
         }
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stockMedicine,'',$pack,$openStock);
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stockMedicine,'',$pack,$minQuantity,$openStock);
         $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));

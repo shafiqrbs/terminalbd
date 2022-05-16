@@ -6,6 +6,9 @@
             <td>{{ loop.index }}</td>
             <td class="span3"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
             <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+            <td class="span1">
+                <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
+            </td>
             <td class="">
                 <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
             </td>
@@ -36,3 +39,19 @@
         </tr>
     {% endfor %}
 {% endif %}
+<tr>
+    <td colspan="15" class="span12" style="border: 1px double #000"></td>
+</tr>
+<tr>
+    <th colspan="7">AVG Purchase Price</th>
+    <td colspan="5" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+    <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+    <td class="span1">{{ (entity.subTotal - ((entity.subTotal*12.5)/100))|number_format(2) }}</td>
+    <td class="span1">12.5%</td>
+</tr>
+<tr>
+    <td colspan="12" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
+    <td class="span1"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
+    <td class="span1"></td>
+    <td class="span1"></td>
+</tr>
