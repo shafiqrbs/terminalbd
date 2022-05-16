@@ -1,7 +1,7 @@
 {% extends '::hms-print.html.twig' %}
 {% block body %}
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
-        <div style="height: 19.7466666667cm!important; display: block">
+        <div style="height: 15.7466666667cm!important; display: block">
         {% if global.webPath('file') is not empty %}<img style="max-height:100px" src="/{{ global.webPath('file') }}">{% endif %}
         <table class="table table-border" >
             <tr>
@@ -94,7 +94,7 @@
             </table>
         {% endif %}
         </div>
-        <div style="height: 9.87cm!important;display: block">
+        <div style="height: 8.87cm!important;display: block">
         <table class="table table-border" >
             <tr>
                 <td>
