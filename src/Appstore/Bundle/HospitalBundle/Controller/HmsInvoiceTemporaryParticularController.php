@@ -57,7 +57,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal',
-                'id' => 'invoicePatientForm',
+                'id' => 'invoicePatientForm patient-info',
                 'novalidate' => 'novalidate',
             )
         ));
