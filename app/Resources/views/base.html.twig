@@ -218,15 +218,16 @@
 {% endjavascripts %}
 {% block javascriptBlock %}
 {% endblock %}
+
 <script type="text/javascript">
 
     jQuery(document).ready(function () {
 
         {% block documentready %}
-            App.init();
-            FormComponents.init();
-            TableAdvanced.init();
-            AppScript;
+        App.init();
+        FormComponents.init();
+        TableAdvanced.init();
+        AppScript;
         $('.select2').select2();
         $('.selectbox').selectBox();
         $('.selectbox select').selectBox();
@@ -248,7 +249,7 @@
 
         $('.multiselect').multiselect();
 
-       $('.toggle').click(function(){
+        $('.toggle').click(function(){
             var id = $(this).attr('id');
             $("#show-"+id).slideToggle(100);
         }).toggle( function() {
@@ -277,10 +278,29 @@
 
         });
 
+        /*$('.horizontal-form').submit(function(){
+            $("button[type='submit']", this)
+                .attr('disabled', 'disabled');
+            setTimeout(function(){
+                $('.pull-right').find('button').removeAttr('disabled')
+            }, 3000);
+            return true;
+        });
+
+        $('.form-horizontal').submit(function(){
+            $("button[type='submit']", this)
+                .attr('disabled', true);
+                setTimeout(function(){
+                    $('.pull-right').find('button').removeAttr('disabled')
+                }, 3000);
+            return true;
+        });
+*/
         $('.horizontal-form').submit(function(){
             $("button[type='submit']", this)
                 .html("Please Wait...")
                 .attr('disabled', 'disabled');
+            //setTimeout(function(){ location.reload() }, 3000);
             setTimeout(function(){
                 $("button[type='submit']", this).removeAttr('disabled')
             }, 3000);

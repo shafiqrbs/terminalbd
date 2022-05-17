@@ -262,7 +262,7 @@ class CustomerRepository extends EntityRepository
 
     }
 
-    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$data)
+    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$patientId,$data)
     {
         $em = $this->_em;
         $customer = $data['customer'];
@@ -275,11 +275,16 @@ class CustomerRepository extends EntityRepository
         $height = isset($customer['height']) ? $customer['height']:'';
         $width = isset($customer['width']) ? $customer['width']:'';
         $bloodPressure = isset($customer['bloodPressure']) ? $customer['bloodPressure']:'';
+        $patient = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'customerId' => $patientId));
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
-        if($entity){
+        if($patient){
+            return $entity = $patient;
+        }elseif($entity){
             return $entity;
         }else{
             $entity = new Customer();
+            $entity->setPatientId($patientId);
+            $entity->setCustomerId($patientId);
             $entity->setMobile($mobile);
             $entity->setName($name);
             $entity->setGender($gender);
@@ -298,7 +303,6 @@ class CustomerRepository extends EntityRepository
             if($bloodPressure){
                 $entity->setBloodPressure($bloodPressure);
             }
-
             $entity->setGlobalOption($globalOption);
             $em->persist($entity);
             $em->flush($entity);

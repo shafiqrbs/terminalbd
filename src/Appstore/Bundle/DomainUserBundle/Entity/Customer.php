@@ -205,6 +205,13 @@ class Customer
     /**
      * @var string
      *
+     * @ORM\Column(name="patientId", type="string",  nullable=true)
+     */
+    private $patientId;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="postalCode", type="string", length=30, nullable =true)
      */
     private $postalCode;
@@ -1825,6 +1832,24 @@ class Customer
     {
         $this->alternativeMobile = $alternativeMobile;
     }
+
+    /**
+     * @return string
+     */
+    public function getPatientId()
+    {
+        return $this->patientId;
+    }
+
+    /**
+     * @param string $patientId
+     */
+    public function setPatientId($patientId)
+    {
+        $this->patientId = $patientId;
+    }
+
+
 
 
 }

@@ -57,7 +57,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal',
-                'id' => 'invoicePatientForm patient-info',
+                'id' => 'invoicePatientForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -75,6 +75,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $editForm->handleRequest($request);
         $referredId = $request->request->get('referredId');
         $discountType = $request->request->get('discountType');
+        $patientId = $request->request->get('customerId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
@@ -89,7 +90,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $entity->setCreatedBy($this->getUser());
         if (!empty($data['customer']['name'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$data);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$patientId,$data);
             $entity->setCustomer($customer);
             $entity->setMobile($mobile);
         }

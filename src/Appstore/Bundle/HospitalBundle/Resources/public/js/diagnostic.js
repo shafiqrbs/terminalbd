@@ -61,7 +61,6 @@ function formSubmit() {
     $('form#invoicePatientForm').on('keypress', 'input,select,textarea', function (e) {
 
         if (e.which == 13) {
-
             e.preventDefault();
             switch (this.id) {
 
@@ -250,6 +249,7 @@ function formSubmit() {
             "appstore_bundle_hospitalbundle_invoice[referredDoctor][name]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[referredDoctor][mobile]": {required: false},
             "appstore_bundle_hospitalbundle_invoice[comment]": {required: false},
+            "customerId": {required: false},
         },
 
         messages: {
