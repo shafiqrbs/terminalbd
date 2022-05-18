@@ -297,24 +297,25 @@
         });
 */
         $('.horizontal-form').submit(function(){
-            var button = $("button[type='submit']", this).text();
+            var submitBtn = $("button[type='submit']", this).text();
             $("button[type='submit']", this)
                 .html("Please Wait...")
                 .attr('disabled', 'disabled');
             //setTimeout(function(){ location.reload() }, 3000);
             setTimeout(function(){
-                $("button[type='submit']", this).html(button).removeAttr("disabled");
+                $("button[type='submit']", this).html(submitBtn).removeAttr("disabled");
             }, 2000);
-            //return true;
+            return true;
         });
 
         $('.form-horizontal').submit(function(){
+            var submitBtn = $("button[type='submit']", this).text();
             $("button[type='submit']", this)
                 .html("Please Wait...")
                 .attr('disabled', 'disabled');
             //setTimeout(function(){ location.reload() }, 3000);
             setTimeout(function(){
-                $("button[type='submit']", this).html(button).removeAttr("disabled");
+                $("button[type='submit']", this).html(submitBtn).removeAttr("disabled");
             }, 2000);
             return true;
         });
