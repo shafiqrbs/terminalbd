@@ -297,14 +297,15 @@
         });
 */
         $('.horizontal-form').submit(function(){
+            var button = $("button[type='submit']", this).text();
             $("button[type='submit']", this)
                 .html("Please Wait...")
                 .attr('disabled', 'disabled');
             //setTimeout(function(){ location.reload() }, 3000);
             setTimeout(function(){
-                $("button[type='submit']", this).removeAttr('disabled')
-            }, 3000);
-            return true;
+                $("button[type='submit']", this).html(button).removeAttr("disabled");
+            }, 2000);
+            //return true;
         });
 
         $('.form-horizontal').submit(function(){
@@ -313,8 +314,8 @@
                 .attr('disabled', 'disabled');
             //setTimeout(function(){ location.reload() }, 3000);
             setTimeout(function(){
-                $("button[type='submit']", this).removeAttr('disabled')
-            }, 3000);
+                $("button[type='submit']", this).html(button).removeAttr("disabled");
+            }, 2000);
             return true;
         });
 

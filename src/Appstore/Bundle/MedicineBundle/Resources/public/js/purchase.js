@@ -145,7 +145,7 @@ $('form#medicineStock').on('keypress', '.stockInput', function (e) {
 });
 
 $('form#purchaseItemForm').on('keypress', '.input', function (e) {
-
+    $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
         var idx = inputs.index(this);
@@ -264,7 +264,6 @@ var form = $("#purchaseItemForm").validate({
         "purchaseItem[salesPrice]": {required: false},
         "purchaseItem[quantity]": {required: false},
         "purchaseItem[expirationEndDate]": {required: false},
-        "purchaseItem[batchno]": {required: false},
         "purchaseItem[bonusQuantity]": {required: false}
     },
 
