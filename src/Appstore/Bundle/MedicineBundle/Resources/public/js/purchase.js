@@ -145,7 +145,7 @@ $('form#medicineStock').on('keypress', '.stockInput', function (e) {
 });
 
 $('form#purchaseItemForm').on('keypress', '.input', function (e) {
-    $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
+  //  $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
     if (e.which === 13) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
         var idx = inputs.index(this);
@@ -258,6 +258,7 @@ var formStock = $("#medicineStock").validate({
     }
 });
 
+
 var form = $("#purchaseItemForm").validate({
     rules: {
         "purchaseItem[stockName]": {required: true},
@@ -279,7 +280,7 @@ var form = $("#purchaseItemForm").validate({
     },
 
     submitHandler: function(form) {
-
+        alert($('form#purchaseItemForm').attr( 'action' ));
         $.ajax({
             url         : $('form#purchaseItemForm').attr( 'action' ),
             type        : $('form#purchaseItemForm').attr( 'method' ),

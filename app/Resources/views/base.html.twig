@@ -296,7 +296,7 @@
             return true;
         });
 */
-        $('.horizontal-form').submit(function(){
+        /*$('.horizontal-form').submit(function(){
             var submitBtn = $("button[type='submit']", this).text();
             $("button[type='submit']", this)
                 .html("Please Wait...")
@@ -318,7 +318,7 @@
                 $("button[type='submit']", this).html(submitBtn).removeAttr("disabled");
             }, 2000);
             return true;
-        });
+        });*/
 
         $(document).on('change', '.targetTo', function() {
             var targetTo = $(this).val();
@@ -426,6 +426,12 @@
         color: #fff;
         top: 25%;
         left: 5%;
+    }
+    .select-error-tooltip{
+        position: relative;
+    }
+    .select-error-tooltip .tooltip{
+        top:10px;
     }
     @media (max-width: 979px) {
         .navbar .brand {

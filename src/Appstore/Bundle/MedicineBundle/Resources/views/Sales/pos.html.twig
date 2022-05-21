@@ -37,7 +37,7 @@
         <div class="row-fluid" >
             <!--/span-->
             <div class="span5">
-                <div class="control-group">
+                <div class="control-group select-error-tooltip">
                     <label class="control-label"  for="category" >Name<span class="required">*</span></label>
                     <div class="controls">
                         {{ form_widget(stockItemForm.name) }}
@@ -125,7 +125,7 @@
             {% endif %}
             {{ form_start(salesItem) }}
             {{ form_row(salesItem._token) }}
-            <div class="{% if config.barcode == 1 and config.purchaseItem == 1 %}span3{% else %}span5{% endif %}"  style="margin-left: 0!important">
+            <div class="{% if config.barcode == 1 and config.purchaseItem == 1 %}span3{% else %}span5{% endif %} select-error-tooltip"  style="margin-left: 0!important">
                 {{ form_widget(salesItem.stockName) }}
                 {{ form_errors(salesItem.stockName) }}
             </div>

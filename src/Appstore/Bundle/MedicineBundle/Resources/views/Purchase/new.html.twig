@@ -53,6 +53,7 @@
                             line-height: 12px!important;
                             margin-top: 0!important;
                         }
+
                     </style>
                     <div class="portlet-body">
                         <div class="portlet-body form">
@@ -115,17 +116,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-actions portlet box grey">
-                                    <div class="pull-right">
-                                    </div>
-                                </div>
                                 {{ form_end(stockItemForm) }}
                             </div>
                             {{ form_start(purchaseItem) }}
                             {{ form_row(purchaseItem._token) }}
                             <div class="row-fluid" >
                                 <div class="span6" style="padding-left:15px">
-                                    <div class="control-group">
+                                    <div class="control-group select-error-tooltip">
                                         <label class="control-label" for="firstName">Search Stock Item Name</label>
                                         <div class="controls">
                                             {{ form_widget(purchaseItem.stockName) }}
