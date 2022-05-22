@@ -280,7 +280,6 @@ var form = $("#purchaseItemForm").validate({
     },
 
     submitHandler: function(form) {
-        alert($('form#purchaseItemForm').attr( 'action' ));
         $.ajax({
             url         : $('form#purchaseItemForm').attr( 'action' ),
             type        : $('form#purchaseItemForm').attr( 'method' ),
