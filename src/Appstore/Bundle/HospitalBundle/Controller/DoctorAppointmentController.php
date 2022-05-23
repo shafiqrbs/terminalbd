@@ -117,7 +117,7 @@ class DoctorAppointmentController extends Controller
         $entity->setCreatedBy($this->getUser());
         if (!empty($data['customer']['name'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$data);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,'',$data);
             $entity->setCustomer($customer);
             $entity->setMobile($mobile);
         }

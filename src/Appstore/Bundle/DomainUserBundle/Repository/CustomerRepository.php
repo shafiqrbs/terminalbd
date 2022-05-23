@@ -262,7 +262,7 @@ class CustomerRepository extends EntityRepository
 
     }
 
-    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$patientId,$data)
+    public function findHmsExistingCustomerDiagnostic(GlobalOption $globalOption, $mobile,$patientId = '',$data)
     {
         $em = $this->_em;
         $customer = $data['customer'];
@@ -277,7 +277,7 @@ class CustomerRepository extends EntityRepository
         $bloodPressure = isset($customer['bloodPressure']) ? $customer['bloodPressure']:'';
         $patient = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'customerId' => $patientId));
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
-        if($patient){
+        if($patient and $patientId > 0){
             return $entity = $patient;
         }elseif($entity){
             return $entity;

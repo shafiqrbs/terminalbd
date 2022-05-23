@@ -53,7 +53,7 @@ class DoctorAppointmentType extends AbstractType
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'doctor',
                 'empty_value' => '---Select Assign Doctor---',
-                'attr'=>array('class'=>'span12 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
@@ -63,7 +63,7 @@ class DoctorAppointmentType extends AbstractType
                 }
             ))
             ->add('diseasesProfile', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'empty_value' => '---Select diseases profile---',
@@ -80,7 +80,7 @@ class DoctorAppointmentType extends AbstractType
                 }
             ))
             ->add('department', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'empty_value' => '---Select department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
