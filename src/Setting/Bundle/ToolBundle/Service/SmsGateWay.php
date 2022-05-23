@@ -90,8 +90,8 @@ class SmsGateWay
     function send($msg, $phone, $sender = ""){
         $curl = curl_init();
         $data =array(
-            'apikey' => env('SMS_API_KEY'),
-            'secretkey' => env('SMS_SECRET_KEY'),
+            'apikey' => '198a7497a859e5fe',
+            'secretkey' => 'cb6adaba',
             'callerID' => '8809612770474',
             'toUser' => $phone,
             'messageContent' => $msg,
