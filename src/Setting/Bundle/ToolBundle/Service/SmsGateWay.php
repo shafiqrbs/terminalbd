@@ -57,7 +57,7 @@ class SmsGateWay
     }
 
 
-    function send($msg, $phone, $sender = ""){
+    function sendx($msg, $phone, $sender = ""){
 
         if(empty($sender)){
             $from = "03590602016";
@@ -78,6 +78,36 @@ class SmsGateWay
             CURLOPT_HTTPHEADER => array(
                 "Content-Type: application/json",
                 "Authorization: Basic dW1hcml0OnVtYXJpdDE0OA=="
+            ),
+        ));
+        $response = curl_exec($curl);
+        print_r(curl_error($curl));
+        curl_close($curl);
+        return 'success';
+
+    }
+
+    function send($msg, $phone, $sender = ""){
+        $curl = curl_init();
+        $data =array(
+            'apikey' => env('SMS_API_KEY'),
+            'secretkey' => env('SMS_SECRET_KEY'),
+            'callerID' => '8809612770474',
+            'toUser' => $phone,
+            'messageContent' => $msg,
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://smpp.ajuratech.com:7790/sendtext",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
             ),
         ));
         $response = curl_exec($curl);
