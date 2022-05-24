@@ -65,12 +65,15 @@ class NewPatientAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'Please select cabin/ward no'))
                 ),
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.service = 2")
-                        ->andWhere('b.id NOT IN (:ids)')->setParameter('ids', $this->cabins )
-                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
-                        ->orderBy("b.name", "ASC");
+                    $qb = $er->createQueryBuilder('b');
+                    $qb  ->where("b.status = 1");
+                    $qb    ->andWhere("b.service = 2");
+                    if($this->cabins){
+                        $qb    ->andWhere('b.id NOT IN (:ids)')->setParameter('ids', $this->cabins );
+                    }
+                    $qb    ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId());
+                    $qb    ->orderBy("b.name", "ASC");
+                    return $qb;
                 }
             ))
             ->add('diseasesProfile', 'entity', array(
