@@ -34,6 +34,7 @@ class MedicineStockType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
+            ->add('barcode','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Barcode')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'MRP price')))
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Purchase price')))
             ->add('minQuantity','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Minimum')))
