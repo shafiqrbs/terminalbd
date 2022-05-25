@@ -35,7 +35,6 @@ class MedicineStockItemType extends AbstractType
                 )
             ))
             ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
-            ->add('barcode','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'Total MRP','autoComplete'=>'off')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'Total MRP','autoComplete'=>'off')))
             ;
     }
