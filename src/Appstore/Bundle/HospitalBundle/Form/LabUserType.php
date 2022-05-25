@@ -41,6 +41,7 @@ class LabUserType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter lab user name'),
                     'constraints' =>array(new NotBlank(array('message'=>'Please enter lab user name'))))
             )
+            ->add('signatureFile')
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter mobile no')))
             ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation')))
             ->add('doctorSignature','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter signature')))

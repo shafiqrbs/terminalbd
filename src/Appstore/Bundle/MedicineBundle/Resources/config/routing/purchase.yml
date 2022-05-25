@@ -73,6 +73,13 @@ medicine_purchase_particular_add:
     options:
             expose: true
 
+medicine_purchase_barcode_item:
+    path:     /{invoice}/barcode-item
+    defaults: { _controller: "MedicineBundle:Purchase:addBarcodeItem" }
+    methods:  POST
+    options:
+            expose: true
+
 
 medicine_stock_item_create:
     path:     /{id}/stock-item-create

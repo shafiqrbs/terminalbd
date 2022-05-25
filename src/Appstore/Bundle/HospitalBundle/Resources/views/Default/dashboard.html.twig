@@ -34,7 +34,7 @@
                 <div class="span2">
                     <div class="btn-group" style="width: 100%!important;">
                         {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") and 'admission' in option.hospitalConfig.invoiceProcess)) or  ('admission' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
-                            <a  href="{{ path('hms_invoice_admission') }}" style="width:75%" class="btn red big"><i class="fa fa-ambulance"></i> New Admission</a>
+                            <a  href="{{ path('hms_invoice_admission') }}" style="width:75%" class="btn red big"><i class="fa fa-ambulance"></i> Admission</a>
                         {% endif %}
                     </div>
                 </div>

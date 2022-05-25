@@ -181,6 +181,7 @@ class DomainUserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        /* @var $entity User */
         $entity = $em->getRepository('UserBundle:User')->find($id);
 
         if (!$entity) {
@@ -190,6 +191,14 @@ class DomainUserController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->getProfile()->upload() && !empty($entity->getProfile()->getFile())){
+                $entity->getProfile()->removeUpload();
+            }
+            if($entity->getProfile()->signatureUpload() && !empty($entity->getProfile()->getSignatureFile())){
+                $entity->getProfile()->removeSignatureUpload();
+            }
+            $entity->getProfile()->upload();
+            $entity->getProfile()->signatureUpload();
             $em->flush();
             return $this->redirect($this->generateUrl('domain_edit', array('id' => $id)));
         }

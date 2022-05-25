@@ -47,10 +47,7 @@ class DomainUserProfileType extends AbstractType
                 )
             ))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile number', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input user mobile no'))
-                )
-            ))
+             ))
             ->add('joiningDate', 'date', array(
                 'widget' => 'choice',
                 'years' => range(date('Y'), date('Y')-50),
@@ -98,6 +95,7 @@ class DomainUserProfileType extends AbstractType
             ))
             ->add('branch','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4 ,'draggable' => 'false' ,'placeholder'=>'Enter your bank branch name')))
             ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your bank account no')))
+            ->add('signatureFile')
             ->add('file');
     }
 

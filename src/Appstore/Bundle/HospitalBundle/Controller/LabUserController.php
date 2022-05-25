@@ -84,6 +84,7 @@ class LabUserController extends Controller
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(9);
             $entity->setService($service);
             $em->persist($entity);
+            $entity->signatureUpload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
@@ -210,6 +211,10 @@ class LabUserController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->signatureUpload() && !empty($entity->getSignatureFile())){
+                $entity->removeSignatureUpload();
+            }
+            $entity->signatureUpload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

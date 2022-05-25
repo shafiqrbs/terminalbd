@@ -66,6 +66,7 @@ class DoctorController extends Controller
             $entity->setService($service);
             $em->persist($entity);
             $entity->upload();
+            $entity->signatureUpload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
@@ -184,6 +185,7 @@ class DoctorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
+        /* @var $entity Particular */
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -196,7 +198,11 @@ class DoctorController extends Controller
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }
+            if($entity->signatureUpload() && !empty($entity->getSignatureFile())){
+                $entity->removeSignatureUpload();
+            }
             $entity->upload();
+            $entity->signatureUpload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

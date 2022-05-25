@@ -469,6 +469,17 @@ class Particular
     protected $file;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $signaturePath;
+
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $signatureFile;
+
+    /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
@@ -1584,6 +1595,100 @@ class Particular
     {
         $this->isReportContent = $isReportContent;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSignaturePath()
+    {
+        return $this->signaturePath;
+    }
+
+    /**
+     * @param mixed $signaturePath
+     */
+    public function setSignaturePath($signaturePath)
+    {
+        $this->signaturePath = $signaturePath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSignatureFile()
+    {
+        return $this->signatureFile;
+    }
+
+    /**
+     * @param mixed $signatureFile
+     */
+    public function setSignatureFile(UploadedFile $signatureFile = null)
+    {
+        $this->signatureFile = $signatureFile;
+    }
+
+
+
+    public function getAbsoluteSignaturePath()
+    {
+        return null === $this->signaturePath
+            ? null
+            : $this->getUploadRootDir().'/'.$this->signaturePath;
+    }
+
+    public function getWebSignaturePath()
+    {
+        return null === $this->signaturePath
+            ? null
+            : $this->getUploadDir().'/'.$this->signaturePath;
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeSignatureUpload()
+    {
+        if ($file = $this->getAbsoluteSignaturePath()) {
+            unlink($file);
+        }
+    }
+
+    public function signatureUpload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getSignatureFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $this->getSignatureFile()->move(
+            $this->getUploadRootDir(),
+            $this->getSignatureFile()->getClientOriginalName()
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->signaturePath = $this->getSignatureFile()->getClientOriginalName();
+
+        // clean up the file property as you won't need it anymore
+        $this->signatureFile = null;
+    }
+
+
 
 
 

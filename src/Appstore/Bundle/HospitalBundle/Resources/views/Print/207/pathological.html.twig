@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>{{ entity.hmsInvoice.invoice }}</title>
+    <title>{{ entity.hmsInvoice.customer.name }}-{{ entity.hmsInvoice.invoice }}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="" name="description"/>
     <meta content="" name="author"/>
@@ -32,15 +32,16 @@
             </th>
         </tr>
         <tr>
-            <td style="width: 40%!important;">
+            <td style="width: 35%!important;">
                 <ul class="unstyled">
                     <li><label>Invoice No:</label> {{ entity.hmsInvoice.invoice }}</li>
-                    <li><label>Patient Name:</label> {{ entity.hmsInvoice.customer.name }}</li>
+                    <li><label>Patient ID:</label> {{ entity.hmsInvoice.customer.customerId }}</li>
+                    <li><label>Name:</label> {{ entity.hmsInvoice.customer.name }}</li>
                     <li><label>Sample:</label> {{ entity.particular.sepcimen }}</li>
                     <li><label>Ref. By:</label> {% if entity.hmsInvoice.assignDoctor is not empty %}<strong>{{ entity.assignDoctor.name }}</strong>{% endif %}</li>
                 </ul>
             </td>
-            <td class="" style="width:25%!important;">
+            <td class="" style="width:30%!important;">
                 <ul class="unstyled" >
                     <li><label>Age:</label> {{ entity.hmsInvoice.customer.age }} {{ entity.hmsInvoice.customer.ageType }}</li>
                     <li><label>Gender:</label> {{ entity.hmsInvoice.customer.gender }} </li>
@@ -167,26 +168,33 @@
             <td class="left span4">
                 <ul class="unstyled">
                     <li>Prepared By</li>
-                    <li><strong>{{ entity.particularPreparedBy.profile.name }}</strong></li>
-                    <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ entity.particularPreparedBy.profile.designation.name }}{% endif %}</li>
+                    <li>
+                        {% if(entity.assignLabuser.webSignaturePath) %}
+                            <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.assignLabuser.webSignaturePath).resize(180,100) }}">
+                        {% endif %}
+                    </li>
+                    <li><strong>{{ entity.assignLabuser.name }}</strong></li>
+                    <li>{% if entity.assignLabuser.designation is not empty %}{{ entity.assignLabuser.designation }}{% endif %}</li>
+                    <li>{% if entity.assignLabuser.doctorSignature is not empty %}{{ entity.assignLabuser.doctorSignature }}{% endif %}</li>
                 </ul>
             </td>
             <td class="center span4">
                 <ul class="unstyled">
                     <li>Printed By</li>
                     <li><strong>{{ printUser.profile.name }}</strong></li>
-                    {#<li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>#}
+                    <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
+                    <li>{{ "now"|date('d-m-Y h:m A') }}</li>
                 </ul>
             </td>
             <td class="span4">
                 {% if entity.assignDoctor is not empty %}
                     <ul class="unstyled">
+                        <li> {% if(entity.assignDoctor.webSignaturePath) %}
+                                <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.assignDoctor.webSignaturePath).resize(180,100) }}">
+                            {% endif %}
+                        </li>
                         <li><strong>{{ entity.assignDoctor.name }}</strong></li>
-                        <li>{{ entity.assignDoctor.educationalDegree|raw }}</li>
-                        <li>{{ entity.assignDoctor.specialist|raw }}</li>
-                        {% if entity.assignDoctor.category is not empty or entity.assignDoctor.department is not empty %}<li> {% if entity.assignDoctor.category is not empty %}{{ entity.assignDoctor.category.name }}{% endif %} {% if entity.assignDoctor.department is not empty %} ,{{ entity.assignDoctor.department.name }}{% endif %}</li>{% endif %}
-                        <li>{{ entity.assignDoctor.designation }}</li>
-                        <li>{{ entity.assignDoctor.currentJob }}</li>
+                        <li>{{ entity.assignDoctor.doctorSignature|raw }}</li>
                     </ul>
                 {% endif %}
             </td>
@@ -226,7 +234,7 @@
         padding-right: 15px;
     }
     table label{
-        width: 80px;
+        width: 90px;
         display: inline-block;
         text-decoration: none;
     }
