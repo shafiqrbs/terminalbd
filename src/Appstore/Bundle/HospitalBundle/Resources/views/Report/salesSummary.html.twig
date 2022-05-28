@@ -172,7 +172,7 @@
                                 <th>{{ userCommissionTotal|number_format(2) }}</th>
                                 <th>{{ userReturnTotal|number_format(2) }}</th>
                                 <th>{{ userPreviousReceiveTotal|number_format(2) }}</th>
-                                <th>{{ ((userTodaySalesTotal + userTodayReceiveTotal) - (userCommissionTotal + userReturnTotal))|number_format }}</th>
+                                <th>{{ ((userPreviousReceiveTotal + userTodayReceiveTotal) - (userCommissionTotal + userReturnTotal))|number_format }}</th>
 
                             </tr>
                         </table>
