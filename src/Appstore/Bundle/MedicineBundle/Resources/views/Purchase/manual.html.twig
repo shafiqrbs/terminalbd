@@ -385,11 +385,11 @@
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Invoice Mode</strong></span></td>
                                                         <td colspan="3"> {{ form_widget(form.invoiceMode) }}</td>
                                                     </tr>#}
-                                                    <tr class="invoiceMode" {% if entity.invoiceMode == "invoice" %} style="display: none" {% endif %}>
+                                                    <tr class="invoiceMode" style="display: none"}>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Discount Type</strong></span></td>
                                                         <td  colspan="3">{{ form_widget(form.discountType) }}</td>
                                                     </tr>
-                                                    <tr class="invoiceMode" {% if entity.invoiceMode == "invoice" %} style="display: none" {% endif %}>
+                                                    <tr class="invoiceMode" style="display: none" >
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Discount</strong></span></td>
                                                         <td  colspan="3"> {{ form_widget(form.discountCalculation) }}
                                                             {{ form_widget(form.discount) }}</td>
@@ -461,6 +461,7 @@
                                                         <td colspan="3">
                                                             <div class="pull-right">
                                                                 <div class="btn-group">
+                                                                    <input type="hidden" class="" name="medicinepurchase_invoiceMode" id="medicinepurchase_invoiceMode" value="{{ entity.invoiceMode }}">
                                                                     <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
                                                                     <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
                                                                     <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.subTotal }}">
