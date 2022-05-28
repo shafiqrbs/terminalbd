@@ -34,8 +34,8 @@ class MedicineStockItemType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span4 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'Total MRP','autoComplete'=>'off')))
+            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span6 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span6 stockInput','placeholder'=>'Total MRP','autoComplete'=>'off')))
             ;
     }
 

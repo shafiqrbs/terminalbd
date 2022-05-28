@@ -157,7 +157,7 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr class="{% if entity.averagePurchasePrice >= entity.salesPrice or entity.averagePurchasePrice == 0  %}warning{% endif %} {% if entity.minQuantity > 0 and entity.remainingQuantity <= entity.minQuantity %} min {% endif %}" id="remove-{{ entity.id }}">
-                                        <td><input type="checkbox" class="checkbox stockId" id="" {% if entity.id in selected %}checked="checked"{% endif %}  value="{{ entity.id }}"></td>
+                                        <td><input type="checkbox" class="checkbox stockId" id="" {% if entity.id in selected %} checked="checked" {% endif %}  value="{{ entity.id }}"></td>
                                         {% if config.isBarcode == 1 %}
                                             <td class="numeric">
                                                 {% if ( app.user.granted("ROLE_MEDICINE_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}

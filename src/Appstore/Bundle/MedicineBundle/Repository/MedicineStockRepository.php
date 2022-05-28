@@ -218,6 +218,26 @@ class MedicineStockRepository extends EntityRepository
         return  $result;
     }
 
+    public function insertBarcodeMedicineStock($config,$data)
+    {
+        $em = $this->_em;
+        $quantity = (float)(trim($data['quantity'])) ? trim($data['quantity']):1;
+        $subTotal = (float)(trim($data['salesPrice'])) ? trim($data['salesPrice']):0;
+        $price = ($subTotal/$quantity);
+        $entity = new MedicineStock();
+        $entity->setMedicineConfig($config);
+        $entity->setBarcode(trim($data['barcode']));
+        $entity->setName(trim($data['name']));
+        $entity->setSlug(strtolower($data['name']));
+        $entity->setSalesPrice($price);
+        $unit = $em->getRepository('SettingToolBundle:ProductUnit')->find(4);
+        $entity->setUnit($unit);
+        $em->persist($entity);
+        $em->flush();
+        return $entity;
+
+    }
+
     public function findWithGlobalSearch($data){
 
         $sort = isset($data['sort'])? $data['sort'] :'e.sku';

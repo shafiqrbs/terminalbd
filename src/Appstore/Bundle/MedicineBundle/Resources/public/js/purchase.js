@@ -247,8 +247,6 @@ var formStock = $("#medicineStock").validate({
                 $('#discount').html(obj['discount']);
                 $('#msg').html(obj['msg']);
                 $("#medicineStock_name").select2("val", "");
-                $("#medicineStock_rackNo").select2("val", "");
-                $("#medicineStock_unit").select2("val", "");
                 $("#medicineId").val();
                 $('#medicineStock')[0].reset();
                 $('#opening-box').hide();
@@ -386,6 +384,93 @@ $(document).on('change', '#medicinepurchase_discountCalculation , #medicinepurch
     })
 
 });
+
+
+$(document).on("click", "#barcodePurchase", function() {
+    $('.purchaseToggle').toggle();
+});
+
+$(document).on("change", ".barcode", function() {
+    var barcode = $(this).val();
+    $.ajax({
+        url: Routing.generate('medicine_purchase_barcode_search',{'id':barcode}),
+        type: 'GET',
+        success: function (response) {
+            obj = JSON.parse(response);
+            $('#barcodePurchaseItem_name').val(obj['name']).focus();
+            $('#barcodeUnit').html(obj['unit']);
+        }
+    })
+});
+
+$('form#barcodePurchaseItemForm').on('keypress', '.barcodeInput', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form#barcodePurchaseItemForm").eq(0).find("input,select");
+        var idx = inputs.index(this);
+        if (idx == inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+            case 'barcodePurchaseItem_name':
+                $('#barcodePurchaseItem_quantity').focus();
+                break;
+
+            case 'barcodePurchaseItem_quantity':
+                $('#addPurchaseBarcodeItemForm').click();
+                $('#barcodePurchaseItem_barcode').focus();
+                break;
+        }
+        return false;
+    }
+});
+
+var barcodePurchaseItem = $("#barcodePurchaseItemForm").validate({
+
+    rules: {
+        "barcodePurchaseItem[barcode]": {required: true},
+        "barcodePurchaseItem[name]": {required: true},
+        "barcodePurchaseItem[salesPrice]": {required: false},
+        "barcodePurchaseItem[quantity]": {required: false},
+        "barcodePurchaseItem[bonusQuantity]": {required: false}
+    },
+
+    messages: {
+        "barcodePurchaseItem[barcode]":"Enter item barcode",
+        "barcodePurchaseItem[name]":"Enter medicine/item name",
+    },
+    tooltip_options: {
+        "barcodePurchaseItem[barcode]": {placement:'top',html:true},
+        "barcodePurchaseItem[name]": {placement:'top',html:true},
+    },
+    submitHandler: function(barcodePurchaseItem) {
+        $.ajax({
+            url         :  barcodePurchaseItem.action,
+            type        :  barcodePurchaseItem.method,
+            data        : new FormData($('form#barcodePurchaseItemForm')[0]),
+            processData : false,
+            contentType : false,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('#subTotal').html(obj['subTotal']);
+                $('#vat').val(obj['vat']);
+                $('.grandTotal').html(obj['netTotal']);
+                $('#paymentTotal').val(obj['subTotal']);
+                $('#due').val(obj['due']);
+                $('.dueAmount').html(obj['due']);
+                $('#discount').html(obj['discount']);
+                $('#msg').html(obj['msg']);
+                $('form#barcodePurchaseItemForm')[0].reset();
+                $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
+                EditableWithLoadInit();
+            }
+        });
+    }
+});
+
 
 
 $('.remove-value').click(function() {

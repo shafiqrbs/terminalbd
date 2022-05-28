@@ -73,8 +73,21 @@ medicine_purchase_particular_add:
     options:
             expose: true
 
+medicine_purchase_particular_add_manual:
+    path:     /{invoice}/particular-add-manual
+    defaults: { _controller: "MedicineBundle:Purchase:addParticularManual" }
+    methods:  POST
+    options:
+            expose: true
+
+medicine_purchase_barcode_search:
+    path:     /{id}/barcode-stock-search
+    defaults: { _controller: "MedicineBundle:Purchase:barcodeSearch" }
+    options:
+        expose: true
+
 medicine_purchase_barcode_item:
-    path:     /{invoice}/barcode-item
+    path:     /{purchase}/create-barcode-item
     defaults: { _controller: "MedicineBundle:Purchase:addBarcodeItem" }
     methods:  POST
     options:

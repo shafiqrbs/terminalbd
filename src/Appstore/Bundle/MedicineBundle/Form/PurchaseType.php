@@ -103,7 +103,7 @@ class PurchaseType extends AbstractType
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
             ->add('payment','text', array('attr'=>array('class'=>'numeric span12 inputs m-wrap remove-value','placeholder'=>'Payment amount')))
             ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
-            ->add('invoiceMode', 'choice', array(
+            /*->add('invoiceMode', 'choice', array(
                 'attr'=>array('class'=>'m-wrap invoice-mode span12'),
                 'expanded'      =>false,
                 'multiple'      =>false,
@@ -111,7 +111,7 @@ class PurchaseType extends AbstractType
                     'invoice' => 'Vendor Invoice',
                     'manual' => 'Manual',
                 ),
-            ))
+            ))*/
             ->add('discountType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap discount-type span12'),
                 'expanded'      =>false,
