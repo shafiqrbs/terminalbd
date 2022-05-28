@@ -214,6 +214,31 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+
+    public function userBaseSalesOverview(User $user,$data, $process = [])
+    {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        if(!empty($process)){
+            $qb->andWhere("e.processHead IN (:process)");
+            $qb->setParameter('process', $process);
+        }
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere("e.process = 'approved'");
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getSingleResult();
+        $data =  array('totalAmount'=> $result['totalAmount'],'receiveAmount'=>$result['receiveAmount'],'dueAmount'=>$result['dueAmount'],'returnAmount'=>$result['returnAmount']);
+        return $data;
+
+    }
+
     public function dailySalesReceive(User $user,$data)
     {
         $globalOption = $user->getGlobalOption();

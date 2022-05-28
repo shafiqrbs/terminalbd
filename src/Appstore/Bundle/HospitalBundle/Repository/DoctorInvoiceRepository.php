@@ -91,6 +91,65 @@ class DoctorInvoiceRepository extends EntityRepository
 
     }
 
+    public function  commissionUserSummary(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.hmsInvoice','hmsInvoice');
+        $qb->join('e.createdBy','u');
+        $qb->select('sum(e.payment) as subTotal');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Paid') ;
+        $qb->andWhere('e.createdBy = :createdBy')->setParameter('createdBy', $user->getId()) ;
+        $this->handleSearchBetween($qb,$data);
+        $receivable = $qb->getQuery()->getOneOrNullResult();
+        $receivableTotal = !empty($receivable['subTotal']) ? $receivable['subTotal'] :0;
+        return $receivableTotal;
+
+    }
+
+    public function  userCommissionSummary(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.hmsInvoice','hmsInvoice');
+        $qb->join('e.createdBy','u');
+        $qb->select('u.id as userId','sum(e.payment) as total');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Paid') ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('e.createdBy');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row){
+            $array[$row['userId']] = $row;
+        }
+        return $array;
+
+
+    }
+
+    public function  userGroupCommissionSummary(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.hmsInvoice','hmsInvoice');
+        $qb->join('e.createdBy','u');
+        $qb->select('u.id as userId','sum(e.payment) as total');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Paid') ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('e.createdBy');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row){
+            $array[$row['userId']] = $row;
+        }
+        return $array;
+
+
+    }
+
     public function  findWithOverview(User $user,$data, $mode = '' )
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();

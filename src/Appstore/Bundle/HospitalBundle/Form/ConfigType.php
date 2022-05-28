@@ -39,6 +39,7 @@ class ConfigType extends AbstractType
                     'expanded'  => true,
                     'empty_data'  => null,
             ))
+            ->add('commissionAutoApproved')
             ->add('customPrint')
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')

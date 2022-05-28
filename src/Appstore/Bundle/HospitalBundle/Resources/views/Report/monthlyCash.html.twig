@@ -44,14 +44,23 @@
                             <div class="portlet search-portlet">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span6"></div>
+                                        <div class="span3"></div>
+                                        <div class="span3">
+                                            {%  set modes = ['diagnostic','admission','visit'] %}
+                                            <option value="">- Select Invoice Mode -</option>
+                                            <select class="span12 m-wrap" name="mode" id='mode'>
+                                                {% for modeId in modes %}
+                                                    <option value='{{ modeId }}' {% if (searchForm.modeId is defined and searchForm.mode == modeId) %} selected="selected" {% endif %} >{{ modeId|capitalize }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                         <div class="span3">
                                             {% set currentMonth = "now"|date("M") %}
                                             {% set currentYear = "now"|date("Y") %}
                                             {%  set months = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
                                             <select class="span12 m-wrap" name="month" id='month'>
                                                 {% for month in months %}
-                                                    <option value='{{ month }}' {% if (searchForm.month is defined and searchForm.month == month) or (month == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
+                                                    <option value='{{ month }}' {% if (searchForm.month is defined and searchForm.month == month) %} selected="selected" {% endif %} >{{ month }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

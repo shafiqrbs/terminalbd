@@ -152,6 +152,40 @@ class HmsInvoiceReturnRepository extends EntityRepository
         return $total;
     }
 
+    public function userInvoiceReturnAmount(User $user, $data){
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.amount) as total');
+        $qb->join('e.createdBy','u');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
+        $qb->andWhere('e.createdBy = :createdBy')->setParameter('createdBy', $user->getId());
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $total = !empty($result['total']) ? $result['total'] :0;
+        return $total;
+
+    }
+
+    public function userGroupInvoiceReturnAmount(User $user, $data){
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('u.id as userId','sum(e.amount) as total');
+        $qb->join('e.createdBy','u');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Approved');
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('e.createdBy');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row){
+            $array[$row['userId']] = $row;
+        }
+        return $array;
+    }
+
     public function monthlySalesReturn(User $user , $data =array())
     {
         $config = $user->getGlobalOption()->getHospitalConfig()->getId();

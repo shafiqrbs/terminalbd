@@ -692,6 +692,7 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity->setProcess('Done');
+        $entity->setCommissionApproved(1);
         $em->persist($entity);
         $em->flush();
         exit;
@@ -703,6 +704,9 @@ class InvoiceController extends Controller
             $em = $this->getDoctrine()->getManager();
             $invoice->setApprovedBy($this->getUser());
             $invoice->setProcess('Done');
+            if($invoice->getHospitalConfig()->isCommissionAutoApproved() == 1){
+                $invoice->setCommissionApproved(1);
+            }
             $em->persist($invoice);
             $em->flush();
             $accountInvoice = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalFinalAccountInvoice($invoice);

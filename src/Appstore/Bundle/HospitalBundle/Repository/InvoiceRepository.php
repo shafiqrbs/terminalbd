@@ -29,6 +29,7 @@ class InvoiceRepository extends EntityRepository
 
         $department = isset($data['department'])? $data['department'] :'';
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
+        $mode = isset($data['mode'])? $data['mode'] :'';
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
         $anesthesia = isset($data['anesthesia'])? $data['anesthesia'] :'';
@@ -81,7 +82,10 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('deliveryDate', $created.'%');
         }
 
-        if(!empty($user)){
+        if(!empty($mode)){
+            $qb->andWhere("e.invoiceMode = :mode")->setParameter('mode', $mode);
+        }
+         if(!empty($user)){
             $qb->andWhere("e.createdBy = :user");
             $qb->setParameter('user', $user);
         }
@@ -420,8 +424,10 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
-        $qb->andWhere('e.process = :process')->setParameter('process', 'Done') ;
-        $qb->andWhere('e.commissionApproved = :approved')->setParameter('approved', 'false') ;
+        if(isset($data['mode']) and $data['mode'] == "diagnostic"){
+            $qb->andWhere('e.process = :process')->setParameter('process', 'Done') ;
+            $qb->andWhere('e.commissionApproved = :approved')->setParameter('approved', 'false') ;
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $qb->getQuery();

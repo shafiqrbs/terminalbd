@@ -25,28 +25,43 @@ class DefaultController extends Controller
         $data['endDate'] = $datetime->format('Y-m-d');
         $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineIncome($this->getUser(),$data);
         $user = $this->getUser();
-        $salesCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('diagnostic','visit'));
+        $salesCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->userBaseSalesOverview($user,$data,array('diagnostic','visit'));
         $salesCashAdmission = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('admission'));
         $purchaseCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($user,$data);
         $transactionMethods                 = array(1);
         $transactionCashOverview            = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview( $this->getUser(),$transactionMethods,$data);
         $expenditureOverview                = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
-        $salesTodayTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false',array('diagnostic','admission'));
-        $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true',array('diagnostic','admission'));
-        $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionSummary($user,$data);
-        $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->getInvoiceReturnAmount($user,$data);
+
+        $salesTodayTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserSalesOverview($user,$data,'false',array('diagnostic','admission','visit'));
+        $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
+
+        $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionUserSummary($user,$data);
+        $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userInvoiceReturnAmount($user,$data);
+
+
+        $salesTodayUser      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesUsers($user);
+        $salesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'false',array('diagnostic','admission','visit'));
+        $previousSalesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
+        $userSalesTodaySalesCommission      = $em->getRepository('HospitalBundle:DoctorInvoice')->userGroupCommissionSummary($user,$data);
+        $userInvoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userGroupInvoiceReturnAmount($user,$data);
+
 
         return $this->render('HospitalBundle:Default:dashboard.html.twig', array(
             'option'                            => $user->getGlobalOption() ,
             'globalOption'                      => $globalOption,
+            'salesTodayUsers'     => $salesTodayUser,
             'salesTodayTransactionOverview'     => $salesTodayTransactionOverview,
-            'salesTodaySalesCommission'         => $salesTodaySalesCommission,
             'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
+            'salesTodayUserTransactionOverview'     => $salesTodayUserTransactionOverview,
+            'previousSalesTodayUserTransactionOverview'     => $previousSalesTodayUserTransactionOverview,
+            'salesTodaySalesCommission'         => $salesTodaySalesCommission,
+            'userSalesTodaySalesCommission'     => $userSalesTodaySalesCommission,
             'transactionCashOverviews'          => $transactionCashOverview,
             'expenditureOverview'               => $expenditureOverview ,
             'salesCashOverview'                 => $salesCashOverview ,
-            'salesCashAdmission'                 => $salesCashAdmission ,
+            'salesCashAdmission'                => $salesCashAdmission ,
             'invoiceReturn'                     => $invoiceReturn ,
+            'userInvoiceReturn'                 => $userInvoiceReturn ,
             'purchaseCashOverview'              => $purchaseCashOverview ,
             'searchForm'                        => $data ,
         ));

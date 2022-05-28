@@ -291,6 +291,147 @@
             </div>
         </div>
         {% endif %}
+        {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER")  or  app.user.granted("ROLE_DOMAIN") ) %}
+            <div class="row-fluid">
+                <div class="span12">
+                <div class="row-fluid">
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Today Overview</div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="portlet-body">
+                            <style>
+                                .icon-btn-mini {
+                                    width: 100%;
+                                    height: 40px!important;
+                                    padding: 7px 0 0 0!important;
+                                }
+                                .userColumn{
+                                    display: grid;
+                                    grid-template-columns: repeat(
+                                            {{ salesTodayUsers|length }}, calc(100% / {{ salesTodayUsers|length }}));
+                                }
+                                .grid-item {
+                                    grid-column-start: auto;
+                                    grid-row-start: auto;
+                                    margin: 5px;
+                                }
+
+                            </style>
+                            <div class="row-fluid">
+                                <div class="span2" style="margin-top:-10px">
+                                    <div class="portlet-body">
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> User Name</div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Total Sales Tk.</div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Sales Receive Tk. </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Commission Tk. </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Return Tk. </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Due Receive Tk.</div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div> Grand Total Tk. </div>
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="span8">
+                                    <div class="userColumn">
+                                    {% set userTodaySales = 0 %}
+                                    {% set userTodayReceive = 0 %}
+                                    {% set userPreviousReceive = 0 %}
+                                    {% set userCommission = 0 %}
+                                    {% set userReturn = 0 %}
+
+                                    {% set userTodaySalesTotal = 0 %}
+                                    {% set userTodayReceiveTotal = 0 %}
+                                    {% set userPreviousReceiveTotal = 0 %}
+                                    {% set userCommissionTotal = 0 %}
+                                    {% set userReturnTotal = 0 %}
+
+                                    {% for user in salesTodayUsers %}
+
+                                        {% set userTodaySales = salesTodayUserTransactionOverview[user.userId] is defined ? salesTodayUserTransactionOverview[user.userId].total : 0 %}
+                                        {% set userTodaySalesTotal = userTodaySalesTotal + userTodaySales %}
+                                        {% set userTodayReceive = salesTodayUserTransactionOverview[user.userId] is defined ? salesTodayUserTransactionOverview[user.userId].receive : 0 %}
+                                        {% set userTodayReceiveTotal = userTodayReceiveTotal + userTodayReceive %}
+                                        {% set userPreviousReceive = previousSalesTodayUserTransactionOverview[user.userId] is defined ? previousSalesTodayUserTransactionOverview[user.userId].total : 0 %}
+                                        {% set userPreviousReceiveTotal = userPreviousReceiveTotal + userPreviousReceive %}
+                                        {% set userCommission = userSalesTodaySalesCommission[user.userId] is defined ? userSalesTodaySalesCommission[user.userId].total : 0 %}
+                                        {% set userCommissionTotal = userCommissionTotal + userCommission %}
+                                        {% set userReturn = userInvoiceReturn[user.userId] is defined ? userInvoiceReturn[user.userId].total : 0 %}
+                                        {% set userReturnTotal = userReturnTotal + userReturn %}
+                                        <div class="span12 grid-item"  style="margin-top:-10px">
+                                            <div class="portlet-body">
+                                                <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                    <div><span style="color: green"> {{ user.createdBy }}</span> </div>
+                                                </a>
+                                                <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                    <div><span style="color: red">{{ userTodaySales|number_format(2) }}</span> </div>
+                                                </a>
+                                                <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                    <div><span style="color: red">{{ userTodayReceive|number_format(2) }}</span> </div>
+                                                </a>
+                                                <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                    <div><span style="color: red">{{ userCommission|number_format(2) }}</span> </div>
+                                                </a>
+                                                <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                    <div><span style="color: red">{{ userReturn|number_format(2) }}</span> </div>
+                                                </a>
+                                                <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                    <div><span style="color: red">{{ userPreviousReceive|number_format(2) }}</span> </div>
+                                                </a>
+                                                <a href="javascript:" class="icon-btn icon-btn-mini">
+                                                    <div><span style="color: red">{{ ((userTodayReceive + userPreviousReceive) - (userCommission + invoiceReturn))|number_format }}</span> </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                </div>
+                                <div class="span2"  style="margin-top:-10px">
+                                    <div class="portlet-body">
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div><span style="color:green"> Grant Total</span> </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div><span style="color: green">{{ userTodaySalesTotal|number_format(2) }}</span> </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div><span style="color: green">{{ userTodayReceiveTotal|number_format(2) }}</span> </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div><span style="color: green">{{ userCommissionTotal|number_format(2) }}</span> </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div><span style="color: green">{{ userReturnTotal|number_format(2) }}</span> </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div><span style="color: green">{{ userPreviousReceiveTotal|number_format(2) }}</span> </div>
+                                        </a>
+                                        <a href="javascript:" class="icon-btn icon-btn-mini">
+                                            <div><span style="color: green">{{ ((userTodaySalesTotal + userTodayReceiveTotal) - (userCommissionTotal + userReturnTotal))|number_format }}</span> </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        {% endif %}
 </div>
 {% endblock %}
 {% block cssBlock %}

@@ -163,6 +163,14 @@ class HospitalConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="commissionAutoApproved", type="boolean",  nullable = true)
+     */
+    private $commissionAutoApproved = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isBranchInvoice", type="boolean",  nullable=true)
      */
     private $isBranchInvoice = false;
@@ -1178,11 +1186,21 @@ class HospitalConfig
         return $this->hmsInvoiceReturns;
     }
 
+    /**
+     * @return bool
+     */
+    public function isCommissionAutoApproved()
+    {
+        return $this->commissionAutoApproved;
+    }
 
-
-
-
-
+    /**
+     * @param bool $commissionAutoApproved
+     */
+    public function setCommissionAutoApproved($commissionAutoApproved)
+    {
+        $this->commissionAutoApproved = $commissionAutoApproved;
+    }
 
 
 }

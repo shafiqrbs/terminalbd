@@ -328,8 +328,8 @@ class DomainUserController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Password reset successfully"
         );
-        // $dispatcher = $this->container->get('event_dispatcher');
-          $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$password));
+      //  $dispatcher = $this->container->get('event_dispatcher');
+      //  $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$password));
         return $this->redirect($this->generateUrl('domain_user'));
     }
 

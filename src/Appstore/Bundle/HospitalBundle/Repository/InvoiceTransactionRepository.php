@@ -18,6 +18,28 @@ use Doctrine\ORM\EntityRepository;
 class InvoiceTransactionRepository extends EntityRepository
 {
 
+    public function todaySalesUsers(User $user)
+    {
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+
+        $qb = $this->createQueryBuilder('it');
+        $qb->join('it.hmsInvoice', 'e');
+        $qb->join('it.createdBy', 'u');
+        $qb->select('u.id as userId,u.username as createdBy');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $compareTo = new \DateTime("now");
+        $startDate =  $compareTo->format('Y-m-d 00:00:00');
+        $endDate =  $compareTo->format('Y-m-d 23:59:59');
+        $qb->andWhere("it.updated >= :startDate");
+        $qb->setParameter('startDate', $startDate);
+        $qb->andWhere("it.updated <= :endDate");
+        $qb->setParameter('endDate', $endDate);
+        $qb->groupBy('it.createdBy');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function todaySalesOverview(User $user , $data , $previous ='', $modes = array())
     {
 
@@ -28,6 +50,7 @@ class InvoiceTransactionRepository extends EntityRepository
         }
 
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $userId = $user->getId();
         $qb = $this->createQueryBuilder('it');
         $qb->join('it.hmsInvoice', 'e');
         $qb->select('sum(it.total) as total ,sum(it.discount) as discount , sum(it.payment) as payment');
@@ -83,6 +106,145 @@ class InvoiceTransactionRepository extends EntityRepository
         $receive = !empty($result['payment']) ? $result['payment'] :0;
         $data = array('total'=> $total,'discount'=> $discount ,'receive'=> $receive);
         return $data;
+    }
+
+    public function todayUserSalesOverview(User $user , $data , $previous ='', $modes = array())
+    {
+
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $userId = $user->getId();
+        $qb = $this->createQueryBuilder('it');
+        $qb->join('it.hmsInvoice', 'e');
+        $qb->select('sum(it.total) as total ,sum(it.discount) as discount , sum(it.payment) as payment');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+
+        if ($previous == 'true'){
+
+            if (!empty($data['startDate'])) {
+                $compareTo = new \DateTime($data['startDate']);
+                $startDate =  $compareTo->format('Y-m-d 00:00:00');
+                $qb->andWhere("e.created <:startDate");
+                $qb->setParameter('startDate', $startDate);
+                $qb->andWhere("it.updated >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+
+
+            }
+            if (!empty($data['endDate'])) {
+
+                $compareTo = new \DateTime($data['endDate']);
+                $endDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("it.updated <= :endDate");
+                $qb->setParameter('endDate', $endDate);
+            }
+
+        }elseif ($previous == 'false'){
+
+            if (!empty($data['startDate'])) {
+                $compareTo = new \DateTime($data['startDate']);
+                $startDate =  $compareTo->format('Y-m-d 00:00:00');
+                $qb->andWhere("e.created >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+                $qb->andWhere("it.updated >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+            }
+            if (!empty($data['endDate'])) {
+                $compareTo = new \DateTime($data['endDate']);
+                $endDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("e.created <= :endDate");
+                $qb->setParameter('endDate', $startDate);
+                $qb->andWhere("it.updated <= :endDate");
+                $qb->setParameter('endDate', $endDate);
+            }
+        }
+
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode IN (:modes)')->setParameter('modes', $modes);
+        }
+        $qb->andWhere('it.process = :process')->setParameter('process', 'Done');
+        $qb->andWhere('it.createdBy = :createdBy')->setParameter('createdBy', $userId);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $total = !empty($result['total']) ? $result['total'] :0;
+        $discount = !empty($result['discount']) ? $result['discount'] :0;
+        $receive = !empty($result['payment']) ? $result['payment'] :0;
+        $data = array('total'=> $total,'discount'=> $discount ,'receive'=> $receive);
+        return $data;
+    }
+
+    public function todayUserGroupSalesOverview(User $user , $data , $previous ='', $modes = array())
+    {
+
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $userId = $user->getId();
+        $qb = $this->createQueryBuilder('it');
+        $qb->join('it.hmsInvoice', 'e');
+        $qb->join('it.createdBy', 'u');
+        $qb->select('u.id as userId,u.username as createdBy,sum(it.total) as total ,sum(it.discount) as discount , sum(it.payment) as receive');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+
+        if ($previous == 'true'){
+
+            if (!empty($data['startDate'])) {
+                $compareTo = new \DateTime($data['startDate']);
+                $startDate =  $compareTo->format('Y-m-d 00:00:00');
+                $qb->andWhere("e.created <:startDate");
+                $qb->setParameter('startDate', $startDate);
+                $qb->andWhere("it.updated >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+
+
+            }
+            if (!empty($data['endDate'])) {
+
+                $compareTo = new \DateTime($data['endDate']);
+                $endDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("it.updated <= :endDate");
+                $qb->setParameter('endDate', $endDate);
+            }
+
+        }elseif ($previous == 'false'){
+
+            if (!empty($data['startDate'])) {
+                $compareTo = new \DateTime($data['startDate']);
+                $startDate =  $compareTo->format('Y-m-d 00:00:00');
+                $qb->andWhere("e.created >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+                $qb->andWhere("it.updated >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+            }
+            if (!empty($data['endDate'])) {
+                $compareTo = new \DateTime($data['endDate']);
+                $endDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("e.created <= :endDate");
+                $qb->setParameter('endDate', $startDate);
+                $qb->andWhere("it.updated <= :endDate");
+                $qb->setParameter('endDate', $endDate);
+            }
+        }
+
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode IN (:modes)')->setParameter('modes', $modes);
+        }
+        $qb->andWhere('it.process = :process')->setParameter('process', 'Done');
+        $qb->groupBy('it.createdBy');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row){
+            $array[$row['userId']] = $row;
+        }
+        return $array;
     }
 
     public function handleDateRangeFind($qb,$data)
@@ -470,7 +632,7 @@ class InvoiceTransactionRepository extends EntityRepository
         return $lastCode;
     }
 
-    public function monthlySales(User $user , $data =array())
+    public function monthlySales(User $user , $data = array())
     {
         $config = $user->getGlobalOption()->getHospitalConfig()->getId();
         $compare = new \DateTime();
@@ -478,16 +640,22 @@ class InvoiceTransactionRepository extends EntityRepository
         $year =  $compare->format('Y');
         $month = isset($data['month'])? $data['month'] :$month;
         $year = isset($data['year'])? $data['year'] :$year;
-
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        $modeqb = '';
+        if($mode){
+            $modeqb = "AND invoice.invoiceMode = :mode";
+        }
         $sql = "SELECT DATE_FORMAT(invoice.updated,'%d-%m-%Y') as date ,SUM(invoice.total) as total,SUM(invoice.discount) as discount,SUM(invoice.payment) as receive, SUM(invoice.due) as due
                 FROM hms_invoice as invoice
-                WHERE invoice.hospitalConfig_id = :hmsConfig AND MONTHNAME(invoice.updated) =:month AND YEAR(invoice.updated) =:year AND invoice.commissionApproved =:approved
+                WHERE invoice.hospitalConfig_id = :hmsConfig AND MONTHNAME(invoice.updated) =:month AND YEAR(invoice.updated) =:year $modeqb
                 GROUP BY date";
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('hmsConfig', $config);
-        $stmt->bindValue('approved', 1);
         $stmt->bindValue('month', $month);
         $stmt->bindValue('year', $year);
+        if($mode){
+            $stmt->bindValue('mode', $mode);
+        }
         $stmt->execute();
         $results =  $stmt->fetchAll();
         $arrays = array();

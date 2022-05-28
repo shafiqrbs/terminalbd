@@ -644,6 +644,9 @@ class InvoiceAdmissionController extends Controller
                 $entity->setDoctorComment($doctorComment);
             }
             $entity->setCaseOfDeath($caseOfDeath);
+            if($entity->getHospitalConfig()->isCommissionAutoApproved() == 1){
+                $entity->setCommissionApproved(1);
+            }
             $em->flush();
             $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->insertHospitalFinalAccountInvoice($entity);
             return new Response('success');
