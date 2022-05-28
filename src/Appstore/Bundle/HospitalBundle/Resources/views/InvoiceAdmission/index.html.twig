@@ -36,9 +36,12 @@
                                 {% set anesthesia = searchForm.anesthesia is defined ? searchForm.anesthesia :'' %}
                                 {% set process = searchForm.process is defined ? searchForm.process :'' %}
                                 {% set released = searchForm.released is defined ? searchForm.released :'' %}
-                                <a class="btn purple" target="_blank" href="{{ path('hms_report_admission_patient_download',{'doctor':doctor,'anesthesia':anesthesia,process:process,released:released}) }}" >
+                                {% set department = searchForm.department is defined ? searchForm.department :'' %}
+                                {% if searchForm is not empty %}
+                                <a class="btn purple" target="_blank" href="{{ path('hms_report_admission_patient_download',{'doctor':doctor,'anesthesia':anesthesia,'process':process,'released':released,'department':department}) }}" >
                                     <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
+                                {% endif %}
                                 {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'admission' in option.hospitalConfig.invoiceProcess)) or  ('admission' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
                                     <a  href="{{ path('hms_invoice_admission_new') }}" class="btn red"><i class="fa fa-ambulance"></i> New Admission</a>
                                 {% endif %}

@@ -31,7 +31,6 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        var_dump($data);
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
         $lists = $entities->getQuery()->getResult();
         $html = $this->renderView(
