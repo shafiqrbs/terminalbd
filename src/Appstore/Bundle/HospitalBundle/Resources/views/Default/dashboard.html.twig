@@ -393,7 +393,7 @@
                                                     <div><span style="color: red">{{ userPreviousReceive|number_format(2) }}</span> </div>
                                                 </a>
                                                 <a href="javascript:" class="icon-btn icon-btn-mini">
-                                                    <div><span style="color: red">{{ ((userTodayReceive + userPreviousReceive) - (userCommission + invoiceReturn))|number_format }}</span> </div>
+                                                    <div><span style="color: red">{{ ((userTodayReceive + userPreviousReceive) - (userCommission + userReturn))|number_format }}</span> </div>
                                                 </a>
                                             </div>
                                         </div>

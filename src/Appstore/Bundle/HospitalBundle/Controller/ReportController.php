@@ -123,6 +123,13 @@ class ReportController extends Controller
         $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user, $data);
         $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user, $data);
 
+        $salesTodayUser      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesUsers($user);
+        $salesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'false',array('diagnostic','admission','visit'));
+        $previousSalesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
+        $userSalesTodaySalesCommission      = $em->getRepository('HospitalBundle:DoctorInvoice')->userGroupCommissionSummary($user,$data);
+        $userInvoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userGroupInvoiceReturnAmount($user,$data);
+
+
         $html = $this->renderView(
             'HospitalBundle:Report:salesSummaryPdf.html.twig', array(
             'salesTotalTransactionOverview' => $salesTotalTransactionOverview,
@@ -133,6 +140,10 @@ class ReportController extends Controller
             'serviceOverview' => $serviceOverview,
             'transactionOverview' => $transactionOverview,
             'commissionOverview' => $commissionOverview,
+            'salesTodayUserTransactionOverview'     => $salesTodayUserTransactionOverview,
+            'previousSalesTodayUserTransactionOverview'     => $previousSalesTodayUserTransactionOverview,
+            'userSalesTodaySalesCommission'     => $userSalesTodaySalesCommission,
+            'userInvoiceReturn'                 => $userInvoiceReturn ,
             'globalOption' => $user->getGlobalOption(),
             'searchForm' => $data,
 

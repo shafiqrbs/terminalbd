@@ -118,6 +118,65 @@
         </td>
     </tr>
     <tr>
+        <th class="pull-center" colspan="2"><h3><strong>User Base Sales & Collection</strong></h3></th>
+    </tr>
+    <table class="table table-bordered table-striped table-condensed flip-content ">
+        <tr>
+            <th>User Name</th>
+            <th>Total Sales Tk.</th>
+            <th>Sales Receive Tk.</th>
+            <th>Commission Tk.</th>
+            <th>Return Tk.</th>
+            <th>Due Receive Tk.</th>
+            <th>Grand Total Tk..</th>
+        </tr>
+        {% set userTodaySales = 0 %}
+        {% set userTodayReceive = 0 %}
+        {% set userPreviousReceive = 0 %}
+        {% set userCommission = 0 %}
+        {% set userReturn = 0 %}
+
+        {% set userTodaySalesTotal = 0 %}
+        {% set userTodayReceiveTotal = 0 %}
+        {% set userPreviousReceiveTotal = 0 %}
+        {% set userCommissionTotal = 0 %}
+        {% set userReturnTotal = 0 %}
+
+        {% for user in salesTodayUsers %}
+
+            {% set userTodaySales = salesTodayUserTransactionOverview[user.userId] is defined ? salesTodayUserTransactionOverview[user.userId].total : 0 %}
+            {% set userTodaySalesTotal = userTodaySalesTotal + userTodaySales %}
+            {% set userTodayReceive = salesTodayUserTransactionOverview[user.userId] is defined ? salesTodayUserTransactionOverview[user.userId].receive : 0 %}
+            {% set userTodayReceiveTotal = userTodayReceiveTotal + userTodayReceive %}
+            {% set userPreviousReceive = previousSalesTodayUserTransactionOverview[user.userId] is defined ? previousSalesTodayUserTransactionOverview[user.userId].total : 0 %}
+            {% set userPreviousReceiveTotal = userPreviousReceiveTotal + userPreviousReceive %}
+            {% set userCommission = userSalesTodaySalesCommission[user.userId] is defined ? userSalesTodaySalesCommission[user.userId].total : 0 %}
+            {% set userCommissionTotal = userCommissionTotal + userCommission %}
+            {% set userReturn = userInvoiceReturn[user.userId] is defined ? userInvoiceReturn[user.userId].total : 0 %}
+            {% set userReturnTotal = userReturnTotal + userReturn %}
+
+            <tr>
+                <th>{{ user.createdBy }}</th>
+                <td>{{ userTodaySales|number_format }}</td>
+                <td>{{ userTodayReceive|number_format }}</td>
+                <td>{{ userCommission|number_format }}</td>
+                <td>{{ userReturn|number_format }}</td>
+                <td>{{ userPreviousReceive|number_format }}</td>
+                <td>{{ ((userTodayReceive + userPreviousReceive) - (userCommission + userReturn))|number_format }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th>Grand Total </th>
+            <th>{{ userTodaySalesTotal|number_format(2) }}</th>
+            <th>{{ userTodayReceiveTotal|number_format(2) }}</th>
+            <th>{{ userCommissionTotal|number_format(2) }}</th>
+            <th>{{ userReturnTotal|number_format(2) }}</th>
+            <th>{{ userPreviousReceiveTotal|number_format(2) }}</th>
+            <th>{{ ((userTodaySalesTotal + userTodayReceiveTotal) - (userCommissionTotal + userReturnTotal))|number_format }}</th>
+
+        </tr>
+    </table>
+    <tr>
         <th class="pull-center" colspan="2"><h3><strong>Mode Base Sales</strong></h3></th>
     </tr>
     <tr>
