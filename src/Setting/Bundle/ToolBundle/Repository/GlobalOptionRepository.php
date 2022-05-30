@@ -423,7 +423,6 @@ class GlobalOptionRepository extends EntityRepository
         $globalOption->setMobile($mobile);
         $globalOption->setMainApp($mainApp);
         $globalOption->setSyndicate($syndicate);
-      //  $globalOption->getSiteSetting()->setAppModules($apps);
         $globalOption->setLocation($location);
         $globalOption->setUniqueCode($this->getUniqueId());
         $em->persist($globalOption);
@@ -550,16 +549,17 @@ class GlobalOptionRepository extends EntityRepository
         $settingEntity->setModules($modules);
         $em->persist($settingEntity);
 
+
+        $templateEntity = new TemplateCustomize();
+        $templateEntity->setGlobalOption($globalOption);
+        $em->persist($templateEntity);
+
+
         $homePageEntity = new HomePage();
         $homePageEntity->setGlobalOption($globalOption);
         $homePageEntity->setUser($entity);
         $homePageEntity->setName('Home');
         $em->persist($homePageEntity);
-
-
-        $templateEntity = new TemplateCustomize();
-        $templateEntity->setGlobalOption($globalOption);
-        $em->persist($templateEntity);
 
         $iconEntity = new MobileIcon();
         $iconEntity->setGlobalOption($globalOption);
@@ -578,6 +578,7 @@ class GlobalOptionRepository extends EntityRepository
         $adsEntity = new AdsTool();
         $adsEntity->setGlobalOption($globalOption);
         $em->persist($adsEntity);
+
 
         $customer = new Customer();
         $customer->setGlobalOption($globalOption);
@@ -621,8 +622,8 @@ class GlobalOptionRepository extends EntityRepository
         $menu->setMenu('Contact us');
         $menu->setSlug('contact');
         $em->persist($menu);
-        $em->flush();
 
+        $em->flush();
         $this->defaultMenuSetup($globalOption);
         $this->initialMenuSetup($globalOption);
 

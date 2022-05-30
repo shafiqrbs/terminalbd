@@ -75,8 +75,8 @@ class GlobalOptionController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->initialSetup($entity);
             $this->get('settong.toolManageRepo')->createDirectory($entity->getGlobalOption()->getId());
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
+          //  $dispatcher = $this->container->get('event_dispatcher');
+        //    $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
             return $this->redirect($this->generateUrl('globaloption_edit', array('id' => $globalOption->getId())));
         }
 

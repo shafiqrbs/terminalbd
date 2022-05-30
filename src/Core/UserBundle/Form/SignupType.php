@@ -38,7 +38,7 @@ class SignupType extends AbstractType
     {
         $builder->add('profile', new SignupProfileType());
         $builder->add('globalOption', new InitialOptionType($this->em,$this->location));
-        $builder->add('siteSetting', new SiteSettingAppType());
+      //  $builder->add('siteSetting', new SiteSettingAppType());
     }
 
     /**
