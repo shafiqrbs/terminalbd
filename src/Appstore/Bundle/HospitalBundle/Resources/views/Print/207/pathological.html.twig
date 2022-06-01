@@ -13,11 +13,11 @@
         <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
     <script type="text/javascript">
-     /*   window.print();
+        window.print();
         setTimeout(function () {
             window.open('', '_self', '');
             window.close();
-        }, 2000);*/
+        }, 2000);
     </script>
 </head>
 <body>
@@ -177,12 +177,12 @@
                 </ul>
             </td>
             <td class="center span4">
-               {# <ul class="unstyled">
+                <ul class="unstyled">
                     <li>Printed By</li>
                     <li><strong>{{ printUser.profile.name }}</strong></li>
                     <li>{% if entity.particularPreparedBy.profile and entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
                     <li>{{ "now"|date('d-m-Y h:m A') }}</li>
-                </ul>#}
+                </ul>
             </td>
             <td class="span4">
                 {% if entity.assignDoctor is not empty %}
