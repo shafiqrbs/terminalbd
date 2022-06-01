@@ -480,6 +480,35 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function liveSearchAutoComplete($q, MedicineConfig $config)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->leftJoin('e.rackNo', 'r');
+        $query->leftJoin('e.unit', 'u');
+        $query->select('e.id as id');
+        $query->addSelect('e.name as name');
+        $query->addSelect('r.name as rack');
+        $query->addSelect('e.brandName as brand');
+        $query->addSelect('e.remainingQuantity as remainQty');
+        $query->addSelect('e.salesPrice as salesPrice');
+        $query->addSelect('e.purchasePrice as purchasePrice');
+        $query->addSelect('u.name as unit');
+     //   $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', rack.name , '- Tk.', e.salesPrice)  END as text");
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($config->isSearchSlug() == 1){
+            $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
+        }else{
+            $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
+        }
+        $query->andWhere('e.status = 1');
+        $query->groupBy('e.name');
+        $query->orderBy('e.slug', 'ASC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getArrayResult();
+
+    }
+
     public function searchGenericStockComplete($q, MedicineConfig $config)
     {
         $query = $this->createQueryBuilder('e');

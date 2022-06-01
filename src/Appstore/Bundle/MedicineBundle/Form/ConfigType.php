@@ -40,6 +40,7 @@ class ConfigType extends AbstractType
             ->add('purchaseItem')
             ->add('printOutstanding')
             ->add('posPrint')
+            ->add('inlineSales')
             ->add('profitLastpp')
             ->add('searchSlug')
             ->add('autoPayment')

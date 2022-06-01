@@ -288,7 +288,7 @@
             </div>
             <div class="form-actions portlet box grey">
                 <div class="pull-right">
-                    {% if (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == "Done") or (app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") and entity.process != "Done")  %}
+                    {% if (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == "Done") or (entity.particularDeliveredBy is empty  and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB"))  %}
                     <button type="button" class="btn green confirmSubmit"><i class="icon-save"></i> Save</button>
                     {% endif %}
                     {% if (app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.process == "Done" ) %}

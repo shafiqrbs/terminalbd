@@ -19,6 +19,7 @@ use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -361,6 +362,40 @@ class MedicineSalesTemporaryController extends Controller
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
     }
+
+    public function addAjaxLiveAction(Request $request,$id)
+    {
+        $user = $this->getUser();
+        $data = $request->request->all();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $stock = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->findOneBy(array('medicineConfig'=>$config,'id'=>$id));
+        if($stock){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertAjaxLiveItem($user, $stock,$data);
+        }
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($user,$msg);
+        return new Response(json_encode($result));
+    }
+
+    public function liveSearchSalesAction(Request $request)
+    {
+
+        $item = isset($_REQUEST['query']) and !empty($_REQUEST['query']) ? trim($_REQUEST['query']): '';
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->liveSearchAutoComplete($item,$inventory);
+            $discountPercentLists = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
+            $return = $this->renderView('MedicineBundle:Sales:live-search-data.html.twig', array(
+                'items'  => $items,
+                'discountPercentLists'  => $discountPercentLists
+            ));
+
+        }else{
+                $return = 'No results containing all your search terms were found.';
+        }
+        return new JsonResponse($return);
+    }
+
 
     public function addGenericStockAction($id)
     {

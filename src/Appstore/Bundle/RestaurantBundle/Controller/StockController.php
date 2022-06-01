@@ -273,16 +273,19 @@ class StockController extends Controller
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
         $setField = 'set'.$data['name'];
-        $price = abs($data['value']);
-        $entity->$setField($price);
-
-        if($data['name'] == "PurchasePrice"){
-            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionElementPrice($entity,$price);
+        if($setField == "Price"){
+            $price = abs($data['value']);
+            $entity->setPrice($price);
+        }elseif($data['name'] == "PurchasePrice") {
+            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionElementPrice($entity, $price);
             $config = $entity->getRestaurantConfig()->getId();
             $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->updateProductionPrice($config);
+        }else{
+            $price = $data['value'];
+            $entity->$setField($price);
         }
         $em->flush();
-        exit;
+        return new Response('success');
 
     }
 

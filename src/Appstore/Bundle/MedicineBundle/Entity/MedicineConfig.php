@@ -130,6 +130,13 @@ class MedicineConfig
      */
     private $purchaseItem = false;
 
+      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="inlineSales", type="boolean",  nullable=true)
+     */
+    private $inlineSales = false;
+
      /**
      * @var boolean
      *
@@ -1053,6 +1060,40 @@ class MedicineConfig
     {
         $this->profitLastpp = $profitLastpp;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStockHouses()
+    {
+        return $this->stockHouses;
+    }
+
+    /**
+     * @param mixed $stockHouses
+     */
+    public function setStockHouses($stockHouses)
+    {
+        $this->stockHouses = $stockHouses;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInlineSales()
+    {
+        return $this->inlineSales;
+    }
+
+    /**
+     * @param bool $inlineSales
+     */
+    public function setInlineSales($inlineSales)
+    {
+        $this->inlineSales = $inlineSales;
+    }
+
+
 
 }
 

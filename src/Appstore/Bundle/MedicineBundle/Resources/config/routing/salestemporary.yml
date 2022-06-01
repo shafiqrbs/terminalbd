@@ -17,6 +17,13 @@ medicine_sales_temporary_item_add:
     options:
             expose: true
 
+medicine_sales_temporary_item_ajax:
+    path:     /{id}/medicine-add-ajax
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addAjaxLive" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_stock_item_sales_create:
     path:     /medicine-stock-create
     defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:stockItemCreate" }
@@ -28,6 +35,13 @@ medicine_sales_barcode_search:
     path:     /barcode-add
     defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:addBarcode" }
     methods:  GET
+    options:
+            expose: true
+
+medicine_sales_temporary_search:
+    path:     /live-search-add-stock
+    defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:liveSearchSales" }
+    methods:  POST
     options:
             expose: true
 

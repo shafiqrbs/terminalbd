@@ -84,6 +84,7 @@
             <input type="text" id="select2GenericMedicine" name="select2GenericMedicine"  class="m-wrap span12 input select2GenericMedicine" placeholder="Search medicine name" aria-required="true">
         </div>
     </div>
+
     <div class="loader loader-double" ></div>
     <div id="instantPurchaseLoad"></div>
     <div id="generic-stock-hide">
@@ -116,6 +117,22 @@
             </div>
         </div>
     </div>
+
+    {% if config.inlineSales == 1 %}
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="input-append input-append-search">
+                    <div class="input-group">
+                        <input type="text" id="barcode" autocomplete="off" name="barcode"  class="m-wrap span2 input barcode" placeholder="Barcode" aria-required="true">
+                        <input type="text" name="search" id="search" placeholder="Search medicine or others item for sales" class="span8 m-wrap" />
+                        <button class="btn yellow search-clear big"><i class="icon-remove"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="result"></div>
+    {% endif %}
+    {% if config.inlineSales != 1 %}
     <div class="particular-info" style="padding-left:15px!important" >
         <div class="row-fluid ">
             {% if config.barcode == 1 %}
@@ -123,34 +140,37 @@
                     <input type="text" id="barcode" autocomplete="off" name="barcode"  class="m-wrap span12 input barcode" placeholder="Barcode" aria-required="true">
                 </div>
             {% endif %}
-            {{ form_start(salesItem) }}
-            {{ form_row(salesItem._token) }}
-            <div class="{% if config.barcode == 1 and config.purchaseItem == 1 %}span3{% else %}span5{% endif %} select-error-tooltip"  style="margin-left: 0!important">
-                {{ form_widget(salesItem.stockName) }}
-                {{ form_errors(salesItem.stockName) }}
-            </div>
-            {% if config.purchaseItem == 1 %}
-                <div class="span2">
-                    {{ form_widget(salesItem.purchaseItem) }}
+                {{ form_start(salesItem) }}
+                {{ form_row(salesItem._token) }}
+                <div class="{% if config.barcode == 1 and config.purchaseItem == 1 %}span3{% else %}span5{% endif %} select-error-tooltip"  style="margin-left: 0!important">
+                    {{ form_widget(salesItem.stockName) }}
+                    {{ form_errors(salesItem.stockName) }}
                 </div>
-            {% endif %}
-            <div class="span5">
-                <div class="input-append">
-                    <div class="input-group">
-                        <input type="checkbox" class="tooltips hover" data-original-title="For short list" name="salesTemporaryItem[isShort]" id="isShort" value="1">
-                        {{ form_widget(salesItem.salesPrice) }}
-                        {{ form_errors(salesItem.salesPrice) }}
-                        {{ form_widget(salesItem.quantity) }}
-                        {{ form_errors(salesItem.quantity) }}
-                        {{ form_widget(salesItem.itemPercent) }}
-                        <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
+                {% if config.purchaseItem == 1 %}
+                    <div class="span2">
+                        {{ form_widget(salesItem.purchaseItem) }}
+                    </div>
+                {% endif %}
+                <div class="span5">
+                    <div class="input-append">
+                        <div class="input-group">
+                            <input type="checkbox" class="tooltips hover" data-original-title="For short list" name="salesTemporaryItem[isShort]" id="isShort" value="1">
+                            {{ form_widget(salesItem.salesPrice) }}
+                            {{ form_errors(salesItem.salesPrice) }}
+                            {{ form_widget(salesItem.quantity) }}
+                            {{ form_errors(salesItem.quantity) }}
+                            {{ form_widget(salesItem.itemPercent) }}
+                            <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {{ form_end(salesItem) }}
+                {{ form_end(salesItem) }}
+
         </div>
     </div>
     <div class="clearfix">&nbsp;</div>
+    {% endif %}
+
     <div class="row-fluid">
         <div class="span12" id="particular-table">
             <table class="table table-bordered table-striped table-condensed table-fixed">
@@ -492,6 +512,27 @@
 </div>
 
     <style>
+        #result {
+            position: relative;
+            width: 100%;
+            top: -10px;
+            text-align: center;
+            font-size: 18px;
+            color: red;
+        }
+       .input-append-search{
+            width: 100%!important;
+        }
+        .input-append-search #barcode{
+            border: 5px solid #00b22d !important;
+            height: 54px!important;
+        }
+        .input-append-search #search{
+            width: 82.4%!important;
+            border: 5px solid #0052cc!important;
+            height: 54px!important;
+        }
+
         .bankHide , .mobileBankHide, #generic-stock-hide, #profit{
             display: none;
         }
@@ -679,6 +720,7 @@
         inputclass: 'span12 m-wrap',
         placement: 'right',
     });
+
 
     EditableWithLoadInit();
     $.key('shift+n', function() {

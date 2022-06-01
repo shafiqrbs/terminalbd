@@ -129,7 +129,10 @@
                                                 <a class="btn mini red"   href="javascript:"><i class="icon-truck"></i>&nbsp;Delivered </a>
                                             {% endif %}
                                             {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.process == 'Done' %}
-                                                <a target="_blank" class="btn mini yellow" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                <a class="btn mini purple" href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-pencil"></i>&nbsp;Edit </a>
+                                            {% endif %}
+                                            {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") and entity.process == 'Done' and entity.particularDeliveredBy is empty %}
+                                                <a class="btn mini purple" href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-pencil"></i>&nbsp;Edit </a>
                                             {% endif %}
                                             </div>
                                         </td>

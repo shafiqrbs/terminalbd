@@ -98,6 +98,46 @@ class MedicineSalesTemporaryRepository extends EntityRepository
 
     }
 
+    public function insertAjaxLiveItem(User $user,MedicineStock $stockItem,$data)
+    {
+        $em = $this->_em;
+        $entity = new MedicineSalesTemporary();
+        $invoiceParticular = $this->_em->getRepository('MedicineBundle:MedicineSalesTemporary')->findOneBy(array('user' => $user,'medicineStock' => $stockItem));
+        if(empty($invoiceParticular)) {
+            $quantity = ($data['quantity']) ? $data['quantity']:1;
+            $price = ($data['price']) ? $data['price']:0;
+            $isShort = empty($data['isShort']) ? 0 : 1;
+            $entity->setQuantity($quantity);
+            $entity->setIsShort($isShort);
+            if($price > 0){
+                if($data['itemPercent'] > 0){
+                    $entity->setItemPercent( $data['itemPercent'] );
+                    $initialDiscount = (($price *  $data['itemPercent'])/100);
+                    $initialGrandTotal =($price  - $initialDiscount);
+                    $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+                }else{
+                    $entity->setSalesPrice( round( $price, 2 ) );
+                }
+                $entity->setSubTotal( round(($entity->getSalesPrice() * $quantity), 2 ) );
+            }else{
+                $entity->setSalesPrice($stockItem->getSalesprice());
+                $entity->setSubTotal( round(($entity->getSalesPrice() * $quantity), 2 ) );
+            }
+            $entity->setEstimatePrice($stockItem->getSalesprice());
+            $entity->setUser($user);
+            $entity->setMedicineConfig( $user->getGlobalOption()->getMedicineConfig() );
+            $entity->setMedicineStock( $stockItem );
+            if($stockItem->getMedicineConfig()->isProfitLastpp() == 1){
+                $entity->setPurchasePrice( round( $stockItem->getPurchasePrice(), 2 ) );
+            }else{
+                $entity->setPurchasePrice( round( $stockItem->getAveragePurchasePrice(), 2 ) );
+            }
+            $em->persist( $entity );
+            $em->flush();
+        }
+
+    }
+
     public function insertGenericInvoiceItems(User $user,MedicineStock $stockItem,$data)
     {
         $em = $this->_em;

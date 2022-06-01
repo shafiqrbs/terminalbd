@@ -2,6 +2,105 @@
  * Created by rbs on 5/1/17.
  */
 
+$(document).ready(function(){
+    load_data();
+    function load_data(query)
+    {
+        $.ajax({
+            url: Routing.generate('medicine_sales_temporary_search'),
+            method:"POST",
+            data:{query:query},
+            success:function(data)
+            {
+                $('#result').html(data);
+                //$('.select2').select2();
+            }
+        });
+    }
+    $('#search').keyup(function(){
+        var search = $(this).val();
+        if(search !== '')
+        {
+            load_data(search);
+        }
+        else
+        {
+            load_data();
+        }
+    });
+});
+
+$(document).on("click", ".inlineAddItem", function() {
+    var id = $(this).attr('data-id');
+    if(id === ''){
+        return false;
+    }
+    $.ajax(Routing.generate('medicine_sales_generic_stock', { id : id}), {
+        type: 'GET',
+    }).done(function (response) {
+        obj = JSON.parse(response);
+        $("#addTemporaryItem").attr("disabled", true);
+        $('#invoiceParticulars').html(obj['salesItems']);
+        $('#subTotal').html(obj['subTotal']);
+        $('#grandTotal').html(obj['initialGrandTotal']);
+        $('.discount').html(obj['initialDiscount']);
+        $('.dueAmount').html(obj['initialGrandTotal']);
+        $('#salesSubTotal').val(obj['subTotal']);
+        $('#salesNetTotal').val(obj['initialGrandTotal']);
+        $('#profit').html(obj['profit']);
+        $('#salesTemporary_discount').val(obj['initialDiscount']);
+        $('#salesTemporary_due').val(obj['initialGrandTotal']);
+        $('#generic-stock-hide').hide();
+        $("#genericStock").select2("val", "");
+        $('.editableText').editable();
+    });
+});
+
+$('#search').focus().val('');
+$(document).on('click', '.search-clear', function() {
+    $('.table-responsive').hide();
+    $('#search').focus().val('');
+});
+$(document).on('click', '.addAjaxItem', function() {
+
+    var item = $(this).attr('data-id');
+    var url = $(this).attr('data-action');
+    var price = $('#salesPrice-'+item).val();
+    var quantity = $('#quantity-'+item).val();
+    var percent = $('#itemPercent-'+item).val();
+    if ($('#isShort-'+item).is(":checked"))
+    {
+        var isShort = 1;
+    } else {
+        var isShort = 0;
+    }
+    $.ajax({
+        url:url,
+        type:'POST',
+        data:'price='+price+'&quantity='+quantity+"&itemPercent="+percent+"&isShort="+isShort,
+        success: function (response) {
+            obj = JSON.parse(response);
+            $("#addTemporaryItem").attr("disabled", true);
+            $('#invoiceParticulars').html(obj['salesItems']);
+            $('#subTotal').html(obj['subTotal']);
+            $('#grandTotal').html(obj['initialGrandTotal']);
+            $('.discount').html(obj['initialDiscount']);
+            $('.dueAmount').html(obj['initialGrandTotal']);
+            $('#salesSubTotal').val(obj['subTotal']);
+            $('#salesNetTotal').val(obj['initialGrandTotal']);
+            $('#profit').html(obj['profit']);
+            $('#salesTemporary_discount').val(obj['initialDiscount']);
+            $('#salesTemporary_due').val(obj['initialGrandTotal']);
+            $('.table-responsive').hide();
+            $('#search').focus().val('');
+            $('.editableText').editable();
+        }
+    });
+
+});
+
+
+
 $(document).on('click', '#temporarySales', function() {
 
     $('.dialogModal_header').html('Sales Information');
