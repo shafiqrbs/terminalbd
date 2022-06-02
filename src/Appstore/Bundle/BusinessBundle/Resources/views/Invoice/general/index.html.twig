@@ -113,7 +113,7 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >
-                                            {% if app.user.granted("ROLE_DOMAIN") %}
+                                            {% if app.user.granted("ROLE_DOMAIN") or app.user.granted("ROLE_BUSINESS_MANAGER") %}
                                                 <a  data-type="select" class="editable" id="customer" data-name="customer" href="#" data-source="{{ path('business_invoice_customer_search') }}"  data-url="{{ path('business_invoice_customer_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.id }}{% endif %}" data-original-title="Enter custo mer name">{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</a>
                                             {% else %}
                                                 {% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
