@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{{ entity.customer.name }} - {{ entity.invoice }}</title>
+    <title>{{ entity.customer.name }}-{{ entity.invoice }}</title>
     {% block stylesheets %}
 
     {% endblock %}
@@ -213,12 +213,16 @@
             padding-bottom: 0!important;
             line-height: 0!important;
         }
+
         .grid-container {
+            width: 100%;
             display: grid;
-            gap: 50px 20px;
-            grid-template-columns: auto auto auto;
-            padding: 10px;
+            grid-gap: 0;
             font-size: 14px;
+        }
+        .grid-container {
+            grid-template-columns: repeat(3, calc(100%/3));
+            text-align: center;
         }
 
         .grid-item {
@@ -227,7 +231,7 @@
             margin-bottom: 25px;
         }
         .grid-item img{
-            height: 100px;
+            height: 90px;
         }
 
 
@@ -322,20 +326,21 @@
     </main>
     <footer>
         <div class="grid-container">
-            <div class="grid-item">
-                Printed By<br/>
-                <strong> {{ entity.createdBy }}</strong><br/>
-                <span>{{ "now"|date('d-m-Y') }}</span>
-            </div>
-            <div class="grid-item"> Approved By<br/>
-                <span> <img src="{{ asset('assets/domain/terminalbd/signature.jpeg') }}"></span><br/>
-                <strong>Md Shafiqul Islam</strong><br/>
-                <span>Chief Executive Officer</span><br/>
-            </div>
+
             <div class="grid-item">
                 Created By<br/>
-                <strong> {{ entity.createdBy }}</strong><br/>
-                <span>{{ entity.created|date('d-m-Y') }}</span>
+                {% if(entity.salesBy.profile.webSignaturePath) %}
+                    <span>    <img alt="" src="{{ image(entity.salesBy.profile.webSignaturePath).resize(120,90) }}"></span><br/>
+                {% endif %}
+                <strong> {{ entity.salesBy.profile.name }}</strong><br/>
+                <span> {{ entity.salesBy.profile.designation.name }}</span><br/>
+            </div>
+            <div class="grid-item">Printed<br>{{ "now"|date('d-m-Y') }}</div>
+            <div class="grid-item">
+                Approved By<br/>
+                <span> <img height="90" src="{{ asset('assets/domain/terminalbd/signature.png') }}"></span><br/>
+                <strong>Md Shafiqul Islam</strong><br/>
+                <span>Chief Executive Officer</span><br/>
             </div>
         </div>
         Invoice was created on a computer and is valid without the signature and seal.

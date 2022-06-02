@@ -79,7 +79,7 @@ class GlobalOptionType extends AbstractType
                 ))
                 ->add('hotline','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Hotline no')
                 ))
-                ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')
+                ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')
                 ))
                 ->add('subDomain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sub-domain name'),
                     'constraints' =>array(
