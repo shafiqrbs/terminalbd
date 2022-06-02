@@ -71,6 +71,11 @@ services:
     helper.imageresizer:
         class: Setting\Bundle\ToolBundle\Service\ImageResizer
 
+    MyModule.twig_extension:
+        class: Setting\Bundle\ToolBundle\Twig\MyModuleTwigExtension
+        tags:
+            - { name: twig.extension }
+
 fos_comment:
     db_driver: orm
     class:

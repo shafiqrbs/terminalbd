@@ -234,7 +234,7 @@
                         <td colspan="2" class="bottom-border"><strong class="strong3">Address</strong>: {{ entity.customer.address|raw }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="bottom-border"><strong class="strong3">In words</strong>: {{ amountInWord }}</td>
+                        <td colspan="2" class="bottom-border"><strong class="strong3">In words</strong>: {{ entity.amount|in_words }}</td>
                     </tr>
                     <tr>
                         <td colspan="2" class="bottom-border"><strong class="strong3">Remarks</strong>: {{ entity.remark }}</td>
