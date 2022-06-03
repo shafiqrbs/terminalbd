@@ -1404,11 +1404,6 @@ class Builder extends ContainerAware
 
 
 	    if ($securityContext->isGranted('ROLE_MEDICINE_STOCK')) {
-		    $menu['Medicine']->addChild('Purchase & Sales')
-
-		                     ->setAttribute('dropdown', true);
-		    $menu['Medicine']['Purchase & Sales']->addChild('Vendor Accounts', array('route' => 'medicine_report_vendor_sales'));
-		    $menu['Medicine']['Purchase & Sales']->addChild('Vendor Medicine', array('route' => 'medicine_report_vendor_sales_medicine'));
 
 		    $menu['Medicine']->addChild('Manage Stock')
 
@@ -1436,6 +1431,12 @@ class Builder extends ContainerAware
 	                $menu['Medicine']['Manage Stock']->addChild( 'Damage', array( 'route' => 'medicine_damage' ) )
 		                                             ;
 	            }
+            if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {
+            $menu['Medicine']->addChild('Purchase & Sales')
+                ->setAttribute('dropdown', true);
+            $menu['Medicine']['Purchase & Sales']->addChild('Vendor Accounts', array('route' => 'medicine_report_vendor_sales'));
+            $menu['Medicine']['Purchase & Sales']->addChild('Vendor Medicine', array('route' => 'medicine_report_vendor_sales_medicine'));
+            }
         }
         if ($securityContext->isGranted('ROLE_MEDICINE_ADMIN')) {
             $menu['Medicine']->addChild('Master Data')->setAttribute('dropdown', true);

@@ -380,7 +380,7 @@ class MedicineSalesTemporaryController extends Controller
     public function liveSearchSalesAction(Request $request)
     {
 
-        $item = isset($_REQUEST['query']) and !empty($_REQUEST['query']) ? trim($_REQUEST['query']): '';
+        $item = !empty($_REQUEST['query']) ? trim($_REQUEST['query']): '';
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
             $items = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->liveSearchAutoComplete($item,$inventory);

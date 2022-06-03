@@ -306,7 +306,7 @@
                     <tr><td colspan="5" style="text-align: left!important;"><span class="pull-left" ><strong>Notes: </strong>{{ entity.comment|raw }}</span></td></tr>
                 {% else %}
                     <tfoot>
-                    <tr><td colspan="5" style="border-bottom:1px solid #000!important">&nbsp; {{ "I am going to cut this text"|cut_text(10)|upper }}</td></tr>
+                    <tr><td colspan="5" style="border-bottom:1px solid #000!important"></td></tr>
                     <tr><td colspan="3"></td><td><span class="pull-right" >SUB TOTAL</span></td><td><strong>{{ entity.subTotal|number_format() }}</strong></td></tr>
                     <tr><td colspan="3"></td><td><span class="pull-right" >DISCOUNT</span></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>
                     <tr><td colspan="3"  class="desc">In words: {{ entity.total|in_words }}</td><td><strong class="pull-right" >TOTAL</strong></td><td><strong>{{ entity.total|number_format() }}</strong></td></tr>

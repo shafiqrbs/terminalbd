@@ -496,6 +496,7 @@ class MedicineStockRepository extends EntityRepository
         $query->addSelect('u.name as unit');
      //   $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', rack.name , '- Tk.', e.salesPrice)  END as text");
         $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
         if($config->isSearchSlug() == 1){
             $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
         }else{
@@ -503,7 +504,7 @@ class MedicineStockRepository extends EntityRepository
         }
         $query->andWhere('e.status = 1');
         $query->groupBy('e.name');
-        $query->orderBy('e.slug', 'ASC');
+        $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getArrayResult();
 
