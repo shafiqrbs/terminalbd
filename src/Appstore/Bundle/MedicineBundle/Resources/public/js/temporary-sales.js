@@ -13,7 +13,7 @@ $(document).ready(function(){
             success:function(data)
             {
                 $('#result').html(data);
-                //$('.select2').select2();
+                searchScroll();
             }
         });
     }
@@ -29,6 +29,12 @@ $(document).ready(function(){
         }
     });
 });
+
+function searchScroll(){
+    $('.search-scroll').slimScroll({
+        height: '350px'
+    });
+}
 
 $(document).on("click", ".inlineAddItem", function() {
     var id = $(this).attr('data-id');
@@ -50,8 +56,8 @@ $(document).on("click", ".inlineAddItem", function() {
         $('#profit').html(obj['profit']);
         $('#salesTemporary_discount').val(obj['initialDiscount']);
         $('#salesTemporary_due').val(obj['initialGrandTotal']);
-        $('#generic-stock-hide').hide();
-        $("#genericStock").select2("val", "");
+        $('.table-responsive').hide();
+        $('#search').focus().val('');
         $('.editableText').editable();
     });
 });

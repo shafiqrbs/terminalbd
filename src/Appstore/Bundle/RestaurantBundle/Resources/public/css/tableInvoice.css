@@ -153,7 +153,7 @@ select.m-wrap.sales-by{
 }
 .nav-tabs>li>a {
     line-height: 32px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
     border-bottom: 1px #9bdae6 solid;
     color: #0593af!important;
@@ -169,8 +169,18 @@ select.m-wrap.sales-by{
 }
 
 .select2-container .select2-choice {
-    height: 35px!important;
+    height: 30px!important;
     z-index: 99999!important;
+}
+
+.customer-box{
+    border: 2px solid #36bae6; background: #36bae6
+}
+.customer-box .select2Customer{
+    margin-left:0!important; width: 90%!important;
+}
+select[class*="span"].m-wrap, textarea[class*="span"].m-wrap{
+    background: #ffffff;
 }
 
 .table-tab .process{

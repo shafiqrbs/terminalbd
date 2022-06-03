@@ -1,5 +1,41 @@
 <div class="payment-info">
-    <div class="clearfix"></div>
+    {% if config.isCustomer == 1 %}
+        <div class="customer-box">
+            <div class="row-fluid">
+                <div class="input-group span12">
+                    <input type="text" style="" id="mobile" name="mobile"  class="span11 m-wrap select2Customer" value=""  autocomplete="off" placeholder="Customer mobile no">
+                    <button type="button" class="btn btn-large blue addCustomer"><i class="icon-user"></i></button>
+                </div>
+            </div>
+            <div class="row-fluid customer" id="">
+                <div class="span12 input-append-border">
+                    <div class="row-fluid">
+                        <div class="input-icon left input-height">
+                            <i class="icon-user"></i>
+                            <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid customer">
+                <div class="span12 input-append-border">
+                    <div class="row-fluid">
+                        <div class="input-icon left input-height">
+                            <i class="icon-phone"></i>
+                            <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid customer">
+                <div class="span12 input-append-border">
+                    <div class="row-fluid">
+                        <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     <table class="table table-bordered">
         <thead class="flip-content ">
         <tr class="head-royal-blue">
@@ -150,42 +186,6 @@
             </div>
         </div>
     </div>
-    <div class="clearfix"></div>
-    {% if config.isCustomer == 1 %}
-        <div class="row-fluid">
-            <div class="span12">
-                <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 m-wrap select2Customer" value=""  autocomplete="off" placeholder="Customer mobile no">
-                <button type="button" class="pull-right btn btn-large blue addCustomer"><i class="icon-user"></i></button>
-            </div>
-        </div>
-        <div class="row-fluid customer" id="">
-            <div class="span12 input-append-border">
-                <div class="row-fluid">
-                    <div class="input-icon left input-height">
-                        <i class="icon-user"></i>
-                        <input type="text" id="customerName" name="customerName" class="m-wrap span12 customer-input" autocomplete="off" placeholder="Customer name" value="">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row-fluid customer">
-            <div class="span12 input-append-border">
-                <div class="row-fluid">
-                    <div class="input-icon left input-height">
-                        <i class="icon-phone"></i>
-                        <input type="text" id="customerMobile" name="customerMobile" class="m-wrap span12 mobile customer-input" autocomplete="off" placeholder="Customer mobile no" value="">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row-fluid customer">
-            <div class="span12 input-append-border">
-                <div class="row-fluid">
-                    <textarea id="customerAddress" name="customerAddress" class="m-wrap span12 customer-input" rows="2" placeholder="Enter customer address"></textarea>
-                </div>
-            </div>
-        </div>
-    {% endif %}
     <div class="clearfix"></div>
     <div class="row-fluid">
         <div class="buttons">

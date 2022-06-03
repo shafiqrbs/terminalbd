@@ -19,7 +19,7 @@
     }
     .row-fluid-body [class*="span"]{
         margin-left: 0px;
-        line-height: 48px;
+        line-height: 34px;
     }
     .row-fluid-header{
         margin-bottom: 5px;
@@ -62,7 +62,6 @@
     .row-fluid-body .name{
         line-height: 15px;
         display: block;
-        min-height: 50px;
         padding-top:3px;
         text-align: left;
     }
@@ -142,7 +141,7 @@
         <div class="span4"></div>
     </div>
 
-    <div style="height: 250px; overflow-y: scroll">
+    <div class="search-scroll">
         {% for item in items %}
         <div class="row-fluid row-fluid-body" >
             <div class="span4">
