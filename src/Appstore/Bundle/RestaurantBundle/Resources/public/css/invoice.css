@@ -316,8 +316,6 @@ li.active > a {
     width:auto;
     padding: 15px 25px;
     border: 1px solid black;
-    margin-top: 10px;
-    margin-bottom: 10px;
     border-radius: 5px;
 }
 

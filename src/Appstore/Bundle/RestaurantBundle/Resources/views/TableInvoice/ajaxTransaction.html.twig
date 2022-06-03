@@ -123,7 +123,7 @@
             <div class="switch-method">
                 {% set methods = ['Cash','Mobile','Bank'] %}
                 {% for method in methods %}
-                    <input {% if entity.transactionMethod is not empty and entity.transactionMethod.name == method %} checked="checked" {% endif %} type="radio" id="{{ method }}" class="method-process" name="method" value="{{ method }}"/>
+                    <input {% if (entity.transactionMethod is not empty and entity.transactionMethod.name == method) or (entity.transactionMethod is  empty and method == 'Cash') %} checked="checked" {% endif %} type="radio" id="{{ method }}" class="method-process" name="method" value="{{ method }}"/>
                     <label  for="{{ method }}">{{ method }}</label>
                 {% endfor %}
 

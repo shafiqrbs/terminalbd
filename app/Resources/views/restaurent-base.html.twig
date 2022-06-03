@@ -33,32 +33,10 @@
         'assets/plugins/font-awesome/css/font-awesome.min.css'
         'assets/plugins/font-awesome/css/font-awesome-4.7.0.min.css'
         'assets/plugins/font-awesome/css/fa-font-awesome.css'
+        'assets/plugins/pop-modal/popModal.min.css'
         'assets/css/style.css'
         'assets/css/style-responsive.css'
         'assets/css/style-metro.css'
-        'assets/css/themes/darkblue.css'
-        'assets/plugins/chosen-bootstrap/chosen/chosen.css'
-        'assets/plugins/select2/select2_metro.css'
-        'assets/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css'
-        'assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css'
-        'assets/plugins/jquery-multi-select/css/multi-select.css'
-        'assets/plugins/clockface/css/clockface.css'
-        'assets/plugins/bootstrap-datepicker/css/datepicker.css'
-        'assets/plugins/glyphicons/css/glyphicons.css'
-        'assets/plugins/glyphicons_halflings/css/halflings.css'
-        'assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css'
-        'assets/plugins/bootstrap-editable/inputs-ext/address/address.css'
-        'assets/plugins/colorpicker/css/evol.colorpicker.min.css'
-        'assets/plugins/jquery-nestable/jquery.nestable.css'
-        'assets/plugins/jquery-ui/jquery-ui-1.12.1.min.css'
-        'assets/plugins/jquery-tree/src/css/jquery.tree.css'
-        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
-        'assets/plugins/remodal/css/remodal.css'
-        'assets/plugins/remodal/css/remodal-default-theme.css'
-        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
-        'assets/plugins/calculator/SimpleCalculadorajQuery.css'
-        'assets/plugins/pop-modal/popModal.min.css'
-        'assets/plugins/jquery-checkradios/css/jquery.checkradios.css'
         'assets/template/desktop/css/css-loader.css'
         'assets/css/comments.css'
         'assets/css/overwrite.css'
@@ -132,14 +110,13 @@
 'assets/plugins/jquery-ui/jquery.ui.menu.min.js'
 'assets/plugins/jquery-ui/jquery.ui.position.min.js'
 'assets/plugins/jquery-ui/jquery.ui.widget.min.js'
-'assets/plugins/jquery-tree/src/js/jquery.tree.js'
 'assets/plugins/bootstrap/js/bootstrap.min.js'
 'assets/plugins/bootstrap/js/bootstrap.typeahead.js'
 'assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js'
 'assets/plugins/select2/select2.min.js'
-'assets/plugins/bootstrap-multiselect/js/bootstrap-multiselect.js'
 'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js'
-'assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js'
+'assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js'
+'assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js'
 'assets/plugins/jquery.confirm.min.js'
 'assets/plugins/pop-modal/popModal.js'
 'assets/template/plugin/matchHeight/height-match.js'
@@ -159,7 +136,6 @@
     jQuery(document).ready(function () {
         {% block documentready %}
         App.init();
-        $('.multiselect').multiselect();
         $('.mobileBankHide').hide();
         $('.bankHide').hide();
         var winHeight = $(window).height();
@@ -167,11 +143,15 @@
         if(docHeight > winHeight){
             $(".page-container").height(winHeight-30).css({'overflow':'hidden'});
         }
-        var productBox      = (winHeight-220);
+        var productBox      = (winHeight-300);
+        var categoryBox  = (winHeight-230);
         var transactionBox  = (winHeight-320);
 
         $('.productBox').slimScroll({
             height: productBox+'px'
+        });
+        $('.all-product-box , .categoryBox').slimScroll({
+            height: categoryBox+'px'
         });
         $('.transactionBox').slimScroll({
             height: transactionBox+'px'

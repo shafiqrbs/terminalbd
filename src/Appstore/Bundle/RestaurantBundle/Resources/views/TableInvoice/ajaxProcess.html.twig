@@ -11,9 +11,11 @@
     <div class="row-fluid">
         <div class="pull-center">
             {% if config.posPrint == 1 and config.payFor == "pre-pay" %}
-                <button type="button" class="btn red big payBtn receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posBtn"><i class="icon-print"></i> BILL PAY</button>
+                <button type="button" class="btn red big payBtn receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posBtn"><i class="icon-print"></i> POS PRINT</button>
             {% elseif config.posPrint == 1 and config.payFor == "post-pay" %}
-                <button type="button" class="btn red big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posBtn"><i class="icon-print"></i> BILL PAY</button>
+                <button type="button" class="btn red big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posBtn"><i class="icon-print"></i> POS PRINT</button>
+            {% elseif config.deliveryPrint == 1 %}
+                <button type="button" class="btn purple big receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="posButton" name="posButton" value="posDelivery"><i class="icon-print"></i> POS PRINT</button>
             {% endif %}
             <button type="button" class="btn blue big  receiveBtn" {% if entity.subTotal is empty %} disabled="disabled" {% endif %} id="saveButton"><i class="icon-save"></i> SAVE</button>
         </div>

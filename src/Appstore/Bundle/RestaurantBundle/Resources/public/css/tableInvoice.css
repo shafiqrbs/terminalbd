@@ -9,7 +9,7 @@
     color: #fff !important;
 }
 .btn.royal-blue,.btn.royal-blue:focus{
-    background-color: #004de0 !important;
+    background-color: #36bae6 !important;
     color: #fff !important;
 }
 
@@ -18,7 +18,7 @@
 .btn.royal-blue.active,
 .btn.royal-blue.disabled,
 .btn.royal-blue[disabled] {
-    background-color: #004de0 !important;
+    background-color: #36bae6 !important;
     color: #fff !important;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .portlet.box.royal-blue > .portlet-title {
-    background-color: #004de0;
+    background-color: #36bae6;
 }
 
 .head-royal-blue {
@@ -39,11 +39,11 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid #125de9;
-    background-color: #055bff;
+    background-color: #36bae6;
 }
 
 select.m-wrap.sales-by{
-   border: 5px solid #055bff!important;
+   border: 5px solid #36bae6!important;
     height: 54px!important;
 }
 
@@ -52,7 +52,7 @@ select.m-wrap.sales-by{
     width: 100%;
     margin: 0 auto;
     position: relative;
-    border-bottom: 10px solid #ff5a00;
+    border-bottom: 5px solid #36bae6;
 }
 
 .tabsWrapper {
@@ -78,18 +78,20 @@ select.m-wrap.sales-by{
 }
 .tabs li {
     display: inline-block;
-    background-color:#004acb;
+    background-color: #eff2f7;
     padding: 15px 15px;
     cursor: pointer;
     font-size: 18px;
     font-weight: 600;
-    color: #ffffff;
+    color: #0593af;
     min-width: 90px;
     text-align: center;
     height: 80px;
+    border: 1px solid #9bdae6;
 }
 .table-tab li.active {
-    background-color:#ff5a00;
+    background-color:#36bae6;
+    color:#ffffff;
 }
 .next, .previous {
     position: absolute;
@@ -115,13 +117,13 @@ select.m-wrap.sales-by{
     display: inline-flex;
     padding: 5px;
     font-size: 12px;
-    color: #ff5a00;
+    color: #444d58;
     margin-top: 1px;
 }
 
 .group-label{
     font-weight: bold;
-    border-bottom: 1px solid #337ab7
+    border-bottom: 1px solid #36bae6
 }
 .bar-tabs>li{
     float: left;
@@ -153,15 +155,15 @@ select.m-wrap.sales-by{
     line-height: 32px;
     font-size: 20px;
     font-weight: 600;
-    border-bottom: 1px #ddddff solid;
-    color: #ffffff!important;
+    border-bottom: 1px #9bdae6 solid;
+    color: #0593af!important;
 }
 
 
 .nav-tabs>.active>a, .nav-tabs>li>a:hover, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
     color: #ffffff !important;
     cursor: hand!important;
-    background-color: #055bff;
+    background-color: #36bae6;
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }
@@ -282,7 +284,7 @@ input[class*="span"].m-wrap-bg{
 }
 
 input.m-wrap , select.m-wrap , textarea.m-wrap{
-    border: 1px solid #004de0!important;
+    border: 1px solid #36bae6!important;
 }
 table.table {
     clear: both;
@@ -302,8 +304,7 @@ select.m-wrap {
 }
 
 .product-content{
-    width: 33%;
-    margin-bottom: 13px;
+    width:100%;
     text-align: center;
     float: left;
     font-size: 12px!important;
@@ -318,7 +319,7 @@ select.m-wrap {
 }
 
 .sales-right input[class*="span"].payment, .sales-right input[class*="span"].discount, .sales-right input[class*="span"].discountCoupon{
-    border: 1px solid #004de0!important;
+    border: 1px solid #36bae6!important;
     font-size: 15px;
 }
 
@@ -341,7 +342,7 @@ select.m-wrap {
 .accordion-container {
     position: relative;
     width: 100%;
-    border: 1px solid #0079c1;
+    border: 1px solid #36bae6;
     border-top: none;
     outline: 0;
     cursor: pointer
@@ -432,9 +433,11 @@ select.m-wrap {
 }
 
 .calltoaction-royal-blue {
-    color: #fff;
-    background-color: #055bff;
-    border-color: #e9ecef;
+    color: #444d58;
+    background-color:#eff2f7;
+    border-color: #9bdae6;
+    box-shadow: rgb(38 57 77) 0px 20px 30px -10px;
+    margin:2px;
 }
 
 .table th.product-title {
@@ -503,7 +506,7 @@ select.m-wrap {
     height: 110px;
     margin-bottom: 15px;
     margin-top: -7px;
-    border: 5px solid #055bff;
+    border: 5px solid #36bae6;
 }
 
 .payment-box{
@@ -512,7 +515,7 @@ select.m-wrap {
     height: 35px;
     margin-bottom:0;
     margin-top: -5px;
-    border: 5px solid#337ab7;
+    border: 5px solid#36bae6;
 }
 
 .switch-field {
@@ -548,7 +551,7 @@ select.m-wrap {
 }
 
 .switch-field input:checked + label {
-    background-color:#ff5a00;
+    background-color:#36bae6;
     box-shadow: none;
 }
 
@@ -593,7 +596,7 @@ select.m-wrap {
 }
 
 .switch-method input:checked + label {
-    background-color: #337ab7;
+    background-color: #36bae6;
     box-shadow: none;
 }
 
@@ -637,8 +640,8 @@ select.m-wrap {
     float: left;
     padding: 0;
     box-sizing: border-box;
-    background:#055bff;
-    border: 1px solid #055bff;
+    background:#36bae6;
+    border: 1px solid #36bae6;
     font-size: 30px;
     line-height: 30px;
     border-radius: 50%;
