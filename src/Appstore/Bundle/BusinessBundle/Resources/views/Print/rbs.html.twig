@@ -273,7 +273,7 @@
                 </tbody>
                 <tfoot>
                 <tr><td colspan="5" style="border-bottom:1px solid #000!important"></td></tr>
-                <tr><td colspan="3"  class="desc">Taka In word: {{ entity.total|in_words }}</td><td><strong class="pull-right" >TOTAL DUE</strong></td><td><strong>{{ entity.total|number_format(2) }}</strong></td></tr>
+                <tr><td colspan="3" style="font-size: 13px;text-align:left">Taka In word: {{ entity.total|in_words }}</td><td><strong class="pull-right" >TOTAL DUE</strong></td><td><strong>{{ entity.total|number_format(2) }}</strong></td></tr>
                 <tr><td colspan="5" style="text-align: left!important;"><p style="font-size: 13px"><strong>Notes: </strong>{{ entity.businessConfig.invoiceComment|raw }}</p></td></tr>
                 </tfoot>
             </table>
@@ -299,16 +299,16 @@
                 <span>Executive Director</span><br/>
             </div>
         </div>
-        Invoice was created on a computer and is valid without the signature and seal.
+        Invoice was created on a computer and is valid without seal.
     </footer>
 </div>
 
 <script>
-    /*window.print();
+    window.print();
     setTimeout(function () {
         window.open('', '_self', '');
         window.close();
-    }, 2000);*/
+    }, 2000);
 </script>
 </body>
 </html>
