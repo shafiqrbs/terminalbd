@@ -265,7 +265,7 @@
                     <tr>
                         <td>{{ loop.index }}.</td>
                         <td class="desc">{{ item.particular }}<br/><sub>{{ item.description|raw }}</sub></td>
-                        <td class="qty">{{ item.quantity|number_format() }} {% if item.unit is not empty %}{{ item.unit }}{% endif %}</td>
+                        <td class="qty">{{ item.totalQuantity|number_format() }} {% if item.unit is not empty %}{{ item.unit }}{% endif %}</td>
                         <td class="unit">{{ item.price|number_format(2) }}</td>
                         <td class="total">{{ item.subTotal|number_format() }}</td>
                     </tr>
