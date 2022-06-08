@@ -77,35 +77,35 @@ class BusinessInvoiceParticular
     /**
      * @var integer
      *
-     * @ORM\Column(name="quantity", type="smallint", length = 5, nullable=true)
+     * @ORM\Column(name="quantity", type="smallint",  nullable=true)
      */
     private $quantity = 0;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="returnQnt", type="smallint", length = 5, nullable=true)
+     * @ORM\Column(name="returnQnt", type="smallint", nullable=true)
      */
     private $returnQnt = 0;
 
      /**
      * @var integer
      *
-     * @ORM\Column(name="damageQnt", type="smallint", length = 5, nullable=true)
+     * @ORM\Column(name="damageQnt", type="smallint", nullable=true)
      */
     private $damageQnt = 0;
 
      /**
      * @var integer
      *
-     * @ORM\Column(name="spoilQnt", type="smallint", length = 5, nullable=true)
+     * @ORM\Column(name="spoilQnt", type="smallint", nullable=true)
      */
     private $spoilQnt= 0;
 
      /**
      * @var integer
      *
-     * @ORM\Column(name="bonusQnt", type="smallint", length = 5, nullable=true)
+     * @ORM\Column(name="bonusQnt", type="smallint", nullable=true)
      */
     private $bonusQnt = 0;
 
