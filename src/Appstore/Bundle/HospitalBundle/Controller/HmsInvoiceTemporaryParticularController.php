@@ -143,16 +143,14 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $discount = ($subTotal * $discount)/100;
             $initialGrandTotal = ($subTotal  - $discount);
         }
-        if($subTotal > $discount){
-            $data = array(
-                'subTotal' => $subTotal,
-                'initialGrandTotal' => $initialGrandTotal,
-                'initialDiscount' => $discount,
-                'success' => 'success'
-            );
-            return new Response(json_encode($data));
-        }
-        exit;
+        $data = array(
+            'subTotal' => $subTotal,
+            'initialGrandTotal' => $initialGrandTotal,
+            'initialDiscount' => $discount,
+            'success' => 'success'
+        );
+        return new Response(json_encode($data));
+
 
     }
 
@@ -188,7 +186,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
-        exit;
+
 
     }
 
@@ -205,7 +203,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $msg = 'Particular deleted successfully';
         $result = $this->returnResultData($user,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
 }

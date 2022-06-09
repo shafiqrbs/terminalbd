@@ -9,9 +9,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CustomerForHospitalType extends AbstractType
+class CustomerForDiagonesticType extends AbstractType
 {
 
+
+    /** @var  LocationRepository */
+    private $location;
+
+    function __construct( LocationRepository $location)
+    {
+        $this->location = $location;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -21,7 +29,12 @@ class CustomerForHospitalType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter patient name'),
+            ->add('customerId','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter patient ID'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter patient ID')),
+                )
+            ))
+             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter patient name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient name')),
                 )
@@ -46,8 +59,16 @@ class CustomerForHospitalType extends AbstractType
                 'attr'=>array('class'=>'span12 m-wrap inputs gender'),
                 'expanded'      =>false,
                 'multiple'      =>false,
-                'data' => 'Male',
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
+            ))
+            ->add('location', 'entity', array(
+                'required'    => false,
+                'empty_value' => '---Select Location---',
+                'attr'=>array('class'=>'select2 m-wrap span12'),
+                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
+                'choices'=> $this->LocationChoiceList(),
+                'choices_as_values' => true,
+                'choice_label' => 'nestedLabel',
             ))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize inputs address','rows'=>3,'autocomplete'=>'off','placeholder'=>'Enter patient address')
             ));
@@ -63,12 +84,18 @@ class CustomerForHospitalType extends AbstractType
         ));
     }
 
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
+
+    }
+
     /**
      * @return string
      */
     public function getName()
     {
-        return 'appstore_bundle_domainuserbundle_customer';
+        return 'customer';
     }
 
 }

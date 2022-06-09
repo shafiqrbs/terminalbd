@@ -110,6 +110,13 @@ class MedicineConfig
     private $invoicePrefix;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="itemSearch", type = "string", length = 50, nullable = true)
+     */
+    private $itemSearch ='rack';
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="invoicePrintLogo", type="boolean",  nullable=true)
@@ -1093,6 +1100,21 @@ class MedicineConfig
         $this->inlineSales = $inlineSales;
     }
 
+    /**
+     * @return string
+     */
+    public function getItemSearch()
+    {
+        return $this->itemSearch;
+    }
+
+    /**
+     * @param string $itemSearch
+     */
+    public function setItemSearch($itemSearch)
+    {
+        $this->itemSearch = $itemSearch;
+    }
 
 
 }

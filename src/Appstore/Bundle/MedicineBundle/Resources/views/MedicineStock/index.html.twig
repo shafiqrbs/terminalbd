@@ -136,7 +136,11 @@
                                         <th class="numeric" >Barcode</th>
                                     {% endif %}
                                     <th {% if pagination.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    {% if config.itemSearch == 'Brand' %}
+                                    <th {% if pagination.isSorted('e.brandName') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Brand Name', 'e.brandName') }}{% if( direction == 'desc' and sort == 'e.brandName') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    {% else %}
                                     <th {% if pagination.isSorted('e.rack') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Rack', 'p.name') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                    {% endif %}
                                     <th class="numeric" >Avg PP</th>
                                     <th class="numeric" >PP Tk.</th>
                                     <th class="numeric" >Avg MRP</th>
@@ -170,9 +174,12 @@
                                         {% else %}
                                             <td ><a data-type="text" class="editableText" data-url="{{ path('medicine_stock_inline') }}"  data-name="itemName" data-trigger="hover" class="tooltips" data-original-title="{% if entity.accessoriesBrand is not empty %}{{ entity.accessoriesBrand.name }}{% endif %}" href="javascript:">{{ entity.name }}</a></td>
                                         {% endif %}
-                                        <td class="numeric" >
-                                            <a  data-type="select" class="editableText" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>
+                                        {% if config.itemSearch == 'Brand' %}
+                                            <td><a  data-type="select" class="editableText" id="BrandName" data-name="BrandName" href="#" data-source="{{ path('medicine_stock_select_brand') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.brandName is not empty %}{{ entity.brandName }}{% endif %}" data-original-title="Enter select brand name">{% if  entity.brandName is not empty %}{{ entity.brandName }}{% endif %}</a>
                                         </td>
+                                        {% else %}
+                                            <td><a  data-type="select" class="editableText" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ entity.id }}" data-value="{% if  entity.rackNo is not empty %}{{ entity.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  entity.rackNo is not empty %}{{ entity.rackNo.name }}{% endif %}</a>
+                                        {% endif %}
                                         <td class="numeric" >
                                             {% if entity.averagePurchasePrice >= entity.salesPrice or entity.averagePurchasePrice == 0 %}
                                                 <a  class="editableText" data-name="AveragePurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purchase avg price">{{ entity.averagePurchasePrice }}</a>

@@ -76,6 +76,8 @@
                                     <th class="numeric">Patient ID</th>
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
+                                    <th class="numeric">Gender</th>
+                                    <th class="numeric">Age</th>
                                     <th class="numeric">Location</th>
                                     <th class="numeric">Action</th>
                                 </tr>
@@ -87,7 +89,10 @@
                                         <td>{{ entity.customerId }}</td>
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
+                                        <td>{{ entity.gender }}</td>
+                                        <td>{{ entity.age }}{{ entity.ageType }}</td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
+
                                         <td class="numeric">
                                             <a class="btn mini green" href="{{ path('hms_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                             <a class="btn mini purple" href="{{ path('hms_customer_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i> Invoice</a>

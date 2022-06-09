@@ -123,7 +123,7 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            <a  data-type="select" class="editable" id="brand" data-name="Brand" href="#" data-source="{{ path('ecommerce_item_inline_brand') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.brand is defined and entity.brand is not empty %}{{ entity.id }}{% endif %}" data-original-title="Enter Brand name">{% if entity.brand is defined and entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</a>
+                                            <a  data-type="select" class="editable" id="brand" data-name="Brand" href="#" data-source="{{ path('ecommerce_item_inline_brand') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.brand is defined and entity.brand is not empty %}{{ entity.brand.id }}{% endif %}" data-original-title="Enter Brand name">{% if entity.brand is defined and entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</a>
                                         </td>
                                         <td><a  data-type="text" class="editable" id="{{ entity.id }}" data-name="WebName" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.webName }}" data-original-title="Enter product name">{{ entity.webName }}</a></td>
                                         <td class="numeric" >

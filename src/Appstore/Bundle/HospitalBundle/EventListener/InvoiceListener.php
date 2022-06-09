@@ -22,10 +22,12 @@ class InvoiceListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
+            $mode = $entity->getInvoiceMode();
+            $mode = strtoupper(substr($mode,0,3)).'-';
             if(empty($entity->getHospitalConfig()->getInvoicePrefix())){
-                $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+                $entity->setInvoice(sprintf("%s%s%s",$mode,$datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
             }else{
-                $entity->setInvoice(sprintf("%s%s%s", $entity->getHospitalConfig()->getInvoicePrefix(), $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+                $entity->setInvoice(sprintf("%s%s%s%s",$mode,$entity->getHospitalConfig()->getInvoicePrefix(), $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
             }
 
         }

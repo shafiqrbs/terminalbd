@@ -1105,7 +1105,7 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Payment', array('route' => 'hms_doctor_invoice'));
             }
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR') or $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ADMISSION')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER') or $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ADMISSION')) {
             if (!empty($config)) {
                 $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'));
             }

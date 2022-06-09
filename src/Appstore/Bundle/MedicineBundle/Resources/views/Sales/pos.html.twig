@@ -178,7 +178,11 @@
                 <tr class="head-blue">
                     {#<th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>#}
                     <th class="span3">Name</th>
+                    {% if config.itemSearch == 'Brand' %}
+                    <th class="span1">Brand Name</th>
+                    {% else %}
                     <th class="span1">Rack</th>
+                    {% endif %}
                     <th class="span1">AVG PP</th>
                     <th class="span1">MRP</th>
                     <th class="span1">Quantity</th>
@@ -195,7 +199,13 @@
                         <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %} class="warning" {% endif %}>
                             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
                             <td class="span5">{{ loop.index }}. <a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
-                            <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+                            <td class="span1">
+                                {% if config.itemSearch == 'Brand' %}
+                                    {{ item.medicineStock.brandName }}
+                                {% elseif(item.medicineStock.rackNo is not empty) %}
+                                    {{ item.medicineStock.rackNo.name }}
+                                {% endif %}
+                            </td>
                             <td class="span1">
                                 {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %}
                                     <a class="editableText" data-name="AveragePurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-original-title="Change purchase avg price">{{ item.medicineStock.averagePurchasePrice }}</a>
@@ -397,7 +407,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
-                        <label class="control-label" for="firstName"><span class="label">Previous Due</span> <span class="pull-right sales-right"  style="width: 180px; font-size: 18px; color: #ea9b14" id="outstanding" ></span></label>
+                        <label class="control-label" for="firstName"><span class="label">Previous Due</span> <span class="pull-right sales-right"  style="width: 180px; font-size: 14px; color: #ea9b14" id="outstanding" ></span></label>
                     </div>
                 </div>
                 <!--/span-->
@@ -517,7 +527,7 @@
         width: 100%;
         top: -9px;
         text-align: center;
-        font-size: 18px;
+        font-size: 14px;
         color: #0052cc;
     }
    .input-append-search{
@@ -537,7 +547,7 @@
         display: none;
     }
     #customerAddress{
-        font-size:18px;
+        font-size:14px;
     }
     .dialogModal{
         z-index: 9999!important;
@@ -558,7 +568,7 @@
     .select2-search input {
         border: 2px solid #0052cc!important;
         height: 32px!important;
-        font-size:18px;
+        font-size:14px;
     }
     .select2-results .select2-result-label {
         padding: 3px 7px 4px;
@@ -570,7 +580,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        font-size: 18px;
+        font-size: 14px;
         line-height: 30px;
         font-weight: bold;
     }
@@ -584,7 +594,7 @@
         height: 38px;
         margin: 0!important;
         width: 100%;
-        font-size:18px;
+        font-size:14px;
     }
 
     .numeric input {
@@ -593,17 +603,17 @@
         width: 70px;
         height: 15px!important;
         border: 1px solid #999;
-        font-size:18px!important;
+        font-size:14px!important;
         line-height: 15px!important;
     }
     .table-striped tbody>tr:nth-child(odd)>td, .table-striped tbody>tr:nth-child(odd)>th {
         font-size:16px!important;
     }
     table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="span"], .row-fluid table th[class*="span"] {
-        font-size:16px!important;
+        font-size:14px!important;
     }
     .table th, .table td {
-        font-size:18px;
+        font-size:14px;
     }
     select.m-wrap, input[type="file"].m-wrap {
         height: 34px !important;

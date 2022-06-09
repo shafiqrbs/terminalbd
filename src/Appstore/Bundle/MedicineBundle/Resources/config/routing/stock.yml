@@ -30,6 +30,10 @@ medicine_stock_rack:
     path:     /rack-no
     defaults: { _controller: "MedicineBundle:MedicineStock:rackSelect" }
 
+medicine_stock_select_brand:
+    path:     /select-brand
+    defaults: { _controller: "MedicineBundle:MedicineStock:brandSelect" }
+
 medicine_stock_new:
     path:     /new
     defaults: { _controller: "MedicineBundle:MedicineStock:new" }

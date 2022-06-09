@@ -959,7 +959,7 @@ class InvoiceAdmissionController extends Controller
     public function cabinSelectAction(Invoice $invoice)
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $cabin = ($invoice->getCabin()) ? $invoice->getCabin()->getId():0;
+        $cabin = ($invoice->getCabin()) ? $invoice->getCabin()->getId() : 0;
         $cabins = $this->getDoctrine()->getRepository(Invoice::class)->getExistCabin($config,$cabin);
         $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getCurrentCabins($config,2,$cabins);
         $items = array();

@@ -3,7 +3,13 @@
         <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %} class="warning" {% endif %}>
             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
             <td class="span5">{{ loop.index }}. <a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
-            <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+            <td class="span1">
+                {% if config.itemSearch == 'Brand' %}
+                    {{ item.medicineStock.brandName }}
+                {% elseif(item.medicineStock.rackNo is not empty) %}
+                    {{ item.medicineStock.rackNo.name }}
+                {% endif %}
+            </td>
             <td class="span1">
                 {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %}
                     <a class="editableText" data-name="AveragePurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-original-title="Change purchase avg price">{{ item.medicineStock.averagePurchasePrice }}</a>

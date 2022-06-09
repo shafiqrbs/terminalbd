@@ -524,6 +524,18 @@ class MedicineStockController extends Controller
     }
 
    
+     public function brandSelectAction()
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($inventory);
+        $items  = array();
+        foreach ($entity as $row){
+            $items[]= array('value' => $row['name'],'text' => $row['name']);
+        }
+        return new JsonResponse($items);
+    }
+
+
     /**
      * Status a Page entity.
      *
@@ -589,11 +601,12 @@ class MedicineStockController extends Controller
             $setField = 'set' . $data['name'];
             $quantity = abs($data['value']);
             $entity->$setField($quantity);
-          //  $remainingQuantity = $entity->getRemainingQuantity() + $quantity;
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->remainingQnt($entity);
         }elseif('rackNo' == $data['name']){
             $rackNo = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->find($data['value']);
             $entity->setRackNo($rackNo);
+        }elseif('BrandName' == $data['name']){
+            $entity->setBrandName($data['value']);
         }elseif('itemName' == $data['name']){
             $entity->setName($data['value']);
             $name =  str_replace(' ','',$data['value']);

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Form\CustomerForDiagonesticType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Form\InvoicePatientType;
@@ -97,11 +98,11 @@ class CustomerHmsController extends Controller
     private function createCreateForm(Customer $entity)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerForHospitalType($location), $entity, array(
+        $form = $this->createForm(new CustomerForDiagonesticType($location), $entity, array(
             'action' => $this->generateUrl('hms_customer_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -172,11 +173,11 @@ class CustomerHmsController extends Controller
     private function createEditForm(Customer $entity)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CustomerForHospitalType($location), $entity, array(
+        $form = $this->createForm(new CustomerForDiagonesticType($location), $entity, array(
             'action' => $this->generateUrl('hms_customer_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

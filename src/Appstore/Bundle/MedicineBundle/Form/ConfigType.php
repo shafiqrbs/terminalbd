@@ -21,7 +21,7 @@ class ConfigType extends AbstractType
     {
         $builder
 
-            ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span8','maxlength'=> 4,'placeholder'=>'max 4 char')))
+            ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span12','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('instantVendorPercentage','text', array('attr'=>array('class'=>'m-wrap span8 ','maxlength'=> 4,'placeholder'=>'Instant vendor item percentage')))
             ->add('tpPercent','text', array('attr'=>array('class'=>'m-wrap span8 ','maxlength'=> 4,'placeholder'=>'TP Percent')))
             ->add('tpVatPercent','text', array('attr'=>array('class'=>'m-wrap span8 ','maxlength'=> 4,'placeholder'=>'TP vat Percent')))
@@ -31,6 +31,13 @@ class ConfigType extends AbstractType
                 'choices' => array(
                     '৳'       => 'Taka(৳)',
                     '$'       => 'Dollar($)'
+                ),
+            ))
+            ->add('itemSearch', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'Rack'       => 'Rack',
+                    'Brand'      => 'Brand'
                 ),
             ))
             ->add('invoiceActualPrice')

@@ -178,9 +178,9 @@ class InvoiceRepository extends EntityRepository
         $qb->select('c.id');
         $qb->join('e.cabin','c');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
-        $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created'));
+        $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created','Release'));
         if($invoice > 0){
-            $qb->orWhere('c.id = :cid')->setParameter('cid', $invoice);
+            $qb->andWhere('c.id != :cid')->setParameter('cid', $invoice);
         }
         $result = $qb->getQuery()->getArrayResult();
         return $result;
@@ -195,7 +195,8 @@ class InvoiceRepository extends EntityRepository
         $qb->join('e.cabin','c');
         $qb->join('e.customer','p');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
-        $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created'));
+        $qb->andWhere('c.status = 1');
+        $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created','Release'));
         $result = $qb->getQuery()->getArrayResult();
         $array = array();
         foreach ( $result as $row):

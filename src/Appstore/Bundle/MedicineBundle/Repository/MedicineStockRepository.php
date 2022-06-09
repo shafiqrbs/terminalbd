@@ -284,6 +284,7 @@ class MedicineStockRepository extends EntityRepository
 		$qb->where("item.medicineConfig = :config");
 		$qb->setParameter('config', $config);
 		$qb->groupBy("item.brandName");
+		$qb->orderBy("item.brandName",'ASC');
 		$result = $qb->getQuery()->getArrayResult();
 		return  $result;
 
@@ -465,7 +466,11 @@ class MedicineStockRepository extends EntityRepository
         // $query->leftJoin('e.medicineBrand', 'brand');
         // $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
-        $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', rack.name , '- Tk.', e.salesPrice)  END as text");
+        if($config->getItemSearch() == "Brand"){
+            $query->addSelect("CASE WHEN (e.brandName IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', e.brandName , '- Tk.', e.salesPrice)  END as text");
+        }else{
+            $query->addSelect("CASE WHEN (e.rackNo IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', rack.name , '- Tk.', e.salesPrice)  END as text");
+        }
         $query->where("ic.id = :config")->setParameter('config', $config->getId());
         if($config->isSearchSlug() == 1){
             $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
