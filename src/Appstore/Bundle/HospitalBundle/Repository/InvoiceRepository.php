@@ -697,8 +697,8 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
-        $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
-        $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
+      //  $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
+    //    $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
         $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
 
         $user = isset($data['user'])? $data['user'] :'';
