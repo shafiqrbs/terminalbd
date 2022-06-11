@@ -248,10 +248,12 @@ class UserRepository extends EntityRepository
             $array['Hotel & Restaurant'] = array(
                 'ROLE_HOTEL'                             => 'Hotel & Reservation',
                 'ROLE_HOTEL_INVOICE'                     => 'Invoice',
+                'ROLE_HOTEL_RESTAURANT'                  => 'Restaurant',
                 'ROLE_HOTEL_PURCHASE'                    => 'Purchase',
                 'ROLE_HOTEL_STOCK'                       => 'Stock',
                 'ROLE_HOTEL_MANAGER'                     => 'Manager',
                 'ROLE_HOTEL_REPORTS'                     => 'Reports',
+                'ROLE_HOTEL_ADMIN'                       => 'Admin',
             );
         }
 

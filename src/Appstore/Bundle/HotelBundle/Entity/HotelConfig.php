@@ -279,6 +279,13 @@ class HotelConfig
      */
     private $invoiceType;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceForRestaurant", type="boolean",nullable = true)
+     */
+    private $invoiceForRestaurant = false;
+
 
     /**
      * @var string
@@ -1285,6 +1292,22 @@ class HotelConfig
 	public function setServiceCharge( float $serviceCharge ) {
 		$this->serviceCharge = $serviceCharge;
 	}
+
+    /**
+     * @return string
+     */
+    public function getInvoiceForRestaurant()
+    {
+        return $this->invoiceForRestaurant;
+    }
+
+    /**
+     * @param string $invoiceForRestaurant
+     */
+    public function setInvoiceForRestaurant($invoiceForRestaurant)
+    {
+        $this->invoiceForRestaurant = $invoiceForRestaurant;
+    }
 
 
 }

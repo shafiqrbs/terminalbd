@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends '::print.html.twig' %}
 {% block body %}
     <script type="text/javascript">
         window.print();
@@ -194,7 +194,4 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-{% block documentready %}
-    {{ parent() }}
-    window.print();
-{% endblock %}
+

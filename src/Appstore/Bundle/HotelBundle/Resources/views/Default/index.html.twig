@@ -17,7 +17,7 @@
                     {% endif %}
                 </div>
                 <div class="span3">
-                    {% if (app.user.granted("ROLE_HOTEL_INVOICE_RESTAURANT"))  %}
+                    {% if (app.user.granted("ROLE_HOTEL_RESTAURANT")) and globalOption.hotelConfig.invoiceForRestaurant == 1 %}
                         <a href="{{ path('hotel_restaurantinvoice_new') }}" class="btn yellow big"><i class="icon-plus-sign"></i> RESTAURANT</a>
                     {% endif %}
                 </div>
@@ -29,6 +29,7 @@
             <div class="span8">
                 <div class="row-fluid">
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_CASH") or  app.user.granted("ROLE_DOMAIN") ) %}
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
@@ -55,8 +56,10 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE") or  app.user.granted("ROLE_DOMAIN") ) %}
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
@@ -83,11 +86,13 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
 
                 </div>
                 <div class="row-fluid">
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
+                        {% if (app.user.granted("ROLE_HOTEL_INVOICE_RESTAURANT")) and globalOption.hotelConfig.invoiceForRestaurant == 1 %}
                         <div class="dashboard-stat2 ">
                             <div class="display">
                                 <div class="number">
@@ -115,6 +120,7 @@
 
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="span6 responsive" data-tablet="span6" data-desktop="span3">
                         <div class="dashboard-stat2 ">
@@ -158,32 +164,39 @@
                                     <i class="icon-tags"></i>
                                     <div> Sales </div>
                                 </a>
+                                {% if (app.user.granted("ROLE_HOTEL_INVOICE_RESTAURANT")) and globalOption.hotelConfig.invoiceForRestaurant == 1 %}
                                 <a href="{{ path('account_purchase_hotel_outstanding') }}" class="icon-btn">
                                     <i class="fa fa-user"></i>
                                     <div> Vendor </div>
                                 </a>
+
                                 <a href="{{ path('hotel_report_purchase_summary') }}" class="icon-btn">
                                     <i class="icon-truck"></i>
                                     <div> Purchase </div>
                                 </a>
+                                {% endif %}
 
                             </div>
 
                         </div>
                         <div class="span6" style="margin-top:-10px">
                             <div class="portlet-body">
-                                <a href="{{ path('hotel_stock') }}" class="icon-btn">
-                                    <i class="icon-th"></i>
-                                    <div> Stock Details </div>
-                                </a>
+                                {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_EXPENDITURE") or  app.user.granted("ROLE_DOMAIN") ) %}
                                 <a href="{{ path('account_expenditure_new') }}" class="icon-btn">
                                     <i class="icon-bar-chart"></i>
                                     <div> Expense </div>
+                                </a>
+                                {% endif %}
+                                {% if (app.user.granted("ROLE_HOTEL_INVOICE_RESTAURANT")) and globalOption.hotelConfig.invoiceForRestaurant == 1 %}
+                                <a href="{{ path('hotel_stock') }}" class="icon-btn">
+                                    <i class="icon-th"></i>
+                                    <div> Stock Details </div>
                                 </a>
                                 <a href="{{ path('hotel_damage_create') }}" class="icon-btn">
                                     <i class="icon-trash"></i>
                                     <div> Damage </div>
                                 </a>
+                                {% endif %}
                                 <a href="{{ path('domain_notepad') }}" class="icon-btn">
                                     <i class=" icon-file"></i>
                                     <div> Notepad </div>

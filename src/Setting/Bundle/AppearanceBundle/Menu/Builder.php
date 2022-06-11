@@ -130,12 +130,12 @@ class Builder extends ContainerAware
                 }
             }
 
-          /*  $result = array_intersect($menuName, array('Hotel'));
+            $result = array_intersect($menuName, array('Hotel'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_HOTEL') or $securityContext->isGranted('ROLE_DOMAIN')){
 	                $menu = $this->ReservationMenu($menu);
                 }
-            }*/
+            }
 
 		    $result = array_intersect($menuName, array('Election'));
 		    if (!empty($result)) {
@@ -1592,9 +1592,10 @@ class Builder extends ContainerAware
 	public function ReservationMenu($menu)
 	{
 
-		$securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+	    $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
+        $config = $securityContext->getGlobalOption()->getHotelConfig();
 
-		$menu
+        $menu
 			->addChild('Hotel & Restaurant')
 			->setAttribute('icon', 'fa fa-hotel')
 			->setAttribute('dropdown', true);
@@ -1606,12 +1607,14 @@ class Builder extends ContainerAware
 			                                         ;
 			$menu['Hotel & Restaurant']['Hotel']->addChild('Invoice', array('route' => 'hotel_invoice'))
 			                           ;
+            if($config->getInvoiceForRestaurant() == 1) {
+                $menu['Hotel & Restaurant']->addChild('Restaurant')->setAttribute('icon', 'icon icon-food')->setAttribute('dropdown', true);
+                $menu['Hotel & Restaurant']['Restaurant']->addChild('Create Invoice', array('route' => 'hotel_restaurantinvoice_new'))
+                ;
+                $menu['Hotel & Restaurant']['Restaurant']->addChild('Invoice', array('route' => 'hotel_restaurantinvoice'));
 
-			$menu['Hotel & Restaurant']->addChild('Restaurant')->setAttribute('icon', 'icon icon-food')->setAttribute('dropdown', true);
-			$menu['Hotel & Restaurant']['Restaurant']->addChild('Create Invoice', array('route' => 'hotel_restaurantinvoice_new'))
-			                                         ;
-			$menu['Hotel & Restaurant']['Restaurant']->addChild('Invoice', array('route' => 'hotel_restaurantinvoice'))
-			                           ;
+            }
+
 
 		}
 
@@ -1619,21 +1622,21 @@ class Builder extends ContainerAware
 			$menu['Hotel & Restaurant']->addChild('Notepad', array('route' => 'domain_notepad'));
 			$menu['Hotel & Restaurant']->addChild('Customer', array('route' => 'domain_customer'));
 		}
-		if ($securityContext->isGranted('ROLE_HOTEL_PURCHASE')) {
+        if($config->getInvoiceForRestaurant() == 1) {
+            if ($securityContext->isGranted('ROLE_HOTEL_PURCHASE')) {
 
-			$menu['Hotel & Restaurant']->addChild('Purchase')->setAttribute('dropdown', true);
-			$menu['Hotel & Restaurant']['Purchase']->addChild('Purchase', array('route' => 'hotel_purchase'))
-			                                        ;
-			$menu['Hotel & Restaurant']['Purchase']->addChild('Vendor', array('route' => 'hotel_vendor'));
-		}
+                $menu['Hotel & Restaurant']->addChild('Purchase')->setAttribute('dropdown', true);
+                $menu['Hotel & Restaurant']['Purchase']->addChild('Purchase', array('route' => 'hotel_purchase'));
+                $menu['Hotel & Restaurant']['Purchase']->addChild('Vendor', array('route' => 'hotel_vendor'));
+            }
 
-		if ($securityContext->isGranted('ROLE_HOTEL_STOCK')) {
-			$menu['Hotel & Restaurant']->addChild('Manage Stock', array('route' => 'hotel_stock'));
-			$menu['Hotel & Restaurant']->addChild('Manage Damage', array('route' => 'hotel_damage'));
-		}
+            if ($securityContext->isGranted('ROLE_HOTEL_STOCK')) {
+                $menu['Hotel & Restaurant']->addChild('Manage Stock', array('route' => 'hotel_stock'));
+                $menu['Hotel & Restaurant']->addChild('Manage Damage', array('route' => 'hotel_damage'));
+            }
+        }
 
-		if ($securityContext->isGranted('ROLE_HOTEL_PURCHASE')) {
-
+		if ($securityContext->isGranted('ROLE_HOTEL_ADMIN')) {
 			$menu['Hotel & Restaurant']->addChild('Master Data')->setAttribute('dropdown', true);
 			$menu['Hotel & Restaurant']['Master Data']->addChild('Room', array('route' => 'hotel_room'));
 			$menu['Hotel & Restaurant']['Master Data']->addChild('Category', array('route' => 'hotel_category'));

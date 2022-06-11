@@ -127,10 +127,9 @@ class InvoiceController extends Controller
 			throw $this->createNotFoundException('Unable to find Invoice entity.');
 		}
 		$editForm = $this->createEditForm($entity);
-		if (in_array($entity->getProcess(), array('check-in','check-out','canceled'))) {
+		if (in_array($entity->getProcess(), array('check-in','check-out','booked','canceled'))) {
 			return $this->redirect($this->generateUrl('hotel_invoice_show', array('id' => $entity->getId())));
 		}
-
 
 		$datetime = new \DateTime('now');
 		$startDate =  $datetime->format('Y-m-d');
