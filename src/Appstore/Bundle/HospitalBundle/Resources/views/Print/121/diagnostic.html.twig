@@ -37,7 +37,7 @@ transform: translateX(-50%);">
                 <td class="pull-right">
                     <ul class="unstyled">
                         <li><strong>Invoice: </strong>&nbsp;<strong>{{ entity.invoice }}</strong></li>
-                        <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
+                        <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:i A') }}</strong></li>
                         <li><strong>Report:</strong>&nbsp;{{  entity.process|capitalize }}</li>
                         {% if entity.assignDoctor is not empty %}<li><strong>Referred By:</strong> {{ entity.assignDoctor.name }}</li>{% endif %}
                     </ul>

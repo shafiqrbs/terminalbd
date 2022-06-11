@@ -761,7 +761,7 @@ class ItemController extends Controller
 			$phpExcelObject->setActiveSheetIndex(0)
 			               ->setCellValue("A{$rowNo}", $entity['createdBy'])
 			               ->setCellValue("B{$rowNo}", $entity['created']->format('d-m-Y') )
-			               ->setCellValue("C{$rowNo}", $entity['created']->format('H:m A') )
+			               ->setCellValue("C{$rowNo}", $entity['created']->format('h:i A') )
 			               ->setCellValue("D{$rowNo}", $entity['categoryName'])
 			               ->setCellValue("E{$rowNo}", $entity['itemSku'])
 			               ->setCellValue("F{$rowNo}", $entity['itemName'])

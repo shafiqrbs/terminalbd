@@ -55,6 +55,14 @@ class DomainUser
      */
     private $yearlySales;
 
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="discountPercent", type="integer", nullable = true)
+     */
+    private $discountPercent =0;
+
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -209,6 +217,24 @@ class DomainUser
     {
         $this->yearlySales = $yearlySales;
     }
+
+    /**
+     * @return int
+     */
+    public function getDiscountPercent()
+    {
+        return $this->discountPercent;
+    }
+
+    /**
+     * @param int $discountPercent
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        $this->discountPercent = $discountPercent;
+    }
+
+
 
 
 }

@@ -23,7 +23,7 @@
                 <td data-label="S/N">{{ loop.index }}</td>
                 <td data-label="Invoice">{{ dailySales.invoice }}</td>
                 <td data-label="Date">{{ dailySales.created|date('d-m-Y') }}</td>
-                <td data-label="Time">{{ dailySales.created|date('h:m A') }}</td>
+                <td data-label="Time">{{ dailySales.created|date('h:i A') }}</td>
                 <td data-label="Sub-Total">{{ dailySales.subTotal|number_format  }}</td>
                 <td data-label="Discount">{{ dailySales.discount|number_format  }}</td>
                 <td data-label="Net Total">{{ dailySales.total|number_format  }}</td>

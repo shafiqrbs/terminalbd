@@ -21,7 +21,7 @@
                 <td data-label="S/N"><span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+ Show]</span></span> </td>
                 <td data-label="Invoice">{{ dailySales.invoice }}</td>
                 <td data-label="Date">{{ dailySales.created|date('d-m-Y') }}</td>
-                <td data-label="Time">{{ dailySales.created|date('h:m A') }}</td>
+                <td data-label="Time">{{ dailySales.created|date('h:i A') }}</td>
                 <td data-label="Item">{{ dailySales.totalItem }}</td>
                 <td data-label="Sub-Total">{{ dailySales.subTotal|number_format  }}</td>
                 <td data-label="Discount">{{ dailySales.discount|number_format  }}</td>

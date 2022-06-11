@@ -181,7 +181,7 @@
                     <li>Printed By</li>
                     <li><strong>{{ printUser.profile.name }}</strong></li>
                     <li>{% if printUser.profile and printUser.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
-                    <li>{{ "now"|date('d-m-Y h:m A') }}</li>
+                    <li>{{ "now"|date('d-m-Y h:i A') }}</li>
                 </ul>
             </td>
             <td class="span4">

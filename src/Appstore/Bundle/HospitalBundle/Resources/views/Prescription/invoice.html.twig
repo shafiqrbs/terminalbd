@@ -172,7 +172,7 @@
                                     {% endif %}
                                 </td>
                                 <td  class="span1">{{ loop.index }}</td>
-                                <td  class="span2">{{ item.created|date('d-m-Y H:m A') }}</td>
+                                <td  class="span2">{{ item.created|date('d-m-Y h:i A') }}</td>
                                 <td class="span4">{{ item.particular.name }}</td>
                                 <td class="span1">{{ item.particular.service.name }}</td>
                                 <td class="span1">{% if item.particular.service.hasQuantity == 1 %}{{ item.quantity }}{% endif %}</td>

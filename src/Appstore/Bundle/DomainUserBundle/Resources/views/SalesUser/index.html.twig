@@ -43,6 +43,7 @@
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Monthly Sales</th>
                                     <th class="numeric" >Yearly Sales</th>
+                                    <th class="numeric" >Discount Percent</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -54,10 +55,13 @@
                                             <td class="numeric" >{{ user.profile.mobile }}</td>
                                             <td class="numeric" >
                                                 <input type="hidden" name="user[]" value="{{ user.id }}" >
-                                                <input type="text" class="numeric td-inline-input price span6"  autocomplete = "off" min="1" name="monthlySales[]" value="{% if user.domainUser is defined and user.domainUser is not empty  %}{{ user.domainUser.monthlySales }}{% endif %}" placeholder="Enter user monthly sales amount ">
+                                                <input type="text" class="numeric td-inline-input price span12"  autocomplete = "off" min="1" name="monthlySales[]" value="{% if user.domainUser is defined and user.domainUser is not empty  %}{{ user.domainUser.monthlySales }}{% endif %}" placeholder="Enter monthly amount ">
                                             </td>
                                             <td class="numeric" >
-                                                <input type="text" class="numeric td-inline-input price span6"  autocomplete = "off" min="1" name="yearlySales[]" value="{% if user.domainUser is defined and user.domainUser is not empty  %}{{ user.domainUser.yearlySales }}{% endif %}" placeholder="Enter user yearly sales amount ">
+                                                <input type="text" class="numeric td-inline-input price span12"  autocomplete = "off" min="1" name="yearlySales[]" value="{% if user.domainUser is defined and user.domainUser is not empty  %}{{ user.domainUser.yearlySales }}{% endif %}" placeholder="Enter yearly amount ">
+                                            </td>
+                                            <td class="numeric" >
+                                                <input type="text" class="numeric td-inline-input price span12"  autocomplete = "off" min="1" name="discountPercent[]" value="{% if user.domainUser is defined and user.domainUser is not empty  %}{{ user.domainUser.discountPercent }}{% endif %}" placeholder="Enter discount percent">
                                             </td>
                                         </tr>
                                     {% endfor %}

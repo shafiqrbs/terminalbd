@@ -224,7 +224,7 @@
                                             {% for transaction in entity.invoiceTransactions %}
                                                 <tr id="delete-{{ transaction.id }}" {% if transaction.process in ['Pending','In-progress'] %} class="yellow-alert" {% endif %} >
                                                     <td  class="numeric">{{ transaction.transactionCode }}</td>
-                                                    <td  class="numeric">{{ transaction.updated|date('d-m-Y H:m A') }}</td>
+                                                    <td  class="numeric">{{ transaction.updated|date('d-m-Y h:i A') }}</td>
                                                     <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
                                                     <td class="numeric">{{ transaction.discount }}</td>
                                                     <td class="numeric">{{ transaction.vat }}</td>

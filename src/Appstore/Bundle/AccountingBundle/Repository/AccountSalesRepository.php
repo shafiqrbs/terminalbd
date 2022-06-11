@@ -1479,7 +1479,7 @@ class AccountSalesRepository extends EntityRepository
             $data[$key]['receive'] = $row['amount'];
             $data[$key]['balance'] = $row['balance'];
             $data[$key]['sourceInvoice'] = ($row['sourceInvoice']) ? $row['sourceInvoice']:'';
-            $data[$key]['updated'] = $row['updated']->format('d-m-Y H:m A');
+            $data[$key]['updated'] = $row['updated']->format('d-m-Y h:i A');
         }
         return $data;
 

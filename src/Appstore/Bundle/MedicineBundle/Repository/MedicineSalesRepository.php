@@ -1062,7 +1062,7 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
         if($entity) {
 
             $data['id'] = (int)$entity->getId();
-            $data['created'] = $entity->getCreated()->format('d-m-Y H:m A');
+            $data['created'] = $entity->getCreated()->format('d-m-Y h:i A');
             $data['invoice'] = $entity->getInvoice();
             $data['customer'] = $entity->getCustomer()->getName();
             $data['customerMobile'] = $entity->getCustomer()->getMobile();

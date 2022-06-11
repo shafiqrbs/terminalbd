@@ -49,7 +49,7 @@
             </td>
             <td class="pull-right">
                 <ul class="unstyled">
-                    <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
+                    <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:i A') }}</strong></li>
                     {% if entity.transactionMethod is not empty %}<li><strong>Method: </strong>&nbsp;{{ entity.transactionMethod.name }}</li>{% endif %}
                     {% if entity.paymentMobile is not empty %}<li><strong><i class="icon-money"></i></strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}
                     {% if entity.cardNo is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>&nbsp;{{ entity.bank.name  }}/{{ entity.cardNo }}</li>{% endif %}

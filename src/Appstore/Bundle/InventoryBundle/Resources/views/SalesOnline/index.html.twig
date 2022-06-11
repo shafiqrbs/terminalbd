@@ -118,7 +118,7 @@
                                 {% for entity in entities %}
                                     <tr id="salesRemove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.created|date('h:m A') }}</td>
+                                        <td class="numeric" >{{ entity.created|date('h:i A') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>

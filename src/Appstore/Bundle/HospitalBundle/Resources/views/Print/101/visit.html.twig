@@ -29,7 +29,7 @@
                 </td>
                 <td class="pull-right">
                     <ul class="unstyled">
-                        <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
+                        <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:i A') }}</strong></li>
                         {% if entity.process is not empty %}<li><strong>Process: </strong>&nbsp;{{ entity.process }}</li>{% endif %}
                         {% if entity.paymentStatus is not empty %}<li><strong>Payment Status: </strong>&nbsp;{{ entity.paymentStatus }}</li>{% endif %}
                         <li><hr></li>
@@ -94,7 +94,7 @@
                     <td class="span4 text-center">
                         <ul class="unstyled">
                             <li>Printed By</li>
-                            <li>Printed: {{ entity.createdBy.profile.name }}, {{ "now"|date("d-m-Y h:m A") }}</li>
+                            <li>Printed: {{ entity.createdBy.profile.name }}, {{ "now"|date("d-m-Y h:i A") }}</li>
                         </ul>
                     </td>
                 </tr>
