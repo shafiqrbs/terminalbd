@@ -296,7 +296,6 @@ class InvoiceRepository extends EntityRepository
         $vat = !empty($result['vat']) ? $result['vat'] :0;
         $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
         $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
-
         return $data;
     }
 
@@ -671,7 +670,8 @@ class InvoiceRepository extends EntityRepository
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
-        $qb->andWhere('e.process = :process')->setParameter('process', "Done") ;
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
         if(!empty($user)){
             $qb->andWhere("e.createdBy = :user");
             $qb->setParameter('user', $user);
