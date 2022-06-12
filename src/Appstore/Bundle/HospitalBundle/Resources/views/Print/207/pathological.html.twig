@@ -26,7 +26,7 @@
     <table class="table table-border reportTable" style="border: 3px solid #383939!important" >
         <tr class="print-header">
             <td colspan="3" style="position: relative">
-                <span class="barcode-left">{{ barcodeInvoice|raw }}</span>
+                <span class="barcode-left">{#{{ barcodeInvoice|raw }}#}</span>
                 <strong class="title title-center" >{{ entity.particular.category.name }} REPORT</strong>
                 <span class="barcode-right">{{ barcodeReport|raw }}</span>
             </th>
@@ -172,8 +172,7 @@
                         {% endif %}
                     </li>
                     <li><strong>{{ entity.assignLabuser.name }}</strong></li>
-                    <li>{% if entity.assignLabuser.designation is not empty %}{{ entity.assignLabuser.designation }}{% endif %}</li>
-                    <li>{% if entity.assignLabuser.doctorSignature is not empty %}{{ entity.assignLabuser.doctorSignature }}{% endif %}</li>
+                    <li>{% if entity.assignLabuser.doctorSignature is not empty %}{{ entity.assignLabuser.doctorSignature|raw }}{% endif %}</li>
                 </ul>
             </td>
             <td class="center span4">
