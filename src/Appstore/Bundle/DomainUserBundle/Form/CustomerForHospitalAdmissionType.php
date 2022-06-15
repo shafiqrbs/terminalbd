@@ -81,7 +81,7 @@ class CustomerForHospitalAdmissionType extends AbstractType
                 'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
             ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'spa6 m-wrap select-custom gender'),
+                'attr'=>array('class'=>'span6 m-wrap select-custom gender'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),

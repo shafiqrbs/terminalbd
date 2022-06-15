@@ -311,7 +311,7 @@ class InvoiceController extends Controller
             $em->flush();
             if($entity->getTotal() > 0) {
                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
-                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+               // $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
             }
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {

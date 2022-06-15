@@ -764,7 +764,7 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $qb->join('pi.businessParticular','ms');
         $qb->join('pi.businessInvoice','e');
         $qb->select('ms.id as id , COALESCE(SUM(pi.quantity),0) as quantity');
-        $qb->where('e.process IN (:processes)');
+        $qb->where('e.process IN (:process)');
         $qb->setParameter('process', array('Done','Delivered','In-progress','Condition','Chalan'));
         $qb->andWhere('ms.id IN (:ids)')->setParameter('ids', $ids) ;
         $qb->groupBy('ms.id');
