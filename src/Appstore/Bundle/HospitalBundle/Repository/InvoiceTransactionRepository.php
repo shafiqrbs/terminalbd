@@ -379,7 +379,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setCode($code + 1);
             $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
             $entity->setTransactionCode($transactionCode);
-            $entity->setProcess('In-progress');
+            $entity->setProcess('Done');
             $entity->setDiscount($invoice->getDiscount());
             $entity->setPayment($invoice->getPayment());
             $entity->setTotal($invoice->getTotal());
@@ -401,7 +401,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $this->_em->persist($entity);
             $this->_em->flush($entity);
             if($invoice->getPayment() > 0){
-             //   $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
+                $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
             }
     }
     public function insertPaymentTransaction(Invoice $invoice, $data)
