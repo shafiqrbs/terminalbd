@@ -100,7 +100,7 @@ class AccountProfitRepository extends EntityRepository
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDiscountTransaction($profit,$row);
                 }elseif($row['amount'] > 0 and $row['processHead'] == 'Due' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDueTransaction($profit,$row);
-                }elseif(in_array($row['processHead'],array('medicine','business','inventory','restaurant','hotel','hospital','diagnostic','admission','visit'))){
+                }elseif(in_array($row['processHead'],array('medicine','business','inventory','restaurant','hotel','hospital','diagnostic','admission','visit','Advance'))){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyTransaction($profit,$row);
                 }
 
