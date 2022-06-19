@@ -140,6 +140,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy("e.companyName");
+        $qb->orderBy("e.companyName",'ASC');
         $this->handleSearchBetween($qb,$globalOption,$data);
         $result = $qb->getQuery()->getArrayResult();
         return $result;

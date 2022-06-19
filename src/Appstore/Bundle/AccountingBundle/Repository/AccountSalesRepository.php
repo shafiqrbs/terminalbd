@@ -249,6 +249,7 @@ class AccountSalesRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy("c.id");
+        $qb->orderBy("c.name",'ASC');
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
         return $result;

@@ -126,20 +126,34 @@ class TransactionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+
         $transactionMethods = array(1,4);
         $globalOption = $this->getUser()->getGlobalOption();
         $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
         $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
-
-        return $this->render('AccountingBundle:Transaction:cashoverview.html.twig', array(
-            'transactionCashOverviews'                  => $transactionCashOverview,
-            'transactionBankCashOverviews'              => $transactionBankCashOverviews,
-            'transactionMobileBankCashOverviews'        => $transactionMobileBankCashOverviews,
-            'transactionAccountHeadCashOverviews'       => $transactionAccountHeadCashOverviews,
-            'searchForm' => $data,
-        ));
+        if(empty($data['pdf'])){
+            return $this->render('AccountingBundle:Transaction:cashoverview.html.twig', array(
+                'transactionCashOverviews'                  => $transactionCashOverview,
+                'transactionBankCashOverviews'              => $transactionBankCashOverviews,
+                'transactionMobileBankCashOverviews'        => $transactionMobileBankCashOverviews,
+                'transactionAccountHeadCashOverviews'       => $transactionAccountHeadCashOverviews,
+                'searchForm' => $data,
+            ));
+        }else{
+            echo $html = $this->renderView(
+                'AccountingBundle:Transaction:cashoverviewPdf.html.twig', array(
+                'globalOption'                  => $this->getUser()->getGlobalOption(),
+                'transactionCashOverviews'                  => $transactionCashOverview,
+                'transactionBankCashOverviews'              => $transactionBankCashOverviews,
+                'transactionMobileBankCashOverviews'        => $transactionMobileBankCashOverviews,
+                'transactionAccountHeadCashOverviews'       => $transactionAccountHeadCashOverviews,
+                'searchForm' => $data,
+            ));
+            exit;
+            $this->downloadPdf($html,'dailyCashPdf.pdf');
+        }
 
     }
 
@@ -175,6 +189,7 @@ class TransactionController extends Controller
         if(empty($data['pdf'])){
 
             return $this->render('AccountingBundle:Transaction:todayCashSummary.html.twig', array(
+                'globalOption'                  => $this->getUser()->getGlobalOption(),
                 'transactionCashOverviews'                  => $transactionCashOverview,
                 'transactionBankCashOverviews'              => $transactionBankCashOverviews,
                 'transactionMobileBankCashOverviews'        => $transactionMobileBankCashOverviews,
@@ -205,7 +220,7 @@ class TransactionController extends Controller
                     'searchForm' => $data,
                 )
             );
-            $this->downloadPdf($html,'dailyCashPdf.pdf');
+           // $this->downloadPdf($html,'dailyCashPdf.pdf');
         }
 
 
@@ -231,6 +246,8 @@ class TransactionController extends Controller
             'transactionAccountHeadCashOverviews'   => $transactionAccountHeadCashOverviews,
             'searchForm' => $data,
         ));
+
+        exit;
 
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
         $snappy          = new Pdf($wkhtmltopdfPath);

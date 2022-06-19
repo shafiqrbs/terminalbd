@@ -35,7 +35,7 @@
                             {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
                             {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
                             <a  href="{{ path('account_balancetransfer_new') }}" class="btn blue"><i class="icon icon-plus-sign"></i> Account Close</a>
-                            <a target="_blank" href="{{ path('account_transaction_cash_overview_pdf',{'startDate':startDate,'endDate':endDate}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
+                            <a target="_blank" href="{{ path('account_transaction_cash_overview',{'pdf':'pdf','startDate':startDate,'endDate':endDate}) }}" class="btn purple"><i class="icon icon-print"></i> Download</a>
                         </div>
                     </div>
 

@@ -140,7 +140,8 @@ class ExpenditureRepository extends EntityRepository
         $qb->select("c.id","c.name","COALESCE(SUM(e.amount),0) AS amount");
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = 'approved'");
-        $qb->groupBy("e.id");
+        $qb->groupBy("c.id");
+        $qb->orderBy("c.name",'ASC');
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
