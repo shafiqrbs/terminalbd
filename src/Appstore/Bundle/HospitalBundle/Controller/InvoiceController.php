@@ -220,7 +220,7 @@ class InvoiceController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
+
 
     }
 
@@ -240,7 +240,7 @@ class InvoiceController extends Controller
         $msg = 'Particular deleted successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function invoiceDiscountUpdateAction(Request $request)
@@ -310,7 +310,7 @@ class InvoiceController extends Controller
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
             if($entity->getTotal() > 0) {
-                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateTransaction($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
             }

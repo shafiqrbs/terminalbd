@@ -683,18 +683,18 @@ class AccountSalesRepository extends EntityRepository
 		}
 
 		$qb = $this->createQueryBuilder('e');
-		$qb->select('COALESCE(SUM(e.totalAmount),0) AS salesAmount');
-		$qb->where("e.globalOption = :globalOption");
-		$qb->setParameter('globalOption', $globalOption);
+		$qb->select('e.processHead as processHead');
+		$qb->addSelect('COALESCE(SUM(e.totalAmount),0) AS amount');
+		$qb->where("e.totalAmount > 0");
+		$qb->andWhere("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption);
 		$this->handleSearchBetween($qb,$data);
-		$result  = $qb->getQuery()->getOneOrNullResult();
-		$salesAmount = $result['salesAmount'];
-
+        $qb->groupBy('e.processHead');
+        $revenues  = $qb->getQuery()->getArrayResult();
 		$purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
-		$revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
-		$expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-		$salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
-		$data =  array('salesAmount' => $salesAmount ,'purchase' => $purchase, 'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
+	//	$revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditureAccountHead($globalOption, $accountHeads = array(37), $data);
+        $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
+		$data =  array('purchase' => $purchase, 'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
 		return $data;
 
 	}

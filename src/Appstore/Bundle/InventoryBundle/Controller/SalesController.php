@@ -460,7 +460,7 @@ class SalesController extends Controller
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+           // $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -659,7 +659,7 @@ class SalesController extends Controller
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+           // $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
         } else {
             return new Response('failed');

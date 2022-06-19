@@ -67,6 +67,8 @@ class AccountProfitRepository extends EntityRepository
         $this->removeExistingTransaction($profit);
         $journalAccountPurchase = $this->monthlyPurchaseJournal($profit, $data);
         $journalAccountSales = $this->monthlySalesJournal($profit, $data);
+        $monthlySalesAccountReceivable = $this->monthlySalesAccountReceivable($profit, $data);
+
         $journalAccountSalesAdjustment = $this->monthlySalesAdjustmentJournal($profit, $data);
         $journalExpenditure = $this->monthlyExpenditureJournal($profit, $data);
         $journalContra = $this->monthlyContraJournal($profit, $data);
@@ -98,9 +100,10 @@ class AccountProfitRepository extends EntityRepository
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDiscountTransaction($profit,$row);
                 }elseif($row['amount'] > 0 and $row['processHead'] == 'Due' ){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyDueTransaction($profit,$row);
-                }elseif($row['total'] > 0 and in_array($row['processHead'],array('medicine','business','inventory','restaurant','hotel','diagnostic','admission','visit'))){
+                }elseif(in_array($row['processHead'],array('medicine','business','inventory','restaurant','hotel','hospital','diagnostic','admission','visit'))){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyTransaction($profit,$row);
                 }
+
             endforeach;
         }
 
@@ -121,6 +124,7 @@ class AccountProfitRepository extends EntityRepository
             endforeach;
         }
 
+        $em->getRepository('AccountingBundle:Transaction')->insertMonthlySalesAccountReceivable($profit,$monthlySalesAccountReceivable);
         $salesReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales');
         $salesAdjustmentReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-adjustment');
         $salesPurchaserReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-purchase');
@@ -172,6 +176,25 @@ class AccountProfitRepository extends EntityRepository
         $stmt->bindValue('year', $year);
         $stmt->execute();
         $result =  $stmt->fetchAll();
+        return $result;
+    }
+
+    private function monthlySalesAccountReceivable(AccountProfit $profit,$data)
+    {
+        $config = $profit->getGlobalOption()->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT (COALESCE(SUM(sales.totalAmount),0) + COALESCE(SUM(sales.tloPrice),0)) as total, COALESCE(SUM(sales.amount),0) as amount
+                FROM account_sales as sales
+                WHERE sales.globalOption_id = :config AND sales.process = :process AND  MONTHNAME(sales.created) =:month AND YEAR(sales.created) =:year";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'approved');
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetch();
         return $result;
     }
 

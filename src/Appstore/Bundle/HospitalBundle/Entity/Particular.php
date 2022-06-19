@@ -544,6 +544,10 @@ class Particular
         return $this->particularCode.' - '.$this->name.$designation;
     }
 
+    public function getReportDoctor(){
+        return $this->name;
+    }
+
     /**
      * Set content
      *

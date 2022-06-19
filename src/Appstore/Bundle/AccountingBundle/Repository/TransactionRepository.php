@@ -3257,7 +3257,6 @@ class TransactionRepository extends EntityRepository
     {
 
         $em = $this->_em;
-
         $amount = round($data['amount']);
         if($amount > 0){
             $transaction = new Transaction();
@@ -3286,7 +3285,7 @@ class TransactionRepository extends EntityRepository
 
         /* Payable */
 
-        if($data['total'] > $data['amount']){
+       /* if($data['total'] > $data['amount']){
 
             $receivable = round($data['total'] - $data['amount']);
             $em = $this->_em;
@@ -3302,7 +3301,27 @@ class TransactionRepository extends EntityRepository
             $transaction->setDebit($receivable);
             $em->persist($transaction);
             $em->flush();
-        }
+        }*/
+
+    }
+
+    public function insertMonthlySalesAccountReceivable(AccountProfit $entity,$data)
+    {
+        $receivable = round($data['total'] - $data['amount']);
+        $em = $this->_em;
+        $transaction = new Transaction();
+        $transaction->setProcess("sales");
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountProfit($entity);
+        $transaction->setCreated($entity->getCreated());
+        $transaction->setUpdated($entity->getCreated());
+        $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'account-receivable'));
+        $transaction->setAccountHead($head);
+        $transaction->setAmount($receivable);
+        $transaction->setDebit($receivable);
+        $em->persist($transaction);
+        $em->flush();
+
     }
 
     public function insertSalesAdjustmentMonthlyTransaction(AccountProfit $entity,$data)

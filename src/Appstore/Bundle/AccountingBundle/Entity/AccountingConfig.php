@@ -142,10 +142,19 @@ class AccountingConfig
      */
     private $isPowered = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="salesReceiveSms", type="boolean",  nullable=true)
+     */
+    private $salesReceiveSms = false;
 
-
-
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="businessMode", type="string", length=100,nullable = true)
+     */
+    private $businessMode = 'Proprietorship';
 
 
     /**
@@ -418,6 +427,40 @@ class AccountingConfig
     {
         $this->capitalInvestor = $capitalInvestor;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSalesReceiveSms()
+    {
+        return $this->salesReceiveSms;
+    }
+
+    /**
+     * @param bool $salesReceiveSms
+     */
+    public function setSalesReceiveSms($salesReceiveSms)
+    {
+        $this->salesReceiveSms = $salesReceiveSms;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBusinessMode()
+    {
+        return $this->businessMode;
+    }
+
+    /**
+     * @param string $businessMode
+     */
+    public function setBusinessMode($businessMode)
+    {
+        $this->businessMode = $businessMode;
+    }
+
+
 
 
 }

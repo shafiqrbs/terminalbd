@@ -30,6 +30,13 @@
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Diagnostic Report Delivery</div>
+                        {% if searchForm.particular is defined and searchForm.particular is not empty %}
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn red addPatient" href="javascript:"><i class="icon-plus-sign"></i> Generate Reports</a>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
 
                     <div class="portlet-body">
@@ -67,15 +74,23 @@
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
                                         <div class="span3">
-                                            <select name="doctor" id="doctor" class="m-wrap span12">
+                                            <select name="particular" id="particular" class="m-wrap span12 select2">
+                                                <option value="">Select Test Name</option>
+                                                {% for service in particularService %}
+                                                    <option {% if searchForm.particular is defined and searchForm.particular == service.id %} selected="selected" {% endif %} value="{{ service.id }}" >{{ service.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <select name="doctor" id="doctor" class="m-wrap span12 select2">
                                                 <option value="" >--Assign Doctor--</option>
                                                 {% for doctor in assignDoctors %}
                                                     <option {% if searchForm.doctor is defined and searchForm.doctor == doctor.id %} selected="selected" {% endif %} value="{{ doctor.id }}" >{{ doctor.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        <div class="span6">
-                                            <select name="referred" id="referred" class="m-wrap span12">
+                                        <div class="span3">
+                                            <select name="referred" id="referred" class="m-wrap span12 select2">
                                                 <option value="" >--Patient Referred--</option>
                                                 {% for referred in referredDoctors %}
                                                     <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
@@ -100,6 +115,9 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
+                                    {% if searchForm.particular is defined and searchForm.particular is not empty %}
+                                    <th class="" ><input type="checkbox" id="checkAll" data-checkwhat="chkSelect"></th>
+                                   {% endif %}
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Name</th>
@@ -115,6 +133,9 @@
                                 {% set processes = ['Collected','In-progress'] %}
                                 {% for entity in entities %}
                                     <tr>
+                                        {% if searchForm.particular is defined and searchForm.particular is not empty %}
+                                        <td class="" ><input type="checkbox" class="chkSelect" id="checkItem-{{ entity.id }}" ></td>
+                                        {% endif %}
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.hmsinvoice.invoice }}</td>
                                         <td class="numeric" >{% if entity.hmsinvoice.customer is defined and entity.hmsinvoice.customer is not empty %}{{ entity.hmsinvoice.customer.name }}{% endif %}</td>
@@ -134,18 +155,18 @@
                                             {% if entity.sampleCollectedBy is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") %}
                                                 <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':entity.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
                                             {% elseif entity.process in processes and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB")  %}
-                                                <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
+                                                <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Generate Report</a>
                                             {% endif %}
                                             {% if entity.process == "Done" and entity.particularDeliveredBy is not empty %}
-                                                <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Print </a>
                                             {% endif %}
                                             {% if entity.hmsInvoice.paymentStatus == 'Paid' and entity.process == 'Done'  and entity.particularDeliveredBy is empty %}
                                                 <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
                                             {% endif %}
                                             {% if  (entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR")) or (entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER")) %}
-                                            <a target="_blank"  href="{{ path('hms_invoice_confirm',{'id':entity.hmsInvoice.id}) }}"  class="btn red mini" ><i class=" icon-plus"></i> Process</a>
+                                            <a target="_blank"  href="{{ path('hms_invoice_confirm',{'id':entity.hmsInvoice.id}) }}"  class="btn red mini" ><i class=" icon-plus"></i> Invoice</a>
                                             {% endif %}
-                                            {% if entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")  %}
+                                            {% if (entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == "Done" and entity.particularDeliveredBy is empty) or ( entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == "Done" )  %}
                                                 <a  class="btn mini black" href="{{ path('hms_invoice_particular_report_reverse', {'id': entity.id}) }}"><i class="icon-refresh"></i>&nbsp;Reverse </a>
                                             {% endif %}
                                             </div>
@@ -180,3 +201,13 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
+
+{% block documentready %}
+    {{ parent() }}
+    $("#checkAll").click(function(){
+        $('input:checkbox').not(this).prop('checked', this.checked);
+        checkwhat  = $(this).data("checkwhat");
+        $('input:checkbox.'+checkwhat).not(this).prop('checked', this.checked);
+    });
+
+{% endblock %}

@@ -404,6 +404,40 @@ class InvoiceTransactionRepository extends EntityRepository
                 $this->_em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
             }
     }
+
+    public function updateTransaction(Invoice $invoice)
+    {
+        $entity = New InvoiceTransaction();
+        $code = $this->getLastCode($invoice);
+        $entity->setHmsInvoice($invoice);
+        $entity->setCode($code + 1);
+        $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+        $entity->setTransactionCode($transactionCode);
+        $entity->setProcess('In-progress');
+        $entity->setDiscount($invoice->getDiscount());
+        $entity->setPayment($invoice->getPayment());
+        $entity->setTotal($invoice->getTotal());
+        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $entity->setAccountBank($invoice->getAccountBank());
+        $entity->setPaymentCard($invoice->getPaymentCard());
+        $entity->setCardNo($invoice->getCardNo());
+        $entity->setBank($invoice->getBank());
+        $entity->setAccountMobileBank($invoice->getAccountMobileBank());
+        $entity->setPaymentMobile($invoice->getPaymentMobile());
+        $entity->setTransactionId($invoice->getTransactionId());
+        $entity->setComment($invoice->getComment());
+        $entity->setCreated($invoice->getCreated());
+        $entity->setIsMaster(true);
+        if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+            $vat = $this->getCulculationVat($invoice, $entity->getPayment());
+            $entity->setVat($vat);
+        }
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
+
+    }
+
+
     public function insertPaymentTransaction(Invoice $invoice, $data)
     {
         $entity = New InvoiceTransaction();

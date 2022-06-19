@@ -70,8 +70,8 @@ class AccountProfitController extends Controller
         }
 
         $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => $month ,'year' => $year));
-        //$overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
-        // $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
+       // $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
+      //  $capital = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
         if(empty($entity)){
             $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->insertAccountProfit($option,$month,$year,$data);
             $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);

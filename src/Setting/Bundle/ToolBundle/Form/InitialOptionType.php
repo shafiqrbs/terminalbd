@@ -67,6 +67,12 @@ class InitialOptionType extends AbstractType
                             ->orderBy('s.name','ASC');
                     },
                 ))
+                ->add('mobile','text', array('attr'=>array('class'=>'m-wrap  mobile span12','placeholder'=>'Enter your mobile no'),
+                        'constraints' =>array(
+                            new NotBlank(array('message'=>'Enter your mobile no required')),
+                            new Length(array('max'=>200))
+                        ))
+                )
                 ->add('location', 'entity', array(
                     'required'    => false,
                     'empty_value' => '---Select Location---',

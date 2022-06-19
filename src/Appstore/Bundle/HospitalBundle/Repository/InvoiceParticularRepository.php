@@ -37,6 +37,7 @@ class InvoiceParticularRepository extends EntityRepository
 		$service = isset($data['service'])? $data['service'] :'';
 		$cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
 		$cabin = isset($data['cabinNo'])? $data['cabinNo'] :'';
+		$particular = isset($data['particular'])? $data['particular'] :'';
 
 		if (!empty($invoice)) {
 			$qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -93,6 +94,11 @@ class InvoiceParticularRepository extends EntityRepository
 			$qb->setParameter('service', $service);
 		}
 
+		if(!empty($particular)){
+			$qb->andWhere("p.id = :particular");
+			$qb->setParameter('particular', $particular);
+		}
+
 		if(!empty($cabin)){
 			$qb->andWhere("e.cabin = :cabin");
 			$qb->setParameter('cabin', $cabin);
@@ -143,6 +149,23 @@ class InvoiceParticularRepository extends EntityRepository
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
+    }
+
+    public function processPathologicalReports($hospital)
+    {
+
+        $qb = $this->createQueryBuilder('ip');
+        $qb->select('p.id','p.name');
+        $qb->join('ip.hmsInvoice','e');
+        $qb->join('ip.particular','p');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
+        $qb->andWhere('e.commissionApproved != 1');
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','In-progress','Diagnostic','Admitted'));
+        $qb->groupBy('p.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
     }
 
     public function insertMasterParticular(User $user,Invoice $invoice){

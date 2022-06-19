@@ -114,7 +114,7 @@
                         {% for child in item.children %}
                             <tr id="remove-{{ item.id }}">
                                 <td  class="numeric">{{ child.name }}</td>
-                                <td class=""><input type="text" name="result[]" class="m-wrap span12" value="{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}" ></td>
+                                <td class=""><input type="text" name="result[]" class="m-wrap span12 input-select" data-index="{{ child.id }}" value="{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}" ></td>
                                 <td class="numeric">{{ child.unit }}</td>
                                 <td class="numeric">{{ child.referenceValue }}</td>
                                 <input type="hidden" name="pathologicalReportId[]" value="{{ child.id }}" >
@@ -123,7 +123,7 @@
                         {% elseif item.parent is empty %}
                             <tr id="remove-{{ item.id }}">
                                 <td  class="numeric">{{ item.name }}</td>
-                                <td class="">{% if item.children is empty %}<input type="text" name="result[]" class="m-wrap span12" value="{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}" >{% endif %}</td>
+                                <td class="">{% if item.children is empty %}<input type="text" name="result[]" class="m-wrap span12 input-select" data-index="{{ item.id }}" value="{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}" >{% endif %}</td>
                                 <td class="numeric">{{ item.unit }}</td>
                                 <td class="numeric">{{ item.referenceValue }}</td>
                                 <input type="hidden" name="pathologicalReportId[]" value="{{ item.id }}" >
@@ -349,17 +349,55 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    CKEDITOR.replace( 'invoiceParticular_reportContent', {
-    toolbarGroups: [
-        { name: 'basicstyles', groups: [ 'basicstyles'] },
-        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-        { name: 'insert' },
-        { name: 'styles' },
-        { name: 'colors' },
-        { name: 'tools' },
-    ]
-    });
+    {% if entity.particular.isReportContent == 1 %}
+        CKEDITOR.replace( 'invoiceParticular_reportContent', {
+            toolbarGroups: [
+                { name: 'basicstyles', groups: [ 'basicstyles'] },
+                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+                { name: 'insert' },
+                { name: 'styles' },
+                { name: 'colors' },
+                { name: 'tools' },
+            ]
+        });
+
+    {% endif %}
+
     var count = 0;
+
+   {# $('.form-horizontal').keyup(function(e) {
+        if (e.which == 8 || e.which == 46) {
+        $(this).prev('input').focus();
+        }
+        else {
+        $(this).next('input').focus();
+        }
+        e.preventDefault();
+    });#}
+    $(".input-select:first").focus();
+    $('body').on('keydown', 'input, select, file,textarea', function(event) {
+        var key = event.which || event.charCode || event.keyCode
+        if (key === 13) {
+            var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+            focusable = form.find('input').filter(':visible');
+            next = focusable.eq(focusable.index(this)+1);
+            if (next.length) {
+                next.val('').focus();
+            }
+            return false;
+        }
+    });
+
+    {#$('.form-horizontal').on('keydown', '.input-select', function (event) {
+        console.log('ok');
+        if (event.which == 13) {
+        event.preventDefault();
+        var $this = $(event.target);
+        var index = parseFloat($this.attr('data-index'));
+        $('[data-index="' + (index + 1).toString() + '"]').focus();
+        }
+    });#}
+
     $('.addMore').click(function(){
 
         var $el = $(this);
