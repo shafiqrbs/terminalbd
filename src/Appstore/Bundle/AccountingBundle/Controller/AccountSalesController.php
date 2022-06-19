@@ -454,6 +454,24 @@ class AccountSalesController extends Controller
 		    if($entity->getAmount() > 0 and in_array($entity->getProcessHead(),array( 'Due','Advance')) ){
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
 		    }
+
+            $customer = $entity->getCustomer();
+            $name = $customer->getName();
+            $orgName = $entity->getGlobalOption()->getName();
+            $hotline = $entity->getGlobalOption()->getHotline();
+            $mobile = "+88".$customer->getMobile();
+           // $mobile = "+8801828148148";
+
+            $outstanding = number_format($entity->getAmount(),2);
+            $msg = "Sir As-salamu Alaykum, Your payment received TK. {$outstanding}. Please Contact:  {$hotline}.Thanks for being with our.";
+            $msg = $orgName .'\nDear '.$msg;
+            if($entity->getGlobalOption()->getAccountingConfig()->isSalesReceiveSms() == 1 and $entity->getGlobalOption()->getSmsSenderTotal() and $entity->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $entity->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1) {
+                $this->send($msg,$mobile);
+                $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->insertCustomerOutstandingSms($customer,$msg,'success');
+                $this->get('session')->getFlashBag()->add(
+                    'success'," $name SMS has benn sent successfully"
+                );
+            }
 		    return new Response('success');
 
         } else {
@@ -548,6 +566,35 @@ class AccountSalesController extends Controller
         return new Response($taka);
         exit;
 
+    }
+
+    function send($msg, $phone, $sender = ""){
+
+        $curl = curl_init();
+        $data =array(
+            'apikey' => '198a7497a859e5fe',
+            'secretkey' => 'cb6adaba',
+            'callerID' => '8809612770474',
+            'toUser' => $phone,
+            'messageContent' => $msg,
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://smpp.ajuratech.com:7790/sendtext",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+            ),
+        ));
+        $response = curl_exec($curl);
+        print_r(curl_error($curl));
+        curl_close($curl);
     }
 
 }
