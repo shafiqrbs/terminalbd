@@ -219,6 +219,14 @@ class BusinessConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="systemReset", type="boolean",  nullable=true)
+     */
+    private $systemReset = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="tloCommission", type="boolean",  nullable=true)
      */
     private $tloCommission = false;
@@ -1642,6 +1650,21 @@ class BusinessConfig
         $this->posPrint = $posPrint;
     }
 
+    /**
+     * @return bool
+     */
+    public function isSystemReset()
+    {
+        return $this->systemReset;
+    }
+
+    /**
+     * @param bool $systemReset
+     */
+    public function setSystemReset($systemReset)
+    {
+        $this->systemReset = $systemReset;
+    }
 
 
 

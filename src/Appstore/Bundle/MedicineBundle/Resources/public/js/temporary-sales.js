@@ -99,6 +99,7 @@ $(document).on('click', '.addAjaxItem', function() {
             $('#salesTemporary_due').val(obj['initialGrandTotal']);
             $('.table-responsive').hide();
             $('#search').focus().val('');
+            $('#isShort').prop('checked',false).removeAttr('checked');
             $('.editableText').editable();
         }
     });

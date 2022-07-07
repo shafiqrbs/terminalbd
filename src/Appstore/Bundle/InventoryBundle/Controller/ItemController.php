@@ -686,18 +686,20 @@ class ItemController extends Controller
 		$inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
 		$entities = $em->getRepository('InventoryBundle:Item')->findWithSearch($inventory,$data);
 		$entities = $entities->getQuery()->getResult();
-		$array[] = 'SKU,Name,Category Name,Unit,Purchase,Purchase Return,Sales,Sales Return,Damage,Reaming,Avg Purchase,Avg Sales,Sales Price';
+		$array[] = 'Barcode,Model,Name,Category Name,Brand,Unit,Purchase,Purchase Return,Sales,Sales Return,Damage,Reaming,Avg Purchase,Avg Sales,Sales Price';
 		/* @var $entity Item */
 
 		foreach ($entities as $key => $entity){
 
 			$unit = !empty($entity->getMasterItem()->getProductUnit()) ? $entity->getMasterItem()->getProductUnit()->getName():'';
 			$category = !empty($entity->getMasterItem()->getCategory()) ? $entity->getMasterItem()->getCategory()->getName():'';
-
+			$brand = !empty($entity->getBrand()) ? $entity->getBrand()->getName():'';
 			$rows = array(
-				$entity->getSku(),
+				$entity->getBarcode(),
+                $entity->getModel(),
 				$entity->getName(),
 				$category,
+                $brand,
 				$unit,
 				$entity->getPurchaseQuantity(),
 				abs($entity->getPurchaseQuantityReturn()),

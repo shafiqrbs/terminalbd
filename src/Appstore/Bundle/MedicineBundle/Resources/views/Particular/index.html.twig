@@ -73,39 +73,41 @@
                             <!-- END FORM-->
                         </div>
                         <div class="clearfix"><br/></div>
-                        <div class="portlet-body flip-scroll">
+                        <div class="portlet-body">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <table class="table" id="datatable">
 
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                        <thead class="flip-content ">
+                                        <tr class="head-blue">
+                                            <th class="numeric" >Particular Type</th>
+                                            <th class="numeric" >Name </th>
+                                            <th class="numeric" >Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
-                                <thead class="flip-content ">
-                                <tr class="head-blue">
-                                    <th class="numeric" >Particular Type</th>
-                                    <th class="numeric" >Name </th>
-                                    <th class="numeric" >Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                        {% for entity in entities %}
+                                            <tr>
 
-                                {% for entity in entities %}
-                                    <tr>
+                                                <td class="numeric" >{{ entity.particularType.name }}</td>
+                                                <td class="numeric" ><a href="{{ path('medicine_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                                <td class="numeric" >
+                                                    {% if( entity.status == 1) %}
+                                                        <a href="{{ path('medicine_particular_status', { 'id': entity.id}) }}" class="btn yellow mini"><i class="icon-ok"></i></a>
+                                                    {% else %}
+                                                        <a  href="{{ path('medicine_particular_status', { 'id': entity.id}) }}" class="btn yellow mini" >x</a>
+                                                    {% endif %}
+                                                    <a href="{{ path('medicine_particular_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                                    <a title="Are you sure went to delete ?" href="{{ path('medicine_particular_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
 
-                                        <td class="numeric" >{{ entity.particularType.name }}</td>
-                                        <td class="numeric" ><a href="{{ path('medicine_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >
-                                            {% if( entity.status == 1) %}
-                                                <a href="{{ path('medicine_particular_status', { 'id': entity.id}) }}" class="btn yellow mini"><i class="icon-ok"></i></a>
-                                            {% else %}
-                                                <a  href="{{ path('medicine_particular_status', { 'id': entity.id}) }}" class="btn yellow mini" >x</a>
-                                            {% endif %}
-                                            <a href="{{ path('medicine_particular_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('medicine_particular_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-
-                                </tbody>
-                            </table>
-
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

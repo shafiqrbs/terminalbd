@@ -394,7 +394,7 @@ class CustomerRepository extends EntityRepository
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
             if(!empty($data['keyword'])){
                 $keyword = $data['keyword'];
-                $qb->andWhere('customer.name LIKE :searchTerm OR customer.mobile LIKE :searchTerm');
+                $qb->andWhere('customer.name LIKE :searchTerm OR customer.mobile LIKE :searchTerm OR customer.referenceId LIKE :searchTerm');
                 $qb->setParameter('searchTerm', '%'.strtolower($keyword).'%');
             }
             if (!empty($mobile)) {

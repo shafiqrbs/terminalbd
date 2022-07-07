@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
@@ -892,6 +893,28 @@ class SalesController extends Controller
         $response =  $connector->getData();
         $printer -> close();
         return $response;
+    }
+
+    public function androidItemSalesProcessAction(MedicineAndroidProcess $process)
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $entity = new MedicineSales();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity->setMedicineConfig($config);
+        $entity->setCreatedBy($this->getUser());
+        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($this->getUser()->getGlobalOption());
+        $entity->setCustomer($customer);
+        $entity->setAndroidProcess($process);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $em->persist($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository(MedicineSales::class)->androidMissingSalesImport($config,$entity,$process);
+        return $this->redirect($this->generateUrl('medicine_sales_edit', array('id' => $entity->getId())));
+
     }
 
 

@@ -202,6 +202,13 @@ class Customer
      */
     private $customerId;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="referenceId", type="string",  nullable=true)
+     */
+    private $referenceId;
+
     /**
      * @var string
      *
@@ -1849,7 +1856,21 @@ class Customer
         $this->patientId = $patientId;
     }
 
+    /**
+     * @return string
+     */
+    public function getReferenceId()
+    {
+        return $this->referenceId;
+    }
 
+    /**
+     * @param string $referenceId
+     */
+    public function setReferenceId($referenceId)
+    {
+        $this->referenceId = $referenceId;
+    }
 
 
 }

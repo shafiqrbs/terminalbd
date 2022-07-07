@@ -177,6 +177,14 @@ class RestaurantConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="systemReset", type="boolean",  nullable=true)
+     */
+    private $systemReset = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isBranch", type="boolean",  nullable=true)
      */
     private $isBranch = false;
@@ -1476,6 +1484,22 @@ class RestaurantConfig
     public function setPrintFooterText($printFooterText)
     {
         $this->printFooterText = $printFooterText;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSystemReset()
+    {
+        return $this->systemReset;
+    }
+
+    /**
+     * @param bool $systemReset
+     */
+    public function setSystemReset($systemReset)
+    {
+        $this->systemReset = $systemReset;
     }
 
 

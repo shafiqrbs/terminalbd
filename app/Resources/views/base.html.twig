@@ -241,6 +241,13 @@
         $( ".date-picker" ).datepicker({
             dateFormat: "yy-mm-dd"
         });
+        $('#datatable').DataTable( {
+            scrollY: "500px",
+            scrollCollapse: true,
+            scrollX: false,
+            paging:false,
+            info: false,
+        } );
         $( ".datePicker" ).datepicker({
             dateFormat: 'dd/mm/yy',
             changeMonth: true,

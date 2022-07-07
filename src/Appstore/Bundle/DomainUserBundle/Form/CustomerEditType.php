@@ -32,6 +32,7 @@ class CustomerEditType extends AbstractType
                         new NotBlank(array('message'=>'Please enter customer name'))
                     ))
             )
+            ->add('referenceId','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Customer old reference no')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Mobile no')))
             ->add('alternativeMobile','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Alternative mobile no')))

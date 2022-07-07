@@ -40,6 +40,7 @@ class CustomerType extends AbstractType
                     ))
             )
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
+            ->add('referenceId','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Customer old reference no')))
             ->add('status')
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>8,'placeholder'=>'Enter customer address')))
             ->add('location', 'entity', array(

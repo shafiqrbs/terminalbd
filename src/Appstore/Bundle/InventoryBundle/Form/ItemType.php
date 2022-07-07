@@ -108,6 +108,7 @@ class ItemType extends AbstractType
                     ));
 
             }
+
             if($this->inventoryConfig->getIsVendor() == 1 ){
 
                 $builder
