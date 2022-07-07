@@ -297,6 +297,14 @@ class MedicineStock
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isDelete", type="boolean" )
+     */
+    private $isDelete = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="printHide", type="boolean",  nullable=true)
      */
     private $printHide;
@@ -1114,6 +1122,22 @@ class MedicineStock
     public function setBonusAdjustment($bonusAdjustment)
     {
         $this->bonusAdjustment = $bonusAdjustment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param bool $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
     }
 
 

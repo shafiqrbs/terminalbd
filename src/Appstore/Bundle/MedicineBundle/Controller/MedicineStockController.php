@@ -497,8 +497,12 @@ class MedicineStockController extends Controller
             );
 
         } catch (ForeignKeyConstraintViolationException $e) {
+            $entity->setStatus(false);
+            $entity->setIsDelete(true);
+            $em->persist($entity);
+            $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'notice',"Data has been relation another Table"
+                'notice',"Data has been deleted successfully"
             );
             $msg = "invalid";
         }catch (\Exception $e) {

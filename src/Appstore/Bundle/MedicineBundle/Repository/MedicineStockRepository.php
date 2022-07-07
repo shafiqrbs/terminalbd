@@ -162,6 +162,7 @@ class MedicineStockRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->andWhere('e.isDelete != 1');
         if($process == 'Current Stock' and $startQuantity == 0 and $endQuantity == 0){
             $qb->andWhere('e.remainingQuantity  > 0');
         }elseif($process == 'Current Stock'  and $startQuantity >= 0 and $endQuantity > 0){
@@ -281,8 +282,7 @@ class MedicineStockRepository extends EntityRepository
 
 		$qb = $this->createQueryBuilder('item');
 		$qb->select('item.brandName as name');
-		$qb->where("item.medicineConfig = :config");
-		$qb->setParameter('config', $config);
+		$qb->where("item.medicineConfig = :config")->setParameter('config', $config);
 		$qb->groupBy("item.brandName");
 		$qb->orderBy("item.brandName",'ASC');
 		$result = $qb->getQuery()->getArrayResult();
@@ -481,7 +481,7 @@ class MedicineStockRepository extends EntityRepository
         $query->groupBy('e.name');
         $query->orderBy('e.slug', 'ASC');
         $query->setMaxResults( '50' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 
@@ -531,7 +531,7 @@ class MedicineStockRepository extends EntityRepository
         $query->groupBy('e.name');
         $query->orderBy('e.slug', 'ASC');
         $query->setMaxResults( '100' );
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
 
     }
 

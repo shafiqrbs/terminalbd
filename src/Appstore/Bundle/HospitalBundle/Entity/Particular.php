@@ -440,7 +440,6 @@ class Particular
      */
     private $isReportContent = false;
 
-
     /**
      * @var boolean
      *

@@ -317,6 +317,7 @@ class MedicineSalesTemporaryController extends Controller
 	    $purchaseSubTotal = floor($total['purchaseSubTotal']);
         $discountPercentLists = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
         $salesItems = $this->renderView('MedicineBundle:Sales:ajaxPosItem.html.twig', array(
+            'config' => $this->getUser()->getGlobalOption()->getMedicineConfig(),
             'salesTemporary'        => $salesTemporary,
             'result'                => $total,
             'discountPercentLists'  => $discountPercentLists

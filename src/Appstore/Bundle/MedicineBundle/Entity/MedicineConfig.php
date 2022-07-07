@@ -274,6 +274,13 @@ class MedicineConfig
      */
     private $openingQuantity = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="systemReset", type="boolean",  nullable=true)
+     */
+    private $systemReset = false;
+
 
     /**
      * @var boolean
@@ -1114,6 +1121,22 @@ class MedicineConfig
     public function setItemSearch($itemSearch)
     {
         $this->itemSearch = $itemSearch;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSystemReset()
+    {
+        return $this->systemReset;
+    }
+
+    /**
+     * @param bool $systemReset
+     */
+    public function setSystemReset($systemReset)
+    {
+        $this->systemReset = $systemReset;
     }
 
 

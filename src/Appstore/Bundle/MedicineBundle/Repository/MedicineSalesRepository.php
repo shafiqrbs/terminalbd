@@ -1096,4 +1096,36 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
 
     }
 
+    public function androidMissingSalesImport(MedicineConfig $conf,MedicineSales $sales , MedicineAndroidProcess $process){
+
+        $em = $this->_em;
+        $items = json_decode($process->getJsonSubItem(),true);
+        if($items) {
+            foreach ($items as $item):
+                if ($sales) {
+                    $salesItem = new MedicineSalesItem();
+                    $salesItem->setAndroidProcess($process);
+                    $salesItem->setMedicineSales($sales);
+                    $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($item['stockId']);
+                    if ($stockId) {
+                        $salesItem->setMedicineStock($stockId);
+                        $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
+                    }
+                    $salesItem->setQuantity($item['quantity']);
+                    if (isset($item['unitPrice']) and $item['unitPrice']) {
+                        $salesItem->setSalesPrice(floatval($item['unitPrice']));
+                    }
+                    $salesItem->setSubTotal($item['subTotal']);
+                    $em->persist($salesItem);
+                    $em->flush();
+                    if ($salesItem->getMedicineStock()) {
+                        $em->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($salesItem->getMedicineStock(), 'sales');
+                    }
+                }
+            endforeach;
+        }
+
+    }
+
+
 }

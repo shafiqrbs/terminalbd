@@ -332,6 +332,14 @@ class Invoice
 
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDelete", type="boolean" )
+     */
+    private $isDelete = false;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=true)
@@ -1556,6 +1564,24 @@ class Invoice
     {
         $this->diseasesProfile = $diseasesProfile;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param bool $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
+    }
+
+
 
 
 }
