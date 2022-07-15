@@ -11,7 +11,7 @@
             <td class="numeric" >
                 {% if salesitem.salesItemSerials is not empty %}
                     {% for serial in salesitem.salesItemSerials %}
-                        {{ serial.serialNo }}
+                        {{ serial.serialNo }}{{ not loop.last ? ',' }}
                     {% endfor %}
                 {% endif %}
             </td>

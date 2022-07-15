@@ -534,7 +534,7 @@ class PurchaseItemRepository extends EntityRepository
             $item = $row['item'];
             $config = $row['config'];
             foreach ($data as $serial){
-                $elem = "INSERT INTO inv_purchase_item_serial(`inventoryConfig_id`,`item_id`,`purchaseItem_id`,barcode,status) VALUES ($config,$item,$id,'$serial',0)";
+                $elem = "INSERT INTO inv_purchase_item_serial(`inventoryConfig_id`,`item_id`,`purchaseItem_id`,barcode,status) VALUES ($config,$item,$id,trim('$serial'),0)";
                 $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
                 $qb1->execute();
             }

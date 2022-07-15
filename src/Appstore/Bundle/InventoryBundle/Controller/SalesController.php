@@ -185,6 +185,7 @@ class SalesController extends Controller
             $data = $this->returnResultData($sales,$msg);
             return new Response(json_encode($data));
         }
+        return new Response(json_encode(array('status'=>'in-valid')));
 
     }
 
@@ -193,7 +194,7 @@ class SalesController extends Controller
         //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
 
         $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
-            $entity
+            'entity' => $entity,
         ));
 
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
