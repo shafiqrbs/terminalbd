@@ -327,7 +327,7 @@
             <div class="grid-item">
                 Created By<br/>
                 {% if(entity.salesBy.profile.webSignaturePath) %}
-                    <span>    <img alt="" src="{{ image(entity.salesBy.profile.webSignaturePath).resize(120,90) }}"></span><br/>
+                    <span><img alt="" src="{{ image(entity.salesBy.profile.webSignaturePath).resize(120,90) }}"></span><br/>
                 {% endif %}
                 <strong> {{ entity.salesBy.profile.name }}</strong><br/>
                 <span> {{ entity.salesBy.profile.designation.name }}</span><br/>

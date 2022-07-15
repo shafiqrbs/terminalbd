@@ -687,18 +687,25 @@ class PurchaseController extends Controller
 
     }
 
-    public function dpGenerate($entity)
+    public function dpGenerate(MedicinePurchaseItem $entity)
     {
         $config = $entity->getMedicinePurchase()->getMedicineConfig();
         //echo $dpPrice = ($config->getTpPercent() + $config->getTpVatPercent());
-        $dpPrice = $config->getTpPercent();
+
+        $dpVat = $config->getTpVatPercent();
+        if($entity->getMedicinePurchase() ->getMedicineVendor() and $entity->getMedicinePurchase() ->getMedicineVendor()->getTpPercent() > 0){
+            $pPrice = $entity->getMedicinePurchase() ->getMedicineVendor()->getTpPercent();
+            $dpPrice = ( $pPrice + $dpVat);
+        }else{
+            $pPrice = $config->getTpPercent();
+            $dpPrice = ($pPrice + $dpVat);
+        }
         // $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
         if($dpPrice > 0){
             $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
             $entity->setTp($dp);
         }
     }
-
     public function invoiceParticularDeleteAction(MedicinePurchase $invoice, MedicinePurchaseItem $particular){
 
         $stock = $particular->getMedicineStock();

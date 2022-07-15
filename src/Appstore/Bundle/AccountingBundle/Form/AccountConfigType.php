@@ -48,6 +48,7 @@ class AccountConfigType extends AbstractType
             ->add('accountClose')
             ->add('salesReceiveSms')
             ->add('purchase')
+            ->add('customPrint')
             ->add('borderColor','text', array('attr'=>array(
                 'class'=>'m-wrap span9 colorpicker-default',
                 'placeholder'=>'')

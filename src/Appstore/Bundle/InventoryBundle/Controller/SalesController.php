@@ -145,41 +145,40 @@ class SalesController extends Controller
 
     public function searchAction(Request $request)
     {
-
+        $purchaseItem = "";
         $em = $this->getDoctrine()->getManager();
         $sales = $request->request->get('sales');
         $barcode = $request->request->get('barcode');
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,$barcode);
-        if($purchaseItem) {
+        $serialItem = $em->getRepository('InventoryBundle:PurchaseItemSerial')->returnPurchaseItemDetails($inventory, $barcode);
+        if(empty($serialItem)){
+            $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,$barcode);
+        }
+        if ($serialItem) {
+           $purchaseItem = $serialItem->getPurchaseItem();
+           $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
+           $itemStock = $purchaseItem->getItemStock();
+           if (!empty($purchaseItem) and $itemStock > 0 and $itemStock >= $checkQuantity) {
+                $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSerialSalesItems($sales, $purchaseItem,$serialItem);
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
+            } else {
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
+            }
+            $data = $this->returnResultData($sales, $msg);
+            return new Response(json_encode($data));
+
+        }elseif($purchaseItem) {
+
             $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
             $itemStock = $purchaseItem->getItemStock();
-
-            $branch = $this->getUser()->getProfile()->getBranches();
-            $branchStockItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem);
-            $msg ='';
-
-            /* Device Detection code desktop or mobile */
-
-            $detect = new MobileDetect();
-            $device = '';
-            if( $detect->isMobile() || $detect->isTablet() ) {
-                $device = 'mobile' ;
-            }
-            if (!empty($branch) and $branchStockItem == 'invalid' ) {
-
-                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-                $msg = '<div class="alert"><strong>Warning!</strong> There is no product in '.$branch->getName().' inventory.</div>';
-
-            }elseif(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
-
+            if(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
                 $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
                 $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
-
             } else {
-
                 $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
             }
@@ -191,7 +190,12 @@ class SalesController extends Controller
 
     public function returnResultData(Sales $entity,$msg=''){
 
-        $salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
+        //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
+
+        $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
+            $entity
+        ));
+
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
@@ -630,9 +634,7 @@ class SalesController extends Controller
                 $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
         }elseif($entity->getProcess() == 'Returned'){
-         //   $this->returnCancelOrder($entity);
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }

@@ -200,7 +200,7 @@
                                             {% if(entity.webPath) %}
                                                 <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.webPath).resize(720,120) }}">
                                             {% else %}
-                                                <img alt="" src="https://via.placeholder.com/150/FF0000/FFFFFF?Text=Header">
+                                                <img alt="" src="https://via.placeholder.com/720x100/FF0000/FFFFFF?Text=Header">
                                             {% endif %}
                                         </div>
                                         <div  class="fileupload-preview fileupload-exists thumbnail"></div>
@@ -291,7 +291,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="weeklyOffDay">Weekly Off Day</label>
+                                <label class="control-label" for="weeklyOffDay">Weekly Present Day</label>
                                 <div class="controls">
                                     {{ form_widget(form.weeklyOffDay) }}
                                     {{ form_errors(form.weeklyOffDay) }}

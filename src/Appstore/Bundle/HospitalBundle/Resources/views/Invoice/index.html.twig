@@ -47,6 +47,25 @@
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid" >
+                                <form action="{{ path('hms_invoice_old_patient_diagnostic') }}" method="post" class="patient-search">
+                                    <div class="row-fluid">
+                                        <div class="span9">
+                                            <input type="text" id="customer" name="customer"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
+                                        </div>
+                                        <div class="span3">
+                                            <div class="controls">
+                                                <div class="input-append span12">
+                                                    <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row-fluid" >
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid" style="margin-bottom: 10px">
                                         <div class="span3">
@@ -132,6 +151,22 @@
                                     </tr>
                                     </thead>
                                 </table>#}
+                            </div>
+                            <div class="row-fluid">
+                                <table class="table table-bordered table-striped table-condensed flip-content ">
+                                    <thead class="flip-content">
+                                    <tr class="head-red">
+                                        <th class="numeric" ><strong>Total Sales Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ salesTransactionOverview.total|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Today Sales Receive Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ salesTransactionOverview.receive|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Due Received Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ previousSalesTransactionOverview.receive|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Total Received Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ (previousSalesTransactionOverview.receive + salesTransactionOverview.receive)|number_format }}</strong></th>
+                                    </tr>
+                                    </thead>
+                                </table>
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 

@@ -187,6 +187,14 @@ class AccountSales
 
 
      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sms_alert", type="boolean" , nullable=true)
+     */
+    private $smsAlert = false;
+
+
+     /**
      * @var float
      *
      * @ORM\Column(name="purchasePrice", type="float" , nullable=true)
@@ -879,6 +887,22 @@ class AccountSales
     public function setEcommerce($ecommerce)
     {
         $this->ecommerce = $ecommerce;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSmsAlert()
+    {
+        return $this->smsAlert;
+    }
+
+    /**
+     * @param bool $smsAlert
+     */
+    public function setSmsAlert($smsAlert)
+    {
+        $this->smsAlert = $smsAlert;
     }
 
 

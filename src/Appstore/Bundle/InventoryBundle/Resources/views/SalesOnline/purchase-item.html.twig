@@ -75,54 +75,7 @@
                                             </thead>
                                             <tbody id="salesItem" >
 
-                                            {% for salesitem in entity.salesItems %}
-                                                <tr id="remove-{{ salesitem.id }}">
-                                                    <td class="numeric" style="width:20px!important;" > {{ loop.index }}</td>
-                                                    <td  class="numeric">
-                                                        {{ salesitem.purchaseItem.barcode }}
-                                                    </td>
-                                                    <td  class="numeric">
-                                                        {{ salesitem.item.name }}
-                                                    </td>
-                                                    {% if entity.inventoryConfig.isAttribute == 1 %}
-                                                        <td class="numeric" >
-
-                                                            {% if salesitem.purchaseItem.serialNo is not empty %}
-                                                                {% set serials = salesitem.serialNo|trim|split(',') %}
-                                                                {% set purchaseItems = salesitem.purchaseItem.serialNo|split(',') %}
-                                                                <select class="m-wrap inputs" name="serialNo" id="serialNo-{{ salesitem.id }}" multiple="multiple" >
-                                                                    <option value="">--IME/Serial No--</option>
-                                                                    {% for serial in  purchaseItems %}
-                                                                        <option {% if serial|trim in serials %} selected="selected" {% endif %} value="{{ serial }}" >{{ serial }}</option>
-                                                                    {% endfor %}
-                                                                </select>
-                                                            {% endif %}
-                                                        </td>
-                                                    {% endif %}
-                                                    <td class=" span1" >
-                                                        <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="quantity inputs td-inline-input" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
-                                                    </td>
-                                                    <td>
-                                                        <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
-                                                        <input class="numeric salesPrice inputs td-inline-input"  rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
-                                                    </td>
-                                                    <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
-                                                    <td>
-                                                        <div class="btn-group">         <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
-                                                            <input class="numeric salesPrice inputs td-inline-input"  rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
-
-                                                            {% if entity.inventoryConfig.isAttribute == 1 and salesitem.purchaseItem.serialNo is not empty %}
-                                                                <a title="Save" id="{{ salesitem.id }}" data-url="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id}) }}" href="javascript:" class="btn blue mini serialSave" ><i class="icon-save"></i></a>
-                                                            {% endif %}
-                                                            <a title="Are you sure went to delete ?" id="{{ salesitem.id }}" rel="{{ path('inventory_salesitem_delete',{'sales':entity.id,'salesItem':salesitem.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
                                             </tbody>
-                                            <tfoot>
-                                            <tr><th class="text-right" {% if entity.inventoryConfig.isAttribute == 1 %} colspan="6" {% else %} colspan="5" {% endif %} >Sub-Total</th><th class="subTotal">{{ entity.subTotal }}</th><td></td></tr>
-                                            </tfoot>
                                         </table>
                                     </div>
 

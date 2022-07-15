@@ -3308,6 +3308,8 @@ class TransactionRepository extends EntityRepository
     public function insertMonthlySalesAccountReceivable(AccountProfit $entity,$data)
     {
         $receivable = round($data['total'] - $data['amount']);
+        echo $receivable;
+        exit;
         $em = $this->_em;
         $transaction = new Transaction();
         $transaction->setProcess("sales");

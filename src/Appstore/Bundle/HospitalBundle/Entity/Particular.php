@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
-use Appstore\Bundle\HospitalBundle\Entity\DiagnosticReport;
+
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Core\UserBundle\Entity\User;
@@ -129,7 +129,6 @@ class Particular
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
      **/
     private  $assignDoctor;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="particulars" )
@@ -478,6 +477,7 @@ class Particular
      */
     protected $signatureFile;
 
+
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -539,8 +539,20 @@ class Particular
     }
 
     public function getDoctor(){
-         $designation = empty($this->designation) ? '' : " (".$this->designation.")";
-        return $this->particularCode.' - '.$this->name.$designation;
+       $designation = empty($this->doctorSignature) ? '' : " (".$this->doctorSignature.")";
+        return $this->name.$designation;
+    }
+
+    public function getVisitDoctor(){
+
+        $weeklyDay = empty($this->weeklyOffDay) ? '' : $this->weeklyOffDay;
+        $days = array();
+        foreach ($weeklyDay as $day){
+            $days[] = $day;
+        }
+        $present =  " [".implode( ', ', $days)."]";
+        $designation = empty($this->doctorSignature) ? '' : " (".$this->doctorSignature.")";
+        return $this->name.$designation.$present;
     }
 
     public function getReportDoctor(){
@@ -1055,13 +1067,14 @@ class Particular
 
         // move takes the target directory and then the
         // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
         $this->getFile()->move(
             $this->getUploadRootDir(),
-            $this->getFile()->getClientOriginalName()
+            $filename
         );
 
         // set the path property to the filename where you've saved the file
-        $this->path = $this->getFile()->getClientOriginalName();
+        $this->path = $filename ;
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
@@ -1679,13 +1692,14 @@ class Particular
 
         // move takes the target directory and then the
         // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getSignatureFile()->getClientOriginalName();
         $this->getSignatureFile()->move(
             $this->getUploadRootDir(),
-            $this->getSignatureFile()->getClientOriginalName()
+            $filename
         );
 
         // set the path property to the filename where you've saved the file
-        $this->signaturePath = $this->getSignatureFile()->getClientOriginalName();
+        $this->signaturePath = $filename;
 
         // clean up the file property as you won't need it anymore
         $this->signatureFile = null;

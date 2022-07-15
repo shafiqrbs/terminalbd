@@ -68,6 +68,11 @@ class PurchaseItem
      **/
     private  $salesItems;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItemSerial", mappedBy="purchaseItem" )
+     **/
+    private  $itemSerials;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoiceItem", mappedBy="purchaseItem" , cascade={"remove"} )
      **/
@@ -706,6 +711,15 @@ class PurchaseItem
     {
         $this->inventoryConfig = $inventoryConfig;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getItemSerials()
+    {
+        return $this->itemSerials;
+    }
+
 
 
 }

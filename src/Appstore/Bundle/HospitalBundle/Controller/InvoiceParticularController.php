@@ -115,7 +115,7 @@ class InvoiceParticularController extends Controller
        
         $barcode = new BarcodeGenerator();
         $barcode->setText($barcodePrint);
-        $barcode->setType(BarcodeGenerator::Code11);
+        $barcode->setType(BarcodeGenerator::Code128);
         $barcode->setScale(1);
         $barcode->setThickness(25);
         $barcode->setFontSize(10);

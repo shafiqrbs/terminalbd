@@ -54,6 +54,7 @@
         'assets/plugins/glyphicons_halflings/css/halflings.css'
         'assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css'
         'assets/plugins/bootstrap-editable/inputs-ext/address/address.css'
+        'assets/plugins/summernote/summernote-lite.min.css'
         'assets/plugins/colorpicker/css/evol.colorpicker.min.css'
         'assets/plugins/jquery-nestable/jquery.nestable.css'
         'assets/plugins/jquery-ui/jquery-ui-1.12.1.min.css'
@@ -197,6 +198,7 @@
 'assets/plugins/jquery-ui/sortable.js'
 'assets/plugins/jquery-checkradios/js/jquery.checkradios.min.js'
 'assets/template/plugin/matchHeight/height-match.js'
+'assets/plugins/summernote/summernote-lite.min.js'
 'assets/module/numeric/jquery.numeric.js'
 'assets/print/js/print.js'
 'assets/scripts/jquery.mjs.nestedSortable.js'
@@ -240,6 +242,12 @@
         $("#schedule").inputmask("mask", {"mask":"dd/mm/yyyy"}); //specifying fn & options
         $( ".date-picker" ).datepicker({
             dateFormat: "yy-mm-dd"
+        });
+        $('.editor').summernote({
+            height: 200,
+        });
+        $('.big-editor').summernote({
+            height: 450,
         });
         $('#datatable').DataTable( {
             scrollY: "500px",

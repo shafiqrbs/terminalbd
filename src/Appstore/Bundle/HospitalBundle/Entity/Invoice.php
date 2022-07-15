@@ -229,6 +229,14 @@ class Invoice
 
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="patientToken", type="integer",  nullable=true)
+     */
+    private $patientToken;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="paymentStatus", type="string", length=50, nullable=true)
@@ -404,6 +412,14 @@ class Invoice
 
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="smsAlert", type="boolean" )
+     */
+    private $smsAlert = false;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="mobile", type="text", nullable=true)
@@ -436,6 +452,20 @@ class Invoice
      * @ORM\Column(name="deliveryDate", type="datetime", nullable=true)
      */
     private $deliveryDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="appointmentDate", type="datetime", nullable=true)
+     */
+    private $appointmentDate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sorting", type="integer", length=10, nullable=true)
+     */
+    private $sorting = 0;
 
     /**
      * @var string
@@ -1581,8 +1611,69 @@ class Invoice
         $this->isDelete = $isDelete;
     }
 
+    /**
+     * @return int
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
 
+    /**
+     * @param int $sorting
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
+    }
 
+    /**
+     * @return \DateTime
+     */
+    public function getAppointmentDate()
+    {
+        return $this->appointmentDate;
+    }
+
+    /**
+     * @param \DateTime $appointmentDate
+     */
+    public function setAppointmentDate($appointmentDate)
+    {
+        $this->appointmentDate = $appointmentDate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPatientToken()
+    {
+        return $this->patientToken;
+    }
+
+    /**
+     * @param int $patientToken
+     */
+    public function setPatientToken($patientToken)
+    {
+        $this->patientToken = $patientToken;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSmsAlert()
+    {
+        return $this->smsAlert;
+    }
+
+    /**
+     * @param bool $smsAlert
+     */
+    public function setSmsAlert($smsAlert)
+    {
+        $this->smsAlert = $smsAlert;
+    }
 
 }
 

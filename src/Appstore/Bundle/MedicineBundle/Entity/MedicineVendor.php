@@ -132,6 +132,14 @@ class MedicineVendor
      */
     private $status=true;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="tpPercent", type="float", nullable=true)
+     */
+    private $tpPercent = 0;
+
+
 
     /**
      * Get id
@@ -390,6 +398,22 @@ class MedicineVendor
 	public function getMedicinePrepurchase() {
 		return $this->medicinePrepurchase;
 	}
+
+    /**
+     * @return float
+     */
+    public function getTpPercent()
+    {
+        return $this->tpPercent;
+    }
+
+    /**
+     * @param float $tpPercent
+     */
+    public function setTpPercent($tpPercent)
+    {
+        $this->tpPercent = $tpPercent;
+    }
 
 
 }

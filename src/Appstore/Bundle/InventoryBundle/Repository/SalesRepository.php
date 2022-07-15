@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
@@ -804,6 +805,8 @@ class SalesRepository extends EntityRepository
     public function insertPosSales(GlobalOption $option,Pos $pos,$cart)
     {
         $em = $this->_em;
+        /* @var $config InventoryConfig */
+        $config = $option->getInventoryConfig();
         $sales = new Sales();
         $sales->setInventoryConfig($option->getInventoryConfig());
         $sales->setDeviceSalesId($pos->getInvoice());
@@ -847,7 +850,11 @@ class SalesRepository extends EntityRepository
         $sales->setPaymentStatus($pos->getPaymentStatus());
         $em->persist($sales);
         $em->flush();
-        $this->insertPosSalesItem($sales,$cart);
+        if($config->getSalesMode() == 'purchase-item'){
+            $this->insertPosPurchaseItem($sales,$cart);
+        }else{
+            $this->insertPosSalesItem($sales,$cart);
+        }
         $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($sales);
         return $sales->getId();
 
@@ -879,6 +886,37 @@ class SalesRepository extends EntityRepository
         }
         $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
         $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales->getId());
+    }
+
+    public function insertPosPurchaseItem($sales,$cart)
+    {
+        $em = $this->_em;
+        if($cart->contents()){
+            foreach ($cart->contents() as $item):
+
+                $salesItem = new SalesItem();
+                $salesItem->setSales($sales);
+                $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->find($item['purchaseItem']);
+                if ($purchaseItem) {
+                    /* @var PurchaseItem $purchaseItem */
+                    $salesItem->setItem($purchaseItem->getItem());
+                    $salesItem->setPurchaseItem($purchaseItem);
+                    $salesItem->setPurchasePrice($purchaseItem->getItem()->getAvgPurchasePrice());
+                }
+                $salesItem->setQuantity($item['quantity']);
+                if (isset($item['price']) and $item['price']) {
+                    $salesItem->setSalesPrice(floatval($item['price']));
+                }
+                $salesItem->setSubTotal($salesItem->getQuantity() * $salesItem->getSalesPrice());
+                $em->persist($salesItem);
+                $em->flush();
+
+            endforeach;
+
+        }
+        $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
+        $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales->getId());
+
     }
 
 

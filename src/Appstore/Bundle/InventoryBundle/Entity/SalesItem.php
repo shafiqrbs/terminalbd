@@ -40,6 +40,11 @@ class SalesItem
      **/
     private  $purchaseItem;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItemSerial", mappedBy="salesItem" )
+     **/
+    private  $salesItemSerials;
+
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturnItem", mappedBy="salesItem" )
      **/
@@ -448,6 +453,16 @@ class SalesItem
     {
         $this->estimatePrice = $estimatePrice;
     }
+
+    /**
+     * @return SalesItemSerial
+     */
+    public function getSalesItemSerials()
+    {
+        return $this->salesItemSerials;
+    }
+
+
 
 
 }

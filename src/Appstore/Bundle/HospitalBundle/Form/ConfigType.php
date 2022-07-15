@@ -39,6 +39,7 @@ class ConfigType extends AbstractType
                     'expanded'  => true,
                     'empty_data'  => null,
             ))
+            ->add('prescriptionBuilder')
             ->add('commissionAutoApproved')
             ->add('customPrint')
             ->add('invoicePrintLogo')
@@ -47,8 +48,14 @@ class ConfigType extends AbstractType
             ->add('isPrintReportHeader')
             ->add('isInventory')
             ->add('isPrintFooter')
+            ->add('headerFile')
+            ->add('footerFile')
+            ->add('appointmentPrescription')
             ->add('printInstruction')
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','rows'=>5)))
+            ->add('messageAdmission','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8)))
+            ->add('messageDiagnostic','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8)))
+            ->add('messageVisit','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8)))
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
@@ -74,7 +81,7 @@ class ConfigType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_particular';
+        return 'config';
     }
 
     /**

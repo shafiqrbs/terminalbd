@@ -51,7 +51,6 @@ class PurchaseSimpleController extends Controller
         $entities = $em->getRepository('InventoryBundle:Purchase')->findWithSearch($inventory,$data);
         $purchaseOverview = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->purchaseOverview($inventory,$data);
         $pagination = $this->paginate($entities);
-
         return $this->render('InventoryBundle:PurchaseSimple:index.html.twig', array(
             'entities' => $pagination,
             'purchaseOverview' => $purchaseOverview,
@@ -212,6 +211,7 @@ class PurchaseSimpleController extends Controller
         $em->persist($purchase);
         $em->flush();
         $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
+        $em->getRepository('InventoryBundle:PurchaseItemSerial')->insertPurchaseItemSerial($purchase);
         $em->getRepository('InventoryBundle:StockItem')->insertPurchaseStockItem($purchase);
         $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($purchase);
         if($purchase->getAsInvestment() == 1){
@@ -383,9 +383,10 @@ class PurchaseSimpleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all()['purchaseitem'];
         $item = $data['item'];
-        $serialNo = $request->request->get('serialNo');
+        $serialNo = $data['serialNo'];
         $stock = $this->getDoctrine()->getRepository("InventoryBundle:Item")->find($item);
         $exist = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('purchase'=>$purchase,'item'=>$item));
+
         if(empty($exist)){
             $purchaseItem = new PurchaseItem();
             $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
@@ -619,6 +620,13 @@ class PurchaseSimpleController extends Controller
         ));
         $em->getRepository('InventoryBundle:Reverse')->insertPurchase($purchase, $template);
         return $this->redirect($this->generateUrl('inventory_purchasesimple_edit',array('id' => $purchase->getId())));
+    }
+
+    public function processSerialNoAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $this->getDoctrine()->getRepository(PurchaseItem::class)->processSerialNo($config);
+        exit;
     }
 
 

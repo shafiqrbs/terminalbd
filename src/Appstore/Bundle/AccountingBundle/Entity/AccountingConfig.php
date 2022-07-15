@@ -149,6 +149,13 @@ class AccountingConfig
      */
     private $salesReceiveSms = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="customPrint", type="boolean",  nullable=true)
+     */
+    private $customPrint = false;
+
     /**
      * @var string
      *
@@ -460,7 +467,21 @@ class AccountingConfig
         $this->businessMode = $businessMode;
     }
 
+    /**
+     * @return bool
+     */
+    public function isCustomPrint()
+    {
+        return $this->customPrint;
+    }
 
+    /**
+     * @param bool $customPrint
+     */
+    public function setCustomPrint($customPrint)
+    {
+        $this->customPrint = $customPrint;
+    }
 
 
 }

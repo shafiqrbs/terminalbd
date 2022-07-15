@@ -14,15 +14,29 @@ $(document).on("click", "#submitBtn", function() {
     });
 });
 
+$(".number , .amount, .numeric").inputFilter(function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); });
+
+
 $(document).on('keyup', '.returnQuantity , .returnPrice', function() {
 
+    var sum = 0;
     var returnSubTotal     = parseFloat($('#returnTotal').val()  != '' ? $('#returnTotal').val() : 0 );
     var id = $(this).attr('data-id');
     var quantity = parseFloat($('#quantity-'+id).val());
+    var maxQuantity = parseFloat($('#quantity-'+id).attr('max'));
     var price = parseFloat($('#price-'+id).val());
+    if (maxQuantity < quantity) {
+        alert("Invalid quantity, less then equal to "+maxQuantity);
+        $('#quantity-'+id).val(maxQuantity).focus();
+        return false;
+    }
     var subTotal  = (quantity * price);
     $("#subTotal-"+id).html(subTotal);
-    var total = (returnSubTotal + subTotal)
+    $(".itemSubtotal").each(function(){
+        var total = ($(this).html() === "" || $(this).html() === "NaN") ? 0 : $(this).html();
+        sum += +parseFloat(total);
+    });
     $('.returnSubTotal').html(total);
     $('.returnSubTotal').val(total);
 

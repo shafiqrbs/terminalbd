@@ -15,6 +15,16 @@ $(document).on("click", ".approve", function() {
     });
 });
 
+document.onkeyup = function(e) {
+    var key = e.which || e.charCode || e.keyCode
+    if(e.ctrlKey && key === 87) {
+        $('.select2StockMedicinePurchase').select2('open');
+    } else if (e.ctrlKey && key === 83) {
+        $('.confirmSubmit').trigger('click');
+    }
+};
+
+
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();

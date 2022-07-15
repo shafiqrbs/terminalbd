@@ -15,6 +15,14 @@ hms_invoice_new:
     path:     /new
     defaults: { _controller: "HospitalBundle:Invoice:new" }
 
+
+hms_invoice_old_patient_diagnostic:
+    path:     /old-patient-diagnostic
+    defaults: { _controller: "HospitalBundle:Invoice:oldPatientDiagnostic" }
+    methods:  POST
+    options:
+            expose: true
+
 hms_invoice_admission:
     path:     /admission-new
     defaults: { _controller: "HospitalBundle:Invoice:new" }

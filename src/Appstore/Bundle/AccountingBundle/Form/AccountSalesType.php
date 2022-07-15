@@ -5,6 +5,7 @@ namespace Appstore\Bundle\AccountingBundle\Form;
 use Appstore\Bundle\InventoryBundle\Entity\globalOption;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -28,7 +29,7 @@ class AccountSalesType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric removeZero','placeholder'=>'Received amount'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span6 numeric removeZero','placeholder'=>'Received amount'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add payment amount'))
                 )))
@@ -46,7 +47,8 @@ class AccountSalesType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span10 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true)))
+            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span9 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true)))
+            ->add('smsAlert',CheckboxType::class, array('attr'=>array('class'=>'')))
             ->add('accountBank', 'entity', array(
                'required'    => true,
                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',

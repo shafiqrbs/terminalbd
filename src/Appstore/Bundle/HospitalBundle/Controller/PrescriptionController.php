@@ -5,21 +5,12 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\DoctorAppointmentType;
-use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmissionType;
-use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
-use Appstore\Bundle\HospitalBundle\Form\NewPatientAdmissionType;
-use Appstore\Bundle\HospitalBundle\Form\PatientAdmissionType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Mike42\Escpos\Printer;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -45,6 +36,10 @@ class PrescriptionController extends Controller
         return $pagination;
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
+     */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -53,14 +48,21 @@ class PrescriptionController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'visit' , $data);
         $pagination = $this->paginate($entities);
-        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'visit');
+        $diseasesProfile = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDiseasesProfile($hospital,'visit');
         return $this->render('HospitalBundle:Prescription:index.html.twig', array(
+            'hospital'                          => $hospital,
             'entities'                          => $pagination,
             'assignDoctors'                     => $assignDoctors,
+            'diseasesProfiles'                     => $diseasesProfile,
             'searchForm'                        => $data,
         ));
 
     }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
+     */
 
     public function newAction()
     {
@@ -239,7 +241,7 @@ class PrescriptionController extends Controller
     {
         $barcode = new BarcodeGenerator();
         $barcode->setText($invoice);
-        $barcode->setType(BarcodeGenerator::Code39Extended);
+        $barcode->setType(BarcodeGenerator::Code128);
         $barcode->setScale(1);
         $barcode->setThickness(25);
         $barcode->setFontSize(8);
@@ -247,6 +249,28 @@ class PrescriptionController extends Controller
         $data = '';
         $data .= '<img src="data:image/png;base64,'.$code .'" />';
         return $data;
+    }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        /* @var $entity Invoice */
+        $entity = $em->getRepository(Invoice::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        if($data['name'] == 'patientToken'){
+            $entity->setPatientToken((float)$data['value']);
+            $em->flush();
+        }
+        if($data['name'] == 'appointmentDate' and !empty($data['value'])){
+            $expirationEndDate = $data['value'];
+            $expirationEndDate = (new \DateTime($expirationEndDate));
+            $entity->setAppointmentDate($expirationEndDate);
+            $em->flush();
+        }
+        exit;
     }
 
     public function deleteAction(Request $request)
@@ -279,6 +303,34 @@ class PrescriptionController extends Controller
 
         ));
     }
+
+
+    public function doctorPrescriptionPrintAction(Request $request,$id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $this->getDoctrine()->getRepository("HospitalBundle:Invoice")->findOneBy(array('hospitalConfig'=>$hospital,'id'=>$id));
+        if (!$entity) {
+           throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+
+        if($hospital->isCustomPrint() == 1){
+            $template = "Print/{$hospital->getGlobalOption()->getId()}:prescription";
+        }else{
+            $template = "Print:prescription";
+        }
+        return $this->render("HospitalBundle:{$template}.html.twig", array(
+            'entity'                => $entity,
+            'config'                => $entity->getHospitalConfig(),
+            'global'                => $entity->getHospitalConfig()->getGlobalOption(),
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+
+        ));
+    }
+
     public function generateAction($id)
     {
         $em = $this->getDoctrine()->getManager();

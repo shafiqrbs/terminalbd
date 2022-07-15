@@ -64,6 +64,13 @@ class Item
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItemSerial", mappedBy="item" , cascade={"remove"} )
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $itemSerials;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="item" , cascade={"remove"} )
      */
     protected $stockItems;
@@ -1303,6 +1310,16 @@ class Item
     {
         $this->openingQuantity = $openingQuantity;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getItemSerials()
+    {
+        return $this->itemSerials;
+    }
+
+
 
 
 }

@@ -31,14 +31,25 @@ hms_prescription_particular_search:
     options:
         expose: true
 
+hms_prescription_inline_update:
+    path:     /inline-update
+    defaults: { _controller: "HospitalBundle:Prescription:inlineUpdate" }
+    methods:  [POST, PUT]
+    options:
+        expose: true
+
 hms_prescription_update:
     path:     /{id}/update
     defaults: { _controller: "HospitalBundle:Prescription:update" }
     methods:  [POST, PUT]
 
 hms_prescription_print:
-    path:     /{id}/print
+    path:     /{id}/invoice-print
     defaults: { _controller: "HospitalBundle:Prescription:print" }
+
+hms_prescription_doctor_print:
+    path:     /{id}/doctor-print
+    defaults: { _controller: "HospitalBundle:Prescription:doctorPrescriptionPrint" }
 
 hms_prescription_delete:
     path:     /delete

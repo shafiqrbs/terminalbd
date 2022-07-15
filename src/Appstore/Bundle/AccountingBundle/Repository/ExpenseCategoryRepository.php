@@ -2,6 +2,7 @@
 
 namespace  Appstore\Bundle\AccountingBundle\Repository;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Util\Debug;
@@ -219,6 +220,22 @@ class ExpenseCategoryRepository extends MaterializedPathRepository
 
         return $data;
 
+    }
+
+    public function generateCommission(GlobalOption $option, AccountHead $head)
+    {
+        $em = $this->_em;
+        $find = $this->findOneBy(array('globalOption'=>$option,'accountHead'=>$head,'name'=>'Commission'));
+        if(empty($find)){
+            $entity = new ExpenseCategory();
+            $entity->setGlobalOption($option);
+            $entity->setAccountHead($head);
+            $entity->setName('Commission');
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }
+        return $find;
     }
 
 

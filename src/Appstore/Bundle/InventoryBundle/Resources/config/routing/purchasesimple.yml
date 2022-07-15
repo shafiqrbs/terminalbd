@@ -2,6 +2,10 @@ inventory_purchasesimple:
     path:     /
     defaults: { _controller: "InventoryBundle:PurchaseSimple:index" }
 
+inventory_purchasesimple_serial:
+    path:     /serial
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:processSerialNo" }
+
 inventory_purchasesimple_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:PurchaseSimple:show" }

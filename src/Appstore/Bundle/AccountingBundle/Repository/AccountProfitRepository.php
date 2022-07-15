@@ -90,10 +90,10 @@ class AccountProfitRepository extends EntityRepository
             endforeach;
         }
 
-
         if($journalAccountSales){
 
             foreach ($journalAccountSales as $row):
+
                 if(in_array($row['processHead'],array('Debit','Outstanding','Opening'))){
                     $em->getRepository('AccountingBundle:Transaction')->insertSalesMonthlyOpeningTransaction($profit,$row);
                 }elseif($row['amount'] > 0 and $row['processHead'] == 'Credit' ){
@@ -125,6 +125,7 @@ class AccountProfitRepository extends EntityRepository
         }
 
         $em->getRepository('AccountingBundle:Transaction')->insertMonthlySalesAccountReceivable($profit,$monthlySalesAccountReceivable);
+
         $salesReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales');
         $salesAdjustmentReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-adjustment');
         $salesPurchaserReconcialtion = $this->monthlyProfitReconcialtionProcess($profit, 'sales-purchase');
@@ -135,7 +136,7 @@ class AccountProfitRepository extends EntityRepository
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($profit->getGlobalOption(), $accountHeads = array(37,23),$date);
         $operatingRevenue = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncomeLoss($profit->getGlobalOption(), $accountHeads = array(20),$date);
 
-        $data =  array('sales' => $salesReconcialtion['debit'] , 'salesAdjustment' => $salesAdjustmentReconcialtion['debit'] ,'purchaseAdjustment' => $salesAdjustmentReconcialtion['credit'] ,'purchase' => $salesPurchaserReconcialtion['credit'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
+        $data =  array('sales' => $monthlySalesAccountReceivable['total'] , 'salesAdjustment' => $salesAdjustmentReconcialtion['debit'] ,'purchaseAdjustment' => $salesAdjustmentReconcialtion['credit'] ,'purchase' => $salesPurchaserReconcialtion['credit'], 'operatingRevenue' => $operatingRevenue['amount'], 'expenditure' => $expenditures['amount']);
         return $data;
 
     }
@@ -196,7 +197,18 @@ class AccountProfitRepository extends EntityRepository
         $stmt->execute();
         $result =  $stmt->fetch();
         return $result;
+
+       /* $option =  $user->getGlobalOption()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.totalAmount) as total , sum(e.purchasePrice) as purchasePrice, sum(e.vat) as vat');
+        $qb->where('e.globalOption = :option')->setParameter('option', $option);
+        $qb->andWhere('e.processType = :type')->setParameter('type', 'Sales');
+        $qb->andWhere('e.process = :process')->setParameter('process', 'approved');
+        $this->handleSearchBetween($qb,$data);
+        return $qb->getQuery()->getOneOrNullResult();*/
     }
+
+
 
     private function monthlySalesAdjustmentJournal(AccountProfit $profit,$data)
     {

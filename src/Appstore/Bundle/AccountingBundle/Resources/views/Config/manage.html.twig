@@ -80,6 +80,17 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
+                                            <label class="control-label " for="capitalInvestor">Business Mode</label>
+                                            <div class="control">
+                                                {{ form_widget(form.businessMode) }}
+                                                {{ form_errors(form.businessMode) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
                                             <label class="control-label " for="capitalInvestor">Sales Receive Sms</label>
                                             <div class="control">
                                                 {{ form_widget(form.salesReceiveSms) }}
@@ -104,6 +115,11 @@
                         <div class="clearfix">&nbsp;</div>
                         <div class="row-fluid">
                             <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        {{ form_widget(form.customPrint) }} Custom Print
+                                    </div>
+                                </div>
                                 <div class="row-fluid">
                                     <div class="span12">
                                         {{ form_widget(form.isPrintHeader) }} Print Header

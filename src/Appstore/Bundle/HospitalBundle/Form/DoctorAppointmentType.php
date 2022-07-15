@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -48,10 +50,17 @@ class DoctorAppointmentType extends AbstractType
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
-              ->add('assignDoctor', 'entity', array(
+            ->add('smsAlert',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
+            ->add('appointmentDate', DateType::class, array(
+                'widget' => 'single_text',
+                'html5' => true,
+                'required' => true,
+                'attr' => array('class' => 'm-wrap span12', 'min' => date('Y-m-d'),'placeholder'=>"Expected Date",'data-trigger' => "focus"),
+            ))
+            ->add('assignDoctor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'doctor',
+                'property' => 'visitDoctor',
                 'empty_value' => '---Select Assign Doctor---',
                 'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -62,6 +71,7 @@ class DoctorAppointmentType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ))
+
             ->add('diseasesProfile', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',

@@ -4,6 +4,8 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * HospitalConfig
@@ -138,6 +140,13 @@ class HospitalConfig
      */
     private $isInventory = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="appointmentPrescription", type="boolean",  nullable = true)
+     */
+    private $appointmentPrescription = false;
+
     /**
      * @var boolean
      *
@@ -239,27 +248,6 @@ class HospitalConfig
      */
     private $isPrintReportHeader = true;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="barcodeColor", type="boolean" ,  nullable=true)
-     */
-    private $barcodeColor;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="barcodeSize", type="boolean",  nullable=true)
-     */
-    private $barcodeSize;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="barcodeText", type="string", length=255,nullable = true)
-     */
-    private $barcodeText;
 
     /**
      * @var string
@@ -285,37 +273,34 @@ class HospitalConfig
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="text", length=10,nullable = true)
+     * @ORM\Column(name="address", type="text",nullable = true)
      */
     private $address;
 
-    /**
-     * @var smallint
-     *
-     * @ORM\Column(name="barcodeWidth", type="smallint", nullable = true)
-     */
-    private $barcodeWidth = 140;
 
     /**
-     * @var smallint
+     * @var string
      *
-     * @ORM\Column(name="barcodeMargin", type="smallint", nullable = true)
+     * @ORM\Column(name="messageDiagnostic", type="text",nullable = true)
      */
-    private $barcodeMargin = 0;
+    private $messageDiagnostic;
 
-    /**
-     * @var smallint
-     *
-     * @ORM\Column(name="barcodeBorder", type="smallint", nullable = true)
-     */
-    private $barcodeBorder = 0;
 
-    /**
-     * @var smallint
+     /**
+     * @var string
      *
-     * @ORM\Column(name="barcodePadding", type="smallint", nullable = true)
+     * @ORM\Column(name="messageAdmission", type="text",nullable = true)
      */
-    private $barcodePadding = 0;
+    private $messageAdmission;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="messageVisit", type="text",nullable = true)
+     */
+    private $messageVisit;
+
 
     /**
      * @var smallint
@@ -324,12 +309,6 @@ class HospitalConfig
      */
     private $printLeftMargin = 0;
 
-    /**
-     * @var smallint
-     *
-     * @ORM\Column(name="barcodeHeight", type="smallint", nullable = true)
-     */
-    private $barcodeHeight = 80;
 
     /**
      * @var integer
@@ -346,26 +325,13 @@ class HospitalConfig
     private $reportHeight = 0;
 
 
-    /**
-     * @var smallint
-     *
-     * @ORM\Column(name="barcodeThickness", type="smallint", nullable = true)
-     */
-    private $barcodeThickness = 30;
 
     /**
-     * @var smallint
+     * @var boolean
      *
-     * @ORM\Column(name="barcodeFontSize", type="smallint", nullable = true)
+     * @ORM\Column(name="prescriptionBuilder", type="boolean",  nullable=true)
      */
-    private $barcodeFontSize = 8;
-
-    /**
-     * @var smallint
-     *
-     * @ORM\Column(name="barcodeScale", type="smallint", nullable = true)
-     */
-    private $barcodeScale = 1;
+    private $prescriptionBuilder = false;
 
     /**
      * @var boolean
@@ -380,7 +346,32 @@ class HospitalConfig
      * @ORM\Column(name="printInstruction", type="boolean",  nullable=true)
      */
     private $printInstruction = true;
+    
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $headerPath;
+
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $headerFile;
+    
+
+   /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $footerPath;
+
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $footerFile;
+
+    
 
     /**
      * Get id
@@ -424,77 +415,6 @@ class HospitalConfig
         return $this->referredDoctors;
     }
 
-    /**
-     * @return Invoice
-     */
-    public function getInvoices()
-    {
-        return $this->invoices;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeScale()
-    {
-        return $this->barcodeScale;
-    }
-
-    /**
-     * @param smallint $barcodeScale
-     */
-    public function setBarcodeScale($barcodeScale)
-    {
-        $this->barcodeScale = $barcodeScale;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeFontSize()
-    {
-        return $this->barcodeFontSize;
-    }
-
-    /**
-     * @param smallint $barcodeFontSize
-     */
-    public function setBarcodeFontSize($barcodeFontSize)
-    {
-        $this->barcodeFontSize = $barcodeFontSize;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeThickness()
-    {
-        return $this->barcodeThickness;
-    }
-
-    /**
-     * @param smallint $barcodeThickness
-     */
-    public function setBarcodeThickness($barcodeThickness)
-    {
-        $this->barcodeThickness = $barcodeThickness;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeHeight()
-    {
-        return $this->barcodeHeight;
-    }
-
-    /**
-     * @param smallint $barcodeHeight
-     */
-    public function setBarcodeHeight($barcodeHeight)
-    {
-        $this->barcodeHeight = $barcodeHeight;
-    }
 
     /**
      * @return smallint
@@ -512,133 +432,6 @@ class HospitalConfig
         $this->printLeftMargin = $printLeftMargin;
     }
 
-    /**
-     * @return smallint
-     */
-    public function getBarcodePadding()
-    {
-        return $this->barcodePadding;
-    }
-
-    /**
-     * @param smallint $barcodePadding
-     */
-    public function setBarcodePadding($barcodePadding)
-    {
-        $this->barcodePadding = $barcodePadding;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeBorder()
-    {
-        return $this->barcodeBorder;
-    }
-
-    /**
-     * @param smallint $barcodeBorder
-     */
-    public function setBarcodeBorder($barcodeBorder)
-    {
-        $this->barcodeBorder = $barcodeBorder;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeMargin()
-    {
-        return $this->barcodeMargin;
-    }
-
-    /**
-     * @param smallint $barcodeMargin
-     */
-    public function setBarcodeMargin($barcodeMargin)
-    {
-        $this->barcodeMargin = $barcodeMargin;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeWidth()
-    {
-        return $this->barcodeWidth;
-    }
-
-    /**
-     * @param smallint $barcodeWidth
-     */
-    public function setBarcodeWidth($barcodeWidth)
-    {
-        $this->barcodeWidth = $barcodeWidth;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBarcodeText()
-    {
-        return $this->barcodeText;
-    }
-
-    /**
-     * @param string $barcodeText
-     */
-    public function setBarcodeText($barcodeText)
-    {
-        $this->barcodeText = $barcodeText;
-    }
-
-    /**
-     * @return smallint
-     */
-    public function getBarcodeBrandVendor()
-    {
-        return $this->barcodeBrandVendor;
-    }
-
-    /**
-     * @param smallint $barcodeBrandVendor
-     */
-    public function setBarcodeBrandVendor($barcodeBrandVendor)
-    {
-        $this->barcodeBrandVendor = $barcodeBrandVendor;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBarcodeSize()
-    {
-        return $this->barcodeSize;
-    }
-
-    /**
-     * @param bool $barcodeSize
-     */
-    public function setBarcodeSize($barcodeSize)
-    {
-        $this->barcodeSize = $barcodeSize;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBarcodeColor()
-    {
-        return $this->barcodeColor;
-    }
-
-    /**
-     * @param bool $barcodeColor
-     */
-    public function setBarcodeColor($barcodeColor)
-    {
-        $this->barcodeColor = $barcodeColor;
-    }
 
     /**
      * @return bool
@@ -1152,22 +945,6 @@ class HospitalConfig
         $this->isPrintReportHeader = $isPrintReportHeader;
     }
 
-    /**
-     * @return bool
-     */
-    public function isInventory()
-    {
-        return $this->isInventory;
-    }
-
-    /**
-     * @param bool $isPrintReportHeader
-     */
-    public function setisInventory(bool $isInventory)
-    {
-        $this->isInventory = $isInventory;
-    }
-
 
 
     /**
@@ -1201,6 +978,287 @@ class HospitalConfig
     {
         $this->commissionAutoApproved = $commissionAutoApproved;
     }
+
+    /**
+     * @return string
+     */
+    public function getMessageDiagnostic()
+    {
+        return $this->messageDiagnostic;
+    }
+
+    /**
+     * @param string $messageDiagnostic
+     */
+    public function setMessageDiagnostic($messageDiagnostic)
+    {
+        $this->messageDiagnostic = $messageDiagnostic;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessageAdmission()
+    {
+        return $this->messageAdmission;
+    }
+
+    /**
+     * @param string $messageAdmission
+     */
+    public function setMessageAdmission($messageAdmission)
+    {
+        $this->messageAdmission = $messageAdmission;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessageVisit()
+    {
+        return $this->messageVisit;
+    }
+
+    /**
+     * @param string $messageVisit
+     */
+    public function setMessageVisit($messageVisit)
+    {
+        $this->messageVisit = $messageVisit;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInventory()
+    {
+        return $this->isInventory;
+    }
+
+    /**
+     * @param bool $isInventory
+     */
+    public function setIsInventory($isInventory)
+    {
+        $this->isInventory = $isInventory;
+    }
+
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/domain/'.$this->getGlobalOption()->getId().'/hms/';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHeaderPath()
+    {
+        return $this->headerPath;
+    }
+
+    /**
+     * @param mixed $HeaderPath
+     */
+    public function setHeaderPath($headerPath)
+    {
+        $this->headerPath = $headerPath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHeaderFile()
+    {
+        return $this->headerFile;
+    }
+
+    /**
+     * @param mixed $headerFile
+     */
+    public function setHeaderFile(UploadedFile $headerFile = null)
+    {
+        $this->headerFile = $headerFile;
+    }
+
+
+
+    public function getAbsoluteHeaderPath()
+    {
+        return null === $this->headerPath
+            ? null
+            : $this->getUploadRootDir().'/'.$this->headerPath;
+    }
+
+    public function getWebHeaderPath()
+    {
+        return null === $this->headerPath
+            ? null
+            : $this->getUploadDir().'/'.$this->headerPath;
+    }
+
+
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeHeaderUpload()
+    {
+        if ($file = $this->getAbsoluteHeaderPath()) {
+            unlink($file);
+        }
+    }
+
+    public function headerUpload()
+    {
+
+        // the file property can be empty if the field is not required
+        if (null === $this->getHeaderFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getHeaderFile()->getClientOriginalName();
+
+        $this->getHeaderFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->headerPath = $filename;
+        // clean up the file property as you won't need it anymore
+        $this->headerFile = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFooterPath()
+    {
+        return $this->footerPath;
+    }
+
+    /**
+     * @param mixed $footerPath
+     */
+    public function setFooterPath($footerPath)
+    {
+        $this->footerPath = $footerPath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFooterFile()
+    {
+        return $this->footerFile;
+    }
+
+    /**
+     * @param mixed $footerFile
+     */
+    public function setFooterFile(UploadedFile $footerFile= null)
+    {
+        $this->footerFile = $footerFile;
+    }
+
+
+
+    public function getAbsoluteFooterPath()
+    {
+        return null === $this->footerPath
+            ? null
+            : $this->getUploadRootDir().'/'.$this->footerPath;
+    }
+
+    public function getWebFooterPath()
+    {
+        return null === $this->footerPath
+            ? null
+            : $this->getUploadDir().'/'.$this->footerPath;
+    }
+
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeFooterUpload()
+    {
+        if ($file = $this->getAbsoluteFooterPath()) {
+            unlink($file);
+        }
+    }
+
+    public function footerUpload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFooterFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFooterFile()->getClientOriginalName();
+        $this->getFooterFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->footerPath = $filename;
+
+        // clean up the file property as you won't need it anymore
+        $this->footerFile = null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAppointmentPrescription()
+    {
+        return $this->appointmentPrescription;
+    }
+
+    /**
+     * @param bool $appointmentPrescription
+     */
+    public function setAppointmentPrescription($appointmentPrescription)
+    {
+        $this->appointmentPrescription = $appointmentPrescription;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function isPrescriptionBuilder()
+    {
+        return $this->prescriptionBuilder;
+    }
+
+    /**
+     * @param bool $prescriptionBuilder
+     */
+    public function setPrescriptionBuilder($prescriptionBuilder)
+    {
+        $this->prescriptionBuilder = $prescriptionBuilder;
+    }
+
+
 
 
 }

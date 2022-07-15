@@ -230,7 +230,7 @@ class DoctorInvoiceController extends Controller
         } else {
             return new Response('success');
         }
-        exit;
+
 
     }
 
@@ -248,7 +248,7 @@ class DoctorInvoiceController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
+
 
     }
 
@@ -262,7 +262,7 @@ class DoctorInvoiceController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
-        exit;
+
     }
 
 

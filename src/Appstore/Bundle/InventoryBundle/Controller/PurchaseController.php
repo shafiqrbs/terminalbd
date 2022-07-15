@@ -45,7 +45,6 @@ class PurchaseController extends Controller
         $entities = $em->getRepository('InventoryBundle:Purchase')->findWithSearch($inventory,$data);
         $purchaseOverview = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->purchaseOverview($inventory,$data);
         $pagination = $this->paginate($entities);
-
         return $this->render('InventoryBundle:Purchase:index.html.twig', array(
             'entities' => $pagination,
             'purchaseOverview' => $purchaseOverview,
@@ -559,6 +558,13 @@ class PurchaseController extends Controller
          * */
 
 
+    }
+
+    public function updateSerialNo()
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $this->getDoctrine()->getRepository(PurchaseItem::class)->processSerialNo($config);
+        exit;
     }
 
 

@@ -115,7 +115,7 @@
 
                         {% for key, serviceDetails in invoiceDetails %}
                             {% if key != 'Pathology' %}
-                                <tr><td colspan="3" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
+                                <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
                             {% endif %}
                             {% set colSpan = serviceDetails.hasQuantity? 1 : 2 %}
                             {% for item in serviceDetails.items %}

@@ -220,7 +220,7 @@
                                                         {% endfor %}
                                                     </select>
                                                 </td>
-                                                <th class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</th>
+                                                <th class="itemSubtotal" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</th>
                                                 <td class="">
                                                     <div class="btn-group">
                                                     <a data-id="{{ item.id }}" title="" data-url="{{ path('medicine_sales_temporary_item_update') }}" href="javascript:" class="btn blue mini itemUpdate" ><i class="icon-save"></i></a>

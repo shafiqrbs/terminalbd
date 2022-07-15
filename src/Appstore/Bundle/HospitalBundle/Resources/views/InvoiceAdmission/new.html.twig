@@ -47,27 +47,29 @@
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
 
-            <div class="clearfix">&nbsp;</div>
-            <div id="updatePatient" >
-                <form action="{{ path('hms_invoice_admission_old_patient') }}" method="post">
+            <div class="row-fluid" >
+                <form action="{{ path('hms_invoice_admission_old_patient') }}" method="post" class="patient-search">
                     <div class="row-fluid">
-                        <div class="span1"></div>
                         <div class="span9">
-                            <input type="text" id="customer" required name="customer"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
+                            <input type="text" id="customer" name="customer"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
                         </div>
-                        <div class="span2">
-                            <div class="control-group">
-                                <div class="btn-group">
-                                    <button class="btn blue" type="submit"><i class="icon-plus-sign"></i> Admission</button>
+                        <div class="span3">
+                            <div class="controls">
+                                <div class="input-append span12">
+                                    <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
+                                    <div class="btn-group">
+                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+            </div>
 
                 {{ form_start(form) }}
                 {{ form_row(form._token) }}
-            <div class="row-fluid">
+                <div class="row-fluid">
                 <div class="form-actions portlet box blue">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Personnel</div>
@@ -318,7 +320,6 @@
                 <div class="clearfix">&nbsp;</div>
             </div>
                 {{ form_end(form) }}
-            </div>
             <div class="clearfix">&nbsp;</div>
 
 
@@ -377,7 +378,13 @@
             z-index: 99999!important;
         }
         .select2-container .select2-choice {
-            height: 31px!important;
+            height: 28px!important;
+        }
+        form.patient-search{
+            background: #386fc0;
+            padding: 10px!important;
+            margin-bottom: 5px!important;
+            padding-bottom: 0!important;
         }
     </style>
 {% endblock %}

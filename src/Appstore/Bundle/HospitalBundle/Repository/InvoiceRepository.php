@@ -270,7 +270,6 @@ class InvoiceRepository extends EntityRepository
         $vat = !empty($result['vat']) ? $result['vat'] :0;
         $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
         $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
-
         return $data;
     }
 
@@ -424,7 +423,7 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
-        $qb->andWhere('e.process = :process')->setParameter('process', 'Done') ;
+        $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Done','Released','Dead'));
         $qb->andWhere('e.commissionApproved = :approved')->setParameter('approved', 'false') ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
@@ -1048,18 +1047,41 @@ class InvoiceRepository extends EntityRepository
         return  $result;
     }
 
-    public function getAssignDoctor($hospital)
+    public function getAssignDoctor($hospital, $mode = '')
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.assignDoctor','d');
         $qb->select('d.id as id','d.name as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->andWhere('e.invoiceMode IN (:mode)')->setParameter('mode',array('visit','admission')) ;
+        if($mode){
+            $qb->andWhere('e.invoiceMode =:mode')->setParameter('mode',$mode) ;
+        }else{
+            $qb->andWhere('e.invoiceMode IN (:mode)')->setParameter('mode',array('visit','admission')) ;
+        }
         $qb->groupBy('d.id');
         $qb->orderBy('d.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
     }
+
+    public function getDiseasesProfile($hospital, $mode = '')
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.diseasesProfile','d');
+        $qb->select('d.id as id','d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        if($mode){
+            $qb->andWhere('e.invoiceMode =:mode')->setParameter('mode',$mode) ;
+        }else{
+            $qb->andWhere('e.invoiceMode IN (:mode)')->setParameter('mode',array('visit','admission')) ;
+        }
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+
     public function getAanesthesiaDoctor($hospital)
     {
         $qb = $this->createQueryBuilder('e');

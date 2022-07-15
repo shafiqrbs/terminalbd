@@ -386,6 +386,13 @@ class InventoryConfig
      */
     private $cartImage = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="systemReset", type="boolean",  nullable=true)
+     */
+    private $systemReset = false;
+
 
     /**
      * @var boolean
@@ -1831,6 +1838,24 @@ class InventoryConfig
     {
         $this->emptySales = $emptySales;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSystemReset()
+    {
+        return $this->systemReset;
+    }
+
+    /**
+     * @param bool $systemReset
+     */
+    public function setSystemReset($systemReset)
+    {
+        $this->systemReset = $systemReset;
+    }
+
+
 
 
 }

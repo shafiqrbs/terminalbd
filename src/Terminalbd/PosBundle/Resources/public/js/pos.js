@@ -274,6 +274,8 @@ $(document).on('change', '#item', function() {
             $('#avg-price').html(obj['purchase']);
             $('#sales-price').html(obj['price']);
             $('#item-status').html(obj['status']);
+            $('#purchaseItem').html(obj['purchaseItem']);
+            $('#serialNo').html(obj['serialNo']);
         },
     })
 });

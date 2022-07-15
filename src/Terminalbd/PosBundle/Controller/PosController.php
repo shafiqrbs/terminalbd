@@ -3,8 +3,10 @@
 namespace Terminalbd\PosBundle\Controller;
 
 
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItemSerial;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -209,9 +211,101 @@ class PosController extends Controller
     public function searchBarcodeAction(Request $request)
     {
         $cart = new Cart($request->getSession());
+        /* @var $config InventoryConfig */
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $barcode = trim($request->request->get('barcode'));
-        $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config, 'barcode' => $barcode));
+        $purchaseItem = "";
+        if($barcode){
+            $serial = $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->returnPurchaseItemDetails($config,$barcode);
+            $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($config, $barcode);
+            if($serial){
+                $data = $this->getBracodeStockPurchaseItemSerial($cart, $serial);
+                return new Response(json_encode($data));
+            }elseif(empty($serial) and $purchaseItem ) {
+                if ($purchaseItem) {
+                    $data = $this->getBracodeStockPurchaseItem($cart, $purchaseItem);
+                    return new Response(json_encode($data));
+                }
+            }else{
+                $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config, 'barcode' => $barcode));
+                if ($product) {
+                    $data = $this->getBracodeStockItem($cart,$product);
+                    return new Response(json_encode($data));
+                }
+            }
+        }
+        return new Response(json_encode(array('status'=>'in-valid')));
+
+    }
+
+
+
+    private function getBracodeStockPurchaseItemSerial($cart,PurchaseItemSerial $barcode){
+
+
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        if($barcode){
+
+            /* @var $product Item */
+
+            $purchaseItem = $barcode->getPurchaseItem();
+            $product = $purchaseItem->getItem();
+            $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+            $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
+            if ($product->getRemainingQnt() > 0){
+                $data = array(
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'unit' => $productUnit,
+                    'price' => $salesPrice,
+                    'quantity' => 1,
+                    'purchaseItem' => $purchaseItem->getId(),
+                    'serial' => $barcode->getId(),
+                    'serialNo' => $barcode->getBarcode(),
+                );
+            }
+            $cart->insert($data);
+            $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
+            $array = $this->returnCartSummaryAjaxData($cart);
+            return $array;
+        }
+        return false;
+    }
+
+    private function getBracodeStockPurchaseItem($cart,PurchaseItem $purchaseItem, $quantity = 1){
+
+
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $purchaseItemQuantity = $this->getDoctrine()->getRepository(PurchaseItem::class)->getPurchaseItemRemaining($purchaseItem->getId());
+
+        if($purchaseItem and $purchaseItemQuantity > 0){
+
+            /* @var $product Item */
+            $purchaseItem = $this->getDoctrine()->getRepository(PurchaseItem::class)->find($existBarcode);
+            $product = $purchaseItem->getItem();
+            $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+            $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
+            $data = array(
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'unit' => $productUnit,
+                'price' => $salesPrice,
+                'quantity' => $quantity,
+                'purchaseItem' => $purchaseItem->getId(),
+                'serial' => '',
+            );
+            $cart->insert($data);
+            $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
+            $array = $this->returnCartSummaryAjaxData($cart);
+            return $array;
+        }
+        return false;
+    }
+
+
+    private function getBracodeStockItem($cart,Item $product,$quantity = 1){
+
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         if($product){
             $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
             $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
@@ -221,7 +315,7 @@ class PosController extends Controller
                     'name' => $product->getName(),
                     'unit' => $productUnit,
                     'price' => $salesPrice,
-                    'quantity' => 1,
+                    'quantity' => $quantity,
                     'purchaseItem' => '',
                     'serial' => '',
                 );
@@ -231,7 +325,7 @@ class PosController extends Controller
                     'name' => $product->getName(),
                     'unit' => $productUnit,
                     'price' => $salesPrice,
-                    'quantity' => 1,
+                    'quantity' => $quantity,
                     'purchaseItem' => '',
                     'serial' => '',
                 );
@@ -239,10 +333,9 @@ class PosController extends Controller
             $cart->insert($data);
             $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
             $array = $this->returnCartSummaryAjaxData($cart);
-            return new Response(json_encode($array));
-        }else{
-            return new Response(json_encode(array('status'=>'in-valid')));
+            return $array;
         }
+        return false;
 
     }
 
@@ -252,14 +345,35 @@ class PosController extends Controller
         $barcode = trim($request->request->get('barcode'));
         $item = trim($request->request->get('item'));
         $product = "";
+        $purchaseItemOption = "";
+        $serialOption = "";
+        $option = "";
+
         if($item > 0){
             $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->find($item);
         }else{
             $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config, 'barcode' => $barcode));
         }
+        if($product->getPurchaseItems()){
+            $purchaseItems = $this->getDoctrine()->getRepository(PurchaseItem::class)->getPurchaseItemRemainingProduct($product);
+            $purchaseItemOption .="<option>--Select Barcode--</option>";
+            foreach ($purchaseItems as $option){
+                $remain = ($option['quantity'] - $option['salesQuantity']);
+                $purchaseItemOption .="<option value='{$option['id']}'>{$option['barcode']} - ({$remain})</option>";
+            }
+        }
+
+        if($product->getItemSerials()){
+
+            $purchaseItems = $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->getSerialProducts($product);
+            $serialOption .="<option>--Select Serial No--</option>";
+            foreach ($purchaseItems as $option){
+                $serialOption .="<option value='{$option['id']}'>{$option['barcode']}</option>";
+            }
+        }
         if($product){
             /* @var $product Item */
-            return new Response(json_encode(array('status'=>'In-stock','quantity' => $product->getRemainingQnt(),'purchase'=>$product->getPurchaseAvgPrice(),'price'=>$product->getPrice())));
+            return new Response(json_encode(array('status'=>'In-stock','quantity' => $product->getRemainingQnt(),'purchase'=> $product->getPurchaseAvgPrice(),'price'=>$product->getPrice(),'purchaseItem' => $purchaseItemOption,'serialNo' => $serialOption)));
         }else{
             return new Response(json_encode(array('status'=>'empty','quantity' => '','purchase'=>'','price'=>'')));
         }
@@ -272,50 +386,28 @@ class PosController extends Controller
         $cart = new Cart($request->getSession());
         $data = $request->request->all();
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $serialNo = isset($data['serialNo']) ? $data['serialNo'] :'';
+        $pItem = isset($data['purchaseItem']) ? $data['purchaseItem']:'';
         $item = $data['item'];
         $quantity = $data['quantity'];
         $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'id' => $item));
-        if($product){
-            if ($config->isEmptySales() != 1 and $product->getRemainingQnt() > 0) {
-                $salesPrice = (isset($_REQUEST['price']) and $_REQUEST['price']) ? $_REQUEST['price']:'';
-                if($salesPrice > 0){
-                    $price = $salesPrice;
-                }else{
-                    $price = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
-                }
-                $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
-                $data = array(
-                    'id' => $product->getId(),
-                    'name' => $product->getName(),
-                    'unit' => $productUnit,
-                    'price' => $price,
-                    'quantity' => $quantity,
-                    'purchaseItem' => '',
-                    'serial' => '',
-                );
-                $cart->insert($data);
-            }elseif ($config->isEmptySales() == 1){
-                $salesPrice = (isset($_REQUEST['price']) and $_REQUEST['price']) ? $_REQUEST['price']:'';
-                if($salesPrice > 0){
-                    $price = $salesPrice;
-                }else{
-                    $price = $product->getDiscountPrice() > 0 ?  $product->getDiscountPrice() : $product->getSalesPrice();
-                }
-                $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
-                $data = array(
-                    'id' => $product->getId(),
-                    'name' => $product->getName(),
-                    'unit' => $productUnit,
-                    'price' => $price,
-                    'quantity' => $quantity,
-                    'purchaseItem' => '',
-                    'serial' => '',
-                );
-                $cart->insert($data);
+
+        if($serialNo){
+            $serial = $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->find($serialNo);
+            if($serial) {
+                $data = $this->getBracodeStockPurchaseItemSerial($cart, $serial);
+                return new Response(json_encode($data));
             }
-            $this->getDoctrine()->getRepository("PosBundle:Pos")->update($this->getUser(),$cart);
-            $array = $this->returnCartSummaryAjaxData($cart);
-            return new Response(json_encode($array));
+        }elseif($pItem){
+            $purchaseItem = $this->getDoctrine()->getRepository(PurchaseItem::class)->find($pItem);
+            $purchaseItemQuantity = $this->getDoctrine()->getRepository(PurchaseItem::class)->getPurchaseItemRemaining($pItem);
+            if ($purchaseItem and $purchaseItemQuantity > 0) {
+                $data = $this->getBracodeStockPurchaseItem($cart, $purchaseItem,$quantity);
+                return new Response(json_encode($data));
+            }
+        }elseif($product) {
+            $data = $this->getBracodeStockItem($cart,$product,$quantity);
+            return new Response(json_encode($data));
         }
         return new Response(json_encode(array('status'=>'in-valid')));
     }

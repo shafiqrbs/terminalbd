@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\ExpenseAndroidProcess;
+use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Core\UserBundle\Entity\User;
@@ -220,12 +221,15 @@ class ExpenditureRepository extends EntityRepository
     {
         $em = $this->_em;
         $entity = new Expenditure();
-        $entity->setGlobalOption($doctorInvoice->getHospitalConfig()->getGlobalOption());
+        $global = $doctorInvoice->getHospitalConfig()->getGlobalOption();
+        $head = $this->_em->getRepository('AccountingBundle:AccountHead')->find(52);
+        $entity->setGlobalOption($global);
         $entity->setDoctorInvoice($doctorInvoice);
         $entity->setAmount($doctorInvoice->getPayment());
         $entity->setCreatedBy($doctorInvoice->getCreatedBy());
         $entity->setApprovedBy($doctorInvoice->getApprovedBy());
-        $entity->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(52));
+        $entity->setAccountHead($head);
+        $entity->setExpenseCategory($em->getRepository(ExpenseCategory::class)->generateCommission($global,$head));
         $entity->setTransactionMethod($doctorInvoice->getTransactionMethod());
         $entity->setAccountMobileBank($doctorInvoice->getAccountMobileBank());
         $entity->setAccountBank($doctorInvoice->getAccountBank());

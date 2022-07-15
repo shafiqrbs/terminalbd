@@ -141,13 +141,13 @@ class DoctorController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $config = $globalOption->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $config,'id'=>$id));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $globalOption = $this->getUser()->getGlobalOption();
         $editForm = $this->createEditForm($entity,$globalOption);
 
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
@@ -207,7 +207,7 @@ class DoctorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_doctor'));
+            return $this->redirect($this->generateUrl('hms_doctor_edit',array('id'=>$id)));
         }
 
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(

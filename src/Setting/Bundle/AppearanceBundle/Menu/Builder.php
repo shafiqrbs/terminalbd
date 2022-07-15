@@ -1093,7 +1093,7 @@ class Builder extends ContainerAware
         }
         if (!empty($config) and in_array('admission', $process) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_ADMISSION')) {
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'));
-            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Booking', array('route' => 'hms_invoice_admission_booking'));
+            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Cabin/Wrad Booking', array('route' => 'hms_invoice_admission_booking'));
         }
         if (!empty($config) and in_array('visit', $process) && $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_VISIT')) {
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Visit', array('route' => 'hms_prescription'));

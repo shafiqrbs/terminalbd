@@ -74,6 +74,7 @@ class HospitalConfigController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        /** @var  $entity HospitalConfig */
         $entity = $this->getUser()->getGlobalOption()->getHospitalConfig();
 
         if (!$entity) {
@@ -84,7 +85,14 @@ class HospitalConfigController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
+            if($entity->HeaderUpload() && !empty($entity->getHeaderFile())){
+                $entity->removeHeaderUpload();
+            }
+            if($entity->footerUpload() && !empty($entity->getFooterFile())){
+                $entity->removeFooterUpload();
+            }
+            $entity->headerUpload();
+            $entity->footerUpload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Report has been created successfully"

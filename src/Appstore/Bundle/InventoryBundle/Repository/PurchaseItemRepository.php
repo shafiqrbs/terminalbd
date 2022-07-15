@@ -291,17 +291,19 @@ class PurchaseItemRepository extends EntityRepository
 
     public function returnPurchaseItemDetails($inventory,$barcode)
     {
-
         $qb = $this->createQueryBuilder('pi');
         $qb->join('pi.item', 'item');
         $qb->join('pi.purchase', 'p');
         $qb->select('pi');
-        $qb->where("pi.barcode = :barcode" );;
+        $qb->where("pi.barcode = :barcode" );
         $qb->setParameter('barcode', $barcode);
         $qb->andWhere("p.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
-        return $qb->getQuery()->getSingleResult();
-
+        $row = $qb->getQuery()->getOneOrNullResult();
+        if($row){
+            return $row;
+        }
+        return false;
     }
 
     public function searchAutoComplete($item, InventoryConfig $inventory)
@@ -412,6 +414,32 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
+    public function getPurchaseItemRemainingProduct(Item $entity, $purchaseItem = "")
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.salesItems','si');
+        $qb->select('e.id  as id','e.barcode  as barcode','e.quantity  as quantity');
+        $qb->addSelect('COALESCE(SUM(e.quantity),0) AS salesQuantity');
+        $qb->where("e.item = :item")->setParameter('item', $entity->getId());
+        $qb->groupBy('e.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function getPurchaseItemRemaining($purchaseItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.salesItems','si');
+        $qb->select('e.id  as id','e.barcode  as barcode','e.quantity  as quantity');
+        $qb->addSelect('COALESCE(SUM(e.quantity),0) AS salesQuantity');
+        $qb->where("e.id = :item")->setParameter('item', $purchaseItem);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $quantity = ($result['quantity'] - $result['salesQuantity']);
+        return $quantity;
+
+    }
+
     public function findItemWithPurchaseQuantity(InventoryConfig $inventory)
     {
 
@@ -447,6 +475,7 @@ class PurchaseItemRepository extends EntityRepository
         return $array;
 
     }
+
 
     public function  getApiPurchaseItem(GlobalOption $option , $data = '')
     {
@@ -493,6 +522,35 @@ class PurchaseItemRepository extends EntityRepository
 
         }
         return $data;
+    }
+
+
+    public function  processSerialNo($config){
+
+        $serilaNos = $this->getAllSerialNo();
+        foreach ($serilaNos as $row){
+            $data = explode(",",$row['serialNo']);
+            $id = $row['id'];
+            $item = $row['item'];
+            $config = $row['config'];
+            foreach ($data as $serial){
+                $elem = "INSERT INTO inv_purchase_item_serial(`inventoryConfig_id`,`item_id`,`purchaseItem_id`,barcode,status) VALUES ($config,$item,$id,'$serial',0)";
+                $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+                $qb1->execute();
+            }
+        }
+    }
+
+    public function getAllSerialNo()
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.item','i');
+        $qb->join('e.purchase','p');
+        $qb->join('p.inventoryConfig','c');
+        $qb->select('e.id as id','c.id as config','i.id as item','e.serialNo as serialNo');
+        $qb->where("e.serialNo !=''");
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
     }
 
 

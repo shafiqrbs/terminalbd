@@ -8,7 +8,8 @@ $( ".dateCalendar" ).datepicker({
     changeYear: true,
 });
 
-
+$(".number , .amount, .numeric").inputFilter(function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); });
 
 /*
 $(document).on("click", ".editable-submit", function() {
@@ -18,6 +19,16 @@ function pageReload() {
     location.reload();
 }
 */
+
+document.onkeyup = function(e) {
+    var key = e.which || e.charCode || e.keyCode
+    if(e.ctrlKey && key === 83) {
+        $('.select2StockMedicinePurchase').select2('open');
+    } else if (e.ctrlKey && key === 80) {
+        $('.regularPrintx').trigger('click');
+    }
+};
+
 
 $(document).on( "click", "#show", function(e){
     $('#hide').slideToggle(2000);

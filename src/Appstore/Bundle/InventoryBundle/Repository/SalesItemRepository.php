@@ -3,8 +3,10 @@
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItemSerial;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItemSerial;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -266,6 +268,34 @@ class SalesItemRepository extends EntityRepository
         $em->flush();
     }
 
+    public function insertSerialSalesItems($sales,$purchaseItem,$serial)
+    {
+        $em = $this->_em;
+        $existSerial = $em->getRepository(SalesItemSerial::class)->findOneBy(array('purchaseItemSerial'=> $serial));
+        $existEntity = $this->findOneBy(array('sales'=> $sales,'purchaseItem'=> $purchaseItem));
+        /* @var $serial PurchaseItemSerial */
+        if(!empty($existEntity) and empty($existSerial)){
+            $qnt = ($existEntity->getQuantity()+1);
+            $existEntity->setQuantity($qnt);
+            $em->persist($existEntity);
+            $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($existEntity,$serial);
+        }else{
+            $entity = new SalesItem();
+            $entity->setSales($sales);
+            $entity->setPurchaseItem($purchaseItem);
+            $entity->setItem($purchaseItem->getItem());
+            $entity->setPurchasePrice($purchaseItem->getPurchasePrice());
+            $entity->setSalesPrice($purchaseItem->getSalesPrice());
+            $entity->setEstimatePrice($purchaseItem->getSalesPrice());
+            $entity->setQuantity(1);
+            $entity->setSerialNo($serial->getBarcode());
+            $entity->setSubTotal($purchaseItem->getSalesPrice());
+            $em->persist($entity);
+            $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($entity,$serial);
+        }
+        $em->flush();
+    }
+
     public function getSalesItems($sales , $device = '' )
     {
         $isAttribute = $sales->getInventoryConfig()->isAttribute();
@@ -306,8 +336,6 @@ class SalesItemRepository extends EntityRepository
             } else{
                 $unit = '';
             }
-
-
 
             $itemName = $entity->getItem()->getName();
             if($device == 'mobile'){

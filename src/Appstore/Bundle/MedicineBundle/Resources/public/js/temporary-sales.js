@@ -2,6 +2,9 @@
  * Created by rbs on 5/1/17.
  */
 
+$(".number , .amount, .numeric").inputFilter(function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); });
+
 $(document).ready(function(){
     load_data();
     function load_data(query)
@@ -408,8 +411,10 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporary_discount').val(obj['initialDiscount']);
                     $('#salesTemporary_due').val(obj['initialGrandTotal']);
                     $("#salesTemporaryItem_stockName").select2("val", "");
-                    $( "#isShort").prop( "checked", false );
-                    $('#isShort').attr('checked', false); // Unchecks it
+                    if( $('#isShort').is(':checked') ) {
+                        $("#isShort").prop("checked", false);
+                        $('#uniform-isShort span').removeClass('checked');
+                    }
                     $('#salesTemporaryItemForm')[0].reset();
                     $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
                     $('.salesBtn').prop("disabled", false);
@@ -418,7 +423,6 @@ function jqueryTemporaryLoad() {
             });
         }
     });
-
 
     var formStock = $("#medicineStock").validate({
         rules: {

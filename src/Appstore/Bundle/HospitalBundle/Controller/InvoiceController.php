@@ -52,7 +52,12 @@ class InvoiceController extends Controller
         $pagination = $this->paginate($entities);
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
+        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','admission');
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','admission');
+
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
+            'salesTransactionOverview' => $salesTransactionOverview,
+            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
             'entities'                          => $pagination,
             'assignDoctors'                     => $referredDoctors,
             'employees'                         => $employees,
@@ -67,20 +72,67 @@ class InvoiceController extends Controller
 
     public function appointmentInvoiceAction()
     {
+        return $this->redirect($this->generateUrl('hms_prescription'));
+
+    }
+
+    public function oldPatientDiagnosticAction(Request $request)
+    {
+        $customerId = $request->request->get('customer');
+        $invoiceId = $request->request->get('invoice');
+        $option = $this->getUser()->getGlobalOption();
         $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $user = $this->getUser();
-        $hospital = $user->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'visit' , $data);
-        $pagination = $this->paginate($entities);
-        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
-        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
-        return $this->render('HospitalBundle:Invoice:appointmentIndex.html.twig', array(
-            'entities'                          => $pagination,
-            'assignDoctors'                     => $assignDoctors,
-            'employees'                     => $employees,
-            'searchForm'                        => $data,
-        ));
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'mobile'=>$customerId));
+        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$hospital,'invoice' => $invoiceId));
+        $entity = new Invoice();
+        if($invoice){
+            $customer = $invoice->getCustomer();
+            $entity->setCustomer($customer);
+            $entity->setMobile($customer->getMobile());
+            $hospital = $option->getHospitalConfig();
+            $entity->setHospitalConfig($hospital);
+            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
+            $entity->setService($service);
+            $referredDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
+            $entity->setReferredDoctor($referredDoctor);
+            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $entity->setTransactionMethod($transactionMethod);
+            $entity->setPaymentStatus('Pending');
+            $entity->setInvoiceMode('diagnostic');
+            $entity->setPrintFor('diagnostic');
+            $entity->setCreatedBy($this->getUser());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_edit', array('id' => $entity->getId())));
+        }elseif($customer){
+            $entity->setCustomer($customer);
+            $entity->setMobile($customer->getMobile());
+            $hospital = $option->getHospitalConfig();
+            $entity->setHospitalConfig($hospital);
+            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
+            $entity->setService($service);
+            $referredDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
+            $entity->setReferredDoctor($referredDoctor);
+            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $entity->setTransactionMethod($transactionMethod);
+            $entity->setPaymentStatus('Pending');
+            $entity->setInvoiceMode('diagnostic');
+            $entity->setPrintFor('diagnostic');
+            $entity->setCreatedBy($this->getUser());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_edit', array('id' => $entity->getId())));
+        }
+
+        return $this->redirect($this->generateUrl('hms_prescription'));
+
 
     }
 
@@ -561,14 +613,14 @@ class InvoiceController extends Controller
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->patientInsertUpdate($data,$invoice);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->patientAdmissionUpdate($data,$invoice);
         return new Response(json_encode(array('patient' => $customer->getId())));
-        exit;
+
     }
 
     public function getBarcode($value)
     {
         $barcode = new BarcodeGenerator();
         $barcode->setText($value);
-        $barcode->setType(BarcodeGenerator::Code39Extended);
+        $barcode->setType(BarcodeGenerator::Code128);
         $barcode->setScale(1);
         $barcode->setThickness(25);
         $barcode->setFontSize(8);

@@ -74,7 +74,7 @@
                                         <td class="numeric" >{{ entity.mode }}</td>
                                         <td class="numeric" ><a href="/{{ entity.webPath }}">Download File</a> </td>
                                         <td class="numeric" >
-                                             {% if entity.progress != 'invalid' and entity.mode == 'purchase' %}
+                                             {% if entity.progress != 'invalid'  %}
                                                 <a title="" href="{{ path('inventory_excelimproter_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Import Purchase</i></a>
                                             {% endif %}
                                                 <a  href="{{ path('inventory_excelimproter_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>

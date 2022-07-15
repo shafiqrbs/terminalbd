@@ -323,8 +323,9 @@ class AccountSalesController extends Controller
         if (!$entity and $entity->getGlobalOption()->getId() != $this->getUser()->getGlobalOption()->getId() ) {
             throw $this->createNotFoundException('Unable to find AccountSales entity.');
         }
+        $template = ($entity->getGlobalOption()->getAccountingConfig()->isCustomPrint() == 1) ? $entity->getGlobalOption()->getSubDomain():'print';
         $amountInWord = $this->get('settong.toolManageRepo')->intToWords($entity->getAmount());
-        return $this->render('AccountingBundle:AccountSales:print.html.twig', array(
+        return $this->render("AccountingBundle:AccountSales:{$template}.html.twig", array(
             'entity'           => $entity,
             'config'           => $entity->getGlobalOption()->getAccountingConfig(),
             'amountInWord'     => $amountInWord,
@@ -465,7 +466,7 @@ class AccountSalesController extends Controller
             $outstanding = number_format($entity->getAmount(),2);
             $msg = "Sir As-salamu Alaykum, Your payment received TK. {$outstanding}. Please Contact:  {$hotline}.Thanks for being with our.";
             $msg = $orgName .'\nDear '.$msg;
-            if($entity->getGlobalOption()->getAccountingConfig()->isSalesReceiveSms() == 1 and $entity->getGlobalOption()->getSmsSenderTotal() and $entity->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $entity->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1) {
+            if($entity->isSmsAlert() == 1 and $entity->getGlobalOption()->getAccountingConfig()->isSalesReceiveSms() == 1 and $entity->getGlobalOption()->getSmsSenderTotal() and $entity->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $entity->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1) {
                 $this->send($msg,$mobile);
                 $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->insertCustomerOutstandingSms($customer,$msg,'success');
                 $this->get('session')->getFlashBag()->add(

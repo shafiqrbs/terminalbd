@@ -100,6 +100,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% if inventory.usingBarcode == "item" %}
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
@@ -111,6 +112,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% endif %}
                                     {% if inventory.isBrand == 1  %}
                                         <div class="row-fluid">
                                             <div class="span12">

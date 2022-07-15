@@ -72,6 +72,7 @@ class InventoryConfigType extends AbstractType
             ->add('cartImage')
             ->add('customPrint')
             ->add('vatEnable')
+            ->add('systemReset')
             ->add('isAttribute')
             ->add('barcodeItem')
             ->add('isInvoice')
@@ -192,7 +193,6 @@ class InventoryConfigType extends AbstractType
             ))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
-            ->add('barcodeText','text',array('attr'=>array('class'=>'m-wrap span12')))
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>"Enter shop address"),'required'=>true))
             ->add('printFooterText','textarea',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>"Enter print footer text"),'required'=>true))
             ->add('barcodeText',

@@ -210,22 +210,37 @@ class InvoiceAdmissionController extends Controller
 
     public function oldPatientAction(Request $request)
     {
-
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $customerId = $request->request->get('customer');
+        $invoiceId = $request->request->get('invoice');
         $option = $this->getUser()->getGlobalOption();
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'mobile'=>$customerId));
-        $em = $this->getDoctrine()->getManager();
-        $entity = new Invoice();
-        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entity->setHospitalConfig($hospital);
-        $entity->setCustomer($customer);
-        $entity->setInvoiceMode('admission');
-        $entity->setPrintFor('admission');
-        $entity->setCreatedBy($this->getUser());
-        $em->persist($entity);
-        $em->flush();
-        return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
+        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$hospital,'invoice' => $invoiceId));
 
+        $em = $this->getDoctrine()->getManager();
+        if($customer){
+            $entity = new Invoice();
+            $entity->setHospitalConfig($hospital);
+            $entity->setCustomer($customer);
+            $entity->setInvoiceMode('admission');
+            $entity->setPrintFor('admission');
+            $entity->setCreatedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
+        }elseif($invoice){
+            $customer = $invoice->getCustomer();
+            $entity = new Invoice();
+            $entity->setHospitalConfig($hospital);
+            $entity->setCustomer($customer);
+            $entity->setInvoiceMode('admission');
+            $entity->setPrintFor('admission');
+            $entity->setCreatedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
+        }
+        return $this->redirect($this->generateUrl('hms_invoice_admission'));
     }
 
     public function admittedPatientAction(Invoice $invoice)
@@ -738,7 +753,7 @@ class InvoiceAdmissionController extends Controller
     {
         $barcode = new BarcodeGenerator();
         $barcode->setText($invoice);
-        $barcode->setType(BarcodeGenerator::Code39Extended);
+        $barcode->setType(BarcodeGenerator::Code128);
         $barcode->setScale(1);
         $barcode->setThickness(25);
         $barcode->setFontSize(8);

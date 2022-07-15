@@ -116,7 +116,7 @@ class VendorController extends Controller
             'action' => $this->generateUrl('medicine_vendor_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -155,7 +155,7 @@ class VendorController extends Controller
             'action' => $this->generateUrl('medicine_vendor_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

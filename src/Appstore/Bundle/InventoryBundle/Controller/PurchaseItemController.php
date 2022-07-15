@@ -177,8 +177,6 @@ class PurchaseItemController extends Controller
         }else{
             $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$inventory),array('name'=>'ASC'));
         }
-
-
         return $this->render('InventoryBundle:PurchaseItem:new.html.twig', array(
             'purchase' => $purchase,
             'entity' => $entity,
@@ -219,7 +217,6 @@ class PurchaseItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-
         $editForm = $this->createEditForm($entity);
         return $this->render('InventoryBundle:PurchaseItem:new.html.twig', array(
             'purchaseInfo' => $entity->getPurchase(),

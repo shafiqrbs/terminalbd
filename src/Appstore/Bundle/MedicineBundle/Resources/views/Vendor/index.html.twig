@@ -62,6 +62,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Company Name </th>
+                                    <th class="numeric" >TP Percent</th>
                                     <th class="numeric" >Name </th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Customer</th>
@@ -74,6 +75,7 @@
                                     <tr>
 
                                         <td class="numeric" ><a href="{{ path('medicine_vendor_edit',{'id': entity.id })}}">{{ entity.companyName }}</a></td>
+                                        <td class="numeric" >{{ entity.tpPercent }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}-{{ entity.customer.mobile }}{% endif %}</td>

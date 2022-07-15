@@ -630,7 +630,7 @@ select.m-wrap.sales-by{
     white-space: nowrap;
     text-overflow: ellipsis;
     line-height: 44px;
-    font-size: 25px;
+    font-size: 15px;
 }
 
 
@@ -1241,7 +1241,7 @@ input[class*="span"].payment{
 }
 #barcode {
     height: 50px !important;
-    font-size: 30px;
+    font-size: 15px;
 }
 .select2-container .select2-choice .select2-arrow b {
     display: block;

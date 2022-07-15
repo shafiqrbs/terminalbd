@@ -41,12 +41,14 @@ class ProductExcel
                 $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
                 $unit = empty($item['Unit']) ? 'Pcs' : $item['Unit'];
                 $barcode = empty($item['Barcode']) ? time() : $item['Barcode'];
+                $model = empty($item['model']) ? time() : $item['model'];
                 $product = new Item();
                 $product->setInventoryConfig($inventory);
                 $product->setName($name);
                 $product->setSalesPrice($salesPrice);
                 $product->setPurchasePrice($purchasePrice);
                 $product->setBarcode($barcode);
+                $product->setModel($model);
                 if ($name) {
                     $master = $this->getMasterItem($name,$category,$unit);
                     $product->setMasterItem($master);
@@ -104,7 +106,7 @@ class ProductExcel
         $category = $categoryRepository->findOneBy(
             array(
                 'inventoryConfig'   => $config,
-                'name' => $item['Category'],
+                'name' => $item,
                 'permission' => 'private',
             )
         );

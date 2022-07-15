@@ -21,6 +21,7 @@ class VendorType extends AbstractType
 
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor name')))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter mobile no')))
+            ->add('tpPercent','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter TP Percent')))
             ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter company name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')))

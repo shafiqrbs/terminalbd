@@ -53,7 +53,7 @@ class PathologyType extends AbstractType
             ->add('isReportContent')
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('instruction','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'3','placeholder'=>'Enter test related any instruction for patient')))
-            ->add('reportContent','textarea', array('attr'=>array('class'=>'ckeditor m-wrap textarea-large span12','rows'=>'10','placeholder'=>'Enter test related any instruction for patient')))
+            ->add('reportContent','textarea', array('attr'=>array('class'=>'big-editor ','rows'=>15,'placeholder'=>'Enter test related any instruction for patient')))
             ->add('minimumPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter minimum price')))
             ->add('reportHeight','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter report height')))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter commission')))
