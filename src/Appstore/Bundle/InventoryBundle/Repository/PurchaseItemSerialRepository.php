@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItemSerial;
 use Doctrine\ORM\EntityRepository;
