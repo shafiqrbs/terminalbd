@@ -606,6 +606,7 @@ class PurchaseSimpleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->purchaseItemStockRemoveQnt($purchase);
         $this->getDoctrine()->getRepository('InventoryBundle:Item')->purchaseItemReverseUpdateQnt($purchase);
+        $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItemSerial')->removeSerialNo($purchase);
         if($purchase->getAsInvestment() == 1 ) {
             $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedPurchaseJournal($purchase);
         }

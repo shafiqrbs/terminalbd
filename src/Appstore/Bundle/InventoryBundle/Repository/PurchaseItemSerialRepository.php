@@ -22,14 +22,24 @@ class PurchaseItemSerialRepository extends EntityRepository
     public function insertPurchaseItemSerial(Purchase $purchase){
 
         $em = $this->_em;
+
         /* @var $item PurchaseItem  */
 
+        foreach ($purchase->getPurchaseItems() as $item ){
+            if($item->getSerialNo()){
+                $id = $item->getId();
+                $stock = $em->createQuery("DELETE InventoryBundle:PurchaseItemSerial e WHERE e.purchaseItem = $id");
+                if($stock){ $stock->execute(); }
+            }
+        }
+
         foreach($purchase->getPurchaseItems() as $item){
-            if(empty($item->getItemSerials()) and $item->getSerialNo()){
+            if($item->getSerialNo()){
                 $ids = explode(",", $item->getSerialNo());
                 foreach ($ids as $id){
                     $entity = new PurchaseItemSerial();
                     $entity->setInventoryConfig($purchase->getInventoryConfig());
+                    $entity->setItem($item->getItem());
                     $entity->setPurchaseItem($item);
                     $entity->setBarcode($id);
                     $entity->setSerialNo($id);
@@ -68,6 +78,19 @@ class PurchaseItemSerialRepository extends EntityRepository
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
+    }
+
+    public function removeSerialNo(Purchase $purchase){
+
+        $em = $this->_em;
+        /* @var $item PurchaseItem */
+        foreach ($purchase->getPurchaseItems() as $item ){
+            if($item->getSerialNo()){
+                $id = $item->getId();
+                $stock = $em->createQuery("DELETE InventoryBundle:PurchaseItemSerial e WHERE e.purchaseItem = $id");
+                if($stock){ $stock->execute(); }
+            }
+        }
     }
 
 
