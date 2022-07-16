@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItemSerial;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -490,6 +491,9 @@ class SalesController extends Controller
             $salesImport = $sales->getSalesImport();
             $em->remove($salesImport);
         }
+        foreach ($sales->getSalesItems() as $item){
+            $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($item);
+        }
         $em->remove($sales);
         $em->flush();
         return new Response('success');
@@ -535,12 +539,13 @@ class SalesController extends Controller
         if (!$salesItem) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
+        $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($entity);
         $em->remove($entity);
         $em->flush();
         $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
         $data = $this->returnResultData($sales);
         return new Response(json_encode($data));
-        exit;
+
 
     }
 

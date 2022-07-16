@@ -48,12 +48,6 @@ class PurchaseItemSerial
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="purchaseItem" )
-     **/
-    private  $salesItems;
-
-
-    /**
      * @var string
      *
      * @ORM\Column(name="barcode", type="string",  nullable = true)
@@ -182,22 +176,6 @@ class PurchaseItemSerial
     public function setPurchaseItem($purchaseItem)
     {
         $this->purchaseItem = $purchaseItem;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSalesItems()
-    {
-        return $this->salesItems;
-    }
-
-    /**
-     * @param mixed $salesItems
-     */
-    public function setSalesItems($salesItems)
-    {
-        $this->salesItems = $salesItems;
     }
 
     /**

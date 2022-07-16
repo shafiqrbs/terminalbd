@@ -277,6 +277,7 @@ class SalesItemRepository extends EntityRepository
         if(!empty($existEntity) and empty($existSerial)){
             $qnt = ($existEntity->getQuantity()+1);
             $existEntity->setQuantity($qnt);
+            $existEntity->setSubTotal($qnt * $existEntity->getSalesPrice());
             $em->persist($existEntity);
             $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($existEntity,$serial);
         }else{

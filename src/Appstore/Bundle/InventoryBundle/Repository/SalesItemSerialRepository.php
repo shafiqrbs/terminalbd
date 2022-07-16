@@ -20,7 +20,8 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class SalesItemSerialRepository extends EntityRepository
 {
 
-    public function insertSalesItemSerial($salesItem,$serial){
+    public function insertSalesItemSerial($salesItem,PurchaseItemSerial $serial){
+
         $em = $this->_em;
         $exist = $this->findOneBy(array('purchaseItemSerial' => $serial));
         if(empty($exist)){
@@ -32,6 +33,21 @@ class SalesItemSerialRepository extends EntityRepository
             $serial->setStatus(1);
             $em->flush();
         }
+
+    }
+
+    public function deleteSalesItemSerial(SalesItem $salesItem){
+
+        $em = $this->_em;
+        /* @var $serial SalesItemSerial */
+        if($salesItem->getSalesItemSerials()){
+            foreach ($salesItem->getSalesItemSerials() as $serial){
+                $item = $serial->getPurchaseItemSerial();
+                $item->setStatus(0);
+                $em->flush();
+            }
+        }
+
 
     }
 
