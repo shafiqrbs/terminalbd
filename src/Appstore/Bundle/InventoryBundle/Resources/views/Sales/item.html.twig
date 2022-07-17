@@ -8,10 +8,11 @@
             {{ salesitem.item.name }}
         </td>
         {% if entity.inventoryConfig.isAttribute == 1 %}
-            <td class="numeric" >dfdsfsdfsdf
+
+            <td class="numeric" >
                 {% if salesitem.salesItemSerials is not empty %}
                     {% for serial in salesitem.salesItemSerials %}
-                        {{ serial.serialNo }}{{ not loop.last ? ',' }}
+                        {{ serial.barcode }}{{ not loop.last ? ',' }}
                     {% endfor %}
                 {% endif %}
             </td>
@@ -25,7 +26,8 @@
         </td>
         <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
         <td>
-            <div class="btn-group">         <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
+            <div class="btn-group">
+                <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
                 <input class="numeric salesPrice inputs td-inline-input"  rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
 
                 {% if entity.inventoryConfig.isAttribute == 1 and salesitem.purchaseItem.serialNo is not empty %}

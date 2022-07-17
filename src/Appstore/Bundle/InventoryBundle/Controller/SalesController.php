@@ -190,9 +190,10 @@ class SalesController extends Controller
 
     }
 
-    public function returnResultData(Sales $entity,$msg=''){
+    public function returnResultData(Sales $sales,$msg=''){
 
         //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->find($sales);
 
         $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
             'entity' => $entity,

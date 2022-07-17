@@ -28,7 +28,7 @@ class SalesItemSerialRepository extends EntityRepository
             $entity = new SalesItemSerial();
             $entity->setSalesItem($salesItem);
             $entity->setPurchaseItemSerial($serial);
-            $entity->setSerialNo($serial->getBarcode());
+            $entity->setBarcode($serial->getBarcode());
             $em->persist($entity);
             $serial->setStatus(1);
             $em->flush();

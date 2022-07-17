@@ -23,7 +23,7 @@ class SalesItemSerial
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", inversedBy="salesItemSerials" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", inversedBy="salesItemSerials" ,cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $salesItem;
@@ -33,12 +33,13 @@ class SalesItemSerial
      **/
     private  $purchaseItemSerial;
 
+
     /**
      * @var string
      *
-     * @ORM\Column(name="serialNo", type="text", length=255, nullable = true)
+     * @ORM\Column(name="barcode", type="text", length=255, nullable = true)
      */
-    private $serialNo;
+    private $barcode;
 
 
     /**
@@ -83,21 +84,24 @@ class SalesItemSerial
         $this->purchaseItemSerial = $purchaseItemSerial;
     }
 
+
     /**
      * @return string
      */
-    public function getSerialNo()
+    public function getBarcode()
     {
-        return $this->serialNo;
+        return $this->barcode;
     }
 
     /**
-     * @param string $serialNo
+     * @param string $barcode
      */
-    public function setSerialNo($serialNo)
+    public function setBarcode($barcode)
     {
-        $this->serialNo = $serialNo;
+        $this->barcode = $barcode;
     }
+
+
 
 
 
