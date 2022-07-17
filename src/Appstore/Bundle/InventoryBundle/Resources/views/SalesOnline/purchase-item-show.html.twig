@@ -115,7 +115,12 @@
                                                 <td class="numeric" >{{ loop.index }}</td>
                                                 <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
                                                 <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                <td class="numeric" >{{ salesItem.serialNo }}</td>
+                                                <td class="numeric" >
+                                                    {% if salesItem.salesItemSerials is not empty %}
+                                                    {% for serial in salesItem.salesItemSerials %}
+                                                        {{ serial.barcode }}{{ not loop.last ? ',' }}
+                                                    {% endfor %}
+                                                    {% endif %}</td>
                                                 <td class="numeric" >{{ salesItem.quantity }}</td>
                                                 <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
