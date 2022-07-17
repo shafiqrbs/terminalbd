@@ -503,9 +503,11 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
         $invoice = $data['purchaseId'];
+        echo $brand = $data['brandName'];
         $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
         $form = $this->createEditForm($entity);
         $form->handleRequest($request);
+        $entity->setBrandName($brand);
         $em->flush();
         return new Response('success');
     }
@@ -838,6 +840,20 @@ class PurchaseController extends Controller
         return $this->render('MedicineBundle:Purchase:show.html.twig', array(
             'entity'      => $entity,
         ));
+    }
+
+     /**
+     * Finds and displays a Vendor entity.
+     *
+     */
+    public function updateBrandAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $this->getDoctrine()->getRepository(MedicinePurchase::class)->find($id);
+        $brand = $_REQUEST['brandName'];
+        $purchase->setBrandName($brand);
+        $em->flush();
+        return new Response('Done');
     }
 
     public function approvedAction($id)
@@ -1203,6 +1219,20 @@ class PurchaseController extends Controller
             return new Response('failed');
         }
     }
+
+    public function autoPurchaseStockItemSearchAction(Request $request)
+    {
+        $purchase = trim($_REQUEST['purchase']);
+        $entity = $this->getDoctrine()->getRepository(MedicinePurchase::class)->find($purchase);
+        $brand = $entity->getBrandName();
+        $item = trim($_REQUEST['q']);
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoPurchaseStockItemWithBrand($item,$inventory,$brand);
+        }
+        return new JsonResponse($item);
+    }
+
 
 
 }

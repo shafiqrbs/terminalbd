@@ -136,6 +136,13 @@ class MedicinePurchase
      /**
      * @var string
      *
+     * @ORM\Column(name="brandName", type="string", length=255, nullable=true)
+     */
+    private $brandName;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="mode", type="string", length=30, nullable=true)
      */
      private $mode ='general';
@@ -906,6 +913,22 @@ class MedicinePurchase
     public function setAndroidProcess($androidProcess)
     {
         $this->androidProcess = $androidProcess;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandName()
+    {
+        return $this->brandName;
+    }
+
+    /**
+     * @param string $brandName
+     */
+    public function setBrandName($brandName)
+    {
+        $this->brandName = $brandName;
     }
 
 

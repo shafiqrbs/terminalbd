@@ -66,6 +66,12 @@ medicine_purchase_particular_search:
     options:
             expose: true
 
+medicine_purchase_stock_item_search:
+    path:     /medicine-stock-item-search
+    defaults: { _controller: "MedicineBundle:Purchase:autoPurchaseStockItemSearch" }
+    options:
+            expose: true
+
 medicine_purchase_particular_add:
     path:     /{invoice}/particular-add
     defaults: { _controller: "MedicineBundle:Purchase:addParticular" }
@@ -112,6 +118,12 @@ medicine_purchase_item_update:
     path:     /item-update
     defaults: { _controller: "MedicineBundle:Purchase:purchaseItemUpdate" }
     methods:  POST
+    options:
+            expose: true
+
+medicine_purchase_update_brand:
+    path:     /{id}/invoice-update-brand
+    defaults: { _controller: "MedicineBundle:Purchase:updateBrand" }
     options:
             expose: true
 

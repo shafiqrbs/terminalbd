@@ -28,7 +28,7 @@ class PurchaseItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicinePurchase input','placeholder'=>'Enter stock medicine name')))
+            ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicinePurchaseItem input','placeholder'=>'Enter stock medicine name')))
             ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar input','placeholder'=>'Expiry date','autoComplete'=>'off')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap purchase-input span10 input','placeholder'=>'Total MRP','autoComplete'=>'off')))
             ->add('bonusQuantity','text', array('attr'=>array('class'=>'m-wrap span9','placeholder'=>'Bonus QTY','autoComplete'=>'off')))

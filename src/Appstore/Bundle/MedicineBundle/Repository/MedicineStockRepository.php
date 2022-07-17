@@ -279,10 +279,11 @@ class MedicineStockRepository extends EntityRepository
 
     public function getBrands($config)
 	{
-
+        $nots = array('.','-',1,',',' ','`',"'");
 		$qb = $this->createQueryBuilder('item');
 		$qb->select('item.brandName as name');
 		$qb->where("item.medicineConfig = :config")->setParameter('config', $config);
+		$qb->andWhere($qb->expr()->notIn('item.brandName', $nots));
 		$qb->groupBy("item.brandName");
 		$qb->orderBy("item.brandName",'ASC');
 		$result = $qb->getQuery()->getArrayResult();
@@ -584,6 +585,29 @@ class MedicineStockRepository extends EntityRepository
         $query->select('e.id as id');
         $query->addSelect("CONCAT(e.name,' => MRP - ', e.salesPrice) as text");
         $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($config->isSearchSlug() == 1){
+            $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
+        }else{
+            $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
+        }
+        $query->andWhere('e.status =1');
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchAutoPurchaseStockItemWithBrand($q, MedicineConfig $config, $brand = "")
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.medicineConfig', 'ic');
+        $query->select('e.id as id');
+        $query->addSelect("CONCAT(e.name,' => MRP - ', e.salesPrice) as text");
+        $query->where("ic.id = :config")->setParameter('config', $config->getId());
+        if($brand){
+            $query->andWhere("e.brandName = :brandName")->setParameter('brandName', $brand);
+        }
         if($config->isSearchSlug() == 1){
             $query->andWhere($query->expr()->like("e.slug", "'$q%'"  ));
         }else{

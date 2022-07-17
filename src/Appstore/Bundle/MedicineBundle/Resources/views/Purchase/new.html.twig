@@ -174,9 +174,27 @@
                             {{ form_end(purchaseBarcodeItemForm) }}
                             </div>
                             <div class="purchaseToggle" id="purchaseItemBox">
-                            {{ form_start(purchaseItem) }}
-                            {{ form_row(purchaseItem._token) }}
-                            <div class="row-fluid" >
+
+                                <div class="row-fluid" >
+                                    <div class="span12" style="margin-bottom:1px">
+                                        <div class="control-group select-error-tooltip">
+                                            <label class="control-label" for="firstName">Medicine/Supplementary Item Name(<sub>For Specific search</sub>)</label>
+                                            <div class="controls">
+                                                <select name="brandName" id="brandName" class="m-wrap span12 select2">
+                                                    <option>-- Select Brand Name --</option>
+                                                    {% if brands is not empty %}
+                                                        {% for item in brands %}
+                                                            <option {% if entity.brandName is not empty and entity.brandName == item.name %} selected="selected" {% endif %} value="{{ item.name }}">{{ item.name }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ form_start(purchaseItem) }}
+                                {{ form_row(purchaseItem._token) }}
+                                <div class="row-fluid" >
                                 <div class="span6" style="padding-left:15px">
                                     <div class="control-group select-error-tooltip">
                                         <label class="control-label" for="firstName">Search Stock Item Name</label>
@@ -603,6 +621,7 @@
 {% block documentready %}
     {{ parent() }}
     EditableWithLoadInit();
+    brandMedicineSearch({{ entity.id }});
     $('.expirationDate').editable({
         format: 'yyyy-mm-dd',
         viewformat: 'dd-mm-yyyy',

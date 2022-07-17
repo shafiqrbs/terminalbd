@@ -576,3 +576,58 @@ $(document).on("click", ".confirmSubmit", function() {
 
 });
 
+function brandMedicineSearch(purchase){
+
+    var url = Routing.generate('medicine_purchase_stock_item_search',{'purchase':purchase});
+    $(".select2StockMedicinePurchaseItem").select2({
+
+        placeholder: "Search stock medicine name",
+        ajax: {
+            url: url,
+            dataType: 'json',
+            delay: 100,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            $.ajax(Routing.generate('medicine_stock_name', { stock : id}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 1
+
+    });
+
+    $(document).on("change", "#brandName", function() {
+        var brand = $(this).val();
+        var purchase = $('#purchaseId').val();
+        $.ajax({
+            url: Routing.generate('medicine_purchase_update_brand',{'id':purchase,'brandName':brand}),
+            type: 'GET',
+            success: function (response) {
+                console.log('done');
+            }
+        })
+    });
+
+}
+
