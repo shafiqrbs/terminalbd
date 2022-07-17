@@ -503,11 +503,9 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
         $invoice = $data['purchaseId'];
-        echo $brand = $data['brandName'];
         $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
         $form = $this->createEditForm($entity);
         $form->handleRequest($request);
-        $entity->setBrandName($brand);
         $em->flush();
         return new Response('success');
     }

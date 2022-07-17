@@ -181,7 +181,7 @@
                                             <label class="control-label" for="firstName">Medicine/Supplementary Item Name(<sub>For Specific search</sub>)</label>
                                             <div class="controls">
                                                 <select name="brandName" id="brandName" class="m-wrap span12 select2">
-                                                    <option>-- Select Brand Name --</option>
+                                                    <option value="">-- Select Brand Name --</option>
                                                     {% if brands is not empty %}
                                                         {% for item in brands %}
                                                             <option {% if entity.brandName is not empty and entity.brandName == item.name %} selected="selected" {% endif %} value="{{ item.name }}">{{ item.name }}</option>
