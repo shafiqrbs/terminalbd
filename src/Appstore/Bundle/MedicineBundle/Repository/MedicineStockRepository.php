@@ -169,6 +169,9 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere("e.remainingQuantity  >= {$startQuantity}");
             $qb->andWhere("e.remainingQuantity  <= {$endQuantity}");
         }
+        if($process == 'Empty Brand Name'){
+            $qb->andWhere('e.brandName  IS NULL');
+        }
         if($process == 'Empty Stock'){
             $qb->andWhere('e.remainingQuantity  = 0');
             $qb->andWhere('e.salesQuantity = 0');
