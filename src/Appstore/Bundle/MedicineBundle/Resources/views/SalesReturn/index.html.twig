@@ -75,7 +75,7 @@
                                         <td class="numeric" >{{ entity.salesPrice }}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
                                         <td class="numeric" >{{ entity.journal }}</td>
-                                        <td class="numeric" >{% if entity.isAdjustment %} Adjustment {% endif %}</td>
+                                        <td class="numeric" >{% if entity.isAdjustment == 1 %} Adjustment {% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved' %}
                                                 <a title="Are you sure went to delete ?" href="{{ path('medicine_sales_return_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>

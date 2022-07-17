@@ -37,8 +37,8 @@ $(document).on('keyup', '.returnQuantity , .returnPrice', function() {
         var total = ($(this).html() === "" || $(this).html() === "NaN") ? 0 : $(this).html();
         sum += +parseFloat(total);
     });
-    $('.returnSubTotal').html(total);
-    $('.returnSubTotal').val(total);
+    $('.returnGrandTotal').html(sum);
+    $('.returnSubTotal').val(sum);
 
 });
 

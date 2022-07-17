@@ -108,9 +108,9 @@
                                                         <input type="number" class="span10 numeric returnQuantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"   id="quantity-{{ item.id }}" name="quantity[]" value="" placeholder="{{ item.quantity }}"></td>
                                                     <td class="span2" ><input type="number" class="span10 numeric returnPrice" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.salesPrice }}"  id="price-{{ item.id }}" name="price[]" value="{{ item.salesPrice }}" placeholder="{{ item.salesPrice }}"></td>
                                                     <td>
-                                                        <span id="subTotal-{{ item.id }}">0</span>
+                                                        <span class="itemSubtotal" id="subTotal-{{ item.id }}">0</span>
                                                     </td>
-                                                    <td><input type="checkbox" name="isAdjustment-{{ item.id }}" id="isAdjustment-{{ item.id }}" value="1"></td>
+                                                    <td><input type="checkbox" name="isAdjustment[{{ item.id }}]" id="isAdjustment-{{ item.id }}" value="1"></td>
                                                 </tr>
                                              {% else %}
                                                     <tr>
@@ -133,7 +133,7 @@
                                         <td><strong>{{ entity.netTotal }}</strong></td>
                                         <td colspan="2"><strong class="pull-right">Return Sub-Total</strong></td>
                                         <td>
-                                            <strong class="returnSubTotal"></strong>
+                                            <strong class="returnGrandTotal"></strong>
                                             <input type="hidden" class="returnSubTotal"  id="returnTotal" value="0">
                                         </td>
                                         <td></td>

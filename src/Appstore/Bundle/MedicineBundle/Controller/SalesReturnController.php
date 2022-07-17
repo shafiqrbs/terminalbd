@@ -103,8 +103,7 @@ class SalesReturnController extends Controller
         $data = $request->request->all();
         foreach ($data['quantity'] as $key => $qnt) {
         	if($qnt > 0 ){
-                $adj = "isAdjustment-{[$key]}";
-        	    $adjustment = isset($adj) ? 1:0;
+        	    $adjustment = isset($data['isAdjustment'][$data['salesItem'][$key]]) ? 1 : 0;
                 $entity = new MedicineSalesReturn();
 		        $salesItem = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->find($data['salesItem'][$key]);
 		        $entity->setMedicineConfig($config);

@@ -87,9 +87,9 @@ class MedicineSalesReturn
     /**
      * @var boolean
      *
-     * @ORM\Column(name="adjustment", type="boolean" )
+     * @ORM\Column(name="adjustment", type="boolean", nullable = true )
      */
-    private $adjustment = false;
+    private $adjustment = 0;
 
     /**
      * @var float
