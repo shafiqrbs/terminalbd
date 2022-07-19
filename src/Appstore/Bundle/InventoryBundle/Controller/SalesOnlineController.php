@@ -116,12 +116,9 @@ class SalesOnlineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
-
-
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'general-sales');
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'general-sales');
         if(!in_array($entity->getProcess(),array('In-progress','Created'))) {

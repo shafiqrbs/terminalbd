@@ -235,7 +235,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		$createdStart = isset($data['startDate'])? $data['startDate'] :'';
 		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 		$medicineName = isset($data['medicineName'])? $data['medicineName'] :'';
-		$brandName = isset($data['brandName'])? $data['brandName'] :'';
+        $medicineBrand = isset($data['brandName'])? $data['brandName'] :'';
 		if (!empty($invoice)) {
 			$qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
 		}

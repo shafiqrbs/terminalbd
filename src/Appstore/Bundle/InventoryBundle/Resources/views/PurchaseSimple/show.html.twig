@@ -130,8 +130,8 @@
                                             <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                             {% if entity.inventoryConfig.isAttribute == 1 %}
                                             <td class="span3">
-                                                <a href="#" id="serialNo" data-name="SerialNo" data-url="{{ path('inventory_purchaseitem_inline_update',{'id':purchaseItem.id}) }}"  data-type="textarea" data-pk="{{ purchaseItem.id }}" value="{{ purchaseItem.serialNo }}" data-placeholder="Enter product IME/Serial no" data-title="Enter IME/Serial no" class="editable">{% if purchaseItem.serialNo is not empty %}{% set serialNos = purchaseItem.serialNo|split(',')  %}{% for serial in serialNos %}{{ serial }}{{ not loop.last ? ',<br/>' }}{% endfor %}{% endif %}</a></td>
-                                            {% else %}
+                                                <a href="#" id="serialNo" data-name="SerialNo" data-url="{{ path('inventory_purchaseitem_inline_update',{'id':purchaseItem.id}) }}"  data-type="textarea" data-pk="{{ purchaseItem.id }}" value="{{ purchaseItem.serialNo }}" data-placeholder="Enter product IME/Serial no" data-title="Enter IME/Serial no" class="editable">{% if purchaseItem.serialNo is not empty %}{% set serialNos = purchaseItem.serialNo|split(',')  %}{% for serial in serialNos %}{{ serial }}{{ not loop.last ? ',<br/>' }}{% endfor %}{% endif %}</a>
+                                            </td>
                                             <td></td>
                                             {% endif %}
                                             <td class="numeric" >{% if purchaseItem.expiredDate %}{{ purchaseItem.expiredDate|date('m-Y') }}{% endif %}</td>
@@ -143,7 +143,7 @@
                                             <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
                                             <td class=" numeric" >
                                                 {% if entity.process != 'approved' %}
-                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
+                                                    <a href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                                 {% if entity.inventoryConfig.isAttribute == 1 %}
                                                 <a href="{{ path('inventory_purchaseitem_edit', { 'id': purchaseItem.id }) }}" rel="" id="{{  purchaseItem.id }}"  class="btn blue mini" >IME/Serial</a>

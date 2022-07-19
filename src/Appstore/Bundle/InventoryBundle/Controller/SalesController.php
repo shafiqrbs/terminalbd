@@ -152,9 +152,9 @@ class SalesController extends Controller
         $barcode = $request->request->get('barcode');
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $serialItem = $em->getRepository('InventoryBundle:PurchaseItemSerial')->returnPurchaseItemDetails($inventory, $barcode);
+        $serialItem = $em->getRepository('InventoryBundle:PurchaseItemSerial')->returnPurchaseItemDetails($inventory, trim($barcode));
         if(empty($serialItem)){
-            $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,$barcode);
+            $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,trim($barcode));
         }
         if ($serialItem) {
            $purchaseItem = $serialItem->getPurchaseItem();
@@ -194,7 +194,6 @@ class SalesController extends Controller
 
         //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->find($sales);
-
         $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
             'entity' => $entity,
         ));

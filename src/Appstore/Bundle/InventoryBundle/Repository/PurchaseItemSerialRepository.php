@@ -37,12 +37,13 @@ class PurchaseItemSerialRepository extends EntityRepository
             if($item->getSerialNo()){
                 $ids = explode(",", $item->getSerialNo());
                 foreach ($ids as $id){
+                  //  $barcode = TRIM(str_replace(str_replace(str_replace($id,'\t',''),'\n',''),'\r',''));
+                    $barcode = TRIM(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $id));
                     $entity = new PurchaseItemSerial();
                     $entity->setInventoryConfig($purchase->getInventoryConfig());
                     $entity->setItem($item->getItem());
                     $entity->setPurchaseItem($item);
-                    $entity->setBarcode($id);
-                    $entity->setSerialNo($id);
+                    $entity->setBarcode($barcode);
                     $entity->setStatus(0);
                     $em->persist($entity);
                     $em->flush();

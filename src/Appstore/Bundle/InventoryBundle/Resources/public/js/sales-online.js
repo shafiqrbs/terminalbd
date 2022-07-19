@@ -180,7 +180,7 @@ var InventorySales = function(sales) {
                 $('#vat').html(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
+              //  FormComponents.init();
             },
 
         })
@@ -210,7 +210,7 @@ var InventorySales = function(sales) {
                 $('#discount').html(obj['discount']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
+             //   FormComponents.init();
             },
         })
     });
