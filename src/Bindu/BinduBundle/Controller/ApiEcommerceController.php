@@ -89,7 +89,6 @@ class ApiEcommerceController extends Controller
                     $vatRegNo = '';
                     $vatPercentage = '';
                     $vatEnable = '';
-
                     $productColumn = $entity->getEcommerceConfig()->getMobileProductColumn();
                     $productFeatureColumn = $entity->getEcommerceConfig()->getMobileFeatureColumn();
                     $currency = $entity->getEcommerceConfig()->getCurrency();

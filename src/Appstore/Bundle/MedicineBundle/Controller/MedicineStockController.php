@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePrepurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Form\AccessoriesStockType;
@@ -110,6 +111,41 @@ class MedicineStockController extends Controller
             'modeFor' => $modeFor,
             'searchForm' => $data,
         ));
+    }
+
+    /**
+     * @Secure(roles="ROLE_MEDICINE_STOCK")
+     */
+
+
+    public function selectedPreviewAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+       /// $data = explode( ',', $request->cookies->get( 'barcodes' ) );
+        $data = $request->cookies->get( 'barcodes');
+        if ( is_null( $data ) ) {
+            return new Response("No record Found");
+        }
+        $stock = $em->getRepository('MedicineBundle:MedicineStock')->findWithSelectedItems($config,$data);
+        $result = $this->renderView('MedicineBundle:MedicineStock:selectedItem.html.twig', array(
+            'pagination' => $stock,
+        ));
+        return new Response($result);
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_MEDICINE_STOCK")
+     */
+
+    public function selectedRefreshAction(Request $request)
+    {
+        unset($_COOKIE['barcodes']);
+        setcookie('barcodes', '', time() - 3600, '/');
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
+
     }
 
 

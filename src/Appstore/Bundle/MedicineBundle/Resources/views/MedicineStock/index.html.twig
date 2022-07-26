@@ -34,7 +34,11 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a  href="{{ path('medicine_prepurchase_create') }}" target="_blank" id="btn-create-barcode" class="btn purple" >
+                                <a  href="javascript:"  id="btn-selected-preview" class="btn" >
+                                    <i class="icon-eye-open"></i> Selected</a>
+                                <a  href="{{ path('medicine_stock_refresh') }}"  id="btn-selected-refresh" class="btn red">
+                                    <i class="icon-refresh"></i></a>
+                                 <a  href="{{ path('medicine_prepurchase_create') }}" target="_blank" id="btn-create-barcode" class="btn purple" >
                                     <i class="icon-shopping-cart"></i> Pre-Purchase</a>
                                 {% if app.user.granted("ROLE_DOMAIN") or app.user.granted("ROLE_MEDICINE_ADMIN") %}
                                 <a  href="{{ path('medicine_purchase_opening') }}" id="btn-create-barcode" class="btn yellow" >

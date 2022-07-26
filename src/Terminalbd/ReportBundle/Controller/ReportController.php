@@ -936,6 +936,58 @@ class ReportController extends Controller
     }
 
 
+    /**
+     * @Route("/monthly-commission-details", methods={"GET", "POST"}, name="hms_report_monthly_commission_details")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function monthlyCommissionDetailsAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($user->getGlobalOption()->getHospitalConfig(), array(5, 6));
+        return $this->render('ReportBundle:Hospital/Monthly:commission.html.twig', array(
+            'referredDoctors' => $referredDoctors,
+            'searchForm' => $data
+        ));
+
+    }
+
+    /**
+     * @Route("/monthly-commission-details-load", methods={"GET", "POST"}, name="hms_report_monthly_commission_details_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function monthlyCommissionDetailsLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $user->getGlobalOption();
+        if(isset($data['month']) and $data['month'] and isset($data['year']) and $data['year'] ) {
+            $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyCommissionDetails($user, $data);
+            $monthlyReferredCommissionInvoice = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyReferredCommissionInvoice($user, $data);
+            $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->monthlyGroupBaseCommissionSummary($user, $data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Hospital/Monthly:commission-details.html.twig', array(
+                    'referredInvoice' => $monthlyReferredCommissionInvoice,
+                    'commissions' => $commissions,
+                    'commissionSummary' => $commissionSummary,
+                    'searchForm' => $data,
+                    'globalOption' => $globalOption,
+                )
+            );
+            return new Response($htmlProcess);
+        }
+        return new Response('Record Does not found');
+    }
+
+
     /* Inventory Report */
 
     /**

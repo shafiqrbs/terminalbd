@@ -187,20 +187,15 @@ class MedicinePrepurchaseItemRepository extends EntityRepository
     }
 
 
-    public function insertStockPurchaseItems(MedicinePrepurchase $purchase,MedicineStock $item, $data)
+    public function insertStockPurchaseItems(MedicinePrepurchase $purchase,MedicineStock $item, $quantity)
     {
         $em = $this->_em;
-        $purchasePrice = $data["medicineStock"]['purchasePrice'];
-        $purchaseQuantity = (isset($data["medicineStock"]['purchaseQuantity']) and $data["medicineStock"]['purchaseQuantity'] > 0 ) ? $data["medicineStock"]['purchaseQuantity'] : 1;
         $entity = new MedicinePrepurchaseItem();
         $entity->setMedicinePrepurchase($purchase);
         $entity->setMedicineStock($item);
-        if($purchasePrice){
-            $unitPrice = round(($purchasePrice/$purchaseQuantity),2);
-            $entity->setSubTotal($item->getPurchasePrice());
-            $entity->setSalesPrice($unitPrice);
-        }
-        $entity->setQuantity($purchaseQuantity);
+        $entity->setQuantity($quantity);
+        $entity->setSalesPrice($item->getSalesPrice());
+        $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
         $em->persist($entity);
         $em->flush();
     }

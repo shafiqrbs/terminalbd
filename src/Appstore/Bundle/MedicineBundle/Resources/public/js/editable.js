@@ -93,6 +93,40 @@ $( ".migration" ).click(function() {
     });
 });
 
+$(document).on('click', '#btn-selected-preview', function() {
+    $('.dialogModal_header').html('Selected Stock Item');
+    $('.dialog_content').dialogModal({
+        topOffset: 0,
+        top: 0,
+        type: '',
+        onOkBut: function(event, el, current) {},
+        onCancelBut: function(event, el, current) {},
+        onLoad: function(el, current) {
+            $.ajax({
+                url: Routing.generate('medicine_stock_selected_preview'),
+                async: true,
+                success: function (response) {
+                    el.find('.dialogModal_content').html(response);
+                    datatableLoad();
+                }
+            });
+        },
+        onClose: function(el, current) {},
+        onChange: function(el, current) {}
+    });
+
+});
+
+function datatableLoad() {
+    $('#datatable').DataTable( {
+        scrollY: "500px",
+        scrollCollapse: true,
+        scrollX: false,
+        paging:false,
+        info: false,
+    } );
+}
+
 
 
 

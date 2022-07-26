@@ -207,6 +207,45 @@ class PurchaseController extends Controller
 
     }
 
+    /**
+     * Finds and displays a Vendor entity.
+     *
+     */
+    public function copyAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        /* @var $purchase MedicinePurchase */
+        $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
+        if (!$purchase) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
+
+        $entity = new MedicinePurchase();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $entity->setMedicineConfig($config);
+        $entity->setCreatedBy($this->getUser());
+        $receiveDate = new \DateTime('now');
+        $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+        if($accountConfig == 1){
+            $datetime = new \DateTime("yesterday 23:30:30");
+            $entity->setCreated($datetime);
+            $entity->setUpdated($datetime);
+            $entity->setReceiveDate($receiveDate);
+        }
+        $entity->setMedicineVendor($purchase->getMedicineVendor());
+        $entity->setSubTotal($purchase->getSubTotal());
+        $entity->setInvoiceMode($purchase->getInvoiceMode());
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $em->persist($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository(MedicinePurchaseItem::class)->insertCopyItems($entity,$purchase);
+        return $this->redirect($this->generateUrl('medicine_purchase_edit', array('id' => $entity->getId())));
+
+    }
+
 	/**
 	 * @Secure(roles="ROLE_MEDICINE_PURCHASE")
 	 */
@@ -246,6 +285,8 @@ class PurchaseController extends Controller
             'form' => $editForm->createView(),
         ));
     }
+
+
 
 
     /**
@@ -839,6 +880,8 @@ class PurchaseController extends Controller
             'entity'      => $entity,
         ));
     }
+
+
 
      /**
      * Finds and displays a Vendor entity.

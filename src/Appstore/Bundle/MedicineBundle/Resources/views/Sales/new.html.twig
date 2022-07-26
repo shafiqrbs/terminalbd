@@ -92,15 +92,21 @@
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}.</td>
                                     <td class="span5">{{ item.medicineStock.name }}</td>
-                                    <td class="span1">{{ item.salesPrice }}</td>
-                                    <td class="span1">{{ item.quantity }}</td>
-                                    <td class="span1">{{ item.subTotal|number_format }}</td>
+                                    <td class="span1">
+                                        <div class="input-append">
+                                            <input type="text" class="td-inline-input salesPrice"  data-id="{{ item.id }}" autocomplete = "off"   id="salesPrice-{{ item.id }}" name="salesPrice[]" value="{{ item.salesPrice }}" placeholder="{{ item.salesPrice }}">
+                                        </div>
+                                    </td>
+                                    <td class="span1">
+                                        <div class="input-append">
+                                            <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span class="btn mini">{{ item.medicineStock.unit.name }}</span>{% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="span1" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format }}</td>
                                     <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('medicine_sales_item_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini itemDelete" ><i class="icon-trash"></i></a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
-                        </tbody>
-                        <tfoot>
                         <tr>
                             <td colspan="6" class="span12" style="border: 1px double #000"></td>
                         </tr>
@@ -114,7 +120,8 @@
                             <td class="span2"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
-                        </tfoot>
+                        </tbody>
+
                     </table>
                     <div class="clearfix">&nbsp;</div>
                 </div>
@@ -370,7 +377,7 @@
                         <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.netTotal }}">
                         <div class="pull-right">
-                            <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Payment</button>
+                            <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Save</button>
                         </div>
                     </div>
                 </div>
@@ -388,6 +395,15 @@
  <style>
      .customer{
          display: none;
+     }
+     .input-append{
+         margin-bottom: 0!important;
+         padding-bottom: 0!important;
+     }
+     .input-append .td-inline-input{
+         border: 2px solid #4d90fe!important;
+         width: 80px!important;
+         height: 16px;
      }
  </style>
 {% endblock %}

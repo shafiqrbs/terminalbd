@@ -88,15 +88,17 @@
                                 <th class="numeric" >Expiry Date</th>
                                 <th class="numeric" >Barcode</th>
                                 <th class="numeric" >Medicine Name</th>
+                                <th class="numeric" >Brand Name</th>
                                 <th class="numeric" >Rack</th>
                                 <th class="numeric" >Grn</th>
                                 <th class="numeric" >Vendor</th>
                                 <th class="numeric" >Quantity</th>
+                                <th class="numeric" >Sales QTY</th>
                                 {#<th class="numeric" >P Return</th>
                                 <th class="numeric" >S Qnt.</th>
                                 <th class="numeric" >S Return</th>
-                                <th class="numeric" >Damage</th>
-                                <th class="numeric" >Remain Qnt.</th>#}
+                                <th class="numeric" >Damage</th>#}
+                                <th class="numeric" >Remain Qnt.</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -109,15 +111,16 @@
                                     </th>
                                     <td class="numeric" >{{ entity.barcode }}</td>
                                     <td class="numeric" >{{ entity.medicineStock.name }}</td>
+                                    <td class="numeric" >{{ entity.medicineStock.brandName }}</td>
                                     <td class="numeric" >{% if entity.medicineStock.rackNo is not empty %}{{ entity.medicineStock.rackNo.name }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.medicinePurchase.grn }}</td>
                                     <td class="numeric" >{% if entity.medicinePurchase.medicineVendor is defined and entity.medicinePurchase.medicineVendor is not empty %}{{ entity.medicinePurchase.medicineVendor.companyName }}{% endif %}</td>
                                     <td class="numeric" >{{ entity.quantity }}</td>
-                                    {#<td class="numeric" >{{ entity.purchaseReturnQuantity }}</td>
                                     <td class="numeric" >{{ entity.salesQuantity }}</td>
+                                    {#<td class="numeric" >{{ entity.purchaseReturnQuantity }}</td>
                                     <td class="numeric" >{{ entity.salesReturnQuantity }}</td>
-                                    <td class="numeric" >{{ entity.damageQuantity }}</td>
-                                    <td class="numeric" >{{ entity.remainingQuantity }}</td>#}
+                                    <td class="numeric" >{{ entity.damageQuantity }}</td>#}
+                                    <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

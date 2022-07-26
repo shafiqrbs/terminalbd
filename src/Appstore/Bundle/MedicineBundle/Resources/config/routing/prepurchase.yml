@@ -85,5 +85,16 @@ medicine_prepurchase_download:
     defaults: { _controller: "MedicineBundle:Prepurchase:downloadPdf" }
 
 
+medicine_prepurchase_update_brand:
+    path:     /{id}/invoice-update-brand
+    defaults: { _controller: "MedicineBundle:Prepurchase:updateBrand" }
+    options:
+        expose: true
+
+medicine_prepurchase_stock_item_search:
+    path:     /medicine-stock-item-search
+    defaults: { _controller: "MedicineBundle:Prepurchase:autoPurchaseStockItemSearch" }
+    options:
+        expose: true
 
 

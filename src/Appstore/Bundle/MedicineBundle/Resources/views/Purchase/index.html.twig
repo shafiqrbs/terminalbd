@@ -124,6 +124,9 @@
                                                 <a id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('medicine_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             <a href="{{ path('medicine_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                            {% if entity.process == "Approved" %}
+                                            <a href="{{ path('medicine_purchase_copy', { 'id': entity.id }) }}" class="btn yellow mini" >Copy</a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

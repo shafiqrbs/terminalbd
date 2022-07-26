@@ -60,6 +60,7 @@ class CustomerForHospitalAdmissionType extends AbstractType
             ))
             ->add('dob','date', array(
                 'years' => range(date('Y'), date('Y')-100),
+                'required' => false,
                 'attr'=>array('class'=>'m-wrap span6 dob','placeholder'=>'Patient date of birth'),
                 ))
             ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'Age'),

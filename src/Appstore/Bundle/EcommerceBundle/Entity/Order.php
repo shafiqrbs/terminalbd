@@ -403,7 +403,7 @@ class Order
      *
      * @ORM\Column(name="isArchive", type="boolean")
      */
-    private $isArchive = true;
+    private $isArchive = 0;
 
     /**
      * @var boolean

@@ -205,55 +205,14 @@ class PrepurchaseController extends Controller
         $entity = new MedicineStock();
         $form = $this->createStockItemForm($entity, $purchase);
         $form->handleRequest($request);
-        $medicineName = $data['medicineStock']['name'];
-        if(empty($data['medicineId'])) {
-            $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockNonMedicine($config,$medicineName);
-        }else{
-            $medicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->find($data['medicineId']);
-            $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->checkDuplicateStockMedicine($config, $medicine);
-        }
-        if (empty($checkStockMedicine)){
-            $entity->setMedicineConfig($config);
-            if(empty($data['medicineId'])){
-                if($data['medicineCompany']){
-                    $entity->setBrandName($data['medicineCompany']);
-                }
-                $slug = str_replace(" ",'',$entity->getName());
-                $entity->setSlug(strtolower($slug));
-            }else{
-                $entity->setMedicineBrand($medicine);
-                $name = $medicine->getName().' '.$medicine->getStrength().' '.$medicine->getMedicineForm();
-                $entity->setName($name);
-                $slug = str_replace(" ",'',$medicine->getName().$medicine->getStrength());
-                $entity->setSlug(strtolower($slug));
-                if($data['medicineCompany']){
-                    $entity->setBrandName($data['medicineCompany']);
-                }else{
-                    $entity->setBrandName($medicine->getMedicineCompany()->getName());
-                }
-                $entity->setMode('medicine');
-            }
-            if(empty($entity->getUnit())){
-                $unit = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->find(4);
-                $entity->setUnit($unit);
-            }
-	        $entity->setPurchaseQuantity(0);
-            $em->persist($entity);
-            $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertStockPurchaseItems($purchase, $entity, $data);
-            $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchase')->updatePurchaseTotalPrice($purchase);
-            $msg = 'Medicine added successfully';
-            $result = $this->returnResultData($invoice, $msg);
-            return new Response(json_encode($result));
-
-        }else{
-
-	        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertStockPurchaseItems($purchase, $checkStockMedicine, $data);
-	        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchase')->updatePurchaseTotalPrice($purchase);
-	        $msg = 'Medicine added successfully';
-	        $result = $this->returnResultData($invoice, $msg);
-	        return new Response(json_encode($result));
-        }
+        $medicine = $data['medicineStock']['name'];
+        $quantity = $data['medicineStock']['purchaseQuantity'];
+        $checkStockMedicine = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('medicineConfig'=>$config,'id'=>$medicine));
+        $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchaseItem')->insertStockPurchaseItems($purchase, $checkStockMedicine, $quantity);
+        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePrepurchase')->updatePurchaseTotalPrice($purchase);
+        $msg = 'Medicine added successfully';
+        $result = $this->returnResultData($invoice, $msg);
+        return new Response(json_encode($result));
         exit;
     }
 
@@ -580,6 +539,35 @@ class PrepurchaseController extends Controller
         return $this->redirect($this->generateUrl('medicine_prepurchase_edit', array('id' => $entity->getId())));
 
     }
+
+    /**
+     * Finds and displays a Vendor entity.
+     *
+     */
+    public function updateBrandAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $purchase = $this->getDoctrine()->getRepository(MedicinePrepurchase::class)->find($id);
+        $brand = $_REQUEST['brandName'];
+        $purchase->setBrandName($brand);
+        $em->flush();
+        return new Response('Done');
+    }
+
+    public function autoPurchaseStockItemSearchAction(Request $request)
+    {
+        $purchase = trim($_REQUEST['purchase']);
+        $entity = $this->getDoctrine()->getRepository(MedicinePrepurchase::class)->find($purchase);
+        $brand = $entity->getBrandName();
+        $item = trim($_REQUEST['q']);
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
+            $item = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->searchAutoPurchaseStockItemWithBrand($item,$inventory,$brand);
+        }
+        return new JsonResponse($item);
+    }
+
+
 
 
 

@@ -132,6 +132,36 @@ class SalesController extends Controller
      * @Secure(roles="ROLE_MEDICINE_SALES")
      */
 
+    public function copyAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $sales = $this->getDoctrine()->getRepository(MedicineSales::class)->findOneBy(array('medicineConfig'=>$config,'id'=>$id));
+        if (!$sales) {
+            throw $this->createNotFoundException('Unable to find MedicineSales entity.');
+        }
+        $entity = new MedicineSales();
+        $entity->setMedicineConfig($config);
+        $entity->setCreatedBy($this->getUser());
+        $entity->setCustomer($sales->getCustomer());
+        $entity->setSubTotal($sales->getSubTotal());
+        $entity->setDiscount($sales->getDiscount());
+        $entity->setDiscountType($sales->getDiscountType());
+        $entity->setNetTotal($sales->getNetTotal());
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $em->persist($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository(MedicineSalesItem::class)->insertCopyItems($entity,$sales);
+        return $this->redirect($this->generateUrl('medicine_sales_edit', array('id' => $entity->getId())));
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_MEDICINE_SALES")
+     */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -216,7 +246,10 @@ class SalesController extends Controller
 
    public function returnResultData(MedicineSales $entity,$msg=''){
 
-       $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->getSalesItems($entity);
+      // $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->getSalesItems($entity);
+       $salesItems = $this->renderView('MedicineBundle:Sales:sales-invoice-data.html.twig', array(
+           'entity'        => $entity,
+       ));
        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
        $netTotal = $entity->getNetTotal() > 0 ? $entity->getNetTotal() : 0;
        $payment = $entity->getReceived() > 0 ? $entity->getReceived() : 0;
@@ -249,8 +282,10 @@ class SalesController extends Controller
        $stockItem = ($data['salesitem']['stockName']);
        $itemPercent = ($data['salesitem']['itemPercent']);
        $salesPrice = ($data['salesitem']['salesPrice']);
+       $quantity = ( $data['salesitem']['quantity'] > 0 ) ?  $data['salesitem']['quantity'] :1;
        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
        $entity->setMedicineStock($stock);
+       $entity->setQuantity($quantity);
        if($itemPercent > 0){
            $initialDiscount = round(($salesPrice *  $itemPercent)/100);
            $initialGrandTotal = round($salesPrice  - $initialDiscount);
@@ -269,6 +304,27 @@ class SalesController extends Controller
        $result = $this->returnResultData($invoice,$msg);
        return new Response(json_encode($result));
 
+   }
+
+   public function salesItemUpdateAction(){
+
+       $em = $this->getDoctrine()->getManager();
+       $data = $_REQUEST;
+       $id = $data['id'];
+       $quantity = $data['quantity'];
+       $price = $data['salesPrice'];
+
+       /* @var $salesItem MedicineSalesItem */
+
+       $salesItem = $this->getDoctrine()->getRepository(MedicineSalesItem::class)->find($id);
+       $salesItem->setQuantity($quantity);
+       $salesItem->setSalesPrice($price);
+       $salesItem->setSubTotal($price * $quantity);
+       $em->flush();
+       $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($salesItem->getMedicineStock(),'sales');
+       $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($salesItem->getMedicineSales());
+       $result = $this->returnResultData($invoice,$msg='');
+       return new Response(json_encode($result));
    }
 
 

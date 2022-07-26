@@ -54,7 +54,7 @@
                 <td><strong>Age</strong></td>
                 <td>{{ entity.customer.age }} {{ entity.customer.ageType }}</td>
                 <td><strong>Date of Birth</strong></td>
-                <td>{% if entity.customer.dob %}{{ entity.customer.dob|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if entity.customer.dob is not empty %}{{ entity.customer.dob|date('d-m-Y') }}{% endif %}</td>
                 <td><strong>Gender</strong></td>
                 <td>{{ entity.customer.gender }}</td>
             </tr>

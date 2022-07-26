@@ -282,7 +282,7 @@ class MedicineStockRepository extends EntityRepository
 
     public function getBrands($config)
 	{
-        $nots = array('.','-',1,',',' ','`',"'");
+        $nots = array('.','-',1,',',' ','`',"'",'0','O');
 		$qb = $this->createQueryBuilder('item');
 		$qb->select('item.brandName as name');
 		$qb->where("item.medicineConfig = :config")->setParameter('config', $config);
@@ -312,6 +312,23 @@ class MedicineStockRepository extends EntityRepository
         $qb->orderBy('e.name','ASC');
         $qb->getQuery();
         return  $qb;
+
+    }
+
+
+    public function findWithSelectedItems($config,$ids)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id ,e.brandName as brandName , e.name as name','e.minQuantity as minQuantity , e.salesPrice as salesPrice','e.remainingQuantity as remainingQuantity , e.pack as pack');
+        $qb->addSelect('u.name as unit');
+        $qb->join("e.unit",'u');
+        $qb->where("e.medicineConfig = :config");
+        $qb->setParameter('config', $config);
+        $qb->andWhere($qb->expr()->in('e.id', $ids));
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
 
     }
 

@@ -1,27 +1,31 @@
 {% set totalPrice = 0 %}
- {% if entity.medicinePurchaseItems is not empty %}
+{% if entity.medicinePurchaseItems is not empty %}
                                             {% for item in entity.medicinePurchaseItems %}
                                                 {% set totalPrice = totalPrice + (item.medicineStock.averagePurchasePrice * item.quantity)  %}
 
                                                 <tr id="remove-{{ item.id }}" class="{% if item.medicineStock.averagePurchasePrice > item.salesPrice %}warning{% endif %}" >
                                                     <td>{{ loop.index }}</td>
-                                                    <td class="span3"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
+                                                    <td class=""><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
                                                     <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                                                    <td class="">{{ item.batchno }}</td>
-                                                    <td class="">
+                                                    <td class="span1">
+                                                        <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
+                                                    </td>
+                                                    <td class="span2">
                                                         <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
                                                     </td>
                                                     <td class="span1"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</a></td>
-                                                    <td class="">{{ item.medicineStock.purchasePrice }}</td>
-                                                    <td class="">{{ item.tp }}</td>
-                                                    <td class="" ><input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
-                                                    <td class="">
-                                                        <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
+                                                    <td class="span1">{{ item.medicineStock.purchasePrice }}</td>
+                                                    <td class="span1">{{ item.tp }}</td>
+                                                    <td class="span1" ><input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
+                                                    <td class="span2">
+                                                        <div class="input-append">
+                                                            <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span class="btn mini">{{ item.medicineStock.unit.name }}</span>{% endif %}
+                                                        </div>
                                                     </td>
-                                                    <td class="">
+                                                    <td class="span1">
                                                         <input type="text" class="td-inline-input bonusQuantity" data-id="{{ item.id }}" autocomplete = "off"  id="bonusQuantity-{{ item.id }}" name="bonusQuantity[]" value="{{ item.bonusQuantity }}" placeholder="{{ item.bonusQuantity }}">
                                                     </td>
-                                                    <td class="">
+                                                    <td class="span1">
                                                         <a  class="editableText" data-name="pack" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-original-title="Change pack qnt">{{ item.medicineStock.pack }}</a>
                                                         {% if item.medicineStock.pack > 1 and item.quantity > item.medicineStock.pack|default(1) %} => {{ (item.quantity/item.medicineStock.pack)|default(1)|number_format(2) }}{% endif %}
                                                     </td>

@@ -129,6 +129,14 @@ class MedicinePrepurchase
     /**
      * @var string
      *
+     * @ORM\Column(name="brandName", type="string", nullable=true)
+     */
+    private $brandName = "";
+
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="process", type="string", nullable=true)
      */
     private $process = "Created";
@@ -454,6 +462,22 @@ class MedicinePrepurchase
 	public function getMedicinePrepurchaseItems() {
 		return $this->medicinePrepurchaseItems;
 	}
+
+    /**
+     * @return string
+     */
+    public function getBrandName()
+    {
+        return $this->brandName;
+    }
+
+    /**
+     * @param string $brandName
+     */
+    public function setBrandName($brandName)
+    {
+        $this->brandName = $brandName;
+    }
 
 }
 

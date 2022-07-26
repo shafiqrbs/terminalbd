@@ -97,6 +97,25 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return  $qb;
     }
 
+    public function insertCopyItems($entity, MedicinePurchase $purchase)
+    {
+        $em = $this->_em;
+        /* @var $item MedicinePurchaseItem */
+        foreach ($purchase->getMedicinePurchaseItems() as $item){
+
+            $purchaseItem = new MedicinePurchaseItem();
+            $purchaseItem->setMedicinePurchase($entity);
+            $purchaseItem->setMedicineStock($item->getMedicineStock());
+            $purchaseItem->setQuantity($item->getQuantity());
+            $purchaseItem->setPurchasePrice($item->getSalesPrice());
+            $purchaseItem->setSalesPrice($item->getSalesPrice());
+            $purchaseItem->setActualPurchasePrice($item->getSalesPrice());
+            $purchaseItem->setPurchaseSubTotal($item->getSalesPrice() * $item->getQuantity());
+            $em->persist($purchaseItem);
+            $em->flush();
+        }
+    }
+
 
 
     public function findWithSearch(MedicineConfig $config,$data = array(),$instant = ''){

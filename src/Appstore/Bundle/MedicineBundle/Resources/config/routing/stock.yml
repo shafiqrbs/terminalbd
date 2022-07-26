@@ -2,6 +2,16 @@ medicine_stock:
     path:     /
     defaults: { _controller: "MedicineBundle:MedicineStock:index" }
 
+medicine_stock_selected_preview:
+    path:     /stock-selected-preview
+    defaults: { _controller: "MedicineBundle:MedicineStock:selectedPreview" }
+    options:
+            expose: true
+
+medicine_stock_refresh:
+    path:     /stock-global-search
+    defaults: { _controller: "MedicineBundle:MedicineStock:selectedRefresh" }
+
 medicine_stock_global:
     path:     /stock-global-search
     defaults: { _controller: "MedicineBundle:MedicineStock:stockSearch" }

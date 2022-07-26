@@ -6,6 +6,10 @@ medicine_sales_hold:
     path:     /hold
     defaults: { _controller: "MedicineBundle:Sales:hold" }
 
+medicine_sales_copy:
+    path:     /{id}/copy
+    defaults: { _controller: "MedicineBundle:Sales:copy" }
+
 medicine_sales_android:
     path:     /android
     defaults: { _controller: "MedicineBundle:Sales:androidSales" }
@@ -43,6 +47,14 @@ medicine_device_sales_import:
 medicine_sales_item:
     path:     /sales-item
     defaults: { _controller: "MedicineBundle:Sales:salesItem" }
+
+
+medicine_sales_item_update:
+    path:     /sales-item-update
+    defaults: { _controller: "MedicineBundle:Sales:salesItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
 
 medicine_sales_show:
     path:     /{id}/show
@@ -103,12 +115,6 @@ medicine_sales_instant_item:
     options:
             expose: true
 
-medicine_sales_item_update:
-    path:     /item-update
-    defaults: { _controller: "MedicineBundle:Sales:invoiceItemUpdate" }
-    methods:  POST
-    options:
-            expose: true
 
 medicine_sales_discount_update:
     path:     /dicount-update

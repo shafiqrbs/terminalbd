@@ -9,9 +9,6 @@
                 </td>
             </tr>
             {% endif %}
-            <tr>
-                <td colspan="2"><h3></h3></td>
-            </tr>
             <tr class="print-header">
                 <th colspan="2">
                     <strong class="title">{{ entity.name }}</strong>
@@ -31,7 +28,7 @@
                 <td>
                     <ul class="unstyled">
                         <ul class="unstyled">
-                            {% if entity is not empty %}<li><strong>Date of Birth:</strong>&nbsp;{{ entity.dob|date('d-m-Y') }}</li>{% endif %}
+                            {% if entity is not empty %}<li><strong>Date of Birth:</strong>{%  if entity.dob is not empty %}&nbsp;{{ entity.dob|date('d-m-Y') }}{% endif %}</li>{% endif %}
                             {% if entity is not empty %}<li><strong>Blood Group:</strong>&nbsp;{{ entity.bloodGroup }}</li>{% endif %}
                             {% if entity is not empty %}<li><strong>Address</strong>&nbsp;{{ entity.address|raw }}</li>{% endif %}
                         </ul>

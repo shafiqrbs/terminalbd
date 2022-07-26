@@ -160,6 +160,26 @@ class MedicineSalesItemRepository extends EntityRepository
         return !empty($qnt['quantity']) ? $qnt['quantity'] : 0;
     }
 
+
+    public function insertCopyItems($entity, MedicineSales $sales)
+    {
+        $em = $this->_em;
+        /* @var $item MedicineSalesItem */
+        foreach ($sales->getMedicineSalesItems() as $item){
+
+            $purchaseItem = new MedicineSalesItem();
+            $purchaseItem->setMedicineSales($entity);
+            $purchaseItem->setMedicineStock($item->getMedicineStock());
+            $purchaseItem->setQuantity($item->getQuantity());
+            $purchaseItem->setPurchasePrice($item->getMedicineStock()->getPurchasePrice());
+            $purchaseItem->setSalesPrice($item->getSalesPrice());
+            $purchaseItem->setDiscountPrice($item->getDiscountPrice());
+            $purchaseItem->setSubTotal($item->getSubTotal());
+            $em->persist($purchaseItem);
+            $em->flush();
+        }
+    }
+
     public function temporarySalesInsert(User $user, MedicineSales $sales)
     {
         $em = $this->_em;

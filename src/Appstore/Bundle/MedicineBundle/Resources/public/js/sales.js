@@ -139,6 +139,31 @@ var form = $("#salesItemForm").validate({
     }
 });
 
+$(document).on('change', '.quantity ,.salesPrice', function() {
+
+    var id = $(this).attr('data-id');
+    var quantity = parseFloat($('#quantity-'+id).val());
+    var salesPrice = parseFloat($('#salesPrice-'+id).val());
+    var subTotal  = (quantity * salesPrice);
+    $("#subTotal-"+id).html(subTotal);
+    $.ajax({
+        url: Routing.generate('medicine_sales_item_update'),
+        type: 'POST',
+        data:'id='+ id +'&quantity='+ quantity+'&salesPrice='+ salesPrice,
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('#subTotal').html(obj['subTotal']);
+            $('#vat').val(obj['vat']);
+            $('.grandTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['subTotal']);
+            $('#due').val(obj['due']);
+            $('.dueAmount').html(obj['due']);
+            $('#discount').html(obj['discount']);
+        },
+
+    })
+});
+
 $('#invoiceParticulars').on("click", ".itemDelete", function() {
 
     var url = $(this).attr("data-url");

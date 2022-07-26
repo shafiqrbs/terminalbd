@@ -29,25 +29,12 @@ class MedicineStockPreItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 autoComplete2Medicine','placeholder'=>'Enter medicine name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicinePurchaseItem','placeholder'=>'Enter medicine name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span3 stockInput','placeholder'=>'MRP','autoComplete'=>'off')))
-            ->add('unit', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
-                'property' => 'name',
-                'empty_value' => '---Choose a unit ---',
-                'attr'=>array('class'=>'span6 m-wrap stockInput'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->orderBy("p.name","ASC");
-                },
-            ))
+            ->add('purchaseQuantity','text', array('attr'=>array('class'=>'m-wrap span12 stockInput','placeholder'=>'QTY','autoComplete'=>'off')))
 
         ;
     }
