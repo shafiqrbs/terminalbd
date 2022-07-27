@@ -148,21 +148,23 @@ class SalesController extends Controller
     {
         $purchaseItem = "";
         $em = $this->getDoctrine()->getManager();
-        $sales = $request->request->get('sales');
+        $salesInvoice = $request->request->get('sales');
         $barcode = $request->request->get('barcode');
-        $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $serialItem = $em->getRepository('InventoryBundle:PurchaseItemSerial')->returnPurchaseItemDetails($inventory, trim($barcode));
+        $sales = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'id'=>$salesInvoice));
+        $serialItem = $em->getRepository('InventoryBundle:PurchaseItemSerial')->returnPurchaseItemSerialDetails($inventory, trim($barcode));
+        $purchaseItem = "";
         if(empty($serialItem)){
             $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,trim($barcode));
         }
         if ($serialItem) {
-           $purchaseItem = $serialItem->getPurchaseItem();
-           $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
-           $itemStock = $purchaseItem->getItemStock();
-           if (!empty($purchaseItem) and $itemStock > 0 and $itemStock >= $checkQuantity) {
-                $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSerialSalesItems($sales, $purchaseItem,$serialItem);
-                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+           $pItem = $serialItem->getPurchaseItem();
+           $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($pItem);
+           $itemStock = $pItem->getItemStock();
+           if (!empty($pItem) and $itemStock > 0 and $itemStock >= $checkQuantity) {
+               // exit;
+                $salesReturn = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSerialSalesItems($sales, $pItem,$serialItem);
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesReturn);
                 $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
             } else {
                 $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
@@ -190,14 +192,14 @@ class SalesController extends Controller
 
     }
 
-    public function returnResultData(Sales $sales,$msg=''){
+    public function returnResultData($sales,$msg=''){
 
-        //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($entity);
-        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->find($sales);
+        //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $config,'id' => $sales));
         $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
-            'entity' => $entity,
+            'entity' => $entity
         ));
-
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
@@ -215,7 +217,6 @@ class SalesController extends Controller
             'salesItems' => $salesItems ,
             'success' => 'success'
         );
-
         return $data;
 
     }
@@ -297,8 +298,8 @@ class SalesController extends Controller
                 $salesItem->setCustomPrice($customPrice);
             }
             $salesItem->setSubTotal($quantity * $salesPrice);
-            $em->persist($salesItem);
-            $em->flush();
+           // $em->persist($salesItem);
+           // $em->flush();
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
         } else {
@@ -465,13 +466,12 @@ class SalesController extends Controller
             $em->flush();
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-           // $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+            $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             return new Response('success');
         } else {
             return new Response('failed');
         }
-        exit;
+
     }
 
 
@@ -481,7 +481,6 @@ class SalesController extends Controller
 
     public function deleteAction(Sales $sales)
     {
-
 
         $em = $this->getDoctrine()->getManager();
         if (!$sales) {
@@ -536,16 +535,15 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('InventoryBundle:SalesItem')->find($salesItem);
-        if (!$salesItem) {
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
-        $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($entity);
+       // $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($entity);
         $em->remove($entity);
         $em->flush();
-        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-        $data = $this->returnResultData($sales);
+        $invoice = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+        $data = $this->returnResultData($invoice);
         return new Response(json_encode($data));
-
 
     }
 

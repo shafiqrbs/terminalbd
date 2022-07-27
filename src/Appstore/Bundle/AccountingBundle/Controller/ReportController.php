@@ -407,8 +407,8 @@ class ReportController extends Controller
         $date = date('d-m-Y');
         $balance = $this->getDoctrine()->getRepository(AccountSales::class)->customerSingleOutstanding( $invoice->getGlobalOption(),$invoice->getId());
         $outstanding = number_format($balance,2);
-        $msg = "Sir As-salamu Alaykum, Your present Due Balance TK. {$outstanding}. Please Contact:  {$hotline}.Thanks for being with our.";
-        $msg = $orgName .'\nDear '.$msg;
+        $msg = "Sir , Your present Due Balance BDT {$outstanding} TK. Please Contact with us";
+        $msg = nl2br("=={$orgName}==  Dear {$msg}");
         if($global->getSmsSenderTotal() and $global->getSmsSenderTotal()->getRemaining() > 0 and $global->getNotificationConfig()->getSmsActive() == 1) {
             $this->send($msg,$mobile);
             $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->insertCustomerOutstandingSms($invoice,$msg,'success');

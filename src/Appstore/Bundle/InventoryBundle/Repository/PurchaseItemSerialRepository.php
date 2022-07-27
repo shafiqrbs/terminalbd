@@ -17,8 +17,6 @@ use Doctrine\ORM\EntityRepository;
 class PurchaseItemSerialRepository extends EntityRepository
 {
 
-
-
     public function insertPurchaseItemSerial(Purchase $purchase){
 
         $em = $this->_em;
@@ -55,12 +53,48 @@ class PurchaseItemSerialRepository extends EntityRepository
 
     }
 
-   public function returnPurchaseItemDetails($inventory,$barcode)
+    public function updatePurchaseItemSerial(PurchaseItem $item,$value){
+
+        $em = $this->_em;
+
+        /* @var $item PurchaseItem  */
+
+        if($item->getSerialNo()){
+            $id = $item->getId();
+            $stock = $em->createQuery("DELETE InventoryBundle:PurchaseItemSerial e WHERE  e.status != 1 AND  e.purchaseItem = $id");
+            if($stock){ $stock->execute(); }
+        }
+
+        if($value){
+            $ids = explode(",", $value);
+
+            foreach ($ids as $id){
+
+                //  $barcode = TRIM(str_replace(str_replace(str_replace($id,'\t',''),'\n',''),'\r',''));
+                $barcode = TRIM(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $id));
+                $empty = $this->findOneBy(array('purchaseItem' => $item,'barcode'=> $barcode));
+                if(empty($empty)){
+                    $entity = new PurchaseItemSerial();
+                    $entity->setInventoryConfig($item->getPurchase()->getInventoryConfig());
+                    $entity->setItem($item->getItem());
+                    $entity->setPurchaseItem($item);
+                    $entity->setBarcode($barcode);
+                    $entity->setStatus(0);
+                    $em->persist($entity);
+                    $em->flush();
+                }
+            }
+
+        }
+        return $item;
+
+    }
+
+   public function returnPurchaseItemSerialDetails($inventory,$barcode)
     {
         $qb = $this->createQueryBuilder('pis');
         $qb->select('pis');
         $qb->where("pis.inventoryConfig = :inventory")->setParameter('inventory', $inventory->getId());
-        $qb->andWhere("pis.status != 1" );
         $qb->andWhere("pis.barcode = :barcode" )->setParameter('barcode', $barcode);
         $row = $qb->getQuery()->getOneOrNullResult();
         if($row){

@@ -94,7 +94,7 @@ inventory_sales_empty_delete:
     defaults: { _controller: "InventoryBundle:Sales:deleteEmptyInvoice" }
 
 inventory_salesitem_delete:
-    path:     /{sales}/{salesItem}/delete
+    path:     /{sales}/{salesItem}/item-delete
     defaults: { _controller: "InventoryBundle:Sales:itemDelete" }
 
 inventory_sales_item_serial_update:

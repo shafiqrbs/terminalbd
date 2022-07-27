@@ -499,7 +499,6 @@ class SalesRepository extends EntityRepository
 
         $em->persist($sales);
         $em->flush();
-
         return $sales;
 
     }

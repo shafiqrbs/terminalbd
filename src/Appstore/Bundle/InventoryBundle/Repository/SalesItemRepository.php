@@ -265,22 +265,23 @@ class SalesItemRepository extends EntityRepository
             $entity->setSubTotal($purchaseItem->getSalesPrice());
             $em->persist($entity);
         }
-        $em->flush();
+
     }
 
-    public function insertSerialSalesItems($sales,$purchaseItem,$serial)
+    public function insertSerialSalesItems($sales,$purchaseItem,PurchaseItemSerial $serial)
     {
         $em = $this->_em;
         $existSerial = $em->getRepository(SalesItemSerial::class)->findOneBy(array('purchaseItemSerial'=> $serial));
         $existEntity = $this->findOneBy(array('sales'=> $sales,'purchaseItem'=> $purchaseItem));
-        /* @var $serial PurchaseItemSerial */
         if(!empty($existEntity) and empty($existSerial)){
+            $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($existEntity,$serial);
             $qnt = ($existEntity->getQuantity()+1);
             $existEntity->setQuantity($qnt);
             $existEntity->setSubTotal($qnt * $existEntity->getSalesPrice());
             $em->persist($existEntity);
-            $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($existEntity,$serial);
-        }else{
+            $em->flush();
+            return $existEntity->getSales();
+        }elseif($serial and empty($existSerial) and empty($existEntity)){
             $entity = new SalesItem();
             $entity->setSales($sales);
             $entity->setPurchaseItem($purchaseItem);
@@ -291,10 +292,20 @@ class SalesItemRepository extends EntityRepository
             $entity->setQuantity(1);
             $entity->setSerialNo($serial->getBarcode());
             $entity->setSubTotal($purchaseItem->getSalesPrice());
+            $entity->setAssuranceType($entity->getPurchaseItem()->getAssuranceType());
+            $entity->setAssuranceFromVendor($entity->getPurchaseItem()->getAssuranceFromVendor());
+            $entity->setAssuranceToCustomer($entity->getPurchaseItem()->getAssuranceToCustomer());
+            $entity->setExpiredDate($entity->getPurchaseItem()->getExpiredDate());
             $em->persist($entity);
+            $em->flush();
             $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($entity,$serial);
+            return $entity->getSales();
         }
-        $em->flush();
+        return $sales;
+
+
+
+
     }
 
     public function getSalesItems($sales , $device = '' )
@@ -379,7 +390,7 @@ class SalesItemRepository extends EntityRepository
                 if ($isAttribute == 1 and !empty($entity->getPurchaseItem()->getSerialNo())) {
                     $data .= "<a id='{$entity->getId()}'  data-url='/inventory/sales/{$entity->getId()}/update-serial-no' href='javascript:' class='btn blue mini serialSave' ><i class='icon-save'></i></a>";
                 }
-                $data .="<a id='{$entity->getId()}'  rel='/inventory/sales/{$entity->getSales()->getId()}/{$entity->getId()}/delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
+                $data .="<a id='{$entity->getId()}'  rel='/inventory/sales/{$entity->getSales()->getId()}/{$entity->getId()}/item-delete' href='javascript:' class='btn red mini delete' ><i class='icon-trash'></i></a>";
                 $data .="</td>";
                 $data .='</tr>';
             }

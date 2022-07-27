@@ -560,6 +560,14 @@ class Customer
 
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="creditLimit", type="float", nullable=true)
+     */
+    private $creditLimit;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
@@ -1871,6 +1879,24 @@ class Customer
     {
         $this->referenceId = $referenceId;
     }
+
+    /**
+     * @return float
+     */
+    public function getCreditLimit()
+    {
+        return $this->creditLimit;
+    }
+
+    /**
+     * @param float $creditLimit
+     */
+    public function setCreditLimit($creditLimit)
+    {
+        $this->creditLimit = $creditLimit;
+    }
+
+
 
 
 }

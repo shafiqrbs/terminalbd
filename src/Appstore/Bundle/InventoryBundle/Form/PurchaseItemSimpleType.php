@@ -47,7 +47,7 @@ class PurchaseItemSimpleType extends AbstractType
 
         if($this->inventoryConfig->isAttribute() == 1){
             $builder
-                ->add('serialNo','textarea', array('required'=> false,'attr'=>array('class'=>'m-wrap span12','required' => false,'rows'=>3,'placeholder'=>'Attribute name')))
+                ->add('serialNo','textarea', array('required'=> false,'attr'=>array('class'=>'m-wrap span12','required' => false,'rows'=>5,'placeholder'=>'Attribute name')))
                 ->add('expiredDate', 'date', array(
                     'widget' => 'single_text',
                     'required'    => false,

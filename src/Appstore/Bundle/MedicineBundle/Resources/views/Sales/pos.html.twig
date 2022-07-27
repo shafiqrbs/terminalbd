@@ -485,32 +485,36 @@
     {{ form_end(form) }}
     <div class="float-sm">
         <div class="fl-fl float-fb">
-            <img src="{{ asset('assets/img/shortcut/shift-t4x.png')}}">
+            <img src="{{ asset('assets/img/shortcut/R.png')}}">
             <a href="javascript:">Total Amount</a>
         </div>
         <div class="fl-fl float-tw">
-            <img src="{{ asset('assets/img/shortcut/shift-s4x.png')}}">
+            <img src="{{ asset('assets/img/shortcut/S.png')}}">
             <a href="javascript:">Save</a>
         </div>
         <div class="fl-fl float-gp">
-            <img src="{{ asset('assets/img/shortcut/shift-t4x.png')}}">
+            <img src="{{ asset('assets/img/shortcut/P.png')}}">
             <a href="javascript:">Print</a>
         </div>
         <div class="fl-fl float-rs">
-            <img src="{{ asset('assets/img/shortcut/shift-t4x.png')}}">
+            <img src="{{ asset('assets/img/shortcut/D.png')}}">
             <a href="javascript:">Discount</a>
         </div>
         <div class="fl-fl float-ig">
-            <img src="{{ asset('assets/img/shortcut/shift-t4x.png')}}">
+            <img src="{{ asset('assets/img/shortcut/R.png')}}">
             <a href="javascript:">Receive Amount</a>
         </div>
         <div class="fl-fl float-pn">
-            <img src="{{ asset('assets/img/shortcut/shift-t4x.png')}}">
+            <img src="{{ asset('assets/img/shortcut/C.png')}}">
             <a href="javascript:">Customer</a>
         </div>
         <div class="fl-fl float-new">
-            <img src="{{ asset('assets/img/shortcut/shift-t4x.png')}}">
+            <img src="{{ asset('assets/img/shortcut/N.png')}}">
             <a href="javascript:">New Item</a>
+        </div>
+        <div class="fl-fl float-new">
+            <img src="{{ asset('assets/img/shortcut/A.png')}}">
+            <a href="javascript:">Add Item</a>
         </div>
     </div>
     <!-- END FORM-->
@@ -758,19 +762,21 @@
     document.onkeyup = function(e) {
         var key = e.which || e.charCode || e.keyCode
         if (e.ctrlKey && key === 78) {
-        $('#salesTemporaryItem_stockName').select2('open');
+            $('#salesTemporaryItem_stockName').select2('open');
         } else if (e.ctrlKey && key === 66) {
-        $('.barcode').focus().attr('value', '').css({'background-color' : '#ccd2cd'});
+            $('.barcode').focus().attr('value', '').css({'background-color' : '#ccd2cd'});
         } else if (e.ctrlKey && key === 68) {
-        $('.initialDiscount').focus().css({'background-color' : '#ccd2cd'});
+            $('.initialDiscount').focus().css({'background-color' : '#ccd2cd'});
         } else if (e.ctrlKey && key === 67) {
-        $('.select2TemporaryCustomer').select2('open');
+            $('.select2TemporaryCustomer').select2('open');
         } else if (e.ctrlKey && key === 65) {
-        $('#salesTemporary_received').focus().css({'background-color' : '#ccd2cd'});
+            $('#salesTemporary_received').focus().css({'background-color' : '#ccd2cd'});
+        } else if  (e.ctrlKey && key === 65) {
+            $('#addTemporaryItem').trigger('click');
         } else if  (e.ctrlKey && key === 83) {
-        $('#receiveBtn').trigger('click');
+            $('#receiveBtn').trigger('click');
         } else if (e.ctrlKey && key === 80) {
-        $('#regularPrint , #posBtn').trigger('click');
+            $('#regularPrint , #posBtn').trigger('click');
         }
     };
 

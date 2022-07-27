@@ -464,8 +464,9 @@ class AccountSalesController extends Controller
            // $mobile = "+8801828148148";
 
             $outstanding = number_format($entity->getAmount(),2);
-            $msg = "Sir As-salamu Alaykum, Your payment received TK. {$outstanding}. Please Contact:  {$hotline}.Thanks for being with our.";
-            $msg = $orgName .'\nDear '.$msg;
+
+            $msg = "Sir, Your payment received BDT {$outstanding} TK, Thanks for being with us.";
+            $msg = nl2br("=={$orgName}==  Dear {$msg}");
             if($entity->isSmsAlert() == 1 and $entity->getGlobalOption()->getAccountingConfig()->isSalesReceiveSms() == 1 and $entity->getGlobalOption()->getSmsSenderTotal() and $entity->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $entity->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1) {
                 $this->send($msg,$mobile);
                 $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->insertCustomerOutstandingSms($customer,$msg,'success');
@@ -579,6 +580,7 @@ class AccountSalesController extends Controller
             'toUser' => $phone,
             'messageContent' => $msg,
         );
+        echo $phone;
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://smpp.ajuratech.com:7790/sendtext",
             CURLOPT_RETURNTRANSFER => true,
@@ -594,6 +596,7 @@ class AccountSalesController extends Controller
             ),
         ));
         $response = curl_exec($curl);
+        var_dump($response);
         print_r(curl_error($curl));
         curl_close($curl);
     }

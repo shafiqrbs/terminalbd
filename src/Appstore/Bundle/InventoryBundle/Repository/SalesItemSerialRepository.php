@@ -41,14 +41,11 @@ class SalesItemSerialRepository extends EntityRepository
         $em = $this->_em;
         /* @var $serial SalesItemSerial */
         if($salesItem->getSalesItemSerials()){
-            foreach ($salesItem->getSalesItemSerials() as $serial){
+            foreach ($salesItem->getSalesItemSerials() as $serial) {
                 $item = $serial->getPurchaseItemSerial();
                 $item->setStatus(0);
-                $em->flush();
             }
         }
-
-
     }
 
 }

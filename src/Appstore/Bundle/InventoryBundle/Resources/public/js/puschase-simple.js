@@ -12,7 +12,7 @@ function InventoryPurchasePage(){
          setTimeout(pageReload, 1000);
      });
      function pageReload() {
-         location.reload();
+         //location.reload();
      }
     $( "#masterItem" ).autocomplete({
         source: function( request, response ) {

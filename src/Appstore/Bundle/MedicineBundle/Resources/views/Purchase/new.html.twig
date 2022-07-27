@@ -298,6 +298,13 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="form-control">
+                                        <input type="text" id="search" name="search" class="span12 m-wrap m-wrap-bg" value="" autocomplete="off" placeholder="Search product">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
                                 <div class="span12" id="particular-table">
                                     <table class="table table-bordered table-striped table-condensed table-fixed">
                                         <thead>
@@ -325,9 +332,9 @@
                                             {% for item in entity.medicinePurchaseItems %}
                                                 {% set totalPrice = totalPrice + (item.medicineStock.averagePurchasePrice * item.quantity)  %}
 
-                                                <tr id="remove-{{ item.id }}" class="{% if item.medicineStock.averagePurchasePrice > item.salesPrice %}warning{% endif %}" >
+                                                <tr cl id="remove-{{ item.id }}" class="product-content {% if item.medicineStock.averagePurchasePrice > item.salesPrice %}warning{% endif %}" >
                                                     <td>{{ loop.index }}</td>
-                                                    <td class=""><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
+                                                    <td class="cta-title"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
                                                     <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                                     <td class="span1">
                                                         <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
@@ -632,6 +639,23 @@
             maxYear: {{ "now"|date_modify("+5 year")|date('YY') }},
             minuteStep: 1
         }
+    });
+    $('#search').keyup(function(){
+
+        // Search text
+        var text = $(this).val();
+
+        // Hide all content class element
+        $('.product-content').hide();
+
+        // Search
+        $('.product-content .cta-title').each(function(){
+
+        if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+        $(this).closest('.product-content').show();
+        }
+        });
+
     });
     $('.editableText').editable({
         type: 'text',

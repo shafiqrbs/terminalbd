@@ -157,8 +157,8 @@ var InventorySales = function(sales) {
         }, 2000)
     });
 
-    $(document).on('change', '#barcode', function() {
-
+    $(document).on('change', '#barcode', function(e) {
+        e.preventDefault();
         var barcode = $('#barcode').val();
         if(barcode == ''){
             $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
@@ -186,7 +186,7 @@ var InventorySales = function(sales) {
         })
     });
 
-    $(document).on('change', '#barcodeNo', function() {
+    $(document).on('change', '#barcodeNo', function(e) {
 
         var barcode = $('#barcodeNo').val();
         if(barcode == ''){
@@ -384,9 +384,9 @@ var InventorySales = function(sales) {
             url: url,
             type: 'GET',
             success: function (response) {
+                $(event.target).closest('tr').remove();
                 obj = JSON.parse(response);
                 if ('success' == obj['success']) {
-                    $(event.target).closest('tr').remove();
                     $('#paymentSubTotal').val(obj['salesTotal']);
                     $('.salesTotal').html(obj['salesTotal']);
                     $('#due').val(obj['due']);

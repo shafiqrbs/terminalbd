@@ -216,7 +216,7 @@
                                         <tr id="remove-purchase-item-{{ purchaseItem.id }}">
                                             <td  >{{ loop.index }}.</td>
                                             <td>
-                                                <a class="editableText" data-name="Barcode" href="#"  data-url="{{ path('inventory_purchaseitem_barcode',{'id':purchaseItem.id}) }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Add product barcode">{{ purchaseItem.barcode }}</a>
+                                                <a class="editable" data-name="Barcode" href="#"  data-url="{{ path('inventory_purchaseitem_barcode',{'id':purchaseItem.id}) }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Add product barcode">{{ purchaseItem.barcode }}</a>
                                             </td>
                                             <td  >{{ purchaseItem.item.name }}</td>
                                             {% if entity.inventoryConfig.isAttribute == 1 %}
@@ -486,7 +486,6 @@
     {% endblock  %}
     {% block documentready %}
     {{ parent() }}
-    EditableInit();
     $( ".datePicker" ).datepicker({
         dateFormat: "dd-mm-yy"
     });

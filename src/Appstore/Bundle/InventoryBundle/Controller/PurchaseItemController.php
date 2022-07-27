@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItemSerial;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -340,8 +341,21 @@ class PurchaseItemController extends Controller
             }
         }
         if($data['name'] == 'SerialNo'){
-            $entity->setSerialNo($data['value']);
-            $em->flush();
+
+            if($entity->getPurchase()->getProcess() == "approved"){
+                /* @var $item PurchaseItem */
+                $item = $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->updatePurchaseItemSerial($entity,$data['value']);
+                $barcodes = array();
+                foreach ($item->getItemSerials() as $serial){
+                    $barcodes[] = $serial->getBarcode();
+                }
+                $barcode = implode(",",$barcodes);
+                $entity->setSerialNo($barcode);
+                $em->flush();
+            }else{
+                $entity->setSerialNo($data['value']);
+                $em->flush();
+            }
 
         }
         exit;
