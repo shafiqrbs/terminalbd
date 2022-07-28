@@ -24,18 +24,10 @@ class PurchaseItemManualType extends AbstractType
             ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicinePurchase input','placeholder'=>'Enter stock medicine name')))
             ->add('expirationEndDate','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar input','placeholder'=>'Expiry date','autoComplete'=>'off')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap purchase-input span12 input','placeholder'=>'Total MRP','autoComplete'=>'off')))
-           /* ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap purchase-input span12 input','placeholder'=>'Total Purchase','autoComplete'=>'off')))*/
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap purchase-input span12 input','placeholder'=>'Total Purchase','autoComplete'=>'off')))
             ->add('bonusQuantity','text', array('attr'=>array('class'=>'m-wrap span9','placeholder'=>'Bonus QTY','autoComplete'=>'off')))
-            ->add('itemPercent', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12 input select2'),
-                'expanded'      =>false,
-                'empty_value' => '-Disc(%)-',
-                'mapped' => false,
-                'required'    => false,
-                'multiple'      =>false,
-                'choices' => $this->discountPercentList()
-            ))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap purchase-input span12 form-control input-number input red-border','placeholder'=>'Quantity','autoComplete'=>'off')));
+            ->add('itemPercent','number', array('attr'=>array('class'=>'m-wrap span8 numeric','placeholder'=>'Item Percent','autoComplete'=>'off')))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap purchase-input span8 form-control input-number input red-border','placeholder'=>'Quantity','autoComplete'=>'off')));
     }
     
     /**
@@ -90,7 +82,17 @@ class PurchaseItemManualType extends AbstractType
             37=>37,
             38=>38,
             39=>39,
-            40=>40
+            40=>40,
+            41=>41,
+            42=>42,
+            43=>43,
+            44=>44,
+            45=>45,
+            46=>46,
+            47=>47,
+            48=>48,
+            49=>49,
+            50=>50
         );
         return $array;
 

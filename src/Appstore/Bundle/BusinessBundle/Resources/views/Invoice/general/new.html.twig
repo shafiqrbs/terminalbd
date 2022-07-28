@@ -65,9 +65,9 @@
                                                                         <option value="">--- Select Stock Product ---- </option>
                                                                         {% for particular in particulars %}
                                                                             {% if particular.category is not empty %}
-                                                                            <option value="{{ particular.id }}">{{ particular.name }} - {{ particular.name }} => {{ (particular.remainingQuantity) }} {{ particular.unit }}</option>
+                                                                            <option value="{{ particular.id }}">{{ particular.name }} - {{ particular.category.name }} => [{{ (particular.remainingQuantity) }}] {{ particular.unit }}</option>
                                                                             {% else %}
-                                                                            <option value="{{ particular.id }}">{{ particular.name }} => QTY {{ (particular.remainingQuantity) }} {{ particular.unit }}</option>
+                                                                            <option value="{{ particular.id }}">{{ particular.name }} => [{{ (particular.remainingQuantity) }}] {{ particular.unit }}</option>
                                                                             {% endif %}
                                                                         {% endfor %}
                                                                     </select>

@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class PurchaseType extends AbstractType
+class PurchaseManualType extends AbstractType
 {
     /** @var  HospitalConfig */
 
@@ -29,22 +29,6 @@ class PurchaseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
-           /* ->add('medicineVendor', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
-                'empty_value' => '---Choose a vendor/supplier ---',
-                'property' => 'companyName',
-                'attr'=>array('class'=>'m-wrap span12 medicineVendor select2 inputs'),
-                'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.medicineConfig =".$this->option->getMedicineConfig()->getId())
-                        ->orderBy('e.companyName','ASC');
-                },
-            ))*/
-
             ->add('medicinePurchaseReturn', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseReturn',
@@ -99,30 +83,8 @@ class PurchaseType extends AbstractType
                 },
             ))
             ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 inputs ','required' => false ,'label' => 'form.name','placeholder'=>'Memo no','autocomplete'=>'off')))
-          //  ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12  resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
-            ->add('payment','text', array('attr'=>array('class'=>'numeric span12 inputs m-wrap remove-value','placeholder'=>'Payment amount')))
-            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
-            /*->add('invoiceMode', 'choice', array(
-                'attr'=>array('class'=>'m-wrap invoice-mode span12'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'invoice' => 'Vendor Invoice',
-                    'manual' => 'Manual',
-                ),
-            ))*/
-            ->add('discountType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap discount-type span12'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'percentage' => 'Percentage',
-                    'flat' => 'Flat',
-                ),
-            ))
-           // ->add('asInvestment')
-            ->add('discount','hidden');
+            ->add('payment','text', array('attr'=>array('class'=>'numeric span12 inputs m-wrap remove-value','placeholder'=>'Payment amount')));
     }
     
     /**

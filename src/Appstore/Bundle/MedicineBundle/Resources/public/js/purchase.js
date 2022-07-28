@@ -55,6 +55,10 @@ $(document).on('change', '#purchaseItem_stockName', function() {
             $('#minQuantity').val(obj['minQuantity']);
             $('#purchaseItem_salesPrice').val(obj['salesPrice']);
             $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
+            $('#stockSalesPrice').val(obj['salesPrice']);
+            $('#stockPurchasePrice').val(obj['purchasePrice']);
+            $('#purchaseItem_quantity').val(1);
+            $('#tradePrice').html(obj['tp']);
             $('#unit').html(obj['unit']);
             if(obj['openingStatus'] === 'valid' ){
                 $('#opening-box').show();
@@ -63,7 +67,8 @@ $(document).on('change', '#purchaseItem_stockName', function() {
                 $('#openingQuantity').val(obj['salesQty']);
                 $('#totalQty').html(obj['salesQty']);
             }
-            $('.expirationDate').editable();
+            $(".editableText").editable();
+            $(".expirationDate").editable();
         }
     })
 });
@@ -75,6 +80,13 @@ $('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
     var total = (salesQty + currentQty);
     $('#totalQty').html(total);
     $('#openingQuantity').val(total);
+});
+
+$('form#purchaseItemForm').on('keyup', '#purchaseItem_quantity', function (e) {
+    var sp =  parseInt($('#stockSalesPrice').val());
+    var quantity =  parseInt($("#purchaseItem_quantity").val());
+    var totalPP = parseFloat(quantity * sp);
+    $('#purchaseItem_salesPrice').val(totalPP);
 });
 
 $('form#purchaseItemForm').on('keyup', '#pack , #purchaseItem_quantity,#purchaseItem_bonusQuantity', function (e) {
@@ -309,8 +321,8 @@ var form = $("#purchaseItemForm").validate({
                 $('#purchaseItemForm')[0].reset();
                 $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
                 $('#opening-box').hide();
-                $('.expirationDate').editable();
-                EditableWithLoadInit();
+                $(".editableText").editable();
+                $(".expirationDate").editable();
             }
         });
     }
@@ -475,7 +487,8 @@ var barcodePurchaseItem = $("#barcodePurchaseItemForm").validate({
                 $('#msg').html(obj['msg']);
                 $('form#barcodePurchaseItemForm')[0].reset();
                 $('#addPurchaseItem').html('<i class="icon-save"></i> Add').attr("disabled", false);
-                EditableWithLoadInit();
+                $(".editableText").editable();
+                $(".expirationDate").editable();
             }
         });
     }
@@ -617,11 +630,23 @@ function brandMedicineSearch(purchase){
 
     });
 
-    $(document).on("change", "#brandName", function() {
-        var brand = $(this).val();
+    $(document).on("change", "#medicineVendor", function() {
+        var id = $(this).val();
         var purchase = $('#purchaseId').val();
         $.ajax({
-            url: Routing.generate('medicine_purchase_update_brand',{'id':purchase,'brandName':brand}),
+            url: Routing.generate('medicine_purchase_update_brand',{'id':purchase,'filedName':'vendor','mode':id}),
+            type: 'GET',
+            success: function (response) {
+                console.log('done');
+            }
+        })
+    });
+
+    $(document).on("change", "#brandName", function() {
+        var id = $(this).val();
+        var purchase = $('#purchaseId').val();
+        $.ajax({
+            url: Routing.generate('medicine_purchase_update_brand',{'id':purchase,'filedName':'brand','mode':id}),
             type: 'GET',
             success: function (response) {
                 console.log('done');

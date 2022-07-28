@@ -162,15 +162,14 @@ class SalesController extends Controller
            $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($pItem);
            $itemStock = $pItem->getItemStock();
            if (!empty($pItem) and $itemStock > 0 and $itemStock >= $checkQuantity) {
-               // exit;
                 $salesReturn = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSerialSalesItems($sales, $pItem,$serialItem);
-                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesReturn);
+                $salesEntity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesReturn);
                 $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
             } else {
-                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $salesEntity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
             }
-            $data = $this->returnResultData($sales, $msg);
+            $data = $this->returnResultData($salesEntity, $msg);
             return new Response(json_encode($data));
 
         }elseif($purchaseItem) {
@@ -189,6 +188,37 @@ class SalesController extends Controller
             return new Response(json_encode($data));
         }
         return new Response(json_encode(array('status'=>'in-valid')));
+
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function searchPurchaseItemAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $sales = $request->request->get('sales');
+        $barcode = $request->request->get('barcode');
+        $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory, $barcode);
+        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
+        $itemStock = $purchaseItem->getItemStock();
+
+        if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
+
+            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+            $msg = 'Product added successfully';
+
+        } else {
+
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
+        }
+        $data = $this->returnResultData($sales,$msg);
+        return new Response(json_encode($data));
 
     }
 

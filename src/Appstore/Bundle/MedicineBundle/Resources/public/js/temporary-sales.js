@@ -103,7 +103,7 @@ $(document).on('click', '.addAjaxItem', function() {
             $('.table-responsive').hide();
             $('#search').focus().val('');
             $('#isShort').prop('checked',false).removeAttr('checked');
-            $('.editableText').editable();
+            $('.editableText').EditableInit();
         }
     });
 

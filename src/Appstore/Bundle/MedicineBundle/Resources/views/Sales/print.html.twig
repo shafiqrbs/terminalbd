@@ -12,15 +12,16 @@
             white-space: nowrap;
             width:100%;
             font-size:13px;
+            margin: 0;
+            padding: 0;
         }
         table td.header strong,table td.header strong{
             font-size: 35px;
         }
         table td,table th{
             padding: 0!important;
-            font-weight: bold;
             padding-bottom: 5px!important;
-            font-size:18px;
+            font-size:14px;
         }
         [class*="span"]{
             flex: 0 0 auto;
@@ -89,6 +90,9 @@
         .logo{
             max-width: 220px;
         }
+        {% if entity.medicineConfig.printCss is not empty %}
+        {{ entity.medicineConfig.printCss|raw }}
+        {% endif %}
     </style>
     <script type="text/javascript">
         window.print();
@@ -99,7 +103,7 @@
     </script>
 </head>
 <body>
-<div style="width:380px; margin: 0 auto">
+<div style="width:380px; margin: 0 auto" id="print-body">
     <table class="">
         {% if  entity.medicineConfig.globalOption.templateCustomize.webPath is defined and entity.medicineConfig.globalOption.templateCustomize.webPath('logo') is not empty and entity.medicineConfig.invoicePrintLogo == 1 %}
         <tr>
@@ -123,7 +127,7 @@
             <td colspan="3" class="label"><div class="row"><span class="span3 right">Bill No</span><span class="span1 center">:</span><span class="span8">{{ entity.invoice }}</span></div></td>
         </tr>
         <tr>
-            <td colspan="3" class="label"><div class="row"><span class="span3 right">Sales By</span><span class="span1 center">:</span><span class="span8">{{ entity.salesBy.profile.name }}</span></div></td>
+            <td colspan="3" class="label"><div class="row"><span class="span3 right">Sales By</span><span class="span1 center">:</span><span class="span8">{#{% if entity.salesBy.profile is not empty %}{{ entity.salesBy.profile.name }}{% endif %}#}</span></div></td>
         </tr>
         <tr>
             <td colspan="3" class="label"><div class="row"><span class="span3 right">Date&Time</span><span class="span1 center">:</span><span class="span8">{{ entity.created|date('d-m-Y h:i A') }}</span></div></td>
@@ -240,9 +244,7 @@
         </tr>
     </table>
 </div>
-{% if entity.medicineConfig.printCss is not empty %}
-    {{ entity.medicineConfig.printCss|raw }}
-{% endif %}
+
 </body>
 </html>
              

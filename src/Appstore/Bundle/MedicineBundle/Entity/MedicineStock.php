@@ -267,6 +267,13 @@ class MedicineStock
     /**
      * @var float
      *
+     * @ORM\Column(name="tradePrice", type="float", nullable=true)
+     */
+    private $tradePrice =0;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="averagePurchasePrice", type="float", nullable=true)
      */
     private $averagePurchasePrice = 0;
@@ -1138,6 +1145,22 @@ class MedicineStock
     public function setIsDelete($isDelete)
     {
         $this->isDelete = $isDelete;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTradePrice()
+    {
+        return $this->tradePrice;
+    }
+
+    /**
+     * @param float $tradePrice
+     */
+    public function setTradePrice($tradePrice)
+    {
+        $this->tradePrice = $tradePrice;
     }
 
 

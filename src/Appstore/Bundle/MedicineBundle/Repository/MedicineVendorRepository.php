@@ -38,7 +38,7 @@ class MedicineVendorRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('s');
-        $qb->select('s.companyName as name');
+        $qb->select('s.id as id','s.companyName as name');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->orderBy('s.companyName','ASC');
         $result = $qb->getQuery()->getArrayResult();

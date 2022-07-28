@@ -216,7 +216,7 @@ class PosController extends Controller
         $barcode = trim($request->request->get('barcode'));
         $purchaseItem = "";
         if($barcode){
-            $serial = $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->returnPurchaseItemDetails($config,$barcode);
+            $serial = $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->returnPurchaseItemSerialDetails($config,$barcode);
             $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($config, $barcode);
             if($serial){
                 $data = $this->getBracodeStockPurchaseItemSerial($cart, $serial);

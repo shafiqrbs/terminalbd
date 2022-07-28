@@ -2,7 +2,9 @@
     {% for item in salesTemporary %}
         <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %} class="warning" {% endif %}>
             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
-            <td class="span5">{{ loop.index }}. <a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
+            <td class="span5">{{ loop.index }}.
+                <a data-type="text" class="editableText" data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-name="itemName" data-trigger="hover" class="tooltips" data-original-title="" href="javascript:">{{ item.medicineStock.name }}</a>
+            </td>
             <td class="span1">
                 {% if config.itemSearch == 'Brand' %}
                     {{ item.medicineStock.brandName }}

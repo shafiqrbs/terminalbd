@@ -169,6 +169,14 @@ class MedicinePurchaseItem
     private $actualPurchasePrice;
 
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="itemPercent", type="float", nullable = true)
+     */
+    private $itemPercent;
+
+
     /**
      * @var integer
      *
@@ -715,6 +723,24 @@ class MedicinePurchaseItem
     {
         $this->batchno = $batchno;
     }
+
+    /**
+     * @return float
+     */
+    public function getItemPercent()
+    {
+        return $this->itemPercent;
+    }
+
+    /**
+     * @param float $itemPercent
+     */
+    public function setItemPercent($itemPercent)
+    {
+        $this->itemPercent = $itemPercent;
+    }
+
+
 
 
 }

@@ -13,6 +13,13 @@ inventory_sales_item_search:
     options:
             expose: true
 
+inventory_sales_purchase_item_search:
+    path:     /purchase-item-search
+    defaults: { _controller: "InventoryBundle:Sales:searchPurchaseItem" }
+    methods:  POST
+    options:
+        expose: true
+
 inventory_sales_item_purchase:
     path:     /item-purchase-details
     defaults: { _controller: "InventoryBundle:Sales:itemPurchaseDetails" }

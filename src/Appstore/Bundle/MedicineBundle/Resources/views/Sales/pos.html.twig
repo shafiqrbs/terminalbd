@@ -198,7 +198,9 @@
                         {% set avgTotal = avgTotal +(item.medicineStock.averagePurchasePrice * item.quantity) %}
                         <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %} class="warning" {% endif %}>
                             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
-                            <td class="span5">{{ loop.index }}. <a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
+                            <td class="span5">{{ loop.index }}.
+                                <a data-type="text" class="editableText" data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-name="itemName" data-trigger="hover" class="tooltips" data-original-title="" href="javascript:">{{ item.medicineStock.name }}</a>
+                            </td>
                             <td class="span1">
                                 {% if config.itemSearch == 'Brand' %}
                                     {{ item.medicineStock.brandName }}
@@ -484,9 +486,13 @@
     </div>
     {{ form_end(form) }}
     <div class="float-sm">
-        <div class="fl-fl float-fb">
-            <img src="{{ asset('assets/img/shortcut/R.png')}}">
-            <a href="javascript:">Total Amount</a>
+        <div class="fl-fl float-new">
+            <img src="{{ asset('assets/img/shortcut/N.png')}}">
+            <a href="javascript:">New Item</a>
+        </div>
+        <div class="fl-fl float-add">
+            <img src="{{ asset('assets/img/shortcut/A.png')}}">
+            <a href="javascript:">Add Item</a>
         </div>
         <div class="fl-fl float-tw">
             <img src="{{ asset('assets/img/shortcut/S.png')}}">
@@ -508,14 +514,7 @@
             <img src="{{ asset('assets/img/shortcut/C.png')}}">
             <a href="javascript:">Customer</a>
         </div>
-        <div class="fl-fl float-new">
-            <img src="{{ asset('assets/img/shortcut/N.png')}}">
-            <a href="javascript:">New Item</a>
-        </div>
-        <div class="fl-fl float-new">
-            <img src="{{ asset('assets/img/shortcut/A.png')}}">
-            <a href="javascript:">Add Item</a>
-        </div>
+
     </div>
     <!-- END FORM-->
 </div>
@@ -734,8 +733,8 @@
         inputclass: 'span12 m-wrap',
         placement: 'right',
     });
+    EditableInit();
 
-    EditableWithLoadInit();
     {#$.key('shift+n', function() {
         $('#salesTemporaryItem_stockName').select2('open');
     });
@@ -769,7 +768,7 @@
             $('.initialDiscount').focus().css({'background-color' : '#ccd2cd'});
         } else if (e.ctrlKey && key === 67) {
             $('.select2TemporaryCustomer').select2('open');
-        } else if (e.ctrlKey && key === 65) {
+        } else if (e.ctrlKey && key === 62) {
             $('#salesTemporary_received').focus().css({'background-color' : '#ccd2cd'});
         } else if  (e.ctrlKey && key === 65) {
             $('#addTemporaryItem').trigger('click');

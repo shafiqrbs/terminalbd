@@ -500,7 +500,7 @@ class PrepurchaseController extends Controller
                 'globalOption'      => $this->getUser()->getGlobalOption(),
             )
         );
-        $this->downloadPdf($html,"{$entity->getMedicineVendor()->getName()}.pdf");
+        $this->downloadPdf($html,"{$entity->getMedicineVendor()->getCompanyName()}.pdf");
 
     }
 

@@ -175,8 +175,31 @@
                             </div>
                             <div class="purchaseToggle" id="purchaseItemBox">
 
-                                <div class="row-fluid" >
-                                    <div class="span12" style="margin-bottom:1px">
+                                <div class="row-fluid" id="brand-box">
+                                    <div class="span4" style="margin-bottom:1px">
+                                        <div class="control-group select-error-tooltip">
+                                            <label class="control-label" for="firstName">Select Vendor/Supplier Name</label>
+                                            <div class="controls">
+                                                <select name="medicineVendor" id="medicineVendor" class="m-wrap span12 select2">
+                                                    <option value="">-- Select Vendor/Supplier Name --</option>
+                                                    {% if vendors is not empty %}
+                                                        {% for item in vendors %}
+                                                            <option {% if entity.medicineVendor is not empty and entity.medicineVendor.id == item.id %} selected="selected" {% endif %} value="{{ item.id }}">{{ item.name }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <label class="control-label" for="firstName">&nbsp;</label>
+                                        <div class="controls">
+                                            <div class="btn-group">
+                                                <a class="btn blue" target="_blank" href="{{ path('medicine_vendor_new') }}" ><i class="icon-plus"></i> New Vendor</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6" style="margin-bottom:1px">
                                         <div class="control-group select-error-tooltip">
                                             <label class="control-label" for="firstName">Medicine/Supplementary Company Name(<sub>For Specific search</sub>)</label>
                                             <div class="controls">
@@ -232,6 +255,7 @@
                                             <div class="input-group">
                                                 {{ form_widget(purchaseItem.salesPrice) }}
                                                 <input type="hidden" id="particularId" name="particularId" value="">
+                                                <input type="hidden" id="stockSalesPrice" name="stockSalesPrice" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -334,7 +358,7 @@
 
                                                 <tr cl id="remove-{{ item.id }}" class="product-content {% if item.medicineStock.averagePurchasePrice > item.salesPrice %}warning{% endif %}" >
                                                     <td>{{ loop.index }}</td>
-                                                    <td class="cta-title"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.name }}</a></td>
+                                                    <td><a data-type="text" class="editableText" data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-name="itemName" data-trigger="hover" class="tooltips" data-original-title="" href="javascript:">{{ item.medicineStock.name }}</a></td>
                                                     <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
                                                     <td class="span1">
                                                         <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
@@ -374,7 +398,7 @@
                                             <th colspan="7">AVG Purchase Price</th>
                                             <td colspan="5" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                            <td class="span1">{{ (entity.subTotal - ((entity.subTotal*12.5)/100))|number_format(2) }}</td>
+                                            <td class="span1">{{ (entity.subTotal - ((entity.subTotal * 12.5)/100))|number_format(2) }}</td>
                                             <td class="span1">12.5%</td>
                                         </tr>
                                         <tr>
@@ -388,7 +412,7 @@
                                         <tr>
                                             <td colspan="15">
                                                 <table class="table">
-                                                    <tr>
+                                                    {#<tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Vendor/Supplier</strong></span></td>
                                                         <td colspan="3">
                                                             <div class="span10">
@@ -401,7 +425,7 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                    </tr>
+                                                    </tr>#}
                                                   {#  <tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Invoice Mode</strong></span></td>
                                                         <td colspan="3"> {{ form_widget(form.invoiceMode) }}</td>
@@ -514,6 +538,11 @@
         </div>
     </div>
     <style>
+        #brand-box{
+            background: #b6bfba;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
         #opening-box{
             display: none;
         }
@@ -611,6 +640,10 @@
             background: #EBEDF0;
         }
 
+        form.editableform .form-group{
+            margin-top: 10px!important;
+        }
+
     </style>
 {% endblock %}
 {% block cssBlock %}
@@ -629,7 +662,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableWithLoadInit();
+    EditableInit();
     brandMedicineSearch({{ entity.id }});
     $('.expirationDate').editable({
         format: 'yyyy-mm-dd',
@@ -663,5 +696,18 @@
         placement: 'right',
     });
     $('#purchaseItem_stockName').focus();
+
+    $('body').on('keydown', 'input, select, file,textarea', function(event) {
+        var key = event.which || event.charCode || event.keyCode
+        if (key === 13) {
+        var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+        focusable = form.find('input').filter(':visible');
+        next = focusable.eq(focusable.index(this)+1);
+        if (next.length) {
+        next.focus();
+        }
+        return false;
+        }
+    });
 {% endblock %}
 

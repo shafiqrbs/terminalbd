@@ -79,73 +79,140 @@
                             </div>
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid box green">
-                                {% if entity.medicinePurchaseItems is defined and  entity.medicinePurchaseItems is not empty  %}
-                                    <table class="table table-bordered table-striped table-condensed flip-content ">
-                                        <thead class="flip-content ">
-                                        <tr class="head-blue">
-                                            <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
-                                            <th class="span3">Name</th>
-                                            <th class="span1">Rack</th>
-                                            <th class="span1">Batch no</th>
-                                            <th class="span1">Expiry Date</th>
-                                            <th class="span1">PP</th>
-                                            <th class="span1">MRP</th>
-                                            <th class="span1">Qnt</th>
-                                            <th class="span1">Remin. Qnt</th>
-                                            <th class="span1">Sub-total</th>
-                                         </tr>
-                                        </thead>
-                                        <tbody id="invoiceParticulars">
-                                        {% if entity.medicinePurchaseItems is not empty %}
-                                            {% for item in entity.medicinePurchaseItems %}
-                                                <tr id="remove-{{ item.id }}">
-                                                    <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
-                                                    <td class="span3">{{ item.medicineStock.name }}</td>
-                                                    <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
-                                                    <td class="span1">
-                                                        <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
-                                                    </td>
-                                                    <td class="span1">
-                                                        <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
-                                                    </td>
-
-                                                    <td class="span1">{{ item.purchasePrice }}</td>
-                                                    <td class="span1">{{ item.salesPrice }}</td>
-                                                    <td class="span1">{{ item.quantity }}</td>
-                                                    <td class="span1">{{ item.remainingQuantity }}</td>
-                                                    <td class="span1">{{ (item.actualPurchasePrice * item.quantity)|number_format }}</td>
-                                                 </tr>
-                                            {% endfor %}
-                                        {% endif %}
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td colspan="11" class="span12" style="border: 1px double #000"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
-                                            <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                                            <td class="span2"><strong id="subTotal">{{ entity.netTotal|number_format }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                            <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong> <span class="btn red mini">{{ entity.discountCalculation|number_format(2, '.', ',') }}{% if entity.discountType != 'flat' %}%{% endif %}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Payment TK.</strong> =</span></td>
-                                            <td class="span2"><strong id="subTotal">{{ entity.payment|number_format }}</strong></td>
-                                        </tr>
-                                        {% if entity.due > 0 %}
-                                        <tr>
-                                            <td colspan="9" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
-                                            <td class="span2"><strong id="subTotal">{{ entity.due|number_format }}</strong></td>
-                                         </tr>
-                                        {% endif %}
-                                        </tfoot>
-                                    </table>
+                                {% if entity.invoiceMode == "invoice" %}
+                                    {% if entity.medicinePurchaseItems is defined and  entity.medicinePurchaseItems is not empty  %}
+                                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                                            <thead class="flip-content ">
+                                            <tr class="head-blue">
+                                                <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
+                                                <th class="span3">Name</th>
+                                                <th class="span1">Rack</th>
+                                                <th class="span1">Batch no</th>
+                                                <th class="span1">Expiry Date</th>
+                                                <th class="span1">PP</th>
+                                                <th class="span1">MRP</th>
+                                                <th class="span1">Qnt</th>
+                                                <th class="span1">Remin. Qnt</th>
+                                                <th class="span1">Sub-total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="invoiceParticulars">
+                                            {% if entity.medicinePurchaseItems is not empty %}
+                                                {% for item in entity.medicinePurchaseItems %}
+                                                    <tr id="remove-{{ item.id }}">
+                                                        <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
+                                                        <td class="span3">{{ item.medicineStock.name }}</td>
+                                                        <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+                                                        <td class="span1">
+                                                            <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
+                                                        </td>
+                                                        <td class="span1">
+                                                            <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
+                                                        </td>
+                                                        <td class="span1">{{ item.purchasePrice }}</td>
+                                                        <td class="span1">{{ item.salesPrice }}</td>
+                                                        <td class="span1">{{ item.quantity }}</td>
+                                                        <td class="span1">{{ item.remainingQuantity }}</td>
+                                                        <td class="span1">{{ (item.actualPurchasePrice * item.quantity)|number_format }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td colspan="11" class="span12" style="border: 1px double #000"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="9" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="9" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.netTotal|number_format }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="9" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong> <span class="btn red mini">{{ entity.discountCalculation|number_format(2, '.', ',') }}{% if entity.discountType != 'flat' %}%{% endif %}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="9" class="span9"><span class="pull-right"><strong>Payment TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.payment|number_format }}</strong></td>
+                                            </tr>
+                                            {% if entity.due > 0 %}
+                                                <tr>
+                                                    <td colspan="9" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                                    <td class="span2"><strong id="subTotal">{{ entity.due|number_format }}</strong></td>
+                                                </tr>
+                                            {% endif %}
+                                            </tfoot>
+                                        </table>
+                                    {% endif %}
+                                {% else %}
+                                    {% if entity.medicinePurchaseItems is defined and  entity.medicinePurchaseItems is not empty  %}
+                                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                                            <thead class="flip-content ">
+                                            <tr class="head-blue">
+                                                <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i> Barcode</th>
+                                                <th class="span3">Name</th>
+                                                <th class="span1">Rack</th>
+                                                <th class="span1">Batch no</th>
+                                                <th class="span1">Expiry Date</th>
+                                                <th class="span1">Qnt</th>
+                                                <th class="span1">MRP</th>
+                                                <th class="span1">PP</th>
+                                                <th class="span1">Sub-total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="invoiceParticulars">
+                                            {% if entity.medicinePurchaseItems is not empty %}
+                                                {% for item in entity.medicinePurchaseItems %}
+                                                    <tr id="remove-{{ item.id }}">
+                                                        <td  class="span1">{{ loop.index }}. {{ item.barcode }}</td>
+                                                        <td class="span3">{{ item.medicineStock.name }}</td>
+                                                        <td class="span1">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+                                                        <td class="span1">
+                                                            <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
+                                                        </td>
+                                                        <td class="span1">
+                                                            <a href="javascript:" id="expirationDate-{{ item.id }}" class="expirationDate" data-type="date" data-name="expirationDate" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter Expiration Date" >{% if item.expirationEndDate is not empty %}{{ item.expirationEndDate|date('d-m-Y') }}{% endif %}</a>
+                                                        </td>
+                                                        <td class="span1">{{ item.quantity }}</td>
+                                                        <td class="span1">{{ item.purchasePrice }}</td>
+                                                        <td class="span1">{{ item.salesPrice }}</td>
+                                                        <td class="span1">{{ (item.purchasePrice * item.quantity)|number_format }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td colspan="9" class="span12" style="border: 1px double #000"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="8" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="8" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.netTotal|number_format }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong> <span class="btn red mini">{{ entity.discountCalculation|number_format(2, '.', ',') }}{% if entity.discountType != 'flat' %}%{% endif %}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="8" class="span9"><span class="pull-right"><strong>Payment TK.</strong> =</span></td>
+                                                <td class="span2"><strong id="subTotal">{{ entity.payment|number_format }}</strong></td>
+                                            </tr>
+                                            {% if entity.due > 0 %}
+                                                <tr>
+                                                    <td colspan="8" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                                    <td class="span2"><strong id="subTotal">{{ entity.due|number_format }}</strong></td>
+                                                </tr>
+                                            {% endif %}
+                                            </tfoot>
+                                        </table>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             <div class="clearfix">&nbsp;</div>

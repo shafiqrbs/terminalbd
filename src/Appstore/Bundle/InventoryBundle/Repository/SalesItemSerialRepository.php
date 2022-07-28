@@ -32,8 +32,10 @@ class SalesItemSerialRepository extends EntityRepository
             $em->persist($entity);
             $serial->setStatus(1);
             $em->flush();
+            $entity->getBarcode();
+            return $entity->getSalesItem();
         }
-
+        return  $salesItem;
     }
 
     public function deleteSalesItemSerial(SalesItem $salesItem){

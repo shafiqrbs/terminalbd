@@ -274,13 +274,14 @@ class SalesItemRepository extends EntityRepository
         $existSerial = $em->getRepository(SalesItemSerial::class)->findOneBy(array('purchaseItemSerial'=> $serial));
         $existEntity = $this->findOneBy(array('sales'=> $sales,'purchaseItem'=> $purchaseItem));
         if(!empty($existEntity) and empty($existSerial)){
-            $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($existEntity,$serial);
-            $qnt = ($existEntity->getQuantity()+1);
-            $existEntity->setQuantity($qnt);
-            $existEntity->setSubTotal($qnt * $existEntity->getSalesPrice());
+            $serialSalesItem = $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($existEntity,$serial);
+            /* @var $serialSalesItem SalesItem */
+            $count =  count($serialSalesItem->getSalesItemSerials());
+            $existEntity->setQuantity($count);
+            $existEntity->setSubTotal($count * $existEntity->getSalesPrice());
             $em->persist($existEntity);
             $em->flush();
-            return $existEntity->getSales();
+            return $serialSalesItem->getSales();
         }elseif($serial and empty($existSerial) and empty($existEntity)){
             $entity = new SalesItem();
             $entity->setSales($sales);
@@ -298,8 +299,8 @@ class SalesItemRepository extends EntityRepository
             $entity->setExpiredDate($entity->getPurchaseItem()->getExpiredDate());
             $em->persist($entity);
             $em->flush();
-            $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($entity,$serial);
-            return $entity->getSales();
+            $serialSalesItem = $em->getRepository(SalesItemSerial::class)->insertSalesItemSerial($entity,$serial);
+            return $serialSalesItem->getSales();
         }
         return $sales;
 

@@ -180,7 +180,7 @@ var InventorySales = function(sales) {
                 $('#vat').html(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
-              //  FormComponents.init();
+               FormComponents.init();
             },
 
         })
@@ -194,7 +194,7 @@ var InventorySales = function(sales) {
             return false;
         }
         $.ajax({
-            url: Routing.generate('inventory_sales_online_item_search'),
+            url: Routing.generate('inventory_sales_purchase_item_search'),
             type: 'POST',
             data:'barcode='+barcode+'&sales='+ sales,
             success: function(response) {
@@ -210,7 +210,7 @@ var InventorySales = function(sales) {
                 $('#discount').html(obj['discount']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
-             //   FormComponents.init();
+                FormComponents.init();
             },
         })
     });

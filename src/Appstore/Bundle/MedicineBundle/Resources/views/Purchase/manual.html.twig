@@ -29,7 +29,6 @@
         <!-- BEGIN category CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Medicine Purchase Information</div>
@@ -43,16 +42,6 @@
                             </div>
                         </div>
                     </div>
-                    <style>
-                        .form form.particular-info{
-                            padding-top: 15px!important;
-                        }
-                        .row-fluid label {
-                            line-height: 12px!important;
-                            margin-top: 0!important;
-                        }
-
-                    </style>
                     <div class="portlet-body">
                         <div class="portlet-body form">
                             {% include('flash-message.html.twig')  %}
@@ -174,10 +163,52 @@
                             {{ form_end(purchaseBarcodeItemForm) }}
                             </div>
                             <div class="purchaseToggle" id="purchaseItemBox">
+
+                                <div class="row-fluid" id="brand-box">
+                                    <div class="span4" style="margin-bottom:1px">
+                                        <div class="control-group select-error-tooltip">
+                                            <label class="control-label" for="firstName">Select Vendor/Supplier Name</label>
+                                            <div class="controls">
+                                                <select name="medicineVendor" id="medicineVendor" class="m-wrap span12 select2">
+                                                    <option value="">-- Select Vendor/Supplier Name --</option>
+                                                    {% if vendors is not empty %}
+                                                        {% for item in vendors %}
+                                                            <option {% if entity.medicineVendor is not empty and entity.medicineVendor.id == item.id %} selected="selected" {% endif %} value="{{ item.id }}">{{ item.name }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <label class="control-label" for="firstName">&nbsp;</label>
+                                        <div class="controls">
+                                        <div class="btn-group">
+                                            <a class="btn blue" target="_blank" href="{{ path('medicine_vendor_new') }}" ><i class="icon-plus"></i> New Vendor</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6" style="margin-bottom:1px">
+                                        <div class="control-group select-error-tooltip">
+                                            <label class="control-label" for="firstName">Medicine/Supplementary Company Name(<sub>For Specific search</sub>)</label>
+                                            <div class="controls">
+                                                <select name="brandName" id="brandName" class="m-wrap span12 select2">
+                                                    <option value="">-- Select Brand Name --</option>
+                                                    {% if brands is not empty %}
+                                                        {% for item in brands %}
+                                                            <option {% if entity.brandName is not empty and entity.brandName == item.name %} selected="selected" {% endif %} value="{{ item.name }}">{{ item.name }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="purchaseToggle" id="purchaseItemBox">
                             {{ form_start(purchaseItem) }}
                             {{ form_row(purchaseItem._token) }}
                             <div class="row-fluid" >
-                                <div class="span6" style="padding-left:15px">
+                                <div class="span4" style="padding-left:15px">
                                     <div class="control-group select-error-tooltip">
                                         <label class="control-label" for="firstName">Search Stock Item Name</label>
                                         <div class="controls">
@@ -190,33 +221,50 @@
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Quantity</label>
                                         <div class="controls">
+                                            <div class="input-append">
                                             {{ form_widget(purchaseItem.quantity) }}
                                             {{ form_errors(purchaseItem.quantity) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Bonus Quantity</label>
-                                        <div class="controls">
-                                            <div class="input-append">
-                                                {{ form_widget(purchaseItem.bonusQuantity) }}
-                                                <button class="btn green" id="unit green">Unit</button>
+                                            <button class="btn green" id="unit green">Unit</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="span2">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Pack QTY</label>
+                                        <label class="control-label" for="firstName">Total MRP</label>
                                         <div class="controls">
-                                            <div class="input-append">
-                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span12" placeholder="Pack QTY" autocomplete="off">
+                                            <div class="input-group">
+                                                {{ form_widget(purchaseItem.salesPrice) }}
+                                                <input type="hidden" id="particularId" name="particularId" value="">
+                                                <input type="hidden" id="stockSalesPrice" name="stockSalesPrice" value="">
+                                                <input type="hidden" id="stockPurchasePrice" name="stockPurchasePrice" value="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Item Percent</label>
+                                        <div class="controls">
+                                            <div class="input-group">
+                                                <div class="input-append">
+                                                {{ form_widget(purchaseItem.itemPercent) }}
+                                                    <button class="btn green" id="tradePrice">TP Price</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Purchase Price</label>
+                                        <div class="controls">
+                                            <div class="input-group">
+                                                {{ form_widget(purchaseItem.purchasePrice) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row-fluid" >
 
@@ -237,6 +285,26 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Bonus Quantity</label>
+                                        <div class="controls">
+                                            <div class="input-append">
+                                                {{ form_widget(purchaseItem.bonusQuantity) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Pack QTY</label>
+                                        <div class="controls">
+                                            <div class="input-append">
+                                                <input type="text" id="pack" name="pack" class="m-wrap purchase-input span12" placeholder="Pack QTY" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                {# <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Total Purchase</label>
@@ -247,33 +315,13 @@
                                         </div>
                                     </div>
                                 </div>#}
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Total MRP</label>
-                                        <div class="controls">
-                                            <div class="input-group">
-                                                {{ form_widget(purchaseItem.salesPrice) }}
-                                                <input type="hidden" id="particularId" name="particularId" value="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Discount Percent</label>
-                                        <div class="controls">
-                                            <div class="input-group">
-                                                {{ form_widget(purchaseItem.itemPercent) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">&nbsp;</label>
                                         <div class="controls">
-                                            <div class="input-append">
-                                                <button type="submit" class="btn red" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
+                                            <div class="input-append span12">
+                                                <button type="submit" class="btn red span12" id="addPurchaseItem" data-url="{{ path('medicine_purchase_particular_add',{'invoice':entity.id}) }}" > <span class="fa fa-save"></span> Add</button>
                                                 <input type="hidden" id="particularId" name="particularId" value="">
                                             </div>
                                         </div>
@@ -285,6 +333,13 @@
                             <div class="clearfix">&nbsp;</div>
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="form-control">
+                                        <input type="text" id="search" name="search" class="span12 m-wrap m-wrap-bg" value="" autocomplete="off" placeholder="Search product">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row-fluid">
                                 <div class="span12" id="particular-table">
                                     <table class="table table-bordered table-striped table-condensed table-fixed">
@@ -298,20 +353,23 @@
                                             <th class="span1">AVGPP</th>
                                             <th class="">Last PP</th>
                                             <th class="">TP</th>
-                                            <th class="">MRP</th>
                                             <th class="">QTY</th>
                                             <th class="">Bonus QTY</th>
                                             <th class="">Pack</th>
-                                            <th class="">Total</th>
-                                            <th class="">Sales Qnt</th>
+                                            <th class="">MRP</th>
+                                            <th class="">Total MRP</th>
+                                            <th class="">PP</th>
+                                            <th class="">Total PP</th>
                                             <th class=""><i class="icon-trash"></i></th>
                                         </tr>
                                         </thead>
                                         <tbody id="invoiceParticulars">
                                         {% set totalPrice = 0 %}
+                                        {% set totalSalesPrice = 0 %}
                                         {% if entity.medicinePurchaseItems is not empty %}
                                             {% for item in entity.medicinePurchaseItems %}
                                                 {% set totalPrice = totalPrice + (item.medicineStock.averagePurchasePrice * item.quantity)  %}
+                                                {% set totalSalesPrice = totalPrice + (item.medicineStock.salesPrice * item.quantity)  %}
 
                                                 <tr id="remove-{{ item.id }}" class="{% if item.medicineStock.averagePurchasePrice > item.salesPrice %}warning{% endif %}" >
                                                     <td>{{ loop.index }}</td>
@@ -326,74 +384,53 @@
                                                     <td class="span1"><a href="{{ path('medicine_purchase_item',{'name':item.medicineStock.name}) }}" target="_blank">{{ item.medicineStock.averagePurchasePrice|number_format(2) }}</a></td>
                                                     <td class="">{{ item.medicineStock.purchasePrice }}</td>
                                                     <td class="">{{ item.tp }}</td>
-                                                    <td class="" ><input type="text" class="td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
                                                     <td class="">
-                                                        <input type="text" class="td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
+                                                        <input type="text" class="td-inline-input manualQuantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}"> {% if item.medicineStock.unit is not empty %}<span>{{ item.medicineStock.unit.name }}</span>{% endif %}
                                                     </td>
                                                     <td class="">
-                                                        <input type="text" class="td-inline-input bonusQuantity" data-id="{{ item.id }}" autocomplete = "off"  id="bonusQuantity-{{ item.id }}" name="bonusQuantity[]" value="{{ item.bonusQuantity }}" placeholder="{{ item.bonusQuantity }}">
+                                                        <input type="text" class="td-inline-input manualBonusQuantity" data-id="{{ item.id }}" autocomplete = "off"  id="bonusQuantity-{{ item.id }}" name="bonusQuantity[]" value="{{ item.bonusQuantity }}" placeholder="{{ item.bonusQuantity }}">
                                                     </td>
                                                     <td class="">
                                                         <a  class="editableText" data-name="pack" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-original-title="Change pack qnt">{{ item.medicineStock.pack }}</a>
                                                         {% if item.medicineStock.pack > 1 and item.quantity > item.medicineStock.pack|default(1) %} => {{ (item.quantity/item.medicineStock.pack)|default(1)|number_format(2) }}{% endif %}
                                                     </td>
-                                                    <td class="" id="subTotal-{{ item.id }}">{{ (item.actualPurchasePrice * item.quantity)|number_format }}</td>
-                                                    <td class="span1">
+                                                    <td class="" ><input type="text" class="td-inline-input manualSalesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice" value="{{ item.salesPrice }}" ></td>
+                                                    <td class="" id="salesSubTotal-{{ item.id }}">{{ (item.salesPrice * item.quantity)|number_format }}</td>
+                                                    <td class="" ><input type="text" class="td-inline-input manualPurchasePrice" data-id="{{ item.id }}" autocomplete = "off"  id="purchasePrice-{{ item.id }}" name="purchasePrice" value="{{ item.purchasePrice }}" ></td>
+                                                    <td class="" id="purchaseSubTotal-{{ item.id }}">{{ (item.purchasePrice * item.quantity)|number_format }}
                                                         <input type="hidden" id="purchaseQuantity-{{ item.id }}"  value="{{ item.quantity }}" >
                                                         <input type="hidden" id="salesQuantity-{{ item.id }}"  value="{{ item.salesQuantity }}" >
-                                                        {{ item.salesQuantity }}</td>
+                                                    </td>
                                                     <td class="">{% if item.salesQuantity == 0 %}<a id="{{ item.id }}"  data-url="{{ path('medicine_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini deleteParticular" ><i class="icon-trash"></i></a>{% endif %}</td>
                                                 </tr>
                                             {% endfor %}
                                         {% endif %}
                                         <tr>
-                                            <td colspan="15" class="span12" style="border: 1px double #000"></td>
+                                            <td colspan="16" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
                                             <th colspan="7">AVG Purchase Price</th>
                                             <td colspan="5" class="span10"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td class="span1"><strong id="">{{ totalSalesPrice|number_format }}</strong></td>
+                                            <td class="span1 text-center">
+                                                {% if entity.subTotal > 0 %}
+                                                {% set discount = (totalSalesPrice - entity.subTotal) %}
+                                                {% set percentage = ((discount * 100) / entity.subTotal) %}
+                                                ({{ discount|number_format }})
+                                                {% endif %}
+                                            </td>
                                             <td class="span1"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
-                                            <td class="span1">{{ (entity.subTotal - ((entity.subTotal*12.5)/100))|number_format(2) }}</td>
-                                            <td class="span1">12.5%</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="12" class="span10"><span class="pull-right"><strong>Discount</strong> =</span></td>
-                                            <td class="span1"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
-                                            <td class="span1"></td>
-                                            <td class="span1"></td>
+                                            <td class="span1">
+                                                {% if entity.subTotal > 0 %}
+                                                <strong>{{ percentage|number_format(2) }}%</strong>
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="15">
+                                            <td colspan="16">
                                                 <table class="table">
-                                                    <tr>
-                                                        <td colspan="7" class="span10"><span class="pull-right"><strong>Vendor/Supplier</strong></span></td>
-                                                        <td colspan="3">
-                                                            <div class="span10">
-                                                                {{ form_widget(form.medicineVendor) }}
-                                                                {{ form_errors(form.medicineVendor) }}
-                                                            </div>
-                                                            <div class="span2">
-                                                                <div class="btn-group">
-                                                                    <a class="btn blue" target="_blank" href="{{ path('medicine_vendor_new') }}" ><i class="icon-plus"></i></a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                  {#  <tr>
-                                                        <td colspan="7" class="span10"><span class="pull-right"><strong>Invoice Mode</strong></span></td>
-                                                        <td colspan="3"> {{ form_widget(form.invoiceMode) }}</td>
-                                                    </tr>#}
-                                                    <tr class="invoiceMode" style="display: none"}>
-                                                        <td colspan="7" class="span10"><span class="pull-right"><strong>Discount Type</strong></span></td>
-                                                        <td  colspan="3">{{ form_widget(form.discountType) }}</td>
-                                                    </tr>
-                                                    <tr class="invoiceMode" style="display: none" >
-                                                        <td colspan="7" class="span10"><span class="pull-right"><strong>Discount</strong></span></td>
-                                                        <td  colspan="3"> {{ form_widget(form.discountCalculation) }}
-                                                            {{ form_widget(form.discount) }}</td>
-                                                    </tr>
                                                     <tr>
                                                         <td colspan="7" class="span10"><span class="pull-right"><strong>Receive Date</strong></span></td>
                                                         <td colspan="3">  {{ form_widget(form.receiveDate) }}
@@ -436,24 +473,9 @@
                                                         <td colspan="3"><strong class="previous-payable"></strong></td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="7"><span class="pull-right"><strong>Payment & Due Amount</strong></span></td>
-                                                        <td><span><button class="btn red span12" id="discountPercentage">{% if entity.discountType == 'flat' %}{{  entity.discountCalculation }}{% else %}{{  entity.discountCalculation }}{% endif %}%</button></span></td>
-                                                        <td>
-                                                            {{ form_errors(form.payment) }}{{ form_widget(form.payment) }}
-
-                                                        </td>
-                                                        <td>
-                                                            <div id="due-input" {% if entity.invoiceMode == "manual" %} style="display: none" {% endif %}>
-                                                                <input type="text" id="invoiceDue" name="invoiceDue" class="numeric span12 inputs m-wrap remove-value" placeholder="Due payable amount" value="">
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="invoiceMode" {% if entity.invoiceMode == "invoice" %} style="display: none" {% endif %}>
-                                                        <td colspan="7"><span class="pull-right"><strong>Discount</strong></span></td>
+                                                        <td colspan="7"><span class="pull-right"><strong>Payment Amount</strong></span></td>
                                                         <td colspan="3">
-                                                            <div class="row-fluid" >
-                                                                {{ entity.due }}
-                                                            </div>
+                                                            {{ form_errors(form.payment) }}{{ form_widget(form.payment) }}
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -487,14 +509,27 @@
 
                             <!-- END FORM-->
                         </div>
+                        </div>
                     </div>
-                </div>
+            </div>
             </div>
         </div>
     </div>
     <style>
+        #brand-box{
+            background: #b6bfba;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
         #opening-box{
             display: none;
+        }
+        .form form.particular-info{
+            padding-top: 15px!important;
+        }
+        .row-fluid label {
+            line-height: 12px!important;
+            margin-top: 0!important;
         }
         .purchase-input{
             width:6%;
@@ -599,6 +634,7 @@
     {{ parent() }}
     {% javascripts
         '@MedicineBundle/Resources/public/js/purchase.js'
+        '@MedicineBundle/Resources/public/js/manual-purchase.js'
         '@MedicineBundle/Resources/public/js/editable.js'
         '@MedicineBundle/Resources/public/js/approveProcess.js'
         '@MedicineBundle/Resources/public/js/medicine.js'
@@ -608,7 +644,8 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableWithLoadInit();
+    EditableInit();
+    brandMedicineSearch({{ entity.id }});
     $('.expirationDate').editable({
         format: 'yyyy-mm-dd',
         viewformat: 'dd-mm-yyyy',
@@ -624,5 +661,36 @@
         placement: 'right',
     });
     $('#purchaseItem_stockName').focus();
+
+    $('#search').keyup(function(){
+
+        // Search text
+        var text = $(this).val();
+
+        // Hide all content class element
+        $('.product-content').hide();
+
+        // Search
+        $('.product-content .cta-title').each(function(){
+
+        if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+        $(this).closest('.product-content').show();
+        }
+        });
+
+    });
+
+    $('body').on('keydown', 'input, select, file,textarea', function(event) {
+    var key = event.which || event.charCode || event.keyCode
+    if (key === 13) {
+    var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+    focusable = form.find('input').filter(':visible');
+    next = focusable.eq(focusable.index(this)+1);
+    if (next.length) {
+    next.focus();
+    }
+    return false;
+    }
+    });
 {% endblock %}
 

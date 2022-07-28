@@ -94,9 +94,9 @@
 <body>
 <div style="width:290px; margin: 0 auto">
     <table class="">
-        {% if  entity.medicineConfig.globalOption.templateCustomize.webPath is defined and entity.medicineConfig.globalOption.templateCustomize.webPath('logo') is not empty and entity.medicineConfig.invoicePrintLogo == 1 %}
+        {% if  entity.medicineConfig.globalOption.webPath is defined and entity.medicineConfig.globalOption.webPath('logo') is not empty and entity.medicineConfig.invoicePrintLogo == 1 %}
         <tr>
-            <td colspan="3" class="span12 center logo"><img style="max-width: 380px; max-height: 180px" src="/{{ entity.medicineConfig.globalOption.templateCustomize.webPath('logo') }}"></td>
+            <td colspan="3" class="span12 center logo"><img style="max-width: 380px; max-height: 180px" src="/{{ entity.medicineConfig.globalOption.webPath('logo') }}"></td>
         </tr>
         {% endif %}
         {% if entity.medicineConfig.isPrintHeader == 1 %}

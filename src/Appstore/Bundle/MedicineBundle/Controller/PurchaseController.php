@@ -13,6 +13,7 @@ use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseBarcodeItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemManualType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
+use Appstore\Bundle\MedicineBundle\Form\PurchaseManualType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseOpeningType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -235,6 +236,7 @@ class PurchaseController extends Controller
             $entity->setReceiveDate($receiveDate);
         }
         $entity->setMedicineVendor($purchase->getMedicineVendor());
+        $entity->setBrandName($purchase->getBrandName());
         $entity->setSubTotal($purchase->getSubTotal());
         $entity->setInvoiceMode($purchase->getInvoiceMode());
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
@@ -265,28 +267,28 @@ class PurchaseController extends Controller
           $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updateInvoiceMode($entity);
         }
         $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
-
         $purchaseBarcodeItemForm = $this->createPurchaseBarcodeItemForm(new MedicinePurchaseItem() , $entity);
-        $editForm = $this->createEditForm($entity);
         $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
+        $vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->getVendorLists($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
         if($entity->getInvoiceMode() == "invoice"){
+            $editForm = $this->createEditForm($entity);
             $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
             $mode = "new";
         }else{
+            $editForm = $this->createManualEditForm($entity);
             $purchaseItemForm = $this->createPurchaseManualItemForm(new MedicinePurchaseItem() , $entity);
             $mode = "manual";
         }
         return $this->render("MedicineBundle:Purchase:{$mode}.html.twig", array(
             'entity' => $entity,
             'brands' => $brands,
+            'vendors' => $vendors,
             'purchaseItem' => $purchaseItemForm->createView(),
             'stockItemForm' => $stockItemForm->createView(),
             'purchaseBarcodeItemForm' => $purchaseBarcodeItemForm->createView(),
             'form' => $editForm->createView(),
         ));
     }
-
-
 
 
     /**
@@ -300,6 +302,28 @@ class PurchaseController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
+            'action' => $this->generateUrl('medicine_purchase_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'purchaseForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param MedicinePurchase $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createManualEditForm(MedicinePurchase $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PurchaseManualType($globalOption), $entity, array(
             'action' => $this->generateUrl('medicine_purchase_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -388,10 +412,9 @@ class PurchaseController extends Controller
         if($particular->getMinQuantity()){
             $min = $particular->getMinQuantity();
         }
-        return new Response(json_encode(array('purchasePrice'=> '', 'salesQty'=> $salesQty,'openingStatus'=> $openingStatus,'pack'=> $pack,'minQuantity'=> $min, 'salesPrice'=> '','quantity'=> 1,'unit' => $unit)));
+        $tp = ($particular->getTradePrice() > 0 ) ? $particular->getTradePrice(): "TP price";
+        return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'tp'=> $tp, 'salesQty'=> $salesQty,'openingStatus'=> $openingStatus,'pack'=> $pack,'minQuantity'=> $min, 'quantity'=> 1, 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit)));
     }
-
-
 
     public function stockItemCreateAction(Request $request,MedicinePurchase $purchase)
     {
@@ -561,6 +584,30 @@ class PurchaseController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function purchaseManulItemUpdateAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $purchase = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItem($data);
+        $entity = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->find($data['purchaseItemId']);
+        $salesQnt = $entity->getSalesQuantity() + $entity->getDamageQuantity() + $entity->getPurchaseReturnQuantity();
+        if(!empty($entity) and $salesQnt  <= (float)$data['quantity']) {
+            $entity->setQuantity($data['quantity']);
+            $entity->setBonusQuantity($data['bonusQuantity']);
+            $entity->setSalesPrice($data['salesPrice']);
+            $entity->setPurchasePrice($data['purchasePrice']);
+            $entity->setActualPurchasePrice($data['purchasePrice']);
+            $entity->setPurchaseSubTotal($data['purchasePrice'] * $data['quantity']);
+            $entity->setRemainingQuantity($data['quantity']);
+        }
+        $em->persist($entity);
+        $em->flush();
+        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchase')->updatePurchaseTotalPrice($purchase);
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
+    }
+
     public function inlineUpdatePurchasePriceAction(Request $request)
     {
         $data = $request->request->all();
@@ -674,7 +721,7 @@ class PurchaseController extends Controller
         $data = $request->request->all();
         $expirationEndDate = ($data['purchaseItem']['expirationEndDate']);
         $entity = new MedicinePurchaseItem();
-        $form = $this->createPurchaseItemForm($entity,$invoice);
+        $form = $this->createPurchaseManualItemForm($entity,$invoice);
         $form->handleRequest($request);
 
         $stockItem = ($data['purchaseItem']['stockName']);
@@ -684,32 +731,27 @@ class PurchaseController extends Controller
         $exist = $this->getDoctrine()->getRepository(MedicinePurchaseItem::class)->findOneBy(array('medicinePurchase'=>$invoice,'medicineStock'=>$stockMedicine));
         $pack = !empty($data['pack']) ? $data['pack'] :1;
         $quantity = empty($data['purchaseItem']['quantity']) ? 1 : $data['purchaseItem']['quantity'];
+        $salesPrice = empty($data['purchaseItem']['salesPrice']) ? 1 : $data['purchaseItem']['salesPrice'];
+        $purchasePrice = empty($data['purchaseItem']['purchasePrice']) ? 1 : $data['purchaseItem']['purchasePrice'];
+        $itemPercent = empty($data['purchaseItem']['itemPercent']) ? 1 : $data['purchaseItem']['itemPercent'];
         $minQuantity = !empty($data['minQuantity']) ? $data['minQuantity'] :1;
-        $salesPrice = !empty($data['purchaseItem']['salesPrice']) ? $data['purchaseItem']['salesPrice'] :'';
         $openStock = !empty($data['openingQuantity']) ? $data['openingQuantity'] :0;
         $bonusQuantity = !empty($data['purchaseItem']['bonusQuantity']) ? $data['purchaseItem']['bonusQuantity'] :0;
         if(empty($exist)){
             $entity->setMedicinePurchase($invoice);
             $entity->setMedicineStock($stockMedicine);
-            // $quantity = ($pack * $quantity);
+            $entity->setPurchasePrice($purchasePrice);
+            $entity->setSalesPrice($salesPrice);
+            $entity->setItemPercent($itemPercent);
             $entity->setQuantity($quantity);
             $entity->setBonusQuantity($bonusQuantity);
-            if(!empty($stockMedicine) and empty($salesPrice)){
-                $entity->setActualPurchasePrice($stockMedicine->getSalesPrice());
-                $entity->setPurchasePrice($stockMedicine->getSalesPrice());
-                $entity->setSalesPrice($stockMedicine->getSalesPrice());
-                $entity->setPurchaseSubTotal(round($entity->getQuantity() * $stockMedicine->getSalesPrice()));
-                $entity->setRemainingQuantity($entity->getQuantity());
-            }else{
-                $entity->setPurchaseSubTotal($entity->getSalesPrice());
-                $entity->setRemainingQuantity($entity->getQuantity());
-                $unitPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
-                $salesPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
-                $entity->setActualPurchasePrice($unitPrice);
-                $entity->setPurchasePrice($unitPrice);
-                $entity->setSalesPrice($salesPrice);
-            }
-            $this->dpGenerate($entity);
+            $entity->setPurchaseSubTotal($entity->getPurchasePrice());
+            $entity->setRemainingQuantity($entity->getQuantity());
+            $unitPrice = round(($entity->getSalesPrice()/$entity->getQuantity()),2);
+            $purchasePrice = round(($entity->getPurchasePrice()/$entity->getQuantity()),2);
+            $entity->setActualPurchasePrice($unitPrice);
+            $entity->setSalesPrice($unitPrice);
+            $entity->setPurchasePrice($purchasePrice);
             if(!empty($expirationEndDate)){
                 $expirationEndDate = (new \DateTime($expirationEndDate));
                 $entity->setExpirationEndDate($expirationEndDate);
@@ -746,6 +788,7 @@ class PurchaseController extends Controller
             $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
             $entity->setTp($dp);
         }
+        return $dp;
     }
     public function invoiceParticularDeleteAction(MedicinePurchase $invoice, MedicinePurchaseItem $particular){
 
@@ -808,7 +851,17 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $editForm = $this->createEditForm($entity);
+        $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
+        $vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->getVendorLists($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
+        if($entity->getInvoiceMode() == "invoice"){
+            $editForm = $this->createEditForm($entity);
+            $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
+            $mode = "new";
+        }else{
+            $editForm = $this->createManualEditForm($entity);
+            $purchaseItemForm = $this->createPurchaseManualItemForm(new MedicinePurchaseItem() , $entity);
+            $mode = "manual";
+        }
         $editForm->handleRequest($request);
         $invoiceDue = $request->request->get('invoiceDue');
         $data = $request->request->all();
@@ -846,19 +899,20 @@ class PurchaseController extends Controller
                 $entity->setTransactionMethod($transactionMethod);
             }
             $em->flush();
-           // $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
+          //  $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($entity);
             return $this->redirect($this->generateUrl('medicine_purchase_show', array('id' => $entity->getId())));
         }
-        $purchaseItemForm = $this->createPurchaseItemForm(new MedicinePurchaseItem() , $entity);
         $stockItemForm = $this->createStockItemForm(new MedicineStock(), $entity);
-      //  $vendors = $this->getDoctrine()->getRepository('MedicineBundle:MedicineVendor')->getVendorLists($entity->getMedicineConfig()->getId());
-        $brands = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getBrands($this->getUser()->getGlobalOption()->getMedicineConfig()->getId());
+        $purchaseBarcodeItemForm = $this->createPurchaseBarcodeItemForm(new MedicinePurchaseItem() , $entity);
 
-        return $this->render('MedicineBundle:Purchase:new.html.twig', array(
+
+        return $this->render("MedicineBundle:Purchase:{$mode}.html.twig", array(
             'entity' => $entity,
             'brands' => $brands,
+            'vendors' => $vendors,
             'purchaseItem' => $purchaseItemForm->createView(),
             'stockItemForm' => $stockItemForm->createView(),
+            'purchaseBarcodeItemForm' => $purchaseBarcodeItemForm->createView(),
             'form' => $editForm->createView(),
         ));
     }
@@ -891,8 +945,14 @@ class PurchaseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $purchase = $this->getDoctrine()->getRepository(MedicinePurchase::class)->find($id);
-        $brand = $_REQUEST['brandName'];
-        $purchase->setBrandName($brand);
+        $filedName = $_REQUEST['filedName'];
+        $mode  = $_REQUEST['mode'];
+        if($filedName == "brand" and !empty($mode)){
+            $purchase->setBrandName($mode);
+        }elseif($filedName == "vendor" and !empty($mode)){
+            $vendor = $this->getDoctrine()->getRepository(MedicineVendor::class)->find($mode);
+            $purchase->setMedicineVendor($vendor);
+        }
         $em->flush();
         return new Response('Done');
     }
@@ -919,7 +979,9 @@ class PurchaseController extends Controller
                 $purchase->setUpdated($datetime);
             }
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
+            if($purchase->getInvoiceMode() == 'invoice') {
+                $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->updatePurchaseItemPrice($purchase);
+            }
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getPurchaseUpdateQnt($purchase);
             if(!empty($purchase->getMedicinePurchaseReturn())){
 	            $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseReturn')->updatePurchaseAdjustment($purchase->getMedicinePurchaseReturn());

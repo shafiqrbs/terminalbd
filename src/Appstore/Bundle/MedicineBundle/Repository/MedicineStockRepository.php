@@ -446,8 +446,31 @@ class MedicineStockRepository extends EntityRepository
         }else{
             $stock->setAverageSalesPrice($item->getSalesPrice());
         }
+        if($avg['tradePrice']){
+            $stock->setTradePrice(floatval($avg['tradePrice']));
+        }else{
+            $tp = $this->dpGenerate($item);
+            $stock->setTradePrice($tp);
+        }
         $em->persist($stock);
         $em->flush();
+    }
+
+    public function dpGenerate(MedicinePurchaseItem $entity)
+    {
+        $config = $entity->getMedicinePurchase()->getMedicineConfig();
+        $dpVat = $config->getTpVatPercent();
+        if($entity->getMedicinePurchase()->getMedicineVendor() and $entity->getMedicinePurchase() ->getMedicineVendor()->getTpPercent() > 0){
+            $pPrice = $entity->getMedicinePurchase()->getMedicineVendor()->getTpPercent();
+            $dpPrice = ( $pPrice + $dpVat);
+        }else{
+            $pPrice = $config->getTpPercent();
+            $dpPrice = ($pPrice + $dpVat);
+        }
+        if($dpPrice > 0){
+            $dp = ($entity->getSalesPrice() - ($entity->getSalesPrice() * ($dpPrice/100)));
+        }
+        return $dp;
     }
 
     public function getSalesUpdateQnt(MedicineSales $invoice){

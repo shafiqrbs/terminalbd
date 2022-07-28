@@ -90,11 +90,18 @@ medicine_purchase_particular_add_manual:
     options:
             expose: true
 
+medicine_purchase_manual_item_update:
+    path:     /particular-add-manual
+    defaults: { _controller: "MedicineBundle:Purchase:purchaseManulItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 medicine_purchase_barcode_search:
     path:     /{id}/barcode-stock-search
     defaults: { _controller: "MedicineBundle:Purchase:barcodeSearch" }
     options:
-        expose: true
+            expose: true
 
 medicine_purchase_barcode_item:
     path:     /{purchase}/create-barcode-item

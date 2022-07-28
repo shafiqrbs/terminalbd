@@ -370,18 +370,18 @@
 {% if entity.medicinePrepurchaseItems is defined and  entity.medicinePrepurchaseItems is not empty  %}
     <table class="table">
         <tr>
-            <td colspan="3" style="text-align: center"><h3>{{ globalOption.name }}</h3>
+            <td colspan="4" style="text-align: center"><h3>{{ globalOption.name }}</h3>
                 {{ config.address|raw }}
             </td>
         </tr>
         <tr>
-            <th colspan="3" style="text-align: left">Vendor/Supplier: {{ entity.medicineVendor.name }}</th>
+            <th colspan="4" style="text-align: left">Vendor/Supplier: {{ entity.medicineVendor.companyName }}</th>
         </tr>
         <tr>
-            <th colspan="3" style="text-align: left">Date: {{ entity.updated|date('d-m-Y') }}</th>
+            <th colspan="4" style="text-align: left">Date: {{ entity.updated|date('d-m-Y') }}</th>
         </tr>
         <tr>
-            <th style="text-align: left">&nbsp;Name</th>
+            <th style="text-align: left">&nbsp;Medicine Name</th>
             <th style="text-align: left">Quantity</th>
             <th style="text-align: left">Pack</th>
             <th style="text-align: left">Unit</th>
