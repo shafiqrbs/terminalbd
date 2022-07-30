@@ -591,6 +591,37 @@ $(document).on("click", ".confirmSubmit", function() {
 
 function brandMedicineSearch(purchase){
 
+    $('body').on('keydown', '.td-inline-input', function(event) {
+        var key = event.which || event.charCode || event.keyCode
+        if (key === 13) {
+            var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+            focusable = form.find('.td-inline-input').filter(':visible');
+            next = focusable.eq(focusable.index(this)+1);
+            if (next.length) {
+                next.focus();
+            }
+            return false;
+        }
+    });
+
+    $('#search').keyup(function(){
+
+        // Search text
+        var text = $(this).val();
+
+        // Hide all content class element
+        $('.product-content').hide();
+
+        // Search
+        $('.product-content .cta-title').each(function(){
+
+            if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+                $(this).closest('.product-content').show();
+            }
+        });
+
+    });
+
     var url = Routing.generate('medicine_purchase_stock_item_search',{'purchase':purchase});
     $(".select2StockMedicinePurchaseItem").select2({
 

@@ -673,23 +673,6 @@
             minuteStep: 1
         }
     });
-    $('#search').keyup(function(){
-
-        // Search text
-        var text = $(this).val();
-
-        // Hide all content class element
-        $('.product-content').hide();
-
-        // Search
-        $('.product-content .cta-title').each(function(){
-
-        if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
-        $(this).closest('.product-content').show();
-        }
-        });
-
-    });
     $('.editableText').editable({
         type: 'text',
         inputclass: 'span12 m-wrap',
@@ -697,17 +680,6 @@
     });
     $('#purchaseItem_stockName').focus();
 
-    $('body').on('keydown', 'input, select, file,textarea', function(event) {
-        var key = event.which || event.charCode || event.keyCode
-        if (key === 13) {
-        var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
-        focusable = form.find('input').filter(':visible');
-        next = focusable.eq(focusable.index(this)+1);
-        if (next.length) {
-        next.focus();
-        }
-        return false;
-        }
-    });
+
 {% endblock %}
 
