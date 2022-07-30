@@ -251,6 +251,37 @@ class SalesController extends Controller
 
     }
 
+    public function returnSalesDataAction($msg=''){
+
+        //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+        $sales = $_REQUEST['id'];
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $config,'id' => $sales));
+        $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
+            'entity' => $entity
+        ));
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
+        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $due = $entity->getDue();
+        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $data = array(
+            'msg' => $msg,
+            'salesSubTotal' => $subTotal,
+            'salesTotal' => $netTotal,
+            'payment' => $payment ,
+            'due' => $due,
+            'discount' => $discount,
+            'vat' => $vat,
+            'salesItems' => $salesItems ,
+            'success' => 'success'
+        );
+        return new Response(json_encode($data));
+
+
+    }
+
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
@@ -328,8 +359,8 @@ class SalesController extends Controller
                 $salesItem->setCustomPrice($customPrice);
             }
             $salesItem->setSubTotal($quantity * $salesPrice);
-           // $em->persist($salesItem);
-           // $em->flush();
+            $em->persist($salesItem);
+            $em->flush();
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
         } else {

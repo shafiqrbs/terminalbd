@@ -1,7 +1,7 @@
 /**
  Core script to handle the entire theme and core functions
  **/
-var AppScript = function () {
+var GlobalScript = function () {
 
     var tableTable = function () {
         $('.dataTable').DataTable({
@@ -35,11 +35,31 @@ var AppScript = function () {
             }
         });
     }
+
+    var tableScriptSearch = function(){
+
+        $('#tableScriptSearch').keyup(function(){
+
+            // Search text
+            var text = $(this).val();
+            // Hide all content class element
+            $('.product-content').hide();
+            // Search
+            $('.product-content .cta-title').each(function(){
+                if($(this).text().toLowerCase().indexOf(""+text+"") != -1 ){
+                    $(this).closest('.product-content').show();
+                }
+            });
+
+        });
+    }
+
     return {
         //main function to initiate the module
         init: function () {
             tableTable();
             tableInlineNext();
+            tableScriptSearch();
         }
 
     };

@@ -169,18 +169,24 @@ var InventorySales = function(sales) {
             type: 'POST',
             data:'barcode='+barcode+'&sales='+sales,
             success: function(response){
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-               FormComponents.init();
+                url = Routing.generate('inventory_sales_item_data');
+                $.get(url,{'id':sales},  // url
+                    function (data) {  // success callback
+                        $('#barcode').focus().val('');
+                        obj = JSON.parse(data);
+                        $('#salesItem').html(obj['salesItems']);
+                        $('#paymentSubTotal').val(obj['salesTotal']);
+                        $('.salesTotal').html(obj['salesTotal']);
+                        $('#due').val(obj['due']);
+                        $('.dueAmount').html(obj['due']);
+                        $('.subTotal').html(obj['salesSubTotal']);
+                        $('#vat').html(obj['salesVat']);
+                        $('#paymentTotal').val(obj['salesTotal']);
+                        $('#wrongBarcode').html(obj['msg']);
+                        FormComponents.init();
+                });
+
+
             },
 
         })
@@ -341,13 +347,13 @@ var InventorySales = function(sales) {
         }
         var subTotal  = (quantity * price);
         $("#subTotalShow-"+rel).html(subTotal);
-
         $.ajax({
             url: Routing.generate('inventory_sales_item_update'),
             type: 'POST',
             data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price +'&customPrice='+ customPrice,
             success: function(response) {
                 obj = JSON.parse(response);
+                $('#salesItem').html(obj['salesItems']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('.salesTotal').html(obj['salesTotal']);
                 $('#due').val(obj['due']);

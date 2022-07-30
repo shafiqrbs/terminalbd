@@ -18,7 +18,14 @@ inventory_sales_purchase_item_search:
     defaults: { _controller: "InventoryBundle:Sales:searchPurchaseItem" }
     methods:  POST
     options:
-        expose: true
+            expose: true
+
+inventory_sales_item_data:
+    path:     /sales-item-data
+    defaults: { _controller: "InventoryBundle:Sales:returnSalesData" }
+    methods:  GET
+    options:
+            expose: true
 
 inventory_sales_item_purchase:
     path:     /item-purchase-details
@@ -64,14 +71,14 @@ inventory_sales_print_chalan:
     defaults: { _controller: "InventoryBundle:Sales:chalanPrint" }
 
 inventory_sales_discount_update:
-    path:     /sales/discount-update
+    path:     /discount-update
     defaults: { _controller: "InventoryBundle:Sales:salesDiscountUpdate" }
     methods:  POST
     options:
             expose: true
 
 inventory_sales_item_update:
-    path:     /sales/item/update
+    path:     /item-update
     defaults: { _controller: "InventoryBundle:Sales:salesItemUpdate" }
     methods:  POST
     options:
