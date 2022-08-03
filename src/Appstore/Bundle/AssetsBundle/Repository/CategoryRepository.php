@@ -101,8 +101,8 @@ class CategoryRepository  extends MaterializedPathRepository
             ->orderBy('node.level','ASC')
             ->getQuery()->getResult();
 
-        $arr =array();
-        $array =array();
+        $arr = array();
+        $array = array();
         if(!empty($categories)){
             /* @var $category ExpenseCategory */
             foreach($categories as $category){

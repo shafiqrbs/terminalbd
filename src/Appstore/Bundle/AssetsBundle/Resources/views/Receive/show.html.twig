@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Purchase Order GRN # {{ entity.grn }}
+                    Goods Receive GRN # {{ entity.grn }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('assets_purchase') }}">Purchase Order</a>
+                        <a href="{{ path('assets_itemreceive') }}">Goods Receive</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Purchase</a></li>
@@ -34,12 +34,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Order Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Goods Receive Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('assets_purchase_new') }}"><i class="icon-plus-sign"></i> Add PO</a>
-                                <a class="btn black" href="{{ path('assets_purchase') }}"><i class="icon-th-list"></i> Purchase Order</a>
+                                <a class="btn red" href="{{ path('assets_itemreceive_new') }}"><i class="icon-plus-sign"></i> Open Item</a>
+                                <a class="btn black" href="{{ path('assets_itemreceive') }}"><i class="icon-th-list"></i> Goods Receive</a>
                             </div>
                         </div>
 
@@ -86,7 +86,7 @@
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid box blue">
                                 <div class="span12" id="particular-table">
-                                    {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}
+                                    {% if entity.receiveItems is defined and  entity.receiveItems is not empty  %}
                                     <table class="table table-bordered table-striped table-condensed table-fixed">
                                         <thead class="flip-content ">
                                         <tr class="head-blue">
@@ -97,29 +97,28 @@
                                             <th class="span3">Product</th>
                                             <th class="span1">Qnt</th>
                                             <th class="span1">Price</th>
-                                            <th class="span1">Amount</th>
                                             <th class="span1">Sub-Total</th>
                                             <th class="span1"><i class="icon-trash"></i></th>
                                         </tr>
                                         </thead>
                                         <tbody id="invoiceParticulars">
-                                        {% if entity.PurchaseItems is not empty %}
-                                            {% for item in entity.PurchaseItems %}
+                                        {% if entity.receiveItems is not empty %}
+                                            {% for item in entity.receiveItems %}
                                                 <tr id="remove-{{ item.id }}">
                                                     <td>{{ loop.index }}</td>
-                                                    <td >{{ item.barcode }}</td>
-                                                    <td >{{ item.item.category.name }}</td>
-                                                    <td >{{ item.item.name }}</td>
-                                                    <td>{{ item.name }}</td>
+                                                    <td >{{ item.purchaseItem.barcode }}</td>
+                                                    <td >{{ item.purchaseItem.item.category.name }}</td>
+                                                    <td >{{ item.purchaseItem.item.name }}</td>
+                                                    <td>{{ item.purchaseItem.name }}</td>
                                                     <td>{{ item.quantity }}</td>
                                                     <td>{{ item.price }}</td>
                                                     <td>{{ item.subTotal|number_format }}</td>
-                                                    <td>{{ (item.subTotal)|number_format }}</td>
                                                     <td> <div class="actions">
                                                             <div class="btn-group">
-                                                                {% if entity.process != 'Approved' %}
-                                                                    <a  href="javascript:" rel="{{ path('assets_purchaseitem_delete', { 'id': item.id }) }}" id="{{  item.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
+                                                                {% if entity.process != 'approved' %}
+                                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('assets_itemreceive_delete', { 'id': item.id }) }}" id="{{  item.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                                 {% endif %}
+                                                                <a href="{{ path('assets_itemreceive_attribute', { 'id': item.id }) }}"  class="btn yellow mini" ><i class="icon-plus-sign"></i> Attribute</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -129,30 +128,26 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td colspan="10" class="span12" style="border: 1px double #000"></td>
+                                            <td colspan="9" class="span12" style="border: 1px double #000"></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
+                                            <td colspan="7" class="span9"><span class="pull-right"><strong>Sub-Total TK.</strong> =</span></td>
                                             <td class="span2"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
+                                        {% if entity.vatPercent > 0 %}
                                         <tr>
-                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
-                                            <td class="span2"><strong class="rebate">{{ entity.discount|number_format }}</strong></td>
-                                            <td class="span1"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
-                                            <td class="span2"><strong class="netTotal">{{ entity.netTotal|number_format }}</strong></td>
-                                            <td class="span1"></td>
-                                        </tr>
-                                        {% if entity.netTotal > entity.payment %}
-                                        <tr>
-                                            <td colspan="8" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
-                                            <td class="span2"><strong class="netTotal">{{ (entity.netTotal - entity.payment)|number_format }}</strong></td>
+                                            <td colspan="7" class="span9"><span class="pull-right"><strong>VAT TK.({{ entity.vatPercent }})%</strong> =</span></td>
+                                            <td class="span2"><strong class="netTotal">{{ entity.vat|number_format }}</strong></td>
                                             <td class="span1"></td>
                                         </tr>
                                         {% endif %}
+                                         <tr>
+                                            <td colspan="7" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
+                                            <td class="span2"><strong class="netTotal">{{ entity.netTotal|number_format }}</strong></td>
+                                            <td class="span1"></td>
+                                        </tr>
+
                                         </tfoot>
                                     </table>
                                     {% endif %}
@@ -168,10 +163,10 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if (entity.process == 'Complete' and app.user.granted("ROLE_ASSETS_APPROVER")) %}
-                                    <a  href="javascript:"  data-url="{{ path('assets_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                    <a  href="javascript:"  data-url="{{ path('assets_itemreceive_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     {% if (entity.process in ['Complete','In-progress'] and app.user.granted("ROLE_ASSETS_APPROVER")) %}
-                                        <a  href="{{ path('assets_purchase_edit',{'id':entity.id}) }}"  class="btn yellow"><i class="icon-pencil"></i>&nbsp;Edit</a>
+                                        <a  href="{{ path('assets_itemreceive_edit',{'id':entity.id}) }}"  class="btn yellow"><i class="icon-pencil"></i>&nbsp;Edit</a>
                                     {% endif %}
                                     <span  class="btn green"><i class=" icon-ok"></i>&nbsp;{{ entity.process|capitalize }}</span>
                                 </div>

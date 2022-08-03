@@ -1,0 +1,224 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <!-- BEGIN Disposal_order HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="Disposal_order-title">
+                Disposal Invoice :
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="{{ path('homepage') }}">Home</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li>
+                    <a href="{{ path('assets_officenote') }}">Office Notes</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li><a href="#">Add/Edit Disposal</a></li>
+                <li class="pull-right btn blue disabled mini">
+                    <i class="fa fa-calendar"></i>
+                    {{ "now"|date("d-F-Y") }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- END Disposal_order HEADER-->
+    <!-- BEGIN Disposal_order CONTENT-->
+    <div class="row-fluid">
+        <div class="span12" style="position:relative">
+
+            <div class="portlet box green tabbable">
+                <div id="dataProces"></div>
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Office Notes Information</div>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a class="btn red" href="{{ path('assets_officenote') }}"><i class="icon-th-list"></i>&nbsp;Office Notes</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="portlet-body form">
+                        {% include('flash-message.html.twig')  %}
+                        <!-- BEGIN FORM-->
+                        <div class="clearfix"><br/></div>
+                        <div class="form-actions portlet box yellow">
+                            <div class="portlet-title">  <div class="caption"><i class="icon-reorder"></i>Disposal Information</div></div>
+                        </div>
+                        <div class="clearfix"><br/></div>
+                        {{ form_start(form) }}
+                        {{ form_row(form._token) }}
+                        <div class="row-fluid">
+                            <div class="span8">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Notes Title</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.name) }}{{ form_errors(form.name) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Requested By</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.requestedBy) }}{{ form_errors(form.requestedBy) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Content</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.content) }}{{ form_errors(form.content) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Attach file</label>
+                                            <div class="controls">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="input-append span12">
+                                                        <div class="uneditable-input">
+                                                            <i class="icon-file fileupload-exists"></i>
+                                                            <span class="fileupload-preview"></span>
+                                                        </div>
+                                                        <span class="btn btn-file">
+													<span class="fileupload-new blue">Select file</span>
+													<span class="fileupload-exists">Change</span>
+                                                            {{ form_widget(form.file) }}
+                                                            {{ form_errors(form.file) }}
+													</span>
+                                                        <a href="#" class="btn fileupload-exists red" data-dismiss="fileupload">Remove</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Ref. No<span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-sort-by-order"></i>
+                                                    {{ form_widget(form.meetingNoteNo) }}{{ form_errors(form.meetingNoteNo) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Entry Date<span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-calendar"></i>
+                                                    {{ form_widget(form.meetingDate) }}{{ form_errors(form.meetingDate) }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Financial Amount</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                <i class="icon-sort-by-order"></i>
+                                                {{ form_widget(form.amount) }}{{ form_errors(form.amount) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Process</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.process) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-right">
+                                <button type="submit" class="btn green" id="action-button"><i class="icon-save"></i> Save</button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <style>
+
+        .ui-menu-item{
+            border-bottom:1px solid #000000;
+        }
+
+        .ui-menu-item a{
+            text-decoration: none;
+            background: #d0dde4;
+            height: 30px !important;
+            line-height: 30px !important;
+            border: none!important;
+            border-bottom:1px solid #000000;
+        }
+
+        .ui-menu-item a:hover{
+            background-color: #d2d2d2;
+            height: 30px !important;
+            line-height: 30px !important;
+        }
+
+        #inventoryItem{
+            display: none;
+        }
+
+    </style>
+    {% endblock %}
+    {% block javascriptBlock %}
+        {{ parent() }}
+        {% javascripts
+        '@InventoryBundle/Resources/public/js/puschase.js'
+        '@InventoryBundle/Resources/public/js/approveProcess.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock  %}
+    {% block documentready %}
+    {{ parent() }}
+    $( ".datePicker" ).datepicker({
+    dateFormat: "dd-mm-yy"
+    });
+    InventoryDisposalPage();
+    ApproveProcess();
+
+
+{% endblock %}

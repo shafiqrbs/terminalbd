@@ -179,7 +179,6 @@ class Category
      *
      * @param string $name
      *
-     * @return ExpenseCategory
      */
     public function setName($name)
     {
@@ -195,7 +194,7 @@ class Category
      */
     public function getName()
     {
-        return $this->name;
+        return $this->categoryType." - ".$this->name." ({$this->accountHead->getName()}) ";
     }
 
 
@@ -205,12 +204,10 @@ class Category
      *
      * @param string $slug
      *
-     * @return ExpenseCategory
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-
         return $this;
     }
 
@@ -228,13 +225,10 @@ class Category
      * Set code
      *
      * @param integer $code
-     *
-     * @return ExpenseCategory
      */
     public function setCode($code)
     {
         $this->code = $code;
-
         return $this;
     }
 
@@ -253,13 +247,10 @@ class Category
      * Set status1
      *
      * @param boolean $status1
-     *
-     * @return ExpenseCategory
      */
     public function setStatus($status)
     {
         $this->status = $status;
-
         return $this;
     }
 

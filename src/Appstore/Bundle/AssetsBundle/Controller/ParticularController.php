@@ -40,7 +40,6 @@ class ParticularController extends Controller
 		$entity = new Particular();
 		$form = $this->createCreateForm($entity);
 		$form->handleRequest($request);
-
 		if ($form->isValid()) {
             $inventory = $this->getUser()->getGlobalOption()->getAssetsConfig();
 			$em = $this->getDoctrine()->getManager();

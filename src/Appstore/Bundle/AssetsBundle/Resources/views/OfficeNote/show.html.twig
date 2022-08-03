@@ -1,0 +1,119 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN purchase_order HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="purchase_order-title">
+                    Office Notes Information
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('assets_officenote') }}">Office Notes</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END purchase_order HEADER-->
+        <!-- BEGIN purchase_order CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Office Notes Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="{{ path('assets_officenote') }}"><i class="icon-th-list"></i>&nbsp;Office Notes</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <div class="clearfix">&nbsp;</div>
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <tr>
+                                <th class="span3">Created</th>
+                                <td class="span2">{{ entity.created|date('d-m-Y') }}</td>
+                                <th class="span2" >Created By</th>
+                                <td class="numeric" >{{ entity.createdBy }}</td>
+                            </tr>
+                            <tr>
+                                <th class="span3" >Meeting Date</th>
+                                <td class="span2" >{{ entity.meetingDate|date('d-m-Y') }}</td>
+                                <th class="span2" >Meeting Note No</th>
+                                <td class="numeric" >{{ entity.meetingNoteNo }}</td>
+                            </tr>
+                            <tr>
+                                <th class="span3" >Meeting Note</th>
+                                <td class="numeric" colspan="3" >{{ entity.name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="span3" >Amount</th>
+                                <td class="numeric" colspan="3" >{{ entity.amount|number_format(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th class="span3" >Requested By</th>
+                                <td class="numeric" colspan="3" >{{ entity.requestedBy }}</td>
+                            </tr>
+                            <tr>
+                                <th class="span3" >Description</th>
+                                <td class="numeric" colspan="3" >{{ entity.content|raw }}</td>
+                            </tr>
+
+                            <tr>
+                                <th class="span3" >Attachment</th>
+                                <td class="numeric" colspan="3" >
+                                    {% if entity.webPath is not empty %}
+                                    <a target="_blank" href="/{{ entity.webPath }}">Download</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                        </table>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-right" id="action-{{ entity.id }}">
+                                {% if entity.process in ['Draft','In-progress'] %}
+                                    <a href="{{ path('assets_officenote_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-edit"></i> Edit</a>
+                                {% endif %}
+                                {% if ((entity.process == 'In-progress') and app.user.granted("ROLE_ASSETS_APPROVER")  )  %}
+                                    <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('assets_officenote_approve', { 'id': entity.id,'Rejected':'Rejected'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
+                                    <a class="btn blue approve approved-{{ entity.id }}" data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('assets_officenote_approve', { 'id': entity.id }) }}"><i class="icon-ok"></i>&nbsp;Approve</a>
+                                {% elseif entity.process == 'Checked' and app.user.granted("ROLE_ASSETS_APPROVER") %}
+                                    <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('assets_officenote_approve', { 'id': entity.id,'Rejected':'Rejected'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
+                                    <a href="javascript:" data-url="{{ path('assets_officenote_approve', { 'id': entity.id }) }}"  class="btn green approve"><i class="icon-ok"></i>&nbsp;Approved</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    '@InventoryBundle/Resources/public/js/puschase.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    ApproveProcess();
+    InventoryPurchasePage();
+{% endblock %}
+

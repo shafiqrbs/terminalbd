@@ -18,6 +18,14 @@ hms_report_sales_details_pdf:
     path:     /sales-details-pdf
     defaults: { _controller: "HospitalBundle:Report:salesDetailsPdf" }
 
+hms_report_sales_discount_details:
+    path:     /sales-discount-details
+    defaults: { _controller: "HospitalBundle:Report:salesDetailsDiscount" }
+
+hms_report_sales_discount_details_pdf:
+    path:     /sales-discount-details-pdf
+    defaults: { _controller: "HospitalBundle:Report:salesDetailsDiscountPdf" }
+
 hms_report_sales_service:
     path:     /service-wise-sales
     defaults: { _controller: "HospitalBundle:Report:serviceBaseSummary" }

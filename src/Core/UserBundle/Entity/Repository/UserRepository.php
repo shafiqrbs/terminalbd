@@ -200,6 +200,8 @@ class UserRepository extends EntityRepository
                 'ROLE_ASSETS_MAINTENANCE'                          => 'Assets Maintenance',
                 'ROLE_ASSETS_DISPOSAL'                             => 'Assets Disposal',
                 'ROLE_ASSETS_STOCK'                                => 'Assets Stock',
+                'ROLE_ASSETS_CHECKER'                              => 'Assets Checker',
+                'ROLE_ASSETS_APPROVER'                             => 'Assets Approver',
                 'ROLE_ASSETS_SETTING'                              => 'Assets Setting',
 
             );

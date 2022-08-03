@@ -39,7 +39,7 @@ class PurchaseRequisitionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventory = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('ProcurementBundle:PurchaseRequisition')->findWithSearch($inventory,$data);
         $purchaseOverview = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisition')->purchaseOverview($inventory,$data);
         $pagination = $this->paginate($entities);

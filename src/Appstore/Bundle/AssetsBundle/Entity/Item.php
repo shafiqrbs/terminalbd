@@ -77,7 +77,7 @@ class Item
 
 
     /**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Setting", inversedBy="items" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="items" )
 	 **/
 	private  $productGroup;
 
@@ -1187,7 +1187,7 @@ class Item
     }
 
     /**
-     * @return Setting
+     * @return Particular
      */
     public function getProductGroup()
     {
@@ -1195,7 +1195,7 @@ class Item
     }
 
     /**
-     * @param Setting $productGroup
+     * @param Particular $productGroup
      */
     public function setProductGroup($productGroup)
     {

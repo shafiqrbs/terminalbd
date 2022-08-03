@@ -65,17 +65,18 @@ class AssetsItemType extends AbstractType
 
             ->add('productGroup', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Setting',
+                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Particular',
                 'empty_value' => 'Choose a product group',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'constraints' => array(
-                    new NotBlank( array( 'message' => 'Please select  product group' ) )
+                    new NotBlank( array( 'message' => 'Please select product group' ) )
                 ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
+                        ->join("b.type",'t')
                         ->where("b.status = 1")
-                        ->andWhere("b.type = 'Product Group'");
+                        ->andWhere("t.slug = 'product-group'");
                 },
             ))
 

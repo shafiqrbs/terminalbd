@@ -715,6 +715,23 @@ class Builder extends ContainerAware
         $user = $securityContext->getToken()->getUser();
 
         $menu
+            ->addChild('Office Notes')
+            ->setAttribute('icon', 'icon-file')
+            ->setAttribute('dropdown', true);
+        $menu['Office Notes']->addChild("Office Notes List", array('route' => 'assets_officenote'));
+        $menu['Office Notes']->addChild("New Office Notes", array('route' => 'assets_officenote_new'));
+
+        $menu
+            ->addChild('Procurement')
+            ->setAttribute('icon', 'icon-shopping-cart')
+            ->setAttribute('dropdown', true);
+        $menu['Procurement']->addChild("Purchase Order List", array('route' => 'assets_purchase'));
+        $menu['Procurement']->addChild("New PO", array('route' => 'assets_purchase_new'));
+        $menu['Procurement']->addChild('Manage Receive')->setAttribute('dropdown', true);
+        $menu['Procurement']['Manage Receive']->addChild("Item Receive", array('route' => 'assets_itemreceive_item'));
+        $menu['Procurement']['Manage Receive']->addChild("Receive Voucher", array('route' => 'assets_itemreceive'));
+
+        $menu
             ->addChild('Fixed Assets')
             ->setAttribute('icon', 'icon-archive')
             ->setAttribute('dropdown', true);
@@ -753,9 +770,6 @@ class Builder extends ContainerAware
         $menu['Fixed Assets']['Product Inventory']->addChild('Inventory',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Inventory')));
         $menu['Fixed Assets']['Product Inventory']->addChild('Stock Details', array('route' => 'assets_barcode_stock'));
         $menu['Fixed Assets']['Product Inventory']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
-        $menu['Fixed Assets']->addChild('Asset Voucher')->setAttribute('dropdown', true);
-        $menu['Fixed Assets']['Asset Voucher']->addChild('Voucher', array('route' => 'assets_purchase'));
-        $menu['Fixed Assets']['Asset Voucher']->addChild('New Voucher', array('route' => 'assets_purchase_new'));
         $menu['Fixed Assets']->addChild('Master Data')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Master Data']->addChild('Depreciation Model', array('route' => 'assets_model'));
         $menu['Fixed Assets']['Master Data']->addChild('Depreciation Setup', array('route' => 'assets_depreciation'));
@@ -1161,8 +1175,8 @@ class Builder extends ContainerAware
                     ->setAttribute('dropdown', true);
                 $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Summary', array('route' => 'hms_report_sales_summary'))
                     ;
-                $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Details', array('route' => 'hms_report_sales_details'))
-                    ;
+                $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Details', array('route' => 'hms_report_sales_details'));
+                $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Discount', array('route' => 'hms_report_sales_discount_details'));
                 $menu['Hospital & Diagnostic']['Reports']->addChild('Monthly Sales & Cash', array('route' => 'hms_report_monthly_cash'))
                     ;
                 $menu['Hospital & Diagnostic']['Reports']->addChild('Monthly Commission', array('route' => 'hms_report_monthly_commission'))

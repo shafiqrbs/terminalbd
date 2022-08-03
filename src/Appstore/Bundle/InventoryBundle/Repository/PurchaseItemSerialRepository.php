@@ -23,6 +23,7 @@ class PurchaseItemSerialRepository extends EntityRepository
 
         /* @var $item PurchaseItem  */
 
+
         foreach ($purchase->getPurchaseItems() as $item ){
             if($item->getSerialNo()){
                 $id = $item->getId();

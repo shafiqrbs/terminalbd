@@ -24,7 +24,7 @@ class PurchaseRequisitionRepository extends EntityRepository
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $qb = $this->createQueryBuilder('purchase');
-        $qb->where("purchase.inventoryConfig = :inventory");
+        $qb->where("purchase.globalOption = :inventory");
         $qb->setParameter('inventory', $inventory);
         if (!empty($receiveDate)) {
             $compareTo = new \DateTime($receiveDate);
@@ -65,7 +65,7 @@ class PurchaseRequisitionRepository extends EntityRepository
         $qb->addSelect('SUM(purchase.paymentAmount) AS payment');
         $qb->addSelect('SUM(purchase.dueAmount) AS due');
         $qb->addSelect('SUM(purchase.commissionAmount) AS discount');
-        $qb->where("purchase.inventoryConfig = :inventory");
+        $qb->where("purchase.globalOption = :inventory");
         $qb->andWhere("purchase.process = 'approved'");
         $qb->setParameter('inventory', $inventory);
         if (!empty($receiveDate)) {

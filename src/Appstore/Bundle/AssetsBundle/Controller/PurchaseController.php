@@ -110,7 +110,10 @@ class PurchaseController extends Controller
 
     public function returnResultData(Purchase $invoice,$msg=''){
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->getPurchaseItems($invoice);
+       // $invoiceParticulars = $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->getPurchaseItems($invoice);
+        $invoiceParticulars =  $this->renderView("AssetsBundle:Purchase:item.html.twig",array(
+            'entity' => $invoice,
+        ));
         $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
         $tti = $invoice->getTotalTaxIncidence() > 0 ? $invoice->getTotalTaxIncidence() : 0;
         $rebate = $invoice->getRebate() > 0 ? $invoice->getRebate() : 0;
@@ -155,6 +158,7 @@ class PurchaseController extends Controller
         $entity->setPrice($price);
         $entity->setPurchasePrice($price);
         $entity->setQuantity($quantity);
+        $entity->setRemainingQuantity($quantity);
         $entity->setSubTotal($subTotal);
         $em->persist($entity);
         $em->flush();
@@ -211,12 +215,9 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountVendor entity.');
         }
-
         $form = $this->createEditForm($entity);
         $form->handleRequest($request);
-
         $data = $request->request->all();
-
         $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['companyMobile']);
         if($mobile and $data['companyName'] ) {
@@ -225,24 +226,12 @@ class PurchaseController extends Controller
                 $entity->setVendor($exist);
             }
         }
-        if (($form->isValid() && $method == 'cash') ||
-            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
-            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
-        ) {
-            $entity->setUpdated($entity->getCreated());
+        if ($form->isValid()) {
+            $entity->setProcess('Complete');
             $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been added successfully"
-            );
-            return $this->redirect($this->generateUrl('assets_purchase_show',['id' => $entity->getId()]));
+            return $this->redirect($this->generateUrl('assets_purchase_show',array('id'=>$entity->getId())));
         }
-        $this->get('session')->getFlashBag()->add(
-            'notice',"May be you are missing to select bank or mobile account"
-        );
-        if($entity->getProcess() == 'Approved'){
-            $this->approvedAction($entity->getId());
-        }
-        $products = $em->getRepository('AssetsBundle:Item')->findAll(array('globalOption' => $entity->getGlobalOption()));
+        $products = $em->getRepository('AssetsBundle:Item')->findAll(array('config' => $entity->getConfig()));
         return $this->render("AssetsBundle:Purchase:new.html.twig",array(
             'entity' => $entity,
             'id' => 'purchase',
@@ -276,13 +265,11 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
 
         /* @var $purchase Purchase */
-
         $purchase = $em->getRepository('AssetsBundle:Purchase')->findOneBy(array('config' => $config , 'id' => $id));
         if (!empty($purchase) and empty($purchase->getApprovedBy())) {
-
             $em = $this->getDoctrine()->getManager();
-          //  $purchase->setProcess('Approved');
-         //   $purchase->setApprovedBy($this->getUser());
+            $purchase->setProcess('Approved');
+            $purchase->setApprovedBy($this->getUser());
             if($purchase->getPayment() === 0 ){
                 $purchase->setTransactionMethod(NULL);
             }
@@ -293,12 +280,6 @@ class PurchaseController extends Controller
                 $purchase->setUpdated($datetime);
             }
             $em->flush();
-            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAssetsAccountPurchase($purchase);
-            $em->getRepository('AccountingBundle:Transaction')->itemDistributionTransaction($purchase,$accountPurchase);
-            $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->insertProductSerialNo($purchase);
-            $this->getDoctrine()->getRepository('AssetsBundle:StockItem')->getPurchaseInsertQnt($purchase);
-            $this->getDoctrine()->getRepository('AssetsBundle:Product')->insertReceiveItem($purchase);
-            $this->getDoctrine()->getRepository('AssetsBundle:Item')->getPurchaseUpdateQnt($purchase);
             return new Response('success');
 
         } else {

@@ -73,17 +73,11 @@
           <th>Created</th>
           <th>Invoice</th>
           <th>Name</th>
-          <th>Particulars</th>
           <th>Referred</th>
           <th>Assign Doctor</th>
           <th>Sub-Total</th>
           <th>Discount</th>
           <th>Total</th>
-          {% for com in commissionSummary %}
-              <th  colspan="2" >{{ com.commissionName }}</th>
-          {% endfor %}
-          <th>Comm.</th>
-          <th >Balance</th>
       </tr>
       </thead>
       <tbody>
@@ -100,33 +94,11 @@
               <td>{{ entity.created|date('d-m-Y') }}</td>
               <td>{{ entity.invoice }}</td>
               <td>{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}<br/>{{ entity.customer.mobile }}{% endif %}</td>
-              <td>
-                  <ul>
-                  {% for particular in entity.invoiceParticulars  %}
-                      <li>{{ loop.index }}. {{ particular.particular.name }}</li>
-                  {% endfor %}
-                  </ul>
-              </td>
               <td>{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</td>
               <td>{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
               <td>{{ entity.subTotal }}</td>
               <td>{{ entity.discount }}</td>
               <td>{{ entity.total }}</td>
-              {% for com in commissionSummary %}
-                  {% set commissionId = entity.id~'-'~com.comId %}
-                  <td  >
-                      {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
-                          {{ commissions[commissionId].referredName }}
-                      {% endif %}
-                  </td>
-                  <td>
-                      {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
-                          {{ commissions[commissionId].payment }}
-                      {% endif %}
-                  </td>
-              {% endfor %}
-              <td  >{{ entity.commission }}</td>
-              <td  >{{ (entity.total - entity.commission)|number_format }}</td>
           </tr>
       {% endfor %}
       </tbody>
@@ -136,12 +108,6 @@
           <td>{{ grandSubTotal }}</td>
           <td>{{ grandDiscount }}</td>
           <td>{{ grandTotal }}</td>
-          {% for com in commissionSummary %}
-              <th>{{ com.commissionName }}</th>
-              <th>{{ com.payment }}</th>
-          {% endfor %}
-          <td>{{ grandCommission }}</td>
-          <td>{{ grandTotal - grandCommission }}</td>
       </tr>
       </tfoot>
   </table>

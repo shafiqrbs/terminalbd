@@ -279,6 +279,63 @@ class ReportController extends Controller
         return new Response('');
     }
 
+    public function salesDetailsDiscountAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        if (empty($data['posted'])) {
+            $datetime = new \DateTime("now");
+            $data['posted'] = $datetime->format('d-m-Y');
+        }
+        $salesTodayUser      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesUsers($user);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceDetailReporets($user, $mode = 'diagnostic', $data);
+        $pagination = $entities->getQuery()->getResult();
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5, 6));
+        return $this->render('HospitalBundle:Report/sales-discount:details.html.twig', array(
+            'entities' => $pagination,
+            'referredDoctors' => $referredDoctors,
+            'salesTodayUser' => $salesTodayUser,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function salesDetailsDiscountPdfAction()
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $datetime = new \DateTime("now");
+        if (empty($data['posted'])) {
+            $data['posted'] = $datetime->format('Y-m-d');
+        }
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceDetailReporets($user, $mode = 'diagnostic', $data);
+        $pagination = $entities->getQuery()->getResult();
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(6));
+        $html = $this->renderView(
+            'HospitalBundle:Report/sales-discount:detailsPdf.html.twig', array(
+                'globalOption' => $user->getGlobalOption(),
+                'entities' => $pagination,
+                'referredDoctors' => $referredDoctors,
+                'searchForm' => $data,
+            )
+        );
+        $date = $datetime->format('d-m-y');
+        $date = "{$date}-daily-sales.pdf";
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy = new Pdf($wkhtmltopdfPath);
+        $pdf = $snappy->getOutputFromHtml($html);
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $date . '"');
+        echo $pdf;
+        return new Response('');
+    }
+
     public function monthlyCashAction()
     {
         $user = $this->getUser();

@@ -52,12 +52,23 @@
                         <div class="row-fluid">
                             <div class="span8">
                                 <div class="row-fluid">
-                                    <div class="span8">
+                                    <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="">Product Group<span class="required">*</span></label>
                                             <div class="controls">
                                                 {{ form_widget(form.productGroup) }}
                                                 {{ form_errors(form.productGroup) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Category<span class="required">*</span></label>
+                                            <div class="controls">
+                                                {{ form_widget(form.category) }}
+                                                {{ form_errors(form.category) }}
                                             </div>
                                         </div>
                                     </div>
@@ -73,19 +84,9 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row-fluid">
-                                    <div class="span8">
-                                        <div class="control-group">
-                                            <label class="control-label" for="">Category<span class="required">*</span></label>
-                                            <div class="controls">
-                                                {{ form_widget(form.category) }}
-                                                {{ form_errors(form.category) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span8">
+                                    <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="">Brand</label>
                                             <div class="controls">

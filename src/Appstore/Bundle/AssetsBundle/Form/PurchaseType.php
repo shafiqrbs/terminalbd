@@ -23,6 +23,7 @@ class PurchaseType extends AbstractType
     public function __construct(GlobalOption $option)
     {
         $this->option = $option;
+        $this->config = $option->getAssetsConfig()->getId();
 
     }
 
@@ -48,64 +49,23 @@ class PurchaseType extends AbstractType
                         ->andWhere("e.globalOption =".$this->option->getId());
                 },
             ))
-            ->add('process', 'choice', array(
-                'attr'=>array('class'=>'span6 m-wrap'),
-                'expanded'      =>false,
+            ->add('officeNotes', 'entity', array(
                 'required'    => true,
-                'multiple'      =>false,
-                'choices' => array(
-                    'Hold' => 'Hold',
-                    'In-progress' => 'In-progress',
-                    'Done' => 'Done',
-                ),
-            ))
-
-            ->add('transactionMethod', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
-                'property' => 'name',
-                'empty_value' => '---Choose a Transaction---',
-                'attr'=>array('class'=>'span12 transactionMethod'),
+                'class' => 'Appstore\Bundle\AssetsBundle\Entity\OfficeNote',
+                'empty_value' => '---Choose a office notes ---',
+                'property' => 'refNo',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                //'constraints' =>array( new NotBlank(array('message'=>'Please select office notes')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->orderBy("e.id","ASC");
-                }
-            ))
-
-            ->add('accountBank', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
-                'empty_value' => '---Choose a bank---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->option->getId())
-                        ->orderBy("b.name", "ASC");
+                        ->andWhere("e.isDelete IS NULL")
+                       // ->andWhere("e.process ='Approved'")
+                        ->andWhere("e.config =".$this->config);
                 },
             ))
-            ->add('accountMobileBank', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
-                'empty_value' => '---Choose a mobile banking---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.globalOption =".$this->option->getId())
-                        ->orderBy("b.name", "ASC");
-                },
-            ))
-            ->add('challanNo','text', array('attr'=>array('class'=>'m-wrap span12 challan inputs','placeholder'=>'Enter challan no')))
-            ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter receive date')))
-            ->add('netTotal','text', array('attr'=>array('class'=>'m-wrap span12 inputs netTotal','readonly'=>'readonly','placeholder'=>'Enter total amount')))
             ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter narration')))
-            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12 inputs discount','placeholder'=>'Enter discount amount')))
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Payment amount','autocomplete'=>'off')
-            ));
+            ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12 inputs discount','placeholder'=>'Enter discount amount')));
     }
     
     /**

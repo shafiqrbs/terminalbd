@@ -172,14 +172,21 @@ class PurchaseItem
 
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="quantity", type="integer",nullable=true)
+     * @ORM\Column(name="float", type="integer",nullable=true)
      */
     private $quantity;
 
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="receiveQuantity", type="float",nullable=true)
+     */
+    private $receiveQuantity;
+
+     /**
      * @var integer
      *
      * @ORM\Column(name="salesQuantity", type="integer",nullable=true)
@@ -1248,6 +1255,22 @@ class PurchaseItem
     public function setApprovedBy($approvedBy)
     {
         $this->approvedBy = $approvedBy;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReceiveQuantity()
+    {
+        return $this->receiveQuantity;
+    }
+
+    /**
+     * @param float $receiveQuantity
+     */
+    public function setReceiveQuantity($receiveQuantity)
+    {
+        $this->receiveQuantity = $receiveQuantity;
     }
 
 

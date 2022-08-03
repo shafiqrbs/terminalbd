@@ -9,7 +9,7 @@
 namespace Setting\Bundle\ToolBundle\Event;
 
 
-class Glo
+class GlobalOption
 {
 
 }

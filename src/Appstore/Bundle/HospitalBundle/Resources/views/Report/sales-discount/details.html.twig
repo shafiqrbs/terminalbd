@@ -38,7 +38,7 @@
                                 {% set name = searchForm.name is defined ? searchForm.name :'' %}
                                 {% set mobile = searchForm.mobile is defined ? searchForm.mobile :'' %}
                                 {% set posted = searchForm.posted is defined ? searchForm.posted :'' %}
-                                <a class="btn red" target="_blank" href="{{ path('hms_report_sales_details_pdf',{'referred':referred,'name':name,posted:posted,mobile:mobile}) }}" >
+                                <a class="btn red" target="_blank" href="{{ path('hms_report_sales_discount_details_pdf',{'referred':referred,'name':name,posted:posted,mobile:mobile}) }}" >
                                     <i class=" icon-download"></i>&nbsp;Download PDF
                                 </a>
                             </div>
@@ -88,12 +88,6 @@
                                 <th class="numeric" >Sub-Total</th>
                                 <th class="numeric" >Discount</th>
                                 <th class="numeric" >Total</th>
-                                {% for com in commissionSummary %}
-                                <th class="numeric" colspan="2" >{{ com.commissionName }}</th>
-                                {% endfor %}
-                                <th class="numeric" >Commission</th>
-                                <th class="numeric" >Balance</th>
-                                <th class="numeric" >Report</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -115,22 +109,6 @@
                                     <td class="numeric" >{{ entity.subTotal }}</td>
                                     <td class="numeric" >{{ entity.discount }}</td>
                                     <td class="numeric" >{{ entity.total }}</td>
-                                    {% for com in commissionSummary %}
-                                        {% set commissionId = entity.id~'-'~com.comId %}
-                                        <td class="numeric" >
-                                            {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
-                                                {{ commissions[commissionId].referredName }}
-                                            {% endif %}
-                                        </td>
-                                        <td class="numeric" >
-                                            {% if commissions[commissionId] is defined and commissions[commissionId] is not empty  %}
-                                                {{ commissions[commissionId].payment }}
-                                            {% endif %}
-                                        </td>
-                                    {% endfor %}
-                                    <td class="numeric" >{{ entity.commission }}</td>
-                                    <td class="numeric" >{{ (entity.total - entity.commission)|number_format }}</td>
-                                    <td class="numeric" > {{ entity.process }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -140,13 +118,6 @@
                                     <td>{{ grandSubTotal }}</td>
                                     <td>{{ grandDiscount }}</td>
                                     <td>{{ grandTotal }}</td>
-                                    {% for com in commissionSummary %}
-                                        <th>{{ com.commissionName }}</th>
-                                        <th>{{ com.payment }}</th>
-                                    {% endfor %}
-                                    <td>{{ grandCommission }}</td>
-                                    <td>{{ grandTotal - grandCommission }}</td>
-                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>

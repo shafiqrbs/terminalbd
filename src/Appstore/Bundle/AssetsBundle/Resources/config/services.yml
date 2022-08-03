@@ -19,6 +19,16 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.assets.officenote.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\OfficeNoteListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.assets.receive.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\ReceiveListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.assets.purchase.event.listener:
         class: Appstore\Bundle\AssetsBundle\EventListener\PurchaseListener
         tags:

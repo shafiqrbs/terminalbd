@@ -131,7 +131,7 @@ $(document).on('change', '.discount', function() {
     var purchase = parseInt($('#purchaseId').val());
 
     $.ajax({
-        url: Routing.generate('tally_purchase_discount_update'),
+        url: Routing.generate('assets_purchase_discount_update'),
         type: 'POST',
         data:'discount=' + discount+'&purchase='+purchase,
         success: function(response) {

@@ -10,6 +10,10 @@ assets_disposal:
     resource: "@AssetsBundle/Resources/config/routing/disposal.yml"
     prefix:   /disposal
 
+assets_office:
+    resource: "@AssetsBundle/Resources/config/routing/officenote.yml"
+    prefix:   /office-note
+
 assets_distribution:
     resource: "@AssetsBundle/Resources/config/routing/distribution.yml"
     prefix:   /distribution
@@ -29,6 +33,10 @@ assets_stockitem:
 assets_item:
     resource: "@AssetsBundle/Resources/config/routing/item.yml"
     prefix:   /item
+
+assets_itemreceive:
+    resource: "@AssetsBundle/Resources/config/routing/itemreceive.yml"
+    prefix:   /item-receive
 
 assets_purchase:
     resource: "@AssetsBundle/Resources/config/routing/purchase.yml"

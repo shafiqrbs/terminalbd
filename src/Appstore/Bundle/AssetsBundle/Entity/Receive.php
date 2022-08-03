@@ -10,14 +10,16 @@ use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Purchase
  *
- * @ORM\Table(name="assets_purchase")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\PurchaseRepository")
+ * @ORM\Table(name="assets_receive")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\ReceiveRepository")
  */
-    class Purchase
+    class Receive
     {
         /**
          * @var integer
@@ -36,16 +38,9 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
         /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="assetsPurchase"  )
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem", mappedBy="receive"  )
          **/
-        private  $purchaseItems;
-
-
-
-        /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="purchase"  )
-         **/
-        private  $stockItems;
+        private  $receiveItems;
 
 
          /**
@@ -115,59 +110,21 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          */
         private $netTotal = 0;
 
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="customsDuty", type="float", nullable=true)
-         */
-        private $customsDuty = 0.00;
-
 
         /**
          * @var float
          *
-         * @ORM\Column(name="supplementaryDuty", type="float", nullable=true)
+         * @ORM\Column(name="vat", type="float", nullable=true)
          */
-        private $supplementaryDuty = 0.00;
+        private $vat = 0.00;
 
-        /**
+
+         /**
          * @var float
          *
-         * @ORM\Column(name="valueAddedTax", type="float", nullable=true)
+         * @ORM\Column(name="vatPercent", type="float", nullable=true)
          */
-        private $valueAddedTax = 0.00;
-
-
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="advanceIncomeTax", type="float", nullable=true)
-         */
-        private $advanceIncomeTax = 0.00;
-
-
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="recurringDeposit", type="float", nullable=true)
-         */
-        private $recurringDeposit = 0.00;
-
-
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="advanceTradeVat", type="float", nullable=true)
-         */
-        private $advanceTradeVat = 0.00;
-
-
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="totalTaxIncidence", type="float", nullable=true)
-         */
-        private $totalTaxIncidence = 0.00;
+        private $vatPercent = 0.00;
 
 
         /**
@@ -176,28 +133,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\Column(name="payment", type="float", nullable=true)
          */
         private $payment = 0;
-
-
-        /**
-         * @var float
-         *
-         * @ORM\Column(name="rebate", type="float", nullable=true)
-         */
-        private $rebate = 0;
-
-         /**
-         * @var float
-         *
-         * @ORM\Column(name="vatDeductionSource", type="float", nullable=true)
-         */
-        private $vatDeductionSource = 0;
-
-         /**
-         * @var float
-         *
-         * @ORM\Column(name="discount", type="float", nullable=true)
-         */
-        private $discount = 0;
 
         /**
          * @var string
@@ -217,6 +152,14 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         /**
          * @var string
          *
+         * @ORM\Column(name="gatepass", type="string", length = 50, nullable=true)
+         */
+        private $gatepass;
+
+
+        /**
+         * @var string
+         *
          * @ORM\Column(name="lcNo", type="string", length = 50, nullable=true)
          */
         private $lcNo;
@@ -227,7 +170,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          *
          * @ORM\Column(name="process", type="string", length = 50, nullable=true)
          */
-        private $process = "process";
+        private $process = "Created";
 
 
         /**
@@ -245,11 +188,15 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private $remark;
 
         /**
-         * @var \DateTime
-         *
-         * @ORM\Column(name="poDate", type="date", nullable = true)
+         * @ORM\Column(type="string", length=255, nullable=true)
          */
-        private $poDate;
+        protected $path;
+
+        /**
+         * @Assert\File(maxSize="8388608")
+         */
+        protected $file;
+
 
 
         /**
@@ -515,126 +462,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
         /**
-         * @return PurchaseItem
-         */
-        public function getPurchaseItems()
-        {
-            return $this->purchaseItems;
-        }
-
-        /**
-         * @return float
-         */
-        public function getTotalTaxIncidence()
-        {
-            return $this->totalTaxIncidence;
-        }
-
-        /**
-         * @param float $totalTaxIncidence
-         */
-        public function setTotalTaxIncidence($totalTaxIncidence)
-        {
-            $this->totalTaxIncidence = $totalTaxIncidence;
-        }
-
-        /**
-         * @return float
-         */
-        public function getAdvanceTradeVat()
-        {
-            return $this->advanceTradeVat;
-        }
-
-        /**
-         * @param float $advanceTradeVat
-         */
-        public function setAdvanceTradeVat($advanceTradeVat)
-        {
-            $this->advanceTradeVat = $advanceTradeVat;
-        }
-
-        /**
-         * @return float
-         */
-        public function getRecurringDeposit()
-        {
-            return $this->recurringDeposit;
-        }
-
-        /**
-         * @param float $recurringDeposit
-         */
-        public function setRecurringDeposit($recurringDeposit)
-        {
-            $this->recurringDeposit = $recurringDeposit;
-        }
-
-        /**
-         * @return float
-         */
-        public function getAdvanceIncomeTax()
-        {
-            return $this->advanceIncomeTax;
-        }
-
-        /**
-         * @param float $advanceIncomeTax
-         */
-        public function setAdvanceIncomeTax($advanceIncomeTax)
-        {
-            $this->advanceIncomeTax = $advanceIncomeTax;
-        }
-
-        /**
-         * @return float
-         */
-        public function getValueAddedTax()
-        {
-            return $this->valueAddedTax;
-        }
-
-        /**
-         * @param float $valueAddedTax
-         */
-        public function setValueAddedTax($valueAddedTax)
-        {
-            $this->valueAddedTax = $valueAddedTax;
-        }
-
-        /**
-         * @return float
-         */
-        public function getSupplementaryDuty()
-        {
-            return $this->supplementaryDuty;
-        }
-
-        /**
-         * @param float $supplementaryDuty
-         */
-        public function setSupplementaryDuty($supplementaryDuty)
-        {
-            $this->supplementaryDuty = $supplementaryDuty;
-        }
-
-        /**
-         * @return float
-         */
-        public function getCustomsDuty()
-        {
-            return $this->customsDuty;
-        }
-
-        /**
-         * @param float $customsDuty
-         */
-        public function setCustomsDuty($customsDuty)
-        {
-            $this->customsDuty = $customsDuty;
-        }
-
-        /**
          * @return float
          */
         public function getNetTotal()
@@ -666,53 +493,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->subTotal = $subTotal;
         }
 
-        /**
-         * @return float
-         */
-        public function getRebate()
-        {
-            return $this->rebate;
-        }
-
-        /**
-         * @param float $rebate
-         */
-        public function setRebate($rebate)
-        {
-            $this->rebate = $rebate;
-        }
-
-        /**
-         * @return float
-         */
-        public function getVatDeductionSource()
-        {
-            return $this->vatDeductionSource;
-        }
-
-        /**
-         * @param float $vatDeductionSource
-         */
-        public function setVatDeductionSource($vatDeductionSource)
-        {
-            $this->vatDeductionSource = $vatDeductionSource;
-        }
-
-        /**
-         * @return float
-         */
-        public function getDiscount()
-        {
-            return $this->discount;
-        }
-
-        /**
-         * @param float $discount
-         */
-        public function setDiscount($discount)
-        {
-            $this->discount = $discount;
-        }
 
         /**
          * @return string
@@ -762,21 +542,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->lcNo = $lcNo;
         }
 
-        /**
-         * @return mixed
-         */
-        public function getPoDate()
-        {
-            return $this->poDate;
-        }
-
-        /**
-         * @param mixed $poDate
-         */
-        public function setPoDate($poDate)
-        {
-            $this->poDate = $poDate;
-        }
 
         /**
          * @return AccountPurchase
@@ -834,13 +599,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
             $this->vendor = $vendor;
         }
 
-        /**
-         * @return StockItem
-         */
-        public function getStockItems()
-        {
-            return $this->stockItems;
-        }
 
         /**
          * @return mixed
@@ -857,6 +615,169 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         {
             $this->officeNotes = $officeNotes;
         }
+
+        /**
+         * Sets file.
+         *
+         * @param Item $file
+         */
+        public function setFile(UploadedFile $file = null)
+        {
+            $this->file = $file;
+        }
+
+        /**
+         * Get file.
+         *
+         * @return Item
+         */
+        public function getFile()
+        {
+            return $this->file;
+        }
+
+        public function getAbsolutePath()
+        {
+            return null === $this->path
+                ? null
+                : $this->getUploadRootDir().'/'.$this->path;
+        }
+
+        public function getWebPath()
+        {
+            return null === $this->path
+                ? null
+                : $this->getUploadDir().'/'.$this->path;
+        }
+
+        /**
+         * @ORM\PostRemove()
+         */
+        public function removeUpload()
+        {
+            if ($file = $this->getAbsolutePath()) {
+                unlink($file);
+            }
+        }
+
+
+        protected function getUploadRootDir()
+        {
+            return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+        }
+
+        protected function getUploadDir()
+        {
+            return 'uploads/domain/'.$this->getConfig()->getGlobalOption()->getId().'/assets/';
+        }
+
+        public function upload()
+        {
+            // the file property can be empty if the field is not required
+            if (null === $this->getFile()) {
+                return;
+            }
+
+            // use the original file name here but you should
+            // sanitize it at least to avoid any security issues
+
+            // move takes the target directory and then the
+            // target filename to move to
+            $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+            $this->getFile()->move(
+                $this->getUploadRootDir(),
+                $filename
+            );
+
+            // set the path property to the filename where you've saved the file
+            $this->path = $filename;
+
+            // clean up the file property as you won't need it anymore
+            $this->file = null;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getReceiveItems()
+        {
+            return $this->receiveItems;
+        }
+
+        /**
+         * @param mixed $receiveItems
+         */
+        public function setReceiveItems($receiveItems)
+        {
+            $this->receiveItems = $receiveItems;
+        }
+
+        /**
+         * @return float
+         */
+        public function getVatPercent()
+        {
+            return $this->vatPercent;
+        }
+
+        /**
+         * @param float $vatPercent
+         */
+        public function setVatPercent($vatPercent)
+        {
+            $this->vatPercent = $vatPercent;
+        }
+
+        /**
+         * @return string
+         */
+        public function getGatepass()
+        {
+            return $this->gatepass;
+        }
+
+        /**
+         * @param string $gatepass
+         */
+        public function setGatepass($gatepass)
+        {
+            $this->gatepass = $gatepass;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getPath()
+        {
+            return $this->path;
+        }
+
+        /**
+         * @param mixed $path
+         */
+        public function setPath($path)
+        {
+            $this->path = $path;
+        }
+
+        /**
+         * @return float
+         */
+        public function getVat()
+        {
+            return $this->vat;
+        }
+
+        /**
+         * @param float $vat
+         */
+        public function setVat($vat)
+        {
+            $this->vat = $vat;
+        }
+
+
+
 
 
     }
