@@ -83,8 +83,8 @@ $('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
 });
 
 $('form#purchaseItemForm').on('keyup', '#purchaseItem_quantity', function (e) {
-    var sp =  parseInt($('#stockSalesPrice').val());
-    var quantity =  parseInt($("#purchaseItem_quantity").val());
+    var sp =  parseFloat($('#stockSalesPrice').val());
+    var quantity =  parseFloat($("#purchaseItem_quantity").val());
     var totalPP = parseFloat(quantity * sp);
     $('#purchaseItem_salesPrice').val(totalPP);
 });

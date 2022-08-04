@@ -1,8 +1,8 @@
 $('form#purchaseItemManualForm').on('keyup', '#purchaseItem_quantity', function (e) {
 
-    var sp =  parseInt($('#stockSalesPrice').val());
-    var pp =  parseInt($('#stockPurchasePrice').val());
-    var quantity =  parseInt($("#purchaseItem_quantity").val());
+    var sp =  parseFloat($('#stockSalesPrice').val());
+    var pp =  parseFloat($('#stockPurchasePrice').val());
+    var quantity =  parseFloat($("#purchaseItem_quantity").val());
     var percent =  parseFloat($("#purchaseItem_itemPercent").val());
     if(quantity !== "NaN" && quantity > 0){
         $('#purchaseItem_salesPrice').val(quantity * sp);
@@ -22,7 +22,7 @@ $('form#purchaseItemManualForm').on('keyup', '#purchaseItem_quantity', function 
 
 $('form#purchaseItemManualForm').on('change', '#purchaseItem_itemPercent, #purchaseItem_salesPrice', function (e) {
 
-    var sp =  parseInt($('#purchaseItem_salesPrice').val());
+    var sp =  parseFloat($('#purchaseItem_salesPrice').val());
     var percent =  parseFloat($(this).val());
     var price = (sp - ((sp*percent)/100));
     $('#purchaseItem_purchasePrice').val(price);
