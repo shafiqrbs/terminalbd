@@ -174,7 +174,7 @@ class PurchaseItem
     /**
      * @var float
      *
-     * @ORM\Column(name="float", type="integer",nullable=true)
+     * @ORM\Column(name="quantity", type="integer",nullable=true)
      */
     private $quantity;
 
