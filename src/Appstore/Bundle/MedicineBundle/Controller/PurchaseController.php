@@ -397,6 +397,7 @@ class PurchaseController extends Controller
 
     public function particularSearchAction(MedicineStock $particular)
     {
+        $purchase = $this->getDoctrine()->getRepository(MedicinePurchase::class)->find($_REQUEST['purchase']);
         $unit = !empty($particular->getUnit()) ? $particular->getUnit()->getName():'Unit';
         $pack = $particular->getPack() > 0  ?  $particular->getPack() : 1;
         if($particular->isOpeningApprove() != 1 and $particular->getMedicineConfig()->isOpeningQuantity() == 1 and $particular->getSalesQuantity() > 0){
@@ -413,7 +414,11 @@ class PurchaseController extends Controller
             $min = $particular->getMinQuantity();
         }
         $tp = ($particular->getTradePrice() > 0 ) ? $particular->getTradePrice(): "TP price";
-        return new Response(json_encode(array('purchasePrice'=> $particular->getPurchasePrice(), 'tp'=> $tp, 'salesQty'=> $salesQty,'openingStatus'=> $openingStatus,'pack'=> $pack,'minQuantity'=> $min, 'quantity'=> 1, 'salesPrice'=> $particular->getSalesPrice(),'quantity'=> 1,'unit' => $unit)));
+        if($purchase->getInvoiceMode() == "manual") {
+            return new Response(json_encode(array('purchasePrice' => $particular->getPurchasePrice(), 'tp' => $tp, 'salesQty' => $salesQty, 'openingStatus' => $openingStatus, 'pack' => $pack, 'minQuantity' => $min, 'quantity' => 1, 'salesPrice' => $particular->getSalesPrice(), 'unit' => $unit)));
+        }else{
+            return new Response(json_encode(array('purchasePrice'=> '', 'tp'=> $tp, 'salesQty'=> $salesQty,'openingStatus'=> $openingStatus,'pack'=> $pack,'minQuantity'=> $min, 'quantity'=> '', 'salesPrice'=> '','unit' => $unit)));
+        }
     }
 
     public function stockItemCreateAction(Request $request,MedicinePurchase $purchase)

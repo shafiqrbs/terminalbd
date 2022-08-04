@@ -42,36 +42,7 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
-$(document).on('change', '#purchaseItem_stockName', function() {
 
-    var medicine = $('#purchaseItem_stockName').val();
-    $.ajax({
-        url: Routing.generate('medicine_purchase_particular_search',{'id':medicine}),
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('#purchaseItem_quantity').focus();
-            $('#pack').val(obj['pack']);
-            $('#minQuantity').val(obj['minQuantity']);
-            $('#purchaseItem_salesPrice').val(obj['salesPrice']);
-            $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
-            $('#stockSalesPrice').val(obj['salesPrice']);
-            $('#stockPurchasePrice').val(obj['purchasePrice']);
-            $('#purchaseItem_quantity').val(1);
-            $('#tradePrice').html(obj['tp']);
-            $('#unit').html(obj['unit']);
-            if(obj['openingStatus'] === 'valid' ){
-                $('#opening-box').show();
-                $('#currentSalesQty').html(obj['salesQty']);
-                $('#salesQty').val(obj['salesQty']);
-                $('#openingQuantity').val(obj['salesQty']);
-                $('#totalQty').html(obj['salesQty']);
-            }
-            $(".editableText").editable();
-            $(".expirationDate").editable();
-        }
-    })
-});
 
 $('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
 
@@ -591,12 +562,8 @@ $(document).on("click", ".confirmSubmit", function() {
 
 function brandMedicineSearch(purchase){
 
-
-
-
     var url = Routing.generate('medicine_purchase_stock_item_search',{'purchase':purchase});
     $(".select2StockMedicinePurchaseItem").select2({
-
         placeholder: "Search stock medicine name",
         ajax: {
             url: url,
@@ -631,6 +598,36 @@ function brandMedicineSearch(purchase){
         allowClear: true,
         minimumInputLength: 1
 
+    });
+
+    $(document).on('change', '#purchaseItem_stockName', function() {
+
+        var medicine = $('#purchaseItem_stockName').val();
+        $.ajax({
+            url: Routing.generate('medicine_purchase_particular_search',{'id':medicine,'purchase':purchase}),
+            type: 'GET',
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#purchaseItem_quantity').focus();
+                $('#pack').val(obj['pack']);
+                $('#minQuantity').val(obj['minQuantity']);
+                $('#purchaseItem_salesPrice').val(obj['salesPrice']);
+                $('#purchaseItem_purchasePrice').val(obj['purchasePrice']);
+                $('#stockSalesPrice').val(obj['salesPrice']);
+                $('#stockPurchasePrice').val(obj['purchasePrice']);
+                $('#tradePrice').html(obj['tp']);
+                $('#unit').html(obj['unit']);
+                if(obj['openingStatus'] === 'valid' ){
+                    $('#opening-box').show();
+                    $('#currentSalesQty').html(obj['salesQty']);
+                    $('#salesQty').val(obj['salesQty']);
+                    $('#openingQuantity').val(obj['salesQty']);
+                    $('#totalQty').html(obj['salesQty']);
+                }
+                $(".editableText").editable();
+                $(".expirationDate").editable();
+            }
+        })
     });
 
     $(document).on("change", "#medicineVendor", function() {
