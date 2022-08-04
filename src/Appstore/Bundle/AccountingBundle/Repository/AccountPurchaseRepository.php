@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountProfit;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
+use Appstore\Bundle\AssetsBundle\Entity\Receive;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
@@ -640,37 +641,34 @@ HAVING customerBalance > 0 ORDER BY vendor.`companyName` ASC";
     }
 
 
-   public function insertAssetsAccountPurchase(\Appstore\Bundle\AssetsBundle\Entity\Purchase $entity)
+   public function insertAssetsAccountPurchase(Receive $entity)
     {
 
         $global = $entity->getConfig()->getGlobalOption();
         $em = $this->_em;
-        $accountPurchase = new AccountPurchase();
-        $accountPurchase->setGlobalOption($global);
-        $accountPurchase->setAssetsPurchase($entity);
-        $accountPurchase->setAccountVendor($entity->getVendor());
-        $accountPurchase->setAccountBank( $entity->getAccountBank() );
-        $accountPurchase->setAccountMobileBank( $entity->getAccountMobileBank() );
-        if (!empty( $entity->getTransactionMethod())) {
-            $accountPurchase->setTransactionMethod( $entity->getTransactionMethod() );
+        $exist = $this->findOneBy(array('globalOption'=>$global,'assetsReceive'=>$entity));
+        if(empty($exist)){
+            $accountPurchase = new AccountPurchase();
+            $accountPurchase->setGlobalOption($global);
+            $accountPurchase->setAssetsReceive($entity);
+            $accountPurchase->setAccountVendor($entity->getVendor());
+            $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+            $accountPurchase->setPayment(0);
+            $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
+            $accountPurchase->setGrn($entity->getGrn());
+            $accountPurchase->setProcessHead('assets');
+            $accountPurchase->setProcessType('Purchase');
+            $accountPurchase->setCreated($entity->getCreated());
+            $accountPurchase->setUpdated($entity->getCreated());
+            $accountPurchase->setProcess('approved');
+            $accountPurchase->setApprovedBy($entity->getApprovedBy());
+            $em->persist($accountPurchase);
+            $em->flush();
+            $this->updateVendorBalance($accountPurchase);
+            return $accountPurchase;
         }
-        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
-        $accountPurchase->setPayment($entity->getPayment());
-        $accountPurchase->setCompanyName($entity->getVendor()->getCompanyName());
-        $accountPurchase->setGrn($entity->getGrn());
-        $accountPurchase->setProcessHead('assets');
-        $accountPurchase->setProcessType('Purchase');
-        $accountPurchase->setCreated($entity->getCreated());
-        $accountPurchase->setUpdated($entity->getCreated());
-        $accountPurchase->setProcess('approved');
-        $accountPurchase->setApprovedBy($entity->getApprovedBy());
-        $em->persist($accountPurchase);
-        $em->flush();
-        $this->updateVendorBalance($accountPurchase);
-        if($accountPurchase->getPayment() > 0 and !empty($accountPurchase->getTransactionMethod()) ){
-            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
-        }
-        return $accountPurchase;
+        return $exist;
+
 
     }
 

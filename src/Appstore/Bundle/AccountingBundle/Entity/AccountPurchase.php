@@ -70,10 +70,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         private  $purchase;
 
          /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Receive", inversedBy="accountPurchase" , cascade={"detach","merge"} )
          * @ORM\JoinColumn(name="assets_purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
-        private  $assetsPurchase;
+        private  $assetsReceive;
 
         /**
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" )
@@ -1041,21 +1041,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             $this->tallyPurchase = $tallyPurchase;
         }
 
-        /**
-         * @return \Appstore\Bundle\AssetsBundle\Entity\Purchase
-         */
-        public function getAssetsPurchase()
-        {
-            return $this->assetsPurchase;
-        }
-
-        /**
-         * @param \Appstore\Bundle\AssetsBundle\Entity\Purchase $assetsPurchase
-         */
-        public function setAssetsPurchase($assetsPurchase)
-        {
-            $this->assetsPurchase = $assetsPurchase;
-        }
 
         /**
          * Sets file.
@@ -1144,6 +1129,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 
             // clean up the file property as you won't need it anymore
             $this->file = null;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getAssetsReceive()
+        {
+            return $this->assetsReceive;
+        }
+
+        /**
+         * @param mixed $assetsReceive
+         */
+        public function setAssetsReceive($assetsReceive)
+        {
+            $this->assetsReceive = $assetsReceive;
         }
 
 

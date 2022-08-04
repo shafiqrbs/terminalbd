@@ -67,20 +67,20 @@ class CategoryType extends AbstractType
                 'choices'=> $this->ExpenseAccountChoiceList()
             ))
 
-            ->add('parent', 'entity', array(
+            /*->add('parent', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Parent Category---',
                 'attr'=>array('class'=>'m-wrap span12 AssetsCategory'),
                 'class' => 'Appstore\Bundle\AssetsBundle\Entity\Category',
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
-            ))
+            ))*/
 
             ->add('parent', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AssetsBundle\Entity\Category',
                 'empty_value' => 'Choose a Parent Category',
-                'property' => 'name',
+                'property' => 'typeNameHead',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')

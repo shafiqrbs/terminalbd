@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AssetsBundle\Repository;
 use Appstore\Bundle\AssetsBundle\Entity\Item;
 use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
+use Appstore\Bundle\AssetsBundle\Entity\Receive;
+use Appstore\Bundle\AssetsBundle\Entity\ReceiveItem;
 use Appstore\Bundle\AssetsBundle\Entity\Sales;
 use Appstore\Bundle\AssetsBundle\Entity\StockItem;
 use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
@@ -264,16 +266,14 @@ class StockItemRepository extends EntityRepository
 
         }elseif($fieldName == 'purchase'){
 
-            /* @var $item PurchaseItem */
-            $item = $em->getRepository('AssetsBundle:PurchaseItem')->find($id);
-            $exist = $this->findOneBy(array('config' => $config,'purchaseItem' => $id ,'mode' => 'purchase'));
-
+            $receiveItem = $em->getRepository('AssetsBundle:ReceiveItem')->find($id);
+            $item = $receiveItem->getPurchaseItem();
+            $exist = $this->findOneBy(array('config' => $config,'receiveItem' => $id ,'mode' => 'opening'));
             if($exist){
                 $entity = $exist;
             }
-
-            $entity->setQuantity($item->getQuantity());
-            $entity->setPurchaseQuantity($item->getQuantity());
+            $entity->setQuantity($receiveItem->getQuantity());
+            $entity->setOpeningQuantity($receiveItem->getQuantity());
             $entity->setItem($item->getItem());
             if($item->getItem()->getBrand()){
                 $entity->setBrand($item->getItem()->getBrand());
@@ -281,6 +281,7 @@ class StockItemRepository extends EntityRepository
             if($item->getItem()->getCategory()){
                 $entity->setCategory($item->getItem()->getCategory());
             }
+            $entity->setReceiveItem($receiveItem);
             $entity->setPurchaseItem($item);
             $entity->setPurchase($item->getAssetsPurchase());
             $entity->setVendor($item->getAssetsPurchase()->getVendor());
@@ -316,7 +317,7 @@ class StockItemRepository extends EntityRepository
         }elseif($fieldName == 'assets-return'){
             $qb->select('SUM(e.assetsReturnQuantity) AS quantity');
         }
-        $qb->where("e.item ={$item}");
+        $qb->where("e.item ={$item->getId()}");
         $qb->andWhere("e.process = :process")->setParameter('process','Approved');
         $quantity = $qb->getQuery()->getOneOrNullResult();
         return $quantity['quantity'];
@@ -351,15 +352,15 @@ class StockItemRepository extends EntityRepository
     }
 
 
-    public function getPurchaseInsertQnt(Purchase $entity){
+    public function getPurchaseInsertQnt(Receive $entity){
 
         $em = $this->_em;
 
-        /** @var $item PurchaseItem  */
+        /** @var $item ReceiveItem  */
 
-        if($entity->getPurchaseItems()){
-            foreach($entity->getPurchaseItems() as $item ){
-                $this->processStockQuantity($item->getConfig(),$item,'purchase');
+        if($entity->getReceiveItems()){
+            foreach($entity->getReceiveItems() as $item ){
+                $this->processStockQuantity($entity->getConfig(),$item,'purchase');
             }
         }
     }

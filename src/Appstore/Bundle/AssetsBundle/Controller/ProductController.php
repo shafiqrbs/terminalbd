@@ -116,7 +116,7 @@ class ProductController extends Controller
 	 */
 	public function showAction($id)
 	{
-
+        return $this->redirect($this->generateUrl('assets_product'));
 	}
 
 	/**

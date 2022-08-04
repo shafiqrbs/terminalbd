@@ -280,9 +280,6 @@ class ReceiveItemController extends Controller
             $em = $this->getDoctrine()->getManager();
           //  $purchase->setProcess('Approved');
          //   $purchase->setApprovedBy($this->getUser());
-            if($purchase->getPayment() === 0 ){
-                $purchase->setTransactionMethod(NULL);
-            }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
                 $datetime = new \DateTime("yesterday 30:30:30");
@@ -292,9 +289,10 @@ class ReceiveItemController extends Controller
             $em->flush();
             $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAssetsAccountPurchase($purchase);
             $em->getRepository('AccountingBundle:Transaction')->itemDistributionTransaction($purchase,$accountPurchase);
-            $this->getDoctrine()->getRepository('AssetsBundle:PurchaseItem')->insertProductSerialNo($purchase);
+            $this->getDoctrine()->getRepository('AssetsBundle:ReceiveItem')->insertProductSerialNo($purchase);
             $this->getDoctrine()->getRepository('AssetsBundle:StockItem')->getPurchaseInsertQnt($purchase);
             $this->getDoctrine()->getRepository('AssetsBundle:Product')->insertReceiveItem($purchase);
+            exit;
             $this->getDoctrine()->getRepository('AssetsBundle:Item')->getPurchaseUpdateQnt($purchase);
             return new Response('success');
 

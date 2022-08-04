@@ -18,6 +18,8 @@ use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\AssetsBundle\Entity\DepreciationBatch;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
+use Appstore\Bundle\AssetsBundle\Entity\Receive;
+use Appstore\Bundle\AssetsBundle\Entity\ReceiveItem;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -2780,18 +2782,17 @@ class TransactionRepository extends EntityRepository
 
     public function itemDistributionTransaction($purchase,$accountPurchase,$source='')
     {
-        if(!empty($accountPurchase->getTransactionMethod()) and $accountPurchase->getPayment() > 0){
-            $this->insertGlobalPurchaseCash($accountPurchase);
-        }
+
         $this->insertGlobalPurchaseAccountPayable($accountPurchase);
         $this->insertFixedAssets($purchase,$accountPurchase);
     }
 
-    public function insertFixedAssets(\Appstore\Bundle\AssetsBundle\Entity\Purchase $purchase,$accountPurchase)
+    public function insertFixedAssets(Receive $purchase,$accountPurchase)
     {
-        /* @var $item PurchaseItem */
+        /* @var $receiveItem ReceiveItem */
 
-        foreach ($purchase->getPurchaseItems() as $item) {
+        foreach ($purchase->getReceiveItems() as $receiveItem) {
+            $item = $receiveItem->getPurchaseItem();
             if($item->getItem()->getCategory()->getCategoryType() == "Assets"){
 
                 $accountHead = $item->getItem()->getCategory()->getAccountHead();

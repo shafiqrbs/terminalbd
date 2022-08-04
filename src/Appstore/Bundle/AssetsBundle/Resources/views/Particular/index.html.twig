@@ -58,7 +58,7 @@
 
                                 {% for entity in entities %}
                                     <tr>
-                                        <td>{{ entity.type.name }}</td>
+                                        <td>{% if entity.type is not empty %}{{ entity.type.name }}{% endif %}</td>
                                         <td class="numeric" ><a href="{{ path('assets_particular_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{% if entity.status == 1 %}Active {% else %}In-active {% endif %}</td>
                                         <td class="numeric" >

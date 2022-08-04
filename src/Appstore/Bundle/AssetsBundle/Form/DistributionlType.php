@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Product\Bundle\ProductBundle\Repository\CategoryRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -61,27 +62,22 @@ class DistributionlType extends AbstractType
 			    },
 		    ))
 
-		    ->add('assignDate', 'date', array(
+		    ->add('assignDate', DateType::class, array(
 			    'widget' => 'single_text',
-			    'placeholder' => array(
-				    'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
-			    ),
 			    'format' => 'dd-MM-yyyy',
-			    'attr' => array('class'=>'m-wrap span12 date-picker'),
+			    'attr' => array('class'=>'m-wrap span12'),
 			    'view_timezone' => 'Asia/Dhaka'))
-
-
 
 		    ->add('product', 'entity', array(
 			    'required'    => true,
 			    'class' => 'Appstore\Bundle\AssetsBundle\Entity\Product',
 			    'empty_value' => '---Choose a Product ---',
-			    'property' => 'productItem',
+			    'property' => 'productItemSerial',
 			    'attr'=>array('class'=>'span12 m-wrap select2'),
 			    'query_builder' => function(EntityRepository $er){
 				    return $er->createQueryBuilder('p')
-					          ->join('p.distributions','d')
-					          ->where("d.process !='Active'")
+					          ->leftJoin('p.distributions','d')
+					          ->where("p.status=1")
 				              ->orderBy("p.name","ASC");
 			    },
 		    ));

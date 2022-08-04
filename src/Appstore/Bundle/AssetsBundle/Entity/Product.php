@@ -68,6 +68,12 @@ class Product
 
 
 	/**
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem", inversedBy="products" )
+	 **/
+	private  $receiveItem;
+
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="branchProducts" )
 	 **/
 	private  $branch;
@@ -912,6 +918,22 @@ class Product
     public function setDepreciationEffectedDate($depreciationEffectedDate)
     {
         $this->depreciationEffectedDate = $depreciationEffectedDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReceiveItem()
+    {
+        return $this->receiveItem;
+    }
+
+    /**
+     * @param mixed $receiveItem
+     */
+    public function setReceiveItem($receiveItem)
+    {
+        $this->receiveItem = $receiveItem;
     }
 
 }

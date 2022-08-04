@@ -38,7 +38,7 @@ class StockItemController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getAssetsConfig()->getId();
         $entities = $em->getRepository('AssetsBundle:Item')->findTypeWithSearch($inventory,$type,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('AssetsBundle:Item:typeIndex.html.twig', array(
+        return $this->render('AssetsBundle:Item:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
         ));

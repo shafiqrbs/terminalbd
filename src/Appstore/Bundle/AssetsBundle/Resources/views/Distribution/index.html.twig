@@ -47,15 +47,15 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Department</th>
+                                    <th class="numeric" >Department/Branch</th>
                                     <th class="numeric" >Assign Employee</th>
-                                    <th class="numeric" >Branch</th>
+                                    {#<th class="numeric" >Branch</th>#}
                                     <th class="numeric" >Product Name </th>
                                     <th class="numeric" >Item</th>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >PR</th>
                                     <th class="numeric" >Serial No</th>
-                                    <th class="numeric" >Branch Code</th>
+                                  {#  <th class="numeric" >Branch Code</th>#}
                                     <th class="numeric" >Assign Date</th>
                                     <th class="numeric" >Release Date</th>
                                     <th class="numeric" >Process</th>
@@ -68,13 +68,13 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.department.name }}</td>
                                         <td class="numeric" >{{ entity.employee.name }}</td>
-                                        <td class="numeric" >{{ entity.branch.name }}</td>
+                                   {#     <td class="numeric" >{{ entity.branch.name }}</td>#}
                                         <td class="numeric" >{{ entity.product.name }}</td>
                                         <td class="numeric" >{{ entity.product.item.name }}</td>
                                         <td class="numeric" >{{ entity.product.category.name }}</td>
                                         <td class="numeric" >{{ entity.requisition }}</td>
                                         <td class="numeric" >{{ entity.product.serialNo }}</td>
-                                        <td class="numeric" >{{ entity.product.branchSerialNo }}</td>
+                                       {# <td class="numeric" >{{ entity.product.branchSerialNo }}</td>#}
                                         <td class="numeric" >{{ entity.assignDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.endDate is not empty %}{{ entity.endDate|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" ><span class="btn red mini">{{ entity.process }}</span></td>

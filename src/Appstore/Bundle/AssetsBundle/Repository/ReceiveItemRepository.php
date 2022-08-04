@@ -5,6 +5,7 @@ use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\AssetsBundle\Entity\Item;
 use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
+use Appstore\Bundle\AssetsBundle\Entity\Receive;
 use Appstore\Bundle\AssetsBundle\Entity\ReceiveItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -249,29 +250,29 @@ class ReceiveItemRepository extends EntityRepository
         return $qnt['quantity'];
     }
 
-    public function insertProductSerialNo(Purchase $purchase)
+    public function insertProductSerialNo(Receive $purchase)
     {
-        foreach ($purchase->getPurchaseItems() as $item):
+        foreach ($purchase->getReceiveItems() as $item):
             $this->generateSerialNo($item);
         endforeach;
     }
 
-    public function generateSerialNo(PurchaseItem $entity){
+    public function generateSerialNo(ReceiveItem $entity){
 
         /* @var $product Item */
 
         $em = $this->_em;
-        $product = $entity->getitem();
+        $product = $entity->getPurchaseItem()->getitem();
+        $product->getName();
 
-        $prefix = !empty($product->getItemPrefix()) ? $product->getItemPrefix().'-':'';
-        $format = $product->getSerialFormat();
-        $generation = $product->getSerialGeneration();
-
-        if($generation == 'auto' and empty($entity->getExternalSerial())){
+         $prefix = !empty($product->getItemPrefix()) ? $product->getItemPrefix().'-':'';
+         $format = $product->getSerialFormat();
+         $generation = $product->getSerialGeneration();
+        if($generation == 'auto'){
             $serialNos = array();
             for($qnt = 1; $entity->getQuantity() >= $qnt; $qnt++ ){
                 $generate = str_pad($qnt,$format, '0', STR_PAD_LEFT);
-                $serialNos[] = $prefix.$entity->getBarcode().'/'.$generate;
+                $serialNos[] = $prefix.$entity->getPurchaseItem()->getBarcode().'/'.$generate;
             }
             $entity->setInternalSerial($serialNos);
             $comma_separated = implode(",", $serialNos);

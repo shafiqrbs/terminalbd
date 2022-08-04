@@ -194,6 +194,17 @@ class Category
      */
     public function getName()
     {
+        return $this->name;
+    }
+
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getTypeNameHead()
+    {
         return $this->categoryType." - ".$this->name." ({$this->accountHead->getName()}) ";
     }
 

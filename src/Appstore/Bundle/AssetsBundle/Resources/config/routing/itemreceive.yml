@@ -35,7 +35,7 @@ assets_itemreceive_item_delete:
 
 assets_itemreceive_approved:
     path:     /{id}/approved
-    defaults: { _controller: "AssetsBundle:ReceiveItem:approve" }
+    defaults: { _controller: "AssetsBundle:ReceiveItem:approved" }
 
 assets_itemreceive_vat_update:
     path:     /vat-update

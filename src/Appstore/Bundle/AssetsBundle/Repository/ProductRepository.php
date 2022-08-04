@@ -7,6 +7,8 @@ use Appstore\Bundle\AssetsBundle\Entity\DepreciationModel;
 use Appstore\Bundle\AssetsBundle\Entity\Product;
 use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
+use Appstore\Bundle\AssetsBundle\Entity\Receive;
+use Appstore\Bundle\AssetsBundle\Entity\ReceiveItem;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\Container;
@@ -281,13 +283,13 @@ class ProductRepository extends EntityRepository
 
     }
 
-    public function insertReceiveItem(Purchase $sales)
+    public function insertReceiveItem(Receive $sales)
     {
         $em = $this->_em;
 
-        /** @var  $item PurchaseItem */
+        /** @var  $item ReceiveItem */
 
-         foreach($sales->getPurchaseItems() as $item ){
+         foreach($sales->getReceiveItems() as $item ){
 
             if($item->getItem()->getCategory()->getCategoryType() == 'Assets'){
                 $this->insertPurchaseItemToAssetsProduct($item);
@@ -295,31 +297,30 @@ class ProductRepository extends EntityRepository
         }
     }
 
-    public function insertPurchaseItemToAssetsProduct(PurchaseItem $item)
+
+    public function insertPurchaseItemToAssetsProduct(ReceiveItem $receiveItem)
     {
         $em = $this->_em;
+        $item = $receiveItem->getPurchaseItem();
         $status = $em->getRepository('AssetsBundle:Particular')->findOneBy(array('slug'=>'ready-to-deploy'));
-
         $depreciation = $em->getRepository('AssetsBundle:DepreciationModel')->findOneBy(array('config' => $item->getConfig(),'isDefault' => 1));
 
-        if($item->getExternalSerial()){
+        if($receiveItem->getExternalSerial()){
 
-            $comma_separated = explode(",", $item->getExternalSerial());
-
+            $comma_separated = explode(",", $receiveItem->getExternalSerial());
             foreach ($comma_separated as $serialNo):
 
                 $product = new Product();
                 $product->setConfig($item->getConfig());
                 $product->setPurchaseItem($item);
+                $product->setReceiveItem($receiveItem);
                 $product->setSerialNo($serialNo);
                 $product->setName($item->getName());
-                //  $product->setBranch($item->getSales()->getBranches());
-                //  $product->setPurchaseRequisition('PR-'.$item->getSales()->getPurchaseRequisition()->getGrn());
                 if($item->getAssetsPurchase()){
                     $product->setVendor($item->getAssetsPurchase()->getVendor());
                 }
                 if($item->getVendor()){
-                    $product->setVendor($item->getVendor());
+                    $product->setVendor($receiveItem->getReceive()->getVendor());
                 }
                 $product->setItem($item->getItem());
                 $product->setCategory($item->getItem()->getCategory());

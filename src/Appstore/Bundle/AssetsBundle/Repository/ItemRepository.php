@@ -5,6 +5,8 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AssetsBundle\Entity\Item;
 use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
+use Appstore\Bundle\AssetsBundle\Entity\Receive;
+use Appstore\Bundle\AssetsBundle\Entity\ReceiveItem;
 use Appstore\Bundle\AssetsBundle\Entity\Sales;
 use Appstore\Bundle\AssetsBundle\Entity\StockItem;
 use Core\UserBundle\Entity\User;
@@ -99,19 +101,17 @@ class ItemRepository extends EntityRepository
         $category = isset($data['category'])? $data['category'] :'';
         $parent = isset($data['parent'])? $data['parent'] :'';
         $depreciation = isset($data['depreciation'])? $data['depreciation'] :'';
-
-
         $qb = $this->createQueryBuilder('item');
+        $qb->join('item.category', 'c');
         $qb->where("item.status IS NOT NULL");
         $qb->andWhere("item.config = :config")->setParameter('config', $config);
-        $qb->andWhere("item.productType = :type")->setParameter('type', $type);
+        $qb->andWhere("c.categoryType = :type")->setParameter('type', $type);
         if (!empty($item)) {
             $qb->andWhere("item.name = :name");
             $qb->setParameter('name', $item);
         }
 
         if (!empty($category)) {
-            $qb->join('item.category', 'c');
             $qb->andWhere("c.name = :category");
             $qb->setParameter('category', $category);
         }
@@ -546,17 +546,17 @@ class ItemRepository extends EntityRepository
         $em->flush();
     }
 
-    public function getPurchaseUpdateQnt(Purchase $entity){
+    public function getPurchaseUpdateQnt(Receive $entity){
 
         $em = $this->_em;
 
-        /** @var $item PurchaseItem  */
+        /** @var $item ReceiveItem  */
 
-        if($entity->getPurchaseItems()){
+        if($entity->getReceiveItems()){
 
-            foreach($entity->getPurchaseItems() as $item ){
+            foreach($entity->getReceiveItems() as $item ){
                 /** @var  $stock Item */
-                $stock = $item->getItem();
+                $stock = $item->getPurchaseItem()->getItem();
                 $this->updateRemovePurchaseQuantity($stock,'purchase');
             }
         }
