@@ -84,7 +84,7 @@
                         <div class="clearfix">&nbsp;</div>
                         <div class="form-actions portlet box grey">
                             <div class="pull-right" id="action-{{ entity.id }}">
-                                {% if entity.process in ['Draft','In-progress'] %}
+                                {% if entity.process in ['Draft','In-progress','Complete'] %}
                                     <a href="{{ path('assets_officenote_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-edit"></i> Edit</a>
                                 {% endif %}
                                 {% if ((entity.process == 'In-progress') and app.user.granted("ROLE_ASSETS_APPROVER")  )  %}

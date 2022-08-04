@@ -55,13 +55,11 @@ class PurchaseType extends AbstractType
                 'empty_value' => '---Choose a office notes ---',
                 'property' => 'refNo',
                 'attr'=>array('class'=>'span12 m-wrap'),
-                //'constraints' =>array( new NotBlank(array('message'=>'Please select office notes')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.isDelete IS NULL")
-                       // ->andWhere("e.process ='Approved'")
-                        ->andWhere("e.config =".$this->config);
+                        ->andWhere("e.isDelete = 0")
+                        ->andWhere("e.config ={$this->config}");
                 },
             ))
             ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter narration')))
