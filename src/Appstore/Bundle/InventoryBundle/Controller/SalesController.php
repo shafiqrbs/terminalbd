@@ -178,10 +178,10 @@ class SalesController extends Controller
             $itemStock = $purchaseItem->getItemStock();
             if(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
                 $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
-                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $reloadSales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
             } else {
-                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($reloadSales);
                 $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
             }
             $data = $this->returnResultData($sales,$msg);
@@ -226,6 +226,7 @@ class SalesController extends Controller
 
         //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $config,'id' => $sales));
         $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
             'entity' => $entity

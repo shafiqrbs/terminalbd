@@ -963,8 +963,9 @@ class PurchaseController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+	    /* @var $purchase MedicinePurchase */
 	    $purchase = $em->getRepository('MedicineBundle:MedicinePurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
-	    if (!empty($purchase) and $purchase->getProcess() == "Complete" ) {
+	    if (!empty($purchase) and $purchase->getMedicineVendor() and $purchase->getProcess() == "Complete" ) {
             $em = $this->getDoctrine()->getManager();
             $purchase->setProcess('Approved');
             $purchase->setApprovedBy($this->getUser());

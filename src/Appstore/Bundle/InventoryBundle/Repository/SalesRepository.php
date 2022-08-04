@@ -468,12 +468,10 @@ class SalesRepository extends EntityRepository
             ->select('sum(si.subTotal) as total , sum(si.quantity) as totalItem')
             ->where('si.sales = :sales')
             ->setParameter('sales', $sales ->getId())
-            ->getQuery()->getSingleResult();
+            ->getQuery()->getOneOrNullResult();
         if($import == 'import'){
             $sales->setPayment($total['total']);
         }
-
-
         if($total['total'] > 0){
 	        $subTotal = $total['total'];
             $sales->setSubTotal($total['total']);
