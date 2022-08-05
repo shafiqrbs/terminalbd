@@ -57,7 +57,12 @@ $('form#purchaseItemForm').on('keyup', '#purchaseItem_quantity', function (e) {
     var sp =  parseFloat($('#stockSalesPrice').val());
     var quantity =  parseFloat($("#purchaseItem_quantity").val());
     var totalPP = parseFloat(quantity * sp);
-    $('#purchaseItem_salesPrice').val(totalPP);
+    if(sp === "" || sp === "NaN"){
+        $('#purchaseItem_salesPrice').val('');
+    }else{
+        $('#purchaseItem_salesPrice').val(totalPP);
+    }
+
 });
 
 $('form#purchaseItemForm').on('keyup', '#pack , #purchaseItem_quantity,#purchaseItem_bonusQuantity', function (e) {
