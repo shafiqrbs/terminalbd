@@ -54,10 +54,10 @@ $('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
 });
 
 $('form#purchaseItemForm').on('keyup', '#purchaseItem_quantity', function (e) {
-    var sp =  parseFloat($('#stockSalesPrice').val());
-    var quantity =  parseFloat($("#purchaseItem_quantity").val());
-    var totalPP = parseFloat(quantity * sp);
-    if(sp === "" || sp === "NaN"){
+    let sp =  parseFloat($('#stockSalesPrice').val());
+    let quantity =  parseFloat($("#purchaseItem_quantity").val());
+    let totalPP = parseFloat(quantity * sp);
+    if(isNaN(parseFloat(totalPP))){
         $('#purchaseItem_salesPrice').val('');
     }else{
         $('#purchaseItem_salesPrice').val(totalPP);
