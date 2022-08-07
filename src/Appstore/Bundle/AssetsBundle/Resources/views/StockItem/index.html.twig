@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Product Lists
+                    Stock Item Details Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -18,7 +18,7 @@
                         <a href="{{ path('assetsitem') }}">Product</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Product Lists</a></li>
+                    <li><a href="#">Stock Item Details Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -33,7 +33,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Product lists</div>
+                        <div class="caption"><i class="icon-reorder"></i>Stock Item Details lists</div>
                         <div class="actions">
                             <div class="btn-group">
                                 {#   {% set gpSku = searchForm.gpSku is defined ? searchForm.gpSku :'' %}
@@ -52,19 +52,14 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span6">
+                                        <div class="span4">
+                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
+                                        </div>
+                                        <div class="span4">
                                             <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
                                         </div>
-                                        <div class="span6">
+                                        <div class="span3">
                                             <input type="text" id="brand" name="brand"  class="leftMargin span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Product brand name">
-                                        </div>
-
-
-                                    </div>
-                                    <br>
-                                    <div class="row-fluid">
-                                        <div class="span11">
-                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
                                         </div>
                                         <div class="span1">
                                             <div class="controls">
@@ -105,7 +100,7 @@
                                 <tbody class="flip-content ">
                                 {% for entity in entities %}
                                     <tr>
-                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{{ entity.productName }}</td>
                                         <td class="">{{entity.barcode}}</td>
                                         <td class="numeric" >{{entity.openingQuantity}}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
@@ -115,7 +110,7 @@
                                         <td class="numeric" >{{ entity.damageQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                         <td class="numeric" >
-                                            <a  href="{{ path('assets_stockitem_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-pencil"></i></a>
+                                            {#<a  href="{{ path('assets_stockitem_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-pencil"></i></a>#}
                                         </td>
                                     </tr>
                                 {% endfor %}

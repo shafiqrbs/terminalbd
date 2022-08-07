@@ -732,6 +732,16 @@ class Builder extends ContainerAware
         $menu['Procurement']['Manage Receive']->addChild("Receive Voucher", array('route' => 'assets_itemreceive'));
 
         $menu
+            ->addChild('Stock Inventory')
+            ->setAttribute('icon', 'icon-archive')
+            ->setAttribute('dropdown', true);
+        $menu['Stock Inventory']->addChild('Stock Issue',array('route' => 'assets_stockissue'));
+        $menu['Stock Inventory']->addChild('Assets',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Assets')));
+        $menu['Stock Inventory']->addChild('Inventory',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Inventory')));
+        $menu['Stock Inventory']->addChild('Stock Details', array('route' => 'assets_barcode_stock'));
+        $menu['Stock Inventory']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
+
+        $menu
             ->addChild('Fixed Assets')
             ->setAttribute('icon', 'icon-archive')
             ->setAttribute('dropdown', true);
@@ -765,20 +775,6 @@ class Builder extends ContainerAware
         $menu['Fixed Assets']->addChild('Asset Disposal')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Asset Disposal']->addChild("Disposal", array('route' => 'assets_disposal'));
         $menu['Fixed Assets']['Asset Disposal']->addChild("New Disposal", array('route' => 'assets_disposal_new'));
-        $menu['Fixed Assets']->addChild('Product Inventory')->setAttribute('dropdown', true);
-        $menu['Fixed Assets']['Product Inventory']->addChild('Assets',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Assets')));
-        $menu['Fixed Assets']['Product Inventory']->addChild('Inventory',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Inventory')));
-        $menu['Fixed Assets']['Product Inventory']->addChild('Stock Details', array('route' => 'assets_barcode_stock'));
-        $menu['Fixed Assets']['Product Inventory']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
-        $menu['Fixed Assets']->addChild('Master Data')->setAttribute('dropdown', true);
-        $menu['Fixed Assets']['Master Data']->addChild('Depreciation Model', array('route' => 'assets_model'));
-        $menu['Fixed Assets']['Master Data']->addChild('Depreciation Setup', array('route' => 'assets_depreciation'));
-        $menu['Fixed Assets']['Master Data']->addChild('Product', array('route' => 'assetsitem'));
-        $menu['Fixed Assets']['Master Data']->addChild('Category', array('route' => 'assetscategory'));
-        $menu['Fixed Assets']['Master Data']->addChild('Vendor', array('route' => 'assets_vendor'));
-        $menu['Fixed Assets']['Master Data']->addChild('Brand', array('route' => 'assetsitembrand'));
-        $menu['Fixed Assets']['Master Data']->addChild('Setting Data', array('route' => 'assets_particular'));
-
         return $menu;
 
     }

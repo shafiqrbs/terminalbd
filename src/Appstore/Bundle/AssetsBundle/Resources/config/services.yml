@@ -24,6 +24,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.assets.stockIssue.event.listener:
+        class: Appstore\Bundle\AssetsBundle\EventListener\StockIssueListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.assets.receive.event.listener:
         class: Appstore\Bundle\AssetsBundle\EventListener\ReceiveListener
         tags:

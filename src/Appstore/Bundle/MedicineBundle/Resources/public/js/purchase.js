@@ -28,7 +28,6 @@ document.onkeyup = function(e) {
 $(document).on('change', '.transactionMethod', function() {
 
     var paymentMethod = $(this).val();
-
     if( paymentMethod === 2){
         $('#cartMethod').show();
         $('#bkashMethod').hide();
@@ -41,8 +40,6 @@ $(document).on('change', '.transactionMethod', function() {
     }
 
 });
-
-
 
 $('form#purchaseItemForm').on('keyup', '#currentQty', function (e) {
 
@@ -69,7 +66,7 @@ $('form#purchaseItemForm').on('keyup', '#pack , #purchaseItem_quantity,#purchase
     var bonus     = parseInt($('#purchaseItem_bonusQuantity').val()  != '' ? $('#purchaseItem_bonusQuantity').val() : 0 );
     var pack     = parseInt($('#pack').val()  != '' ? $('#pack').val() : 0 );
     var qnt     = parseInt($('#purchaseItem_quantity').val()  != '' ? $('#purchaseItem_quantity').val() : 0 );
-    if(qnt === "NaN" || qnt === ""){
+    if(isNaN(parseFloat(qnt))){
         $('#totalQnt').html(0);
     }
     if(qnt > 0){
@@ -117,7 +114,7 @@ $('form#medicineStock').on('keypress', '.stockInput', function (e) {
 
             case 'medicineStock_purchaseQuantity':
                 var qnt = $('#medicineStock_purchaseQuantity').val();
-                if(qnt == "NaN" || qnt =="" ){
+                if(isNaN(parseInt(qnt))){
                     $('#medicineStock_purchaseQuantity').focus();
                 }else{
                     $('#medicineStock_purchasePrice').focus();
@@ -125,7 +122,7 @@ $('form#medicineStock').on('keypress', '.stockInput', function (e) {
                 break;
             case 'medicineStock_purchasePrice':
                 var price = $('#medicineStock_purchasePrice').val();
-                if(price == "NaN" || price =="" ){
+                if(isNaN(parseInt(price))){
                     $('#medicineStock_purchasePrice').focus();
                 }else {
                     $('#stockItemCreate').click();

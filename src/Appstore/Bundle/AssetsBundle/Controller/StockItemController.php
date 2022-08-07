@@ -49,7 +49,7 @@ class StockItemController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getTallyConfig();
+        $inventory = $this->getUser()->getGlobalOption()->getAssetsConfig();
         $entities = $em->getRepository('AssetsBundle:StockItem')->findWithSearch($inventory,$data);
         $pagination = $this->paginate($entities);
         return $this->render('AssetsBundle:StockItem:index.html.twig', array(

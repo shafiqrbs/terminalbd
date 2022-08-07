@@ -38,6 +38,10 @@ assets_itemreceive:
     resource: "@AssetsBundle/Resources/config/routing/itemreceive.yml"
     prefix:   /item-receive
 
+assets_stockissue:
+    resource: "@AssetsBundle/Resources/config/routing/stockIssue.yml"
+    prefix:   /stock-issue
+
 assets_purchase:
     resource: "@AssetsBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase

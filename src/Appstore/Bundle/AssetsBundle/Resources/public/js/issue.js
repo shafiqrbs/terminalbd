@@ -240,55 +240,7 @@ var InventorySales = function(sales) {
         minimumInputLength:1
     });
 
-    $(document).on('change', '#item', function() {
 
-        var item = $('#item').val();
-        if(item === ''){
-            $('#stockItemDetails').hide();
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('tally_sales_item_purchase'),
-            type: 'POST',
-            data:'item='+ item +'&sales=' + sales,
-            success: function(response) {
-                $('#stockItemDetails').show();
-                $('#itemDetails').html(response);
-                $(".editable").editable();
-            },
-        })
-    });
-
-    $(document).on('click', '.addSales', function() {
-
-        var purchaseItemId = $(this).attr('id');
-        var quantity = parseFloat($('#purchaseQuantity-'+purchaseItemId).val());
-        var price = parseFloat($('#purchaseSalesPrice-'+purchaseItemId).val());
-        var serialNo = $('#serialNo-'+purchaseItemId).val();
-        if(purchaseItemId === ''){
-            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('tally_sales_sales_item_insert'),
-            type: 'POST',
-            data:'salesId='+ sales +'&purchaseItemId='+ purchaseItemId +'&quantity='+ quantity +'&salesPrice='+ price +'&serialNo='+ serialNo,
-            success: function(response) {
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#salesItem').html(obj['salesItems']);
-                $('.subTotal').html(obj['subTotal']);
-                $('.total').html(obj['total']);
-                $('.netTotal').html(obj['netTotal']);
-                $('.due').html(obj['due']);
-                $('.vat').html(obj['tti']);
-                $('.discount').html(obj['discount']);
-                $('.discountCalculation').html(obj['discountCalculation']);
-                $('.paymentTotal').html(obj['netTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-            },
-        })
-    });
 
     $(document).on('change', '.quantity , .salesPrice', function() {
 
