@@ -570,9 +570,10 @@ class CustomerRepository extends EntityRepository
         $query->orWhere($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
+        $query->andWhere('e.status=1');
         $query->orderBy('e.name', 'ASC');
         $query->groupBy('e.mobile');
-        $query->setMaxResults( '10' );
+        $query->setMaxResults( '20' );
         return $query->getQuery()->getResult();
 
     }
@@ -848,6 +849,7 @@ class CustomerRepository extends EntityRepository
         $qb->where("customer.globalOption = :globalOption");
         $qb->andWhere("customer.mobile IS NOT NULL");
         $qb->setParameter('globalOption', $option->getId());
+        $qb->andWhere("customer.status=1");
         $qb->orderBy('customer.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
@@ -857,7 +859,6 @@ class CustomerRepository extends EntityRepository
             $data[$key]['name']                 = $row['name'];
             $data[$key]['mobile']               = $row['mobile'];
         }
-
         return $data;
 
     }
