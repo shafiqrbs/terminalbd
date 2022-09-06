@@ -12,6 +12,7 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
+    {% if entity.hmsInvoice.hospitalConfig.printOff != 1  %}
     <script type="text/javascript">
         window.print();
         setTimeout(function () {
@@ -19,6 +20,7 @@
             window.close();
         }, 2000);
     </script>
+    {% endif %}
 </head>
 <body style="margin: 0px!important;">
 <div style="display: block">
@@ -65,8 +67,7 @@
             <tr><td colspan="3"><strong>Machine Name:</strong> {{ entity.particular.reportMachineName }}</td></tr>
             {% endif %}
         </table>
-        {% if entity.particular.reportFormat == 1 %}
-            {% if entity.reportContent and entity.particular.isReportContent != 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+            {% if  entity.particular.isReportContent != 1 and entity.particular.reportFormat == 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
                 <table class="table reportTable" style="margin-top:20px;min-height:{{  entity.hmsInvoice.hospitalConfig.reportHeight }}px">
                     <tbody>
                     <tr>
@@ -74,7 +75,7 @@
                             {% if entity.particular.pathologicalReports is not empty %}
                                 {% for item in entity.particular.pathologicalReports %}
                                     {% if item.children is not empty %}
-                                        <div class="span6" data-match-height="report-block" style="float: left; display:block; margin-bottom:15px!important;">
+                                        <div class="span6" data-match-height="report-block" style="float: left; display:block; margin-bottom:15px!important;margin-top:15px!important;">
                                             <ul class="unstyled span12">
                                                 <li><h2><strong>{{ item.name }}</strong></h2></li>
                                                 {% for child in item.children %}
@@ -101,9 +102,8 @@
                     </tbody>
                 </table>
             {% endif %}
-        {% else %}
-            {% if entity.reportContent and entity.particular.isReportContent != 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
-                <table class=" reportTable" style="margin-top:20px;">
+            {% if entity.particular.isReportContent != 1 and entity.particular.reportFormat != 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+                <table class="reportTable" style="margin-top:20px;min-height:{{  entity.hmsInvoice.hospitalConfig.reportHeight }}px">
                     <thead>
                     <tr class="head-black">
                         <td class="span3">Name</th>
@@ -154,7 +154,6 @@
                     </tbody>
                 </table>
             {% endif %}
-        {% endif %}
         {% if entity.reportContent and entity.particular.isReportContent == 1 %}
             {{ entity.reportContent|raw }}
         {% endif %}
@@ -227,9 +226,7 @@
         line-height: 24px;
         font-size: 12px!important;
     }
-    table.reportTable tr:first-child td , table.reportTable tr:first-child th{
-        font-weight: bold;
-    }
+
     table.reportTable tr th.center, table.reportTable tr td.center{
         text-align: right;
         padding-left: 8px;
@@ -290,4 +287,6 @@
         {% endif %}
     }
 </style>
+<script type="application/javascript" src="{{ asset('assets/plugins/jquery-1.10.2.min.js') }}"></script>
+<script type="application/javascript" src="{{ asset('bundles/hospital/js/height-match.js') }}"></script>
 </html>
