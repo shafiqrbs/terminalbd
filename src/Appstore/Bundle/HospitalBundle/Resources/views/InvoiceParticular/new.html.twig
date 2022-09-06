@@ -86,8 +86,7 @@
             <!-- BEGIN FORM-->
             {{ form_start(form) }}
             {{ form_row(form._token) }}
-
-            {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+            {% if entity.particular.isReportContent != 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
                 <div class="form-actions portlet box blue">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Report Format</div>
@@ -108,13 +107,13 @@
                     {% for item in entity.particular.pathologicalReports %}
 
                         {% if item.children is not empty %}
-                        <tr id="remove-{{ item.id }}">dsaddasd
+                        <tr id="remove-{{ item.id }}">
                             <td  class="numeric" colspan="5"><strong>{{ item.name }}</strong></td>
                         </tr>
                         {% for child in item.children %}
                             <tr id="remove-{{ item.id }}">
                                 <td  class="numeric">{{ child.name }}</td>
-                                <td class=""><input type="text" name="result[]" class="m-wrap span12 input-select" data-index="{{ child.id }}" value="{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}" ></td>
+                                <td class=""><input type="text" name="result[]" class="m-wrap span12 input-select" data-index="{{ child.id }}" value="{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }} {% else %} {{ item.sampleValue }}{% endif %}" ></td>
                                 <td class="numeric">{{ child.unit }}</td>
                                 <td class="numeric">{{ child.referenceValue }}</td>
                                 <input type="hidden" name="pathologicalReportId[]" value="{{ child.id }}" >
@@ -123,7 +122,7 @@
                         {% elseif item.parent is empty %}
                             <tr id="remove-{{ item.id }}">
                                 <td  class="numeric">{{ item.name }}</td>
-                                <td class="">{% if item.children is empty %}<input type="text" name="result[]" class="m-wrap span12 input-select" data-index="{{ item.id }}" value="{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}" >{% endif %}</td>
+                                <td class="">{% if item.children is empty %}<input type="text" name="result[]" class="m-wrap span12 input-select" data-index="{{ item.id }}" value="{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }} {% else %} {{ item.sampleValue }}{% endif %}" >{% endif %}</td>
                                 <td class="numeric">{{ item.unit }}</td>
                                 <td class="numeric">{{ item.referenceValue }}</td>
                                 <input type="hidden" name="pathologicalReportId[]" value="{{ item.id }}" >
@@ -349,7 +348,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    {% if entity.particular.isReportContent == 1 %}
+   {# {% if entity.particular.isReportContent == 1 %}
         CKEDITOR.replace( 'invoiceParticular_reportContent', {
             toolbarGroups: [
                 { name: 'basicstyles', groups: [ 'basicstyles'] },
@@ -362,7 +361,7 @@
         });
 
     {% endif %}
-
+#}
     var count = 0;
 
    {# $('.form-horizontal').keyup(function(e) {
