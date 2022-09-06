@@ -3253,7 +3253,6 @@ class TransactionRepository extends EntityRepository
         $em->flush();
     }
 
-
     public function insertSalesMonthlyTransaction(AccountProfit $entity,$data)
     {
 
@@ -3286,8 +3285,7 @@ class TransactionRepository extends EntityRepository
 
         /* Payable */
 
-       /* if($data['total'] > $data['amount']){
-
+        if($data['total'] > $data['amount']){
             $receivable = round($data['total'] - $data['amount']);
             $em = $this->_em;
             $transaction = new Transaction();
@@ -3302,15 +3300,47 @@ class TransactionRepository extends EntityRepository
             $transaction->setDebit($receivable);
             $em->persist($transaction);
             $em->flush();
-        }*/
+        }
+
+    }
+
+    public function insertSalesHospitalMonthlyTransaction(AccountProfit $entity,$data)
+    {
+
+        $em = $this->_em;
+        $amount = round($data['amount']);
+        if($amount > 0){
+            $transaction = new Transaction();
+            $transaction->setProcess("sales");
+            $transaction->setGlobalOption($entity->getGlobalOption());
+            $transaction->setAccountProfit($entity);
+            $transaction->setCreated($entity->getCreated());
+            $transaction->setUpdated($entity->getCreated());
+
+            /* Cash - Cash various */
+
+            if ($data['method'] == 2) {
+                $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'bank-account')));
+                $subAccount = $em->getRepository('AccountingBundle:AccountHead')->insertBankSubHead($data['bank']);
+                $transaction->setSubAccountHead($subAccount);
+            } elseif ($data['method'] == 3) {
+                $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'mobile-account')));
+                $subAccount = $em->getRepository('AccountingBundle:AccountHead')->insertMobileSubHead($data['mobile']);
+                $transaction->setSubAccountHead($subAccount);
+            } elseif ($data['method'] == 1) {
+                $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'cash-in-hand')));
+            }
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $em->persist($transaction);
+            $em->flush();
+        }
 
     }
 
     public function insertMonthlySalesAccountReceivable(AccountProfit $entity,$data)
     {
         $receivable = round($data['total'] - $data['amount']);
-        echo $receivable;
-        exit;
         $em = $this->_em;
         $transaction = new Transaction();
         $transaction->setProcess("sales");
@@ -3497,6 +3527,83 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function insertSalesAdvanceMonthlyTransaction(AccountProfit $entity,$data)
+    {
+        $em = $this->_em;
+        $amount = round($data['amount']);
+        $transaction = new Transaction();
+        $transaction->setProcess("sales-advance");
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountProfit($entity);
+        $transaction->setCreated($entity->getCreated());
+        $transaction->setUpdated($entity->getCreated());
+        $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'account-payable'));
+        $transaction->setAccountHead($head);
+        $transaction->setAmount($amount);
+        $transaction->setCredit("-{$amount}");
+        $em->persist($transaction);
+        $em->flush();
+
+        $transaction = new Transaction();
+        $transaction->setProcess("sales-advance");
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountProfit($entity);
+        $transaction->setCreated($entity->getCreated());
+        $transaction->setUpdated($entity->getCreated());
+        /* Cash - Cash various */
+        if ($data['method'] == 2) {
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'bank-account')));
+            $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertBankSubHead($data['bank']);
+            $transaction->setSubAccountHead($subAccount);
+        } elseif ($data['method'] == 3) {
+            $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'mobile-account')));
+            $subAccount = $em->getRepository('AccountingBundle:AccountHead')->insertMobileSubHead($data['mobile']);
+            $transaction->setSubAccountHead($subAccount);
+        } elseif ($data['method'] == 1) {
+            $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'cash-in-hand')));
+        }
+        $transaction->setAmount("{$amount}");
+        $transaction->getDebit($amount);
+        $em->persist($transaction);
+        $em->flush();
+
+    }
+
+    public function insertSalesMonthlyMedicineReturnTransaction(AccountProfit $entity,$data)
+    {
+        $em = $this->_em;
+        $amount = round($data['amount']);
+        $transaction = new Transaction();
+        $transaction->setProcess("sales");
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountProfit($entity);
+        $transaction->setCreated($entity->getCreated());
+        $transaction->setUpdated($entity->getCreated());
+        /* Current Current Asset - Account Receivable */
+        $head = $em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug' => 'account-receivable'));
+        $transaction->setAccountHead($head);
+        $transaction->setAmount("-{$amount}");
+        $transaction->setCredit(abs($amount));
+        $em->persist($transaction);
+        $em->flush();
+
+        $em = $this->_em;
+        /* Inventory Assets*/
+        $transaction = new Transaction();
+        $transaction->setProcess("sales-return");
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountProfit($entity);
+        $transaction->setCreated($entity->getCreated());
+        $transaction->setUpdated($entity->getCreated());
+        $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->findOneBy(array('slug'=>'inventory')));
+        $transaction->setAmount(abs($amount));
+        $transaction->setDebit(abs($amount));
+        $em->persist($transaction);
+        $em->flush();
+
+
+    }
+
     public function insertPurchaseExpenseMonthlyTransaction(AccountProfit $entity,$data)
     {
         $em = $this->_em;
@@ -3645,6 +3752,25 @@ class TransactionRepository extends EntityRepository
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('config', $config);
         $stmt->bindValue('process', $process);
+        $stmt->bindValue('month', $month);
+        $stmt->bindValue('year', $year);
+        $stmt->execute();
+        $result =  $stmt->fetch();
+        return $result;
+    }
+
+    public function getTransactionSalesReturn(GlobalOption $option,$data)
+    {
+        $config = $option->getId();
+        $compare = new \DateTime($data);
+        $month =  $compare->format('F');
+        $year =  $compare->format('Y');
+        $sql = "SELECT COALESCE(SUM(trans.debit),0)
+                FROM Transaction as trans
+                WHERE trans.globalOption_id = :config AND trans.process = :process AND  MONTHNAME(trans.created) =:month AND YEAR(trans.created) =:year";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('config', $config);
+        $stmt->bindValue('process', 'sales-return');
         $stmt->bindValue('month', $month);
         $stmt->bindValue('year', $year);
         $stmt->execute();

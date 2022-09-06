@@ -53,7 +53,8 @@ class PathologicalReportType extends AbstractType
                         ->orderBy('o.name','ASC');
                 },
             ))
-            ->add('referenceValue','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 6,'placeholder'=>'Enter reference value')))
+            ->add('sampleValue','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sample value')))
+            ->add('referenceValue','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 3,'placeholder'=>'Enter reference value')))
             ->add('unit','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter unit name')));
     }
     

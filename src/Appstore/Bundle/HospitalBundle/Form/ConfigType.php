@@ -52,17 +52,18 @@ class ConfigType extends AbstractType
             ->add('footerFile')
             ->add('appointmentPrescription')
             ->add('printInstruction')
+            ->add('printOff')
             ->add('address','textarea',array('attr'=>array('class'=>'m-wrap span12','rows'=>5)))
-            ->add('messageAdmission','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8)))
-            ->add('messageDiagnostic','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8)))
-            ->add('messageVisit','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8)))
+            ->add('messageAdmission','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8, 'placeholder'=>'Enter message for admission')))
+            ->add('messageDiagnostic','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8, 'placeholder'=>'Enter message for Diagonestic')))
+            ->add('messageVisit','textarea',array('attr'=>array('class'=>'m-wrap span12 editor','rows'=>8, 'placeholder'=>'Enter message for visit')))
+            ->add('cssContent','textarea',array('attr'=>array('class'=>'m-wrap span12','rows'=>8, 'placeholder'=>'Enter Print custom print')))
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printMarginReportLeft','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('reportHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printMarginReportTop','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
-
         ;
     }
     

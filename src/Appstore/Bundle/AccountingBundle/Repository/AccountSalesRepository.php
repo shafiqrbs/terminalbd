@@ -1157,7 +1157,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setGlobalOption($global);
         $accountSales->setCustomer($sales->getCustomer());
         $accountSales->setAmount($entity->getSubTotal());
-        $accountSales->setProcessHead('medicine-return');
+        $accountSales->setProcessHead('sales-return');
         $accountSales->setProcessType('Sales-Return');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($entity->getCreatedBy());

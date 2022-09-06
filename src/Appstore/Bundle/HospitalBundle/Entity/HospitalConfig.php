@@ -172,6 +172,14 @@ class HospitalConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="printOff", type="boolean",  nullable = true)
+     */
+    private $printOff = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="commissionAutoApproved", type="boolean",  nullable = true)
      */
     private $commissionAutoApproved = false;
@@ -364,6 +372,12 @@ class HospitalConfig
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $footerPath;
+
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $cssContent;
 
 
     /**
@@ -1102,8 +1116,6 @@ class HospitalConfig
             : $this->getUploadDir().'/'.$this->headerPath;
     }
 
-
-
     /**
      * @ORM\PostRemove()
      */
@@ -1256,6 +1268,38 @@ class HospitalConfig
     public function setPrescriptionBuilder($prescriptionBuilder)
     {
         $this->prescriptionBuilder = $prescriptionBuilder;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCssContent()
+    {
+        return $this->cssContent;
+    }
+
+    /**
+     * @param mixed $cssContent
+     */
+    public function setCssContent($cssContent)
+    {
+        $this->cssContent = $cssContent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrintOff()
+    {
+        return $this->printOff;
+    }
+
+    /**
+     * @param bool $printOff
+     */
+    public function setPrintOff($printOff)
+    {
+        $this->printOff = $printOff;
     }
 
 

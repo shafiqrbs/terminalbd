@@ -136,6 +136,20 @@ class Invoice
      **/
     private  $deliveredBy;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $discountRequestedBy;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountRequestedComment", type="string", nullable=true)
+     */
+    private $discountRequestedComment;
+
+
     /**
      * @var string
      *
@@ -1674,6 +1688,40 @@ class Invoice
     {
         $this->smsAlert = $smsAlert;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDiscountRequestedBy()
+    {
+        return $this->discountRequestedBy;
+    }
+
+    /**
+     * @param mixed $discountRequestedBy
+     */
+    public function setDiscountRequestedBy($discountRequestedBy)
+    {
+        $this->discountRequestedBy = $discountRequestedBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountRequestedComment()
+    {
+        return $this->discountRequestedComment;
+    }
+
+    /**
+     * @param string $discountRequestedComment
+     */
+    public function setDiscountRequestedComment($discountRequestedComment)
+    {
+        $this->discountRequestedComment = $discountRequestedComment;
+    }
+
+
 
 }
 

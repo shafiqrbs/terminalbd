@@ -610,7 +610,5 @@ class MedicineSalesTemporaryController extends Controller
         return $response;
     }
 
-
-
 }
 

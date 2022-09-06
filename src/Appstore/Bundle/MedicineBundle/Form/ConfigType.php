@@ -40,20 +40,20 @@ class ConfigType extends AbstractType
                     'Brand'      => 'Brand'
                 ),
             ))
+
             ->add('invoiceActualPrice')
             ->add('printPreviousDue')
             ->add('printDiscountPercent')
             ->add('customPrint')
             ->add('purchaseItem')
             ->add('printOutstanding')
-            ->add('posPrint')
             ->add('inlineSales')
             ->add('profitLastpp')
             ->add('searchSlug')
             ->add('autoPayment')
             ->add('openingQuantity')
-            ->add('regularPosPrint')
             ->add('isBarcode')
+            ->add('printOff')
             ->add('isPrint')
             ->add('invoicePrintLogo')
             ->add('isPrintHeader')

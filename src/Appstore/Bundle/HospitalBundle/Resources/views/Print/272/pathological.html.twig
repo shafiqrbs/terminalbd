@@ -22,7 +22,6 @@
 </head>
 <body style="margin: 0px!important;">
 <div style="display: block">
-    {% if global.webPath('file') is not empty %}<img style="max-height:100px" src="/{{ global.webPath('file') }}">{% endif %}
     <div style="margin-top:{{ global.hospitalConfig.printMarginReportTop }}px; margin-left:{{ global.hospitalConfig.printMarginReportLeft }}px;margin-right:{{ global.hospitalConfig.printMarginReportLeft }}px;" >
         <table class="table table-border reportTable" style="border: 3px solid #383939!important" >
             <tr class="print-header">
@@ -62,9 +61,12 @@
                 </td>
             </tr>
             <tr><td colspan="3"><strong>Investigation Name:</strong> {{ entity.particular.name }}</td></tr>
+            {% if entity.particular.reportMachineName %}
+            <tr><td colspan="3"><strong>Machine Name:</strong> {{ entity.particular.reportMachineName }}</td></tr>
+            {% endif %}
         </table>
         {% if entity.particular.reportFormat == 1 %}
-            {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+            {% if entity.reportContent and entity.particular.isReportContent != 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
                 <table class="table reportTable" style="margin-top:20px;min-height:{{  entity.hmsInvoice.hospitalConfig.reportHeight }}px">
                     <tbody>
                     <tr>
@@ -100,8 +102,7 @@
                 </table>
             {% endif %}
         {% else %}
-            {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
-
+            {% if entity.reportContent and entity.particular.isReportContent != 1 and entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
                 <table class=" reportTable" style="margin-top:20px;">
                     <thead>
                     <tr class="head-black">
@@ -284,9 +285,9 @@
     table.report-table {
         display:inline-block;
         width: 100%;
-    {% if entity.hmsInvoice.hospitalConfig.reportHeight  %}
-        min-height:{{ entity.hmsInvoice.hospitalConfig.reportHeight }}px;
-    {% endif %}
+        {% if entity.hmsInvoice.hospitalConfig.reportHeight  %}
+            min-height:{{ entity.hmsInvoice.hospitalConfig.reportHeight }}px;
+        {% endif %}
     }
 </style>
 </html>

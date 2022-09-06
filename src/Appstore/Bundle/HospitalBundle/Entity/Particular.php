@@ -149,6 +149,14 @@ class Particular
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="reportMachineName", type="string", length=255, nullable=true)
+     */
+    private $reportMachineName;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="quantity", type="smallint", length=3, nullable=true)
@@ -1705,10 +1713,21 @@ class Particular
         $this->signatureFile = null;
     }
 
+    /**
+     * @return string
+     */
+    public function getReportMachineName()
+    {
+        return $this->reportMachineName;
+    }
 
-
-
-
+    /**
+     * @param string $reportMachineName
+     */
+    public function setReportMachineName($reportMachineName)
+    {
+        $this->reportMachineName = $reportMachineName;
+    }
 
 
 }

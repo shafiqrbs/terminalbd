@@ -51,6 +51,7 @@ class PathologyType extends AbstractType
             ->add('isAttachment')
             ->add('additionalField')
             ->add('isReportContent')
+            ->add('reportMachineName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter report machine name')))
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('instruction','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'3','placeholder'=>'Enter test related any instruction for patient')))
             ->add('reportContent','textarea', array('attr'=>array('class'=>'big-editor ','rows'=>15,'placeholder'=>'Enter test related any instruction for patient')))

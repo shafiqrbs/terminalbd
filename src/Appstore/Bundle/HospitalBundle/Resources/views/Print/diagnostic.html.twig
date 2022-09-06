@@ -145,6 +145,11 @@
             <tr><td colspan="3">&nbsp;</td></tr>
         </table>
         {% endif %}
+<style>
+{% if entity.hospitalConfig.cssContent  %}
+    {{ entity.hospitalConfig.cssContent|raw }}
+{% endif %}
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

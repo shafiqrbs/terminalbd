@@ -90,6 +90,14 @@ class AccountProfit
     private $sales = 0;
 
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="salesReturn", type="float",  nullable = true)
+     */
+    private $salesReturn = 0;
+
+
     /**
      * @var float
      *
@@ -355,6 +363,22 @@ class AccountProfit
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalesReturn()
+    {
+        return $this->salesReturn;
+    }
+
+    /**
+     * @param float $salesReturn
+     */
+    public function setSalesReturn($salesReturn)
+    {
+        $this->salesReturn = $salesReturn;
     }
 
 }

@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class AccountPurchaseType extends AbstractType
+class   AccountPurchaseType extends AbstractType
 {
 
     /* @var $global GlobalOption */

@@ -119,6 +119,13 @@ class MedicineConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="printOff", type="boolean",  nullable=true)
+     */
+    private $printOff = true;
+
+     /**
+     * @var boolean
+     *
      * @ORM\Column(name="invoicePrintLogo", type="boolean",  nullable=true)
      */
     private $invoicePrintLogo = true;
@@ -1138,6 +1145,24 @@ class MedicineConfig
     {
         $this->systemReset = $systemReset;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPrintOff()
+    {
+        return $this->printOff;
+    }
+
+    /**
+     * @param bool $printOff
+     */
+    public function setPrintOff($printOff)
+    {
+        $this->printOff = $printOff;
+    }
+
+
 
 
 }

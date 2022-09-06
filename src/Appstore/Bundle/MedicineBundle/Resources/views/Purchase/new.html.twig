@@ -359,7 +359,7 @@
                                                 <tr cl id="remove-{{ item.id }}" class="product-content {% if item.medicineStock.averagePurchasePrice > item.salesPrice %}warning{% endif %}" >
                                                     <td>{{ loop.index }}</td>
                                                     <td><a data-type="text" class="editableText" data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-name="itemName" data-trigger="hover" class="tooltips" data-original-title="" href="javascript:">{{ item.medicineStock.name }}</a></td>
-                                                    <td class="">{% if item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</td>
+                                                    <td><a  data-type="select" class="editableText" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ item.medicineStock.id }}" data-value="{% if  item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</a>
                                                     <td class="span1">
                                                         <a href="javascript:" id="batchno-{{ item.id }}" class="editable" data-type="text" data-name="batchno" data-pk="{{ item.id }}" data-url="{{ path('medicine_purchaseitem_inline_update') }}" data-title="Enter batch no" >{% if item.batchno is not empty %}{{ item.batchno }}{% endif %}</a>
                                                     </td>
@@ -662,7 +662,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
+    EditableWithLoadInit();
     brandMedicineSearch({{ entity.id }});
     $('.expirationDate').editable({
         format: 'yyyy-mm-dd',

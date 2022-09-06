@@ -55,6 +55,16 @@
                             {{ form_row(form._token) }}
                             <div class="row-fluid">
                                 <!--/span-->
+
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="category" >Parent Name</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.parent) }}
+                                            {{ form_errors(form.parent) }}
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="span4">
                                     <div class="control-group">
                                         <label class="control-label"  for="category" >Name<span class="required">*</span></label>
@@ -68,15 +78,17 @@
                                     </div>
                                 </div>
                                 <div class="span4">
-                                    <div class="control-group">
-                                        <label class="control-label"  for="category" >Parent Name</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.parent) }}
-                                            {{ form_errors(form.parent) }}
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="name">Sample Value</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.sampleValue) }}
+                                                    {{ form_errors(form.sampleValue) }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="span4">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">

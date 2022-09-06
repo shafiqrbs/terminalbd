@@ -70,8 +70,9 @@ class AccountProfitController extends Controller
         }
 
         $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->findOneBy(array('globalOption' => $option,'month' => $month ,'year' => $year));
-       // $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
-       // $capital = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
+      //  $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
+      //  $capital = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->getCapitalInvestment($option,$entity);
+
         if(empty($entity)){
             $entity = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->insertAccountProfit($option,$month,$year,$data);
             $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountProfit')->reportMonthlyProfitLoss($entity,$data);
@@ -79,11 +80,13 @@ class AccountProfitController extends Controller
             $purchase = round($overview['purchase'] + $overview['purchaseAdjustment']);
             $expenditure = round ($overview['expenditure']);
             $revenue = round ($overview['operatingRevenue']);
+            $salesReturn = round ($overview['salesReturn']);
             $profit = ($sales + $revenue) - ($purchase + $expenditure);
             $entity->setSales($sales);
             $entity->setPurchase($purchase);
             $entity->setExpenditure($expenditure);
             $entity->setRevenue($revenue);
+            $entity->setSalesReturn($salesReturn);
             $entity->setMonth($month);
             $entity->setYear($year);
             if($profit > 0 ){

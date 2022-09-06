@@ -86,6 +86,13 @@ class PathologicalReport
      */
     private $referenceValue;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="sampleValue", type="text", nullable=true)
+     */
+    private $sampleValue;
+
     /**
      * @var string
      *
@@ -289,6 +296,24 @@ class PathologicalReport
     {
         $this->parentName = $parentName;
     }
+
+    /**
+     * @return string
+     */
+    public function getSampleValue()
+    {
+        return $this->sampleValue;
+    }
+
+    /**
+     * @param string $sampleValue
+     */
+    public function setSampleValue($sampleValue)
+    {
+        $this->sampleValue = $sampleValue;
+    }
+
+
 
 
 }
