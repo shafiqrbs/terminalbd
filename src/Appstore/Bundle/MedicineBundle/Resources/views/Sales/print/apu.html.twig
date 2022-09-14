@@ -164,9 +164,9 @@
                     {% set total = total + (item.quantity * item.mrpPrice) %}
                     <tr>
                         <td class="span8 left">{{ loop.index }}. {{ item.medicineStock.name }}</td>
-                        <td class="span2 center">{{ item.mrpPrice|number_format(2) }}</td>
+                        <td class="span2 center">{{ item.salesPrice|number_format(2) }}</td>
                         <td class="span2 center">{{ item.quantity }}</td>
-                        <td class="span2 left">{{ subTotal|number_format(2) }}</td>
+                        <td class="span2 left">{{ subTotal|number_format }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}
@@ -188,9 +188,9 @@
                 {% for item in entity.medicineSalesItems %}
                     <tr>
                         <td class="span8 left">{{ loop.index }}. {{ item.medicineStock.name }}</td>
-                        <td class="span2 center">{{ item.mrpPrice|number_format(2) }}</td>
+                        <td class="span2 center">{{ item.salesPrice|number_format(2) }}</td>
                         <td class="span2 center">{{ item.quantity }}</td>
-                        <td class="span2 right">{{ item.subTotal|number_format(2) }}</td>
+                        <td class="span2 right">{{ item.subTotal|number_format }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}
@@ -243,7 +243,7 @@
                 {% else %}
                     <span><strong>*Medicines once sold are not taken back*</strong></span><br/>
                 {% endif %}
-                <span>Development by www.poskeeper.com</span>
+                <span>Development by www.terminalbd.com</span>
             </td>
         </tr>
     </table>

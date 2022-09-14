@@ -95,7 +95,7 @@ class MedicineStockController extends Controller
 	 */
 
 
-	public function itemShortListAction()
+	public function itemShortListAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -105,9 +105,11 @@ class MedicineStockController extends Controller
         $pagination = $this->paginate($entities);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
         $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+        $selected = explode(',', $request->cookies->get('barcodes', ''));
         return $this->render('MedicineBundle:MedicineStock:shortList.html.twig', array(
             'pagination' => $pagination,
             'racks' => $racks,
+            'selected' => $selected,
             'modeFor' => $modeFor,
             'searchForm' => $data,
         ));
@@ -154,7 +156,7 @@ class MedicineStockController extends Controller
 	 */
 
 
-	public function currentShortListAction()
+	public function currentShortListAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -163,9 +165,11 @@ class MedicineStockController extends Controller
         $pagination = $this->paginate($entities);
         $racks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticular')->findBy(array('medicineConfig'=> $config,'particularType'=>'1'));
         $modeFor = $this->getDoctrine()->getRepository('MedicineBundle:MedicineParticularType')->findBy(array('modeFor'=>'brand'));
+        $selected = explode(',', $request->cookies->get('barcodes', ''));
         return $this->render('MedicineBundle:MedicineStock:currentShortList.html.twig', array(
             'pagination' => $pagination,
             'racks' => $racks,
+            'selected' => $selected,
             'modeFor' => $modeFor,
             'searchForm' => $data,
         ));

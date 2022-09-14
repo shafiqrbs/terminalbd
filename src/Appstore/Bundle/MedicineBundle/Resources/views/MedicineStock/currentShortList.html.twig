@@ -34,13 +34,12 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock Short List</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a  href="{{ path('medicine_prepurchase_create') }}" id="btn-create-barcode" class="btn yellow" >
-                                    Pre-Purchase
-                                    <i class="icon-barcode"></i>
-                                </a>
+                                <a  href="javascript:"  id="btn-selected-preview" class="btn" >
+                                    <i class="icon-eye-open"></i> Selected</a>
+                                <a  href="{{ path('medicine_prepurchase_create') }}" target="_blank" id="btn-create-barcode" class="btn purple" >
+                                    <i class="icon-shopping-cart"></i> Pre-Purchase</a>
                             </div>
                         </div>
-
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
@@ -93,7 +92,7 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr {% if entity.medicineStock.minQuantity > 0 and entity.medicineStock.remainingQuantity <= entity.medicineStock.minQuantity %} class="min" {% endif %}>
-                                        <td><input type="checkbox" class="checkbox stockId" id=""  value="{{ entity.medicineStock.id }}"></td>
+                                        <td><input type="checkbox" class="checkbox stockId" id="" {% if entity.medicineStock.id in selected %} checked="checked" {% endif %}  value="{{ entity.medicineStock.id }}"></td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         {% if entity.medicineStock.mode == 'medicine' %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineStock.medicineBrand is not empty %}{{ entity.medicineStock.medicineBrand.medicineForm }}-{{ entity.medicineStock.medicineBrand.name }}-{{ entity.medicineStock.medicineBrand.strength }}-{{ entity.medicineStock.medicineBrand.medicineGeneric.name }}-{{ entity.medicineStock.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.medicineStock.id })}}">{{ entity.medicineStock.name }}</a></td>

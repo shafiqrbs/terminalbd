@@ -1,3 +1,14 @@
+<div class="portlet box green ">
+<div class="portlet-title">
+    <div class="caption"><i class="icon-reorder"></i>Selected Item List</div>
+    <div class="actions">
+        <div class="btn-group">
+            <a  href="{{ path('medicine_prepurchase_create') }}"  id="btn-create-barcode" class="btn purple" >
+                <i class="icon-shopping-cart"></i> Pre-Purchase</a>
+        </div>
+    </div>
+</div>
+</div>
 <table class="table table-bordered table-striped" id="datatable">
     <thead class="flip-content ">
     <tr class="head-blue">
@@ -14,7 +25,7 @@
     <tbody>
     {% for entity in pagination %}
         <tr>
-            <td><input type="checkbox" class="checkbox stockId" id=""  value="{{ entity.id }}"></td>
+            <td><input type="checkbox" checked class="checkbox stockId" id=""  value="{{ entity.id }}"></td>
             <td class="numeric" >{{ entity.name }}</td>
             <td class="numeric" >{{ entity.brandName }}</td>
             <td class="numeric">{{ entity.salesPrice }}</td>

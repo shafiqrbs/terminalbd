@@ -16,6 +16,7 @@ use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseManualType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseOpeningType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -818,33 +819,28 @@ class PurchaseController extends Controller
         $discountType = $request->request->get('discountType');
         $discountCal = (float)$request->request->get('discount');
         $invoice = $request->request->get('purchase');
+        $medicinepurchase_memo = $request->request->get('medicinepurchase_memo');
+        $method = $request->request->get('medicinepurchase_transactionMethod');
+        $payment = ($request->request->get('medicinepurchase_payment') &&  $request->request->get('medicinepurchase_payment') == "NaN" ) ? 0 : $request->request->get('medicinepurchase_payment');
+        $invoiceDue = ($request->request->get('invoiceDue') &&  $request->request->get('invoiceDue') == "NaN" ) ? 0 : $request->request->get('invoiceDue');
+
         /* @var $entity MedicinePurchase */
         $entity = $em->getRepository('MedicineBundle:MedicinePurchase')->find($invoice);
-        $subTotal = $entity->getSubTotal();
-        if($discountType == 'flat'){
-            $total = ($subTotal  - $discountCal);
-            $discount = $discountCal;
-        }else{
-            $discount = ($subTotal * $discountCal)/100;
-            $total = ($subTotal  - $discount);
+        $entity->setMemo($medicinepurchase_memo);
+        if($method){
+            $trans = $this->getDoctrine()->getRepository(TransactionMethod::class)->find($method);
+            $entity->setTransactionMethod($trans);
         }
-        $vat = 0;
-        if(($subTotal - $discount) > 0){
-            $entity->setDiscountType($discountType);
-            $entity->setDiscountCalculation($discountCal);
-            $entity->setDiscount(round($discount));
-            $entity->setNetTotal(round($total + $vat));
-            $entity->setDue(round($total + $vat));
-        }else{
-		    $entity->setDiscountType('percentage');
-		    $entity->setDiscountCalculation(0);
-		    $entity->setDiscount(0);
-		    $entity->setNetTotal($entity->getSubTotal());
+        if($payment){
+            $total = ($payment + $invoiceDue);
+            $entity->setNetTotal($total);
+            $entity->setPayment($payment);
+            $entity->setDiscountType('percentage');
+            $entity->setDiscount($entity->getSubTotal()-$total);
+            $entity->setDue($invoiceDue);
         }
 	    $em->flush();
-
-        $result = $this->returnResultData($entity);
-        return new Response(json_encode($result));
+        return new Response('success');
 
     }
 
@@ -920,6 +916,23 @@ class PurchaseController extends Controller
             'purchaseBarcodeItemForm' => $purchaseBarcodeItemForm->createView(),
             'form' => $editForm->createView(),
         ));
+    }
+
+    /**
+     * Finds and displays a Vendor entity.
+     *
+     */
+    public function ajaxUpdateAction(Request $request, MedicinePurchase $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if($entity->getInvoiceMode() == "invoice"){
+            $editForm = $this->createEditForm($entity);
+        }else{
+            $editForm = $this->createManualEditForm($entity);
+        }
+        $editForm->handleRequest($request);
+        $em->flush();
+        return new Response('Done');
     }
 
     /**

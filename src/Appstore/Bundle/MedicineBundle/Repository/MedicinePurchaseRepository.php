@@ -102,23 +102,18 @@ class MedicinePurchaseRepository extends EntityRepository
         $em->persist($purchase);
         $em->flush();
 
+        $purchaseId = $purchase->getId();
         /* @var $row MedicinePrepurchaseItem */
+
         if($prepurchase->getMedicinePrepurchaseItems()){
-            foreach ($prepurchase->getMedicinePrepurchaseItems() as $row):
-
-                $entity = new MedicinePurchaseItem();
-                $entity->setMedicinePurchase($purchase);
-                $entity->setMedicineStock($row->getMedicineStock());
-                $entity->setQuantity($row->getQuantity());
-                $entity->setActualPurchasePrice($row->getMedicineStock()->getPurchasePrice());
-                $entity->setPurchasePrice($row->getSalesPrice());
-                $entity->setSalesPrice($row->getSalesPrice());
-                $this->dpGenerate($entity);
-                $entity->setPurchaseSubTotal($row->getMedicineStock()->getSalesPrice() * $entity->getQuantity());
-                $em->persist($entity);
-                $em->flush();
-
-            endforeach;
+            $em = $this->_em;
+            $elem = "INSERT INTO medicine_purchase_item(`medicinePurchase_id`,`medicineStock_id`,`salesPrice`,`purchasePrice`,`actualPurchasePrice`,`quantity`,purchaseSubTotal)
+  SELECT $purchaseId,`medicineStock_id`,`salesPrice`,salesPrice,salesPrice,`quantity`, purchaseSubTotal
+  FROM medicine_prepurchase_item
+  WHERE medicinePrepurchase_id =:config";
+            $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+            $qb1->bindValue('config', $id);
+            $qb1->execute();
             $this->updatePurchaseTotalPrice($purchase);
             return $purchase->getId();
         }

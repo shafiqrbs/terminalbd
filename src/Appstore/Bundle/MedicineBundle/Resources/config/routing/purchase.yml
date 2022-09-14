@@ -51,6 +51,13 @@ medicine_purchase_vendor_update:
     options:
         expose: true
 
+medicine_purchase_ajax_update:
+    path:     /ajax-update
+    defaults: { _controller: "MedicineBundle:Purchase:ajaxUpdate" }
+    methods:  [POST, PUT]
+    options:
+        expose: true
+
 
 medicine_purchase_approve:
     path:     /{id}/approve

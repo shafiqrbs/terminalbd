@@ -34,10 +34,11 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Stock Short List</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a  href="{{ path('medicine_prepurchase_create') }}" id="btn-create-barcode" class="btn yellow" >
-                                    Pre-Purchase Generate
-                                    <i class="icon-barcode"></i>
-                                </a>
+                                <a  href="javascript:"  id="btn-selected-preview" class="btn" >
+                                    <i class="icon-eye-open"></i> Selected</a>
+                                <a  href="{{ path('medicine_prepurchase_create') }}" target="_blank" id="btn-create-barcode" class="btn purple" >
+                                    <i class="icon-shopping-cart"></i> Pre-Purchase</a>
+
                             </div>
                         </div>
 
@@ -106,7 +107,7 @@
                                 <tbody>
                                 {% for entity in pagination %}
                                     <tr {% if entity.minQuantity > 0 and entity.remainingQuantity <= entity.minQuantity %} class="min" {% endif %}>
-                                        <td><input type="checkbox" class="checkbox stockId" id=""  value="{{ entity.id }}"></td>
+                                        <td><input type="checkbox" class="checkbox stockId" id="" {% if entity.id in selected %} checked="checked" {% endif %}  value="{{ entity.id }}"></td>
                                         <td class="numeric" >{{ entity.sku }}</td>
                                         {% if entity.mode == 'medicine' %}
                                             <td class="numeric" ><a data-trigger="hover" class="tooltips" data-original-title="{% if entity.medicineBrand is not empty %}{{ entity.medicineBrand.medicineForm }}-{{ entity.medicineBrand.name }}-{{ entity.medicineBrand.strength }}-{{ entity.medicineBrand.medicineGeneric.name }}-{{ entity.medicineBrand.medicineCompany.name }}{% endif %}" href="{{ path('medicine_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>

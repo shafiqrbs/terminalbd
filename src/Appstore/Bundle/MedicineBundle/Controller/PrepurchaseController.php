@@ -124,6 +124,8 @@ class PrepurchaseController extends Controller
 
     public function processAction($id)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $entity = $em->getRepository('MedicineBundle:MedicinePrepurchase')->findOneBy(array('medicineConfig' => $config , 'id' => $id));
@@ -213,7 +215,7 @@ class PrepurchaseController extends Controller
         $msg = 'Medicine added successfully';
         $result = $this->returnResultData($invoice, $msg);
         return new Response(json_encode($result));
-        exit;
+
     }
 
     public function purchaseItemUpdateAction(Request $request)
