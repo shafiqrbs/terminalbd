@@ -108,7 +108,7 @@ class MedicinePurchaseRepository extends EntityRepository
         if($prepurchase->getMedicinePrepurchaseItems()){
             $em = $this->_em;
             $elem = "INSERT INTO medicine_purchase_item(`medicinePurchase_id`,`medicineStock_id`,`salesPrice`,`purchasePrice`,`actualPurchasePrice`,`quantity`,purchaseSubTotal)
-  SELECT $purchaseId,`medicineStock_id`,`salesPrice`,salesPrice,salesPrice,`quantity`, purchaseSubTotal
+  SELECT $purchaseId,`medicineStock_id`,`salesPrice`,salesPrice,salesPrice,`quantity`, (salesPrice * quantity) as purchaseSubTotal
   FROM medicine_prepurchase_item
   WHERE medicinePrepurchase_id =:config";
             $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
