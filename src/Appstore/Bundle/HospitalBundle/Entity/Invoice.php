@@ -109,6 +109,11 @@ class Invoice
     private  $cabin;
 
    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="specialization", cascade={"persist"}  )
+     **/
+    private  $specialization;
+
+   /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn", mappedBy="hmsInvoice", cascade={"remove"})
      **/
     private  $hmsInvoiceReturn;
@@ -1721,6 +1726,21 @@ class Invoice
         $this->discountRequestedComment = $discountRequestedComment;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSpecialization()
+    {
+        return $this->specialization;
+    }
+
+    /**
+     * @param mixed $specialization
+     */
+    public function setSpecialization($specialization)
+    {
+        $this->specialization = $specialization;
+    }
 
 
 }

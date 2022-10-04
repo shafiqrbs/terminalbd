@@ -970,6 +970,8 @@ class PurchaseController extends Controller
         }elseif($filedName == "vendor" and !empty($mode)){
             $vendor = $this->getDoctrine()->getRepository(MedicineVendor::class)->find($mode);
             $purchase->setMedicineVendor($vendor);
+        }elseif($filedName == "brand" and empty($mode)){
+            $purchase->setBrandName(Null);
         }
         $em->flush();
         return new Response('Done');

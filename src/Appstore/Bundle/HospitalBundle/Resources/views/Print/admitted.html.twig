@@ -47,7 +47,11 @@
             <td class="pull-right">
                 <ul class="unstyled">
                     <li><strong>Admission Date: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:i A') }}</strong></li>
-                    <li><strong>Released Date: </strong>&nbsp;<strong>{{ entity.updated|date('d-m-Y h:i A') }}</strong></li>
+                    {% if entity.process in ['Released','Dead'] %}
+                    <li><strong>{{ entity.process }} Date: </strong>
+                        &nbsp;<strong>{{ entity.updated|date('d-m-Y h:i A') }}</strong>
+                    </li>
+                    {% endif %}
                     <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                     <li><hr></li>
                     <li><strong>Patient status:</strong>&nbsp;{{  entity.process|capitalize }}</li>

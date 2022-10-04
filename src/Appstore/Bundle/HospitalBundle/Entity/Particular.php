@@ -555,8 +555,10 @@ class Particular
 
         $weeklyDay = empty($this->weeklyOffDay) ? '' : $this->weeklyOffDay;
         $days = array();
-        foreach ($weeklyDay as $day){
-            $days[] = $day;
+        if($weeklyDay){
+            foreach ($weeklyDay as $day){
+                $days[] = $day;
+            }
         }
         $present =  " [".implode( ', ', $days)."]";
         $designation = empty($this->doctorSignature) ? '' : " (".$this->doctorSignature.")";

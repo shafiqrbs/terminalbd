@@ -158,7 +158,6 @@ class AccountSalesAdjustmentController extends Controller
             }
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertSalesAdjustment($entity);
-         //   $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->salesAdjustmentTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -179,7 +178,6 @@ class AccountSalesAdjustmentController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response('success');
-        exit;
     }
 
 

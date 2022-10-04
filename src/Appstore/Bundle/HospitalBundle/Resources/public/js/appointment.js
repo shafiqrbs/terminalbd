@@ -188,12 +188,16 @@ function appointmentFormSubmit() {
             "appointment_invoice[customer][height]": {required: false, digits: true},
             "appointment_invoice[customer][bloodPressure]": {required: false},
             "appointment_invoice[customer][address]": {required: false},
+            "appointment_invoice[assignDoctor]": {required: true},
             "appointment_invoice[department]": {required: false},
             "appointment_invoice[payment]": {required: false, digits: true},
             "appointment_invoice[comment]": {required: false},
+            "appointment_invoice[smsAlert]": {required: false},
+            "appointment_invoice[appointmentDate]": {required: false},
         },
 
         messages: {
+            "appointment_invoice[assignDoctor]": "Select assign doctor",
             "appointment_invoice[department]": "Select Department",
             "appointment_invoice[customer][name]": "Enter patient name",
             "appointment_invoice[customer][mobile]": "Enter patient mobile no",
@@ -205,6 +209,7 @@ function appointmentFormSubmit() {
             "appointment_invoice[customer][mobile]": {placement: 'top', html: true},
             "appointment_invoice[customer][age]": {placement: 'top', html: true},
             "appointment_invoice[payment]": {placement: 'top', html: true},
+            "appointment_invoice[assignDoctor]": {placement: 'top', html: true},
             "appointment_invoice[department]": {placement: 'top', html: true},
         },
         submitHandler: function (form) {

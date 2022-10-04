@@ -22,7 +22,7 @@ class MedicineSalesTemporaryRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.subTotal) AS subTotal,SUM(e.purchasePrice * e.quantity) AS purchaseSubTotal ');
+        $qb->select('SUM(e.subTotal) AS subTotal,SUM(e.purchasePrice * e.quantity) AS purchaseSubTotal');
         $qb->where('e.medicineConfig = :config');
         $qb->setParameter('config', $config);
         $qb->andWhere("e.user =".$user->getId());

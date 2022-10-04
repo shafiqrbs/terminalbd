@@ -89,14 +89,43 @@ class DoctorAppointmentType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ))
-            ->add('department', 'entity', array(
+
+            ->add('diseasesProfile', 'entity', array(
                 'required'    => false,
-                'empty_value' => '---Select department---',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'property' => 'nestedLabel',
-                'choices'=> $this->DepartmentChoiceList()
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
+                'property' => 'name',
+                'empty_value' => '---Select diseases profile---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select diseases profile')),
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                        ->andWhere("e.service = 11")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
             ))
+
+            ->add('specialization', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
+                'property' => 'name',
+                'empty_value' => '--- Select Specialization ---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select diseases profile')),
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                        ->andWhere("e.service = 12")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
+            ))
+
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 textarea','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
