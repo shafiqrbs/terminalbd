@@ -78,13 +78,15 @@ class InvoiceController extends Controller
 
     public function oldPatientDiagnosticAction(Request $request)
     {
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $customerId = $request->request->get('customer');
         $invoiceId = $request->request->get('invoice');
+        $patient = $request->request->get('patientId');
         $option = $this->getUser()->getGlobalOption();
-        $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $patientId = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'customerId'=>$patient));
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'mobile'=>$customerId));
         $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$hospital,'invoice' => $invoiceId));
+        $em = $this->getDoctrine()->getManager();
         $entity = new Invoice();
         if($invoice){
             $customer = $invoice->getCustomer();
@@ -102,9 +104,6 @@ class InvoiceController extends Controller
             $entity->setInvoiceMode('diagnostic');
             $entity->setPrintFor('diagnostic');
             $entity->setCreatedBy($this->getUser());
-            if(!empty($this->getUser()->getProfile()->getBranches())){
-                $entity->setBranches($this->getUser()->getProfile()->getBranches());
-            }
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('hms_invoice_edit', array('id' => $entity->getId())));
@@ -123,9 +122,24 @@ class InvoiceController extends Controller
             $entity->setInvoiceMode('diagnostic');
             $entity->setPrintFor('diagnostic');
             $entity->setCreatedBy($this->getUser());
-            if(!empty($this->getUser()->getProfile()->getBranches())){
-                $entity->setBranches($this->getUser()->getProfile()->getBranches());
-            }
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_edit', array('id' => $entity->getId())));
+        }elseif($patientId){
+            $entity->setCustomer($patientId);
+            $entity->setMobile($patientId->getMobile());
+            $hospital = $option->getHospitalConfig();
+            $entity->setHospitalConfig($hospital);
+            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
+            $entity->setService($service);
+            $referredDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
+            $entity->setReferredDoctor($referredDoctor);
+            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $entity->setTransactionMethod($transactionMethod);
+            $entity->setPaymentStatus('Pending');
+            $entity->setInvoiceMode('diagnostic');
+            $entity->setPrintFor('diagnostic');
+            $entity->setCreatedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('hms_invoice_edit', array('id' => $entity->getId())));

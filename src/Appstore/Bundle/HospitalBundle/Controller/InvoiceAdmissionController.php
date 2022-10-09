@@ -213,7 +213,9 @@ class InvoiceAdmissionController extends Controller
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $customerId = $request->request->get('customer');
         $invoiceId = $request->request->get('invoice');
+        $patient = $request->request->get('patientId');
         $option = $this->getUser()->getGlobalOption();
+        $patientId = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'customerId'=>$patient));
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'mobile'=>$customerId));
         $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$hospital,'invoice' => $invoiceId));
 
@@ -233,6 +235,16 @@ class InvoiceAdmissionController extends Controller
             $entity = new Invoice();
             $entity->setHospitalConfig($hospital);
             $entity->setCustomer($customer);
+            $entity->setInvoiceMode('admission');
+            $entity->setPrintFor('admission');
+            $entity->setCreatedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_admitted_patient_edit', array('id' => $entity->getId())));
+        }elseif($patientId){
+            $entity = new Invoice();
+            $entity->setHospitalConfig($hospital);
+            $entity->setCustomer($patientId);
             $entity->setInvoiceMode('admission');
             $entity->setPrintFor('admission');
             $entity->setCreatedBy($this->getUser());

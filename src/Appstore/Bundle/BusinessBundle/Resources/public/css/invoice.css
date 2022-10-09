@@ -85,7 +85,6 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     padding-right: 10px;
     float: right;
     text-align: right;
-    width: 190px;
 }
 .sales-right input[class*="span"].m-wrap{
     font-weight: bold;
@@ -93,6 +92,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     text-align: right;
     border: 2px solid #4b8df8!important;
     height: 23px!important;
+    width: 100px!important;
 }
 .select2-search{
     padding-left: 0;
@@ -277,6 +277,7 @@ li.active > a {
     height: 20px!important;
     border: 2px solid red !important;
     margin-top: -4px!important;
+    width: 100px!important;
 }
 
 .td-inline-input{

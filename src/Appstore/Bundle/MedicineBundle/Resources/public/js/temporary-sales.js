@@ -5,6 +5,16 @@
 $(".number , .amount, .numeric").inputFilter(function(value) {
     return /^-?\d*[.,]?\d*$/.test(value); });
 
+$('.amount').change(function(){
+    this.value = parseFloat(this.value).toFixed(2);
+});
+
+function financial(val) {
+    var number =  Number.parseFloat(val).toFixed(2);
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
 $(document).ready(function(){
     load_data();
     function load_data(query)
@@ -532,7 +542,8 @@ function jqueryTemporaryLoad() {
         var itemPercent = parseFloat($('#itemPercent-'+id).val());
         var amount = (estimatePrice-(estimatePrice*itemPercent/100));
         var subTotal  = (quantity * amount);
-        $("#subTotal-"+id).html(subTotal);
+
+        $("#subTotal-"+id).html(financial(subTotal));
 
         $.ajax({
             url: Routing.generate('medicine_sales_temporary_item_update'),

@@ -11,6 +11,18 @@ $( ".dateCalendar" ).datepicker({
 $(".number , .amount, .numeric").inputFilter(function(value) {
     return /^-?\d*[.,]?\d*$/.test(value); });
 
+
+$('.amount').change(function(){
+    this.value = parseFloat(this.value).toFixed(2);
+});
+
+function financial(val) {
+    var number =  Number.parseFloat(val).toFixed(2);
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
+
 /*
 $(document).on("click", ".editable-submit", function() {
     setTimeout(pageReload, 3000);

@@ -1,5 +1,8 @@
 {% if salesTemporary is not empty %}
+    {% set avgTotal = 0 %}
     {% for item in salesTemporary %}
+        {% set avgTotal = avgTotal +(item.medicineStock.averagePurchasePrice * item.quantity) %}
+
         <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %} class="warning" {% endif %}>
             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
             <td class="span5">{{ loop.index }}.
@@ -14,6 +17,7 @@
                     {{ item.medicineStock.averagePurchasePrice|number_format(2) }}
                 {% endif %}
             </td>
+            <td class="span1">{{ item.estimatePrice }}</td>
             <td class="span1">
                 <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                 <input type="hidden" name="estimatePrice-{{ item.id }}" id="estimatePrice-{{ item.id }}" value="{{ item.estimatePrice }}" >
@@ -21,19 +25,14 @@
                     {{ item.salesPrice|number_format(2) }}
                     <input type="hidden" name="salesPrice-{{ item.id }}" id="salesPrice-{{ item.id }}" value="{{ item.salesPrice }}" >
                 {% else %}
-                    <input type="number" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice-{{ item.id }}" value="{{ item.salesPrice|number_format(2) }}" >
+                    <input type="text" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice-{{ item.id }}" value="{{ item.salesPrice|number_format(2) }}" >
                 {% endif %}
             </td>
             <td class="span1">
-                <input type="number" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
+                <input type="text" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
             </td>
             <td class="span1">
-                <select class="td-inline-input itemPercent" data-id="{{ item.id }}" id="itemPercent-{{ item.id }}" name="itemPercent-{{ item.id }}">
-                    <option value="0">Disc(%)</option>
-                    {% for per in discountPercentLists %}
-                        <option {% if item.itemPercent is defined and item.itemPercent == per %} selected="selected" {% endif %} value="{{ per }}">{{ per }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" class=" numeric td-inline-input itemPercent" data-id="{{ item.id }}" autocomplete = "off"   id="itemPercent-{{ item.id }}" name="itemPercent-{{ item.id }}" value="{{ item.itemPercent }}" placeholder="{{ item.itemPercent }}">
             </td>
             <th class="" id="subTotal-{{ item.id }}">{{ item.subTotal|number_format(2) }}</th>
             <td class="">
@@ -46,25 +45,25 @@
     {% endfor %}
 {% endif %}
 <tr>
-    <td colspan="9" class="span12" style="border: 1px double #000"></td>
+    <td colspan="10" class="span12" style="border: 1px double #000"></td>
 </tr>
 <tr>
-    <td colspan="7" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+    <td colspan="8" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
     <td class=""><strong id="subTotal">{{ result.subTotal|number_format(2) }}</strong></td>
     <td class="span1"></td>
 </tr>
 <tr>
-    <td colspan="7" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+    <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
     <td class=""><strong class="discount"></strong></td>
     <td class="span1"></td>
 </tr>
 <tr>
-    <td colspan="7" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
+    <td colspan="8" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
     <td class=""><strong id="grandTotal">{{ result.subTotal|number_format(2) }}</strong></td>
     <td class="span1"></td>
 </tr>
 <tr>
-    <td colspan="7" class="span9"><span class="pull-right"><strong>Profit TK.</strong> =</span></td>
-    <td class=""><strong id="profit">{{ (result.subTotal - result.purchaseSubTotal)|number_format(2) }}</strong></td>
+    <td colspan="8" class="span9"><span class="pull-right"><strong>Profit TK.</strong> =</span></td>
+    <td class=""><strong id="profit">{{ (result.subTotal - avgTotal)|number_format(2) }}</strong></td>
     <td class="span1"><a href="javascript:" class="btn mini blue profitBtn"><i class="icon-eye-open"></i> Show</a></td>
 </tr>

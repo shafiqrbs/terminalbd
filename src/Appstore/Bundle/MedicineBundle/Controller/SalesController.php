@@ -172,8 +172,10 @@ class SalesController extends Controller
         }
         $salesItemForm = $this->createMedicineSalesItemForm(new MedicineSalesItem() , $entity);
         $editForm = $this->createEditForm($entity);
+        $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->getCustomers($this->getUser()->getGlobalOption()->getId());
         return $this->render('MedicineBundle:Sales:new.html.twig', array(
             'entity' => $entity,
+            'customers' => $customers,
             'salesItem' => $salesItemForm->createView(),
             'form' => $editForm->createView(),
         ));
@@ -434,9 +436,8 @@ class SalesController extends Controller
                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption,$mobile,$data);
                $entity->setCustomer($customer);
 
-           } elseif(!empty($data['mobile'])) {
-               $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-               $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
+           } elseif(!empty($data['customer'])) {
+               $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->find($data['customer']);
                $entity->setCustomer($customer);
            }
            if($data['process'] == 'hold'){
@@ -470,8 +471,10 @@ class SalesController extends Controller
                return $this->redirect($this->generateUrl('medicine_sales_print_invoice', array('id' => $entity->getId())));
            }
        }
+       $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->getCustomers($this->getUser()->getGlobalOption()->getId());
        return $this->render('MedicineBundle:Sales:new.html.twig', array(
            'entity' => $entity,
+           'customers' => $customers,
            'salesItemForm' => $salesItemForm->createView(),
            'form' => $editForm->createView(),
        ));
@@ -513,10 +516,20 @@ class SalesController extends Controller
         if($entity->getCustomer()->getName() != "Default"){
             $previousDue = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($option,$entity->getCustomer());
         }
-        return $this->render('MedicineBundle:Sales:print.html.twig', array(
-            'entity'      => $entity,
-            'previousDue'      => $previousDue,
-        ));
+        if($entity->getMedicineConfig()->isCustomPrint() == 1){
+            $subDomain = $entity->getMedicineConfig()->getGlobalOption()->getSubDomain();
+            $printUrl = "MedicineBundle:Sales/print:{$subDomain}.html.twig";
+            return $this->render("{$printUrl}", array(
+                'entity'      => $entity,
+                'previousDue'      => $previousDue,
+            ));
+        }else{
+            return $this->render('MedicineBundle:Sales:print.html.twig', array(
+                'entity'      => $entity,
+                'previousDue'      => $previousDue,
+            ));
+        }
+
     }
 
 

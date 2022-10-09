@@ -41,17 +41,9 @@ class SalesTemporaryItemType extends AbstractType
         $builder
 
             ->add('stockName','text', array('attr'=>array('class'=>'m-wrap span12 select2StockMedicine input','placeholder'=>'Enter stock medicine name')))
-            ->add('itemPercent', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span3 input'),
-                'expanded'      =>false,
-                'empty_value' => '-Disc(%)-',
-                'mapped' => false,
-                'required'    => false,
-                'multiple'      =>false,
-                'choices' => $this->discountPercentList()
-            ))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span3 input','autocomplete'=>'off','placeholder'=>'MRP')))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input','autocomplete'=>'off','placeholder'=>'quantity')));
+            ->add('itemPercent','text', array('attr'=>array('class'=>'m-wrap span3 input number','autocomplete'=>'off','placeholder'=>'Percent (%)')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span3 input number','autocomplete'=>'off','placeholder'=>'MRP')))
+            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span3 form-control input-number input number','autocomplete'=>'off','placeholder'=>'QTY')));
             if($this->config->isPurchaseItem() == 1) {
                 $builder->add('purchaseItem', 'choice', array(
                     'attr' => array('class' => 'm-wrap span12 input'),

@@ -29,4 +29,6 @@ hms_pathological_report_list_sorted:
     defaults: { _controller: "HospitalBundle:PathologicalReport:sorting" }
     methods:  POST
 
-
+hms_pathological_report_inline_update:
+    path:     /{pathology}/report-inline-update
+    defaults: { _controller: "HospitalBundle:PathologicalReport:inlineReportUpdate" }

@@ -36,12 +36,11 @@ class SalesType extends AbstractType
     {
         $builder
 
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment received','data-original-title'=>'Add payment received','autocomplete'=>'off')))
-
-            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
-            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Add payment discount','data-original-title'=>'Add payment discount','autocomplete'=>'off')))
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Card no','data-original-title'=>'Card no','autocomplete'=>'off')))
+            ->add('received','text', array('attr'=>array('class'=>'m-wrap span12 salesInput td-inline-input','placeholder'=>'Received','data-original-title'=>'Received','autocomplete'=>'off')))
+            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Mobile No','data-original-title'=>'Mobile no','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Transaction ID','data-original-title'=>'Transaction ID','autocomplete'=>'off')))
+            ->add('discountCalculation','number', array('attr'=>array('class'=>'m-wrap span12 td-inline-input salesInput','placeholder'=>'Discount','data-original-title'=>'Discount','autocomplete'=>'off')))
             ->add('discountType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap discount-type span12'),
                 'expanded'      =>false,
@@ -115,7 +114,6 @@ class SalesType extends AbstractType
                         ->orderBy("u.username", "ASC");
                 }
             ))
-
             ->add('doctor','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor name','data-original-title'=>'Enter prescribe doctor name','autocomplete'=>'off')))
             ->add('doctorMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Enter doctor mobile no','data-original-title'=>'Enter doctor mobile no','autocomplete'=>'off')))
             ->add('doctorAddress','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor address','data-original-title'=>'Enter prescribe doctor address','autocomplete'=>'off')))

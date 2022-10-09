@@ -49,8 +49,13 @@
                             <div class="row-fluid" >
                                 <form action="{{ path('hms_invoice_old_patient_diagnostic') }}" method="post" class="patient-search">
                                     <div class="row-fluid">
-                                        <div class="span9">
+                                        <div class="span6">
                                             <input type="text" id="customer" name="customer"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
+                                        </div>
+                                        <div class="span3">
+                                            <div class="controls">
+                                                <input type="text" id="patientId" name="patientId"  class="m-wrap span12" value="{% if searchForm.patientId is defined %}{{ searchForm.patientId }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.patientId is defined %}{{ searchForm.patientId }}{% else %}Patient ID no{% endif %} ">
+                                            </div>
                                         </div>
                                         <div class="span3">
                                             <div class="controls">
@@ -174,6 +179,8 @@
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
+                                    <th class="numeric" >Assign Doctor</th>
+                                    <th class="numeric" >CustomerID</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Delivery Date</th>
@@ -194,6 +201,8 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y h:i A') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.deliveryDateTime }}</td>

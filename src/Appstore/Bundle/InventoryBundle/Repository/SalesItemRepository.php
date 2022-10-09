@@ -179,8 +179,6 @@ class SalesItemRepository extends EntityRepository
         $qb->addSelect('SUM(salesItem.quantity) as quantity ');
         $qb->where("salesItem.purchaseItem = :purchaseItem");
         $qb->setParameter('purchaseItem', $purchaseItem->getId());
-        $qb->andWhere('sales.process IN(:process)');
-        $qb->setParameter('process',array_values(array('In-progress','Courier')));
         $quantity =  $qb->getQuery()->getOneOrNullResult();
         if(!empty($quantity['quantity'])){
             return $quantity['quantity'];

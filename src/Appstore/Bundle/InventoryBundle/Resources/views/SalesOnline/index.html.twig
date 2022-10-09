@@ -136,9 +136,9 @@
                                                 <a target="_blank"  href="{{ path('inventory_salesonline_print_invoice',{'invoice':entity.invoice}) }}" rel=""  class="btn green mini print" ><i class="icon-print"></i></a>
                                             {% endif %}
                                             {% if entity.process in ['Created','In-progress'] %}
-                                                {% if config.isInvoice == 1 and config.deliveryProcess == "general-sales" %}
+                                                {% if config.deliveryProcess == "general-sales" %}
                                                     <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
-                                                {% elseif config.isInvoice == 1 and config.deliveryProcess == "manual-sales" %}
+                                                {% elseif config.deliveryProcess == "manual-sales" %}
                                                     <a href="{{ path('inventory_salesmanual_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                                 {% endif %}
                                                 <a  id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>

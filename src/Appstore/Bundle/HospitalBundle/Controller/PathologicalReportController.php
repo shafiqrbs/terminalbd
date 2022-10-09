@@ -8,6 +8,7 @@ use Appstore\Bundle\HospitalBundle\Form\PathologicalReportType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -223,5 +224,22 @@ class PathologicalReportController extends Controller
         $data = $request ->request->get('item');
         $this->getDoctrine()->getRepository('HospitalBundle:PathologicalReport')->updateSorting($data);
         exit;
+    }
+
+    public function inlineReportUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        $em = $this->getDoctrine()->getManager();
+        /* @var $entity PathologicalReport */
+        $entity = $this->getDoctrine()->getRepository(PathologicalReport::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PathologicalReport entity.');
+        }
+        $setField = 'set' . $data['name'];
+        $entity->$setField($data['value']);
+        $em->flush();
+        return new Response('success');
+
     }
 }

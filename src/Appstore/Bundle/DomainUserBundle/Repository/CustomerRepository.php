@@ -863,6 +863,22 @@ class CustomerRepository extends EntityRepository
 
     }
 
+
+    public function getCustomers($option)
+    {
+        $qb = $this->createQueryBuilder('customer');
+        $qb->select('customer.id as id','customer.name as name','customer.mobile as mobile');
+        $qb->where("customer.globalOption = :globalOption");
+        $qb->andWhere("customer.mobile IS NOT NULL");
+        $qb->andWhere("customer.name != 'Default'");
+        $qb->setParameter('globalOption', $option);
+        $qb->andWhere("customer.status=1");
+        $qb->orderBy('customer.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
     public function apiCreateCustomer(GlobalOption $global,$data)
     {
         $em = $this->_em;

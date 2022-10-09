@@ -115,6 +115,14 @@ class MedicineSalesItem
     private $purchasePrice;
 
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="itemPercent", type="float", nullable=true)
+     */
+    private $itemPercent;
+
+
     /**
      * @var boolean
      *
@@ -441,6 +449,22 @@ class MedicineSalesItem
     public function setIsShort($isShort)
     {
         $this->isShort = $isShort;
+    }
+
+    /**
+     * @return float
+     */
+    public function getItemPercent()
+    {
+        return $this->itemPercent;
+    }
+
+    /**
+     * @param float $itemPercent
+     */
+    public function setItemPercent($itemPercent)
+    {
+        $this->itemPercent = $itemPercent;
     }
 
 

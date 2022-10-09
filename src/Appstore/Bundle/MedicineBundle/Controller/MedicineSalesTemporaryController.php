@@ -313,8 +313,8 @@ class MedicineSalesTemporaryController extends Controller
        // $salesItems = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSalesItems($user);
         $salesTemporary = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->findBy(array('user'=>$user),array('id'=>'ASC'));
         $total = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-	    $subTotal = floor($total['subTotal']);
-	    $purchaseSubTotal = floor($total['purchaseSubTotal']);
+	    $subTotal = round($total['subTotal']);
+	    $purchaseSubTotal = round($total['purchaseSubTotal']);
         $discountPercentLists = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
         $salesItems = $this->renderView('MedicineBundle:Sales:ajaxPosItem.html.twig', array(
             'config' => $this->getUser()->getGlobalOption()->getMedicineConfig(),

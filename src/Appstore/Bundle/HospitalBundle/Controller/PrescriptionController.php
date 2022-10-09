@@ -100,13 +100,15 @@ class PrescriptionController extends Controller
     }
     public function oldPatientAction(Request $request)
     {
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $customerId = $request->request->get('customer');
         $invoiceId = $request->request->get('invoice');
+        $patient = $request->request->get('patientId');
         $option = $this->getUser()->getGlobalOption();
-        $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $patientId = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'customerId'=>$patient));
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$option,'mobile'=>$customerId));
         $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$hospital,'invoice' => $invoiceId));
+        $em = $this->getDoctrine()->getManager();
         if($invoice){
             /* @var $invoice Invoice */
             $entity = new Invoice();
@@ -117,7 +119,7 @@ class PrescriptionController extends Controller
             $entity->setPayment($invoice->getAssignDoctor()->getPrice());
             $entity->setSubTotal($invoice->getAssignDoctor()->getPrice());
             $entity->setTotal($invoice->getAssignDoctor()->getPrice());
-            $entity->setPayment($invoice->getAssignDoctor()->getPrice());
+            $entity->setPayment(0);
             $entity->setInvoiceMode('visit');
             $entity->setProcess('Created');
             $entity->setPrintFor('visit');
@@ -130,6 +132,17 @@ class PrescriptionController extends Controller
             $entity = new Invoice();
             $entity->setHospitalConfig($hospital);
             $entity->setCustomer($customer);
+            $entity->setInvoiceMode('visit');
+            $entity->setPrintFor('visit');
+            $entity->setProcess('Created');
+            $entity->setCreatedBy($this->getUser());
+            $em->persist($entity);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_prescription_edit', array('id' => $entity->getId())));
+        }elseif($patientId){
+            $entity = new Invoice();
+            $entity->setHospitalConfig($hospital);
+            $entity->setCustomer($patientId);
             $entity->setInvoiceMode('visit');
             $entity->setPrintFor('visit');
             $entity->setProcess('Created');

@@ -193,6 +193,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		        $entity->setMedicineStock( $item->getMedicineStock() );
 		        $entity->setQuantity($item->getQuantity() );
 		        $entity->setMrpPrice($item->getMedicineStock()->getSalesPrice());
+		        $entity->setItemPercent( $item->getItemPercent() );
 		        $entity->setSalesPrice( $item->getSalesPrice() );
 		        $entity->setSubTotal($item->getSubTotal());
 	            $entity->setPurchasePrice( $item->getPurchasePrice() );

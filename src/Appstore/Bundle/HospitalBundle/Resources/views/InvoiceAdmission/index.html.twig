@@ -54,8 +54,13 @@
                             <div class="row-fluid" >
                                 <form action="{{ path('hms_invoice_admission_old_patient') }}" method="post" class="patient-search">
                                     <div class="row-fluid">
-                                        <div class="span9">
+                                        <div class="span6">
                                             <input type="text" id="customer" name="customer"  class="leftMargin span12 select2Customer m-wrap" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Customer mobile no">
+                                        </div>
+                                        <div class="span3">
+                                            <div class="controls">
+                                                <input type="text" id="patientId" name="patientId"  class="m-wrap span12" value="{% if searchForm.patientId is defined %}{{ searchForm.patientId }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.patientId is defined %}{{ searchForm.patientId }}{% else %}Patient ID no{% endif %} ">
+                                            </div>
                                         </div>
                                         <div class="span3">
                                             <div class="controls">
@@ -174,6 +179,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Doctor</th>
+                                    <th class="numeric" >Patient ID</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Cabin</th>
                                     <th class="numeric" >Diseases</th>
@@ -193,6 +199,7 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }} {% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.process in processEdit %}

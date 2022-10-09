@@ -159,11 +159,10 @@ class SalesController extends Controller
         }
         if ($serialItem) {
            $pItem = $serialItem->getPurchaseItem();
-           $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($pItem);
-           $itemStock = $pItem->getItemStock();
-           if (!empty($pItem) and $itemStock > 0 and $itemStock >= $checkQuantity) {
-                $salesReturn = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSerialSalesItems($sales, $pItem,$serialItem);
-                $salesEntity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesReturn);
+           $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItemSerial')->findOneBy(array('purchaseItemSerial' => $serialItem));
+           if (empty($checkQuantity)) {
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSerialSalesItems($sales, $pItem,$serialItem);
+                $salesEntity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
             } else {
                 $salesEntity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
@@ -175,13 +174,13 @@ class SalesController extends Controller
         }elseif($purchaseItem) {
 
             $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
-            $itemStock = $purchaseItem->getItemStock();
+            $itemStock = $purchaseItem->getQuantity();
             if(!empty($purchaseItem) and $itemStock > 0 and  $itemStock >= $checkQuantity) {
                 $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
-                $reloadSales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
             } else {
-                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($reloadSales);
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
                 $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
             }
             $data = $this->returnResultData($sales,$msg);

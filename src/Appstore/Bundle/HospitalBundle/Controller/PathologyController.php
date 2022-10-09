@@ -12,6 +12,7 @@ use Appstore\Bundle\HospitalBundle\Entity\DiagnosticReportFormat;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -352,4 +353,21 @@ class PathologyController extends Controller
             $em->flush();
         }
     }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        /* @var $entity Particular */
+        $entity = $em->getRepository(Particular::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find particular entity.');
+        }
+        $setField = 'set' . $data['name'];
+        $entity->$setField($data['value']);
+        $em->flush();
+        return new Response('success');
+
+    }
+
 }
