@@ -461,7 +461,7 @@
                         <input type="hidden" id="salesNetTotal" name="salesNetTotal" value="{{ result.subTotal }}">
                         <input type="hidden" id="salesSubTotal" name="salesSubTotal" value="{{ result.subTotal }}">
                         <input type="hidden" name="buttonType" id="buttonType" value="">
-                        <button type="button" class="btn salesBtn red big {% if config.posPrint == 1 or config.regularPosPrint %} span6 {% else %} span12 {% endif %} " id="receiveBtn" {% if result.subTotal is empty %} disabled="disabled" {% endif %} ><i class="icon-save"></i> SAVE </button>
+                        <button type="button" class="btn salesBtn red big span6" id="receiveBtn" {% if result.subTotal is empty %} disabled="disabled" {% endif %} ><i class="icon-save"></i> SAVE </button>
                         {% if config.posPrint == 1 %}
                             <button type="button" class="btn salesBtn yellow big span6" id="posBtn" {% if result.subTotal is empty %} disabled="disabled" {% endif %} ><i class="icon-print"></i> POS PRINT</button>
                         {% else %}
