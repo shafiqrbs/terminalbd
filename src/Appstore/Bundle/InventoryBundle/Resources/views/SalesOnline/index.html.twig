@@ -38,10 +38,8 @@
                                 {% if config.isPos == 1 %}
                                     <a class="btn red" href="{{ path('pos_desktop') }}"><i class="icon-plus-sign"></i> POS</a>
                                 {% endif %}
-                                {% if config.isInvoice == 1 and config.deliveryProcess == "general-sales" %}
+                                {% if config.isInvoice == 1 %}
                                     <a class="btn yellow" href="{{ path('inventory_salesonline_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
-                                {% elseif config.isInvoice == 1 and config.deliveryProcess == "manual-sales" %}
-                                    <a class="btn yellow" href="{{ path('inventory_salesmanual_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
                                 {% endif %}
                                 <a class="btn purple" href="{{ path('inventory_sales_empty_delete') }}"><i class="icon-th-list"></i>&nbsp;Delete Empty</a>
                             </div>

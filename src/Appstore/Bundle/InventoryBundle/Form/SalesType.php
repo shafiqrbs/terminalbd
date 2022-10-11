@@ -87,6 +87,17 @@ class SalesType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+            ->add('discountType', 'choice', array(
+                'required'    => true,
+                'attr'=>array('class'=>'span12 m-wrap inputs salesOperation'),
+                'choices' => array(
+                    'Flat' => 'Flat',
+                    'Percentage' => 'Percentage',
+                ),
+            ))
+            ->add('discountCalculation','text', array('attr'=>array('class'=>'m-wrap span12 inputs','placeholder'=>'Enter discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off')))
+            ->add('deliveryCharge','text', array('attr'=>array('class'=>'m-wrap amount span12 inputs','placeholder'=>'Delivery charge','data-original-title'=>'Enter delivery charge','autocomplete'=>'off')))
+
 
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,

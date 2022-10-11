@@ -129,7 +129,7 @@
                                                         <a  href="javascript:" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  class="btn green mini print" ><i class="icon-print"></i></a>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == "Pending" %}
-                                                        <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                                        <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
                                                         <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == "Due" %}

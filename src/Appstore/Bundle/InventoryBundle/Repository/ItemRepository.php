@@ -200,6 +200,21 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function returnStockItemDetails($inventory,$barcode)
+    {
+        $qb = $this->createQueryBuilder('item');
+        $qb->select('item');
+        $qb->where("item.barcode = :barcode" );
+        $qb->setParameter('barcode', $barcode);
+        $qb->andWhere("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        $row = $qb->getQuery()->getOneOrNullResult();
+        if($row){
+            return $row;
+        }
+        return false;
+    }
+
     public function  getApiStock(GlobalOption $option , $data = '')
     {
         $em = $this->_em;

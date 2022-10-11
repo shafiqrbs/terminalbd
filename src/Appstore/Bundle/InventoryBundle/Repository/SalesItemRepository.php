@@ -171,7 +171,7 @@ class SalesItemRepository extends EntityRepository
 
 
 
-    public function checkSalesQuantity(PurchaseItem $purchaseItem)
+    public function checkPurchaseItemSalesQuantity(PurchaseItem $purchaseItem)
     {
 
         $qb = $this->createQueryBuilder('salesItem');
@@ -179,6 +179,8 @@ class SalesItemRepository extends EntityRepository
         $qb->addSelect('SUM(salesItem.quantity) as quantity ');
         $qb->where("salesItem.purchaseItem = :purchaseItem");
         $qb->setParameter('purchaseItem', $purchaseItem->getId());
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
         $quantity =  $qb->getQuery()->getOneOrNullResult();
         if(!empty($quantity['quantity'])){
             return $quantity['quantity'];
@@ -207,7 +209,7 @@ class SalesItemRepository extends EntityRepository
 
     }
 
-    public function insertSalesManualItems(Sales $sales,Item $item,$data)
+    public function insertSalesItems(Sales $sales,Item $item,$data)
     {
 
     	$em = $this->_em;
@@ -235,8 +237,7 @@ class SalesItemRepository extends EntityRepository
         $em->flush();
     }
 
-
-    public function insertSalesItems($sales,$purchaseItem,$customPrice = 0 )
+    public function insertSalesPurchaseItems($sales,$purchaseItem,$customPrice = 0 )
     {
         $em = $this->_em;
         $existEntity = $this->findOneBy(array('sales'=> $sales,'purchaseItem'=> $purchaseItem));

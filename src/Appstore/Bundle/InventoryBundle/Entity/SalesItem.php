@@ -100,6 +100,14 @@ class SalesItem
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="barcode", type="string",nullable=true)
+     */
+    private $barcode;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="quantity", type="float",nullable=true)
@@ -461,6 +469,24 @@ class SalesItem
     {
         return $this->salesItemSerials;
     }
+
+    /**
+     * @return string
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
+     * @param string $barcode
+     */
+    public function setBarcode($barcode)
+    {
+        $this->barcode = $barcode;
+    }
+
+
 
 
 

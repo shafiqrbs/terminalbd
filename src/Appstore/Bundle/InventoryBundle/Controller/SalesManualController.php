@@ -140,6 +140,28 @@ class SalesManualController extends Controller
         ));
     }
 
+    /**
+     * Creates a form to edit a Sales entity.wq
+     *
+     * @param Sales $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(Sales $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new SalesType($globalOption), $entity, array(
+            'action' => $this->generateUrl('inventory_sales_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'id' => 'posForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
 
     private function createItemForm(SalesItem $item , Sales $entity)
     {

@@ -793,11 +793,8 @@ class Builder extends ContainerAware
                 $menu['Sales']->addChild('Pos', array('route' => 'pos_desktop'));
             }
             $deliveryProcess = $inventory->getDeliveryProcess();
-            if ($inventory->isInvoice() == 1 and 'general-sales' == $deliveryProcess) {
+            if ($inventory->isInvoice() == 1) {
                 $menu['Sales']->addChild('New Invoice', array('route' => 'inventory_salesonline_new'));
-            }
-            if($inventory->isInvoice() == 1 and 'manual-sales' == $deliveryProcess) {
-                $menu['Sales']->addChild('New Invoice', array('route' => 'inventory_salesmanual_new'));
             }
             $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesonline'));
             if($inventory->isInvoice() == 1 and $securityContext->isGranted('ROLE_POS_ANDROID')){
