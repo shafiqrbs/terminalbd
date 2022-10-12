@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HumanResourceBundle\Form;
 
 
 use Appstore\Bundle\DomainUserBundle\Form\EmployeeProfileType;
+use Core\UserBundle\Entity\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -21,9 +22,13 @@ class EmployeePayrollType extends AbstractType
     /** @var  GlobalOption */
     private $option;
 
-    function __construct( GlobalOption $option , LocationRepository $location)
+    /** @var  UserRepository */
+    private $user;
+
+    function __construct( UserRepository $user , GlobalOption $option , LocationRepository $location)
     {
         $this->location = $location;
+        $this->user = $user;
         $this->global = $option;
     }
 
@@ -107,7 +112,7 @@ class EmployeePayrollType extends AbstractType
 
                 ),
             ));
-            $builder->add('profile', new EmployeeProfileType( $this->global,$this->location));
+
 
     }
     

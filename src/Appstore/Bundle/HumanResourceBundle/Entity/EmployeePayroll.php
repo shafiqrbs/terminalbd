@@ -31,20 +31,31 @@ class EmployeePayroll
     protected $globalOption;
 
 
-    /**
-     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="employeePayroll" )
-     **/
-    private  $employee;
 
-     /**
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\PayrollSheet", mappedBy="employee" )
      **/
     private  $payrollSheets;
 
     /**
-     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\Profile", inversedBy="employeePayroll" )
-     **/
+     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\Profile", inversedBy="employeePayroll")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="profile_id", referencedColumnName="id", unique=true, onDelete="CASCADE")
+     * })
+     */
     private  $profile;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="employeePayroll")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="employee_id", referencedColumnName="id", unique=true, onDelete="CASCADE")
+     * })
+     */
+
+    protected $employee;
+
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="payrollApproved" )

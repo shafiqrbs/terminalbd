@@ -32,6 +32,11 @@
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Employee Payroll Lists </div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn red" href="{{ path('employee_payroll_new') }}"><i class="icon-plus-sign"></i>&nbsp; New Employee</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
@@ -72,7 +77,10 @@
                                         <td class="numeric" >{{ user.total }}</td>
                                         <td class="numeric" >{{ user.payable }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('employee_payroll_add',{'user':user.id}) }}" class="btn purple mini" ><i class="fa fa-sign-out"></i>&nbsp;Payroll</a>
+                                            <div class="btn-group">
+                                            <a href="{{ path('employee_payroll_edit',{'user':user.id}) }}" class="btn purple mini" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                                            <a href="{{ path('employee_payroll_add',{'user':user.id}) }}" class="btn blue mini" ><i class="fa fa-sign-out"></i>&nbsp;Payroll</a>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}

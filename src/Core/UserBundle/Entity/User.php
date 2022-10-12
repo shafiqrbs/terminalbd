@@ -23,6 +23,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
+use Appstore\Bundle\HumanResourceBundle\Entity\Payroll;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
@@ -150,8 +151,9 @@ class User extends BaseUser
     private  $accountHead;
 
 
+
 	/**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="employee" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="employee" , cascade={"persist", "remove"})
      **/
     private  $employeePayroll;
 
@@ -1861,6 +1863,15 @@ class User extends BaseUser
     }
 
     /**
+     * @param  EmployeePayroll $employeePayroll
+     */
+    public function setEmployeePayroll($employeePayroll)
+    {
+        $employeePayroll->setEmployee($this);
+        $this->employeePayroll = $employeePayroll;
+    }
+
+     /**
      * @return EmployeePayroll
      */
     public function getEmployeePayroll()
@@ -1907,6 +1918,7 @@ class User extends BaseUser
     {
         return $this->businessAndroidProcess;
     }
+
 
 
 }

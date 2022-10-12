@@ -2,20 +2,31 @@ employee_payroll:
     path:     /
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:index" }
 
-employee_payroll_add:
+employee_payroll_new:
+    path:     /new
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:new" }
+
+employee_payroll_create:
+    path:     /create
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:create" }
+    methods:  [POST]
+
+employee_payroll_edit:
     path:     /{user}/edit
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:employee" }
+
+employee_payroll_update:
+    path:     /{id}/update
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:update" }
+    methods:  [POST, PUT]
+
+employee_payroll_add:
+    path:     /{user}/add-payroll
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:employee" }
 
 employee_payroll_particular_delete:
     path:     /{id}/particular-delete
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:particularDelete" }
     options:
-           expose: true
-
-employee_payroll_create:
-    path:     /{id}/update
-    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:update" }
-    methods:  [POST, PUT]
-
-
+        expose: true
 

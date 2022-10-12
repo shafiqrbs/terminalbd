@@ -6,7 +6,9 @@ namespace Appstore\Bundle\HumanResourceBundle\Controller;
 
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayrollParticular;
+use Appstore\Bundle\HumanResourceBundle\Form\EditUserType;
 use Appstore\Bundle\HumanResourceBundle\Form\EmployeePayrollType;
+use Appstore\Bundle\HumanResourceBundle\Form\UserType;
 use Core\UserBundle\Entity\User;
 
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -34,16 +36,47 @@ class EmployeePayrollController extends Controller
         ));
     }
 
-    public function employeeAction(User $user)
+    public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->userInsertUpdate($user);
+        $entity = new User();
         $form = $this->createCreateForm($entity);
         $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$entity->getGlobalOption()));
         return $this->render('HumanResourceBundle:EmployeePayroll:new.html.twig', array(
-            'user'  => $user,
             'entity'  => $entity,
             'particulars' => $particulars,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    public function createAction(Request $request)
+    {
+
+        $entity = new User();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+        $globalOption = $this->getUser()->getGlobalOption();
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($globalOption);
+            $entity->setPassword($globalOption);
+            $entity->getProfile()->upload();
+            $entity->setPassword('@123456');
+            $entity->setUserGroup('employee');
+            $entity->setDomainOwner(2);
+            $entity->getProfile()->setEmail($entity->getEmail());
+            $entity->getEmployeePayroll()->setEmployeeName($entity->getProfile()->getName());
+            $entity->getEmployeePayroll()->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
+            return $this->redirect($this->generateUrl('employee_payroll_add',array('user' => $entity->getId())));
+        }
+        return $this->render('HumanResourceBundle:EmployeePayroll:new.html.twig', array(
+            'entity' => $entity,
+            'particulars' => '',
             'form'   => $form->createView(),
         ));
     }
@@ -55,13 +88,52 @@ class EmployeePayrollController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(EmployeePayroll $entity)
+    private function createCreateForm(User $entity)
     {
         $option = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new EmployeePayrollType($option,$location), $entity, array(
-            'action' => $this->generateUrl('employee_payroll_create',array('id'=> $entity->getId())),
-            'method' => 'PUT',
+        $user = $this->getDoctrine()->getRepository('UserBundle:User');
+        $form = $this->createForm(new UserType($user,$option,$location), $entity, array(
+            'action' => $this->generateUrl('employee_payroll_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function employeeAction(User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->editCreateForm($user);
+        $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$user->getGlobalOption()));
+        return $this->render('HumanResourceBundle:EmployeePayroll:edit.html.twig', array(
+            'user'  => $user,
+            'entity'  => $user->getEmployeePayroll(),
+            'particulars' => $particulars,
+            'form'   => $form->createView(),
+        ));
+    }
+
+
+
+    /**
+     * Creates a form to create a Vendor entity.
+     *
+     * @param EmployeePayroll $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function editCreateForm(User $entity)
+    {
+        $option = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $user = $this->getDoctrine()->getRepository('UserBundle:User');
+        $form = $this->createForm(new EditUserType($user,$option,$location), $entity, array(
+            'action' => $this->generateUrl('employee_payroll_update',array('id'=> $entity->getId())),
+            'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',

@@ -83,6 +83,12 @@ class Profile
     protected $deliveryLocation;
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\HrDepartment", inversedBy="profiles" )
+     */
+    protected $department;
+
+
 
     /**
      * @var string
@@ -1109,8 +1115,21 @@ class Profile
         $this->signatureFile = null;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
 
-
+    /**
+     * @param mixed $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
 
 
 }

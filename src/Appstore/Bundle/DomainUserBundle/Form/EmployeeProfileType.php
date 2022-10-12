@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Form;
 
+use Appstore\Bundle\HumanResourceBundle\Form\UserType;
+use Core\UserBundle\Entity\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -19,10 +21,14 @@ class EmployeeProfileType extends AbstractType
     /** @var  GlobalOption */
     private $option;
 
-    function __construct( GlobalOption $option , LocationRepository $location)
+    /** @var  UserRepository */
+    private $user;
+
+    function __construct(  UserRepository $user , GlobalOption $option , LocationRepository $location)
     {
         $this->location = $location;
-        $this->global = $option;
+        $this->option = $option;
+        $this->user = $user;
     }
 
 
@@ -58,7 +64,6 @@ class EmployeeProfileType extends AbstractType
              ->add('phoneNo','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Phone no'),
                     )
             )
-            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Email address')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows'=>2,'placeholder'=>'Enter Employee Address'),
                     'constraints' =>array( new NotBlank(array('message'=>'Please Employee Address')))
                 )
@@ -88,17 +93,17 @@ class EmployeeProfileType extends AbstractType
                         ->orderBy("e.name", "ASC");
                 },
             ))
-
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
-            ->add('branches', 'entity', array(
+            ->add('department', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Branches',
-                'empty_value' => '---Choose a Branch Name---',
+                'class' => 'Appstore\Bundle\HumanResourceBundle\Entity\HrDepartment',
+                'empty_value' => '---Choose a department Name---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->global->getId())
+                        ->where("e.globalOption =".$this->option->getId())
+                        ->andWhere("e.status =1")
                         ->orderBy("e.name", "ASC");
                 },
             ))
@@ -152,6 +157,7 @@ class EmployeeProfileType extends AbstractType
                     'Hourly' => 'Hourly'
                 ),
             ));
+           //$builder->add('user', new UserType( $this->user, $this->global));
     }
     
     /**

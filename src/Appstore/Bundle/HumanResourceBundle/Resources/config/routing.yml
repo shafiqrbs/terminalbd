@@ -26,6 +26,10 @@ human_resource_payroll_setting:
     resource: "@HumanResourceBundle/Resources/config/routing/payrollsetting.yml"
     prefix:   /payroll-setting
 
+human_resource_payroll_department:
+    resource: "@HumanResourceBundle/Resources/config/routing/hrdepartment.yml"
+    prefix:   /payroll-department
+
 human_resource_employee_payroll:
     resource: "@HumanResourceBundle/Resources/config/routing/employeepayroll.yml"
     prefix:   /employee-payroll

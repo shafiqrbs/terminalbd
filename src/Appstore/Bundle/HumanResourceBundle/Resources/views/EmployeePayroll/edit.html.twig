@@ -343,17 +343,6 @@
                                 <div class="row-fluid" >
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label"  for="category" >Username<span class="required">*</span></label>
-                                            <div class="controls">
-                                                {{ form_widget(form.username) }}
-                                                {{ form_errors(form.username) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid" >
-                                    <div class="span12">
-                                        <div class="control-group">
                                             <label class="control-label"  for="category" >Email Address<span class="required">*</span></label>
                                             <div class="controls">
                                                 {{ form_widget(form.email) }}
@@ -379,16 +368,17 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="form-group">
-                                            <label for="{{ form.roles.vars.id }}" >Access Control Role:</label>
+                                            <div for="{{ form.roles.vars.id }}">
+                                                Access Control Role:
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
-                                        <div class="form-group">
-                                            {{ form_errors(form.roles) }}
-                                            {{ form_widget(form.roles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
-                                        </div>
+                                        {{ form_errors(form.roles) }}
+                                        {{ form_widget(form.roles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
+
                                     </div>
                                 </div>
                             </div>

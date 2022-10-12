@@ -1816,7 +1816,7 @@ class Builder extends ContainerAware
 
         if ($securityContext->isGranted('ROLE_HR_ATTENDANCE')) {
             $menu['HR & Payroll']->addChild('Attendance')->setAttribute('dropdown', true);
-            $menu['HR & Payroll']['Attendance']->addChild('Employee', array('route' => 'attendance'));
+            $menu['HR & Payroll']['Attendance']->addChild('Daily Sheet', array('route' => 'attendance'));
             $menu['HR & Payroll']['Attendance']->addChild('Leave Setup', array('route' => 'leave_setup'));
             $menu['HR & Payroll']['Attendance']->addChild('Daily Attendance', array('route' => 'daily_attendance'));
             $menu['HR & Payroll']['Attendance']->addChild('Calendar Weekend', array('route' => 'weekend'));
@@ -1826,7 +1826,7 @@ class Builder extends ContainerAware
             $menu['HR & Payroll']->addChild('Payroll')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Payroll']->addChild('Salary Transaction', array('route' => 'account_paymentsalary'));
             $menu['HR & Payroll']['Payroll']->addChild('Payroll Generate', array('route' => 'payroll'));
-            $menu['HR & Payroll']['Payroll']->addChild('Payroll Employee', array('route' => 'employee_payroll'));
+            $menu['HR & Payroll']['Payroll']->addChild('Manage Employee', array('route' => 'employee_payroll'));
 
         }
 
@@ -1834,6 +1834,7 @@ class Builder extends ContainerAware
 
             $menu['HR & Payroll']->addChild('Setting')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Setting']->addChild('Payroll Setting', array('route' => 'payrollsetting'));
+            $menu['HR & Payroll']['Setting']->addChild('Department', array('route' => 'hrdepartment'));
             $menu['HR & Payroll']['Setting']->addChild('Leave Setting', array('route' => 'payrollsetting'));
 
         }
