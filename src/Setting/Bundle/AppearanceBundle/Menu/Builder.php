@@ -912,13 +912,13 @@ class Builder extends ContainerAware
             $menu['Inventory']['Manage Stock']->addChild('Barcode Stock Details', array('route' => 'inventory_barcode_stock'));
             $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'));
             $menu['Inventory']['Manage Stock']->addChild('Stock Short List', array('route' => 'inventory_stockitem_short_list'));
-            $menu['Inventory']['Manage Stock']->addChild('Stock Adjustment', array('route' => 'inv_stock_adjustment'));
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
             if ($inventory->getBarcodePrint() == 1) {
                 $menu['Inventory']['Manage Stock']->addChild('Barcode Print', array('route' => 'inventory_barcode'))
                     ;
             }
+            $menu['Inventory']['Manage Stock']->addChild('Stock Adjustment', array('route' => 'inv_stock_adjustment'));
             $menu['Inventory']['Manage Stock']->addChild('Damage', array('route' => 'inventory_damage'))
                 ->setAttribute('icon', ' icon-trash');
 
