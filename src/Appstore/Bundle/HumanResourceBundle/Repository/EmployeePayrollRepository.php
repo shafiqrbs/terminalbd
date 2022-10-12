@@ -93,43 +93,44 @@ class EmployeePayrollRepository extends \Doctrine\ORM\EntityRepository
     {
         $em = $this->_em;
         $basic = $payroll->getBasicAmount();
+        if(isset($data['particular']) and $data['particular']) {
+            foreach ($data['particular'] as $key => $value):
 
-        foreach ($data['particular'] as $key => $value):
+                if (!empty($data['unit'][$key])) {
+                    $particular = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($value);
+                    $exist = $em->getRepository('HumanResourceBundle:EmployeePayrollParticular')->findOneBy(array('employeePayroll' => $payroll, 'particular' => $particular));
+                    if ($exist) {
+                        $exist->setUnit($data['unit'][$key]);
+                        if ($data['unit'][$key] and $data['type'][$key] == 'Percentage') {
+                            $amount = $this->calculateAmount($basic, $data['unit'][$key]);
+                            $exist->setAmount($amount);
+                        } else {
+                            $exist->setAmount($data['unit'][$key]);
+                        }
+                        $exist->setType($data['type'][$key]);
+                        $em->persist($exist);
+                        $em->flush();
 
-            if(!empty($data['unit'][$key])){
-                $particular = $em->getRepository('HumanResourceBundle:PayrollSetting')->find($value);
-                $exist = $em->getRepository('HumanResourceBundle:EmployeePayrollParticular')->findOneBy(array('employeePayroll' => $payroll,'particular' => $particular));
-                if($exist){
-                    $exist->setUnit($data['unit'][$key]);
-                    if($data['unit'][$key] and $data['type'][$key] == 'Percentage'){
-                        $amount = $this->calculateAmount($basic,$data['unit'][$key]);
-                        $exist->setAmount($amount);
-                    }else{
-                        $exist->setAmount($data['unit'][$key]);
+                    } else {
+
+                        $entity = new EmployeePayrollParticular();
+                        $entity->setEmployeePayroll($payroll);
+                        $entity->setParticular($particular);
+                        $entity->setMode($particular->getMode());
+                        $entity->setUnit($data['unit'][$key]);
+                        if ($data['unit'][$key] and $data['type'][$key] == 'Percentage') {
+                            $amount = $this->calculateAmount($basic, $data['unit'][$key]);
+                            $entity->setAmount($amount);
+                        } else {
+                            $entity->setAmount($data['unit'][$key]);
+                        }
+                        $entity->setType($data['type'][$key]);
+                        $em->persist($entity);
+                        $em->flush();
                     }
-                    $exist->setType($data['type'][$key]);
-                    $em->persist($exist);
-                    $em->flush();
-
-                }else{
-
-                    $entity = new EmployeePayrollParticular();
-                    $entity->setEmployeePayroll($payroll);
-                    $entity->setParticular($particular);
-                    $entity->setMode($particular->getMode());
-                    $entity->setUnit($data['unit'][$key]);
-                    if($data['unit'][$key] and $data['type'][$key] == 'Percentage'){
-                        $amount = $this->calculateAmount($basic,$data['unit'][$key]);
-                        $entity->setAmount($amount);
-                    }else{
-                        $entity->setAmount($data['unit'][$key]);
-                    }
-                    $entity->setType($data['type'][$key]);
-                    $em->persist($entity);
-                    $em->flush();
                 }
-            }
-        endforeach;
+            endforeach;
+        }
     }
 
     private function calculateAmount($basic,$unit){

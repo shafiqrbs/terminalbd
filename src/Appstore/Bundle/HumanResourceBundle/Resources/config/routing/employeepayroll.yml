@@ -13,16 +13,21 @@ employee_payroll_create:
 
 employee_payroll_edit:
     path:     /{user}/edit
-    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:employee" }
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:edit" }
 
 employee_payroll_update:
     path:     /{id}/update
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:update" }
     methods:  [POST, PUT]
 
-employee_payroll_add:
-    path:     /{user}/add-payroll
-    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:employee" }
+employee_payroll_setting:
+    path:     /{user}/payroll-setting
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:payrollSetting" }
+
+employee_payroll_setting_update:
+    path:     /{id}/payroll-setting-update
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:payrollSettingUpdate" }
+    methods:  [POST, PUT]
 
 employee_payroll_particular_delete:
     path:     /{id}/particular-delete

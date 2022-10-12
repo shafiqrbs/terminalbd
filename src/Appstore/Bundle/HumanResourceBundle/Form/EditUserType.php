@@ -58,8 +58,6 @@ class EditUserType extends AbstractType
             )
         ;
         $builder->add('profile', new EmployeeProfileType($this->user, $this->option,$this->location));
-        $builder->add('employeePayroll', new EmployeePayrollType($this->user, $this->option,$this->location));
-
     }
 
     public function getAccessRoleGroup(){
