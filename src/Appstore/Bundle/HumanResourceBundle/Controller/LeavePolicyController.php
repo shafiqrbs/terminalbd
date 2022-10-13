@@ -19,14 +19,17 @@ class LeavePolicyController extends Controller
      * Lists all LeavePolicy entities.
      *
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entities = $em->getRepository('HumanResourceBundle:LeavePolicy')->findAll();
+        $entity = new LeavePolicy();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
 
         return $this->render('HumanResourceBundle:LeavePolicy:index.html.twig', array(
             'entities' => $entities,
+            'form'   => $form->createView(),
         ));
     }
     /**
@@ -44,7 +47,7 @@ class LeavePolicyController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('leavepolicy_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('leavepolicy'));
         }
 
         return $this->render('HumanResourceBundle:LeavePolicy:new.html.twig', array(
@@ -65,10 +68,11 @@ class LeavePolicyController extends Controller
         $form = $this->createForm(new LeavePolicyType(), $entity, array(
             'action' => $this->generateUrl('leavepolicy_create'),
             'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
         return $form;
     }
 
@@ -105,7 +109,6 @@ class LeavePolicyController extends Controller
 
         return $this->render('HumanResourceBundle:LeavePolicy:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -129,7 +132,11 @@ class LeavePolicyController extends Controller
         return $this->render('HumanResourceBundle:LeavePolicy:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+
         ));
     }
 
@@ -177,8 +184,7 @@ class LeavePolicyController extends Controller
 
         return $this->render('HumanResourceBundle:LeavePolicy:edit.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form'   => $editForm->createView()
         ));
     }
     /**

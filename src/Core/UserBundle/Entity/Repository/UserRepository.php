@@ -215,7 +215,6 @@ class UserRepository extends EntityRepository
                 'ROLE_HR'                                   => 'Human Resource',
                 'ROLE_HR_EMPLOYEE'                          => 'HR Employee',
                 'ROLE_HR_ATTENDANCE'                        => 'HR Attendance',
-                'ROLE_HR_BRANCH'                            => 'Branch',
                 'ROLE_PAYROLL'                              => 'Payroll',
                 'ROLE_PAYROLL_SALARY'                       => 'Payroll Salary',
                 'ROLE_PAYROLL_APPROVAL'                     => 'Payroll Approval',
@@ -450,9 +449,11 @@ class UserRepository extends EntityRepository
         $qb->leftJoin('p.location','l');
         $qb->leftJoin('e.employeePayroll','ep');
         $qb->leftJoin('p.designation','d');
+        $qb->leftJoin('ep.approvedBy','epa');
         $qb->select('e.id as id','e.username as username');
         $qb->addSelect('d.name as designationName');
         $qb->addSelect('l.name as locationName');
+        $qb->addSelect('epa.id as epaId','epa.username as epaUsername');
         $qb->addSelect('p.name as name','p.mobile as mobile','p.address as address','p.employeeType as employeeType','p.joiningDate as joiningDate','p.userGroup as userGroup');
         $qb->addSelect('ep.basicAmount as basicAmount','ep.allowanceAmount as allowance','ep.deductionAmount as deduction','ep.loanAmount as loan','ep.advanceAmount as advance','ep.arearAmount as arear','ep.salaryType as salaryType','ep.totalAmount as total','ep.payableAmount as payable');
         $qb->where("e.globalOption =".$option->getId());

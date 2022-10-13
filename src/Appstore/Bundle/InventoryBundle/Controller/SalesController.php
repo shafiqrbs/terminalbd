@@ -6,6 +6,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItemSerial;
+use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -369,28 +370,34 @@ class SalesController extends Controller
         $customPrice = $request->request->get('customPrice');
 
         $salesItem = $em->getRepository('InventoryBundle:SalesItem')->find($salesItemId);
-        $checkOngoingSalesQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
-        $itemStock = $salesItem->getPurchaseItem()->getItemStock();
-        $currentRemainingQnt = ($itemStock + $salesItem->getQuantity()) - ($checkOngoingSalesQuantity + $quantity) ;
+        /* @var $salesItem SalesItem */
+        if($salesItem->getPurchaseItem()){
+            $checkOngoingSalesQuantity = $this->getDoctrine()->getRepository(SalesItem::class)->checkPurchaseItemSalesQuantity($salesItem->getPurchaseItem());
+            $itemStock = $salesItem->getPurchaseItem()->getQuantity();
+        }else{
+            $checkOngoingSalesQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($salesItem->getItem());
+            $itemStock = $salesItem->getItem()->getRemainingQnt();
+        }
+        $currentRemainingQnt = ($itemStock - ($checkOngoingSalesQuantity + $quantity)) ;
         $sales = $salesItem->getSales();
+        $salesItem->setSalesPrice($salesPrice);
+        if (!empty($customPrice)) {
+            $salesItem->setCustomPrice($customPrice);
+        }
         if(!empty($salesItem) && $itemStock > 0 && $currentRemainingQnt >= 0 ){
-
             $salesItem->setQuantity($quantity);
-            $salesItem->setSalesPrice($salesPrice);
-            if (!empty($customPrice)) {
-                $salesItem->setCustomPrice($customPrice);
-            }
-            $salesItem->setSubTotal($quantity * $salesPrice);
-            $em->persist($salesItem);
-            $em->flush();
+            $salesItem->setSubTotal($salesItem->getQuantity() * $salesPrice);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
         } else {
+            $salesItem->setSubTotal($salesItem->getQuantity() * $salesPrice);
             $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
-         }
+        }
+        $em->persist($salesItem);
+        $em->flush();
         $data = $this->returnResultData($sales,$msg);
         return new Response(json_encode($data));
-        exit;
+
     }
 
 

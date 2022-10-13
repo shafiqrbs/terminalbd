@@ -187,7 +187,7 @@ class EmployeePayrollController extends Controller
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $user = $this->getDoctrine()->getRepository('UserBundle:User');
         $form = $this->createForm(new EmployeePayrollType($user,$option,$location), $entity, array(
-            'action' => $this->generateUrl('employee_payroll_update',array('id'=> $entity->getId())),
+            'action' => $this->generateUrl('employee_payroll_setting_update',array('id'=> $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -212,32 +212,45 @@ class EmployeePayrollController extends Controller
 
 
 
-    public function payrollSettingUpdateAction(Request $request ,User $entity)
+    public function payrollSettingUpdateAction(Request $request ,EmployeePayroll $entity)
     {
-        /* @var $entity User */
 
-        $form = $this->settingCreateForm($entity->getEmployeePayroll());
+        $form = $this->settingCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->getProfile()->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->insertUpdateParticular($entity->getEmployeePayroll(),$data);
-            $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->insertUpdate($entity->getEmployeePayroll());
-            return $this->redirect($this->generateUrl('employee_payroll_setting',array('user' => $entity->getId())));
+            $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->insertUpdateParticular($entity,$data);
+            $this->getDoctrine()->getRepository('HumanResourceBundle:EmployeePayroll')->insertUpdate($entity);
+            return $this->redirect($this->generateUrl('employee_payroll_setting',array('user' => $entity->getEmployee()->getId())));
         }
         $particulars = $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSetting')->findBy(array('globalOption'=>$entity->getGlobalOption()));
         return $this->render('HumanResourceBundle:EmployeePayroll:payroll.html.twig', array(
-            'user'  => $entity,
-            'entity' => $entity->getEmployeePayroll(),
+            'user'  => $entity->getEmployee(),
+            'entity' => $entity,
             'particulars' => $particulars,
             'form'   => $form->createView(),
         ));
+    }
+
+    public function approveAction(User $user)
+    {
+        $entity = $user->getEmployeePayroll();
+        $em = $this->getDoctrine()->getManager();
+        $approve = $this->getUser();
+        $entity->setApprovedBy($approve);
+        $em->persist($entity);
+        $em->flush();
+        return new Response('success');
+
+
+
+
     }
 
     public function particularDeleteAction(EmployeePayrollParticular $entity)

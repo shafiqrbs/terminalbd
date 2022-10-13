@@ -1,10 +1,10 @@
 human_resource_leavepolicy:
     resource: "@HumanResourceBundle/Resources/config/routing/leavepolicy.yml"
-    prefix:   /leavepolicy
+    prefix:   /leave-policy
 
 human_resource_leave:
     resource: "@HumanResourceBundle/Resources/config/routing/leave.yml"
-    prefix:   /leavepolicy
+    prefix:   /leave
 
 human_resource_blackout:
     resource: "@HumanResourceBundle/Resources/config/routing/weekend.yml"

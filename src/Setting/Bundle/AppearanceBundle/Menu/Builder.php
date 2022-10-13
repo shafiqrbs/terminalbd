@@ -1835,6 +1835,7 @@ class Builder extends ContainerAware
             $menu['HR & Payroll']->addChild('Setting')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Setting']->addChild('Payroll Setting', array('route' => 'payrollsetting'));
             $menu['HR & Payroll']['Setting']->addChild('Department', array('route' => 'hrdepartment'));
+            $menu['HR & Payroll']['Setting']->addChild('Leave Policy', array('route' => 'leavepolicy'));
             $menu['HR & Payroll']['Setting']->addChild('Leave Setting', array('route' => 'payrollsetting'));
 
         }

@@ -35,6 +35,13 @@ class LeavePolicy
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="shortcode", type="string", length=255)
+     */
+    private $shortcode;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="paymentable", type="boolean", nullable=true)
@@ -144,6 +151,22 @@ class LeavePolicy
     public function setPaymentable($paymentable)
     {
         $this->paymentable = $paymentable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortcode()
+    {
+        return $this->shortcode;
+    }
+
+    /**
+     * @param string $shortcode
+     */
+    public function setShortcode($shortcode)
+    {
+        $this->shortcode = $shortcode;
     }
 }
 

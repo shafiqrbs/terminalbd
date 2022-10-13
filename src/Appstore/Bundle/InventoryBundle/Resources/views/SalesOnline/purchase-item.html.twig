@@ -58,46 +58,43 @@
                                 <div class="row-fluid">
                                     <div class="span12">
 
-                                        <table class="table table-bordered table-hover">
-                                            <thead class="">
+                                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                                            <thead class="flip-content ">
                                             <tr class="head-blue">
-                                                <th class="numeric" >S/N</th>
-                                                <th class="numeric">Barcode</th>
-                                                <th class="numeric">Product</th>
-                                                {% if entity.inventoryConfig.isAttribute == 1 %}
-                                                    <th  class="numeric">Serial no</th>
-                                                {% endif %}
-                                                <th  class="numeric span1">Quantity</th>
-                                                <th class="numeric span2">Price</th>
-                                                <th>Total</th>
+                                                <th class="numeric" ><i class="icon icon-th-list"></i></th>
+                                                <th class="numeric" >Name </th>
+                                                <th class="numeric" >Quantity</th>
+                                                <th class="numeric" >Price</th>
+                                                <th class="numeric" >Total</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
-                                            <tbody id="salesItem" >
+                                            <tbody id="salesItem">
+                                            {% set quantity = 0 %}
+                                            {% set salesPrice = 0 %}
                                             {% for salesitem in entity.salesItems %}
                                                 <tr id="remove-{{ salesitem.id }}">
-                                                    <td class="numeric" style="width:20px!important;" > {{ loop.index }}</td>
-                                                    <td  class="numeric">
-                                                        {{ salesitem.purchaseItem.barcode }}
-                                                    </td>
+                                                    <td class="numeric" >{{ loop.index }}</td>
                                                     <td  class="numeric">
                                                         {{ salesitem.item.name }}
-                                                    </td>
-                                                    {% if entity.inventoryConfig.isAttribute == 1 %}
-                                                        <td class="numeric" >
+                                                        {% if entity.inventoryConfig.isAttribute == 1 %}
                                                             {% if salesitem.salesItemSerials is not empty %}
+                                                                <br/>Serial No:
                                                                 {% for serial in salesitem.salesItemSerials %}
                                                                     {{ serial.barcode }}{{ not loop.last ? ',' }}
                                                                 {% endfor %}
                                                             {% endif %}
-                                                        </td>
-                                                    {% endif %}
-                                                    <td class=" span1" >
+                                                        {% endif %}
+                                                        {% if salesitem.assuranceType and salesitem.assuranceToCustomer is not empty %}
+                                                            <p>{{ salesitem.assuranceType }} : {{ salesitem.assuranceToCustomer }} - {{ salesitem.expiredDate|date('d-m-Y') }}</p>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="span1" >
                                                         {% if salesitem.salesItemSerials is not empty %}
                                                             {{ salesitem.quantity }}
                                                             <input type="hidden" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="quantity inputs td-inline-input" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
                                                         {% else %}
-                                                            <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="quantity inputs td-inline-input" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
+                                                            <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="quantity inputs td-inline-input" placeholder="" min="1" max="">
                                                         {% endif %}
                                                     </td>
                                                     <td>
@@ -107,16 +104,11 @@
                                                     <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                     <td>
                                                         <div class="btn-group">
-                                                            {% if entity.inventoryConfig.isAttribute == 1 %}
-                                                                <a title="Save" id="{{ salesitem.id }}" data-url="{{ path('inventory_sales_item_serial_update',{'salesItem':salesitem.id}) }}" href="javascript:" class="btn blue mini serialSave" ><i class="icon-save"></i></a>
-                                                            {% endif %}
                                                             <a id="{{ salesitem.id }}" rel="{{ path('inventory_salesitem_delete',{'sales':entity.id,'salesItem':salesitem.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                         </div>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
-                                            <tr><th class="text-right" {% if entity.inventoryConfig.isAttribute == 1 %} colspan="6" {% else %} colspan="5" {% endif %} >Sub-Total</th><th class="subTotal">{{ entity.subTotal }}</th><td></td></tr>
-
                                             </tbody>
                                         </table>
                                     </div>

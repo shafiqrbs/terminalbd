@@ -78,7 +78,10 @@ $(document).on("click", ".confirm , .approve , .delete ", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+                if(data === "success"){
+                    location.reload();
+                }
+
             });
         }
     });

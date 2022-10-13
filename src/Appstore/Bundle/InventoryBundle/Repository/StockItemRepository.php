@@ -1565,4 +1565,23 @@ class StockItemRepository extends EntityRepository
 
     }
 
+    public function checkPurchaseItemSalesQuantity($purchaseItem)
+    {
+
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.sales','sales');
+        $qb->addSelect('SUM(stock.salesQuantity) as quantity ');
+        $qb->where("stock.purchaseItem = :purchaseItem");
+        $qb->setParameter('purchaseItem', $purchaseItem);
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier','Hold')));
+        $quantity =  $qb->getQuery()->getOneOrNullResult();
+        if(!empty($quantity['quantity'])){
+            return $quantity['quantity'];
+        }else{
+            return 0;
+        }
+    }
+
+
 }

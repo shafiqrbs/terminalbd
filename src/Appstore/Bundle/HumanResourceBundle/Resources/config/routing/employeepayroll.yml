@@ -29,6 +29,12 @@ employee_payroll_setting_update:
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:payrollSettingUpdate" }
     methods:  [POST, PUT]
 
+employee_payroll_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "HumanResourceBundle:EmployeePayroll:approve" }
+    options:
+        expose: true
+
 employee_payroll_particular_delete:
     path:     /{id}/particular-delete
     defaults: { _controller: "HumanResourceBundle:EmployeePayroll:particularDelete" }
