@@ -300,12 +300,10 @@ class MedicineSalesItemRepository extends EntityRepository
 			$qb->setParameter('method', $transactionMethod);
 		}
 		if(!empty($medicineName)){
-			$qb->join("si.medicineStock",'m');
 			$qb->andWhere($qb->expr()->like("m.name", "'%$medicineName%'"  ));
 		}
         if(!empty($medicineBrand)){
-            $qb->join("si.stock",'si');
-            $qb->andWhere($qb->expr()->like("si.brandName", "'%$medicineBrand%'"  ));
+            $qb->andWhere($qb->expr()->like("m.brandName", "'%$medicineBrand%'"  ));
         }
         if(!empty($quantity)){
             $qb->andWhere("si.quantity = :quantity")->setParameter('quantity', $quantity);
@@ -356,6 +354,7 @@ class MedicineSalesItemRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('si');
         $qb->join('si.medicineSales','s');
+        $qb->join("si.medicineStock",'m');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('si.isShort = 1');
         $this->handleSearchBetween($qb,$data);

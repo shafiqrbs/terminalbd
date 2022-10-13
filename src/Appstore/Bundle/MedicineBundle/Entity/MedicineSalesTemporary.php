@@ -78,7 +78,7 @@ class MedicineSalesTemporary
      *
      * @ORM\Column(name="itemPercent", type="float", nullable=true)
      */
-    private $itemPercent;
+    private $itemPercent=0;
 
      /**
      * @var float
