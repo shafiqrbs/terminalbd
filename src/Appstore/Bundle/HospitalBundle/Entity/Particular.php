@@ -337,6 +337,13 @@ class Particular
      */
     private $doctorSignature;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="doctorSignatureBangla", type="string", length=255, nullable=true)
+     */
+    private $doctorSignatureBangla;
+
     /**
      * @var string
      *
@@ -350,6 +357,20 @@ class Particular
      * @ORM\Column(name="currentJob", type="string", length=256, nullable=true)
      */
     private $currentJob;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="string", length=256, nullable=true)
+     */
+    private $remark;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="visitTime", type="string", length=256, nullable=true)
+     */
+    private $visitTime;
 
     /**
      * @var string
@@ -1729,6 +1750,54 @@ class Particular
     public function setReportMachineName($reportMachineName)
     {
         $this->reportMachineName = $reportMachineName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemark()
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param string $remark
+     */
+    public function setRemark($remark)
+    {
+        $this->remark = $remark;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVisitTime()
+    {
+        return $this->visitTime;
+    }
+
+    /**
+     * @param string $visitTime
+     */
+    public function setVisitTime($visitTime)
+    {
+        $this->visitTime = $visitTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoctorSignatureBangla()
+    {
+        return $this->doctorSignatureBangla;
+    }
+
+    /**
+     * @param string $doctorSignatureBangla
+     */
+    public function setDoctorSignatureBangla($doctorSignatureBangla)
+    {
+        $this->doctorSignatureBangla = $doctorSignatureBangla;
     }
 
 

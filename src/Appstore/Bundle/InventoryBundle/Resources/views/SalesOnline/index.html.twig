@@ -134,12 +134,8 @@
                                                 <a target="_blank"  href="{{ path('inventory_salesonline_print_invoice',{'invoice':entity.invoice}) }}" rel=""  class="btn green mini print" ><i class="icon-print"></i></a>
                                             {% endif %}
                                             {% if entity.process in ['Created','In-progress'] %}
-                                                {% if config.deliveryProcess == "general-sales" %}
-                                                    <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
-                                                {% elseif config.deliveryProcess == "manual-sales" %}
-                                                    <a href="{{ path('inventory_salesmanual_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
-                                                {% endif %}
-                                                <a  id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                <a href="{{ path('inventory_salesonline_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pencil"></i></a>
+                                                <a  id="{{ entity.id }}" data-url="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if entity.paymentStatus == "Due" %}
                                                 <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini yellow" ><i class="icon-money"></i></a>
@@ -174,20 +170,4 @@
     $( "#search-product" ).slideToggle( "slow" );
     });
     ApproveProcess();
-    $('#sales').on("click", ".delete", function() {
-
-    var url = $(this).attr("rel");
-    var id = $(this).attr("id");
-    $.ajax({
-    url: url,
-    type: 'GET',
-    success: function (response) {
-    obj = JSON.parse(response);
-    if ('success' == obj['success']) {
-    $('#salesRemove-' + id).hide();
-    }
-    }
-    })
-    })
-
 {% endblock %}

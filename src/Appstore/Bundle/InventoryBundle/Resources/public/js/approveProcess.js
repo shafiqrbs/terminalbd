@@ -17,7 +17,7 @@ function ApproveProcess(){
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
-            onOkBut: function(event) {
+            onOkBut: function() {
                 $.get(url, function( data ) {
                     $(event.target).closest('tr').remove();
                 });

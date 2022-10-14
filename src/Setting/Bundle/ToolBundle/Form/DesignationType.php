@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Repository\DesignationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

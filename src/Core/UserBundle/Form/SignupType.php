@@ -57,6 +57,6 @@ class SignupType extends AbstractType
      */
     public function getName()
     {
-        return 'Core_userbundle_user';
+        return 'domain';
     }
 }

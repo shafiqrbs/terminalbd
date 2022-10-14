@@ -51,6 +51,18 @@
                 <!--/span-->
                 <div class="span4">
                     <div class="control-group">
+                        <label class="control-label" for="name">Assign Doctor Name</label>
+                        <div class="controls">
+                            {{ form_widget(form.assignDoctor) }}
+                            {{ form_errors(form.assignDoctor) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <!--/span-->
+                <div class="span4">
+                    <div class="control-group">
                         <label class="control-label" for="name">Doctor Name<span class="required">*</span></label>
                         <div class="controls">
                             {{ form_widget(form.name) }}
@@ -132,12 +144,21 @@
             <div class="row-fluid">
                 <div class="span8">
                     <div class="row-fluid">
-                        <div class="span12">
+                        <div class="span6">
                             <div class="control-group">
                                 <label class="control-label" for="specialist">Doctor Signature<span class="required">*</span></label>
                                 <div class="controls">
                                     {{ form_widget(form.doctorSignature) }}
                                     {{ form_errors(form.doctorSignature) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span6">
+                            <div class="control-group">
+                                <label class="control-label" for="specialist">Doctor Signature Bangla<span class="required">*</span></label>
+                                <div class="controls">
+                                    {{ form_widget(form.doctorSignatureBangla) }}
+                                    {{ form_errors(form.doctorSignatureBangla) }}
                                 </div>
                             </div>
                         </div>
@@ -160,6 +181,17 @@
                                 <div class="controls">
                                     {{ form_widget(form.educationalDegree) }}
                                     {{ form_errors(form.educationalDegree) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                <label class="control-label" for="name">Visit Time Duration</label>
+                                <div class="controls">
+                                    {{ form_widget(form.visitTime) }}
+                                    {{ form_errors(form.visitTime) }}
                                 </div>
                             </div>
                         </div>

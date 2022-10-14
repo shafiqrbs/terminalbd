@@ -156,7 +156,7 @@
                                                 <a  id="{{ entity.id }}" data-url="{{ path('dps_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a>
                                                 {% endif %}
                                                 {% if entity.process !='New' %}
-                                                <a target="_blank"  href="{{ path('dps_prescription_print',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
+                                                <a target="_blank"  href="{{ path('dps_description_preview',{'id':entity.id}) }}"  class="btn green mini"><i class="icon-print"></i> Print</a>
                                                 {% endif %}
                                                 <a href="{{ path('dps_prescription_show', { 'id': entity.id }) }}" class="btn blue mini"><i class="icon-eye-open"></i> View</a>
                                             </div>

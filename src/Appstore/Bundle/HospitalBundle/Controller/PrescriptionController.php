@@ -37,7 +37,7 @@ class PrescriptionController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_DOCTOR");
      */
 
     public function indexAction()
@@ -54,7 +54,7 @@ class PrescriptionController extends Controller
             'hospital'                          => $hospital,
             'entities'                          => $pagination,
             'assignDoctors'                     => $assignDoctors,
-            'diseasesProfiles'                     => $diseasesProfile,
+            'diseasesProfiles'                  => $diseasesProfile,
             'searchForm'                        => $data,
         ));
 
@@ -343,6 +343,11 @@ class PrescriptionController extends Controller
 
         ));
     }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     */
+
 
     public function generateAction($id)
     {

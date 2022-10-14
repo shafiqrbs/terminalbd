@@ -1919,6 +1919,16 @@ class User extends BaseUser
         return $this->businessAndroidProcess;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getParticularDoctor()
+    {
+        return $this->particularDoctor;
+    }
+
+
+
 
 
 }

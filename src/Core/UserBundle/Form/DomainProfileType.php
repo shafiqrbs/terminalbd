@@ -54,7 +54,9 @@ class DomainProfileType extends AbstractType
                 'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Designation',
                 'empty_value' => '---Choose a designation---',
-                'property' => 'name',
+                'group_by'  => 'parent.name',
+                'property'  => 'name',
+                'choice_translation_domain' => true,
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select user designation'))
                 ),

@@ -186,17 +186,17 @@
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != "Done" %}
-                                                <a  href="javascript:" data-url="{{ path('hms_invoice_appointment_approve',{'id':entity.id}) }}" class="btn green mini confirm"><i class="icon-retweet"></i> Closed</a>
+                                                <a  href="javascript:" data-url="{{ path('hms_invoice_appointment_approve',{'id':entity.id}) }}" class="btn green mini confirm"><i class="icon-retweet"></i> Confirmed</a>
                                             {% else %}
-                                                <span class="btn gray mini">{{ entity.process }}</span>
+                                                {% if hospital.prescriptionBuilder == 1 %}
+                                                    <a target="_blank" href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn yellow mini tooltips" ><i class="icon-plus-sign-alt"></i> Prescription</a>
+                                                {% endif %}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processEdit = {'Created':'Created','Revised':'Revised'} %}
-                                                    {% if hospital.prescriptionBuilder == 1 %}
-                                                        <a target="_blank" href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn yellow mini tooltips" ><i class="icon-plus-sign-alt"></i> Builder</a>
-                                                    {% endif %}
+
                                                     <a target="_blank"  href="{{ path('hms_prescription_print',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Print</a>
                                                     {% if hospital.appointmentPrescription == 1 and entity.process == "Done" %}
                                                         <a target="_blank"  href="{{ path('hms_prescription_doctor_print',{'id':entity.id}) }}"  class="btn yellow mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Prescription</a>

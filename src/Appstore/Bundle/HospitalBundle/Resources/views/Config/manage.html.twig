@@ -41,22 +41,22 @@
                                     <div class="span3">
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="invoiceProcess">&nbsp;</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.initialDiagnosticShow) }} Initial Diagnostic Show
-                                                    </div>
-                                                </div>
+                                                {{ form_widget(form.initialDiagnosticShow) }} Initial Diagnostic Show
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="invoiceProcess">&nbsp;</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.commissionAutoApproved) }} Commission Auto Approved
-                                                    </div>
-                                                </div>
+                                                {{ form_widget(form.commissionAutoApproved) }} Commission Auto Approved
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                {{ form_widget(form.prescriptionBuilder) }} Prescription Builder
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                {{ form_widget(form.appointmentPrescription) }}Appointment Prescription
                                             </div>
                                         </div>
                                         <div class="row-fluid">
@@ -179,16 +179,7 @@
                                                     {{ form_widget(form.printOff) }} Print Off
                                                 </div>
                                             </div>
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    {{ form_widget(form.prescriptionBuilder) }} Prescription Builder
-                                                </div>
-                                            </div>
-                                             <div class="row-fluid">
-                                                <div class="span12">
-                                                    {{ form_widget(form.appointmentPrescription) }}Appointment Prescription
-                                                </div>
-                                            </div>
+
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     {{ form_widget(form.invoicePrintLogo) }}Print Logo

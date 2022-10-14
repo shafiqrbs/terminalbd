@@ -347,7 +347,6 @@ class MedicineSalesItemRepository extends EntityRepository
             $res = $qb->getQuery();
             return  $res;
         }
-
     }
 
     public function currentShortList($config, $data)

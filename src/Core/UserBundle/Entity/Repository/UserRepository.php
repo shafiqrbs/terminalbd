@@ -190,38 +190,6 @@ class UserRepository extends EntityRepository
         }
 
 
-        $assets = array('assets');
-        $result = array_intersect($arrSlugs, $assets);
-        if (!empty($result)) {
-            $array['ASSETS'] = array(
-                'ROLE_ASSETS'                                      => 'Fixed Assets',
-                'ROLE_ASSETS_MANAGE'                               => 'Assets Manage',
-                'ROLE_ASSETS_DISTRIBUTION'                         => 'Assets Distribution',
-                'ROLE_ASSETS_MAINTENANCE'                          => 'Assets Maintenance',
-                'ROLE_ASSETS_DISPOSAL'                             => 'Assets Disposal',
-                'ROLE_ASSETS_STOCK'                                => 'Assets Stock',
-                'ROLE_ASSETS_CHECKER'                              => 'Assets Checker',
-                'ROLE_ASSETS_APPROVER'                             => 'Assets Approver',
-                'ROLE_ASSETS_SETTING'                              => 'Assets Setting',
-
-            );
-        }
-
-        $payroll = array('payroll');
-        $result = array_intersect($arrSlugs, $payroll);
-        if (!empty($result)) {
-
-            $array['HR & Payroll'] = array(
-                'ROLE_HR'                                   => 'Human Resource',
-                'ROLE_HR_EMPLOYEE'                          => 'HR Employee',
-                'ROLE_HR_ATTENDANCE'                        => 'HR Attendance',
-                'ROLE_PAYROLL'                              => 'Payroll',
-                'ROLE_PAYROLL_SALARY'                       => 'Payroll Salary',
-                'ROLE_PAYROLL_APPROVAL'                     => 'Payroll Approval',
-                'ROLE_PAYROLL_REPORT'                       => 'Payroll Report',
-            );
-        }
-
 
 
         $business = array('business');
@@ -334,6 +302,40 @@ class UserRepository extends EntityRepository
                 'ROLE_DPS_ADMIN'                                => 'Doctor Admin',
             );
         }
+
+
+        $assets = array('assets');
+        $result = array_intersect($arrSlugs, $assets);
+        if (!empty($result)) {
+            $array['ASSETS'] = array(
+                'ROLE_ASSETS'                                      => 'Fixed Assets',
+                'ROLE_ASSETS_MANAGE'                               => 'Assets Manage',
+                'ROLE_ASSETS_DISTRIBUTION'                         => 'Assets Distribution',
+                'ROLE_ASSETS_MAINTENANCE'                          => 'Assets Maintenance',
+                'ROLE_ASSETS_DISPOSAL'                             => 'Assets Disposal',
+                'ROLE_ASSETS_STOCK'                                => 'Assets Stock',
+                'ROLE_ASSETS_CHECKER'                              => 'Assets Checker',
+                'ROLE_ASSETS_APPROVER'                             => 'Assets Approver',
+                'ROLE_ASSETS_SETTING'                              => 'Assets Setting',
+
+            );
+        }
+
+        $payroll = array('payroll');
+        $result = array_intersect($arrSlugs, $payroll);
+        if (!empty($result)) {
+
+            $array['HR & Payroll'] = array(
+                'ROLE_HR'                                   => 'Human Resource',
+                'ROLE_HR_EMPLOYEE'                          => 'HR Employee',
+                'ROLE_HR_ATTENDANCE'                        => 'HR Attendance',
+                'ROLE_PAYROLL'                              => 'Payroll',
+                'ROLE_PAYROLL_SALARY'                       => 'Payroll Salary',
+                'ROLE_PAYROLL_APPROVAL'                     => 'Payroll Approval',
+                'ROLE_PAYROLL_REPORT'                       => 'Payroll Report',
+            );
+        }
+
 
         $pos = array('inventory','miss','business','restaurant');
         $result = array_intersect($arrSlugs, $pos);
@@ -466,11 +468,12 @@ class UserRepository extends EntityRepository
 
     public function getEmployeeEntities(GlobalOption $option)
     {
+
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption =".$option->getId());
-        $qb->andWhere('e.domainOwner = 2');
-        $qb->andWhere('e.isDelete != 1');
-        $qb->orderBy("e.username","ASC");
+      //  $qb->andWhere('e.domainOwner = 2');
+      //  $qb->andWhere('e.isDelete != 1');
+      //  $qb->orderBy("e.username","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;
     }

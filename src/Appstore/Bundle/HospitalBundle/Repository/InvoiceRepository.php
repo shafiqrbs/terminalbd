@@ -382,6 +382,10 @@ class InvoiceRepository extends EntityRepository
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles())) {
+            $id = $user->getParticularDoctor()->getId();
+            $qb->andWhere('e.assignDoctor = :doctor')->setParameter('doctor', $id) ;
+        }
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');

@@ -1301,23 +1301,17 @@ class Builder extends ContainerAware
         $mainApp = $securityContext->getGlobalOption()->getMainApp()->getModuleClass();
         $menu
             ->addChild('Doctor Prescription')
-            ->setAttribute('icon', 'fa fa-hospital-o')
+            ->setAttribute('icon', 'fa fa-medkit')
             ->setAttribute('dropdown', true);
 
         //if($mainApp == "Hospital" and $securityContext->isGranted('ROLE_DOMAIN_DMS_DOCTOR')){
-        if($mainApp == "Hospital"){
-            $menu['Doctor Prescription']->addChild('Prescription', array('route' => 'dps_prescription'))
-                ;
-        }else{
-            $menu['Doctor Prescription']->addChild('Patient', array('route' => 'dps_invoice'))
-                ;
-            $menu['Doctor Prescription']->addChild('Expense')
-                
-                ->setAttribute('dropdown', true);
-            $menu['Doctor Prescription']['Expense']->addChild('Expenditure', array('route' => 'dps_account_expenditure'))
-                ;
-            $menu['Doctor Prescription']['Expense']->addChild('Expense Category', array('route' => 'dps_expensecategory'))
-                ;
+        if($mainApp == "Hospital" and $securityContext->isGranted('ROLE_DOMAIN_DMS_DOCTOR')){
+            $menu['Doctor Prescription']->addChild('Prescription', array('route' => 'dps_prescription'));
+        }elseif($mainApp = "Hospital"){
+            $menu['Doctor Prescription']->addChild('Patient', array('route' => 'dps_invoice'));
+            $menu['Doctor Prescription']->addChild('Expense')->setAttribute('dropdown', true);
+            $menu['Doctor Prescription']['Expense']->addChild('Expenditure', array('route' => 'dps_account_expenditure'));
+            $menu['Doctor Prescription']['Expense']->addChild('Expense Category', array('route' => 'dps_expensecategory'));
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_MANAGER')) {
 

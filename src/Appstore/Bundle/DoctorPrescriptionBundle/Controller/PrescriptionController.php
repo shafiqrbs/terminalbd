@@ -54,7 +54,7 @@ class PrescriptionController extends Controller
         $dpsConfig = $user->getGlobalOption()->getDpsConfig();
         $entities = $em->getRepository('DoctorPrescriptionBundle:DpsInvoice')->invoiceLists( $user,$data);
         $pagination = $this->paginate($entities);
-        $assignDoctors = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsParticular')->getFindWithParticular($dpsConfig,array('doctor'));
+        $assignDoctors = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsInvoice')->getFindWithDoctor($user);
         return $this->render('DoctorPrescriptionBundle:Prescription:index.html.twig', array(
             'dpsConfig' => $dpsConfig,
             'entities' => $pagination,

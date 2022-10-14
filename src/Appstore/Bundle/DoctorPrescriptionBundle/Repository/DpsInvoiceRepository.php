@@ -161,7 +161,19 @@ class DpsInvoiceRepository extends EntityRepository
         return $data;
     }
 
-    public function findWithServiceOverview(User $user, $data)
+    public function getFindWithDoctor(User $user)
+    {
+        $config = $user->getGlobalOption()->getDpsConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.hmsAssignDoctor','d');
+        $qb->select('d.name as name','d.id as id');
+        $qb->where('e.dpsConfig = :config')->setParameter('config', $config);
+        $qb->groupBy('d.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+     public function findWithServiceOverview(User $user, $data)
     {
         $config = $user->getGlobalOption()->getDpsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
@@ -244,6 +256,10 @@ class DpsInvoiceRepository extends EntityRepository
         $config = $user->getGlobalOption()->getDpsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.dpsConfig = :config')->setParameter('config', $config) ;
+        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles())) {
+            $id = $user->getParticularDoctor()->getId();
+            $qb->andWhere('e.hmsAssignDoctor = :doctor')->setParameter('doctor', $id) ;
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();

@@ -18,10 +18,12 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\TicketBundle\Entity\TicketConfig;
+use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\AppModule;
+use Setting\Bundle\ToolBundle\Entity\Designation;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\AppearanceBundle\Entity\MenuGrouping;
@@ -215,7 +217,7 @@ class GlobalOptionRepository extends EntityRepository
         }
 
         if(!empty($data['name'])){
-            $qb->andWhere("e.slug LIKE :slug");
+            $qb->andWhere("e.name LIKE :slug");
             $qb->setParameter('slug',  '%'.$data['name'].'%');
         }
         return $qb;
@@ -399,21 +401,15 @@ class GlobalOptionRepository extends EntityRepository
     {
 
         $em = $this->_em;
-        $syndicate = $data['Core_userbundle_user']['globalOption']['syndicate'];
-        $mainApp = $data['Core_userbundle_user']['globalOption']['mainApp'];
-        $location = $data['Core_userbundle_user']['globalOption']['location'];
-        $name = $data['Core_userbundle_user']['globalOption']['name'];
-        /*$appModules = $data['Core_userbundle_user']['siteSetting']['appModules'];
-        $apps[] = array();
-        foreach ($appModules as $appModule){
-            $apps[]  = $em->getRepository(AppModule::class)->find($appModule);
-        }*/
+        $syndicate = $data['domain']['globalOption']['syndicate'];
+        $mainApp = $data['domain']['globalOption']['mainApp'];
+        $location = $data['domain']['globalOption']['location'];
+        $name = $data['domain']['globalOption']['name'];
         $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id' => $syndicate));
         $mainApp = $em->getRepository(AppModule::class)->find($mainApp);
         $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id' => $location));
         $globalOption = new GlobalOption();
-        if($user) { $globalOption->setAgent($user);}
-        $globalOption->setStatus(true);
+        $globalOption->setStatus(1);
         $globalOption->setName($name);
         $globalOption->setOrganizationName($name);
         $globalOption->setMobileName($name);
@@ -421,11 +417,35 @@ class GlobalOptionRepository extends EntityRepository
         $globalOption->setSlug($this->urlSlug($name));
         $globalOption->setSubDomain($this->urlSlug($name));
         $globalOption->setMobile($mobile);
+        $globalOption->setHotline($mobile);
         $globalOption->setMainApp($mainApp);
         $globalOption->setSyndicate($syndicate);
         $globalOption->setLocation($location);
         $globalOption->setUniqueCode($this->getUniqueId());
         $em->persist($globalOption);
+        $em->flush();
+
+        $name = $data['domain']['profile']['name'];
+        $username = $data['domain']['profile']['username'];
+        $email = "{$username}@gmail.com";
+        $user = new User();
+        $user->setUsername($username);
+        $user->setEmail($email);
+        $user->setPlainPassword('@123456');
+        $user->setAppPassword('@123456');
+        $user->setEnabled(1);
+        $user->setGlobalOption($globalOption);
+        $user->setUserGroup(2);
+        $em->persist($user);
+        $em->flush();
+
+        $profile = new Profile();
+        $profile->setUser($user);
+        $profile->setName($name);
+        $profile->setMobile($mobile);
+        $designation = $em->getRepository(Designation::class)->find(1);
+        $profile->setDesignation($designation);
+        $em->persist($profile);
         $em->flush();
         return $globalOption;
 

@@ -49,10 +49,12 @@ class DoctorType extends AbstractType
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter valid email')))
             ->add('currentJob','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter current job')))
             ->add('specialist','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter specialist')))
-            ->add('doctorSignature','textarea', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Doctor signature'),
+            ->add('doctorSignature','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature'),
                     'constraints' =>array(new NotBlank(array('message'=>'Please enter doctor signature'))))
             )
+            ->add('doctorSignatureBangla','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature')))
             ->add('educationalDegree','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter educational degree')))
+            ->add('visitTime','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Enter visit time duration')))
             ->add('startHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A','placeholder'=>'Start hour')))
             ->add('endHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A', 'placeholder'=>'End hour')))
             ->add('weeklyOffDay', 'choice', array(
@@ -64,15 +66,11 @@ class DoctorType extends AbstractType
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('file')
             ->add('signatureFile')
-            /*
-             ->add('assignDoctor', 'entity', array(
+            ->add('assignDoctor', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select doctor from employee list---',
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userDoctor',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select doctor from employee list')),
-                ),
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -83,8 +81,7 @@ class DoctorType extends AbstractType
                         ->setParameter('roles', '%"ROLE_DOMAIN_HOSPITAL_DOCTOR"%')
                         ->orderBy("p.name","ASC");
                 }
-            ))*/
-
+            ))
             ->add('assignOperator', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select operator---',
