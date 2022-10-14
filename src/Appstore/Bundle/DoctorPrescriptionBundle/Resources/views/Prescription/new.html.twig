@@ -423,14 +423,15 @@
                                             <div class="row-fluid particular-info" >
                                                 <div class="span6">
                                                     <div class="input-append span12" style="margin-bottom:0!important">
-                                                        <select class="m-wrap span4" id="medicineQuantity" name="medicineQuantity"  >
-                                                            <option value="">--Medicine Quantity--</option>
+                                                        <input class="m-wrap span4" list="medicineQuantities" id="medicineQuantity" name="medicineQuantity" placeholder="Medicne Quantity" />
+
+                                                        <datalist id="medicineQuantities">
                                                             {% for attribute in attributes %}
                                                                 {% if attribute.parent == 'medicine-quantity' %}
-                                                                    <option value="{{ attribute.id }}">{% if entity.dpsConfig.medicineUsage == 1 %}{{ attribute.name }}{% else %}{{ attribute.nameBn }}{% endif %}</option>
+                                                                    <option>{% if entity.dpsConfig.medicineUsage == 1 %}{{ attribute.name }}{% else %}{{ attribute.nameBn }}{% endif %}</option>
                                                                 {% endif %}
                                                             {% endfor %}
-                                                        </select>
+                                                        </datalist>
                                                         <select class="m-wrap span4" id="medicineDose" name="medicineDose">
                                                             <option value="">--Medicine Dose--</option>
                                                             {% for attribute in attributes %}
@@ -453,13 +454,8 @@
                                                 <div class="span6">
                                                     <div class="input-group input-append input-group">
                                                                     <span class="input-group-btn">
-                                                                       <button type="button" class="btn yellow btn-number-day" data-type="minus" data-field="medicineDuration">
-                                                                                <span class="fa fa-minus"></span>
-                                                                       </button>
-                                                                       <input type="number" style="text-align: center; font-weight: bold" class="m-wrap span4 form-control input-number" id="medicineDuration" name="medicineDuration" value="7" min="1" max="100">
-                                                                       <button type="button" class="btn green btn-number-day"  data-type="plus" data-field="medicineDuration">
-                                                                              <span class="fa fa-plus"></span>
-                                                                      </button>
+                                                                                <input type="text" style="text-align: center; font-weight: bold" class="m-wrap span6 form-control " id="medicineDuration" name="medicineDuration">
+
                                                                     </span>
                                                         <select class="m-wrap span6" id="medicineDurationType" name="medicineDurationType">
                                                             <option value="">--Medicine Duration--</option>

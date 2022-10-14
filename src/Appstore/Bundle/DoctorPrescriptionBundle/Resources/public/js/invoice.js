@@ -335,7 +335,7 @@ $(document).on('click', '#addPrescriptionParticular', function() {
     var medicine = $('#medicine').val();
     var medicineId = $('#medicineId').val();
     var generic = $('#generic').val();
-    var medicineQuantity = parseInt($('#medicineQuantity').val());
+    var medicineQuantity = $('#medicineQuantity').val();
     var medicineDose = $('#medicineDose').val();
     var medicineDoseTime = $('#medicineDoseTime').val();
     var medicineDuration = $('#medicineDuration').val();

@@ -141,8 +141,10 @@ class MedicineDoctorPrescribeRepository extends EntityRepository
         $em = $this->_em;
         $entity = new MedicineDoctorPrescribe();
 
-        if(!empty($data['medicineQuantity']) and $data['medicineQuantity'] != 'NaN'){
-            $entity->setMedicineQuantity($em->getRepository('MedicineBundle:PrescriptionAttribute')->find($data['medicineQuantity'])->getNameBn());
+
+
+        if(!empty($data['medicineQuantity'])){
+            $entity->setMedicineQuantity($data['medicineQuantity']);
         }
         if(!empty($data['medicineDose']) and $data['medicineDose'] != 'NaN'){
             $entity->setMedicineDose($em->getRepository('MedicineBundle:PrescriptionAttribute')->find($data['medicineDose'])->getNameBn());

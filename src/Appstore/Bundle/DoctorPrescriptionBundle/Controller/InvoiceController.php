@@ -623,7 +623,7 @@ class InvoiceController extends Controller
 
             $services = $em->getRepository('DoctorPrescriptionBundle:DpsService')->findBy(array('dpsConfig'=>$dpsConfig,'serviceShow'=>1,'status'=>1),array('serviceSorting'=>'ASC'));
             if($dpsConfig->isCustomPrescription() == 1){
-                $template = $dpsConfig->getGlobalOption()->getSlug();
+                $template = $dpsConfig->getGlobalOption()->getSubDomain();
             }else{
                 $template = 'print';
             }

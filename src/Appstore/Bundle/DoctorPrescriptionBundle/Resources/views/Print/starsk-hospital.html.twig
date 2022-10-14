@@ -74,14 +74,14 @@
                     {% endif %}
                 {% endfor %}
                 {% if entity.investigations is not empty %}
-                <div class="tab-pane">
-                    <h4>Investigation</h4>
-                    <ul class="styled">
-                        {% for investigations in entity.investigations %}
-                            <li>{{ investigations.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                    <div class="tab-pane">
+                        <h4>Investigation</h4>
+                        <ul class="styled">
+                            {% for investigations in entity.investigations %}
+                                <li>{{ investigations.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
             </div>
             <div class="col-md-8 print-right" style="padding-left: 30px; height:1080px; margin-left: -1px ;border-left:2px solid #0a7265">
