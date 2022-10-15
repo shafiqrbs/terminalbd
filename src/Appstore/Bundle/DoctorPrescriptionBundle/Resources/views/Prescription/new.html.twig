@@ -11,6 +11,8 @@
                     {% if  entity.customer is not empty %}
                         <div class="span4">
                             <ul class="unstyled">
+                                <li>Doctor: {% if entity.hmsAssignDoctor is not empty %} {{ entity.hmsAssignDoctor.name }}{% endif %}</li>
+                                <li>Visit Type: {{ entity.visitType }}</li>
                                 <li>Patient Name: {{ entity.customer.name }}</li>
                                 <li>Mobile: {{ entity.customer.mobile }}</li>
                                 <li>Gender: {{ entity.customer.gender }}, Age: {{ entity.customer.age }} {{ entity.customer.ageType }}</li>
@@ -25,10 +27,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('dps_invoice') }}">Patient Invoice</a>
+                        <a href="{{ path('dps_prescription') }}">Patients</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Patient Invoice</a></li>
+                    <li><a href="#">Manage Patient Prescription</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -46,14 +48,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Patient Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="{{ path('dps_invoice') }}"><i class="icon-th-list"></i> Patient Lists</a>
-                                <a class="btn red addPatient" href="javascript:"><i class="icon-plus-sign"></i> Add New Patient</a>
-                            {#    <a class="btn yellow appointmentSchedule"
-                                   data-title="Patient Appointment Schedule"
-                                   data-topoffset="0" data-top="10%"
-                                   href="javascript:" data-url="{{ path('dps_treatment_appointment_schedule') }}" ><span
-                                            class="fa fa-calendar"></span> Appointment Schedule</a>
-#}                            </div>
+                                <a class="btn" href="{{ path('dps_prescription') }}"><i class="icon-th-list"></i> Patients</a>
+                            </div>
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -72,7 +68,9 @@
                                             <li  class="active" ><a href="#tab_patient_info" data-toggle="tab">Patient Information</a></li>
                                             {% if entity.customer is not empty %}
                                                 {% for service in services %}
+                                                    {% if service.status == 1 %}
                                                     <li class=""><a href="#tab-{{ service.slug }}" data-toggle="tab" class="saveButton">{{ service.name }}</a></li>
+                                                    {% endif %}
                                                 {% endfor %}
                                             {% endif %}
                                         </ul>
@@ -104,8 +102,8 @@
                                                                     <div class="portlet-body">
                                                                         <ul class="unstyled">
                                                                             <li>
-                                                                                <span class="sale-info">Assign Doctor: </span>
-                                                                                <span class="sale-num"> {% if entity.assignDoctor is not empty %} {{ entity.assignDoctor.name }}{% endif %}</span>
+                                                                                <span class="sale-info">Doctor: </span>
+                                                                                <span class="sale-num"> {% if entity.hmsAssignDoctor is not empty %} {{ entity.hmsAssignDoctor.name }}{% endif %}</span>
                                                                             </li>
                                                                             <li>
                                                                                 <span class="sale-info">Gender: </span>
@@ -132,7 +130,6 @@
                                                         <!--end row-fluid-->
                                                         <div class="clearfix">&nbsp;</div>
                                                         <div class="tabbable tabbable-custom tabbable-custom-profile">
-                                                            <div class="loader loader-double" ></div>
                                                             <div id="patientLoad"></div>
                                                         </div>
                                                     </div>
@@ -233,6 +230,7 @@
                                             </div>
                                             {% if entity.customer is not empty %}
                                                 {% for service in services %}
+                                                    {% if service.status == 1 %}
                                                      <div class="tab-pane tab-height" id="tab-{{ service.slug }}" >
                                                         <div class="form-actions portlet box blue">
                                                             <div class="portlet-title">
@@ -377,6 +375,7 @@
                                                          {% endif  %}
                                                         <div class="clearfix">&nbsp;</div>
                                                     </div>
+                                                    {% endif %}
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
@@ -516,7 +515,7 @@
                                                 {{ form_errors(form.process) }}
                                                 <div class="btn-group">
                                                     {% if entity.customer is not empty %}
-                                                    <button  class='btn green'><i class='icon-save'></i>&nbsp;Save</button>
+                                                    <button class='btn green'><i class='icon-save'></i>&nbsp;Save</button>
                                                     <a target="_blank"  href='{{ path('dps_description_preview',{'id':entity.id}) }}' class='btn blue'><i class='icon-eye-open'></i>&nbsp; Preview</a>
                                                     {% endif %}
                                                 </div>
@@ -536,6 +535,7 @@
             </div>
         </div>
     </div>
+    <div class="loader loader-double" ></div>
  <style>
      .form-horizontal .patient-info .control-label {
          float: left;

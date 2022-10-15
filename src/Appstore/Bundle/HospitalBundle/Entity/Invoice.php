@@ -154,6 +154,21 @@ class Invoice
      */
     private $discountRequestedComment;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="visitType", type="string", nullable=true)
+     */
+    private $visitType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="followUpId", type="string", nullable=true)
+     */
+    private $followUpId;
+
+
 
     /**
      * @var string
@@ -1741,6 +1756,40 @@ class Invoice
     {
         $this->specialization = $specialization;
     }
+
+    /**
+     * @return string
+     */
+    public function getVisitType()
+    {
+        return $this->visitType;
+    }
+
+    /**
+     * @param string $visitType
+     */
+    public function setVisitType($visitType)
+    {
+        $this->visitType = $visitType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFollowUpId()
+    {
+        return $this->followUpId;
+    }
+
+    /**
+     * @param string $followUpId
+     */
+    public function setFollowUpId($followUpId)
+    {
+        $this->followUpId = $followUpId;
+    }
+
+
 
 
 }

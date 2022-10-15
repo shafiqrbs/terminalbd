@@ -8,6 +8,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDmsType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForDpsType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoiceParticular;
@@ -642,11 +643,17 @@ class PrescriptionController extends Controller
             }else{
                 $template = 'print';
             }
+            if($entity->getHmsInvoice()){
+                $barcode = $this->getBarcode($entity->getHmsInvoice()->getInvoice());
+            }else{
+                $barcode = $this->getBarcode($entity->getInvoice());
+            }
             $invoiceServices = $em->getRepository('DoctorPrescriptionBundle:DpsInvoiceParticular')->getInvoiceServices($entity);
             return  $this->render('DoctorPrescriptionBundle:Print:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
                     'dpsConfig' => $dpsConfig,
+                    'barcode' => $barcode,
                     'print' => 'print',
                     'invoiceParticularArr' => $invoiceParticularArr,
                     'services' => $services,
@@ -848,6 +855,20 @@ class PrescriptionController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsParticular')->getSalesUpdateQnt($accessories);
         exit;
+    }
+
+    public function getBarcode($invoice)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($invoice);
+        $barcode->setType(BarcodeGenerator::Code128);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(8);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,'.$code .'" />';
+        return $data;
     }
 
 }

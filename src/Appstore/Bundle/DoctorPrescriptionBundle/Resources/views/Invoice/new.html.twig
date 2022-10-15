@@ -240,6 +240,7 @@
                                             </div>
                                             {% if entity.customer is not empty %}
                                                 {% for service in services %}
+                                                    {% if service.status == 1 %}
                                                     <div class="tab-pane tab-height" id="tab-{{ service.slug }}" >
                                                         <div class="form-actions portlet box blue">
                                                             <div class="portlet-title">
@@ -384,6 +385,7 @@
                                                         {% endif  %}
                                                         <div class="clearfix">&nbsp;</div>
                                                     </div>
+                                                    {% endif %}
                                                 {% endfor %}
                                             {% endif %}
                                         </div>

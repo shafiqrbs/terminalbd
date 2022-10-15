@@ -46,11 +46,24 @@ class DoctorAppointmentType extends AbstractType
         $builder
 
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
+            ->add('followUpId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Follow-up ID','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
             ->add('smsAlert',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
+            ->add('visitType', 'choice', array(
+                'attr' => array('class' => 'm-wrap visitType span12 invoiceProcess select-custom'),
+                'expanded' => false,
+                'multiple' => false,
+                'data' => 'New Visit',
+                'choices' => array(
+                    'New Visit' => 'New Visit',
+                    'Report' => 'Report',
+                    'Follow up' => 'Follow up',
+                    'Old' => 'Old',
+                ),
+            ))
             ->add('appointmentDate', DateType::class, array(
                 'widget' => 'single_text',
                 'html5' => true,

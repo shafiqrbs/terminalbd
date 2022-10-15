@@ -664,7 +664,6 @@ var form = $("#invoiceForm").validate({
         "appstore_bundle_dpsinvoice[customer][weight]": {required: false},
         "appstore_bundle_dpsinvoice[customer][bloodPressure]": {required: false},
         "appstore_bundle_dpsinvoice[customer][bloodGroup]": {required: false},
-        "appstore_bundle_dpsinvoice[customer][bloodGroup]": {required: false},
     },
 
     messages: {
@@ -683,19 +682,18 @@ var form = $("#invoiceForm").validate({
 
     submitHandler: function(form) {
 
+
         $.ajax({
             url         : $('form#invoiceForm').attr( 'action' ),
             type        : $('form#invoiceForm').attr( 'method' ),
             data        : new FormData($('form#invoiceForm')[0]),
             processData : false,
             contentType : false,
-            beforeSend: function() {
-               // $('#savePatientButton').show().addClass('btn-ajax-loading').fadeIn(3000);
-                //$('.btn-ajax-loading').attr("disabled", true);
+            beforeSend: function(){
+                $('.loader-double').fadeIn(1000).addClass('is-active');
             },
             complete: function(){
-               // $('.btn-ajax-loading').attr("disabled", false);
-               // $('#savePatientButton').removeClass('btn-ajax-loading');
+                $('.loader-double').fadeIn(1000).removeClass('is-active');
             },
             success: function(response){
 

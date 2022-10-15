@@ -33,12 +33,6 @@
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Patient</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn yellow" href="{{ path('dps_invoice_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
-                                <a class="btn red addPatient" href="javascript:"><i class="icon-plus-sign"></i> Add New Patient</a>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="portlet-body">
@@ -60,24 +54,20 @@
                                                 <input class="m-wrap span12 search-input" name="mobile" id="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% else %}Patient mobile{% endif %}">
                                             </div>
                                         </div>
-
                                         <div class="span3">
                                             <div class="input-icon left">
-                                                <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="createdStart" id="createdStart" value="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% else %}Created start date{% endif %}" >
+                                                <i class="icon-user"></i>
+                                                <input class="m-wrap span12 search-input" name="customerId" id="customerId" value="{% if searchForm.customerId is defined %}{{ searchForm.customerId }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.customerId is defined %}{{ searchForm.customerId }}{% else %}Customer ID{% endif %}">
                                             </div>
                                         </div>
-
                                         <div class="span3">
-                                            <div class="input-icon left">
-                                                <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="createdEnd" id="createdEnd" value="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% else %}Created end date{% endif %}">
-                                            </div>
+                                            <input type="text" id="hmsInvoice" name="hmsInvoice"  class="m-wrap span12" value="{% if searchForm.hmsInvoice is defined %}{{ searchForm.hmsInvoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.hmsInvoice is defined %}{{ searchForm.hmsInvoice }}{% else %}Invoice ID{% endif %} ">
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
-                                        <div class="span6">
+
+                                        <div class="span3">
                                             <select name="doctor" id="doctor" class="m-wrap span12">
                                                 <option value="" >--Assign Doctor--</option>
                                                 {% for doctor in assignDoctors %}
@@ -95,9 +85,15 @@
                                            </select>
                                         </div>
                                         <div class="span3">
+                                            <div class="input-icon left">
+                                                <i class="icon-calendar"></i>
+                                                <input class="m-wrap span12 search-input date-picker" name="createdStart" id="createdStart" value="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% else %}Created start date{% endif %}" >
+                                            </div>
+                                        </div>
+                                        <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span12">
-                                                    <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient ID{% endif %} ">
+                                                    <input type="text" id="endDate" name="endDate"  class="m-wrap span10 date-picker" value="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% else %}Created end date{% endif %}">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
@@ -106,31 +102,19 @@
                                         </div>
                                     </div>
                                 </form>
-                                {#<table class="table table-bordered table-striped table-condensed flip-content ">
-                                    <thead class="flip-content">
-                                    <tr class="head-red">
-                                        <th class="numeric" ><strong>Total Sales Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ salesTransactionOverview.total|number_format }}</strong></th>
-                                        <th class="numeric" ><strong>Today Sales Receive Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ salesTransactionOverview.receive|number_format }}</strong></th>
-                                        <th class="numeric" ><strong>Due Received Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ previousSalesTransactionOverview.receive|number_format }}</strong></th>
-                                        <th class="numeric" ><strong>Total Received Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ (previousSalesTransactionOverview.receive + salesTransactionOverview.receive)|number_format }}</strong></th>
-                                    </tr>
-                                    </thead>
-                                </table>#}
+
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Patient No</th>
-                                    <th class="numeric" >Assign Doctor</th>
+                                    <th class="numeric" >Presceiption Type</th>
+                                    <th class="numeric" >Patient Invoice</th>
+                                    <th class="numeric" >Doctor</th>
+                                    <th class="numeric" >Patient ID</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -140,11 +124,12 @@
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{{ entity.visitType }}</td>
+                                        <td class="numeric" >{% if entity.hmsInvoice is not empty %}{{ entity.hmsInvoice.invoice }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.hmsAssignDoctor is defined and entity.hmsAssignDoctor is not empty %}{{ entity.hmsAssignDoctor.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        <td class="numeric" > {% if entity.hmsAssignDoctor %}{{ entity.hmsAssignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">

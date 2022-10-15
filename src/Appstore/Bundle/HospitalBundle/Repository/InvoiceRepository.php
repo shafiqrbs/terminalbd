@@ -382,7 +382,7 @@ class InvoiceRepository extends EntityRepository
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles())) {
+        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles()) and $user->getParticularDoctor()) {
             $id = $user->getParticularDoctor()->getId();
             $qb->andWhere('e.assignDoctor = :doctor')->setParameter('doctor', $id) ;
         }

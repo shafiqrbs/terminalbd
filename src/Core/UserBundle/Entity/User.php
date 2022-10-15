@@ -94,7 +94,7 @@ class User extends BaseUser
 	 *
 	 * @ORM\Column(name="appPassword", type="string", length = 30, nullable=true)
 	 */
-	private $appPassword = "android";
+	private $appPassword = "@123456";
 
 	/**
 	 * @var array

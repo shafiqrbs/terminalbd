@@ -37,9 +37,11 @@ class DpsInvoiceRepository extends EntityRepository
     {
 
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
+        $hmsInvoice = isset($data['hmsInvoice'])? $data['hmsInvoice'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
+        $customerId = isset($data['customerId'])? $data['customerId'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $createdStart = isset($data['createdStart'])? $data['createdStart'] :'';
         $createdEnd = isset($data['createdEnd'])? $data['createdEnd'] :'';
@@ -47,13 +49,19 @@ class DpsInvoiceRepository extends EntityRepository
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
+         if (!empty($hmsInvoice)) {
+            $qb->leftJoin('e.hmsInvoice','hms');
+            $qb->andWhere($qb->expr()->like("hms.invoice", "'%$hmsInvoice%'"  ));
+        }
         if (!empty($customerName)) {
-            $qb->join('e.customer','c');
-            $qb->andWhere($qb->expr()->like("c.name", "'$customerName%'"  ));
+            $qb->andWhere($qb->expr()->like("c.name", "'%$customerName%'"  ));
+        }
+
+        if (!empty($customerId)) {
+            $qb->andWhere($qb->expr()->like("c.customerId", "'%$customerId%'"  ));
         }
 
         if (!empty($customerMobile)) {
-            $qb->join('e.customer','m');
             $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
         }
         if (!empty($createdStart)) {
@@ -255,8 +263,9 @@ class DpsInvoiceRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getDpsConfig()->getId();
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','c');
         $qb->where('e.dpsConfig = :config')->setParameter('config', $config) ;
-        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles())) {
+        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles()) and  $user->getParticularDoctor()) {
             $id = $user->getParticularDoctor()->getId();
             $qb->andWhere('e.hmsAssignDoctor = :doctor')->setParameter('doctor', $id) ;
         }

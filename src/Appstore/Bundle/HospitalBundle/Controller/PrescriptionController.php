@@ -362,11 +362,15 @@ class PrescriptionController extends Controller
                 $entity = new DpsInvoice();
                 $entity->setDpsConfig($config);
                 $entity->setCustomer($invoice->getCustomer());
+                $entity->setInvoice($invoice->getInvoice());
+                $entity->setHmsInvoice($invoice);
                 $entity->setHmsAssignDoctor($invoice->getAssignDoctor());
+                $entity->setDoctorName($invoice->getAssignDoctor()->getName());
                 $entity->setPayment($invoice->getAssignDoctor()->getPrice());
                 $entity->setSubTotal($invoice->getAssignDoctor()->getPrice());
                 $entity->setTotal($invoice->getAssignDoctor()->getPrice());
                 $entity->setPayment($invoice->getAssignDoctor()->getPrice());
+                $entity->setVisitType($invoice->getVisitType());
                 $entity->setCreatedBy($this->getUser());
                 $em->persist($entity);
                 $em->flush();

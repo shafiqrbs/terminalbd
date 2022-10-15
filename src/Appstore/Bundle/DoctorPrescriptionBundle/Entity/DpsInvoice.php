@@ -42,6 +42,12 @@ class DpsInvoice
     private $dpsConfig;
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="dpsInvoices")
+     **/
+    private $hmsInvoice;
+
+
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsService", inversedBy="dpsInvoices")
      **/
@@ -178,6 +184,20 @@ class DpsInvoice
      * @ORM\Column(name="invoice", type="string", length=50, nullable=true)
      */
     private $invoice;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="doctorName", type="string", length=255, nullable=true)
+     */
+    private $doctorName;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="visitType", type="string", length=255, nullable=true)
+     */
+    private $visitType;
 
     /**
      * @var integer
@@ -919,6 +939,54 @@ class DpsInvoice
     public function setDiseasesProfile($diseasesProfile)
     {
         $this->diseasesProfile = $diseasesProfile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
+    }
+
+    /**
+     * @param mixed $hmsInvoice
+     */
+    public function setHmsInvoice($hmsInvoice)
+    {
+        $this->hmsInvoice = $hmsInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoctorName()
+    {
+        return $this->doctorName;
+    }
+
+    /**
+     * @param string $doctorName
+     */
+    public function setDoctorName($doctorName)
+    {
+        $this->doctorName = $doctorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVisitType()
+    {
+        return $this->visitType;
+    }
+
+    /**
+     * @param string $visitType
+     */
+    public function setVisitType($visitType)
+    {
+        $this->visitType = $visitType;
     }
 
 
