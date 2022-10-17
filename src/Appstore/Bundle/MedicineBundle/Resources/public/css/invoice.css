@@ -32,7 +32,7 @@
 
 div.checker {
     border: 3px solid red;
-    margin-top: -4px;
+    margin-top: 4px;
 }
 
 .btn-show{
@@ -151,7 +151,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     background: none;
     font-weight: bold;
     color: #000;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .form-horizontal .patient-info .control-label span ,  .form-horizontal .referred-info .control-label span {
