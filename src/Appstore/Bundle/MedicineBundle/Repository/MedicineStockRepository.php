@@ -36,7 +36,7 @@ class MedicineStockRepository extends EntityRepository
         $brandName = isset($data['brandName'])? $data['brandName'] :'';
         $keyword = isset($data['keyword'])? $data['keyword'] :'';
         if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("e.name", "'$name%'"  ));
+            $qb->andWhere("e.name = :name")->setParameter('name', $name);
         }
         if (!empty($sku)) {
             $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
@@ -51,11 +51,19 @@ class MedicineStockRepository extends EntityRepository
             $qb->andWhere("e.mode = :mode")->setParameter('mode', $mode);
         }
         if (!empty($keyword)) {
+            $keyword = $this->clean($keyword);
             $qb->leftJoin('e.medicineBrand','mb');
             $qb->leftJoin('mb.medicineGeneric','mg');
             $qb->andWhere('e.name LIKE :searchTerm OR e.brandName LIKE :searchTerm OR mg.name LIKE :searchTerm OR e.slug LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.$keyword.'%');
         }
+    }
+
+
+    public function  clean($string) {
+        $res = preg_replace('/[0-9\@\&\^\%\(\)\#\$\!\]\[\}\{\*\'\"\.\;\" "]+/', ' ', $string);
+        return $res;
+
     }
 
     public function checkDuplicateStockMedicine(MedicineConfig $config, MedicineBrand $brand)

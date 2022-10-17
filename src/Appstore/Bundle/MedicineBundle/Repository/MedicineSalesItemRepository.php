@@ -29,6 +29,7 @@ class MedicineSalesItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('si');
         $qb->join('si.medicineSales','s');
+        $qb->join("si.medicineStock",'m');
         $qb->select('SUM(si.quantity) AS quantity');
         $qb->addSelect('COUNT(si.id) AS totalItem');
         $qb->addSelect('SUM(si.quantity * si.purchasePrice) AS totalPurchase');
@@ -257,6 +258,7 @@ class MedicineSalesItemRepository extends EntityRepository
 		$createdEnd = isset($data['endDate'])? $data['endDate'] :'';
 		$medicineName = isset($data['medicineName'])? $data['medicineName'] :'';
         $medicineBrand = isset($data['brandName'])? $data['brandName'] :'';
+        $keyword = isset($data['keyword'])? $data['keyword'] :'';
 		if (!empty($invoice)) {
 			$qb->andWhere($qb->expr()->like("s.invoice", "'%$invoice%'"  ));
 		}
@@ -300,7 +302,7 @@ class MedicineSalesItemRepository extends EntityRepository
 			$qb->setParameter('method', $transactionMethod);
 		}
 		if(!empty($medicineName)){
-			$qb->andWhere($qb->expr()->like("m.name", "'%$medicineName%'"  ));
+	        $qb->andWhere("m.name = :name")->setParameter('name', $medicineName);
 		}
         if(!empty($medicineBrand)){
             $qb->andWhere($qb->expr()->like("m.brandName", "'%$medicineBrand%'"  ));
@@ -309,7 +311,21 @@ class MedicineSalesItemRepository extends EntityRepository
             $qb->andWhere("si.quantity = :quantity")->setParameter('quantity', $quantity);
 		}
 
+        if (!empty($keyword)) {
+            $keyword = $this->clean($keyword);
+            $qb->andWhere('m.name LIKE :searchTerm OR m.brandName LIKE :searchTerm OR m.slug LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.$keyword.'%');
+        }
+
 	}
+
+    public function  clean($string) {
+        $res = preg_replace('/[0-9\@\&\^\%\(\)\#\$\!\]\[\}\{\*\'\"\.\;\" "]+/', ' ', $string);
+        return $res;
+
+    }
+
+
 
     public function handleDateRangeFind($qb,$data)
     {
@@ -338,6 +354,7 @@ class MedicineSalesItemRepository extends EntityRepository
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('si');
         $qb->join('si.medicineSales','s');
+        $qb->join("si.medicineStock",'m');
         $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
