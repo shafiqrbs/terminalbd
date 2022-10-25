@@ -91,7 +91,7 @@ hms_invoice_admission_empty_delete:
 hms_invoice_admission_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:approve" }
-    methods:  POST
+    methods:  [POST,PUT]
     options:
             expose: true
 
@@ -163,9 +163,11 @@ hms_invoice_admission_daily_particular_delete:
             expose: true
 
 hms_invoice_admission_daily_invoice_transaction_submit:
-    path:     /{id}/admitted-patient-particular-submit
+    path:     /{invoice}/{id}/admitted-patient-particular-submit
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:submitTransaction" }
-    methods:  [POST]
+    methods:  [POST,PUT]
+    options:
+            expose: true
 
 
 hms_invoice_admission_transaction_print:

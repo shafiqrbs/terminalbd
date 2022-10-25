@@ -2,8 +2,10 @@
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
+use Appstore\Bundle\HospitalBundle\Entity\HmsDoctorVisitMode;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
+use Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup;
 use Appstore\Bundle\HospitalBundle\Entity\HmsStockOut;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
@@ -364,10 +366,32 @@ class ParticularRepository extends EntityRepository
         return $result;
     }
 
+    public function insertDoctorVisitModes(Particular $doctor,$data){
 
+        $em = $this->_em;
+        if(!empty($data['visitMod'])){
+            foreach($data['visitMod'] as $key => $item ){
+                $entity = new HmsDoctorVisitMode();
+                $particular = $em->getRepository(HmsServiceGroup::class)->find($key);
+                $entity->setDoctor($doctor);
+                $entity->setService($particular);
+                $entity->setAmount($item);
+                $em->persist($entity);
+                $em->flush();
+            }
+        }
+    }
+    public function updateDoctorVisitModes(Particular $doctor,$data){
 
-
-
-
+        $em = $this->_em;
+        if(!empty($data['visitMod'])){
+            foreach($data['visitMod'] as $key => $item ){
+                $entity = $em->getRepository(HmsDoctorVisitMode::class)->findOneBy(array('doctor' => $doctor->getId(),'service'=> $key));
+                $entity->setAmount($item);
+                $em->persist($entity);
+                $em->flush();
+            }
+        }
+    }
 
 }

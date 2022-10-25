@@ -313,7 +313,56 @@ $(document).on("click", ".paymentConfirm", function(event) {
 });
 
 
-$(document).on('click', '#addPayment', function() {
+$(document).on("click", "#addPayment", function() {
+
+    var formData = new FormData($('form#invoiceForm')[0]); // Create an arbitrary FormData instance
+    var url = $('form#invoiceForm').attr('action'); // Create an arbitrary FormData instance
+    console.log(formData);
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(el) {
+            $.ajax({
+                url:url ,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data:formData,
+                success: function(response){
+                    // location.reload();
+                }
+            });
+        }
+    })
+
+});
+
+var invoicePayment = $("#invoicePayment").validate({
+
+    rules: {
+        "invoicePayment[payment]": {required: true, digits: true},
+        "invoicePayment[discount]": {required: false},
+        "invoicePayment[cardNo]": {required: false},
+        "invoicePayment[paymentCard]": {required: false},
+        "invoicePayment[accountBank]": {required: false},
+        "invoicePayment[accountMobileBank]": {required: false},
+        "invoicePayment[paymentMobile]": {required: false},
+        "invoicePayment[transactionId]": {required: false},
+        "invoicePayment[comment]": {required: false},
+    },
+    messages: {
+        "invoicePayment[payment]": "Enter payment amount",
+    },
+    tooltip_options: {
+        "invoicePayment[payment]": {placement: 'top', html: true},
+    },
+    submitHandler: function (invoicePayment) {
+        $('form#invoicePayment').submit();
+
+    }
+});
+
+$(document).on('click', '#addPaymentxxx', function() {
 
     var payment = $('#payment').val();
     var discount = $('#discount').val();

@@ -1804,10 +1804,8 @@ class Builder extends ContainerAware
             $menu['HR & Payroll']->addChild('Branch', array('route' => 'domain_branches'));
         }
         if ($securityContext->isGranted('ROLE_HR_EMPLOYEE')) {
-            $menu['HR & Payroll']->addChild('Human Resource')->setAttribute('dropdown', true);
-            $menu['HR & Payroll']['Human Resource']->addChild('Employee', array('route' => 'domain_user'));
+            $menu['HR & Payroll']->addChild('System Users', array('route' => 'domain_user'));
         }
-
         if ($securityContext->isGranted('ROLE_HR_ATTENDANCE')) {
             $menu['HR & Payroll']->addChild('Attendance')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Attendance']->addChild('Daily Sheet', array('route' => 'attendance'));

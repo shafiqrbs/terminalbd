@@ -52,52 +52,36 @@ class DoctorAppointmentType extends AbstractType
             ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
             ->add('smsAlert',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
-            ->add('visitType', 'choice', array(
-                'attr' => array('class' => 'm-wrap visitType span12 invoiceProcess select-custom'),
-                'expanded' => false,
-                'multiple' => false,
-                'data' => 'New Visit',
-                'choices' => array(
-                    'New Visit' => 'New Visit',
-                    'Report' => 'Report',
-                    'Follow up' => 'Follow up',
-                    'Old' => 'Old',
-                ),
-            ))
             ->add('appointmentDate', DateType::class, array(
                 'widget' => 'single_text',
                 'html5' => true,
                 'required' => true,
                 'attr' => array('class' => 'm-wrap span12', 'min' => date('Y-m-d'),'placeholder'=>"Expected Date",'data-trigger' => "focus"),
             ))
-            ->add('assignDoctor', 'entity', array(
+
+            ->add('visitType', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'visitDoctor',
-                'empty_value' => '---Select Assign Doctor---',
-                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap visitType'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                        ->andWhere("e.service = 5")
+                        ->andWhere("e.service = 12")
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }
             ))
-
-            ->add('diseasesProfile', 'entity', array(
+            ->add('assignDoctor', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
-                'property' => 'name',
-                'empty_value' => '---Select diseases profile---',
-                'attr'=>array('class'=>'span12 m-wrap select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select diseases profile')),
-                ),
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'visitDoctor',
+                'empty_value' => '---Select Assign Doctor---',
+                'attr'=>array('class'=>'span12 m-wrap select2 assignDoctor'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                        ->andWhere("e.service = 11")
+                        ->andWhere("e.service = 5")
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }
@@ -133,7 +117,7 @@ class DoctorAppointmentType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                        ->andWhere("e.service = 12")
+                        ->andWhere("e.service = 13")
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }

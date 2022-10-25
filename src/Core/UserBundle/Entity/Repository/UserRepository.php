@@ -233,7 +233,6 @@ class UserRepository extends EntityRepository
 
             $array['HMS'] = array(
                 'ROLE_HOSPITAL'                              => 'Hospital & Diagnostic',
-                'ROLE_HOSPITAL_FINANCIAL_APPROVE'            => 'Financial Approve',
                 'ROLE_DOMAIN_HOSPITAL_ADMISSION'             => 'Admission',
                 'ROLE_DOMAIN_HOSPITAL_VISIT'                 => 'Doctor Visit',
                 'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Receptionist',
@@ -243,13 +242,12 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_HOSPITAL_REPORT_PRINT'          => 'Report Print',
                 'ROLE_DOMAIN_HOSPITAL_DUTY_DOCTOR'           => 'Duty Doctor',
                 'ROLE_DOMAIN_HOSPITAL_DUTY_NURSE'            => 'Duty Nurse',
+                'ROLE_DOMAIN_HOSPITAL_OT'                    => 'OT',
                 'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Doctor',
-                'ROLE_DOMAIN_HOSPITAL_PURCHASE'              => 'Purchase',
-                'ROLE_DOMAIN_HOSPITAL_ISSUE'                 => 'Stock Issue',
-                'ROLE_DOMAIN_HOSPITAL_STOCK'                 => 'Stock',
                 'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Configuration',
                 'ROLE_DOMAIN_HOSPITAL_MASTERDATA'            => 'Master Data',
                 'ROLE_DOMAIN_HOSPITAL_REPORT'                => 'Reports',
+                'ROLE_HOSPITAL_FINANCIAL_APPROVE'            => 'Financial Approve',
                 'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Administrator',
             );
         }
@@ -470,10 +468,11 @@ class UserRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
+        $array = array('user');
         $qb->where("e.globalOption =".$option->getId());
-      //  $qb->andWhere('e.domainOwner = 2');
+        $qb->andWhere("e.userGroup IN (:userGroups)")->setParameter('userGroups',$array);
       //  $qb->andWhere('e.isDelete != 1');
-      //  $qb->orderBy("e.username","ASC");
+        $qb->orderBy("e.username","ASC");
         $result = $qb->getQuery()->getResult();
         return $result;
     }

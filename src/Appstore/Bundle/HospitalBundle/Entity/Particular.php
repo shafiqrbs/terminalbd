@@ -9,10 +9,12 @@ use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Particular
  *
  * @ORM\Table( name = "hms_particular")
+ * @UniqueEntity(fields={"assignOperator","hospitalConfig"},message="Doctor already existing,Please try again.")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\ParticularRepository")
  */
 class Particular
@@ -116,7 +118,7 @@ class Particular
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator"))
      **/
     private  $assignOperator;
 
@@ -126,8 +128,17 @@ class Particular
     private  $surgeryDepartment;
 
     /**
-     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsDoctorVisitMode", mappedBy="doctor")
      **/
+    private  $visitModes;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="assignDoctor_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * })
+     */
     private  $assignDoctor;
 
     /**
@@ -139,6 +150,22 @@ class Particular
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="particulars")
      **/
     protected $location;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Particular", inversedBy="children")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * })
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Particular" , mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $children;
+
 
     /**
      * @var string
@@ -1798,6 +1825,46 @@ class Particular
     public function setDoctorSignatureBangla($doctorSignatureBangla)
     {
         $this->doctorSignatureBangla = $doctorSignatureBangla;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param mixed $children
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVisitModes()
+    {
+        return $this->visitModes;
     }
 
 

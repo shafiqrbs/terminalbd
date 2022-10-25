@@ -53,6 +53,15 @@ class UserType extends AbstractType
                     ))
             )
             ->add('enabled')
+            ->add('userGroup', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span8'),
+                'expanded'      => false,
+                'multiple'      => false,
+                'choices' => array(
+                    'employee' => 'employee',
+                    'user' => 'user'
+                ),
+            ))
             ->add('roles', 'choice', array(
                     'attr'=>array('class'=>'category form-control'),
                     'required' => false,

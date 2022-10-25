@@ -24,13 +24,15 @@ $(document).on('click', '.addAppointment', function() {
 
 });
 
-$(document).on('change', '#appointment_invoice_assignDoctor', function() {
-    var id = $(this).val();
-    $.get(Routing.generate('hms_doctor_visit_amount',{id:id}), function( data ){
+$(document).on('change', '.assignDoctor, .visitType', function() {
+    var id = $("#appointment_invoice_assignDoctor").val();
+    var visitType = $("#appointment_invoice_visitType").val();
+    $.get(Routing.generate('hms_doctor_visit_amount',{id:id,'visitType':visitType}), function( data ){
         $('#appointment_invoice_payment').val(data);
         $('#visit').html(data);
     });
 });
+
 
 $('form#appointmentPatientForm').on('keypress', 'input,select,textarea', function (e) {
 

@@ -8,10 +8,8 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess;
 use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
-use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
-use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
@@ -87,7 +85,7 @@ class User extends BaseUser
 	 *
 	 * @ORM\Column(name="userGroup", type="string", length = 30, nullable=true)
 	 */
-	private $userGroup;
+	private $userGroup = "user";
 
 	/**
 	 * @var string

@@ -39,7 +39,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_ADMISSION,ROLE_DOMAIN_HOSPITAL_VISIT");
      */
 
     public function indexAction()
@@ -66,8 +66,8 @@ class InvoiceController extends Controller
 
     }
 
-     /**
-     * @Secure(roles="ROLE_HOSPITAL,ROLE_DOMAIN");
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_ADMISSION,ROLE_DOMAIN_HOSPITAL_VISIT");
      */
 
     public function appointmentInvoiceAction()
@@ -76,6 +76,9 @@ class InvoiceController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_ADMISSION,ROLE_DOMAIN_HOSPITAL_VISIT");
+     */
     public function oldPatientDiagnosticAction(Request $request)
     {
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
@@ -150,18 +153,22 @@ class InvoiceController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_ADMISSION,ROLE_DOMAIN_HOSPITAL_VISIT");
+     */
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Invoice();
         $option = $this->getUser()->getGlobalOption();
-        $patient = isset($_REQUEST['patient']) ? $_REQUEST['patient']:'';
-        if(!empty($patient)){
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option,'id' => $patient));
-            $entity->setCustomer($customer);
-            $entity->setMobile($customer->getMobile());
-        }
         $hospital = $option->getHospitalConfig();
+        $invoice = isset($_REQUEST['id']) ? $_REQUEST['id']:'';
+        if(!empty($invoice)){
+            $admission = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'id' => $invoice));
+            $entity->setCustomer($admission->getCustomer());
+            $entity->setMobile($admission->getCustomer()->getMobile());
+            $entity->setParent($admission);
+        }
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
         $entity->setService($service);
@@ -182,9 +189,11 @@ class InvoiceController extends Controller
 
     }
 
+
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_ADMISSION,ROLE_DOMAIN_HOSPITAL_VISIT");
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -207,6 +216,10 @@ class InvoiceController extends Controller
         ));
     }
 
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     */
 
     public function readyReportAction(Invoice $entity)
     {
@@ -289,6 +302,10 @@ class InvoiceController extends Controller
 
 
     }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     */
 
     public function invoiceParticularDeleteAction( $invoice, InvoiceParticular $particular){
 
@@ -516,9 +533,12 @@ class InvoiceController extends Controller
         } else {
             return new Response('failed');
         }
-        exit;
     }
 
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
+     */
     public function deleteAction(Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -526,12 +546,16 @@ class InvoiceController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsEditInvoiceTransaction($entity);
-        $em->remove($entity);
+        $entity->setIsDelete(1);
+        $entity->setInvoiceMode('delete');
+        $em->persist($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
-        exit;
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
+     */
     public function diagnoesticInvoiceReverseAction($invoice){
 
         /*
@@ -585,13 +609,20 @@ class InvoiceController extends Controller
         ));
     }
 
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
+     */
+
     public function deleteEmptyInvoiceAction()
     {
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findBy(array('hospitalConfig' => $hospital, 'process' => 'Created','invoiceMode'=>'diagnostic'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
-            $em->remove($entity);
+            $entity->setIsDelete(1);
+            $entity->setInvoiceMode('delete');
+            $em->persist($entity);
             $em->flush();
         }
         return $this->redirect($this->generateUrl('hms_invoice'));

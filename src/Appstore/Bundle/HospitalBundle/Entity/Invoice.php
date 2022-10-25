@@ -83,6 +83,21 @@ class Invoice
      **/
     private  $customer;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Invoice", inversedBy="children")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     * })
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Invoice" , mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $children;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoice", cascade={"persist"}  )
      **/
@@ -154,12 +169,12 @@ class Invoice
      */
     private $discountRequestedComment;
 
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="visitType", type="string", nullable=true)
-     */
-    private $visitType;
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup")
+     **/
+    private  $visitType;
+
 
     /**
      * @var string
@@ -378,7 +393,7 @@ class Invoice
      *
      * @ORM\Column(name="isDelete", type="boolean" )
      */
-    private $isDelete = false;
+    private $isDelete = 0;
 
 
     /**
@@ -1757,21 +1772,7 @@ class Invoice
         $this->specialization = $specialization;
     }
 
-    /**
-     * @return string
-     */
-    public function getVisitType()
-    {
-        return $this->visitType;
-    }
 
-    /**
-     * @param string $visitType
-     */
-    public function setVisitType($visitType)
-    {
-        $this->visitType = $visitType;
-    }
 
     /**
      * @return string
@@ -1789,7 +1790,53 @@ class Invoice
         $this->followUpId = $followUpId;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
 
+    /**
+     * @param mixed $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param mixed $children
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVisitType()
+    {
+        return $this->visitType;
+    }
+
+    /**
+     * @param mixed $visitType
+     */
+    public function setVisitType($visitType)
+    {
+        $this->visitType = $visitType;
+    }
 
 
 }

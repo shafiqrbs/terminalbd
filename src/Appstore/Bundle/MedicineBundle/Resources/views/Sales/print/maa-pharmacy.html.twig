@@ -167,7 +167,7 @@
                         <td class="span2 center">{{ item.mrpPrice|number_format(2) }}</td>
                         <td class="span2 center">{{ item.itemPercent }}</td>
                         <td class="span2 center">{{ item.quantity }}</td>
-                        <td class="span2 right">{{ subTotal|number_format(2) }}</td>
+                        <td class="span2 right">{{ item.subTotal|number_format(2) }}</td>
                     </tr>
                 {% endfor %}
             {% endif %}

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\HospitalBundle\Entity\HmsDoctorVisitMode;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
@@ -136,7 +137,10 @@ class DoctorAppointmentController extends Controller
 
     public function doctorVisitAmountAction(Particular $particular)
     {
-        return new Response($particular->getPrice());
+        $visitType = $_REQUEST['visitType'];
+        $visit = $this->getDoctrine()->getRepository(HmsDoctorVisitMode::class)->findOneBy(array('doctor'=>$particular,'service'=>$visitType));
+        $amount = empty($visit) ? $particular->getPrice() : $visit->getAmount();
+        return new Response($amount);
     }
 
 

@@ -75,6 +75,12 @@ class InvoiceTransaction
     private  $accountMobileBank;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard" )
+     **/
+    private  $paymentCard;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="cardNo", type="string", length=100, nullable=true)
@@ -592,6 +598,8 @@ class InvoiceTransaction
     {
         $this->approvedBy = $approvedBy;
     }
+
+
 
 
 }

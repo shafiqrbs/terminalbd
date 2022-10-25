@@ -51,6 +51,18 @@
                                     <!--/span-->
                                     <div class="span12">
                                         <div class="control-group">
+                                            <label class="control-label"  for="category" >User Group</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.userGroup) }}
+                                                {{ form_errors(form.userGroup) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid" >
+                                    <!--/span-->
+                                    <div class="span12">
+                                        <div class="control-group">
                                             <label class="control-label"  for="category" >Employee Type<span class="required">*</span></label>
                                             <div class="controls">
                                                 {{ form_widget(form.profile.employeeType) }}

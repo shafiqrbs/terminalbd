@@ -34,6 +34,21 @@ class AccountSalesType extends AbstractType
                     new NotBlank(array('message'=>'Add payment amount'))
                 )))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remark')))
+
+            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span9 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true)))
+            ->add('smsAlert',CheckboxType::class, array('attr'=>array('class'=>'')))
+
+            ->add('processHead', 'choice', array(
+		        'attr'=>array('class'=>'span12 m-wrap'),
+		        'expanded'      =>false,
+		        'multiple'      =>false,
+		        'choices' => array(
+                    'Due' => 'Receive from Due',
+                    'Advance' => 'Receive of Advance',
+                    'Debit' => 'Debit Adjustment(Receive)',
+                    'Credit' => 'Credit Adjustment(Payment)',
+		        ),
+	        ))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -47,31 +62,18 @@ class AccountSalesType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-            ->add('customer','text', array('attr'=>array('class'=>'m-wrap span9 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true)))
-            ->add('smsAlert',CheckboxType::class, array('attr'=>array('class'=>'')))
             ->add('accountBank', 'entity', array(
-               'required'    => true,
-               'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
-               'empty_value' => '---Choose a bank---',
-               'property' => 'name',
-               'attr'=>array('class'=>'span12 m-wrap'),
-               'query_builder' => function(EntityRepository $er){
-                   return $er->createQueryBuilder('b')
-                       ->where("b.globalOption =".$this->globalOption->getId())
-                       ->orderBy("b.name", "ASC");
-               },
-           ))
-            ->add('processHead', 'choice', array(
-		        'attr'=>array('class'=>'span12 m-wrap'),
-		        'expanded'      =>false,
-		        'multiple'      =>false,
-		        'choices' => array(
-                    'Due' => 'Receive from Due',
-                    'Advance' => 'Receive of Advance',
-                    'Debit' => 'Debit Adjustment(Receive)',
-                    'Credit' => 'Credit Adjustment(Payment)',
-		        ),
-	        ))
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
+                'empty_value' => '---Choose a bank---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.globalOption =".$this->globalOption->getId())
+                        ->orderBy("b.name", "ASC");
+                },
+            ))
             ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

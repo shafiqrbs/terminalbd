@@ -7,8 +7,10 @@ use Appstore\Bundle\HospitalBundle\Form\DoctorType;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -58,10 +60,11 @@ class DoctorController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createCreateForm($entity,$globalOption);
         $form->handleRequest($request);
-
+        $errors = $this->getErrorsFromForm($form);
+        $data = $request->request->all();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setHospitalConfig($globalOption -> getHospitalConfig());
+            $entity->setHospitalConfig($globalOption->getHospitalConfig());
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(5);
             $entity->setService($service);
             $em->persist($entity);
@@ -71,13 +74,36 @@ class DoctorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
+            $this->getDoctrine()->getRepository(Particular::class)->insertDoctorVisitModes($entity,$data);
             return $this->redirect($this->generateUrl('hms_doctor_new', array('id' => $entity->getId())));
         }
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $globalOption->getHospitalConfig()));
 
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
             'entity' => $entity,
+            'visitMods' => $visitMods,
             'form'   => $form->createView(),
         ));
+    }
+
+    private function getErrorsFromForm(FormInterface $form)
+    {
+        $errors = array();
+
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = (string) $child->getErrors(true, false);
+            }
+        }
+        return $errors;
     }
 
     /**
@@ -111,9 +137,10 @@ class DoctorController extends Controller
         $entity = new Particular();
         $globalOption = $this->getUser()->getGlobalOption();
         $form   = $this->createCreateForm($entity,$globalOption);
-
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $globalOption->getHospitalConfig()));
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
             'entity' => $entity,
+            'visitMods' => $visitMods,
             'form'   => $form->createView(),
         ));
     }
@@ -149,9 +176,17 @@ class DoctorController extends Controller
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity,$globalOption);
-
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $config));
+        $visitAmounts = array();
+        if($entity->getVisitModes()){
+            foreach ( $entity->getVisitModes() as $mod){
+                $visitAmounts[$mod->getService()->getId()] = $mod->getAmount();
+            }
+        }
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
             'entity'      => $entity,
+            'visitMods'      => $visitMods,
+            'visitAmounts'      => $visitAmounts,
             'form'   => $editForm->createView(),
         ));
     }
@@ -193,7 +228,7 @@ class DoctorController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $editForm = $this->createEditForm($entity,$globalOption);
         $editForm->handleRequest($request);
-
+        $data = $request->request->all();
         if ($editForm->isValid()) {
             if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
@@ -207,11 +242,20 @@ class DoctorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
+            $this->getDoctrine()->getRepository(Particular::class)->updateDoctorVisitModes($entity,$data);
             return $this->redirect($this->generateUrl('hms_doctor_edit',array('id'=>$id)));
         }
-
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $globalOption->getHospitalConfig()));
+        $visitAmounts = array();
+        if($entity->getVisitModes()){
+            foreach ( $entity->getVisitModes() as $mod){
+                $visitAmounts[$mod->getService()->getId()] = $mod->getAmount();
+            }
+        }
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
             'entity'      => $entity,
+            'visitMods'      => $visitMods,
+            'visitAmounts'      => $visitAmounts,
             'form'   => $editForm->createView(),
         ));
     }

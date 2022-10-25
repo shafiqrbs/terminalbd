@@ -58,6 +58,7 @@ class DomainUserController extends Controller
             $entity->setGlobalOption($globalOption);
             $entity->getProfile()->upload();
             $entity->setDomainOwner(2);
+            $entity->setUserGroup('user');
             $entity->setAppPassword($password);
             $em->persist($entity);
             $em->flush();

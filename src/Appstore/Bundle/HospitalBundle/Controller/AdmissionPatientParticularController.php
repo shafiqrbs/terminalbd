@@ -9,6 +9,7 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmissionType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceAdmittedParticularType;
+use Appstore\Bundle\HospitalBundle\Form\InvoicePaymentType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
 use Appstore\Bundle\HospitalBundle\Form\NewPatientAdmissionType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
@@ -35,7 +36,6 @@ class AdmissionPatientParticularController extends Controller
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital , 'invoice' => $invoice));
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
@@ -70,6 +70,29 @@ class AdmissionPatientParticularController extends Controller
 
     }
 
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param Invoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createInvoicePaymentForm(InvoiceTransaction $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new InvoicePaymentType($globalOption), $entity, array(
+            'action' => $this->generateUrl('hms_invoice_admission_daily_invoice_transaction_submit', array('invoice' => $entity->getHmsInvoice()->getInvoice(),'id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoicePayment',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
     public function dailyAdmittedInvoiceAction($invoice, InvoiceTransaction $transaction)
     {
 
@@ -84,11 +107,38 @@ class AdmissionPatientParticularController extends Controller
         }
         $particular = new AdmissionPatientParticular();
         $particularForm = $this->createCreateForm($particular);
+        $editForm = $this->createInvoicePaymentForm($transaction);
         return $this->render('HospitalBundle:InvoiceAdmission:confirm.html.twig', array(
             'entity' => $entity,
             'invoiceTransaction' => $transaction,
             'form' => $particularForm->createView(),
+            'paymentForm' => $editForm->createView(),
         ));
+    }
+
+    public function submitTransactionAction(Request $request , InvoiceTransaction $transaction)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $payment = (float)$data['invoicePayment']['payment'];
+        $transactionForm = $this->createInvoicePaymentForm($transaction);
+        $transactionForm->handleRequest($request);
+        if ($transactionForm->isValid() and (!empty($transaction) and !empty($payment))) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($transaction);
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
+        }
+        $particular = new AdmissionPatientParticular();
+        $particularForm = $this->createCreateForm($particular);
+        $editForm = $this->createInvoicePaymentForm($transaction);
+        return $this->render('HospitalBundle:InvoiceAdmission:confirm.html.twig', array(
+            'entity' => $transaction->getHmsInvoice(),
+            'invoiceTransaction' => $transaction,
+            'form' => $particularForm->createView(),
+            'paymentForm' => $editForm->createView(),
+        ));
+
     }
 
     /**
@@ -128,7 +178,7 @@ class AdmissionPatientParticularController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($transaction,$msg);
         return new Response(json_encode($result));
-        exit;
+
 
     }
 
@@ -160,25 +210,7 @@ class AdmissionPatientParticularController extends Controller
         exit;
     }
 
-    public function submitTransactionAction(Request $request , InvoiceTransaction $transaction)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $payment = $request->request->get('payment');
-        $transaction->setProcess('In-progress');
-        $transaction->setPayment($payment);
-        $em->persist($transaction);
-        $em->flush();
-        /*foreach ($transaction->getAdmissionPatientParticulars() as $patientParticular ){
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceParticularMasterUpdate($patientParticular);
-        }
-        if($transaction->getPayment() > 0){
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionInvoiceTransactionUpdate($transaction);
-        }
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
-        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);*/
-        return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
-    }
+
 
     public function invoiceTransactionDeleteAction($invoice ,InvoiceTransaction $transaction)
     {

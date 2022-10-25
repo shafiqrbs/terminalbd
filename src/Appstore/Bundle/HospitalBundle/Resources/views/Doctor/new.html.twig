@@ -331,6 +331,18 @@
                             </div>
                         </div>
                     </div>
+                    {% if visitMods is defined and visitMods is not empty %}
+                        {% for visitMod in visitMods %}
+                            <div class="row-fluid">
+                                <div class="span6">
+                                    {{ visitMod.name }}
+                                </div>
+                                <div class="span6">
+                                   <input type="text" id="visitMod-{{ visitMod.id }}" name="visitMod[{{ visitMod.id }}]" value="{% if visitAmounts is defined and visitAmounts is not empty  %}{{ visitAmounts[visitMod.id] }} {% endif %}"  class="m-wrap span12 number" placeholder="Enter {{ visitMod.name }} amount">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
                 <!--/span-->
             </div>

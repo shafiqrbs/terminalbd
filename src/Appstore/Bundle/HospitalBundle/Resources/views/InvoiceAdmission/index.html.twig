@@ -240,7 +240,7 @@
                                                     <li><a target="_blank"  href="{{ path('hms_invoice_admission_print',{'id':entity.id}) }}" class="btn"><i class="icon-print"></i>&nbsp;Invoice Print</a></li>
                                                     {% endif %}
                                                     {% if entity.customer is not empty %}
-                                                    <li><a target="_blank" href="{{ path('hms_invoice_new',{'patient':entity.customer.id}) }}"  class="btn"><i class="icon-plus-sign-alt"></i> Diagnostic</a></li>
+                                                    <li><a target="_blank" href="{{ path('hms_invoice_new',{'id':entity.id}) }}"  class="btn"><i class="icon-plus-sign-alt"></i> Diagnostic</a></li>
                                                     <li><a  href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn" ><i class="icon-plus-sign-alt"></i> Prescription</a></li>
                                                     {% endif %}
                                                     {% if entity.process in ['Released','Dead'] %}
