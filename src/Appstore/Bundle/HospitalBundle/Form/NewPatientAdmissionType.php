@@ -102,6 +102,20 @@ class NewPatientAdmissionType extends AbstractType
                 'choices'=> $this->DepartmentChoiceList()
             ))
 
+            ->add('referredDoctor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'referredName',
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
+                'empty_value' => '--- Choose Referred ---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere('b.service IN(:service)') ->setParameter('service',array_values(array(5,6)))
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
             ->add('assignDoctor', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
@@ -111,7 +125,7 @@ class NewPatientAdmissionType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
-                        ->andWhere("b.service = 5")
+                        ->andWhere("b.service =6")
                         ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
                         ->orderBy("b.name", "ASC");
                 }

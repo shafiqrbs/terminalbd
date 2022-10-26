@@ -207,6 +207,17 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="control-group">
+                                    <label class="control-label red" for="firstName"><span>Referred</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.referredDoctor) }}
+                                        {{ form_errors(form.referredDoctor) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
                                     <label class="control-label red" for="firstName"><span>Assistant Doctor</span></label>
                                     <div class="controls">
                                         {{ form_widget(form.assistantDoctor) }}

@@ -599,6 +599,17 @@ class Particular
         return $this->name.$designation;
     }
 
+    public function getReferredName(){
+
+        if($this->getService()->getId() == 6 ){
+            return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')';
+        }else{
+            $designation = empty($this->doctorSignature) ? '' : " (".$this->doctorSignature.")";
+            return $this->particularCode.' - '.$this->name.$designation;
+        }
+
+    }
+
     public function getVisitDoctor(){
 
         $weeklyDay = empty($this->weeklyOffDay) ? '' : $this->weeklyOffDay;

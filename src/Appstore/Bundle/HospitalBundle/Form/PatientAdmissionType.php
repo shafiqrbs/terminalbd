@@ -65,6 +65,20 @@ class PatientAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+            ->add('referredDoctor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'referredName',
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
+                'empty_value' => '--- Choose Referred ---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere('b.service IN(:service)') ->setParameter('service',array_values(array(5,6)))
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
             ->add('diseasesProfile', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
