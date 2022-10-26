@@ -389,8 +389,8 @@ class InvoiceRepository extends EntityRepository
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
-        $qb->getQuery();
-        return  $qb;
+        $result = $qb->getQuery();
+        return  $result;
     }
 
     public function invoiceDetailReporets(User $user , $mode , $data)

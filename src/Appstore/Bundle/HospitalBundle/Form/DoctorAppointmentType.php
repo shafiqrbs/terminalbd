@@ -46,7 +46,7 @@ class DoctorAppointmentType extends AbstractType
         $builder
 
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('followUpId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Follow-up ID','autocomplete'=>'off')))
+            ->add('followUpId','text', array( 'required'=> false,'attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Follow-up ID','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
@@ -60,14 +60,14 @@ class DoctorAppointmentType extends AbstractType
             ))
 
             ->add('visitType', 'entity', array(
-                'required'    => true,
+                'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap visitType'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                        ->andWhere("e.service = 12")
+                        ->andWhere("e.service = 13")
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }
@@ -117,7 +117,7 @@ class DoctorAppointmentType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                        ->andWhere("e.service = 13")
+                        ->andWhere("e.service = 12")
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
                 }

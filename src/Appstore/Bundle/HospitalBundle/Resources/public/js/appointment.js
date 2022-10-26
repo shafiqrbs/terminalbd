@@ -90,6 +90,7 @@ var form = $("#appointmentPatientForm").validate({
         "appointment_invoice[diseasesProfile]": {required: false},
         "appointment_invoice[payment]": {required: false, digits: true},
         "appointment_invoice[comment]": {required: false},
+        "#appointment_invoice_followUpId": {required: false},
     },
 
     messages: {

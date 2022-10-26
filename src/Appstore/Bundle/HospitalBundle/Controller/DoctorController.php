@@ -77,7 +77,7 @@ class DoctorController extends Controller
             $this->getDoctrine()->getRepository(Particular::class)->insertDoctorVisitModes($entity,$data);
             return $this->redirect($this->generateUrl('hms_doctor_new', array('id' => $entity->getId())));
         }
-        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $globalOption->getHospitalConfig()));
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>13,'hospitalConfig' => $globalOption->getHospitalConfig()));
 
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
             'entity' => $entity,
@@ -137,7 +137,7 @@ class DoctorController extends Controller
         $entity = new Particular();
         $globalOption = $this->getUser()->getGlobalOption();
         $form   = $this->createCreateForm($entity,$globalOption);
-        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $globalOption->getHospitalConfig()));
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>13,'hospitalConfig' => $globalOption->getHospitalConfig()));
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
             'entity' => $entity,
             'visitMods' => $visitMods,
@@ -176,7 +176,7 @@ class DoctorController extends Controller
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity,$globalOption);
-        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $config));
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>13,'hospitalConfig' => $config));
         $visitAmounts = array();
         if($entity->getVisitModes()){
             foreach ( $entity->getVisitModes() as $mod){
@@ -245,7 +245,7 @@ class DoctorController extends Controller
             $this->getDoctrine()->getRepository(Particular::class)->updateDoctorVisitModes($entity,$data);
             return $this->redirect($this->generateUrl('hms_doctor_edit',array('id'=>$id)));
         }
-        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>12,'hospitalConfig' => $globalOption->getHospitalConfig()));
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>13,'hospitalConfig' => $globalOption->getHospitalConfig()));
         $visitAmounts = array();
         if($entity->getVisitModes()){
             foreach ( $entity->getVisitModes() as $mod){

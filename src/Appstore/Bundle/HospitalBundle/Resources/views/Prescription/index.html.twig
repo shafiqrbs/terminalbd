@@ -149,6 +149,7 @@
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Diseases</th>
+                                    <th class="numeric" >Specialization</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Process</th>
@@ -182,14 +183,15 @@
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.diseasesProfile is not empty %}{{ entity.diseasesProfile.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.specialization is not empty %}{{ entity.specialization.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != "Done" %}
-                                                <a  href="javascript:" data-url="{{ path('hms_invoice_appointment_approve',{'id':entity.id}) }}" class="btn green mini confirm"><i class="icon-retweet"></i> Confirmed</a>
+                                                <a  href="javascript:" data-url="{{ path('hms_invoice_appointment_approve',{'id':entity.id}) }}" class="btn green mini confirm">Confirmed</a>
                                             {% else %}
                                                 {% if hospital.prescriptionBuilder == 1 %}
-                                                    <a target="_blank" href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn yellow mini tooltips" ><i class="icon-plus-sign-alt"></i> Prescription</a>
+                                                    <a target="_blank" href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn yellow mini tooltips" >Prescription</a>
                                                 {% endif %}
                                             {% endif %}
                                         </td>

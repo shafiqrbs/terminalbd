@@ -124,7 +124,7 @@ class Invoice
     private  $cabin;
 
    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="specialization", cascade={"persist"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="specialization", cascade={"persist"}  )
      **/
     private  $specialization;
 

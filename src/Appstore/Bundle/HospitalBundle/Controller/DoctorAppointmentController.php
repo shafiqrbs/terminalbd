@@ -137,8 +137,11 @@ class DoctorAppointmentController extends Controller
 
     public function doctorVisitAmountAction(Particular $particular)
     {
-        $visitType = $_REQUEST['visitType'];
-        $visit = $this->getDoctrine()->getRepository(HmsDoctorVisitMode::class)->findOneBy(array('doctor'=>$particular,'service'=>$visitType));
+        $visit = "";
+        $visitType = isset($_REQUEST['visitType']) ? $_REQUEST['visitType'] :'';
+        if($visitType){
+            $visit = $this->getDoctrine()->getRepository(HmsDoctorVisitMode::class)->findOneBy(array('doctor'=>$particular,'service'=>$visitType));
+        }
         $amount = empty($visit) ? $particular->getPrice() : $visit->getAmount();
         return new Response($amount);
     }
