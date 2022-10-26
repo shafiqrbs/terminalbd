@@ -60,7 +60,7 @@ class DoctorAppointmentType extends AbstractType
             ))
 
             ->add('visitType', 'entity', array(
-                'required'    => false,
+                'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap visitType'),

@@ -329,7 +329,7 @@ $(document).on("click", "#addPayment", function() {
                 contentType: false,
                 data:formData,
                 success: function(response){
-                    // location.reload();
+                     location.reload();
                 }
             });
         }

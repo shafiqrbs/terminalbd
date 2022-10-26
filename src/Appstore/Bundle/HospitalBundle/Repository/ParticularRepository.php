@@ -387,9 +387,14 @@ class ParticularRepository extends EntityRepository
         if(!empty($data['visitMod'])){
             foreach($data['visitMod'] as $key => $item ){
                 $entity = $em->getRepository(HmsDoctorVisitMode::class)->findOneBy(array('doctor' => $doctor->getId(),'service'=> $key));
-                $entity->setAmount($item);
-                $em->persist($entity);
-                $em->flush();
+                if($entity){
+                    $entity->setAmount($item);
+                    $em->persist($entity);
+                    $em->flush();
+                }else{
+                   $this->insertDoctorVisitModes($doctor,$data);
+                }
+
             }
         }
     }
