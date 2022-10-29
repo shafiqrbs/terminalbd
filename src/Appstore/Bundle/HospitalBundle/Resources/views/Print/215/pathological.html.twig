@@ -24,7 +24,11 @@
 </head>
 <body style="margin: 0px!important;">
 <div style="display: block">
-    {% if global.webPath('file') is not empty %}<img style="max-height:100px" src="/{{ global.webPath('file') }}">{% endif %}
+    {% if entity.hospitalConfig.webHeaderPath is defined  and entity.hospitalConfig.webHeaderPath is not empty  %}
+        <div class="print-header-content" style="height: 100px">
+            <img style="width: 100%; height:100px" src="/{{ entity.hospitalConfig.webHeaderPath }}">
+        </div>
+    {% endif %}
     <div style="margin-top:{{ global.hospitalConfig.printMarginReportTop }}px; margin-left:{{ global.hospitalConfig.printMarginReportLeft }}px;margin-right:{{ global.hospitalConfig.printMarginReportLeft }}px;" >
         <table class="table table-border reportTable" style="border: 3px solid #383939!important" >
             <tr class="print-header">

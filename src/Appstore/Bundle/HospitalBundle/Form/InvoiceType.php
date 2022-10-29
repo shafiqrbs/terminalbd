@@ -56,7 +56,7 @@ class InvoiceType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'doctor',
-                'empty_value' => '---Select Consultant---',
+                'empty_value' => '---Select Consultant/Doctor---',
                 'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
