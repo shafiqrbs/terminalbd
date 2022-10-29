@@ -240,3 +240,27 @@ $(document).on('keyup', '#hospitalInvoice_payment', function() {
         $('.due').html(balance);
     }
 });
+
+var invoicePayment = $("#invoicePayment").validate({
+
+    rules: {
+        "invoicePayment[payment]": {required: true, digits: true},
+        "invoicePayment[discount]": {required: false},
+        "invoicePayment[cardNo]": {required: false},
+        "invoicePayment[paymentCard]": {required: false},
+        "invoicePayment[accountBank]": {required: false},
+        "invoicePayment[accountMobileBank]": {required: false},
+        "invoicePayment[paymentMobile]": {required: false},
+        "invoicePayment[transactionId]": {required: false},
+        "invoicePayment[comment]": {required: false},
+    },
+    messages: {
+        "invoicePayment[payment]": "Enter payment amount",
+    },
+    tooltip_options: {
+        "invoicePayment[payment]": {placement: 'top', html: true},
+    },
+    submitHandler: function (invoicePayment) {
+        $('form#invoicePayment').submit();
+    }
+});

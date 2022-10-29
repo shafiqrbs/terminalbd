@@ -67,6 +67,7 @@ class DoctorController extends Controller
             $entity->setHospitalConfig($globalOption->getHospitalConfig());
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(5);
             $entity->setService($service);
+            $entity->setIsDoctor(1);
             $em->persist($entity);
             $entity->upload();
             $entity->signatureUpload();

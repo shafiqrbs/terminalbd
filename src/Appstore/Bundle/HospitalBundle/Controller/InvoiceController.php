@@ -6,8 +6,10 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceEditType;
+use Appstore\Bundle\HospitalBundle\Form\InvoicePaymentType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -468,7 +470,7 @@ class InvoiceController extends Controller
         $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
         $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
         return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
-        exit;
+
     }
 
     public function showAction(Invoice $entity)
@@ -487,12 +489,37 @@ class InvoiceController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
         if ($inventory == $entity->getHospitalConfig()->getId()) {
+            $editForm = $this->createInvoicePaymentForm($entity, new InvoiceTransaction());
             return $this->render('HospitalBundle:Invoice:confirm.html.twig', array(
                 'entity' => $entity,
+                'paymentForm' => $editForm->createView(),
             ));
         } else {
             return $this->redirect($this->generateUrl('hms_invoice'));
         }
+    }
+
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param Invoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createInvoicePaymentForm(Invoice $invoice, InvoiceTransaction $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new InvoicePaymentType($globalOption), $entity, array(
+            'action' => $this->generateUrl('hms_add_invoice_payment', array('id' => $invoice->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'invoicePayment',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
     }
 
     /**
@@ -520,19 +547,27 @@ class InvoiceController extends Controller
     public function addPaymentAction(Request $request , Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $payment = $request->request->get('payment');
-        $discount = (float)$request->request->get('discount');
+        $data = $request->request->all();
+        $payment = (float)$data['invoicePayment']['payment'];
+        $discount = (float)$data['invoicePayment']['discount'];
+        $remark = $request->request->get('remark');
         $discount = $discount !="" ? $discount : 0 ;
-        if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
+        $transaction =  new InvoiceTransaction();
+        $transactionForm = $this->createInvoicePaymentForm($entity,$transaction);
+        $transactionForm->handleRequest($request);
+        if ($transactionForm->isValid() and (!empty($entity) and !empty($payment)) or (!empty($entity) and !empty($discount))) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess('In-progress');
+            $code = $this->getDoctrine()->getRepository(InvoiceTransaction::class)->getLastCode($entity);
+            $transaction->setHmsInvoice($entity);
+            $transaction->setCode($code + 1);
+            $transaction->setProcess("In-progress");
+            $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+            $transaction->setTransactionCode($transactionCode);
+            $em->persist($transaction);
             $em->flush();
-            $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
-            return new Response('success');
-        } else {
-            return new Response('failed');
         }
+        return $this->redirect($this->generateUrl('hms_invoice_confirm',array('id'=>$entity->getId())));
+
     }
 
 
@@ -882,6 +917,7 @@ class InvoiceController extends Controller
         endforeach;
         exit;
     }
+
 
 }
 

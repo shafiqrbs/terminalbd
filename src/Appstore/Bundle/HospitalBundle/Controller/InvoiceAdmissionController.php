@@ -685,7 +685,7 @@ class InvoiceAdmissionController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
-                'id' => 'invoiceForm',
+                'id' => 'invoicePayment',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -730,7 +730,6 @@ class InvoiceAdmissionController extends Controller
             $em->flush();
         }
         return $this->redirect($this->generateUrl('hms_invoice_admission_confirm',array('id'=>$entity->getId())));
-
     }
 
     public function dischargeAction($id)
