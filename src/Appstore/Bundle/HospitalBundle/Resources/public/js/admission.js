@@ -565,9 +565,11 @@ $(document).on("click", "#dischargeBtn", function() {
     var url = $(this).attr('data-url');
     var caseOfDeath = $('#caseOfDeath').val();
     var doctorComment = $('#doctorComment').val();
+    var doctorDeathComment = $('#doctorDeathComment').val();
     var advice = $('#advice').val();
     var medicine = $('#medicine').val();
-    var processMode = $('#processMode').val();
+    var processDeath = $('#processDeath').val();
+    var processRelease = $('#processRelease').val();
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
@@ -575,9 +577,9 @@ $(document).on("click", "#dischargeBtn", function() {
             $.ajax({
                 url:url,
                 type: 'POST',
-                data:'caseOfDeath='+caseOfDeath+'&doctorComment='+doctorComment+'&advice='+advice+'&medicine='+medicine+'&processMode='+processMode,
+                data:'caseOfDeath='+caseOfDeath+'&doctorComment='+doctorComment+'&doctorDeathComment='+doctorDeathComment+'&advice='+advice+'&medicine='+medicine+'&processDeath='+processDeath+'&processRelease='+processRelease,
                 success: function(response) {
-                     location.reload();
+                   //  location.reload();
                 }
             })
 

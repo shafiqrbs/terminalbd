@@ -740,9 +740,9 @@ class InvoiceAdmissionController extends Controller
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$inventory,'id'=>$id));
         /* @var $entity Invoice */
         $entity->setMedicine($data['medicine']);
-        $entity->setDoctorComment($data['doctorComment']);
         $entity->setAdvice($data['advice']);
         $entity->setCaseOfDeath($data['caseOfDeath']);
+        $entity->setDoctorComment($data['doctorComment']);
         $entity->setProcess($data['processMode']);
         $entity->setDischargeBy($this->getUser());
         $em->flush();

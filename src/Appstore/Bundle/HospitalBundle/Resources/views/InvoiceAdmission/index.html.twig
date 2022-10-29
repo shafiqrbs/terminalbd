@@ -221,7 +221,7 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            <div class="btn-group">
+                                            <div>
                                                 {% if entity.process in processArr %}
                                                     <a href="{{ path('hms_invoice_admission_confirm', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="fa fa-refresh"></i> Process</a>
                                                 {% endif %}

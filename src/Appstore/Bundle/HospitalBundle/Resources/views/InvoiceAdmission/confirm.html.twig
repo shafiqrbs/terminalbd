@@ -558,55 +558,55 @@
                                         {% if entity.total == entity.payment and entity.process not in ['Released','Dead','Release','Death'] %}
                                             <div class="clearfix">&nbsp;</div>
                                             <div class="row-fluid">
-                                        <form>
-                                        <div class="span12">
-                                            <div class="process" id="release">
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <textarea  class="m-wrap span12" id="medicine" name="medicine" placeholder="Enter medicine">{{ entity.medicine }}</textarea>
+                                                <form>
+                                                <div class="span12">
+                                                    <div class="process" id="release">
+                                                        <div class="row-fluid">
+                                                            <div class="span12">
+                                                                <textarea  class="m-wrap span12" id="medicine" name="medicine" placeholder="Enter medicine">{{ entity.medicine }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row-fluid">
+                                                            <div class="span12">
+                                                                <textarea  class="m-wrap span12" id="advice" name="advice" placeholder="Advices"  >{{ entity.advice }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row-fluid">
+                                                            <div class="span12">
+                                                                <textarea  class="m-wrap span12" id="doctorComment" name="doctorComment" placeholder="Doctor comment">{{ entity.doctorComment }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row-fluid pull-right text-right">
+                                                            <input type="hidden" name="caseOfDeath" id="caseOfDeath">
+                                                            <input type="hidden" name="processMode" id="processMode" value="Release" >
+                                                            <button type="button" class="btn blue" id="dischargeBtn" data-url="{{ path('hms_invoice_admission_discharge',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="process" id="death">
+                                                        <div class="clearfix">&nbsp;</div>
+                                                        <div class="row-fluid">
+                                                            <div class="span12">
+                                                                <textarea  class="m-wrap span12" id="caseOfDeath" name="caseOfDeath" placeholder="Cases of death"> {{ entity.caseOfDeath }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row-fluid">
+                                                            <div class="span12">
+                                                                <textarea  class="m-wrap span12" id="doctorComment" name="doctorComment" placeholder="Doctor comment"  >{{ entity.doctorComment }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row-fluid pull-right text-right">
+                                                            <input type="hidden" name="medicine" id="medicine">
+                                                            <input type="hidden" name="advice" id="advice">
+                                                            <input type="hidden" name="processMode" id="processMode" value="Death" >
+                                                            <button type="button" class="btn blue" id="dischargeBtn" data-url="{{ path('hms_invoice_admission_discharge',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <textarea  class="m-wrap span12" id="advice" name="advice" placeholder="Advices"  >{{ entity.advice }}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <textarea  class="m-wrap span12" id="doctorComment" name="doctorComment" placeholder="Doctor comment">{{ entity.doctorComment }}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="row-fluid pull-right text-right">
-                                                    <input type="hidden" name="caseOfDeath" id="caseOfDeath">
-                                                    <input type="hidden" name="processMode" id="processMode" value="Release" >
-                                                    <button type="button" class="btn blue" id="dischargeBtn" data-url="{{ path('hms_invoice_admission_discharge',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
-                                                </div>
+                                                </form>
                                             </div>
-                                            <div class="process" id="death">
-                                                <div class="clearfix">&nbsp;</div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <textarea  class="m-wrap span12" id="caseOfDeath" name="caseOfDeath" placeholder="Cases of death"> {{ entity.caseOfDeath }}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="row-fluid">
-                                                    <div class="span12">
-                                                        <textarea  class="m-wrap span12" id="doctorComment" name="doctorComment" placeholder="Doctor comment"  >{{ entity.doctorComment }}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="row-fluid pull-right text-right">
-                                                    <input type="hidden" name="medicine" id="medicine">
-                                                    <input type="hidden" name="advice" id="advice">
-                                                    <input type="hidden" name="processMode" id="processMode" value="Death" >
-                                                    <button type="button" class="btn blue" id="dischargeBtn" data-url="{{ path('hms_invoice_admission_discharge',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        </form>
-                                    </div>
                                             <div class="clearfix">&nbsp;</div>
                                         {% endif %}
+                                        {% if entity.process in ['Released','Release','Death','Dead'] %}
                                         {% if entity.process in ['Released','Release'] %}
                                             <div class="row-fluid">
                                                 <div class="span2"><strong>Name of Medicine</strong></div>
@@ -629,8 +629,9 @@
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span2"><strong>Doctor Comment By</strong></div>
-                                            <div class="span10">{% if entity.dischargeBy and entity.dischargeBy.profile is defined %}{{ entity.dischargeBy.name }}{% endif %}</div>
+                                            <div class="span10">{% if entity.dischargeBy and entity.dischargeBy.profile is defined %}{{ entity.dischargeBy.profile.name }}{% endif %}</div>
                                         </div>
+                                        {% endif %}
                                         <div class="form-actions portlet box grey">
                                         <div class="pull-right" id="action-{{ entity.id }}">
                                             <div class="btn-group dropup">
