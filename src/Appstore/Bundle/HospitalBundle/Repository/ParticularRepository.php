@@ -177,6 +177,8 @@ class ParticularRepository extends EntityRepository
     {
         $em = $this->_em;
         $name = $data['referredDoctor']['name'];
+        $doctorSignature = $data['referredDoctor']['doctorSignature'];
+        $isDoctor = isset($data['referredDoctor']['isDoctor']) ? 1 : 0;
         $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
         if($entity){
             return $entity;
@@ -185,6 +187,8 @@ class ParticularRepository extends EntityRepository
             $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
             $entity->setMobile($mobile);
             $entity->setName($name);
+            $entity->setDoctorSignature($doctorSignature);
+            $entity->setIsDoctor($isDoctor);
             $entity->setHospitalConfig($hospital);
             $em->persist($entity);
             $em->flush($entity);

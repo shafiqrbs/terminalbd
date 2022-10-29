@@ -68,21 +68,6 @@ class InvoicePaymentType extends AbstractType
                         ->orderBy("e.id","ASC");
                 }
             ))
-            ->add('process',
-                'choice', array(
-                    'attr'=>array('class'=>'span12 m-wrap process'),
-                    'empty_value' => '---Choose process---',
-                    'choices' => array(
-                        'Admitted'    => 'Admitted',
-                        'Release'   => 'Release',
-                        'Death'  => 'Death',
-                    ),
-                    'required'    => false,
-                    'mapped'    => false,
-                    'multiple'    => false,
-                    'expanded'  => false,
-                    'empty_data'  => null,
-            ))
             ->add('accountBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',

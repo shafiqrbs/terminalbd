@@ -72,7 +72,7 @@ class DoctorAppointmentController extends Controller
         $entity = new Invoice();
         $em = $this->getDoctrine()->getManager();
         $form = $this->createInvoiceCustomerForm($entity);
-        $html = $this->renderView('HospitalBundle:Invoice:appointment.html.twig', array(
+        $html = $this->renderView('HospitalBundle:Prescription:appointment.html.twig', array(
             'initialDiscount'   => 0,
             'user'   => $user,
             'entity'   => $entity,
@@ -117,8 +117,9 @@ class DoctorAppointmentController extends Controller
         $entity->setPrintFor('visit');
         $entity->setCreatedBy($this->getUser());
         if (!empty($data['customer']['name'])) {
+            $patientId = $request->request->get('patientId');
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,'',$data);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$patientId,$data);
             $entity->setCustomer($customer);
             $entity->setMobile($mobile);
         }

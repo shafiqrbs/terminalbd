@@ -160,6 +160,12 @@ class Invoice
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
+    private  $dischargeBy;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
     private  $discountRequestedBy;
 
     /**
@@ -550,6 +556,12 @@ class Invoice
      * @ORM\Column(name="invoiceMode", type="string", length=50, nullable=true)
      */
     private $invoiceMode = 'pathological';
+
+    public function __construct()
+    {
+        $this->appointmentDate = new \DateTime();
+    }
+
 
     /**
      * Get id
@@ -1836,6 +1848,22 @@ class Invoice
     public function setVisitType($visitType)
     {
         $this->visitType = $visitType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDischargeBy()
+    {
+        return $this->dischargeBy;
+    }
+
+    /**
+     * @param mixed $dischargeBy
+     */
+    public function setDischargeBy($dischargeBy)
+    {
+        $this->dischargeBy = $dischargeBy;
     }
 
 

@@ -186,7 +186,7 @@ class InvoiceAdmissionController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
-                'id' => 'invoiceForm',
+                'id' => 'admissionForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -714,14 +714,7 @@ class InvoiceAdmissionController extends Controller
         $payment = (float)$data['invoicePayment']['payment'];
         $discount = (float)$data['invoicePayment']['discount'];
         $remark = $request->request->get('remark');
-        $medicine = $request->request->get('medicine');
-        $advice = $request->request->get('advice');
-        $doctorComment = $request->request->get('doctorComment');
-        $doctorDeadComment = $request->request->get('doctorDeadComment');
-        $caseOfDeath = $request->request->get('caseOfDeath');
-
         $discount = $discount !="" ? $discount : 0 ;
-        $process = $request->request->get('process');
         $transaction =  new InvoiceTransaction();
         $transactionForm = $this->createInvoicePaymentForm($entity,$transaction);
         $transactionForm->handleRequest($request);
@@ -734,35 +727,27 @@ class InvoiceAdmissionController extends Controller
             $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
             $transaction->setTransactionCode($transactionCode);
             $em->persist($transaction);
-            $entity->setProcess('Admitted');
-            $entity->setComment($remark);
-            $entity->setMedicine($medicine);
-            $entity->setAdvice($advice);
-            $entity->setDoctorComment($doctorComment);
-            $entity->setCaseOfDeath($caseOfDeath);
             $em->flush();
-            return new Response('success');
-        } elseif ($transactionForm->isValid()  and !empty($entity) and in_array($process , array('Release','Death')) and $entity->getTotal() <= $entity->getPayment() ) {
-            $entity->setProcess($process);
-            $entity->setComment($remark);
-            $entity->setMedicine($medicine);
-            $entity->setAdvice($advice);
-            if($entity->getProcess() == "Death"){
-                $entity->setDoctorComment($doctorDeadComment);
-            }else{
-                $entity->setDoctorComment($doctorComment);
-            }
-            $entity->setCaseOfDeath($caseOfDeath);
-            if($entity->getHospitalConfig()->isCommissionAutoApproved() == 1){
-                $entity->setCommissionApproved(1);
-            }
-            $em->flush();
-            $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->insertHospitalFinalAccountInvoice($entity);
-            return new Response('success');
-        } else {
-            return new Response('failed');
         }
+        return $this->redirect($this->generateUrl('hms_invoice_admission_confirm',array('id'=>$entity->getId())));
 
+    }
+
+    public function dischargeAction($id)
+    {
+        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$inventory,'id'=>$id));
+        /* @var $entity Invoice */
+        $entity->setMedicine($data['medicine']);
+        $entity->setDoctorComment($data['doctorComment']);
+        $entity->setAdvice($data['advice']);
+        $entity->setCaseOfDeath($data['caseOfDeath']);
+        $entity->setProcess($data['processMode']);
+        $entity->setDischargeBy($this->getUser());
+        $em->flush();
+        return new Response('success');
     }
 
     public function releaseAction($invoice,$process)

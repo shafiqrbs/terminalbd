@@ -60,6 +60,18 @@ domain_customer_search:
     options:
             expose: true
 
+domain_patient_search:
+    path:     /patient-search
+    defaults: { _controller: "DomainUserBundle:Customer:patientSearch" }
+    options:
+            expose: true
+
+domain_patient_information:
+    path:     /{id}/patient-information
+    defaults: { _controller: "DomainUserBundle:Customer:patientInfo" }
+    options:
+        expose: true
+
 domain_customer_name:
     path:      /{customer}/customer-name
     defaults: { _controller: "DomainUserBundle:Customer:searchCustomerName" }

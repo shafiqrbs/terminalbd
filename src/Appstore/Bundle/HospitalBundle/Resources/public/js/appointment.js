@@ -62,7 +62,7 @@ $('form#appointmentPatientForm').on('keypress', 'input,select,textarea', functio
                 break;
 
             case 'appointment_invoice_customer_bloodPressure':
-                $("#appointment_invoice_assignDoctor").select2().select2("val","").select2('open');
+                $('#appointment_invoice_customer_address').focus();
                 break;
 
             case 'appointment_invoice_assignDoctor':
@@ -80,6 +80,7 @@ var form = $("#appointmentPatientForm").validate({
 
     rules: {
 
+        "appointment_invoice_assignDoctor": {required: true},
         "appointment_invoice[customer][name]": {required: true},
         "appointment_invoice[customer][mobile]": {required: true, digits: true},
         "appointment_invoice[customer][age]": {required: true, digits: true},
@@ -88,19 +89,21 @@ var form = $("#appointmentPatientForm").validate({
         "appointment_invoice[customer][bloodPressure]": {required: false},
         "appointment_invoice[department]": {required: false},
         "appointment_invoice[diseasesProfile]": {required: false},
-        "appointment_invoice[payment]": {required: false, digits: true},
+        "appointment_invoice[payment]": {required: true, digits: true},
         "appointment_invoice[comment]": {required: false},
         "#appointment_invoice_followUpId": {required: false},
+        "#appointment_invoice_referredDoctor": {required: false},
     },
 
     messages: {
-        "appointment_invoice[department]": "Select Department",
+        "appointment_invoice_assignDoctor": "Select Doctor",
         "appointment_invoice[customer][name]": "Enter patient name",
         "appointment_invoice[customer][mobile]": "Enter patient mobile no",
         "appointment_invoice[customer][age]": "Enter patient age",
         "appointment_invoice[payment]": "Enter payment amount, if payment are due input zero",
     },
     tooltip_options: {
+        "appointment_invoice_assignDoctor": {placement: 'top', html: true},
         "appointment_invoice[customer][name]": {placement: 'top', html: true},
         "appointment_invoice[customer][mobile]": {placement: 'top', html: true},
         "appointment_invoice[customer][age]": {placement: 'top', html: true},
@@ -115,11 +118,11 @@ var form = $("#appointmentPatientForm").validate({
             processData : false,
             contentType : false,
             beforeSend: function() {
-                $('#saveDiagnosticButton').html("Please Wait...").attr('disabled', 'disabled');
+                $('.saveDiagnosticButton').attr('disabled', true);
             },
             success: function(response){
                 $('form#appointmentPatientForm')[0].reset();
-                $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr("disabled", false);
+                $('.saveDiagnosticButton').attr("disabled", false);
                 $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                 $('#appointment_invoice_discount').val(0);
                 $('#invoiceParticulars').hide();
@@ -239,6 +242,64 @@ function appointmentFormSubmit() {
 
         }
     });
+
+
+    $(".invoiceSearch").select2({
+
+        ajax: {
+            url: Routing.generate('domain_patient_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
+    $(document).on('change', '#patient', function() {
+
+        var id = $(this).val();
+        $.ajax({
+            url: Routing.generate('domain_patient_information',{'id':id}),
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+                obj = JSON.parse(response);
+                $('#patientId').val(obj['patientId']);
+                $('#appointment_invoice_customer_name').val(obj['name']);
+                $('#appointment_invoice_customer_mobile').val(obj['mobile']);
+                $('#appointment_invoice_customer_age').val(obj['age']);
+                $('#appointment_invoice_customer_ageType').val(obj['ageType']);
+                $('#appointment_invoice_customer_gender').val(obj['gender']);
+                $('#appointment_invoice_customer_height').val(obj['height']);
+                $('#appointment_invoice_customer_weight').val(obj['weight']);
+                $('#appointment_invoice_customer_bloodPressure').val(obj['bloodPressure']);
+                $('#appointment_invoice_customer_address').val(obj['address']);
+            }
+        })
+
+    });
+
 }
 
 

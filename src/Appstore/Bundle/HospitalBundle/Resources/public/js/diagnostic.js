@@ -288,6 +288,65 @@ function formSubmit() {
 
         }
     });
+
+    $(".invoiceSearch").select2({
+
+        ajax: {
+            url: Routing.generate('domain_patient_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
+    $(document).on('change', '#patient', function() {
+
+        var id = $(this).val();
+        $.ajax({
+            url: Routing.generate('domain_patient_information',{'id':id}),
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+                obj = JSON.parse(response);
+                $('#customerId').val(obj['patientId']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_name').val(obj['name']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_mobile').val(obj['mobile']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_age').val(obj['age']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_ageType').val(obj['ageType']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_gender').val(obj['gender']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_address').val(obj['address']);
+            }
+        })
+
+    });
+
+
+
+
+
+
 }
 
 

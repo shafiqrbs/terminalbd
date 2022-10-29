@@ -334,12 +334,14 @@ class PrescriptionController extends Controller
         }else{
             $template = "Print:prescription";
         }
+        $barcode = $this->getBarcode($entity->getInvoice());
         return $this->render("HospitalBundle:{$template}.html.twig", array(
             'entity'                => $entity,
             'config'                => $entity->getHospitalConfig(),
             'global'                => $entity->getHospitalConfig()->getGlobalOption(),
             'patientBarcode'        => $patientId,
             'inWords'               => $inWords,
+            'barcode'               => $barcode,
 
         ));
     }

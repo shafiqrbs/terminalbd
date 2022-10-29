@@ -95,6 +95,13 @@ hms_invoice_admission_approved:
     options:
             expose: true
 
+hms_invoice_admission_discharge:
+    path:     /{id}/patient-discharge
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:discharge" }
+    methods:  [POST]
+    options:
+            expose: true
+
 hms_invoice_admission_patient_release:
     path:     /{invoice}/{process}/invoice-confirm
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:release" }

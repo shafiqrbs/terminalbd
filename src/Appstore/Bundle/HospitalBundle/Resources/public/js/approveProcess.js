@@ -252,6 +252,8 @@ $(".select2CustomerCode" ).autocomplete({
 
 });
 
+/*
+
 $( ".select2mobile" ).autocomplete({
 
     source: function( request, response ) {
@@ -285,6 +287,8 @@ $( ".select2mobile" ).autocomplete({
     }
 
 });
+
+*/
 
 $( ".select2HmsInvoice" ).select2({
 

@@ -12,6 +12,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Customer controller.
@@ -297,6 +298,34 @@ class CustomerController extends Controller
             $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($go,$item);
         }
         return new JsonResponse($item);
+    }
+
+     public function patientSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $go = $this->getUser()->getGlobalOption();
+            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchPatientAutoComplete($go,$item);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function patientInfoAction(Customer $customer)
+    {
+        $data = array(
+            'id'=> $customer->getId(),
+            'patientId'=> $customer->getCustomerId(),
+            'name'=> $customer->getName(),
+            'mobile'=> $customer->getMobile(),
+            'age'=> $customer->getAge(),
+            'ageType'=> $customer->getAgeType(),
+            'gender'=> $customer->getGender(),
+            'height'=> $customer->getHeight(),
+            'weight'=> $customer->getWeight(),
+            'bloodPressure'=> $customer->getBloodPressure(),
+            'address'=> $customer->getAddress()
+        );
+        return new Response(json_encode($data));
     }
 
     public function searchCustomerNameAction($customer)

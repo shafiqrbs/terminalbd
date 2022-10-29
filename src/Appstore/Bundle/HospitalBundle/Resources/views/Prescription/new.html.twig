@@ -42,19 +42,36 @@
             </div>
         </div>
     <div class="portlet-body">
+        {{ form_start(form) }}
+        {{ form_row(form._token) }}
         <div class="portlet-body form"  >
             {% include('flash-message.html.twig')  %}
-            <!-- BEGIN FORM-->
-
-            <div class="clearfix">&nbsp;</div>
-            <div id="updatePatient" >
-                {{ form_start(form) }}
-                {{ form_row(form._token) }}
-                <div>
-                    <div class="row-fluid particular-info" style="padding-left: 15px" >
+            <div class="row-fluid particular-info">
+                <div class="span8" id="particular-table" >
+                    <div class="row-fluid" style="padding-left: 15px" >
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <div class="control-group ">
+                                    <label class="control-label red" for="firstName"><span>Assign Doctor</span><span class="required">*</span></label>
+                                    <div class="controls select-error-tooltip">
+                                        {{ form_widget(form.assignDoctor) }}
+                                        {{ form_errors(form.assignDoctor) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6">
+                                <div class="control-group">
+                                    <label class="control-label red" for="firstName"><span>Referred</span></label>
+                                    <div class="controls">
+                                        {{ form_widget(form.referredDoctor) }}
+                                        {{ form_errors(form.referredDoctor) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row-fluid">
                             <div class="span3">
-                                <div class="control-group">
+                                <div class="">
                                     <label class="control-label red" for="firstName">Patient Name<span class="required">*</span></label>
                                     <div class="controls">
                                         {{ form_widget(form.customer.name) }}
@@ -62,8 +79,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span2">
-                                <div class="control-group">
+                            <div class="span3">
+                                <div class="">
                                     <label class="control-label red" for="firstName"><span>Mobile no</span><span class="required">*</span></label>
                                     <div class="controls">
                                         {{ form_widget(form.customer.mobile) }}
@@ -71,8 +88,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span4">
-                                <div class="control-group">
+                            <div class="span6">
+                                <div class="">
                                     <label class="control-label red" for="firstName"><span>Age & Gender</span><span class="required">*</span></label>
                                     <div class="controls span4" style="margin-left: 0!important;">
                                         {{ form_widget(form.customer.age) }}
@@ -86,268 +103,173 @@
                                     <div class="clearfix"></div>
                                     <div class="controls">
                                         {{ form_errors(form.customer.age) }}
-                                        {{ form_widget(form.customer.gender) }}
+                                        {{ form_errors(form.customer.gender) }}
                                         {{ form_errors(form.customer.gender) }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="span2">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="control-label red" for="firstName"><span>Height/Weight</span></label>
-                                        <div class="controls span6" style="margin-left: 0!important;">
-                                            {{ form_widget(form.customer.height) }}
-                                        </div>
-                                        <div class="controls span6">
-                                            {{ form_widget(form.customer.weight) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span1">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="control-label red" for="firstName"><span>B/P</span></label>
-                                        {{ form_widget(form.customer.bloodPressure) }}
-                                        {{ form_errors(form.customer.bloodPressure) }}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+                        <div class="row-fluid">
 
-                    </div>
-                    <div class="clearfix">&nbsp;</div>
-                    <div class="row-fluid" style="background:#ffffff!important;">
-                        <div class="span8" id="particular-table" >
-                        </div>
-                        <div class="span4 payment-info" style="padding: 15px; background:#f5f5f5;">
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        {{ form_widget(form.customer.address) }}
-                                        {{ form_errors(form.customer.address) }}
+                            <div class="span6">
+                                <div class="">
+                                    <label class="control-label red" for="firstName"><span>Height/Weight</span><span>B/P</span></label>
+                                    <div class="controls span4" style="margin-left: 0!important;">
+                                        {{ form_widget(form.customer.height) }}
+                                    </div>
+                                    <div class="controls span4">
+                                        {{ form_widget(form.customer.weight) }}
+                                    </div>
+                                    <div class="controls span4">
+                                        {{ form_widget(form.customer.bloodPressure) }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix"><br/></div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        {{ form_widget(form.visitType) }}
-                                        {{ form_errors(form.visitType) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"><br/></div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        {{ form_widget(form.specialization) }}
-                                        {{ form_errors(form.specialization) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"><br/></div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        {{ form_widget(form.diseasesProfile) }}
-                                        {{ form_errors(form.diseasesProfile) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"><br/></div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        {{ form_widget(form.assignDoctor) }}
-                                        {{ form_errors(form.assignDoctor) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix"><br/></div>
-                            <div class="row-fluid">
-                            <div class="span12">
-                                <div class="control-group">
+                            <div class="span6">
+                                <div class="">
+                                    <label class="control-label red" for="firstName"><span>Appointment Date</span></label>
                                     <div class="controls">
                                         {{ form_widget(form.appointmentDate) }}
                                         {{ form_errors(form.appointmentDate) }}
                                     </div>
                                 </div>
                             </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <label class="custom-control custom-checkbox">&nbsp;&nbsp;SMS Alert
-                                                {{ form_widget(form.smsAlert) }}
-                                                <span class="custom-control-indicator"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label" id="receive-label" for="firstName">
-                                            <span class="label-custom" >Receivable TK. <strong id="visit"></strong></span>
-                                            <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            {{ form_widget(form.transactionMethod) }}
-                                            {{ form_errors(form.transactionMethod) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <div id="cartMethod" class="bankHide">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {{ form_widget(form.cardNo) }}
-                                                {{ form_errors(form.cardNo) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {{ form_widget(form.paymentCard) }}
-                                                {{ form_errors(form.paymentCard) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {{ form_widget(form.accountBank) }}
-                                                {{ form_errors(form.accountBank) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                            </div>
-                            <div id="bkashMethod" class="mobileBankHide">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {{ form_widget(form.accountMobileBank) }}
-                                                {{ form_errors(form.accountMobileBank) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {{ form_widget(form.paymentMobile) }}
-                                                {{ form_errors(form.paymentMobile) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {{ form_widget(form.transactionId) }}
-                                                {{ form_errors(form.transactionId) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="row-fluid">
-                                {{ form_widget(form.comment) }}
-                                {{ form_errors(form.comment) }}
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="row-fluid">
-                                <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="">
-                                <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
-                                <button type="submit" class="btn blue big" style="width: 100%!important;"><i class="icon-save"></i> Save</button>
-                            </div>
-                            </div>
+
+                        </div>
+
                     </div>
                 </div>
-                {{ form_end(form) }}
+                <div class="span4 payment-info" style="background:#ffffff80!important; padding: 15px;">
+                    <div class="row-fluid">
+                        {{ form_widget(form.customer.address) }}
+                        {{ form_errors(form.customer.address) }}
+                    </div>
+                    <div class="row-fluid ">
+                        {{ form_widget(form.visitType) }}
+                        {{ form_errors(form.visitType) }}
+                    </div>
+                    <div class="row-fluid margin-bottom-10">
+                        {{ form_widget(form.diseasesProfile) }}
+                        {{ form_errors(form.diseasesProfile) }}
+                    </div>
+                    <div class="row-fluid margin-bottom-10">
+                        {{ form_widget(form.specialization) }}
+                        {{ form_errors(form.specialization) }}
+                    </div>
+                    <div class="row-fluid">
+                        {{ form_widget(form.followUpId) }}
+                        {{ form_errors(form.followUpId) }}
+                    </div>
+                    <div class="row-fluid ">
+                        {{ form_widget(form.transactionMethod) }}
+                        {{ form_errors(form.transactionMethod) }}
+                    </div>
+                    <div id="cartMethod" class="bankHide">
+                        <div class="row-fluid">
+                            {{ form_widget(form.cardNo) }}
+                            {{ form_errors(form.cardNo) }}
+                        </div>
+                        <div class="row-fluid">
+                            {{ form_widget(form.paymentCard) }}
+                            {{ form_errors(form.paymentCard) }}
+                        </div>
+                        <div class="row-fluid">
+                            {{ form_widget(form.accountBank) }}
+                            {{ form_errors(form.accountBank) }}
+                        </div>
+                    </div>
+                    <div id="bkashMethod" class="mobileBankHide">
+                        <div class="row-fluid">
+                            {{ form_widget(form.accountMobileBank) }}
+                            {{ form_errors(form.accountMobileBank) }}
+                        </div>
+                        <div class="row-fluid">
+                            {{ form_widget(form.paymentMobile) }}
+                            {{ form_errors(form.paymentMobile) }}
+                        </div>
+                        <div class="row-fluid">
+                            {{ form_widget(form.transactionId) }}
+                            {{ form_errors(form.transactionId) }}
+                        </div>
+                    </div>
+                    <div class="row-fluid margin-bottom-5">
+                        <label class="custom-control custom-checkbox">&nbsp;&nbsp;SMS Alert
+                            {{ form_widget(form.smsAlert) }}
+                            <span class="custom-control-indicator"></span>
+                        </label>
+                    </div>
+                    <div class="row-fluid">
+                        <label class="control-label" id="receive-label" for="firstName"><span class="label-custom" >Receivable TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
             </div>
-            <div class="clearfix">&nbsp;</div>
-
-
-            <!-- END FORM-->
+            <div class="row-fluid" style="padding-top: 13px; background: #00b22d">
+                <div class="span8" style="padding-left: 15px">
+                    {{ form_widget(form.comment) }}
+                    {{ form_errors(form.comment) }}
+                </div>
+                <div class="span4">
+                    <div class="input-append span11">
+                        <div class="btn-group span12">
+                            <input type="hidden" class="initialGrandTotal" name="initialDue" id="initialDue" value="">
+                            <input type="hidden" name="initialDiscount" id="initialDiscount" value="">
+                            <button type="submit" class="btn yellow big span12 saveDiagnosticButton" value="print"  id=""><i class="icon-save"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        {{ form_end(form) }}
     </div>
     </div>
     </div>
     </div>
     </div>
- <style>
-     .sales-right input[class*="span"].m-wrap {
-         font-weight: bold;
-         margin-top: -1px;
-         text-align: right;
-         border: 2px solid #4b8df8!important;
-         height: 23px!important;
-     }
- </style>
- <style>
-        .particular-info{
-            margin-left: -10px!important;
-            padding-left: 15px;
-        }
+    <style>
         input.m-wrap , select.m-wrap , textarea.m-wrap{
-            border: 2px solid #1e7b85!important;
+            border: 2px solid #0052cc!important;
         }
         .label-custom{
-            background: #1e7b85;
+            background: #0052cc;
             padding: 0px;
-            width: 190px;
+            width: 200px;
             display: inline-block;
             text-align: right;
             padding-right: 15px;
             color: #ffffff;
         }
-        .sales-right input[class*="span"].payment{
+        .select-error-tooltip .tooltip{
+            left: 0!important;
+        }
+
+        #discount-label{
+            background: #ffe853;
+            height: 54px;
+            padding-top: 13px;
+        }
+
+        #receive-label{
+            background: red;
+            height: 54px;
+            padding-top: 13px;
+        }
+
+        .sales-right input[class*="span"].payment {
             border: 3px solid red!important;
-            height: 31px!important;
-            font-size: 20px
+            height: 48px!important;
+            font-size: 20px;
+            margin-top: -10px;
+        }
+
+        input[class*="span"]#appstore_bundle_hospitalbundle_invoice_comment{
+            height:54px!important;
         }
         .address{
             background: #ffffff!important;
         }
-        textarea{
-            background: #ffffff!important;
-        }
         .select2-container{
-            border: 2px solid #1e7b85!important;
+            border: 2px solid #0052cc!important;
         }
         .bankHide , .mobileBankHide , .customer{
             display: none;
@@ -359,13 +281,20 @@
             z-index: 99999!important;
         }
         .select2-container .select2-choice {
-            height: 31px!important;
+            height: 30px!important;
         }
+        #instruction{
+            color: red;
+            line-height: 30px;
+        }
+        textarea[class*="span"].m-wrap{
+            background: #ffffff;
+        }
+
     </style>
 {% endblock %}
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
-    '@HospitalBundle/Resources/public/css/admission.css'
     '@HospitalBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>

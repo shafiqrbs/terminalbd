@@ -789,6 +789,7 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity->setProcess('Done');
+        $entity->setApprovedBy($this->getUser());
         $entity->setCommissionApproved(1);
         $em->persist($entity);
         $em->flush();

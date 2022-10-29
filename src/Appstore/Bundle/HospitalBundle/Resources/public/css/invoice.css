@@ -21,6 +21,13 @@
     padding-bottom: 0;
 }
 
+.margin-bottom-5{
+    margin-bottom: 5px!important;
+}
+.margin-bottom-10{
+    margin-bottom: 5px!important;
+}
+
 div.checker {
     border: 3px solid red;
     margin-top: -4px;

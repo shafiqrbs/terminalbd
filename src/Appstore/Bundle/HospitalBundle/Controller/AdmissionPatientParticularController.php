@@ -86,7 +86,7 @@ class AdmissionPatientParticularController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
-                'id' => 'invoicePayment',
+                'id' => 'newInvoicePayment',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -123,7 +123,7 @@ class AdmissionPatientParticularController extends Controller
         $payment = (float)$data['invoicePayment']['payment'];
         $transactionForm = $this->createInvoicePaymentForm($transaction);
         $transactionForm->handleRequest($request);
-        if ($transactionForm->isValid() and (!empty($transaction) and !empty($payment))) {
+        if ($transactionForm->isValid() and (!empty($transaction)) and count($transaction->getAdmissionPatientParticulars())) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($transaction);
             $em->flush();
@@ -178,8 +178,6 @@ class AdmissionPatientParticularController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($transaction,$msg);
         return new Response(json_encode($result));
-
-
     }
 
     public function returnResultData(InvoiceTransaction $entity,$msg=''){

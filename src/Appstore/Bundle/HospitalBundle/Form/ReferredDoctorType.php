@@ -46,7 +46,9 @@ class ReferredDoctorType extends AbstractType
                     ))
             )
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
+            ->add('isDoctor')
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Commission no')))
+            ->add('doctorSignature','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Doctor signature information')))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 ','rows' => 4,'placeholder'=>'Enter customer address')))
             ->add('location', 'entity', array(
                 'required'    => false,

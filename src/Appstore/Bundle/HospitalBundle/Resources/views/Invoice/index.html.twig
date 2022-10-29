@@ -179,7 +179,8 @@
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
-                                    <th class="numeric" >Assign Doctor</th>
+                                    <th class="numeric" >Doctor</th>
+                                    <th class="numeric" >Referred</th>
                                     <th class="numeric" >CustomerID</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
@@ -202,6 +203,9 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y h:i A') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
+                                        <td class="numeric" >
+                                            {% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}
+                                        </td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>

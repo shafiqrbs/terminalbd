@@ -74,6 +74,16 @@ $(document).on( "click", ".receivePayment", function(e){
     $("span", this).toggleClass("fa-minus fa-money");
 });
 
+$(document).on( "change", ".invoiceSearch", function(e){
+
+    var search = $('.invoiceSearch').val();
+    var url = $('.invoiceSearch').attr("data-url");
+    $.get(url, function(data){
+
+    });
+});
+
+
 $(document).on('change', '#particular', function() {
 
     var url = $(this).val();

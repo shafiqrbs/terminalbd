@@ -31,21 +31,19 @@
             color: #0A0302;
         }
         .print-header .title-center{
-            line-height: 35px;
+            line-height:28px;
         }
         .print-header{
-            height: 35px!important;
+            height: 28px!important;
         }
 
         .print-patient .barcode-left{
             float: left;
-            margin-top: 5px;
         }
 
         .print-patient .barcode-right{
             float: right;
             padding-right: 10px;
-            margin-top: 5px;
         }
         .strong3{
             display: inline-block;
@@ -58,7 +56,7 @@
             font-size:13px;
         }
         .barcode-left , .barcode-right{
-            line-height: 18px;
+            line-height: 14px;
             font-size:13px;
         }
         .bottom-border{
@@ -77,9 +75,73 @@
         }
 
     </style>
-<div style="display: block">
-    {% if global.webPath('file') is not empty %}<img style="max-height:100px" src="/{{ global.webPath('file') }}">{% endif %}
-    <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px; margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;margin-right:{{ entity.hospitalConfig.printLeftMargin }}px;" >
+<div style="display: block; height: 380px">
+    {% if entity.hospitalConfig.isPrintHeader == 1 %}
+    {% if global.webPath('file') is not empty %}<img style="max-height:100px;width: 100%!important;" src="/{{ global.webPath('file') }}">{% endif %}
+    {% endif %}
+    <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px; margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;margin-right:{{ entity.hospitalConfig.printLeftMargin }}px; padding: 15px; padding-top:0px" >
+        <table class="table table-border" >
+            <tr class="print-header">
+                <th colspan="2">
+                    <span class="title-center text-center">Payment Received</span>
+                </th>
+            </tr>
+            <tr class="print-header">
+                <th colspan="2">
+                    <span class="barcode-left">Invoice no. {{ entity.invoice }}</span>
+                    <span class="barcode-right">Created: {{ entity.updated|date('d-m-Y') }}</span>
+                </th>
+            </tr>
+            <tr class="print-patient">
+                <td>
+                    <span class="barcode-left"><strong class="strong3">Patient</strong>: {{ entity.customer.name }}</span>
+                </td>
+                <td>
+                    <span class="barcode-right">Age & Gender: {{ entity.customer.age }} {{ entity.customer.ageType }}/ {{ entity.customer.gender }}</span>
+                </td>
+            </tr>
+            <tr class="print-patient">
+                <td>
+                    <span class="barcode-left"><strong class="strong3">Mobile</strong>: {{ entity.customer.mobile }}</span>
+                </td>
+                <td>
+                    <span class="barcode-right">H/W: <span style="width:60px; display: inline-block">{{ entity.customer.height }}  {{ entity.customer.weight }}</span></span>
+                    <span class="barcode-right"><span class="strong3">B/P: {{ entity.customer.bloodPressure }}</span></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="bottom-border"><strong class="strong3">Address</strong>: {{ entity.customer.address|raw }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="bottom-border"><strong class="strong3">Doctor</strong>: {{ entity.assignDoctor.name }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="bottom-border"><strong class="strong3">In words</strong>: {{ inWords }}</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="bottom-border"><strong class="strong3">Remarks</strong>: {{ entity.comment }}</td>
+            </tr>
+            <tr>
+                <td class="span6" style="margin-top: 10px">
+                    <ul class="unstyled" style="margin-top: 15px!important;">
+                        <li>Amount Tk. <label class="label-box">{{ entity.payment|number_format }}</label></li>
+                    </ul>
+                </td>
+                <td class="span3 pull-right" style="margin-top: 30px">
+                    <ul class="unstyled">
+                        <li style="border-top:2px solid #000; text-align: center; margin-top: 10px">Signature</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <div style="height:50px"></div>
+    </div>
+</div>
+<div style="display: block; height: 380px;width: 100%!important;">
+    {% if entity.hospitalConfig.isPrintHeader == 1 %}
+        {% if global.webPath('file') is not empty %}<img style="max-height:100px;width: 100%!important;" src="/{{ global.webPath('file') }}">{% endif %}
+    {% endif %}
+    <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px; margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;margin-right:{{ entity.hospitalConfig.printLeftMargin }}px; padding: 15px;padding-top:0px" >
         <table class="table table-border" >
             <tr class="print-header">
                 <th colspan="2">

@@ -49,7 +49,7 @@ class DoctorAppointmentType extends AbstractType
             ->add('followUpId','text', array( 'required'=> false,'attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Follow-up ID','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
+            ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric number span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
             ->add('smsAlert',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
             ->add('appointmentDate', DateType::class, array(
@@ -73,7 +73,7 @@ class DoctorAppointmentType extends AbstractType
                 }
             ))
             ->add('assignDoctor', 'entity', array(
-                'required'    => false,
+                'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'visitDoctor',
                 'empty_value' => '---Select Assign Doctor---',
@@ -84,6 +84,20 @@ class DoctorAppointmentType extends AbstractType
                         ->andWhere("e.service = 5")
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
+                }
+            ))
+            ->add('referredDoctor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'referredName',
+                'attr'=>array('class'=>'span12 select2 m-wrap'),
+                'empty_value' => '--- Choose Referred ---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere('b.service IN(:service)') ->setParameter('service',array_values(array(5,6)))
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
                 }
             ))
 

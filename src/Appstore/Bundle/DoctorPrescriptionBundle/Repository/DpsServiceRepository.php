@@ -42,28 +42,31 @@ class DpsServiceRepository extends EntityRepository
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
         $this->removeServicePreviousCheck($entity);
-        foreach ($data['serviceKey'] as $key => $value) {
-            /* @var $entity DpsService */
-            $entity= $em->getRepository('DoctorPrescriptionBundle:DpsService')->find($value);
-            $entity->setServicePosition($data['servicePosition'][$key]);
-            $entity->setServiceHeight($data['serviceHeight'][$key]);
-            $em->flush($entity);
+        if(isset($data['serviceKey']) and !empty($data['serviceKey'])){
+            foreach ($data['serviceKey'] as $key => $value) {
+                /* @var $entity DpsService */
+                $entity= $em->getRepository('DoctorPrescriptionBundle:DpsService')->find($value);
+                $entity->setServicePosition($data['servicePosition'][$key]);
+                $entity->setServiceHeight($data['serviceHeight'][$key]);
+                $em->flush($entity);
+            }
+
+            foreach ($data['serviceShow'] as $key => $value) {
+                /* @var $entity DpsService */
+                $entity= $em->getRepository('DoctorPrescriptionBundle:DpsService')->find($value);
+                $entity->setServiceShow(1);
+                $em->flush($entity);
+
+            }
+            foreach ($data['serviceHeaderShow'] as $key => $value) {
+                /* @var $entity DpsService */
+                $entity= $em->getRepository('DoctorPrescriptionBundle:DpsService')->find($value);
+                $entity->setServiceHeaderShow(1);
+                $em->flush($entity);
+
+            }
         }
 
-        foreach ($data['serviceShow'] as $key => $value) {
-            /* @var $entity DpsService */
-            $entity= $em->getRepository('DoctorPrescriptionBundle:DpsService')->find($value);
-            $entity->setServiceShow(1);
-            $em->flush($entity);
-
-        }
-        foreach ($data['serviceHeaderShow'] as $key => $value) {
-            /* @var $entity DpsService */
-            $entity= $em->getRepository('DoctorPrescriptionBundle:DpsService')->find($value);
-            $entity->setServiceHeaderShow(1);
-            $em->flush($entity);
-
-        }
 
     }
 

@@ -367,7 +367,6 @@ class PrescriptionController extends Controller
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
-        exit;
 
     }
 

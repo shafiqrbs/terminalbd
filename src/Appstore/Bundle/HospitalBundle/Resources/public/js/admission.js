@@ -358,8 +358,19 @@ var invoicePayment = $("#invoicePayment").validate({
     },
     submitHandler: function (invoicePayment) {
         $('form#invoicePayment').submit();
-
     }
+});
+
+$(document).on("click", "#invoicePaymentBtn", function() {
+
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('#newInvoicePayment').submit();
+        }
+    });
+
 });
 
 $(document).on('click', '#addPaymentxxx', function() {
@@ -446,7 +457,7 @@ $(document).on('keyup', '#invoice_payment', function() {
 });
 
 $('.particular-info').on('keypress', 'input', function (e) {
-    if (e.which == 13) {
+    if (e.which === 13) {
         e.preventDefault();
         switch (this.id) {
 
@@ -464,7 +475,7 @@ $('.particular-info').on('keypress', 'input', function (e) {
 
 $('form.horizontal-form').on('keypress', 'input', function (e) {
 
-    if (e.which == 13) {
+    if (e.which === 13) {
         e.preventDefault();
 
         switch (this.id) {
@@ -500,6 +511,79 @@ $(document).on('change', '.invoiceCabinBooking', function(e) {
                 });
             }
         });
+
+});
+
+
+var form = $("#admissionForm").validate({
+
+    rules: {
+
+        "invoice[customer][name]": {required: true},
+        "invoice[customer][mobile]": {required: true, digits: true},
+        "invoice[customer][age]": {required: true, digits: true},
+        "invoice[customer][address]": {required: false},
+        "invoice[customer][location]": {required: false},
+        "invoice[customer][fatherName]": {required: false},
+        "invoice[customer][bloodGroup]": {required: false},
+        "invoice[customer][religion]": {required: false},
+        "invoice[customer][nationality]": {required: false},
+        "invoice[cabin]": {required: true},
+        "invoice[assignDoctor]": {required: true},
+        "invoice[diseasesProfile]": {required: true},
+        "invoice[disease]": {required: false},
+        "invoice[referredDoctor]": {required: false},
+        "invoice[assistantDoctor]": {required: false},
+        "invoice[anesthesiaDoctor]": {required: false},
+        "invoice[department]": {required: true},
+
+    },
+
+    messages: {
+        "invoice[assignDoctor]": "Select assign doctor",
+        "invoice[department]": "Select Department",
+        "invoice[customer][name]": "Enter patient name",
+        "invoice[customer][mobile]": "Enter patient mobile no",
+        "invoice[customer][age]": "Enter patient age",
+        "invoice[payment]": "Enter payment amount, if payment are due input zero",
+    },
+    tooltip_options: {
+        "invoice[customer][name]": {placement: 'top', html: true},
+        "invoice[customer][mobile]": {placement: 'top', html: true},
+        "invoice[customer][age]": {placement: 'top', html: true},
+        "invoice[payment]": {placement: 'top', html: true},
+        "invoice[assignDoctor]": {placement: 'top', html: true},
+        "invoice[department]": {placement: 'top', html: true},
+    },
+    submitHandler: function (form) {
+        $("#invoiceForm").submit();
+    }
+});
+
+$(document).on("click", "#dischargeBtn", function() {
+
+    var url = $(this).attr('data-url');
+    var caseOfDeath = $('#caseOfDeath').val();
+    var doctorComment = $('#doctorComment').val();
+    var advice = $('#advice').val();
+    var medicine = $('#medicine').val();
+    var processMode = $('#processMode').val();
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.ajax({
+                url:url,
+                type: 'POST',
+                data:'caseOfDeath='+caseOfDeath+'&doctorComment='+doctorComment+'&advice='+advice+'&medicine='+medicine+'&processMode='+processMode,
+                success: function(response) {
+                     location.reload();
+                }
+            })
+
+        }
+    });
+
 
 });
 

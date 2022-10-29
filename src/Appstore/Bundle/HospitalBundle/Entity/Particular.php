@@ -468,6 +468,14 @@ class Particular
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isDoctor", type="boolean", nullable=true)
+     */
+    private $isDoctor = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="reportUnitHide", type="boolean", nullable=true)
      */
     private $reportUnitHide = false;
@@ -549,7 +557,6 @@ class Particular
     private $updated;
 
 
-
     /**
      * Get id
      *
@@ -602,7 +609,7 @@ class Particular
     public function getReferredName(){
 
         if($this->getService()->getId() == 6 ){
-            return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')';
+            return $this->particularCode.' - '.$this->name;
         }else{
             $designation = empty($this->doctorSignature) ? '' : " (".$this->doctorSignature.")";
             return $this->particularCode.' - '.$this->name.$designation;
@@ -1877,6 +1884,24 @@ class Particular
     {
         return $this->visitModes;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDoctor()
+    {
+        return $this->isDoctor;
+    }
+
+    /**
+     * @param bool $isDoctor
+     */
+    public function setIsDoctor($isDoctor)
+    {
+        $this->isDoctor = $isDoctor;
+    }
+
+
 
 
 }
