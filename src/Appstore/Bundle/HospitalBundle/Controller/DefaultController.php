@@ -44,6 +44,10 @@ class DefaultController extends Controller
         $previousSalesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
         $userSalesTodaySalesCommission      = $em->getRepository('HospitalBundle:DoctorInvoice')->userGroupCommissionSummary($user,$data);
         $userInvoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userGroupInvoiceReturnAmount($user,$data);
+        $hospital = $globalOption->getHospitalConfig()->getId();
+        $diagonesticProcesses = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'diagnostic',$data);
+        $admissionProcesses = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'admission',$data);
+        $visitProcesses = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'visit',$data);
 
 
         return $this->render('HospitalBundle:Default:dashboard.html.twig', array(
@@ -63,6 +67,9 @@ class DefaultController extends Controller
             'invoiceReturn'                     => $invoiceReturn ,
             'userInvoiceReturn'                 => $userInvoiceReturn ,
             'purchaseCashOverview'              => $purchaseCashOverview ,
+            'diagonesticProcesses'              => $diagonesticProcesses ,
+            'admissionProcesses'                => $admissionProcesses ,
+            'visitProcesses'                    => $visitProcesses ,
             'searchForm'                        => $data ,
         ));
 

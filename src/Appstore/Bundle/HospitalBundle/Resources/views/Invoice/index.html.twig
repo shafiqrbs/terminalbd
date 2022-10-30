@@ -62,7 +62,7 @@
                                                 <div class="input-append span12">
                                                     <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
                                                     <div class="btn-group">
-                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                        <button class="btn red" type="submit"><i class="icon-plus-sign"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,14 +89,14 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.created is defined %}{{ searchForm.created }}{% else %}Created Date{% endif %}" >
+                                                <input class="m-wrap span12 search-input date-picker" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="Created Date" >
                                             </div>
                                         </div>
 
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="deliveryDate" id="deliveryDate" value="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% else %}Delivery Date{% endif %}">
+                                                <input class="m-wrap span12 search-input date-picker" name="deliveryDate" id="deliveryDate" value="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% endif %}"  autocomplete="off" placeholder="Delivery Date">
                                             </div>
                                         </div>
                                     </div>
@@ -111,6 +111,14 @@
                                             </select>
                                         </div>
                                         <div class="span3">
+                                            <select name="referred" id="referred" class="m-wrap span12">
+                                                <option value="" >--Referred--</option>
+                                                {% for referred in referredDoctors %}
+                                                    <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span3">
                                             <select name="user" id="user" class="m-wrap span12">
                                                 <option value="" >--Created User By--</option>
                                                 {% for employee in employees %}
@@ -119,18 +127,11 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <select name="process" id="process" class="m-wrap span12">
-                                                <option value="" >--Process--</option>
-                                                <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
-                                                <option value="Done"  {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} >Done</option>
-                                                <option value="Cancel"  {% if searchForm.process is defined and searchForm.process == 'Cancel' %} selected="selected" {% endif %} >Cancel</option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span12">
                                                     <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
                                                     <div class="btn-group">
+                                                        <input type="hidden" id="process" name="process"  class="m-wrap span4" value="{% if searchForm.process is defined %}{{ searchForm.process }}{% else %}In-progress{% endif %}"  autocomplete="off" >
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
                                                 </div>
@@ -172,6 +173,17 @@
                                     </tr>
                                     </thead>
                                 </table>
+                            </div>
+                            <div>
+                                <div class="tabs">
+                                    {% set mode =  searchForm.process is defined and  searchForm.process is not empty  ? searchForm.process : "In-progress" %}
+                                    {% for row in processes %}
+                                        <div class="tab">
+                                            <input type="radio" name="css-tabs" id="tab-{{ row.process }}"  class="tab-switch ">
+                                            <a for="tab-{{ row.process }}" href="{{ path('hms_invoice',{'process':row.process}) }}"  class="tab-label {% if mode|trim == row.process  %}checked{% endif %}">{{ row.process }}  <span class="btn red mini"> {{ row.total }}</span></a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -225,30 +237,28 @@
                                         </td>
                                         <td class="numeric" >{% if entity.commissionApproved == 1 %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" >
-                                            <div class="btn-group">
-                                                {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
-                                                    <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-refresh"></i> Process</a>
-                                                {% endif %}
-                                                {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and  entity.process in processIntArr )  %}
-                                                    <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn green mini tooltips" data-trigger = "hover" data-original-title = "Edit" ><i class="icon-pencil"></i></a>
-                                                {% endif %}
-                                                {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and  entity.process in processIntArr )  %}
-                                                    <a  id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i></a>
-                                                {% endif %}
-                                                {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
-                                                    <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
-                                                {% endif %}
-                                                <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
-                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
-                                                    <a data-url="{{ path('hms_invoice_commission_regenerate',{'id':entity.id}) }}" class="btn yellow mini approve tooltips" data-trigger = "hover" data-original-title = "Commission Regenerate" ><i class="icon-cog"></i></a>
-                                                {% endif %}
-                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
-                                                    <a href="{{ path('hms_invoice_reverse', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Revised" ><i class="icon-retweet"></i> Reverse</a>
-                                                {% endif %}
-                                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress' and entity.process != 'Returned') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process != 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
-                                                    <a href="{{ path('hms_invoicereturn_create', { 'id': entity.id }) }}" class="btn gray mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
-                                                {% endif %}
-                                            </div>
+                                            {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
+                                                <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-refresh"></i> Process</a>
+                                            {% endif %}
+                                            {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and  entity.process in processIntArr )  %}
+                                                <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn green mini tooltips" data-trigger = "hover" data-original-title = "Edit" ><i class="icon-pencil"></i></a>
+                                            {% endif %}
+                                            {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and  entity.process in processIntArr )  %}
+                                                <a  id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i></a>
+                                            {% endif %}
+                                            {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
+                                                <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
+                                            {% endif %}
+                                            <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
+                                            {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                <a data-url="{{ path('hms_invoice_commission_regenerate',{'id':entity.id}) }}" class="btn yellow mini approve tooltips" data-trigger = "hover" data-original-title = "Commission Regenerate" ><i class="icon-cog"></i></a>
+                                            {% endif %}
+                                            {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'Done') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == 'Done' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                <a href="{{ path('hms_invoice_reverse', { 'invoice': entity.invoice }) }}" class="btn red mini tooltips" data-trigger = "hover" data-original-title = "Revised" ><i class="icon-retweet"></i> Reverse</a>
+                                            {% endif %}
+                                            {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress' and entity.process != 'Returned') or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process != 'In-progress' and entity.process != 'Returned' and entity.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                <a href="{{ path('hms_invoicereturn_create', { 'id': entity.id }) }}" class="btn gray mini tooltips" data-trigger = "hover" data-original-title = "Return" ><i class="icon-random"></i></a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}

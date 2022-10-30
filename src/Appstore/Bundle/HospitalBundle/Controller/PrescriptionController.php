@@ -48,12 +48,17 @@ class PrescriptionController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'visit' , $data);
         $pagination = $this->paginate($entities);
-        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'visit');
         $diseasesProfile = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDiseasesProfile($hospital,'visit');
+        $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'visit',$data);
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'assign-doctor');
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'referred-doctor');
+
         return $this->render('HospitalBundle:Prescription:index.html.twig', array(
             'hospital'                          => $hospital,
             'entities'                          => $pagination,
             'assignDoctors'                     => $assignDoctors,
+            'referredDoctors'                     => $referredDoctors,
+            'processes'                             => $processes,
             'diseasesProfiles'                  => $diseasesProfile,
             'searchForm'                        => $data,
         ));

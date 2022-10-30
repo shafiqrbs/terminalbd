@@ -312,6 +312,8 @@ li.active > a {
 .tab-label:hover {
     top: -0.25rem;
     transition: top 0.25s;
+    text-decoration: none;
+    text-underline: none;
 }
 .tab-content {
     height: 12rem;
@@ -348,6 +350,8 @@ li.active > a {
     border-right: 0.125rem solid #fff;
     transition: all 0.35s;
     z-index: 1;
-    top: -0.0625rem;
+    border-top: 1px solid #1abc9c;
+    text-decoration: none;
+    text-underline: none;
 }
 

@@ -108,6 +108,14 @@
                                             </select>
                                         </div>
                                         <div class="span3">
+                                            <select name="referred" id="referred" class="m-wrap span12">
+                                                <option value="" >--Referred--</option>
+                                                {% for referred in referredDoctors %}
+                                                    <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span3">
                                             <select name="diseasesProfile" id="diseasesProfile" class="m-wrap span12">
                                                 <option value="" >--Diseases Profile--</option>
                                                 {% for profile in diseasesProfiles %}
@@ -116,18 +124,11 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <select name="process" id="process" class="m-wrap span12">
-                                                <option value="" >--Process--</option>
-                                                <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
-                                                <option value="Done"  {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} >Done</option>
-                                                <option value="Cancel"  {% if searchForm.process is defined and searchForm.process == 'Cancel' %} selected="selected" {% endif %} >Cancel</option>
-                                            </select>
-                                        </div>
-                                        <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span12">
                                                     <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
                                                     <div class="btn-group">
+                                                        <input type="hidden" id="process" name="process"  class="m-wrap span4" value="{% if searchForm.process is defined %}{{ searchForm.process }}{% else %}In-progress{% endif %}"  autocomplete="off" >
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
                                                 </div>
@@ -135,6 +136,19 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                            <div>
+                                <div class="tabs">
+                                    {% set mode =  searchForm.process is defined and  searchForm.process is not empty  ? searchForm.process : "In-progress" %}
+                                    {% for row in processes %}
+                                        <div class="tab">
+                                            <input type="radio" name="css-tabs" id="tab-{{ row.process }}"  class="tab-switch ">
+                                            <a for="tab-{{ row.process }}" href="{{ path('hms_prescription',{'process':row.process}) }}"  class="tab-label {% if mode|trim == row.process  %}checked{% endif %}">{{ row.process }}
+                                                <span class="btn red mini"> {{ row.total }}</span></a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -199,7 +213,7 @@
                                             <div class="btn-group">
                                                 {% set processEdit = {'Created':'Created','Revised':'Revised'} %}
 
-                                                    <a target="_blank"  href="{{ path('hms_prescription_print',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Print</a>
+                                                    <a target="_blank"  href="{{ path('hms_prescription_print',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
                                                     {% if hospital.appointmentPrescription == 1 and entity.process == "Done" %}
                                                         <a target="_blank"  href="{{ path('hms_prescription_doctor_print',{'id':entity.id}) }}"  class="btn green mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Prescription</a>
                                                     {% endif %}
@@ -207,7 +221,7 @@
                                                         <a href="javascript:" data-action="{{ path('hms_prescription_doctor_print',{'id':entity.id}) }}"  class="btn red mini tooltips" data-trigger = "hover" data-original-title = "SMS Alert"><i class="icon-file-text"></i> SMS</a>
                                                     {% endif %}
                                                     <a class="btn purple mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                                        More <i class="icon-tasks"></i>
+                                                        <i class="icon-tasks"></i>
                                                     </a>
                                                     <ul class="dropdown-menu pull-right action">
                                                         {% if entity.process in  processEdit or app.user.granted("ROLE_DOMAIN") %}

@@ -171,18 +171,13 @@
                                     </thead>
                                 </table>
                             </div>
-                            <style>
-                                .search-form select[class*="span"].m-wrap, .search-form textarea[class*="span"].m-wrap, .search-form input[class*="span"].m-wrap {
-                                    margin-bottom: 0;
-                                }
-                            </style>
                             <div>
                                 <div class="tabs">
                                     {% set mode =  searchForm.process is defined and  searchForm.process is not empty  ? searchForm.process : "Admitted" %}
                                     {% for row in processes %}
                                         <div class="tab">
                                             <input type="radio" name="css-tabs" id="tab-{{ row.process }}"  class="tab-switch ">
-                                            <a for="tab-{{ row.process }}" href="{{ path('hms_invoice_admission',{'process':row.process}) }}"  class="tab-label {% if mode|trim == row.process  %}checked{% endif %}">{{ row.process }}</a>
+                                            <a for="tab-{{ row.process }}" href="{{ path('hms_invoice_admission',{'process':row.process}) }}"  class="tab-label {% if mode|trim == row.process  %}checked{% endif %}">{{ row.process }} <span class="btn red mini"> {{ row.total }}</span></a>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -237,7 +232,7 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            <div>
+                                            <div class="btn-group">
                                                 {% if entity.process in processArr %}
                                                     <a href="{{ path('hms_invoice_admission_confirm', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="fa fa-refresh"></i> Process</a>
                                                 {% endif %}
@@ -245,11 +240,11 @@
                                                     <a class="btn purple mini" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> New Invoice</a>
                                                 {% endif %}
                                                 {% if entity.process in ['Admitted','Released','Dead'] %}
-                                                <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green mini"><i class="icon-print"></i>&nbsp;Print</a>
+                                                <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green mini"><i class="icon-print"></i></a>
                                                 {% endif %}
 
                                                 <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                                    Action <i class="icon-tasks"></i>
+                                                    <i class="icon-tasks"></i>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right action">
                                                     {% if entity.process in ['Released','Dead'] %}

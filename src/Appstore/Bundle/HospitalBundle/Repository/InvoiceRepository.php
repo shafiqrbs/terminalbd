@@ -169,14 +169,16 @@ class InvoiceRepository extends EntityRepository
         }
     }
 
-    public function getAdmissionProcess($hospital,$invoice = 0)
+    public function getAdmissionProcess($hospital,$mode,$data = "")
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.process as process');
+        $qb->select('e.process as process','count(e.id) as total');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $qb->groupBy('e.process');
         $qb->orderBy('e.process','ASC');
+        $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
@@ -389,7 +391,7 @@ class InvoiceRepository extends EntityRepository
     {
 
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-        $process = (isset($data['process']) and $data['process']) ? $data['process']:'Admitted';
+
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles()) and $user->getParticularDoctor()) {
@@ -397,7 +399,16 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere('e.assignDoctor = :doctor')->setParameter('doctor', $id) ;
         }
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
-        $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+        if($mode == "diagnostic"){
+            $process = (isset($data['process']) and $data['process']) ? $data['process']:'In-progress';
+            $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+        }elseif($mode == "admission"){
+            $process = (isset($data['process']) and $data['process']) ? $data['process']:'Admitted';
+            $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+        }elseif($mode == "visit"){
+            $process = (isset($data['process']) and $data['process']) ? $data['process']:'In-progress';
+            $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
