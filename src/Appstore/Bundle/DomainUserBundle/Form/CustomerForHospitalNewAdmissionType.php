@@ -28,25 +28,31 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 patientName','autocomplete'=>'off','placeholder'=>'patient name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 patientName','autocomplete'=>'off','placeholder'=>'Patient name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient full name')),
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 select2mobile','autocomplete'=>'off','placeholder'=>'mobile no'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 select2mobile','autocomplete'=>'off','placeholder'=>'Mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient mobile no')),
                 )
             ))
-            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'father/spouse name'),
+            ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter profession'),
 
             ))
-            ->add('age','number', array('attr'=>array('class'=>'m-wrap span6 numeric patientAge','placeholder'=>'age'),
+            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'Father/spouse name'),
+
+            ))
+            ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'Mother name'),
+
+            ))
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'Age'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'patient age')),
+                    new NotBlank(array('message'=>'Patient age')),
                 )))
             ->add('ageType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span6 select-custom ageType'),
+                'attr'=>array('class'=>'m-wrap span3 select-custom ageType'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'constraints' =>array(
@@ -66,6 +72,11 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array('Single' => 'Single','Married' => 'Married', 'Divorced' => 'Divorced','Widow'=>'Widow'),
             ))
+            ->add('dob','date', array(
+                'years' => range(date('Y'), date('Y')-100),
+                'required' => false,
+                'attr'=>array('class'=>'m-wrap span6 dob','placeholder'=>'Patient date of birth'),
+            ))
 
             ->add('bloodGroup', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
@@ -77,7 +88,10 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'Guardian name')),
                 )))
 
-            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no')))
+            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'Guardian mobile no'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Guardian mobile no')),
+                )))
             ->add('alternativeRelation','text', array('attr'=>array('class'=>'m-wrap span12  alternativeRelation','placeholder'=>'Relationship with the Patient'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Relationship with the Patient')),

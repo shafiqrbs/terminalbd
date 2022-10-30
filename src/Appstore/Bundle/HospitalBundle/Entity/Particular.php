@@ -241,6 +241,14 @@ class Particular
     private $purchasePrice;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="ipdVisitCharge", type="decimal", nullable=true)
+     */
+    private $ipdVisitCharge;
+
+
     /**
      * @var string
      *
@@ -1900,6 +1908,24 @@ class Particular
     {
         $this->isDoctor = $isDoctor;
     }
+
+    /**
+     * @return string
+     */
+    public function getIpdVisitCharge()
+    {
+        return $this->ipdVisitCharge;
+    }
+
+    /**
+     * @param string $ipdVisitCharge
+     */
+    public function setIpdVisitCharge($ipdVisitCharge)
+    {
+        $this->ipdVisitCharge = $ipdVisitCharge;
+    }
+
+
 
 
 

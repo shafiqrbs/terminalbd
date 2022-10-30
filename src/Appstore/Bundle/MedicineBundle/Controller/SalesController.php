@@ -797,9 +797,21 @@ class SalesController extends Controller
     public function androidDuplicateSalesDeleteAction(MedicineAndroidProcess $android)
     {
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDuplicateSalesDelete($config,$android);
+        if($android->getMedicineConfig()->getId() == $config->getId()) {
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDuplicateSalesDelete($config, $android);
+        }
         return $this->redirect($this->generateUrl('medicine_sales_android'));
+    }
 
+    public function androidDeleteAction(MedicineAndroidProcess $android)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        if($android->getMedicineConfig()->getId() == $config->getId()){
+            $em->remove($android);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('medicine_sales_android'));
     }
 
     private function posMikePrint(MedicineSales $entity)

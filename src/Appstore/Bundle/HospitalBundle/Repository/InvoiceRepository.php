@@ -34,7 +34,7 @@ class InvoiceRepository extends EntityRepository
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
         $anesthesia = isset($data['anesthesia'])? $data['anesthesia'] :'';
         $referred = isset($data['referred'])? $data['referred'] :'';
-        $process = isset($data['process'])? $data['process'] :'';
+       // $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $created = isset($data['created'])? $data['created'] :'';
@@ -120,8 +120,7 @@ class InvoiceRepository extends EntityRepository
         }
 
         if(!empty($process)){
-            $qb->andWhere("e.process = :process");
-            $qb->setParameter('process', $process);
+          //  $qb->andWhere("e.process = :process")->setParameter('process', $process);
         }
 
         if(!empty($transactionMethod)){
@@ -170,6 +169,17 @@ class InvoiceRepository extends EntityRepository
         }
     }
 
+    public function getAdmissionProcess($hospital,$invoice = 0)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.process as process');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->groupBy('e.process');
+        $qb->orderBy('e.process','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
 
     public function getExistCabin($hospital,$invoice = 0)
     {
@@ -369,7 +379,6 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("ip.updated <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
-
         $qb->groupBy('ip.assignDoctor');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
@@ -380,6 +389,7 @@ class InvoiceRepository extends EntityRepository
     {
 
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $process = (isset($data['process']) and $data['process']) ? $data['process']:'Admitted';
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles()) and $user->getParticularDoctor()) {
@@ -387,6 +397,7 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere('e.assignDoctor = :doctor')->setParameter('doctor', $id) ;
         }
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
@@ -1068,6 +1079,31 @@ class InvoiceRepository extends EntityRepository
         return  $result;
     }
 
+    public function getAssignProcess($hospital, $mode = '')
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode IN (:mode)')->setParameter('mode',array('visit','admission')) ;
+        if($mode == "assign-doctor"){
+            $qb->join('e.assignDoctor','d');
+            $qb->select('d.id as id','d.name as name');
+            $qb->andWhere('e.assignDoctor IS NOT NULL');
+        }elseif ($mode == "anesthesia-doctor"){
+            $qb->join('e.anesthesiaDoctor','d');
+            $qb->select('d.id as id','d.name as name');
+            $qb->andWhere('e.assignDoctor IS NOT NULL');
+        }elseif ($mode == "referred-doctor"){
+            $qb->join('e.referredDoctor','d');
+            $qb->select('d.id as id','d.name as name');
+            $qb->andWhere('e.referredDoctor IS NOT NULL');
+        }
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+
     public function getDiseasesProfile($hospital, $mode = '')
     {
         $qb = $this->createQueryBuilder('e');
@@ -1177,6 +1213,19 @@ class InvoiceRepository extends EntityRepository
         $query->addSelect("CONCAT(e.invoice,'-', c.name) as text");
         $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
         $query->andWhere($query->expr()->like("e.invoice", "'%$q%'"  ));
+        $query->orderBy('e.created', 'DESC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function getExistingCabin($config)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->leftJoin('e.customer', 'c');
+        $query->select('e.id as id');
+        $query->addSelect("CONCAT(e.invoice,'-', c.name) as text");
+        $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
         $query->orderBy('e.created', 'DESC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();

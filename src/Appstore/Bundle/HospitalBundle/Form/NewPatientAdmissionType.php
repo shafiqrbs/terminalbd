@@ -99,6 +99,9 @@ class NewPatientAdmissionType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select department')),
+                ),
                 'choices'=> $this->DepartmentChoiceList()
             ))
 
@@ -117,9 +120,12 @@ class NewPatientAdmissionType extends AbstractType
                 }
             ))
             ->add('assignDoctor', 'entity', array(
-                'required'    => false,
+                'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'doctor',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select Consultant/Doctor')),
+                ),
                 'attr'=>array('class'=>'span12 select2 m-wrap'),
                 'empty_value' => '--- Choose assign doctor ---',
                 'query_builder' => function(EntityRepository $er){

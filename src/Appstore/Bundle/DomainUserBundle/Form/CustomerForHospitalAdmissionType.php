@@ -47,9 +47,9 @@ class CustomerForHospitalAdmissionType extends AbstractType
             ->add('religion','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Religion'),
 
             ))
-            ->add('weight','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'Weight')))
-            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'BP')))
-            ->add('height','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'Height')))
+            ->add('weight','text', array('attr'=>array('class'=>'m-wrap span3','autocomplete'=>'off','placeholder'=>'Weight')))
+            ->add('bloodPressure','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'BP')))
+            ->add('height','text', array('attr'=>array('class'=>'m-wrap span3','autocomplete'=>'off','placeholder'=>'Height')))
             ->add('diabetes','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Diabetes')))
 
             ->add('profession','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Profession'),
@@ -65,7 +65,7 @@ class CustomerForHospitalAdmissionType extends AbstractType
                 ))
             ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'Age'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'patient age')),
+                    new NotBlank(array('message'=>'Patient age')),
             )))
             ->add('bloodGroup', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
@@ -99,7 +99,10 @@ class CustomerForHospitalAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'Guardian name')),
             )))
 
-            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'guardian mobile no')))
+            ->add('alternativeContactMobile','text', array('attr'=>array('class'=>'m-wrap span6 numeric mobile alternativeContactMobile','placeholder'=>'Guardian mobile no'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Guardian mobile no')),
+                )))
             ->add('alternativeRelation','text', array('attr'=>array('class'=>'m-wrap span12  alternativeRelation','placeholder'=>'Relationship with the Patient'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Relationship with the Patient')),

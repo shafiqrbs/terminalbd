@@ -13,10 +13,10 @@ use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 /**
  * DpsInvoiceParticular
  *
- * @ORM\Table( name = "hms_doctor_medication")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\MedicineDoctorPrescribeRepository")
+ * @ORM\Table( name = "hms_admission_todo_particular")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\HmsAdmissionTodoParticularRepository")
  */
-class DoctorMedication
+class HmsAdmissionTodoParticular
 {
     /**
      * @var integer
@@ -28,14 +28,20 @@ class DoctorMedication
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="admissionInvestigations" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="medications" )
      **/
     private  $admission;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsAdmissionAttribute", inversedBy="admissionInvestigations" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsAdmissionTodo", inversedBy="todoParticulars" )
      **/
-    private  $admissionAttribute;
+    private  $todo;
+
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsAdmissionPatientRelease", inversedBy="todoParticulars" )
+     **/
+    private  $patientRelease;
 
 
     /**
@@ -43,8 +49,19 @@ class DoctorMedication
      **/
     private $medicine;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $approvedBy;
 
-     /**
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="approved", type="datetime")
+     */
+    private $approved;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="medicineQuantity", type="string", length=100, nullable=true)
@@ -73,6 +90,14 @@ class DoctorMedication
     private $medicineDoseTime;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name;
+
+
+     /**
      * @var string
      *
      * @ORM\Column(name="medicineName", type="string", length=255, nullable=true)
@@ -104,6 +129,14 @@ class DoctorMedication
 
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
+     */
+    private $status;
+
+
+    /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
@@ -127,23 +160,6 @@ class DoctorMedication
     {
         return $this->id;
     }
-
-    /**
-     * @return DpsInvoice
-     */
-    public function getDpsInvoice()
-    {
-        return $this->dpsInvoice;
-    }
-
-    /**
-     * @param DpsInvoice $dpsInvoice
-     */
-    public function setDpsInvoice($dpsInvoice)
-    {
-        $this->dpsInvoice = $dpsInvoice;
-    }
-
 
 
     /**
@@ -291,22 +307,6 @@ class DoctorMedication
         $this->medicineName = $medicineName;
     }
 
-    /**
-     * @return DmsInvoice
-     */
-    public function getDmsInvoice()
-    {
-        return $this->dmsInvoice;
-    }
-
-    /**
-     * @param DmsInvoice $dmsInvoice
-     */
-    public function setDmsInvoice($dmsInvoice)
-    {
-        $this->dmsInvoice = $dmsInvoice;
-    }
-
 
 	/**
 	 * @return string
@@ -335,6 +335,104 @@ class DoctorMedication
 	public function setTotalQuantity($totalQuantity ) {
 		$this->totalQuantity = $totalQuantity;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getAdmission()
+    {
+        return $this->admission;
+    }
+
+    /**
+     * @param mixed $admission
+     */
+    public function setAdmission($admission)
+    {
+        $this->admission = $admission;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTodo()
+    {
+        return $this->todo;
+    }
+
+    /**
+     * @param mixed $todo
+     */
+    public function setTodo($todo)
+    {
+        $this->todo = $todo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param mixed $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getApproved()
+    {
+        return $this->approved;
+    }
+
+    /**
+     * @param \DateTime $approved
+     */
+    public function setApproved($approved)
+    {
+        $this->approved = $approved;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+
 
 
 }

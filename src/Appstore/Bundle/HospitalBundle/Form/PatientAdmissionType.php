@@ -9,6 +9,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
+use Appstore\Bundle\HospitalBundle\Repository\InvoiceRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -23,18 +24,21 @@ class PatientAdmissionType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
-    /** @var  HmsCategoryRepository */
-    private $emCategory;
-
     /** @var  GlobalOption */
     private $globalOption;
 
+    /** @var  InvoiceRepository */
+    private $admission;
 
-    function __construct(GlobalOption $globalOption , HmsCategoryRepository $emCategory ,  LocationRepository $location)
+    /** @var  HmsCategoryRepository */
+    private $emCategory;
+
+    function __construct(GlobalOption $globalOption, InvoiceRepository $admission, LocationRepository $location, HmsCategoryRepository $emCategory)
     {
+        $this->admission        = $admission;
+        $this->globalOption     = $globalOption;
         $this->location         = $location;
         $this->emCategory       = $emCategory;
-        $this->globalOption     = $globalOption;
     }
 
 
@@ -44,10 +48,11 @@ class PatientAdmissionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id = $options['data']->getId();
         $builder
-
             ->add('disease','textarea',
                 array('attr'=>array('class'=>'m-wrap span12','required'=> false,'rows' => 4,'placeholder'=>'Add disease')))
+
             ->add('cabin', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
@@ -61,6 +66,7 @@ class PatientAdmissionType extends AbstractType
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
                         ->andWhere("b.service = 2")
+                        ->andWhere("b.id NOT IN (:cabins)")->setParameter('cabins',$this->CabinChoiceList())
                         ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
                         ->orderBy("b.name", "ASC");
                 }
@@ -102,13 +108,19 @@ class PatientAdmissionType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select department')),
+                ),
                 'choices'=> $this->DepartmentChoiceList()
             ))
 
             ->add('assignDoctor', 'entity', array(
-                'required'    => false,
+                'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'doctor',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select Consultant/Doctor')),
+                ),
                 'attr'=>array('class'=>'span12 select2 m-wrap'),
                 'empty_value' => '--- Choose assign doctor ---',
                 'query_builder' => function(EntityRepository $er){
@@ -174,7 +186,7 @@ class PatientAdmissionType extends AbstractType
      */
     protected function CabinChoiceList()
     {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
+        return $this->admission->getExistCabin($this->globalOption->getHospitalConfig()->getId());
 
     }
 

@@ -1151,7 +1151,7 @@ class Builder extends ContainerAware
                 if(in_array('admission', $process)) {
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Cabin/Ward', array('route' => 'hms_cabin'));
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Surgery', array('route' => 'hms_surgery'));
-                $menu['Hospital & Diagnostic']['Master Data']->addChild('Other Service', array('route' => 'hms_other_service'));
+                $menu['Hospital & Diagnostic']['Master Data']->addChild('Services/Procedure', array('route' => 'hms_other_service'));
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Service Group', array('route' => 'hms_service_group'));
                 }
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Commission', array('route' => 'hms_commission'));

@@ -372,7 +372,9 @@ class PrescriptionController extends Controller
                 $entity->setSubTotal($invoice->getAssignDoctor()->getPrice());
                 $entity->setTotal($invoice->getAssignDoctor()->getPrice());
                 $entity->setPayment($invoice->getAssignDoctor()->getPrice());
-                $entity->setVisitType($invoice->getVisitType());
+                if($invoice->getVisitType()){
+                    $entity->setVisitType($invoice->getVisitType()->getName());
+                }
                 $entity->setCreatedBy($this->getUser());
                 $em->persist($entity);
                 $em->flush();

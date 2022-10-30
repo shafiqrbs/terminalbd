@@ -29,43 +29,39 @@ class HmsAdmissionTodo
     private  $admission;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsAdmissionTodoParticular", mappedBy="todo" )
+     **/
+    private  $todoParticulars;
+
+
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceCreatedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="json_array",  nullable=true)
-     */
-    private $investigations;
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="ipdVisits" )
+     **/
+    private  $doctor;
 
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string",nullable=true)
+     * @ORM\Column(name="process", type="string",nullable=true)
+     */
+    private $process;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text",nullable=true)
      */
     private $comment;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="notes", type="string",nullable=true)
-     */
-    private $notes;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="advice", type="string",nullable=true)
-     */
-    private $advice;
 
 
 
@@ -150,21 +146,6 @@ class HmsAdmissionTodo
         $this->createdBy = $createdBy;
     }
 
-    /**
-     * @return string
-     */
-    public function getInvestigations()
-    {
-        return $this->investigations;
-    }
-
-    /**
-     * @param string $investigations
-     */
-    public function setInvestigations($investigations)
-    {
-        $this->investigations = $investigations;
-    }
 
     /**
      * @return string
@@ -215,54 +196,55 @@ class HmsAdmissionTodo
     }
 
     /**
+     * @return mixed
+     */
+    public function getTodoParticulars()
+    {
+        return $this->todoParticulars;
+    }
+
+    /**
+     * @param mixed $todoParticulars
+     */
+    public function setTodoParticulars($todoParticulars)
+    {
+        $this->todoParticulars = $todoParticulars;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDoctor()
+    {
+        return $this->doctor;
+    }
+
+    /**
+     * @param mixed $doctor
+     */
+    public function setDoctor($doctor)
+    {
+        $this->doctor = $doctor;
+    }
+
+    /**
      * @return string
      */
-    public function getPrescription()
+    public function getProcess()
     {
-        return $this->prescription;
+        return $this->process;
     }
 
     /**
-     * @param string $prescription
+     * @param string $process
      */
-    public function setPrescription($prescription)
+    public function setProcess($process)
     {
-        $this->prescription = $prescription;
+        $this->process = $process;
     }
 
-    /**
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
-    }
 
-    /**
-     * @param string $notes
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
-    }
 
-    /**
-     * @return string
-     */
-    public function getAdvice()
-    {
-        return $this->advice;
-    }
-
-    /**
-     * @param string $advice
-     */
-    public function setAdvice($advice)
-    {
-        $this->advice = $advice;
-    }
-
-    
 
 
 }

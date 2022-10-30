@@ -18,6 +18,10 @@ medicine_sales_android_duplicate_delete:
     path:     /{android}/android-duplicate-delete
     defaults: { _controller: "MedicineBundle:Sales:androidDuplicateSalesDelete" }
 
+medicine_sales_android_delete:
+    path:     /{android}/android-delete
+    defaults: { _controller: "MedicineBundle:Sales:androidDelete" }
+
 medicine_sales_android_view:
     path:     /android
     defaults: { _controller: "MedicineBundle:Sales:androidSales" }

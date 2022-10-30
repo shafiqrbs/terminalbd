@@ -9,10 +9,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * HmsAdmissionAttribute
  *
- * @ORM\Table( name ="hms_admission_attribute")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\HmsAdmissionAttributeRepository")
+ * @ORM\Table( name ="hms_admission_patient_release")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\HmsAdmissionPatientReleaseRepository")
  */
-class HmsAdmissionAttribute
+class HmsAdmissionPatientRelease
 {
     /**
      * @var integer
@@ -29,25 +29,37 @@ class HmsAdmissionAttribute
     private  $admission;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsAdmissionTodoParticular", mappedBy="patientRelease" )
+     **/
+    private  $todoParticulars;
+
+
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceCreatedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="json_array",  nullable=true)
-     */
-    private $investigations;
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="ipdVisits" )
+     **/
+    private  $doctor;
 
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string",nullable=true)
+     * @ORM\Column(name="process", type="string",nullable=true)
+     */
+    private $process;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text",nullable=true)
      */
     private $comment;
 
@@ -134,21 +146,6 @@ class HmsAdmissionAttribute
         $this->createdBy = $createdBy;
     }
 
-    /**
-     * @return string
-     */
-    public function getInvestigations()
-    {
-        return $this->investigations;
-    }
-
-    /**
-     * @param string $investigations
-     */
-    public function setInvestigations($investigations)
-    {
-        $this->investigations = $investigations;
-    }
 
     /**
      * @return string
@@ -199,20 +196,55 @@ class HmsAdmissionAttribute
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getPrescription()
+    public function getTodoParticulars()
     {
-        return $this->prescription;
+        return $this->todoParticulars;
     }
 
     /**
-     * @param string $prescription
+     * @param mixed $todoParticulars
      */
-    public function setPrescription($prescription)
+    public function setTodoParticulars($todoParticulars)
     {
-        $this->prescription = $prescription;
+        $this->todoParticulars = $todoParticulars;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDoctor()
+    {
+        return $this->doctor;
+    }
+
+    /**
+     * @param mixed $doctor
+     */
+    public function setDoctor($doctor)
+    {
+        $this->doctor = $doctor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * @param string $process
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+    }
+
+    
+
 
 
 }

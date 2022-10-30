@@ -27,7 +27,6 @@ class InvoiceAdmissionController extends Controller
 
     public function paginate($entities)
     {
-
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
@@ -48,29 +47,33 @@ class InvoiceAdmissionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
         $pagination = $this->paginate($entities);
-
         $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','admission');
         $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','admission');
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
         $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
         $cabinGroups = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=>$hospital,'service'=>2),array('name'=>'ASC'));
         $departments = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDepartments($hospital);
+        $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'admission');
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'assign-doctor');
+        $anesthesiaDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'anesthesia-doctor');
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'referred-doctor');
 
         return $this->render('HospitalBundle:InvoiceAdmission:index.html.twig', array(
             'entities' => $pagination,
             'salesTransactionOverview' => $salesTransactionOverview,
             'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
-            'assignDoctors'                     => $referredDoctors,
+            'assignDoctors'                     => $assignDoctors,
+            'anesthesiaDoctors'                     => $anesthesiaDoctors,
+            'referredDoctors'                     => $referredDoctors,
             'employees'                         => $employees,
             'cabinGroups' => $cabinGroups,
             'departments' => $departments,
             'cabins' => $cabins,
+            'processes' => $processes,
             'option' => $user->getGlobalOption(),
             'searchForm' => $data,
         ));
@@ -153,6 +156,7 @@ class InvoiceAdmissionController extends Controller
         }
         $editForm = $this->createCreateForm($entity);
         $editForm->handleRequest($request);
+       // $error = $this->getErrorMessages($editForm);
         if ($editForm->isValid()) {
             $entity->setHospitalConfig($hospital);
             $entity->getCustomer()->setGlobalOption($user->getGlobalOption());
@@ -160,12 +164,32 @@ class InvoiceAdmissionController extends Controller
             $entity->setInvoiceMode('admission');
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('hms_invoice_admission'));
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
+            return $this->redirect($this->generateUrl('hms_invoice_admission_daily_invoice',array('invoice' => $entity->getInvoice())));
         }
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
             'form' => $editForm->createView(),
         ));
+    }
+
+    private function getErrorMessages(\Symfony\Component\Form\Form $form) {
+        $errors = array();
+        foreach ($form->getErrors() as $key => $error) {
+            if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+            } else {
+                $errors[] = $error->getMessage();
+            }
+        }
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = (string) $child->getErrors(true, false);
+            }
+        }
+        return $errors;
     }
 
     /**
@@ -206,6 +230,7 @@ class InvoiceAdmissionController extends Controller
         $entity->setCabin($cabin);
         $entity->setPaymentStatus('Pending');
         $entity->setInvoiceMode('admission');
+        $entity->setProcess('Admitted');
         $entity->setPrintFor('admission');
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
@@ -232,6 +257,7 @@ class InvoiceAdmissionController extends Controller
             $entity->setCustomer($customer);
             $entity->setInvoiceMode('admission');
             $entity->setPrintFor('admission');
+            $entity->setProcess('Admitted');
             $entity->setCreatedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
@@ -243,6 +269,7 @@ class InvoiceAdmissionController extends Controller
             $entity->setCustomer($customer);
             $entity->setInvoiceMode('admission');
             $entity->setPrintFor('admission');
+            $entity->setProcess('Admitted');
             $entity->setCreatedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
@@ -253,6 +280,7 @@ class InvoiceAdmissionController extends Controller
             $entity->setCustomer($patientId);
             $entity->setInvoiceMode('admission');
             $entity->setPrintFor('admission');
+            $entity->setProcess('Admitted');
             $entity->setCreatedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
@@ -270,6 +298,7 @@ class InvoiceAdmissionController extends Controller
         $entity->setHospitalConfig($hospital);
         $entity->setCustomer($customer);
         $entity->setParent($invoice);
+        $entity->setProcess('Admitted');
         $entity->setInvoiceMode('admission');
         $entity->setPrintFor('admission');
         $entity->setCreatedBy($this->getUser());
@@ -375,7 +404,7 @@ class InvoiceAdmissionController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceAdmissionType($globalOption,$category ,$location), $entity, array(
+        $form = $this->createForm(new InvoiceAdmissionType($globalOption,$location,$category), $entity, array(
             'action' => $this->generateUrl('hms_invoice_admission_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -397,9 +426,10 @@ class InvoiceAdmissionController extends Controller
     private function createAdmissionForm(Invoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $admission = $this->getDoctrine()->getRepository('HospitalBundle:Invoice');
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new PatientAdmissionType($globalOption,$category ,$location), $entity, array(
+        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $form = $this->createForm(new PatientAdmissionType($globalOption,$admission,$location,$category), $entity, array(
             'action' => $this->generateUrl('hms_invoice_admitted_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
