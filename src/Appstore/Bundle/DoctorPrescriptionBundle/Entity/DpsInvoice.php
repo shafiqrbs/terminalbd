@@ -43,7 +43,8 @@ class DpsInvoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="dpsInvoice",cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hmsInvoice;
 

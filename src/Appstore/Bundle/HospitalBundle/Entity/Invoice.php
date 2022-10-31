@@ -49,6 +49,12 @@ class Invoice
     private $doctorInvoices;
 
      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="hmsInvoice" , cascade={"remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    private $dpsInvoice;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hmsInvoices")
      **/
     private $service;
@@ -141,18 +147,18 @@ class Invoice
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceCreatedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceApprovedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $approvedBy;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceDeliveredBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User" )
      **/
     private  $deliveredBy;
 
@@ -1864,6 +1870,14 @@ class Invoice
     public function setDischargeBy($dischargeBy)
     {
         $this->dischargeBy = $dischargeBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDpsInvoice()
+    {
+        return $this->dpsInvoice;
     }
 
 
