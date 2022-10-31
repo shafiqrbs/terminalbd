@@ -226,7 +226,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_DOCTOR,ROLE_DOMAIN_HOSPITAL_OPERATOR");
      */
 
     public function readyReportAction(Invoice $entity)
@@ -312,7 +312,7 @@ class InvoiceController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_DOCTOR");
      */
 
     public function invoiceParticularDeleteAction( $invoice, InvoiceParticular $particular){

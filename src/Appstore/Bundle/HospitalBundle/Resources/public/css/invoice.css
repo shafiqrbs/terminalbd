@@ -355,3 +355,51 @@ li.active > a {
     text-underline: none;
 }
 
+.icon-btn-mini {
+    width: 100%;
+    height: 40px!important;
+    padding: 7px 0 0 0!important;
+}
+
+#diagonestic {
+    height: 60px;
+    display: grid;
+    gap: 5px;
+    background-color:#0d42e3;
+    padding: 3px;
+}
+#diagonestic .item-1 {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+.process-box{
+    height: 45px;
+    grid: inherit;
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 12px;
+}
+#visit {
+    height: 60px;
+    display: grid;
+    gap: 5px;
+    background-color:#6e7d0a;
+    padding: 3px;
+}
+#visit .item-2 {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+#admission {
+    height: 60px;
+    display: grid;
+    gap: 5px;
+    background-color: #cb5a5e;
+    padding: 3px;
+}
+#admission .item-3 {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+

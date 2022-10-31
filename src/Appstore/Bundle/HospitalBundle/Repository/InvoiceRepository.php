@@ -176,6 +176,7 @@ class InvoiceRepository extends EntityRepository
         $qb->select('e.process as process','count(e.id) as total');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        $qb->andWhere('e.process != :revised')->setParameter('revised', "Revised") ;
         $qb->groupBy('e.process');
         $qb->orderBy('e.process','ASC');
         $this->handleSearchBetween($qb,$data);

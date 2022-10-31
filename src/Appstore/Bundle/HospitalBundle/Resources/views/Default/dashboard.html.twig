@@ -3,92 +3,53 @@
     <div class="container-fluid">
         <!-- END PAGE HEADER-->
         <div class="portlet-body">
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-bottom:2px">
                 <div class="span4">
-                    <h5>OPD Overview</h5>
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and  diagonesticProcesses is not empty and ('diagnostic' in option.hospitalConfig.invoiceProcess) %}
+                    <h5><strong>OPD Overview</strong></h5>
                     <div id="diagonestic">
-
                         {% for row in diagonesticProcesses %}
                             <div class="item-1">
-                                <a href="{{ path('hms_invoice',{'process':row.process}) }}">
-                                    <span class="btn red mini"> {{ row.total }}</span><br/>
+                                <a class="process-box" href="{{ path('hms_invoice',{'process':row.process}) }}">
+                                    <span  class="btn red mini"> {{ row.total }}</span><br/>
                                     <span>{{ row.process }} </span>
                                 </a>
                             </div>
                         {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
                 <div class="span4">
-                    <h5>Visit Overview</h5>
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_VISIT") and  visitProcesses is not empty and ('visit' in option.hospitalConfig.invoiceProcess) %}
+                    <h5><strong>Visit Overview</strong></h5>
                     <div id="visit">
                         {% for row in visitProcesses %}
                             <div class="item-2">
-                                <a href="{{ path('hms_prescription',{'process':row.process}) }}">
+                                <a class="process-box" href="{{ path('hms_prescription',{'process':row.process}) }}">
                                     <span class="btn red mini"> {{ row.total }}</span><br/>
                                     <span>{{ row.process }} </span>
                                 </a>
                             </div>
                         {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
                 <div class="span4">
-                    <h5>IPD Overview</h5>
+                    {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") and  admissionProcesses is not empty and ('admission' in option.hospitalConfig.invoiceProcess) %}
+                    <h5><strong>IPD Overview</strong></h5>
                     <div id="admission">
                         {% for row in admissionProcesses %}
                             <div class="item-3">
-                                <a href="{{ path('hms_invoice_admission',{'process':row.process}) }}">
+                                <a class="process-box" href="{{ path('hms_invoice_admission',{'process':row.process}) }}">
                                     <span class="btn red mini"> {{ row.total }}</span><br/>
                                     <span>{{ row.process }} </span>
                                 </a>
                             </div>
                         {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
-            <style>
-                #diagonestic {
-                    height: 60px;
-                    display: grid;
-                    gap: 5px;
-                    background-color: #2196F3;
-                    padding: 3px;
-                    grid-template-columns: repeat({{diagonesticProcesses|length}}, 1fr);
-                }
-                #diagonestic .item-1 {
-                    background-color: rgba(255, 255, 255, 0.8);
-                    text-align: center;
-                    padding: 3px 0;
-                    font-size: 14px;
-                }
-                #visit {
-                    height: 60px;
-                    display: grid;
-                    gap: 5px;
-                    background-color: #2196F3;
-                    padding: 3px;
-                    grid-template-columns: repeat({{visitProcesses|length}}, 1fr);
-                }
-                #visit .item-2 {
-                    background-color: rgba(255, 255, 255, 0.8);
-                    text-align: center;
-                    padding: 3px 0;
-                    font-size: 14px;
-                }
-                #admission {
-                    height: 60px;
-                    display: grid;
-                    gap: 5px;
-                    background-color: #2196F3;
-                    padding: 3px;
-                    grid-template-columns: repeat({{admissionProcesses|length}}, 1fr);
-                }
-                #admission .item-3 {
-                    background-color: rgba(255, 255, 255, 0.8);
-                    text-align: center;
-                    padding: 3px 0;
-                    font-size: 14px;
-                }
-            </style>
             <div class="row-fluid" >
                 <div class="span3">
                     <div class="btn-group" style="width:88%!important">
@@ -138,13 +99,6 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="portlet-body">
-                                <style>
-                                    .icon-btn-mini {
-                                        width: 100%;
-                                        height: 40px!important;
-                                        padding: 7px 0 0 0!important;
-                                    }
-                                </style>
                                 <div class="row-fluid">
                                     <div class="span8" style="margin-top:-10px">
                                         <div class="portlet-body">
@@ -520,6 +474,17 @@
             </div>
         {% endif %}
 </div>
+    <style>
+        #diagonestic {
+            grid-template-columns: repeat({{diagonesticProcesses|length}}, 1fr);
+        }
+        #visit {
+            grid-template-columns: repeat({{visitProcesses|length}}, 1fr);
+        }
+        #admission {
+            grid-template-columns: repeat({{admissionProcesses|length}}, 1fr);
+        }
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
