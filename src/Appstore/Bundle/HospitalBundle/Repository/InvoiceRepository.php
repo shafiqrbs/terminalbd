@@ -206,7 +206,7 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('c.id as cabin','p.name as customer','e.created as created','e.invoice as invoice','p.mobile as mobile');
         $qb->join('e.cabin','c');
-        $qb->join('e.customer','p');
+        $qb->leftJoin('e.customer','p');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         $qb->andWhere('c.status = 1');
         $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created','Release'));
