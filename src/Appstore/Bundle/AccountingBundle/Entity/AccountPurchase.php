@@ -70,7 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         private  $purchase;
 
          /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Receive", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Receive", cascade={"detach","merge"} )
          * @ORM\JoinColumn(name="assets_purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $assetsReceive;

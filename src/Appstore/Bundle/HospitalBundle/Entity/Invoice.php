@@ -94,7 +94,7 @@ class Invoice
 
     /**
      * @ORM\OneToMany(targetEntity="Invoice" , mappedBy="parent")
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OrderBy({"invoice" = "ASC"})
      **/
     private $children;
 
@@ -124,7 +124,7 @@ class Invoice
     private  $cabin;
 
    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="specialization", cascade={"persist"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", cascade={"persist"}  )
      **/
     private  $specialization;
 

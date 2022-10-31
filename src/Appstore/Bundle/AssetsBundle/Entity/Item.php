@@ -77,7 +77,7 @@ class Item
 
 
     /**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="items" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular")
 	 **/
 	private  $productGroup;
 

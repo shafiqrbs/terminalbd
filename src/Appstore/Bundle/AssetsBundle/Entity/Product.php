@@ -68,7 +68,7 @@ class Product
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem", inversedBy="products" )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem")
 	 **/
 	private  $receiveItem;
 

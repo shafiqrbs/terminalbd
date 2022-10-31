@@ -46,7 +46,7 @@ class StockItem
     protected $purchaseItem;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem", inversedBy="stockItems")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $receiveItem;

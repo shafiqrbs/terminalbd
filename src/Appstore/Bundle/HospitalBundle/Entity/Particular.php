@@ -118,7 +118,7 @@ class Particular
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator"))
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User"))
      **/
     private  $assignOperator;
 

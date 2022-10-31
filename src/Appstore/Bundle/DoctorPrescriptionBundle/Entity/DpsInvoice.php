@@ -43,7 +43,7 @@ class DpsInvoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="dpsInvoices")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice")
      **/
     private $hmsInvoice;
 

@@ -84,7 +84,7 @@ class Profile
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\HrDepartment", inversedBy="profiles" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\HrDepartment")
      */
     protected $department;
 

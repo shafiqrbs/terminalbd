@@ -636,66 +636,6 @@ class User extends BaseUser
 	protected $hmsInvoiceApprovedBy;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $hmsInvoiceReturnCreatedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $hmsInvoiceReturnApprovedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particularDeliveredBy" , cascade={"persist", "remove"})
-	 */
-	protected $hmsInvoiceParticularDelivered;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particularPreparedBy" , cascade={"persist", "remove"})
-	 */
-	protected $hmsInvoiceParticularPrepared;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="sampleCollectedBy" , cascade={"persist", "remove"})
-	 */
-	protected $hmsInvoiceParticularCollected;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
-	 */
-	protected $particularDoctor;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsStockOut", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $stockOut;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsStockOut", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $stockOutApprovedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignOperator" , cascade={"persist", "remove"})
-	 */
-	protected $particularOperator;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $doctorInvoiceCreatedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $doctorInvoiceApprovedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $hmsReverse;
-
-	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="user" , cascade={"persist", "remove"})
 	 */
 	protected $userAttendance;

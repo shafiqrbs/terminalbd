@@ -46,12 +46,12 @@ class HmsStockOut
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="stockOut" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="stockOutApprovedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User" )
      **/
     private  $approvedBy;
 
