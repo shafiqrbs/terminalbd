@@ -130,7 +130,8 @@ class InvoiceParticularController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
         }
-	    $barcodePrint = $entity->getParticular()->getParticularCode().'-'.$entity->getReportCode();
+	   // $barcodePrint = $entity->getParticular()->getParticularCode().'-'.$entity->getReportCode();
+	    $barcodePrint = $entity->getHmsInvoice()->getInvoice();
         $barcodeReport = $this->getBarcode($barcodePrint);
         return $this->render('HospitalBundle:InvoiceParticular:sampleCollectionBarcode.html.twig', array(
             'entity' => $entity,
@@ -151,6 +152,24 @@ class InvoiceParticularController extends Controller
             $em->flush();
         }
         exit;
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_LAB,ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     */
+
+    public function machineFormatAction(InvoiceParticular $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity->setParticularDeliveredBy($this->getUser());
+        $entity->setParticularPreparedBy($this->getUser());
+        $entity->setCollectionDate(new \DateTime());
+        $entity->setProcess('Collected');
+        $entity->setSampleCollectedBy($this->getUser());
+        $entity->setProcess('Done');
+        $em->persist($entity);
+        $em->flush();
+        return new Response('done');
     }
 
 
@@ -183,6 +202,8 @@ class InvoiceParticularController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+
 
     /**
      * Creates a form to edit a Invoice entity.wq

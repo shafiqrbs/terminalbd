@@ -77,7 +77,7 @@
                                             <select name="particular" id="particular" class="m-wrap span12 select2">
                                                 <option value="">Select Test Name</option>
                                                 {% for service in particularService %}
-                                                    <option {% if searchForm.particular is defined and searchForm.particular == service.id %} selected="selected" {% endif %} value="{{ service.id }}" >{{ service.name }}</option>
+                                                    <option {% if searchForm.particular is defined and searchForm.particular == service.id %} selected="selected" {% endif %} value="{{ service.id }}" >{{ service.particularCode }} - {{ service.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -143,7 +143,7 @@
                                         <td class="numeric" >{{ entity.hmsInvoice.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.hmsInvoice.invoice }}</td>
                                         <td class="numeric" >{% if entity.hmsInvoice.customer is defined and entity.hmsInvoice.customer is not empty %}{{ entity.hmsInvoice.customer.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.particular.name }}</td>
+                                        <td class="numeric" >{{ entity.particular.particularCode }}-{{ entity.particular.name }}</td>
                                         <td class="numeric" >{{ entity.hmsInvoice.deliveryDateTime }}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
@@ -165,12 +165,15 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                             {% if entity.sampleCollectedBy is empty %}
-                                                <a class="btn mini green"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':entity.id}) }}" ><i class="icon-barcode"></i> Tag</a>
+                                                <a class="btn mini green" target="_blank"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':entity.id}) }}" ><i class="icon-barcode"></i> Tag</a>
                                                 <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':entity.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
                                             {% elseif entity.process in processes %}
                                                 <a target="_blank" class="btn mini green"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':entity.id}) }}" ><i class="icon-barcode"></i> Tag</a>
                                                 <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Generate Report</a>
-                                            {% endif %}
+                                                {% if entity.particular.isMachineFormat == 1 %}
+                                                <a class="btn mini red confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_machine_format', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Machine Report</a>
+                                                {% endif %}
+                                                {% endif %}
                                             </div>
                                         </td>
                                     </tr>

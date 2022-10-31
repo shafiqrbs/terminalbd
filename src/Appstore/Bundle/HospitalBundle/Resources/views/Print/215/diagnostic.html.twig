@@ -116,7 +116,7 @@
                             <td class="span4 text-center">
                                 <ul class="unstyled">
                                     <li>Printed By</li>
-                                    <li>{{ entity.createdBy }}, {{ "now"|date("d-m-Y") }}</li>
+                                    <li>{% if entity.createdBy.profile is not empty %}{{ entity.createdBy.profile.name }} {% endif %}, {{ "now"|date("d-m-Y") }}</li>
                                 </ul>
                             </td>
                             <td class="span4 text-right">&nbsp;</td>

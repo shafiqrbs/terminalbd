@@ -511,6 +511,13 @@ class Particular
      */
     private $isReportContent = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isMachineFormat", type="boolean", nullable=true)
+     */
+    private $isMachineFormat = false;
+
     /**
      * @var boolean
      *
@@ -1925,6 +1932,21 @@ class Particular
         $this->ipdVisitCharge = $ipdVisitCharge;
     }
 
+    /**
+     * @return bool
+     */
+    public function isMachineFormat()
+    {
+        return $this->isMachineFormat;
+    }
+
+    /**
+     * @param bool $isMachineFormat
+     */
+    public function setIsMachineFormat($isMachineFormat)
+    {
+        $this->isMachineFormat = $isMachineFormat;
+    }
 
 
 

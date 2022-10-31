@@ -14,6 +14,10 @@ hms_invoice_particular_preparation:
     path:     /{id}/preparation
     defaults: { _controller: "HospitalBundle:InvoiceParticular:preparation" }
 
+hms_invoice_particular_machine_format:
+    path:     /{id}/machine-format
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:machineFormat" }
+
 hms_invoice_particular_collection:
     path:     /{id}/sample-collection
     defaults: { _controller: "HospitalBundle:InvoiceParticular:sampleCollection" }

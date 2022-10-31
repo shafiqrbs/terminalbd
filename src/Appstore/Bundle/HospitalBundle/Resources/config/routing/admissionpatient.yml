@@ -1,0 +1,10 @@
+hms_admission_patient:
+    path:      /{id}
+    defaults: { _controller: "HospitalBundle:AdmissionPatient:patient" }
+
+hms_invoice_admission_particular_search:
+    path:     /particular-search
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:particularSearch" }
+    methods:  GET
+    options:
+        expose: true

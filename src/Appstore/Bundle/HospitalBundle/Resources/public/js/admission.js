@@ -579,7 +579,7 @@ $(document).on("click", "#dischargeBtn", function() {
                 type: 'POST',
                 data:'caseOfDeath='+caseOfDeath+'&doctorComment='+doctorComment+'&doctorDeathComment='+doctorDeathComment+'&advice='+advice+'&medicine='+medicine+'&processDeath='+processDeath+'&processRelease='+processRelease,
                 success: function(response) {
-                   //  location.reload();
+                    location.reload();
                 }
             })
 

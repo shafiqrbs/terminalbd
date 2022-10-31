@@ -36,7 +36,6 @@
                     </div>
 
                     <div class="portlet-body">
-
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid" >
@@ -45,23 +44,23 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-user"></i>
-                                                <input class="m-wrap span12 search-input" name="name" id="name" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Patient name{% endif %}">
+                                                <input class="m-wrap span12 search-input" name="name" id="name" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Patient name">
                                             </div>
                                         </div>
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-phone"></i>
-                                                <input class="m-wrap span12 search-input" name="mobile" id="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% else %}Patient mobile{% endif %}">
+                                                <input class="m-wrap span12 search-input" name="mobile" id="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Patient mobile">
                                             </div>
                                         </div>
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-user"></i>
-                                                <input class="m-wrap span12 search-input" name="customerId" id="customerId" value="{% if searchForm.customerId is defined %}{{ searchForm.customerId }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.customerId is defined %}{{ searchForm.customerId }}{% else %}Customer ID{% endif %}">
+                                                <input class="m-wrap span12 search-input" name="customerId" id="customerId" value="{% if searchForm.customerId is defined %}{{ searchForm.customerId }}{% endif %}"  autocomplete="off" placeholder="Customer ID">
                                             </div>
                                         </div>
                                         <div class="span3">
-                                            <input type="text" id="hmsInvoice" name="hmsInvoice"  class="m-wrap span12" value="{% if searchForm.hmsInvoice is defined %}{{ searchForm.hmsInvoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.hmsInvoice is defined %}{{ searchForm.hmsInvoice }}{% else %}Invoice ID{% endif %} ">
+                                            <input type="text" id="hmsInvoice" name="hmsInvoice"  class="m-wrap span12" value="{% if searchForm.hmsInvoice is defined %}{{ searchForm.hmsInvoice }}{% endif %}"  autocomplete="off" placeholder="Invoice ID">
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
@@ -87,13 +86,13 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="createdStart" id="createdStart" value="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% else %}Created start date{% endif %}" >
+                                                <input class="m-wrap span12 search-input date-picker" name="createdStart" id="createdStart" value="{% if searchForm.createdStart is defined %}{{ searchForm.createdStart }}{% endif %}"  autocomplete="off" placeholder="Start date" >
                                             </div>
                                         </div>
                                         <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span12">
-                                                    <input type="text" id="endDate" name="endDate"  class="m-wrap span10 date-picker" value="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% else %}Created end date{% endif %}">
+                                                    <input type="text" id="endDate" name="endDate"  class="m-wrap span10 date-picker" value="{% if searchForm.createdEnd is defined %}{{ searchForm.createdEnd }}{% endif %}"  autocomplete="off" placeholder="End date">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
@@ -107,7 +106,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Presceiption Type</th>
+                                    <th class="numeric" >Prescription Type</th>
                                     <th class="numeric" >Patient Invoice</th>
                                     <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Patient ID</th>

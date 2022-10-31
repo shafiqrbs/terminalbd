@@ -582,7 +582,7 @@
                                                             <button type="button" class="btn blue" id="dischargeBtn" data-url="{{ path('hms_invoice_admission_discharge',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
                                                         </div>
                                                     </div>
-                                                    {#<div class="process" id="death">
+                                                    <div class="process" id="death">
                                                         <div class="clearfix">&nbsp;</div>
                                                         <div class="row-fluid">
                                                             <div class="span12">
@@ -600,7 +600,7 @@
                                                             <input type="hidden" name="processMode" id="processMode" value="Death" >
                                                             <button type="button" class="btn blue" id="dischargeBtn" data-url="{{ path('hms_invoice_admission_discharge',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
                                                         </div>
-                                                    </div>#}
+                                                    </div>
                                                 </div>
                                                 </form>
                                             </div>
@@ -628,8 +628,8 @@
                                             <div class="span10">{{ entity.doctorComment }}</div>
                                         </div>
                                         <div class="row-fluid">
-                                            <div class="span2"><strong>Doctor Comment By & Date</strong></div>
-                                            <div class="span10">{% if entity.dischargeBy and entity.dischargeBy.profile is defined %}{{ entity.dischargeBy.profile.name }}{% endif %},{{ entity.updated|date('d-m-y') }}</div>
+                                            <div class="span2"><strong>Doctor Comment By</strong></div>
+                                            <div class="span10">{% if entity.dischargeBy and entity.dischargeBy.profile is defined %}{{ entity.dischargeBy.profile.name }}{% endif %}</div>
                                         </div>
                                         {% endif %}
                                         <div class="form-actions portlet box grey">
@@ -644,14 +644,13 @@
                                                     <a class="btn purple" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> New Invoice</a>
                                                 {% endif %}
                                                 {% if entity.total == entity.payment and entity.process not in ['Released','Dead','Release','Death'] %}
-                                                    <a class="btn green processConfirm" data-title="release" href="javascript:">Discharge</a>
-                                                   {# <a class="btn red" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                    <a class="btn red" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                         Discharge <i class="icon-tasks"></i>
                                                     </a>
                                                     <ul class="dropdown-menu pull-right action">
                                                         <li> <a class="btn green processConfirm" data-title="release" href="javascript:">Release</a></li>
                                                         <li><a class="btn red processConfirm" data-title="death" href="javascript:">Death</a></li>
-                                                    </ul>#}
+                                                    </ul>
                                                 {% endif %}
                                                 {% if ( app.user.granted("ROLE_DOMAIN") or app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER"))  %}
                                                     {% if entity.process in ['Release','Death'] and entity.total <= entity.payment %}

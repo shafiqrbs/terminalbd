@@ -77,7 +77,7 @@
                                             <select name="particular" id="particular" class="m-wrap span12 select2">
                                                 <option value="">Select Test Name</option>
                                                 {% for service in particularService %}
-                                                    <option {% if searchForm.particular is defined and searchForm.particular == service.id %} selected="selected" {% endif %} value="{{ service.id }}" >{{ service.name }}</option>
+                                                    <option {% if searchForm.particular is defined and searchForm.particular == service.id %} selected="selected" {% endif %} value="{{ service.id }}" >{{ service.particularCode }}-{{ service.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -140,7 +140,7 @@
                                         <td class="numeric" >{{ entity.hmsinvoice.invoice }}</td>
                                         <td class="numeric" >{% if entity.hmsinvoice.customer is defined and entity.hmsinvoice.customer is not empty %}{{ entity.hmsinvoice.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.hmsinvoice.due > 0 %}{{ entity.hmsinvoice.due|number_format }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.particular.name }}</td>
+                                        <td class="numeric" >{{ entity.particular.particularCode }}-{{ entity.particular.name }}</td>
                                         <td class="numeric" >{{ entity.hmsinvoice.deliveryDateTime }}</td>
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
@@ -156,6 +156,9 @@
                                                 <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':entity.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
                                             {% elseif entity.process in processes and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB")  %}
                                                 <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Generate Report</a>
+                                                {% if entity.particular.isMachineFormat == 1 %}
+                                                    <a class="btn mini red " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Machine Report</a>
+                                                {% endif %}
                                             {% endif %}
                                             {% if entity.process == "Done" and entity.particularDeliveredBy is not empty %}
                                                 <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Print </a>

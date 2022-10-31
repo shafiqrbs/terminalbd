@@ -155,7 +155,7 @@ class InvoiceParticularRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('ip');
-        $qb->select('p.id','p.name');
+        $qb->select('p.id','p.name','p.particularCode');
         $qb->join('ip.hmsInvoice','e');
         $qb->join('ip.particular','p');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;

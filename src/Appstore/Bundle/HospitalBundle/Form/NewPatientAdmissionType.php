@@ -119,6 +119,7 @@ class NewPatientAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+
             ->add('assignDoctor', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
@@ -131,11 +132,12 @@ class NewPatientAdmissionType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
-                        ->andWhere("b.service =6")
+                        ->andWhere('b.service IN(:service)') ->setParameter('service',array_values(array(5)))
                         ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
                         ->orderBy("b.name", "ASC");
                 }
             ))
+
             ->add('anesthesiaDoctor', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',

@@ -50,6 +50,10 @@ hospital_invoice_admission:
     resource: "@HospitalBundle/Resources/config/routing/invoiceadmission.yml"
     prefix:   /invoice-admission
 
+hospital_admission_patient:
+    resource: "@HospitalBundle/Resources/config/routing/admissionpatient.yml"
+    prefix:   /patient
+
 hospital_invoice_particular:
     resource: "@HospitalBundle/Resources/config/routing/invoiceparticular.yml"
     prefix:   /report-process

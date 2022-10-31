@@ -773,7 +773,7 @@ class InvoiceAdmissionController extends Controller
         $entity->setAdvice($data['advice']);
         $entity->setCaseOfDeath($data['caseOfDeath']);
         $entity->setDoctorComment($data['doctorComment']);
-        $entity->setProcess($data['processMode']);
+        $entity->setProcess("Release");
         $entity->setDischargeBy($this->getUser());
         $em->flush();
         return new Response('success');
