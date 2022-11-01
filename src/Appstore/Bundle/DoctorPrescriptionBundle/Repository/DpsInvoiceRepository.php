@@ -275,6 +275,24 @@ class DpsInvoiceRepository extends EntityRepository
         return  $qb;
     }
 
+    public function invoiceHospitalLists(User $user, $data)
+    {
+        $config = $user->getGlobalOption()->getDpsConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.customer','c');
+        $qb->join('e.hmsInvoice','hi');
+        $qb->where('e.dpsConfig = :config')->setParameter('config', $config) ;
+        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles()) and  $user->getParticularDoctor()) {
+            $id = $user->getParticularDoctor()->getId();
+            $qb->andWhere('e.hmsAssignDoctor = :doctor')->setParameter('doctor', $id) ;
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+
     public function invoicePathologicalReportLists(User $user , $mode , $data)
     {
         $config = $user->getGlobalOption()->getDpsConfig()->getId();

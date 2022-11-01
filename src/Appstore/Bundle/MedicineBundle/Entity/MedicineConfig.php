@@ -121,7 +121,7 @@ class MedicineConfig
      *
      * @ORM\Column(name="printOff", type="boolean",  nullable=true)
      */
-    private $printOff = true;
+    private $printOff;
 
      /**
      * @var boolean

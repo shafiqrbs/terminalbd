@@ -53,7 +53,7 @@ class PrescriptionController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $dpsConfig = $user->getGlobalOption()->getDpsConfig();
-        $entities = $em->getRepository('DoctorPrescriptionBundle:DpsInvoice')->invoiceLists( $user,$data);
+        $entities = $em->getRepository('DoctorPrescriptionBundle:DpsInvoice')->invoiceHospitalLists( $user,$data);
         $pagination = $this->paginate($entities);
         $assignDoctors = $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsInvoice')->getFindWithDoctor($user);
         return $this->render('DoctorPrescriptionBundle:Prescription:index.html.twig', array(
@@ -599,17 +599,25 @@ class PrescriptionController extends Controller
 
             $services = $em->getRepository('DoctorPrescriptionBundle:DpsService')->findBy(array('dpsConfig'=>$dpsConfig,'serviceShow'=>1,'status'=>1),array('serviceSorting'=>'ASC'));
             if($dpsConfig->isCustomPrescription() == 1){
-                $template = $dpsConfig->getGlobalOption()->getSlug();
+                $template = $dpsConfig->getGlobalOption()->getSubDomain();
             }else{
                 $template = 'print';
             }
-
+            if($entity->getHmsInvoice()){
+                $barcode = $this->getBarcode($entity->getHmsInvoice()->getInvoice());
+            }else{
+                $barcode = $this->getBarcode($entity->getInvoice());
+            }
+            $invoiceServices = $em->getRepository('DoctorPrescriptionBundle:DpsInvoiceParticular')->getInvoiceServices($entity);
             return  $this->render('DoctorPrescriptionBundle:Print:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
+                    'dpsConfig' => $dpsConfig,
+                    'barcode' => $barcode,
                     'print' => 'print',
                     'invoiceParticularArr' => $invoiceParticularArr,
                     'services' => $services,
+                    'invoiceServices' => $invoiceServices,
                 )
             );
 
@@ -648,7 +656,7 @@ class PrescriptionController extends Controller
                 $barcode = $this->getBarcode($entity->getInvoice());
             }
             $invoiceServices = $em->getRepository('DoctorPrescriptionBundle:DpsInvoiceParticular')->getInvoiceServices($entity);
-            return  $this->render('DoctorPrescriptionBundle:Print:'.$template.'.html.twig',
+            return  $this->render('DoctorPrescriptionBundle:Prescription:preview.html.twig',
                 array(
                     'entity' => $entity,
                     'dpsConfig' => $dpsConfig,
@@ -664,53 +672,7 @@ class PrescriptionController extends Controller
 
     }
 
-    public function invoicePrintPdfAction(DpsInvoice $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $dpsConfig = $this->getUser()->getGlobalOption()->getDpsConfig();
-        if ($dpsConfig->getId() == $entity->getDpsConfig()->getId()) {
 
-            /** @var  $invoiceParticularArr */
-            $invoiceParticularArr = array();
-
-            /** @var $row DpsInvoiceParticular */
-            if (!empty($entity->getInvoiceParticulars())) {
-                foreach ($entity->getInvoiceParticulars() as $row):
-                    if (!empty($row->getDpsParticular())) {
-                        $invoiceParticularArr[$row->getDpsParticular()->getId()] = $row;
-                    }
-                endforeach;
-            }
-
-            $services = $em->getRepository('DoctorPrescriptionBundle:DpsService')->findBy(array('dpsConfig' => $dpsConfig, 'serviceShow' => 1, 'status' => 1), array('serviceSorting' => 'ASC'));
-            $treatmentSchedule = $em->getRepository('DoctorPrescriptionBundle:DpsTreatmentPlan')->findTodaySchedule($dpsConfig);
-
-            if ($dpsConfig->isCustomPrescription() == 1) {
-                $template = $dpsConfig->getGlobalOption()->getSlug();
-            } else {
-                $template = 'print';
-            }
-
-            $html = $this->renderView(
-                'DoctorPrescriptionBundle:Print:dental-care.html.twig', array(
-                    'entity' => $entity,
-                    'invoiceParticularArr' => $invoiceParticularArr,
-                    'services' => $services,
-                    'treatmentSchedule' => $treatmentSchedule,
-                )
-            );
-
-            $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-            $snappy = new Pdf($wkhtmltopdfPath);
-            $pdf = $snappy->getOutputFromHtml($html);
-
-            header('Content-Type: application/pdf');
-            header('Content-Disposition: attachment; filename="incomePdf.pdf"');
-            echo $pdf;
-
-            return new Response('');
-        }
-    }
 
     public function appointmentTimeAction()
     {

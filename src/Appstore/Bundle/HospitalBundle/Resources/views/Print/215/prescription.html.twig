@@ -21,10 +21,64 @@
             window.close();
         }, 2000);
     </script>
+<style>
+    #myDIV {
+        height:180px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 35% 28% 35%;
+
+    }
+    #myDIV div.item {
+        background-color: rgba(255, 255, 255, 0.8);
+        text-align: center;
+        padding: 5px 0;
+        font-size: 14px;
+        line-height: 18px;
+    }
+    #myDIV div.item.left{
+        text-align: left;
+    }
+    #myDIV div.item.right{
+        text-align: right;
+    }
+    #myDIV div h1{
+        font-size: 20px;
+        padding: 0;
+        margin: 0;
+        padding-bottom: 15px;
+    }
+    .specialist {
+        border: 2px solid #000;
+        border-radius: 4px!important;
+        height: 65px;
+        font-size: 18px;
+        line-height: 30px;
+        font-weight: bold;
+    }
+
+</style>
 </head>
+
 {% block body %}
-    <div style="width:960px; height: 29.7cm; margin:0 auto; margin-top:5px">
+    <div style="width:960px; height: 29.7cm; margin:0 auto;">
     {% if entity.hospitalConfig.isPrintHeader == 1 and entity.assignDoctor is defined and entity.assignDoctor.webPath is not empty  %}
+        <div class="print-header-content" style="height:180px;margin-top:48px;position: relative">
+            <div id="myDIV">
+                <div class="item left">
+                    <h1>{{ entity.assignDoctor.name }}</h1>
+                  {{ entity.assignDoctor.doctorSignature|raw }}
+                </div>
+                <div class="item" style="align-items:center;display: flex;">
+                    <span class="specialist">{{ entity.assignDoctor.specialist }}</span>
+                </div>
+                <div class="item right">
+                     {{ entity.assignDoctor.doctorSignatureBangla|raw }}
+                </div>
+            </div>
+            <div style="height: 20px; text-align: center;width: 100%; font-size: 16px; position:absolute; bottom: 20px">{{ entity.assignDoctor.visitTime }}</div>
+        </div>
+    {% else %}
         <div class="print-header-content" style="height: 220px">
             <img style="width: 100%; height: 220px" src="/{{ entity.assignDoctor.webPath }}">
         </div>
@@ -52,7 +106,7 @@
             <div  style="margin-top: 28px!important; float: left; width: 310px ">
              C/C
             </div>
-            <div  style="padding-left: 30px;float: left; height:1030px; margin-left: -1px ;border-left:2px solid #0a7265">
+            <div  style="padding-left: 30px;float: left; height:1010px; margin-left: -1px ;border-left:2px solid #0a7265">
                 <img src="{{ asset('assets/img/customer/rx.png') }}" style="margin-top: 30px;width:44px">
                 <br/>
             </div>
@@ -81,6 +135,5 @@
     </style>
 {% endblock %}
  {% block javascriptBlock %}
-
  {% endblock %}
 

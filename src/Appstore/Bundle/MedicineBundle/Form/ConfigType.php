@@ -57,6 +57,7 @@ class ConfigType extends AbstractType
             ->add('invoicePrintLogo')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
+            ->add('printOff')
             ->add('expiryDate', 'choice', array(
                 'attr' => array(
                     'class'=>'m-wrap span12'),
@@ -97,7 +98,7 @@ class ConfigType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_medicine_config';
+        return 'config';
     }
 
 

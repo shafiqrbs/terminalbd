@@ -79,6 +79,9 @@ dps_description_preview:
     path:     /{id}/preview
     defaults: { _controller: "DoctorPrescriptionBundle:Prescription:preview" }
 
+dps_prescription_print:
+    path:     /{id}/print
+    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:invoicePrint" }
 
 
 dps_prescription_accessories_add:
@@ -87,15 +90,6 @@ dps_prescription_accessories_add:
     methods:  POST
     options:
             expose: true
-
-dps_prescription_accessories_delete:
-    path:     /{id}/accessories-delete
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:deleteAccessories" }
-
-dps_prescription_accessories_approved:
-    path:     /{id}/accessories-approved
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:approvedAccessories" }
-
 
 dps_prescription_approved:
     path:     /{id}/Prescription-approved
@@ -113,37 +107,14 @@ dps_prescription_delete:
     path:     /{id}/delete
     defaults: { _controller: "DoctorPrescriptionBundle:Prescription:delete" }
 
-dps_prescription_reverse_show:
-    path:     /{id}/Prescription-reverse-show
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionReverseShow" }
 
 
-dps_prescription_confirm:
-    path:     /{id}/Prescription-confirm
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:confirm" }
 
-dps_prescription_particular_delete:
-    path:     /{Prescription}/{id}/particular-delete
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionParticularDelete" }
-
-dps_prescription_print:
-    path:     /{id}/print
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionPrint" }
-
-dps_prescription_preview:
-    path:     /{Prescription}/print-preview
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionPrintPreview" }
 
 dps_prescription_patient_load:
     path:     /{id}/patient-load
     defaults: { _controller: "DoctorPrescriptionBundle:Prescription:patientLoad" }
 
-dps_prescription_process_update:
-    path:     /hms-Prescription/upadte-process
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:PrescriptionProcessUpdate" }
-    methods:  POST
-    options:
-            expose: true
 
 dps_prescription_status_select:
     path:     /Prescription-status-select
@@ -151,9 +122,7 @@ dps_prescription_status_select:
     options:
            expose: true
 
-dps_prescription_empty_delete:
-    path:     /delete/empty-Prescription
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:deleteEmptyPrescription" }
+
 
 dps_prescription_customer_details:
     path:     /Prescription-patient-details
@@ -162,12 +131,6 @@ dps_prescription_customer_details:
     options:
            expose: true
 
-dps_prescription_add_patient:
-    path:     /{id}/Prescription-patient-add
-    defaults: { _controller: "DoctorPrescriptionBundle:Prescription:addPatient" }
-    methods:  [POST, PUT]
-    options:
-            expose: true
 
 dps_treatment_inline_update:
     path:     /inline-update
