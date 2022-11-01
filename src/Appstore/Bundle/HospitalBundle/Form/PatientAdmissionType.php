@@ -143,21 +143,24 @@ class PatientAdmissionType extends AbstractType
             ))
         ;
 
-        if($this->CabinChoiceList()){
+        if($this->CabinChoiceList( $options['data']->getId())){
+            $id = $options['data']->getId();
             $builder->add('cabin', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'name',
+                'group_by'  => 'serviceGroup.name',
+                'choice_translation_domain' => true,
                 'attr'=>array('class'=>'span12 m-wrap select2'),
                 'empty_value' => '---Select cabin/ward no---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select required'))
                 ),
-                'query_builder' => function(EntityRepository $er){
+                'query_builder' => function(EntityRepository $er) use($id){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")
                         ->andWhere("b.service = 2")
-                        ->andWhere("b.id NOT IN (:cabins)")->setParameter('cabins',$this->CabinChoiceList())
+                        ->andWhere("b.id NOT IN (:cabins)")->setParameter('cabins',$this->CabinChoiceList($id))
                         ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
                         ->orderBy("b.name", "ASC");
                 }
@@ -167,6 +170,8 @@ class PatientAdmissionType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'name',
+                'group_by'  => 'serviceGroup.name',
+                'choice_translation_domain' => true,
                 'attr'=>array('class'=>'span12 m-wrap select2'),
                 'empty_value' => '---Select cabin/ward no---',
                 'constraints' =>array(
@@ -209,9 +214,9 @@ class PatientAdmissionType extends AbstractType
     /**
      * @return mixed
      */
-    protected function CabinChoiceList()
+    protected function CabinChoiceList( $id)
     {
-        return $this->admission->getExistCabin($this->globalOption->getHospitalConfig()->getId());
+        return $this->admission->getExistCabin($this->globalOption->getHospitalConfig()->getId(),$id);
 
     }
 
