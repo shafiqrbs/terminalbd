@@ -53,24 +53,6 @@ class PatientAdmissionType extends AbstractType
             ->add('disease','textarea',
                 array('attr'=>array('class'=>'m-wrap span12','required'=> false,'rows' => 4,'placeholder'=>'Add disease')))
 
-            ->add('cabin', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Select cabin/ward no---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->where("b.status = 1")
-                        ->andWhere("b.service = 2")
-                        ->andWhere("b.id NOT IN (:cabins)")->setParameter('cabins',$this->CabinChoiceList())
-                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
-                        ->orderBy("b.name", "ASC");
-                }
-            ))
             ->add('referredDoctor', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
@@ -160,6 +142,49 @@ class PatientAdmissionType extends AbstractType
                 }
             ))
         ;
+
+        if($this->CabinChoiceList()){
+            $builder->add('cabin', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'empty_value' => '---Select cabin/ward no---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.service = 2")
+                        ->andWhere("b.id NOT IN (:cabins)")->setParameter('cabins',$this->CabinChoiceList())
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ));
+        }else{
+            $builder->add('cabin', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'empty_value' => '---Select cabin/ward no---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.service = 2")
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ));
+        }
+
+
+
+
         $builder->add('customer', new CustomerForHospitalAdmissionType( $this->location ));
     }
     

@@ -656,7 +656,7 @@ class PrescriptionController extends Controller
                 $barcode = $this->getBarcode($entity->getInvoice());
             }
             $invoiceServices = $em->getRepository('DoctorPrescriptionBundle:DpsInvoiceParticular')->getInvoiceServices($entity);
-            return  $this->render('DoctorPrescriptionBundle:Prescription:preview.html.twig',
+            return  $this->render('DoctorPrescriptionBundle:Preview:'.$template.'.html.twig',
                 array(
                     'entity' => $entity,
                     'dpsConfig' => $dpsConfig,
