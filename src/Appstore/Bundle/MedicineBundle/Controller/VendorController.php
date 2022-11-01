@@ -80,23 +80,20 @@ class VendorController extends Controller
         if ($form->isValid() and empty($exitVendor)) {
 	        $em = $this->getDoctrine()->getManager();
             $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $config->getGlobalOption(),'mobile' => $data['customer']));
-            if($customer){
-                $entity->setCustomer($customer);
-            }
             $entity->setMedicineConfig($config);
             $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->insertVendor($entity);
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
             return $this->redirect($this->generateUrl('medicine_vendor'));
         }
-        $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->insertVendor($entity);
+
 	    $this->get('session')->getFlashBag()->add(
 		    'success',"User mobile no already exist,Please try again."
 	    );
-        return $this->render('MedicineBundle:Vendor:index.html.twig', array(
+        return $this->render('MedicineBundle:Vendor:new.html.twig', array(
             'entities' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),

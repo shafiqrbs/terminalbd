@@ -144,6 +144,7 @@ class PatientAdmissionType extends AbstractType
         ;
 
         if($this->CabinChoiceList( $options['data']->getId())){
+
             $id = $options['data']->getId();
             $builder->add('cabin', 'entity', array(
                 'required'    => false,
@@ -165,7 +166,9 @@ class PatientAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ));
+
         }else{
+
             $builder->add('cabin', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
