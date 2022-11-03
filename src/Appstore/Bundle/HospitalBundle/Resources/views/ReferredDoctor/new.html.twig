@@ -6,7 +6,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="category-title">
-                Manage Referred Doctor
+                Manage Referred
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_referreddoctor') }}">Referred Doctor</a>
+                    <a href="{{ path('hms_referreddoctor') }}">Referred</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Manage Referred Doctor</a></li>
@@ -33,7 +33,7 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Referred Doctor</div>
+            <div class="caption"><i class="icon-reorder"></i>Referred</div>
             <div class="actions">
                 <div class="btn-group">
                     <a class="btn red" href="{{ path('hms_referreddoctor') }}"><i class="icon-th-list"></i>&nbsp;Referred</a>
@@ -50,7 +50,7 @@
                 <!--/span-->
                 <div class="span8">
                     <div class="control-group">
-                        <label class="control-label" for="name">Referred Doctor/Others <span class="required">*</span></label>
+                        <label class="control-label" for="name">Referred Name <span class="required">*</span></label>
                         <div class="controls">
                             {{ form_widget(form.name) }}
                             {{ form_errors(form.name) }}
