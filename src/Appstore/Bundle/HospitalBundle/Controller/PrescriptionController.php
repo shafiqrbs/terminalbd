@@ -294,6 +294,23 @@ class PrescriptionController extends Controller
     public function deleteAction(Request $request)
     {
     }
+
+    public function invoiceApproveAction(Invoice $invoice)
+    {
+        if($invoice->getPaymentStatus() == 'Paid'){
+            $em = $this->getDoctrine()->getManager();
+            $invoice->setApprovedBy($this->getUser());
+            $invoice->setProcess('Done');
+            $em->persist($invoice);
+            $em->flush();
+            if($invoice->getAssignDoctor()->isSendToAccount() == 1){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalVisitAccount($invoice);
+            }
+        }
+       return new Response('Success');
+    }
+
+
     public function printAction(Request $request,$id)
     {
         $em = $this->getDoctrine()->getManager();

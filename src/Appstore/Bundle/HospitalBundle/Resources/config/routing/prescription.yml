@@ -43,6 +43,10 @@ hms_prescription_update:
     defaults: { _controller: "HospitalBundle:Prescription:update" }
     methods:  [POST, PUT]
 
+hms_prescription_approve:
+    path:     /{id}/invoice-approve
+    defaults: { _controller: "HospitalBundle:Prescription:invoiceApprove" }
+
 hms_prescription_print:
     path:     /{id}/invoice-print
     defaults: { _controller: "HospitalBundle:Prescription:print" }

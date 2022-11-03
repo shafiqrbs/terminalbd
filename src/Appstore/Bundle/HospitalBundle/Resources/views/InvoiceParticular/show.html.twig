@@ -97,6 +97,7 @@
                                         </thead>
                                         <tbody>
                                         {% for item in entity.invoiceParticulars %}
+                                            {% if item.particular.service.slug == 'diagnostic' %}
                                             <tr id="remove-{{ item.id }}">
                                                 <td><span class="badge badge-warning toggle badge-custom" id="{{ item.id  }}" ><span>[+]</span></span></td>
                                                 <td  class="numeric">{{ entity.invoice  }}-{{ item.particular.particularCode  }}</td>
@@ -123,8 +124,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            {% if item.particular.service.slug == 'diagnostic' %}
-                                                <tr id="show-{{ item.id }}" class="showing-overview">
+                                             <tr id="show-{{ item.id }}" class="showing-overview">
                                                     <td colspan="11">
                                                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                                             <tr class="">

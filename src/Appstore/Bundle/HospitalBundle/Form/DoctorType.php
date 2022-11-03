@@ -66,6 +66,7 @@ class DoctorType extends AbstractType
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('file')
             ->add('signatureFile')
+            ->add('sendToAccount')
             ->add('assignDoctor', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select doctor from employee list---',

@@ -280,6 +280,10 @@ class InvoiceParticularController extends Controller
         return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getHmsInvoice()->getId())));
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_ADMIN");
+     */
+
     public function reportReverseAction(InvoiceParticular $entity)
     {
         if (!empty($entity)) {

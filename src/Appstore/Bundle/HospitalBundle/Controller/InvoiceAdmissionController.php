@@ -1010,6 +1010,9 @@ class InvoiceAdmissionController extends Controller
         exit;
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN");
+     */
 
     public function admissionInvoiceReverseAction($invoice){
 
@@ -1018,7 +1021,6 @@ class InvoiceAdmissionController extends Controller
         $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
         $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsAdmissionSalesTransactionReverse($entity);
         $em->getRepository('HospitalBundle:InvoiceParticular')->hmsInvoiceParticularReverse($entity);
-        $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
         $entity->setTotal($entity->getSubTotal());
         $entity->setProcess('Admitted');

@@ -247,9 +247,10 @@ class InvoiceParticularRepository extends EntityRepository
     {
         $em = $this->_em;
         $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
-        $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular()));
+        $particular = $patientParticular->getParticular();
+        $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular(), ));
         /* @var $entity InvoiceParticular */
-        if(empty($entity)){
+        if(empty($entity)) {
 
             $entity = new InvoiceParticular();
             $entity->setSubTotal($patientParticular->getSubTotal());
@@ -258,12 +259,21 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setParticular($patientParticular->getParticular());
             $entity->setSalesPrice($patientParticular->getSalesPrice());
             $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
+            if ($patientParticular->getParticular()->getCommission()) {
+                $entity->setCommission($patientParticular->getParticular()->getCommission() * $entity->getQuantity());
+            }
+        }elseif($entity and ($particular->getService()->getHasQuantity() == 0)){
+            $entity = new InvoiceParticular();
+            $entity->setSubTotal($patientParticular->getSubTotal());
+            $entity->setQuantity(1);
+            $entity->setHmsInvoice($invoice);
+            $entity->setParticular($patientParticular->getParticular());
+            $entity->setSalesPrice($patientParticular->getSalesPrice());
+            $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
             if($patientParticular->getParticular()->getCommission()){
                 $entity->setCommission($patientParticular->getParticular()->getCommission() * $entity->getQuantity());
             }
-
         }else{
-
             $entity->setSubTotal( $entity->getSubTotal() + $patientParticular->getSubTotal());
             $entity->setQuantity( $entity->getQuantity() + $patientParticular->getQuantity());
             if($entity->getCommission()){

@@ -995,9 +995,6 @@ class AccountSalesRepository extends EntityRepository
         }
         $accountSales->setProcessHead('Advance');
         $accountSales->setApprovedBy($entity->getCreatedBy());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
-        }
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
@@ -1026,9 +1023,35 @@ class AccountSalesRepository extends EntityRepository
             $accountSales->setTotalAmount($entity->getTotal());
             $accountSales->setProcessHead($entity->getInvoiceMode());
             $accountSales->setApprovedBy($entity->getCreatedBy());
-            if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-                $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
-            }
+            $accountSales->setProcessType('Sales');
+            $accountSales->setProcess('approved');
+            $accountSales->setCreated($entity->getCreated());
+            $accountSales->setUpdated($entity->getCreated());
+            $em->persist($accountSales);
+            $em->flush();
+            $this->updateCustomerBalance($accountSales);
+            return $accountSales;
+        }
+        return $exist;
+    }
+
+    public function insertHospitalVisitAccount(\Appstore\Bundle\HospitalBundle\Entity\Invoice $entity)
+    {
+
+        $em = $this->_em;
+        $exist = $this->findOneBy(array('hmsInvoices'=>$entity->getId(),'processHead' => $entity->getInvoiceMode(),'processType'=>'Sales'));
+        if(empty($exist)){
+            $accountSales = new AccountSales();
+            $accountSales->setAccountBank($entity->getAccountBank());
+            $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+            $accountSales->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
+            $accountSales->setHmsInvoices($entity);
+            $accountSales->setSourceInvoice( $entity->getInvoice() );
+            $accountSales->setCustomer($entity->getCustomer());
+            $accountSales->setTotalAmount($entity->getPayment());
+            $accountSales->setAmount($entity->getPayment());
+            $accountSales->setProcessHead($entity->getInvoiceMode());
+            $accountSales->setApprovedBy($entity->getCreatedBy());
             $accountSales->setProcessType('Sales');
             $accountSales->setProcess('approved');
             $accountSales->setCreated($entity->getCreated());

@@ -115,10 +115,8 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    {% if searchForm.particular is defined and searchForm.particular is not empty %}
-                                    <th class="" ><input type="checkbox" id="checkAll" data-checkwhat="chkSelect"></th>
-                                   {% endif %}
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Patient Mode</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Balance</th>
@@ -133,10 +131,8 @@
                                 {% set processes = ['Collected','In-progress'] %}
                                 {% for entity in entities %}
                                     <tr>
-                                        {% if searchForm.particular is defined and searchForm.particular is not empty %}
-                                        <td class="" ><input type="checkbox" class="chkSelect" id="checkItem-{{ entity.id }}" ></td>
-                                        {% endif %}
-                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y h:i a') }}</td>
+                                        <td class="numeric" >{{ entity.hmsinvoice.invoiceMode|capitalize }}</td>
                                         <td class="numeric" >{{ entity.hmsinvoice.invoice }}</td>
                                         <td class="numeric" >{% if entity.hmsinvoice.customer is defined and entity.hmsinvoice.customer is not empty %}{{ entity.hmsinvoice.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.hmsinvoice.due > 0 %}{{ entity.hmsinvoice.due|number_format }}{% endif %}</td>
@@ -152,22 +148,11 @@
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                            {% if entity.sampleCollectedBy is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") %}
-                                                <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':entity.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
-                                            {% elseif entity.process in processes and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB")  %}
-                                                <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Generate Report</a>
-                                                {% if entity.particular.isMachineFormat == 1 %}
-                                                    <a class="btn mini red " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Machine Report</a>
-                                                {% endif %}
-                                            {% endif %}
                                             {% if entity.process == "Done" and entity.particularDeliveredBy is not empty %}
                                                 <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Print </a>
                                             {% endif %}
-                                            {% if entity.hmsInvoice.paymentStatus == 'Paid' and entity.process == 'Done'  and entity.particularDeliveredBy is empty %}
-                                                <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
-                                            {% endif %}
-                                            {% if  (entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR")) or (entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER")) %}
-                                            <a target="_blank"  href="{{ path('hms_invoice_confirm',{'id':entity.hmsInvoice.id}) }}"  class="btn red mini" ><i class=" icon-plus"></i> Invoice</a>
+                                            {% if  (entity.hmsinvoice.invoiceMode == "diagnostic" and entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR")) or (entity.hmsinvoice.invoiceMode == "diagnostic" and entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER")) %}
+                                                <a target="_blank"  href="{{ path('hms_invoice_confirm',{'id':entity.hmsInvoice.id}) }}"  class="btn red mini" ><i class=" icon-plus"></i> Invoice</a>
                                             {% endif %}
                                             {% if (entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == "Done" and entity.particularDeliveredBy is empty) or ( entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == "Done" )  %}
                                                 <a  class="btn mini black" href="{{ path('hms_invoice_particular_report_reverse', {'id': entity.id}) }}"><i class="icon-refresh"></i>&nbsp;Reverse </a>

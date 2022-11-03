@@ -535,6 +535,14 @@ class Particular
 
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sendToAccount", type="boolean", nullable=true)
+     */
+    private $sendToAccount = true;
+
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $path;
@@ -1948,8 +1956,21 @@ class Particular
         $this->isMachineFormat = $isMachineFormat;
     }
 
+    /**
+     * @return bool
+     */
+    public function isSendToAccount()
+    {
+        return $this->sendToAccount;
+    }
 
-
+    /**
+     * @param bool $sendToAccount
+     */
+    public function setSendToAccount($sendToAccount)
+    {
+        $this->sendToAccount = $sendToAccount;
+    }
 
 
 }

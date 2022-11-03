@@ -124,57 +124,74 @@
                                             <thead class="flip-content ">
                                             <tr class="head-blue">
                                                 <th class="numeric">Si/No</th>
+                                                <th class="numeric">Created</th>
                                                 <th class="numeric">Code</th>
                                                 <th class="numeric">Particular</th>
                                                 <th class="numeric">Service</th>
-                                                <th class="numeric">Qnt</th>
+                                                <th class="numeric">QTY</th>
                                                 <th class="numeric">Amount</th>
+                                                <th class="numeric"></th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             {% for item in entity.invoiceParticulars %}
                                                 <tr id="remove-{{ item.id }}">
                                                     <td  class="numeric">{{ loop.index }}</td>
+                                                    <td  class="numeric">{{ item.updated|date('d-m-Y h:i a') }}</td>
                                                     <td  class="numeric">{{ item.particular.particularCode }}</td>
                                                     <td class="numeric">{{ item.particular.name }}</td>
                                                     <td class="numeric">{{ item.particular.service.name }}</td>
                                                     <td class="numeric">{{ item.quantity }}</td>
                                                     <td class="numeric">{{ item.subTotal|number_format }}</td>
+                                                    <td>
+                                                        {% if item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is empty %}
+                                                            <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': item.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
+                                                        {% endif %}
+                                                        {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is not empty %}
+                                                            <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                        {% endif %}
+                                                        {% if  item.webPath is not empty %}
+                                                            <br/>
+                                                            <a class="btn red pull-right mini" target="_blank" href="/{{ item.webPath }}"><i class="icon-download"></i> Download</a>
+                                                        {% endif %}
+                                                    </td>
                                                 </tr>
-
                                             {% endfor %}
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="7" class="span12" style="border: 1px double #000"></td>
+                                                <td colspan="8" class="span12" style="border: 1px double #000"></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                                <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                                 <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                                <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                                <td colspan="6" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                                                 <td class="span2"><strong id="vat">{{ entity.vat|number_format }}</strong></td>
-
+                                                <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                                <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                                 <td class="span2"><strong id="vat">{{ entity.discount|number_format }}</strong></td>
-
+                                                <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
+                                                <td colspan="6" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
                                                 <td class="span2"><strong id="vat">{{ entity.total|number_format }}</strong></td>
-
+                                                <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                                                <td colspan="6" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
                                                 <td class="span2"><strong id="vat">{{ entity.payment|number_format }}</strong></td>
+                                                <td></td>
                                             </tr>
 
                                             <tr>
-                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                                <td colspan="6" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
                                                 <td class="span2"><strong id="vat">{{ entity.due|number_format }}</strong></td>
+                                                <td></td>
 
                                             </tr>
 
@@ -247,7 +264,7 @@
                                                     <th class="span1">Code</th>
                                                     <th class="span4">Particular</th>
                                                     <th class="span2">Service</th>
-                                                    <th class="span1">Qnt</th>
+                                                    <th class="span1">QTY</th>
                                                     <th class="span2">Unit Price</th>
                                                     <th class="span1">Amount</th>
                                                     <th class="span1"></th>
@@ -632,6 +649,7 @@
                                             <div class="span10">{% if entity.dischargeBy and entity.dischargeBy.profile is defined %}{{ entity.dischargeBy.profile.name }}{% endif %},{{ entity.updated|date('d-m-y') }}</div>
                                         </div>
                                         {% endif %}
+                                            <div class="clearfix">&nbsp;</div>
                                         <div class="form-actions portlet box grey">
                                         <div class="pull-right" id="action-{{ entity.id }}">
                                             <div class="btn-group dropup">

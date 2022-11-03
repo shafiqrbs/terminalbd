@@ -614,8 +614,7 @@ class InvoiceController extends Controller
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
         $entity->setRevised(true);
-        $entity->setProcess('Revised');
-        $entity->setRevised(true);
+        $entity->setProcess('In-progress');
         $entity->setPaymentStatus('Due');
         $entity->setDue($entity->getTotal());
         $entity->setPaymentInWord(null);
@@ -874,7 +873,6 @@ class InvoiceController extends Controller
         $pagination = $entities->getQuery()->getResult();
             /* @var $entity Invoice */
             foreach ($pagination as $entity):
-                $entity->setRevised(true);
                 $entity->setProcess('Revised');
                 $entity->setRevised(true);
                 $em->flush();

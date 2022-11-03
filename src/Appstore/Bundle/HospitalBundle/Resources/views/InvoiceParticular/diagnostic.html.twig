@@ -121,6 +121,7 @@
                                     {% endif %}
                                     </th>
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Mode</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Patient Name</th>
                                     <th class="numeric" >Test Name </th>
@@ -134,13 +135,14 @@
                                 {% set processes = ['Collected','In-progress'] %}
                                 {% for entity in entities %}
                                     <tr>
-                                            <td class="" >
-                                                {% if searchForm.particular is defined and searchForm.particular is not empty and entity.particularDeliveredBy is not empty and entity.process != 'Done' %}
-                                                <input type="checkbox" class="chkSelect" id="checkItem-{{ entity.id }}" >
-                                                {% endif %}
-                                            </td>
+                                        <td class="" >
+                                            {% if searchForm.particular is defined and searchForm.particular is not empty and entity.particularDeliveredBy is empty and entity.process != 'Done' %}
+                                            <input type="checkbox" class="chkSelect" id="checkItem-{{ entity.id }}" >
+                                            {% endif %}
+                                        </td>
 
-                                        <td class="numeric" >{{ entity.hmsInvoice.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.hmsInvoice.created|date('d-m-Y h:i a') }}</td>
+                                        <td class="numeric" >{{ entity.hmsinvoice.invoiceMode|capitalize }}</td>
                                         <td class="numeric" >{{ entity.hmsInvoice.invoice }}</td>
                                         <td class="numeric" >{% if entity.hmsInvoice.customer is defined and entity.hmsInvoice.customer is not empty %}{{ entity.hmsInvoice.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.particular.particularCode }}-{{ entity.particular.name }}</td>
