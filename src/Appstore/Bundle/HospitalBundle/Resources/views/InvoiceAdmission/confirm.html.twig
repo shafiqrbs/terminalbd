@@ -415,7 +415,9 @@
                                                                             {% set processArr = ['Created','Pending','In-progress'] %}
                                                                             {% if (transaction.process in  processArr and invoiceTransaction is defined and transaction.id != invoiceTransaction.id)  %}
                                                                                 <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                                                <a target="_blank" href="{{ path('hms_invoice_admission_daily_invoice_create',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}" class="btn yellow mini"><i class="fa fa-edit"></i></a>
                                                                             {% elseif (transaction.process in  processArr and invoiceTransaction is not defined)  %}
+                                                                                <a target="_blank" href="{{ path('hms_invoice_admission_daily_invoice_create',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}" class="btn  yellow mini"><i class="fa fa-edit"></i></a>
                                                                                 <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                                             {% endif %}
                                                                             {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
@@ -426,6 +428,9 @@
                                                                             {% endif %}
                                                                             {% if (transaction.process == 'In-progress') or ( transaction.process == 'Pending' and transaction.total > 0 ) %}
                                                                                 <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve green mini"><i class="fa fa-ok"></i> Approve</a>
+                                                                            {% endif %}
+                                                                            {% if (app.user.granted("ROLE_DOMAIN") and transaction.process not in  processArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMI") and transaction.process == 'Done' and transaction.updated|date('d-m-Y') == "now"|date('d-m-Y'))  %}
+                                                                                <a target="_blank" href="{{ path('hms_invoice_admission_daily_invoice_create',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn yellow mini"><i class="fa fa-edit"></i></a>
                                                                             {% endif %}
                                                                         </td>
                                                                     </tr>

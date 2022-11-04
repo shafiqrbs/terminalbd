@@ -59,8 +59,6 @@ class InvoiceController extends Controller
         $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'diagnostic',$data);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'assign-doctor');
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'referred-doctor');
-
-
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
             'salesTransactionOverview' => $salesTransactionOverview,
             'previousSalesTransactionOverview' => $previousSalesTransactionOverview,

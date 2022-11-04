@@ -402,13 +402,19 @@ class InvoiceRepository extends EntityRepository
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         if($mode == "diagnostic"){
             $process = (isset($data['process']) and $data['process']) ? $data['process']:'In-progress';
-            $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+            if($process != 'all'){
+                $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+            }
         }elseif($mode == "admission"){
             $process = (isset($data['process']) and $data['process']) ? $data['process']:'Admitted';
-            $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+            if($process != 'all') {
+                $qb->andWhere('e.process = :process')->setParameter('process', trim($process));
+            }
         }elseif($mode == "visit"){
             $process = (isset($data['process']) and $data['process']) ? $data['process']:'In-progress';
-            $qb->andWhere('e.process = :process')->setParameter('process',trim($process)) ;
+            if($process != 'all') {
+                $qb->andWhere('e.process = :process')->setParameter('process', trim($process));
+            }
         }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');

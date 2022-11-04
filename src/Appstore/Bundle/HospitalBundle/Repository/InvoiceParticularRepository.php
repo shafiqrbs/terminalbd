@@ -144,8 +144,8 @@ class InvoiceParticularRepository extends EntityRepository
         $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
         $qb->andWhere('e.commissionApproved != 1');
         $this->handleSearchBetween($qb,$data);
-        $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','In-progress','Diagnostic','Admitted'));
+        $qb->andWhere("e.invoiceMode IN (:invoiceModes)")->setParameter('invoiceModes', array('diagnostic','admission'));
+        $qb->andWhere("e.process IN (:process)")->setParameter('process', array('Done','In-progress','Diagnostic','Admitted'));
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;

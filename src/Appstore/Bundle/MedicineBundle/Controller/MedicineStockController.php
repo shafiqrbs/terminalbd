@@ -271,10 +271,11 @@ class MedicineStockController extends Controller
             if(empty($data['medicineId'])){
                 if($entity->getAccessoriesBrand()) {
                     $brand = $entity->getAccessoriesBrand();
-                    if($data['medicineCompany']){
-                        $entity->setBrandName($data['medicineCompany']);
-                    }
+                    $entity->setBrandName($brand->getName());
                     $entity->setMode($brand->getParticularType()->getSlug());
+                }
+                if($data['medicineCompany']){
+                    $entity->setBrandName($data['medicineCompany']);
                 }
                 $slug = str_replace(" ",'',$entity->getName());
                 $entity->setSlug(strtolower($slug));

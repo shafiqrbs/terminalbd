@@ -735,7 +735,7 @@ class MedicineStock
     }
 
     /**
-     * @return Particular
+     * @return MedicineParticular
      */
     public function getAccessoriesBrand()
     {
@@ -743,7 +743,7 @@ class MedicineStock
     }
 
     /**
-     * @param Particular $accessoriesBrand
+     * @param MedicineParticular $accessoriesBrand
      */
     public function setAccessoriesBrand($accessoriesBrand)
     {

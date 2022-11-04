@@ -985,7 +985,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getHmsInvoice()->getHospitalConfig()->getGlobalOption());
         $accountSales->setHmsInvoices($entity->getHmsInvoice());
-	    $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice() );
+	    $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice()."-".$entity->getId());
 	    $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
         if ($entity->getPayment() > 0){
             $accountSales->setAmount($entity->getPayment());
@@ -1006,6 +1006,17 @@ class AccountSalesRepository extends EntityRepository
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         }
         return $accountSales;
+    }
+
+    public function insertHospitalInvoiceDelete(InvoiceTransaction $entity)
+    {
+        $em = $this->_em;
+        $sourceId = $entity->getHmsInvoice()->getInvoice()."-".$entity->getId();
+        $entity = $this->findOneBy(array('sourceInvoice'=>$sourceId,'hmsInvoices'=>$entity));
+        if($entity){
+            $em->remove($entity);
+            $em->flush();
+        }
     }
 
     public function insertHospitalFinalAccountInvoice(\Appstore\Bundle\HospitalBundle\Entity\Invoice $entity)

@@ -177,6 +177,10 @@
                             <div>
                                 <div class="tabs">
                                     {% set mode =  searchForm.process is defined and  searchForm.process is not empty  ? searchForm.process : "In-progress" %}
+                                    <div class="tab">
+                                        <input type="radio" name="css-tabs" id="tab-all"  class="tab-switch ">
+                                        <a for="tab-all" href="{{ path('hms_invoice',{'process':'all'}) }}"  class="tab-label {% if mode|trim == 'all'  %}checked{% endif %}">All OPD</a>
+                                    </div>
                                     {% for row in processes %}
                                         <div class="tab">
                                             <input type="radio" name="css-tabs" id="tab-{{ row.process }}"  class="tab-switch ">
