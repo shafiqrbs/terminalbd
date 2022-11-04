@@ -50,7 +50,7 @@ class InvoiceAdmittedParticularType extends AbstractType
                         ->orderBy("e.name","ASC");
                 }
             ))
-            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span5 input-number','placeholder'=>'Quantity','autocomplete'=>'off')))
+            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span5 numeric input-number text-center','placeholder'=>'Quantity','autocomplete'=>'off')))
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span8 price','placeholder'=>'Price','autocomplete'=>'off')))
         ;
     }

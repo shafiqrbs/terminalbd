@@ -32,6 +32,14 @@ class InvoiceParticular
      **/
     private $hmsInvoice;
 
+
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $admissionPatientParticular;
+
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="invoiceParticular")
      **/
@@ -606,6 +614,24 @@ class InvoiceParticular
     {
         $this->reportContent = $reportContent;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAdmissionPatientParticular()
+    {
+        return $this->admissionPatientParticular;
+    }
+
+    /**
+     * @param mixed $admissionPatientParticular
+     */
+    public function setAdmissionPatientParticular($admissionPatientParticular)
+    {
+        $this->admissionPatientParticular = $admissionPatientParticular;
+    }
+
+
 
 
 

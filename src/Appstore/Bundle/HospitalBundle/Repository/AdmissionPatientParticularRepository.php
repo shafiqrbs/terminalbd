@@ -41,7 +41,7 @@ class AdmissionPatientParticularRepository extends EntityRepository
                 $entity->setQuantity(1);
             }
             $entity->setSalesPrice($data['price']);
-            $entity->setSubTotal($data['price'] * $data['quantity']);
+            $entity->setSubTotal($data['price'] *  $entity->getQuantity());
         }
         $entity->setInvoiceTransaction($transaction);
         $entity->setParticular($particular);

@@ -207,7 +207,6 @@
                                         </div>
                                     </div>
                                     <div class="clearfix">&nbsp;</div>
-                                    <div class="clearfix">&nbsp;</div>
                                     {{ form_start(form) }}
                                     {{ form_row(form._token) }}
                                     <div class="row-fluid">
@@ -222,17 +221,7 @@
                                                         <div class="span2">
                                                             <div class="input-append span12" style="margin-bottom:0!important">
                                                             <div class="input-group">
-                                                                <span class="input-group-btn">
-                                                                   <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
-                                                                            <span class="fa fa-minus"></span>
-                                                                   </button>
-                                                                </span>
                                                                 {{ form_widget(form.quantity) }}
-                                                                <span class="input-group-btn">
-                                                                  <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
-                                                                          <span class="fa fa-plus"></span>
-                                                                  </button>
-                                                                </span>
                                                             </div>
                                                             </div>
                                                         </div>

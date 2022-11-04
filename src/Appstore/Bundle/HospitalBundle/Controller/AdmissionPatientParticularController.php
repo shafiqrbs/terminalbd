@@ -103,16 +103,17 @@ class AdmissionPatientParticularController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        if($transaction->getProcess() == "Done"){
+        if($transaction->getProcess() == "Done") {
             $this->getDoctrine()->getRepository(AccountSales::class)->insertHospitalInvoiceDelete($transaction);
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionInvoiceTransactionUpdate($transaction);
+            foreach ($transaction->getAdmissionPatientParticulars() as $row){
+                $this->getDoctrine()->getRepository(InvoiceParticular::class)->reverseInvoiceParticularMasterUpdate($row);
+            }
             $transaction->setProcess('Created');
             $em->flush();
         }
         if($transaction->getProcess() == 'In-progress'){
             return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
         }
-
         $particular = new AdmissionPatientParticular();
         $particularForm = $this->createCreateForm($particular);
         $editForm = $this->createInvoicePaymentForm($transaction);

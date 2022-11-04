@@ -251,11 +251,14 @@ class InvoiceParticularRepository extends EntityRepository
         $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular(), ));
         /* @var $entity InvoiceParticular */
         if(empty($entity)) {
-
             $entity = new InvoiceParticular();
             $entity->setSubTotal($patientParticular->getSubTotal());
             $entity->setQuantity($patientParticular->getQuantity());
             $entity->setHmsInvoice($invoice);
+            if($particular->getService()->getHasQuantity() == 0){
+                $entity->setAdmissionPatientParticular($patientParticular);
+                $entity->setQuantity(1);
+            }
             $entity->setParticular($patientParticular->getParticular());
             $entity->setSalesPrice($patientParticular->getSalesPrice());
             $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
@@ -267,6 +270,7 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setSubTotal($patientParticular->getSubTotal());
             $entity->setQuantity(1);
             $entity->setHmsInvoice($invoice);
+            $entity->setAdmissionPatientParticular($patientParticular);
             $entity->setParticular($patientParticular->getParticular());
             $entity->setSalesPrice($patientParticular->getSalesPrice());
             $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
@@ -290,9 +294,7 @@ class InvoiceParticularRepository extends EntityRepository
         $em = $this->_em;
         $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
         $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular()));
-
         if($entity->getQuantity() == 1){
-
             $em->remove($entity);
             $em->flush();
 
