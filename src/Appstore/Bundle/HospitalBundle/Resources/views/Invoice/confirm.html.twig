@@ -122,7 +122,7 @@
                                                 <td class="">
                                                     <div class="btn-group">
                                                     {% if item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is empty %}
-                                                    <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': item.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
+                                                        <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': item.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
                                                         {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is not empty %}
                                                             <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
                                                         {% endif %}

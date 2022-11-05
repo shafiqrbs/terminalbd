@@ -15,8 +15,6 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
-use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;

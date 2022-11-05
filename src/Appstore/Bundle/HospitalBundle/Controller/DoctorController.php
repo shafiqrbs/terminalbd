@@ -11,6 +11,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyAccess\PropertyPath;
+use Symfony\Component\Validator\Constraint;
 
 
 /**
@@ -60,9 +62,15 @@ class DoctorController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createCreateForm($entity,$globalOption);
         $form->handleRequest($request);
-        $errors = $this->getErrorsFromForm($form);
         $data = $request->request->all();
-        if ($form->isValid()) {
+        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>13,'hospitalConfig' => $globalOption->getHospitalConfig()));
+        $valid = $this->getDoctrine()->getRepository(Particular::class)->findOneBy(array('assignDoctor'=>$entity->getAssignDoctor()));
+        if(!empty($valid)){
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Doctor already existing,Please try again."
+            );
+        }
+        if ($form->isValid() and empty($valid)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setHospitalConfig($globalOption->getHospitalConfig());
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(5);
@@ -78,7 +86,6 @@ class DoctorController extends Controller
             $this->getDoctrine()->getRepository(Particular::class)->insertDoctorVisitModes($entity,$data);
             return $this->redirect($this->generateUrl('hms_doctor_new', array('id' => $entity->getId())));
         }
-        $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>13,'hospitalConfig' => $globalOption->getHospitalConfig()));
 
         return $this->render('HospitalBundle:Doctor:new.html.twig', array(
             'entity' => $entity,
@@ -86,6 +93,7 @@ class DoctorController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
 
     private function getErrorsFromForm(FormInterface $form)
     {

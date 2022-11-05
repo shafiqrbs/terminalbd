@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * Particular
  *
  * @ORM\Table( name = "hms_particular")
- * @UniqueEntity(fields={"assignOperator","hospitalConfig"},message="Doctor already existing,Please try again.")
+ * @UniqueEntity(fields={"assignOperator"},message="Doctor already existing,Please try again.")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\ParticularRepository")
  */
 class Particular
@@ -118,7 +118,7 @@ class Particular
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User"))
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $assignOperator;
 
@@ -131,7 +131,6 @@ class Particular
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsDoctorVisitMode", mappedBy="doctor")
      **/
     private  $visitModes;
-
 
     /**
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User")

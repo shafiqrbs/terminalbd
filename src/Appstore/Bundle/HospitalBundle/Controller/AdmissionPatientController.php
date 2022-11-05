@@ -30,8 +30,9 @@ class AdmissionPatientController extends Controller
 
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
         if ($inventory == $entity->getHospitalConfig()->getId()) {
-            return $this->render('HospitalBundle:InvoiceAdmission:patient.html.twig', array(
+            return $this->render('HospitalBundle:AdmissionPatient:index.html.twig', array(
                 'entity' => $entity,
+                'option' => $this->getUser()->getGlobalOption(),
             ));
         }else{
             return $this->redirect($this->generateUrl('hms_invoice_admission'));

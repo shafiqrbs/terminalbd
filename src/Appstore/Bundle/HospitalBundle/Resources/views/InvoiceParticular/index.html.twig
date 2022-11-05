@@ -148,11 +148,33 @@
                                         </td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                            {% if entity.process == "Done" and entity.particularDeliveredBy is not empty %}
-                                                <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Print </a>
-                                            {% endif %}
                                             {% if  (entity.hmsinvoice.invoiceMode == "diagnostic" and entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR")) or (entity.hmsinvoice.invoiceMode == "diagnostic" and entity.hmsinvoice.due > 0 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER")) %}
                                                 <a target="_blank"  href="{{ path('hms_invoice_confirm',{'id':entity.hmsInvoice.id}) }}"  class="btn red mini" ><i class=" icon-plus"></i> Invoice</a>
+                                            {% endif %}
+                                            {% if entity.sampleCollectedBy is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") %}
+                                                <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':entity.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
+                                            {% elseif entity.process in processes and app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB")  %}
+                                                <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Generate Report</a>
+                                                {% if entity.particular.isMachineFormat == 1 %}
+                                                    <a class="btn mini red " href="{{ path('hms_invoice_particular_machine_format', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Machine Report</a>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if entity.particular.service.slug == 'diagnostic' and entity.process == 'Done' and entity.particularDeliveredBy is empty %}
+                                                <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
+                                                {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.particular.service.slug == 'diagnostic' and entity.process == 'Done' and entity.particularDeliveredBy is not empty %}
+                                                    <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                {% endif %}
+                                                {% if  entity.webPath is not empty %}
+                                                    <br/>
+                                                    <a class="btn red pull-right mini" target="_blank" href="/{{ entity.webPath }}"><i class="icon-download"></i> Download</a>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if entity.particular.service.slug == 'diagnostic' and entity.process == 'Done' and entity.particularDeliveredBy is not empty %}
+                                                <a target="_blank" class="btn mini yellow" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                {% if  entity.webPath is not empty %}
+                                                    <br/>
+                                                    <a class="btn red pull-right mini" target="_blank" href="/{{ entity.webPath }}"><i class="icon-download"></i> Download</a>
+                                                {% endif %}
                                             {% endif %}
                                             {% if (entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and entity.process == "Done" and entity.particularDeliveredBy is empty) or ( entity.hmsinvoice.commissionApproved != 1 and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.process == "Done" )  %}
                                                 <a  class="btn mini black" href="{{ path('hms_invoice_particular_report_reverse', {'id': entity.id}) }}"><i class="icon-refresh"></i>&nbsp;Reverse </a>
