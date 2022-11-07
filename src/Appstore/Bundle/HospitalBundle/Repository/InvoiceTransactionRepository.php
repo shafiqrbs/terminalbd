@@ -18,23 +18,35 @@ use Doctrine\ORM\EntityRepository;
 class InvoiceTransactionRepository extends EntityRepository
 {
 
-    public function todaySalesUsers(User $user)
+    public function todaySalesUsers(User $user,$data = "")
     {
 
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-
         $qb = $this->createQueryBuilder('it');
         $qb->join('it.hmsInvoice', 'e');
         $qb->join('it.createdBy', 'u');
+        $qb->leftJoin('u.profile', 'profile');
         $qb->select('u.id as userId,u.username as createdBy');
+        $qb->addSelect('profile.name as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
-        $compareTo = new \DateTime("now");
-        $startDate =  $compareTo->format('Y-m-d 00:00:00');
-        $endDate =  $compareTo->format('Y-m-d 23:59:59');
-        $qb->andWhere("it.updated >= :startDate");
-        $qb->setParameter('startDate', $startDate);
-        $qb->andWhere("it.updated <= :endDate");
-        $qb->setParameter('endDate', $endDate);
+        if(empty($data)){
+            $compareTo = new \DateTime("now");
+            $startDate =  $compareTo->format('Y-m-d 00:00:00');
+            $endDate =  $compareTo->format('Y-m-d 23:59:59');
+            $qb->andWhere("it.updated >= :startDate")->setParameter('startDate', $startDate);
+            $qb->andWhere("it.updated <= :endDate")->setParameter('endDate', $endDate);
+        }else{
+            if (!empty($data['startDate'])) {
+                $startDate = str_replace('T',' ',$data['startDate']);
+                $qb->andWhere("it.updated >= :startDate");
+                $qb->setParameter('startDate', $startDate);
+            }
+            if (!empty($data['endDate'])) {
+                $endDate = str_replace('T',' ',$data['endDate']);
+                $qb->andWhere("it.updated <= :endDate");
+                $qb->setParameter('endDate', $endDate);
+            }
+        }
         $qb->groupBy('it.createdBy');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
@@ -191,7 +203,7 @@ class InvoiceTransactionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('it');
         $qb->join('it.hmsInvoice', 'e');
         $qb->join('it.createdBy', 'u');
-        $qb->select('u.id as userId,u.username as createdBy,sum(it.total) as total ,sum(it.discount) as discount , sum(it.payment) as receive');
+        $qb->select('u.id as userId,u.username as createdBy,sum(e.subTotal) as subTotal ,sum(it.total) as total ,sum(it.discount) as discount , sum(it.payment) as receive');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
 
         if ($previous == 'true'){
@@ -203,11 +215,8 @@ class InvoiceTransactionRepository extends EntityRepository
                 $qb->setParameter('startDate', $startDate);
                 $qb->andWhere("it.updated >= :startDate");
                 $qb->setParameter('startDate', $startDate);
-
-
             }
             if (!empty($data['endDate'])) {
-
                 $compareTo = new \DateTime($data['endDate']);
                 $endDate =  $compareTo->format('Y-m-d 23:59:59');
                 $qb->andWhere("it.updated <= :endDate");

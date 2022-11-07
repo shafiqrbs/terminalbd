@@ -34,6 +34,11 @@ class AdmissionPatientParticular
      **/
     private $invoiceTransaction;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="admissionPatientParticular")
+     **/
+    private $invoiceParticular;
+
     /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceCreatedBy" )

@@ -433,10 +433,14 @@ class ExpenditureRepository extends EntityRepository
                 if(isset($item['bankAccount']) and $item['bankAccount'] > 0 ){
                     $bank = $em->getRepository('AccountingBundle:AccountBank')->find($item['bankAccount']);
                     if($bank){ $sales->setAccountBank($bank); }
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'bank'));
+                    $sales->setTransactionMethod($method);
                 }
                 if(isset($item['mobileBankAccount']) and $item['mobileBankAccount'] > 0 ){
                     $mobile = $em->getRepository('AccountingBundle:AccountMobileBank')->find($item['mobileBankAccount']);
                     if($mobile){ $sales->setAccountMobileBank($mobile); }
+                    $method = $em->getRepository('SettingToolBundle:TransactionMethod')->findOneBy(array('slug'=>'mobile'));
+                    $sales->setTransactionMethod($method);
                 }
                 $category = $em->getRepository('AccountingBundle:ExpenseCategory')->find($item['expenseCategory']);
                 if(!empty($category)){

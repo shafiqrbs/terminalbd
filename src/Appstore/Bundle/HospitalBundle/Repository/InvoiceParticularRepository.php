@@ -248,71 +248,35 @@ class InvoiceParticularRepository extends EntityRepository
         $em = $this->_em;
         $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
         $particular = $patientParticular->getParticular();
-        $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular(), ));
+        $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular()));
         /* @var $entity InvoiceParticular */
         if(empty($entity)) {
             $entity = new InvoiceParticular();
             $entity->setSubTotal($patientParticular->getSubTotal());
             $entity->setQuantity($patientParticular->getQuantity());
             $entity->setHmsInvoice($invoice);
-            if($particular->getService()->getHasQuantity() == 0){
-                $entity->setAdmissionPatientParticular($patientParticular);
-                $entity->setQuantity(1);
-            }
+            $entity->setAdmissionPatientParticular($patientParticular);
             $entity->setParticular($patientParticular->getParticular());
             $entity->setSalesPrice($patientParticular->getSalesPrice());
             $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
             if ($patientParticular->getParticular()->getCommission()) {
                 $entity->setCommission($patientParticular->getParticular()->getCommission() * $entity->getQuantity());
             }
-        }elseif($entity and ($particular->getService()->getHasQuantity() == 0)){
-            $entity = new InvoiceParticular();
-            $entity->setSubTotal($patientParticular->getSubTotal());
-            $entity->setQuantity(1);
-            $entity->setHmsInvoice($invoice);
-            $entity->setAdmissionPatientParticular($patientParticular);
-            $entity->setParticular($patientParticular->getParticular());
-            $entity->setSalesPrice($patientParticular->getSalesPrice());
-            $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
-            if($patientParticular->getParticular()->getCommission()){
-                $entity->setCommission($patientParticular->getParticular()->getCommission() * $entity->getQuantity());
-            }
-        }else{
-            $entity->setSubTotal( $entity->getSubTotal() + $patientParticular->getSubTotal());
-            $entity->setQuantity( $entity->getQuantity() + $patientParticular->getQuantity());
-            if($entity->getCommission()){
-                $entity->setCommission($entity->getCommission() * $entity->getQuantity());
-            }
+            $em->persist($entity);
+            $em->flush();
         }
-        $em->persist($entity);
-        $em->flush();
+
     }
 
     public function reverseInvoiceParticularMasterUpdate(AdmissionPatientParticular $patientParticular)
     {
-
         $em = $this->_em;
-        $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
-        $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular()));
-        if($entity->getQuantity() == 1){
+        $patientParticular->getId();
+        $entity = $this->findOneBy(array('admissionPatientParticular' => $patientParticular));
+        if($entity){
             $em->remove($entity);
             $em->flush();
-
-        }else{
-
-            /* @var $entity InvoiceParticular */
-
-            $entity->setSubTotal( $entity->getSubTotal() - $patientParticular->getSubTotal());
-            $entity->setQuantity( $entity->getQuantity() - $patientParticular->getQuantity());
-            if($entity->getCommission()){
-                $entity->setCommission($entity->getCommission() * $entity->getQuantity());
-            }
-            $em->persist($entity);
-            $em->flush();
-
         }
-
-
     }
 
 

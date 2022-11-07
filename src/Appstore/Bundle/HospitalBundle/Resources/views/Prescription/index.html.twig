@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice') }}"> Manage Doctor Visit</a>
+                        <a href="{{ path('hms_prescription') }}"> Manage Doctor Visit</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -43,6 +43,18 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <div class="row-fluid" >
+                                <form action="javascript:" method="post" class="patient-global-search">
+                                    <div class="row-fluid">
+                                        <div class="span9">
+                                            <input type="text" id="select2Invoice" name="select2Invoice"  class="m-wrap span12 select2Invoice" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Global Search For : Diagnostic,Visit,Admission for Patient Details{% endif %} ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="barcode2Invoice" name="barcode2Invoice"  class="m-wrap span12" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Scan invoice barcode for invoice details{% endif %} ">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <div class="row-fluid" >
                                 <form action="{{ path('hms_prescription_old_patient') }}" method="post" class="patient-search">
                                     <div class="row-fluid">
@@ -142,7 +154,7 @@
                                     {% set mode =  searchForm.process is defined and  searchForm.process is not empty  ? searchForm.process : "In-progress" %}
                                     <div class="tab">
                                         <input type="radio" name="css-tabs" id="tab-all"  class="tab-switch ">
-                                        <a for="tab-all" href="{{ path('hms_prescription',{'process':'all'}) }}"  class="tab-label {% if mode|trim == 'all'  %}checked{% endif %}">All OPD</a>
+                                        <a for="tab-all" href="{{ path('hms_prescription',{'process':'all'}) }}"  class="tab-label {% if mode|trim == 'all'  %}checked{% endif %}">All Visit</a>
                                     </div>
                                     {% for row in processes %}
                                         <div class="tab">

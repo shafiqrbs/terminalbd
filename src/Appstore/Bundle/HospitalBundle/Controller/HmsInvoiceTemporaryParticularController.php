@@ -76,6 +76,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $referredId = $request->request->get('referredId');
         $discountType = $request->request->get('discountType');
         $patientId = $request->request->get('customerId');
+        $admissionId = $request->request->get('admissionId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
@@ -83,10 +84,13 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $referredDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
         $entity->setReferredDoctor($referredDoctor);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        if($admissionId){
+            $admission = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $hospital,'invoice'=>$admissionId,'status'=>1));
+            $entity->setParent($admission);
+        }
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
         $entity->setInvoiceMode('diagnostic');
-        $entity->setPrintFor('diagnostic');
         $entity->setCreatedBy($this->getUser());
         if (!empty($data['customer']['name'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);

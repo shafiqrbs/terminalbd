@@ -51,8 +51,8 @@ class InvoiceAdmissionController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
         $pagination = $this->paginate($entities);
-        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','admission');
-        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','admission');
+     //   $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','admission');
+     //   $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','admission');
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
         $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
         $cabinGroups = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=>$hospital,'service'=>2),array('name'=>'ASC'));
@@ -64,8 +64,8 @@ class InvoiceAdmissionController extends Controller
 
         return $this->render('HospitalBundle:InvoiceAdmission:index.html.twig', array(
             'entities' => $pagination,
-            'salesTransactionOverview' => $salesTransactionOverview,
-            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+           // 'salesTransactionOverview' => $salesTransactionOverview,
+           // 'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
             'assignDoctors'                     => $assignDoctors,
             'anesthesiaDoctors'                     => $anesthesiaDoctors,
             'referredDoctors'                     => $referredDoctors,
@@ -1011,7 +1011,7 @@ class InvoiceAdmissionController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN");
+     * @Secure(roles="ROLE_DOMAIN");
      */
 
     public function admissionInvoiceReverseAction($invoice){
@@ -1037,9 +1037,9 @@ class InvoiceAdmissionController extends Controller
 
     }
 
+
     public function admissionInvoiceReverseShowAction($invoice)
     {
-
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $admission = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
         $entity = $this->getDoctrine()->getRepository('HospitalBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $hospital, 'hmsInvoice' => $admission->getId()));

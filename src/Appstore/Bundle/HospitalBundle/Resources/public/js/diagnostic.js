@@ -9,6 +9,69 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
+$(".select2Invoice").select2({
+
+    ajax: {
+        url: Routing.generate('hms_patient_invoice_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    allowClear: true,
+    minimumInputLength: 1
+});
+
+
+$(document).on('change', '#select2Invoice, #barcode2Invoice', function() {
+
+    var invoice = $(this).val();
+    if(invoice === "" || invoice === "NaN"){
+        return false;
+    }
+    $('.dialogModal_header').html('Patient Information');
+    $('.dialog_content').dialogModal({
+        topOffset: 0,
+        top: 0,
+        type: '',
+        onOkBut: function(event, el, current) {},
+        onCancelBut: function(event, el, current) {},
+        onLoad: function(el, current) {
+            $.ajax({
+                url: Routing.generate('hms_patient_invoice_details',{'invoice':invoice}),
+                async: true,
+                success: function (response) {
+                    el.find('.dialogModal_content').html(response);
+                }
+            });
+        },
+        onClose: function(el, current) {},
+        onChange: function(el, current) {}
+    });
+
+});
+
+
+
 $(document).on('click', '.addPatient', function() {
 
     $('.dialogModal_header').html('Patient Information');
@@ -53,6 +116,8 @@ $(document).on("click", ".saveButton", function() {
 });
 
 function formSubmit() {
+
+
 
     $('#appstore_bundle_hospitalbundle_invoice_customer_name').focus().keypress(function () {
         $('#appstore_bundle_hospitalbundle_invoice_customer_name').css('textTransform', 'capitalize');
@@ -321,6 +386,8 @@ function formSubmit() {
         minimumInputLength: 1
     });
 
+
+
     $(document).on('change', '#patient', function() {
 
         var id = $(this).val();
@@ -342,10 +409,57 @@ function formSubmit() {
 
     });
 
+    $(".select2Admission").select2({
 
+        ajax: {
+            url: Routing.generate('hms_patient_admission_invoice_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength: 1
+    });
 
+    $(document).on('change', '#admissionId', function() {
 
+        var invoice = $(this).val();
+        $.ajax({
+            url: Routing.generate('hms_patient_info',{'invoice':invoice}),
+            type: 'GET',
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#customerId').val(obj['patientId']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_name').val(obj['name']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_mobile').val(obj['mobile']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_age').val(obj['age']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_ageType').val(obj['ageType']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_gender').val(obj['gender']);
+                $('#appstore_bundle_hospitalbundle_invoice_customer_address').val(obj['address']);
+            }
+        })
 
+    });
 
 }
 

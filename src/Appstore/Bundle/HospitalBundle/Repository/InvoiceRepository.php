@@ -34,7 +34,6 @@ class InvoiceRepository extends EntityRepository
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
         $anesthesia = isset($data['anesthesia'])? $data['anesthesia'] :'';
         $referred = isset($data['referred'])? $data['referred'] :'';
-       // $process = isset($data['process'])? $data['process'] :'';
         $customerName = isset($data['name'])? $data['name'] :'';
         $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
         $created = isset($data['created'])? $data['created'] :'';
@@ -48,7 +47,8 @@ class InvoiceRepository extends EntityRepository
         $user = isset($data['user'])? $data['user'] :'';
 
         if (!empty($invoice)) {
-            $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
+            $inv = trim($invoice);
+            $qb->andWhere($qb->expr()->like("e.invoice", "'%$inv%'"  ));
         }
         if (!empty($customerName)) {
             $qb->join('e.customer','c');
@@ -119,10 +119,6 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('created', $created.'%');
         }
 
-        if(!empty($process)){
-          //  $qb->andWhere("e.process = :process")->setParameter('process', $process);
-        }
-
         if(!empty($transactionMethod)){
             $qb->andWhere("e.transactionMethod = :transactionMethod");
             $qb->setParameter('transactionMethod', $transactionMethod);
@@ -179,7 +175,7 @@ class InvoiceRepository extends EntityRepository
         $qb->andWhere('e.process != :revised')->setParameter('revised', "Revised") ;
         $qb->groupBy('e.process');
         $qb->orderBy('e.process','ASC');
-        $this->handleSearchBetween($qb,$data);
+       // $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
@@ -392,7 +388,6 @@ class InvoiceRepository extends EntityRepository
     {
 
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles()) and $user->getParticularDoctor()) {
@@ -1227,10 +1222,30 @@ class InvoiceRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('e');
         $query->leftJoin('e.customer', 'c');
-        $query->select('e.id as id');
-        $query->addSelect("CONCAT(e.invoice,'-', c.name) as text");
+        $query->select('e.invoice as id');
+        $query->addSelect("CONCAT(e.invoiceMode,' => ', e.invoice,'-[',e.process,'] - ', c.name,' - Mob:', c.mobile) as text");
         $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
-        $query->andWhere($query->expr()->like("e.invoice", "'%$q%'"  ));
+        $query->andWhere('e.invoice LIKE :searchTerm OR c.name LIKE :searchTerm OR c.mobile LIKE :searchTerm  OR c.customerId LIKE :searchTerm');
+        $query->setParameter('searchTerm', '%'.trim($q).'%');
+        $query->orderBy('e.created', 'DESC');
+        $query->setMaxResults( '50' );
+        return $query->getQuery()->getResult();
+
+    }
+
+
+    public function searchAdmissionAutoComplete($q, HospitalConfig $config)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $query->leftJoin('e.customer', 'c');
+        $query->select('e.invoice as id');
+        $query->addSelect("CONCAT(e.invoiceMode,' => ', e.invoice,'-[',e.process,'] - ', c.name,' - Mob:', c.mobile) as text");
+        $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
+        $query->andWhere('e.invoice LIKE :searchTerm OR c.name LIKE :searchTerm OR c.mobile LIKE :searchTerm OR c.customerId LIKE :searchTerm');
+        $query->andWhere('e.invoiceMode = :mode')->setParameter('mode','admission') ;
+        $query->andWhere('e.process IN (:process)')->setParameter('process',array('Admitted','Release','Revised','Death')) ;
+        $query->setParameter('searchTerm', '%'.trim($q).'%');
         $query->orderBy('e.created', 'DESC');
         $query->setMaxResults( '50' );
         return $query->getQuery()->getResult();

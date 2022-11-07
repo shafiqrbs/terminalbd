@@ -1,0 +1,32 @@
+hms_patient_invoice_search:
+    path:     /patient-invoice-search
+    defaults: { _controller: "HospitalBundle:Patient:invoiceSearch" }
+    methods:  GET
+    options:
+        expose: true
+
+
+hms_patient_admission_invoice_search:
+    path:     /patient-admission-invoice-search
+    defaults: { _controller: "HospitalBundle:Patient:invoiceAdmissionSearch" }
+    methods:  GET
+    options:
+        expose: true
+
+hms_patient_invoice_details:
+    path:     /{invoice}/patient-invoice-details
+    defaults: { _controller: "HospitalBundle:Patient:patientGlobalDetails" }
+    methods:  GET
+    options:
+        expose: true
+
+hms_patient_info:
+    path:      /{invoice}/info
+    defaults: { _controller: "HospitalBundle:Patient:patientInfo" }
+    methods:  GET
+    options:
+        expose: true
+
+hms_patient:
+    path:      /{id}
+    defaults: { _controller: "HospitalBundle:Patient:patient" }

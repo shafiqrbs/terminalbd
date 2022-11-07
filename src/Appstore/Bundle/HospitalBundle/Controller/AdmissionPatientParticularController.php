@@ -96,7 +96,6 @@ class AdmissionPatientParticularController extends Controller
 
     public function dailyAdmittedInvoiceAction($invoice, InvoiceTransaction $transaction)
     {
-
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
@@ -108,8 +107,17 @@ class AdmissionPatientParticularController extends Controller
             foreach ($transaction->getAdmissionPatientParticulars() as $row){
                 $this->getDoctrine()->getRepository(InvoiceParticular::class)->reverseInvoiceParticularMasterUpdate($row);
             }
-            $transaction->setProcess('Created');
+
+            $count =  count($transaction->getAdmissionPatientParticulars());
+            if($count > 0){
+                $transaction->setProcess('Created');
+            }else{
+                $transaction->setProcess('In-progress');
+            }
             $em->flush();
+            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
+            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
+            $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);
         }
         if($transaction->getProcess() == 'In-progress'){
             return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
@@ -132,7 +140,7 @@ class AdmissionPatientParticularController extends Controller
         $payment = (float)$data['invoicePayment']['payment'];
         $transactionForm = $this->createInvoicePaymentForm($transaction);
         $transactionForm->handleRequest($request);
-        if ($transactionForm->isValid() and (!empty($transaction)) and count($transaction->getAdmissionPatientParticulars())) {
+        if ($transactionForm->isValid() and (!empty($transaction)) and count($transaction->getAdmissionPatientParticulars()) > 0) {
             $em = $this->getDoctrine()->getManager();
             $transaction->setProcess("In-progress");
             $em->persist($transaction);
@@ -214,8 +222,7 @@ class AdmissionPatientParticularController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('HospitalBundle:AdmissionPatientParticular')->updateInvoiceTransactionTotalPrice($transaction);
         $total = $transaction->getTotal();
-        return new Response(json_encode(array('success' => 'success','total'=>$total)));
-        exit;
+        return new Response(json_encode(array('success' => 'success','total' => $total)));
     }
 
 

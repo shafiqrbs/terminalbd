@@ -53,7 +53,7 @@ class DefaultController extends Controller
         return $this->render('HospitalBundle:Default:dashboard.html.twig', array(
             'option'                            => $user->getGlobalOption() ,
             'globalOption'                      => $globalOption,
-            'salesTodayUsers'     => $salesTodayUser,
+            'salesTodayUsers'                   => $salesTodayUser,
             'salesTodayTransactionOverview'     => $salesTodayTransactionOverview,
             'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
             'salesTodayUserTransactionOverview'     => $salesTodayUserTransactionOverview,

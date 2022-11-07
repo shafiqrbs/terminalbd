@@ -107,7 +107,9 @@ class DoctorAppointmentController extends Controller
         $hospital = $option->getHospitalConfig();
         $editForm = $this->createInvoiceCustomerForm($entity);
         $editForm->handleRequest($request);
-        $data = $request->request->all()['appointment_invoice'];
+        $appointment = $request->request->all();
+        $data = $appointment['appointment_invoice'];
+        $isConfirm = isset($data['isConfirm']) ? $data['isConfirm'] :'';
         $entity->setHospitalConfig($hospital);
         $assignDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->find($data['assignDoctor']);
         $entity->setAssignDoctor($assignDoctor);
@@ -125,14 +127,30 @@ class DoctorAppointmentController extends Controller
         }
         $entity->setSubTotal($assignDoctor->getPrice());
         $entity->setTotal($assignDoctor->getPrice());
-        $entity->setPaymentStatus("Paid");
-        $entity->setDue(0);
-	    $entity->setProcess('In-progress');
+        if($entity->getPayment() > 0 and $isConfirm == 1 ){
+            $entity->setApprovedBy($this->getUser());
+            $entity->setProcess('Done');
+            $entity->setPaymentStatus("Paid");
+            $entity->setDue(0);
+        }else{
+            $entity->setDue($assignDoctor->getPrice());
+            $entity->setProcess('In-progress');
+        }
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
         $entity->setPaymentInWord($amountInWords);
         $em->persist($entity);
         $em->flush();
-        return new Response($entity->getId());
+        $prescriptionLink = $this->generateUrl('hms_prescription_doctor_print',array('id' => $entity->getId()));
+        $printLink = $this->generateUrl('hms_prescription_print',array('id'=> $entity->getId()));
+        $array = array(
+            'save'=> isset($appointment['save']) ? $appointment['save'] :'',
+            'print'=> isset($appointment['print']) ? $appointment['print'] :'',
+            'isConfirm'=> $isConfirm,
+            'prescriptionLink' =>"<a target='_blank' class='btn blue' href='{$prescriptionLink}'>Print Prescription</a>",
+            'printLink' => $printLink,
+            'invoice' => $entity->getId(),
+        );
+        return new Response(json_encode($array));
 
     }
 

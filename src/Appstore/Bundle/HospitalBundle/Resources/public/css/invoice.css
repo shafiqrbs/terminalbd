@@ -21,6 +21,13 @@
     padding-bottom: 0;
 }
 
+.patient-global-search{
+    background: #d93717;
+    padding: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 0;
+}
+
 .margin-bottom-5{
     margin-bottom: 5px!important;
 }

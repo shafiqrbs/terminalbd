@@ -9,6 +9,69 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
+$(".select2Invoice").select2({
+
+    ajax: {
+        url: Routing.generate('hms_patient_invoice_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    allowClear: true,
+    minimumInputLength: 1
+});
+
+
+$(document).on('change', '#select2Invoice, #barcode2Invoice', function() {
+
+    var invoice = $(this).val();
+    if(invoice === "" || invoice === "NaN"){
+        return false;
+    }
+    $('.dialogModal_header').html('Patient Information');
+    $('.dialog_content').dialogModal({
+        topOffset: 0,
+        top: 0,
+        type: '',
+        onOkBut: function(event, el, current) {},
+        onCancelBut: function(event, el, current) {},
+        onLoad: function(el, current) {
+            $.ajax({
+                url: Routing.generate('hms_patient_invoice_details',{'invoice':invoice}),
+                async: true,
+                success: function (response) {
+                    el.find('.dialogModal_content').html(response);
+                }
+            });
+        },
+        onClose: function(el, current) {},
+        onChange: function(el, current) {}
+    });
+
+});
+
+
+
 
 
 $(document).on("click", ".editable-submit", function() {

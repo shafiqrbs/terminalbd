@@ -111,6 +111,7 @@ var form = $("#appointmentPatientForm").validate({
         "appointment_invoice[department]": {placement: 'top', html: true},
     },
     submitHandler: function (form) {
+        console.log(new FormData($('form#appointmentPatientForm')[0]));
         $.ajax({
             url         : $('form#appointmentPatientForm').attr( 'action' ),
             type        : $('form#appointmentPatientForm').attr( 'method' ),
@@ -121,6 +122,7 @@ var form = $("#appointmentPatientForm").validate({
                 $('.saveDiagnosticButton').attr('disabled', true);
             },
             success: function(response){
+
                 $('form#appointmentPatientForm')[0].reset();
                 $('.saveDiagnosticButton').attr("disabled", false);
                 $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
@@ -199,6 +201,7 @@ function appointmentFormSubmit() {
             "appointment_invoice[payment]": {required: false, digits: true},
             "appointment_invoice[comment]": {required: false},
             "appointment_invoice[smsAlert]": {required: false},
+            "appointment_invoice[isConfirm]": {required: false},
             "appointment_invoice[appointmentDate]": {required: false},
         },
 
@@ -229,6 +232,13 @@ function appointmentFormSubmit() {
                     $('#saveDiagnosticButton').html("Please Wait...").attr('disabled', 'disabled');
                 },
                 success: function(response){
+                    obj = JSON.parse(response);
+                    if(obj['isConfirm'] == 1){
+                        $('#print-link').html(obj['prescriptionLink']);
+                    }else{
+                        $('#print-link').html('');
+                    }
+                    $('#patientId').val(obj['patientId']);
                     $('form#appointmentPatientForm')[0].reset();
                     $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr("disabled", false);
                     $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
@@ -236,7 +246,9 @@ function appointmentFormSubmit() {
                     $('#invoiceParticulars').hide();
                     $("#appointment_invoice_assignDoctor").select2().select2("val","");
                     $("#referredId").select2().select2("val","");
-                   window.open('/hms/invoice/'+response+'/appointment-print', '_blank');
+                    if(obj['print'] === "print") {
+                        window.open(obj['printLink'], '_blank');
+                    }
                 }
             });
 

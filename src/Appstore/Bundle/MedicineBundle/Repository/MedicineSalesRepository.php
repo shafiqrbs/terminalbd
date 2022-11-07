@@ -909,6 +909,7 @@ class MedicineSalesRepository extends EntityRepository
                     if ($stockId) {
                         $salesItem->setMedicineStock($stockId);
                         $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
+                        $salesItem->setMrpPrice($stockId->getSalesPrice());
                     }
                     $salesItem->setQuantity($item['quantity']);
                     if (isset($item['unitPrice']) and $item['unitPrice']) {

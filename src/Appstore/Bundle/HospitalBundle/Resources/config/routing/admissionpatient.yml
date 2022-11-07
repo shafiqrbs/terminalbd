@@ -1,4 +1,0 @@
-hms_admission_patient:
-    path:      /{id}
-    defaults: { _controller: "HospitalBundle:AdmissionPatient:patient" }
-

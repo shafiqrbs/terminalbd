@@ -642,9 +642,63 @@ class ReportController extends Controller
             $data['endDate'] = $datetime->format('Y-m-d');
         }
 
-       // $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data);
-       // $salesTodayTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'false', array('diagnostic', 'admission'));
-      //  $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user, $data, 'true', array('diagnostic', 'admission'));
+        $summary = $em->getRepository('HospitalBundle:Invoice')->salesSummary($user, $data);
+        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'diagnostic');
+        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'admission');
+        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user, $data);
+        $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user, $data);
+        $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user, $data);
+        $salesTodayUser      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesUsers($user,$data);
+        $salesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'false',array('diagnostic','admission','visit'));
+        $previousSalesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
+        $userSalesTodaySalesCommission      = $em->getRepository('HospitalBundle:DoctorInvoice')->userGroupCommissionSummary($user,$data);
+        $userInvoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userGroupInvoiceReturnAmount($user,$data);
+        $salesTodayTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserSalesOverview($user,$data,'false',array('diagnostic','admission','visit'));
+        $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
+        $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionUserSummary($user,$data);
+        $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userInvoiceReturnAmount($user,$data);
+
+        return $this->render('ReportBundle:Hospital:index.html.twig', array(
+
+            'diagnosticOverview' => $diagnosticOverview,
+            'admissionOverview' => $admissionOverview,
+            'serviceOverview' => $serviceOverview,
+            'transactionOverview' => $transactionOverview,
+            'commissionOverview' => $commissionOverview,
+            'salesTodayUsers' => $salesTodayUser,
+            'salesTodayTransactionOverview'     => $salesTodayTransactionOverview,
+            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
+            'salesTodayUserTransactionOverview'     => $salesTodayUserTransactionOverview,
+            'previousSalesTodayUserTransactionOverview'     => $previousSalesTodayUserTransactionOverview,
+            'salesTodaySalesCommission'         => $salesTodaySalesCommission,
+            'userSalesTodaySalesCommission'     => $userSalesTodaySalesCommission,
+            'invoiceReturn'                     => $invoiceReturn ,
+            'userInvoiceReturn'                 => $userInvoiceReturn ,
+            'summary' => $summary,
+            'searchForm' => $data,
+            'option' => $globalOption,
+
+        ));
+    }
+
+    /**
+     * @Route("/hospital-user-sales", methods={"GET", "POST"}, name="hms_report_user_sales")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsUserSalesAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (!empty($data['date'])) {
+            $datetime = new \DateTime($data['date']);
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        }
 
         $summary = $em->getRepository('HospitalBundle:Invoice')->salesSummary($user, $data);
         $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user, $data, 'diagnostic');
@@ -652,23 +706,43 @@ class ReportController extends Controller
         $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user, $data);
         $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user, $data);
         $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user, $data);
+        $salesTodayUser      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesUsers($user,$data);
 
-        return $this->render('ReportBundle:Hospital:index.html.twig', array(
+        $salesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'false',array('diagnostic','admission','visit'));
+        $previousSalesTodayUserTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserGroupSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
+        $userSalesTodaySalesCommission      = $em->getRepository('HospitalBundle:DoctorInvoice')->userGroupCommissionSummary($user,$data);
+        $userInvoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userGroupInvoiceReturnAmount($user,$data);
+        $salesTodayTransactionOverview      = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserSalesOverview($user,$data,'false',array('diagnostic','admission','visit'));
+        $previousSalesTransactionOverview   = $em->getRepository('HospitalBundle:InvoiceTransaction')->todayUserSalesOverview($user,$data,'true',array('diagnostic','admission','visit'));
+        $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionUserSummary($user,$data);
+        $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userInvoiceReturnAmount($user,$data);
 
-           // 'salesTotalTransactionOverview' => $salesTotalTransactionOverview,
-         //   'salesTodayTransactionOverview' => $salesTodayTransactionOverview,
-           // 'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+        return $this->render('ReportBundle:Hospital:user-sales.html.twig', array(
+
             'diagnosticOverview' => $diagnosticOverview,
             'admissionOverview' => $admissionOverview,
             'serviceOverview' => $serviceOverview,
             'transactionOverview' => $transactionOverview,
             'commissionOverview' => $commissionOverview,
+
+            'salesTodayUsers' => $salesTodayUser,
+            'salesTodayTransactionOverview'     => $salesTodayTransactionOverview,
+            'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
+            'salesTodayUserTransactionOverview'     => $salesTodayUserTransactionOverview,
+            'previousSalesTodayUserTransactionOverview'     => $previousSalesTodayUserTransactionOverview,
+            'salesTodaySalesCommission'         => $salesTodaySalesCommission,
+            'userSalesTodaySalesCommission'     => $userSalesTodaySalesCommission,
+            'invoiceReturn'                     => $invoiceReturn ,
+            'userInvoiceReturn'                 => $userInvoiceReturn ,
             'summary' => $summary,
             'searchForm' => $data,
             'option' => $globalOption,
 
         ));
     }
+
+
+
 
     /**
      * @Route("/hospital-diagnostic-invoice", methods={"GET", "POST"}, name="hms_report_diagnostic_invoice")

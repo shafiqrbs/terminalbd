@@ -52,6 +52,7 @@ class DoctorAppointmentType extends AbstractType
             ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric number span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
             ->add('smsAlert',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
+            ->add('isConfirm',CheckboxType::class, array('attr'=> array('class'=>'m-wrap custom-control-input'),'mapped' => false,'data' => true))
             ->add('appointmentDate', DateType::class, array(
                 'widget' => 'single_text',
                 'html5' => true,

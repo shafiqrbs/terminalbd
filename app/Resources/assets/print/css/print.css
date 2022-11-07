@@ -4,15 +4,13 @@ body {
     color: #000000;
     font-weight: 400;
     position: relative;
-    max-width: 1170px;
+    max-width: 100%;
     min-width: 1024px;
     margin: 0 auto;
 }
 
 body.body{
-    max-width: 1170px;
-    min-width: 1024px;
-    margin: 0 auto;
+    margin: 0 15px;
 }
 a{
     text-decoration: none;
@@ -37,6 +35,8 @@ a:hover{
     text-transform: uppercase;
     text-align: left;
     line-height: 60px;
+    width: 100% !important;
+    display: block;
 }
 
 .btn-margin-left{

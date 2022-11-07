@@ -32,9 +32,8 @@ class InvoiceParticular
      **/
     private $hmsInvoice;
 
-
      /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular",inversedBy="invoiceParticular")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $admissionPatientParticular;

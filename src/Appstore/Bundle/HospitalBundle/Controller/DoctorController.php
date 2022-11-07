@@ -64,13 +64,17 @@ class DoctorController extends Controller
         $form->handleRequest($request);
         $data = $request->request->all();
         $visitMods = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('service'=>13,'hospitalConfig' => $globalOption->getHospitalConfig()));
-        $valid = $this->getDoctrine()->getRepository(Particular::class)->findOneBy(array('assignDoctor'=>$entity->getAssignDoctor()));
-        if(!empty($valid)){
+        $valid = 0;
+        if($entity->getAssignDoctor()){
+            $validCount = $this->getDoctrine()->getRepository(Particular::class)->findOneBy(array('assignDoctor'=> $entity->getAssignDoctor()));
+            $valid = count($validCount);
+        }
+        if($valid > 0 ){
             $this->get('session')->getFlashBag()->add(
                 'notice',"Doctor already existing,Please try again."
             );
         }
-        if ($form->isValid() and empty($valid)) {
+        if ($form->isValid() and $valid == 0) {
             $em = $this->getDoctrine()->getManager();
             $entity->setHospitalConfig($globalOption->getHospitalConfig());
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(5);
