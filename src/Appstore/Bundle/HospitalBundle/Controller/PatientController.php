@@ -63,7 +63,7 @@ class PatientController extends Controller
     public function patientGlobalDetailsAction($invoice)
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
-        $entity = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $config,'invoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $config,'invoice' => trim($invoice)));
         if ($entity) {
             $view =  $this->renderView('HospitalBundle:Patient:ajax-show.html.twig', array(
                 'entity' => $entity,
@@ -77,7 +77,7 @@ class PatientController extends Controller
     public function patientInfoAction($invoice)
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
-        $entity = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $config,'invoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $config,'invoice' => trim($invoice)));
         if ($entity) {
             $customer = $entity->getCustomer();
             $data = array(

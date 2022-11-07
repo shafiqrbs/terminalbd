@@ -192,6 +192,7 @@
                         </div>
                     </div>
                     <div class="clearfix">&nbsp;</div>
+                    {% if entity.invoiceMode == "admission" %}
                     <div class="form-actions portlet box grey">
                         <div class="pull-right" id="action-{{ entity.id }}">
                             <div class="btn-group">
@@ -205,6 +206,47 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+                    {% if entity.invoiceMode == "diagnostic" %}
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-right" id="action-{{ entity.id }}">
+                                {% if (app.user.granted("ROLE_DOMAIN") and entity.process == 'In-progress') or (entity.process == 'In-progress' and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) or (entity.process == 'In-progress' and app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR")) %}
+                                    <a data-url="{{ path('hms_invoice_ready',{'id':entity.id}) }}" href="javascript:" class="btn blue approve"><i class="icon-cog"></i>&nbsp;Process Report</a>
+                                {% endif %}
+                                <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
+                                {% if entity.paymentStatus == "Paid" and entity.process == 'In-progress'  %}
+                                    <a  href="javascript:" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" class="btn purple approve"><i class=" icon-refresh"></i> Waiting for Done</a>
+                                {% else %}
+                                    <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
+                                {% endif %}
+                                {% if entity.process == 'Created' %}
+                                    <a  href="{{ path('hms_invoice_edit',{'id':entity.id}) }}" class="btn purple"><i class=" icon-pencil"></i>&nbsp;Manage Patient</a>
+                                {% endif %}
+                                {% if app.user.granted("ROLE_DOMAIN") or app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") %}
+                                    <a  href="{{ path('hms_invoice_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Admission Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
+                                {% endif %}
+                                <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if entity.invoiceMode == "visit" %}
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-right" id="action-{{ entity.id }}">
+                                <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
+                                <a  href="javascript:" data-url="{{ path('hms_prescription_approve',{'id':entity.id}) }}" class="btn blue confirm">Confirmed</a>
+                                {% if entity.hospitalConfig.prescriptionBuilder == 1 %}
+                                    <a target="_blank" href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn yellow tooltips" >Generate</a>
+                                {% endif %}
+                                {% if entity.smsAlert == 1 and entity.process != "Done" %}
+                                    <a href="javascript:" data-action="{{ path('hms_prescription_doctor_print',{'id':entity.id}) }}"  class="btn red tooltips" data-trigger = "hover" data-original-title = "SMS Alert"><i class="icon-file-text"></i> SMS</a>
+                                {% endif %}
+                                {% if entity.hospitalConfig.appointmentPrescription == 1 and entity.process == "Done" %}
+                                    <a target="_blank"  href="{{ path('hms_prescription_doctor_print',{'id':entity.id}) }}"  class="btn purple tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Prescription</a>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
