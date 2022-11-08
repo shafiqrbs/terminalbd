@@ -91,6 +91,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
         $entity->setInvoiceMode('diagnostic');
+        $entity->setPrintFor('diagnostic');
         $entity->setCreatedBy($this->getUser());
         if (!empty($data['customer']['name'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
