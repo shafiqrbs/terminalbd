@@ -771,7 +771,7 @@ class ItemRepository extends EntityRepository
             }
 
           //  $ongoingSalesQnt = $this->_em->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
-            $ongoingSalesQnt = 0    ;
+            $ongoingSalesQnt = 0;
             $data .= '<tr>';
             $data .= '<td class="numeric" >' . $purchaseItem->getBarcode() .'</td>';
             if($device != 'mobile') {

@@ -742,10 +742,13 @@ class MedicineStockRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.medicineBrand','brand');
         $qb->leftJoin('e.unit','u');
-        $qb->select('e.id as stockId','e.name as name','e.remainingQuantity as remainingQuantity','e.salesPrice as salesPrice','e.purchasePrice as purchasePrice','e.printHide as printHidden','e.path as path');
-        $qb->addSelect('brand.name as brandName','brand.strength as strength');
+        $qb->select('e.id as stockId','e.barcode as barcode','e.name as name','e.remainingQuantity as remainingQuantity','e.salesPrice as salesPrice','e.purchasePrice as purchasePrice','e.printHide as printHidden','e.path as path');
+        $qb->addSelect('e.name as brandName','brand.strength as strength');
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
+        if($config->isRemainingQuantity() == 1){
+            $qb->andWhere('e.remainingQuantity > 0');
+        }
         $qb->andWhere('e.status = 1');
         $qb->orderBy('e.sku','ASC');
         $result = $qb->getQuery()->getArrayResult();
@@ -754,22 +757,14 @@ class MedicineStockRepository extends EntityRepository
 
             $data[$key]['global_id']            = (int) $option->getId();
             $data[$key]['item_id']              = (int) $row['stockId'];
-
-            /*if($row['brandName']){
-                $printName = $row['brandName'].' '.$row['strength'];
-            }else{
-                $printName = $row['name'];
-            }*/
-          //  $arr = array("Tablet","Capsule","Eye Drops","Suspension","Syrup");
-           // $printName = trim(str_replace($arr, "", $row['name']));
             $printName = trim($row['name']);
             $data[$key]['category_id']      = 0;
             $data[$key]['categoryName']     = '';
             if ($row['unitId']){
-                $data[$key]['unit_id']          = $row['unitId'];
+                $data[$key]['unit_id']          = $row['barcode'];
                 $data[$key]['unit']             = $row['unitName'];
             }else{
-                $data[$key]['unit_id']          = 0;
+                $data[$key]['unit_id']          = $row['barcode'];
                 $data[$key]['unit']             = '';
             }
             $data[$key]['name']                 = $row['name'];
