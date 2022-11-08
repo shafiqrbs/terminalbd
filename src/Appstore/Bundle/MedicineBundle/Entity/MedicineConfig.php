@@ -161,6 +161,13 @@ class MedicineConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isRemainingQuantity", type="boolean",  nullable=true)
+     */
+    private $isRemainingQuantity = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="invoiceActualPrice", type="boolean",  nullable=true)
      */
     private $invoiceActualPrice = false;
@@ -1161,6 +1168,24 @@ class MedicineConfig
     {
         $this->printOff = $printOff;
     }
+
+    /**
+     * @return bool
+     */
+    public function isRemainingQuantity()
+    {
+        return $this->isRemainingQuantity;
+    }
+
+    /**
+     * @param bool $isRemainingQuantity
+     */
+    public function setIsRemainingQuantity($isRemainingQuantity)
+    {
+        $this->isRemainingQuantity = $isRemainingQuantity;
+    }
+
+
 
 
 

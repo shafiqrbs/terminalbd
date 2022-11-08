@@ -529,6 +529,9 @@ class MedicineStockRepository extends EntityRepository
         }else{
             $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
         }
+        if($config->isRemainingQuantity() == 1){
+            $query->andWhere("e.remainingQuantity > 0");
+        }
         $query->andWhere('e.status = 1');
         $query->groupBy('e.name');
         $query->orderBy('e.slug', 'ASC');

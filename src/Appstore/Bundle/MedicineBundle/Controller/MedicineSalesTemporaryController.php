@@ -356,7 +356,10 @@ class MedicineSalesTemporaryController extends Controller
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $barcode =trim($_REQUEST['barcode']);
         $stock = $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->findOneBy(array('medicineConfig'=>$config,'barcode'=>$barcode));
-        if($stock){
+        if($stock and $config->isRemainingQuantity() == 1 and $stock->getRemainingQuantity() >  0){
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertBarcodeInvoiceItems($user, $stock);
+        }
+        if($stock and $config->isRemainingQuantity() != 1){
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->insertBarcodeInvoiceItems($user, $stock);
         }
         $msg = 'Particular added successfully';
