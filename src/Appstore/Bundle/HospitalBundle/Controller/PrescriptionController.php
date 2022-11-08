@@ -406,14 +406,25 @@ class PrescriptionController extends Controller
         }
         return $this->redirect($this->generateUrl('hms_prescription'));
     }
-    public function showAction(Request $request)
+
+    public function showAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital , 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        return $this->render('HospitalBundle:Prescription:show.html.twig', array(
+            'entity' => $entity,
+        ));
     }
+
 
     /**
      * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
      */
-    public function prescriptionReverseAction($invoice){
+    public function prescriptionReverseAction($id){
 
         /*
          * Stock Details
@@ -428,7 +439,7 @@ class PrescriptionController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'id' => $id));
         $entity->setRevised(true);
         $entity->setProcess('In-progress');
         $entity->setPaymentStatus('Due');
