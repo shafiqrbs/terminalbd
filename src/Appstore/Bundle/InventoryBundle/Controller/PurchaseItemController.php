@@ -362,6 +362,15 @@ class PurchaseItemController extends Controller
 
     }
 
+    public function inlineSerialUpdateAction(Purchase $purchase)
+    {
+       foreach ($purchase->getPurchaseItems() as $entity)
+           if($entity->getSerialNo()){
+               $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->sysncPurchaseItemSerial($entity);
+           }
+           return new Response('success');
+    }
+
     public function inlineItemUpdateAction(Request $request)
     {
         $data = $request->request->all();

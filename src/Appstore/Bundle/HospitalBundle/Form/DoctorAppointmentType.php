@@ -108,9 +108,6 @@ class DoctorAppointmentType extends AbstractType
                 'property' => 'name',
                 'empty_value' => '---Select diseases profile---',
                 'attr'=>array('class'=>'span12 m-wrap select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select diseases profile')),
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
@@ -126,9 +123,6 @@ class DoctorAppointmentType extends AbstractType
                 'property' => 'name',
                 'empty_value' => '--- Select Specialization ---',
                 'attr'=>array('class'=>'span12 m-wrap select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select diseases profile')),
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())

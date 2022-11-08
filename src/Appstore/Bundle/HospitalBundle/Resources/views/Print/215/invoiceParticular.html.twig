@@ -116,7 +116,7 @@
                 <td class="span4">
                     <ul class="unstyled">
                         <li>Prepared By</li>
-                        <li>{{ entity.createdBy.profile.name }}</li>
+                        <li>{% if entity.createdBy.profile %}{{ entity.createdBy.profile.name }}{% endif %}</li>
                     </ul>
                 </td>
                 <td class="span4 text-center">
@@ -128,7 +128,7 @@
                 <td class="span4 pull-right">
                     <ul class="unstyled">
                         <li>Printed By</li>
-                        <li>{{ app.user }}</li>
+                        <li>{% if app.user.profile %}{{ app.user.profile.name }}{% endif %}</li>
                     </ul>
                 </td>
             </tr>

@@ -402,7 +402,7 @@
                                                                         <td class="numeric">{{ transaction.vat }}</td>
                                                                         <td class="numeric" id="total-{{ transaction.id }}">{{ transaction.total }}</td>
                                                                         <td class="numeric">{{ transaction.payment }}</td>
-                                                                        <td class="numeric">{{ transaction.createdBy }}</td>
+                                                                        <td class="numeric">{% if transaction.createdBy.profile %}{{ transaction.createdBy.profile.name }}{% endif %}</td>
                                                                         <td class="numeric">{{ transaction.process }}</td>
                                                                         <td class="numeric">
                                                                             {% set processArr = ['Created','Pending','In-progress'] %}

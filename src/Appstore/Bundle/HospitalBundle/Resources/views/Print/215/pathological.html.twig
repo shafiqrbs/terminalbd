@@ -24,16 +24,16 @@
 </head>
 <body style="margin: 0px!important;">
 <div style="display: block">
-    {% if entity.hospitalConfig.webHeaderPath is defined  and entity.hospitalConfig.webHeaderPath is not empty  %}
-        <div class="print-header-content" style="height: 100px">
-            <img style="width: 100%; height:100px" src="/{{ entity.hospitalConfig.webHeaderPath }}">
+    {% if entity.hmsInvoice.hospitalConfig.webHeaderPath is defined  and entity.hmsInvoice.hospitalConfig.webHeaderPath is not empty  %}
+        <div class="print-header-content" style="height: 100px; width: 100%!important;">
+            <img style="width: 100%; height:100px" src="/{{ entity.hmsInvoice.hospitalConfig.webHeaderPath }}">
         </div>
     {% endif %}
     <div style="margin-top:{{ global.hospitalConfig.printMarginReportTop }}px; margin-left:{{ global.hospitalConfig.printMarginReportLeft }}px;margin-right:{{ global.hospitalConfig.printMarginReportLeft }}px;" >
         <table class="table table-border reportTable" style="border: 3px solid #383939!important" >
             <tr class="print-header">
                 <td colspan="3" style="position: relative">
-                    <span class="barcode-left">{#{{ barcodeInvoice|raw }}#}</span>
+                    <span class="barcode-left">{{ barcodeInvoice|raw }}</span>
                     <strong class="title title-center" >{{ entity.particular.category.name }} REPORT</strong>
                     <span class="barcode-right">{{ barcodeReport|raw }}</span>
                 </th>
@@ -45,7 +45,7 @@
                         <li><label>Patient ID:</label> {{ entity.hmsInvoice.customer.customerId }}</li>
                         <li><label>Name:</label> {{ entity.hmsInvoice.customer.name }}</li>
                         <li><label>Sample:</label> {{ entity.particular.sepcimen }}</li>
-                        <li><label>Ref. By:</label> {% if entity.hmsInvoice.assignDoctor is not empty %}<strong>{{ entity.assignDoctor.name }}</strong>{% endif %}</li>
+                        <li><label>Ref. By:</label> {% if entity.hmsInvoice.assignDoctor is not empty %}<strong>{{ entity.hmsInvoice.assignDoctor.name }}</strong>{% endif %}</li>
                     </ul>
                 </td>
                 <td class="" style="width:30%!important;">

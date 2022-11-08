@@ -542,8 +542,8 @@ class ReportController extends Controller
      * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
      */
 
-    public function salesDetailsAction()
-    {
+   public function salesDetailsAction()
+   {
         set_time_limit(0);
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
@@ -563,7 +563,7 @@ class ReportController extends Controller
             'option' => $globalOption,
             'searchForm' => $data,
         ));
-    }
+   }
 
     /**
      * @Route("/sales-details-load", methods={"GET", "POST"}, name="accounting_report_sales_ajax")
@@ -590,6 +590,8 @@ class ReportController extends Controller
         }
         return new Response('Record Does not found');
     }
+
+
 
 
     /**
@@ -682,6 +684,66 @@ class ReportController extends Controller
     }
 
     /**
+     * @Route("/daily-sales-collection", methods={"GET", "POST"}, name="hms_report_daily_sales_collection")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsSalesCollectionAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        if (empty($data['posted'])) {
+            $datetime = new \DateTime("now");
+            $data['posted'] = $datetime->format('d-m-Y');
+        }
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5,6));
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        return $this->render('ReportBundle:Hospital/Sales:sales-collection.html.twig', array(
+            'referredDoctors' => $referredDoctors,
+            'employees' => $employees,
+            'option' => $user->getGlobalOption(),
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/daily-sales-collection-load", methods={"GET", "POST"}, name="hms_report_daily_sales_collection_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function hmsSalesCollectionAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        if(isset($data['posted']) and $data['posted']) {
+            $entities = $em->getRepository('HospitalBundle:Invoice')->hmsSalesCollectionComissionReports($user,$data);
+            $pagination = $entities->getQuery()->getResult();
+            $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital, $entities);
+            $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital, $entities);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Hospital/Sales:sales-collection-ajax.html.twig', array(
+                    'entities' => $pagination,
+                    'commissions' => $commissions,
+                    'commissionSummary' => $commissionSummary,
+                    'option' => $user->getGlobalOption(),
+                    'searchForm' => $data,
+                )
+            );
+            return new Response($htmlProcess);
+        }
+        return new Response('Record Does not found');
+    }
+
+
+
+    /**
      * @Route("/hospital-user-sales", methods={"GET", "POST"}, name="hms_report_user_sales")
      * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
      */
@@ -743,7 +805,6 @@ class ReportController extends Controller
 
 
 
-
     /**
      * @Route("/hospital-diagnostic-invoice", methods={"GET", "POST"}, name="hms_report_diagnostic_invoice")
      * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
@@ -764,16 +825,24 @@ class ReportController extends Controller
             $data['startDate'] = $datetime->format('Y-m-d');
             $data['endDate'] = $datetime->format('Y-m-d');
         }
-        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital->getId());
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'visit',$data);
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital,'referred-doctor');
+
         $entities = $em->getRepository('HospitalBundle:Invoice')->reportInvoiceLists($user , $mode = 'diagnostic' , $data);
         return $this->render('ReportBundle:Hospital/Sales:diagnostic-invoice.html.twig', array(
             'entities' => $entities,
+            'assignDoctors'                     => $assignDoctors,
+            'referredDoctors'                     => $referredDoctors,
+            'processes' => $processes,
             'employees' => $employees,
             'searchForm' => $data,
             'option' => $globalOption,
 
         ));
     }
+
 
     /**
      * @Route("/hospital-visit-invoice", methods={"GET", "POST"}, name="hms_report_visit_invoice")
@@ -797,9 +866,12 @@ class ReportController extends Controller
         $entities = $em->getRepository('HospitalBundle:Invoice')->reportVisitLists($user , $mode = 'visit' , $data);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'visit',$data);
+
         return $this->render('ReportBundle:Hospital/Sales:visit-invoice.html.twig', array(
             'employees' => $employees,
             'assignDoctors' => $assignDoctors,
+            'processes' => $processes,
             'entities' => $entities,
             'searchForm' => $data,
             'option' => $globalOption,

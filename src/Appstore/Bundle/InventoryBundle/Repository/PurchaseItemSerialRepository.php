@@ -68,7 +68,6 @@ class PurchaseItemSerialRepository extends EntityRepository
 
         if($value){
             $ids = explode(",", $value);
-
             foreach ($ids as $id){
 
                 //  $barcode = TRIM(str_replace(str_replace(str_replace($id,'\t',''),'\n',''),'\r',''));
@@ -91,7 +90,41 @@ class PurchaseItemSerialRepository extends EntityRepository
 
     }
 
-   public function returnPurchaseItemSerialDetails($inventory,$barcode)
+    public function sysncPurchaseItemSerial(PurchaseItem $item){
+
+        $em = $this->_em;
+
+        /* @var $item PurchaseItem  */
+
+        if($item->getSerialNo()){
+            $id = $item->getId();
+            $stock = $em->createQuery("DELETE InventoryBundle:PurchaseItemSerial e WHERE  e.status != 1 AND  e.purchaseItem = $id");
+            if($stock){ $stock->execute(); }
+        }
+
+        if($item->getSerialNo()){
+            $ids = explode(",", $item->getSerialNo());
+            foreach ($ids as $id){
+
+                //  $barcode = TRIM(str_replace(str_replace(str_replace($id,'\t',''),'\n',''),'\r',''));
+                $barcode = TRIM(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $id));
+                $empty = $this->findOneBy(array('purchaseItem' => $item,'barcode'=> $barcode));
+                if(empty($empty)){
+                    $entity = new PurchaseItemSerial();
+                    $entity->setInventoryConfig($item->getPurchase()->getInventoryConfig());
+                    $entity->setItem($item->getItem());
+                    $entity->setPurchaseItem($item);
+                    $entity->setBarcode($barcode);
+                    $entity->setStatus(0);
+                    $em->persist($entity);
+                    $em->flush();
+                }
+            }
+        }
+    }
+
+
+    public function returnPurchaseItemSerialDetails($inventory,$barcode)
     {
         $qb = $this->createQueryBuilder('pis');
         $qb->select('pis');

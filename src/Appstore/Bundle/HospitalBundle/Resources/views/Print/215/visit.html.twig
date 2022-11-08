@@ -76,8 +76,8 @@
 
     </style>
 <div style="display: block; height: 380px">
-    {% if entity.hospitalConfig.isPrintHeader == 1 %}
-    {% if global.webPath('file') is not empty %}<img style="max-height:100px;width: 100%!important;" src="/{{ global.webPath('file') }}">{% endif %}
+    {% if entity.hospitalConfig.isPrintHeader == 1 and entity.hospitalConfig.webHeaderPath is defined  and entity.hospitalConfig.webHeaderPath is not empty  %}
+        <img style="max-height:100px;width: 100%!important;" src="/{{ entity.hospitalConfig.webHeaderPath }}">
     {% endif %}
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px; margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;margin-right:{{ entity.hospitalConfig.printLeftMargin }}px; padding: 15px; padding-top:0px" >
         <table class="table table-border" >
@@ -129,7 +129,7 @@
                 </td>
                 <td class="span3 pull-right" style="margin-top: 30px">
                     <ul class="unstyled">
-                        <li style="border-top:2px solid #000; text-align: center; margin-top: 10px">Signature</li>
+                        <li style="border-top:2px solid #000; text-align: center; margin-top: 10px">{% if entity.createdBy.profile is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</li>
                     </ul>
                 </td>
             </tr>
@@ -138,8 +138,8 @@
     </div>
 </div>
 <div style="display: block; height: 380px;width: 100%!important;">
-    {% if entity.hospitalConfig.isPrintHeader == 1 %}
-        {% if global.webPath('file') is not empty %}<img style="max-height:100px;width: 100%!important;" src="/{{ global.webPath('file') }}">{% endif %}
+    {% if entity.hospitalConfig.isPrintHeader == 1 and entity.hospitalConfig.webHeaderPath is defined  and entity.hospitalConfig.webHeaderPath is not empty  %}
+        <img style="max-height:100px;width: 100%!important;" src="/{{ entity.hospitalConfig.webHeaderPath }}">
     {% endif %}
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px; margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;margin-right:{{ entity.hospitalConfig.printLeftMargin }}px; padding: 15px;padding-top:0px" >
         <table class="table table-border" >
@@ -191,7 +191,7 @@
                 </td>
                 <td class="span3 pull-right" style="margin-top: 30px">
                     <ul class="unstyled">
-                        <li style="border-top:2px solid #000; text-align: center; margin-top: 10px">Signature</li>
+                        <li style="border-top:2px solid #000; text-align: center; margin-top: 10px">{% if entity.createdBy.profile %}{{ entity.createdBy.profile.name }}{% endif %}</li>
                     </ul>
                 </td>
             </tr>

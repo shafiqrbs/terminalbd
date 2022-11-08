@@ -304,6 +304,10 @@ function jqueryTemporaryLoad() {
                     break;
 
                 case 'salesTemporaryItem_quantity':
+                    $('#salesTemporaryItem_itemPercent').focus();
+                    break;
+
+                case 'salesTemporaryItem_itemPercent':
                     $('#addTemporaryItem').click();
                     $('#salesTemporaryItem_stockName').select2('open');
                     break;

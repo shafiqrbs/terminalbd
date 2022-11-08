@@ -45,7 +45,6 @@ class InvoiceRepository extends EntityRepository
         $cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
         $cabin = isset($data['cabinNo'])? $data['cabinNo'] :'';
         $user = isset($data['user'])? $data['user'] :'';
-
         if (!empty($invoice)) {
             $inv = trim($invoice);
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$inv%'"  ));
@@ -430,6 +429,20 @@ class InvoiceRepository extends EntityRepository
         return  $qb;
     }
 
+    public function hmsSalesCollectionComissionReports(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        //$qb->andWhere('e.commissionApproved = 1');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+
 
 
     public function invoicePathologicalReportLists(User $user , $mode , $data)
@@ -691,25 +704,40 @@ class InvoiceRepository extends EntityRepository
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $user = isset($data['user'])? $data['user'] :'';
         $process = isset($data['process'])? $data['process'] :'';
+        $assignDoctor = isset($data['$assignDoctor'])? $data['$assignDoctor'] :'';
+        $referred = isset($data['referred'])? $data['referred'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
+        $qb->leftJoin('e.assignDoctor','ad');
+        $qb->leftJoin('e.referredDoctor','rd');
         $qb->select('e.created as created','e.invoice as invoice','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
         $qb->addSelect('c.name as name','c.mobile as mobile');
+        $qb->addSelect('ad.name as doctor','rd.name as referred');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic'));
         if(!empty($user)){
             $qb->andWhere("e.createdBy = :user");
             $qb->setParameter('user', $user);
         }
-        if (!empty($data['startDate']) ) {
-            $qb->andWhere("e.created >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        if (!empty($data['startDate'])) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
         }
         if (!empty($data['endDate'])) {
-            $qb->andWhere("e.created <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        if(!empty($assignDoctor)){
+            $qb->andWhere("ad.name = :doctor");
+            $qb->setParameter('doctor', $process);
+        }
+        if(!empty($referred)){
+            $qb->andWhere("rd.name = :referred");
+            $qb->setParameter('referred', $referred);
         }
         if(!empty($process)){
             $qb->andWhere("e.process = :process");
@@ -724,21 +752,19 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
-      //  $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
-    //    $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
         $diseasesProfile = isset($data['diseasesProfile'])? $data['diseasesProfile'] :'';
-
         $user = isset($data['user'])? $data['user'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
         $qb->leftJoin('e.assignDoctor','d');
+        $qb->leftJoin('e.visitType','vt');
         $qb->select('e.created as created','e.invoice as invoice','e.payment as receive');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('d.name as doctor');
+        $qb->addSelect('vt.name as visitType');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
-        $qb->andWhere('e.process = :process')->setParameter('process', "In-progress") ;
         if(!empty($assignDoctor)){
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
@@ -751,13 +777,15 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.createdBy = :user");
             $qb->setParameter('user', $user);
         }
-        if (!empty($data['startDate']) ) {
-            $qb->andWhere("e.created >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        if (!empty($data['startDate'])) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
         }
         if (!empty($data['endDate'])) {
-            $qb->andWhere("e.created <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
         }
         if(!empty($process)){
             $qb->andWhere("e.process = :process");

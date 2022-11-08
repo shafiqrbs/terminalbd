@@ -889,20 +889,30 @@ class InvoiceAdmissionController extends Controller
         if(count($invoiceDetails['Pathology']['items']) == 0) {
             unset($invoiceDetails['Pathology']);
         }
-        if(in_array($entity->getProcess(),array('Admitted'))){
-            $print = "admitted";
-        }elseif(in_array($entity->getProcess(),array('Released'))){
-            $print = "released";
-        }elseif(in_array($entity->getProcess(),array('Dead'))){
-            $print = "dead";
+        $hospital = $entity->getHospitalConfig();
+        if($hospital->isCustomPrint() == 1){
+            if(in_array($entity->getProcess(),array('Admitted'))){
+                $template = "Print/{$hospital->getGlobalOption()->getId()}:admitted";
+            }elseif(in_array($entity->getProcess(),array('Released'))){
+                $template = "Print/{$hospital->getGlobalOption()->getId()}:released";
+            }elseif(in_array($entity->getProcess(),array('Dead'))){
+                $template = "Print/{$hospital->getGlobalOption()->getId()}:dead";
+            }
+        }else{
+            if(in_array($entity->getProcess(),array('Admitted'))){
+                $template = "Print:admission";
+            }elseif(in_array($entity->getProcess(),array('Released'))){
+                $template = "Print:released";
+            }elseif(in_array($entity->getProcess(),array('Dead'))){
+                $template = "Print:dead";
+            }
         }
-
-        return $this->render("HospitalBundle:Print:{$print}.html.twig", array(
-            'entity'               => $entity,
-            'invoiceDetails'        => $invoiceDetails,
+        return $this->render("HospitalBundle:{$template}.html.twig", array(
+            'entity'             => $entity,
+            'invoiceDetails'     => $invoiceDetails,
             'invoiceBarcode'     => $barcode,
             'patientBarcode'     => $patientId,
-            'inWords'           => $inWords,
+            'inWords'            => $inWords,
         ));
     }
 

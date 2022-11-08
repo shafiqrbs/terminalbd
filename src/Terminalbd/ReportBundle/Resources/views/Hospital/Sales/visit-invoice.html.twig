@@ -4,8 +4,8 @@
         <div class="col-md-12 print-bar">
             <form action="" method="get">
                 <div class="row">
-                    <div class="col-md-3 margin-top">
-                        <label>Customer</label>
+                    <div class="col-md-2 margin-top">
+                        <label>Created Employee</label>
                         <select class="search-input select span12 m-wrap" id="user" name="user">
                             <option value="">--Select Created User--</option>
                             {% for employee in employees %}
@@ -13,12 +13,21 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-3 margin-top">
+                    <div class="col-md-2 margin-top">
                         <label>Doctor</label>
                         <select name="doctor" id="doctor" class="search-input select2 span12 m-wrap">
                             <option value="" >--Assign Doctor--</option>
                             {% for doctor in assignDoctors %}
                                 <option {% if searchForm.doctor is defined and searchForm.doctor == doctor.id %} selected="selected" {% endif %} value="{{ doctor.id }}" >{{ doctor.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 margin-top">
+                        <label>Visit Process</label>
+                        <select name="process" id="process" class="search-input select2 span12 m-wrap">
+                            <option value="" >--Select Process--</option>
+                            {% for process in processes %}
+                                <option {% if searchForm.process is defined and searchForm.process == process.process %} selected="selected" {% endif %} value="{{ process.process }}" >{{ process.process }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -70,6 +79,7 @@
                         <th>Name</th>
                         <th>Mobile</th>
                         <th>Doctor</th>
+                        <th>Visit Type</th>
                         <th class="text-right">Receive</th>
                     </tr>
                     <tbody>
@@ -85,13 +95,14 @@
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>
                             <td class="numeric" >{{ entity.doctor }}</td>
+                            <td class="numeric" >{{ entity.visitType }}</td>
                             <td class="text-right" >{{ entity.receive|number_format(2) }}</td>
                         </tr
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="6">Grand Balance</th>
+                        <th class="text-right" colspan="7">Grand Balance</th>
                         <th class="text-right">{{ sales|number_format(2) }}</th>
                     </tr>
                     </tfoot>

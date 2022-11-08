@@ -95,6 +95,7 @@
                                         <div class="btn-group">
                                         {% if entity.inventoryConfig.isAttribute == 1 %}
                                             <a href="{{ path('inventory_purchaseitem_multi_add',{'purchase':entity.id}) }}" rel=""   class="btn red" ><i class="icon-plus"></i>Item IME/Serial no</a>
+                                            <a href="javascript:"  data-action="{{ path('inventory_purchaseitem_serialno_update',{'purchase':entity.id}) }}"  class="btn yellow approve" ><i class="icon-plus"></i>Update Serial No</a>
                                         {% endif %}
                                         </div>
                                     </div>
