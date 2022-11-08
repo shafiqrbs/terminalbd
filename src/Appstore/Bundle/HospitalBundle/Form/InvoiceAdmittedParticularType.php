@@ -30,6 +30,14 @@ class InvoiceAdmittedParticularType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        $servicies = [];
+        $servies = $this->hospitalConfig->getServices();
+        if($servies){
+            foreach ($servies as $service){
+                $servicies[] = $service->getId();
+            }
+        }
         $builder
             ->add('particular', 'entity',array(
                 'class'     => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
@@ -41,13 +49,14 @@ class InvoiceAdmittedParticularType extends AbstractType
                 'empty_value' => '---Test Name, Accessories, Surgery, Cabin etc.---',
                 'attr'=>array('class'=>'span12 m-wrap particular select2'),
                 'choice_translation_domain' => true,
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('e')
-                        ->join("e.service",'s')
-                        ->where('e.hospitalConfig ='.$this->hospitalConfig->getId())
-                        ->andWhere('s.id IN(:service)')->setParameter('service',array(1,2,3,4,7))
-                        ->andWhere("e.status = 1")
-                        ->orderBy("e.name","ASC");
+                'query_builder' => function(EntityRepository $er) use($servicies) {
+                    $qb =  $er->createQueryBuilder('e');
+                    $qb->join("e.service",'s');
+                    $qb->where('e.hospitalConfig ='.$this->hospitalConfig->getId());
+                    $qb->andWhere('s.id IN(:service)')->setParameter('service',$servicies);
+                    $qb->andWhere("e.status = 1");
+                    $qb->orderBy("e.name","ASC");
+                    return $qb;
                 }
             ))
             ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span5 numeric input-number text-center','placeholder'=>'Quantity','autocomplete'=>'off')))

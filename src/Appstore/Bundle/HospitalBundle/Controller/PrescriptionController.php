@@ -297,7 +297,7 @@ class PrescriptionController extends Controller
 
     public function invoiceApproveAction(Invoice $invoice)
     {
-        if($invoice->getPaymentStatus() == 'Paid'){
+        if($invoice->getPayment() > 0){
             $em = $this->getDoctrine()->getManager();
             $invoice->setApprovedBy($this->getUser());
             $invoice->setProcess('Done');
@@ -408,6 +408,42 @@ class PrescriptionController extends Controller
     }
     public function showAction(Request $request)
     {
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN");
+     */
+    public function prescriptionReverseAction($invoice){
+
+        /*
+         * Stock Details
+         * Invoice  Transaction Update
+         * Medicine Invoice
+         * Account Sales
+         * Transaction
+         * Delete Journal & Account Purchase
+         */
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
+        $entity->setRevised(true);
+        $entity->setProcess('In-progress');
+        $entity->setPaymentStatus('Due');
+        $entity->setDue($entity->getTotal());
+        $entity->setPaymentInWord(null);
+        $entity->setCommission(0);
+        $entity->setCommissionApproved(0);
+        $entity->setPayment(null);
+        $em->flush();
+        $template = $this->get('twig')->render('HospitalBundle:Reverse:reverse.html.twig',array(
+            'entity' => $entity,
+        ));
+        $em->getRepository('HospitalBundle:HmsReverse')->insertInvoice($entity,$template);
+        $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
+        return $this->redirect($this->generateUrl('hms_prescription_edit',array('id'=>$entity->getId())));
     }
 
 

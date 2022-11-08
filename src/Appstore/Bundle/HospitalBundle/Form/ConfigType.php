@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 
 class ConfigType extends AbstractType
@@ -25,6 +26,20 @@ class ConfigType extends AbstractType
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5','max'=> 100)))
             ->add('vatEnable')
             ->add('initialDiagnosticShow')
+            ->add('services', 'entity', array(
+                'required'    => false,
+                'expanded'    => true,
+                'multiple'    => true,
+                'property' => 'name',
+                'attr'=>array('class'=>'check-list m-wrap'),
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Service',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.status =1')
+                        ->orderBy("e.name","ASC");
+                }
+
+            ))
             ->add('invoiceProcess',
                 'choice', array(
                     'attr'=>array('class'=>'check-list  span8'),

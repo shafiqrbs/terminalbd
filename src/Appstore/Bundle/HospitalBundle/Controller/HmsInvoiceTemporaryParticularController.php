@@ -85,7 +85,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $entity->setReferredDoctor($referredDoctor);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         if($admissionId){
-            $admission = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $hospital,'invoice'=>$admissionId,'status'=>1));
+            $admission = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $hospital,'invoice'=>$admissionId));
             $entity->setParent($admission);
         }
         $entity->setTransactionMethod($transactionMethod);

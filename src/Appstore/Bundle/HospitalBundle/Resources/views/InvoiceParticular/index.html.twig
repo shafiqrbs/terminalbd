@@ -159,7 +159,7 @@
                                                     <a class="btn mini red " href="{{ path('hms_invoice_particular_machine_format', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Machine Report</a>
                                                 {% endif %}
                                             {% endif %}
-                                            {% if entity.particular.service.slug == 'diagnostic' and entity.process == 'Done' and entity.particularDeliveredBy is empty %}
+                                            {% if entity.particular.service.slug == 'diagnostic' and entity.hmsinvoice.process == 'Done' and entity.particularDeliveredBy is empty %}
                                                 <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
                                                 {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.particular.service.slug == 'diagnostic' and entity.process == 'Done' and entity.particularDeliveredBy is not empty %}
                                                     <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>

@@ -144,7 +144,7 @@
                                                     <td class="numeric">{{ item.quantity }}</td>
                                                     <td class="numeric">{{ item.subTotal|number_format }}</td>
                                                     <td>
-                                                        {% if item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is empty %}
+                                                        {% if (app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_REQUEST")  and item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is empty) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_REQUEST")  and item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is empty)  %}
                                                             <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': item.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
                                                         {% endif %}
                                                         {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and item.particular.service.slug == 'diagnostic' and item.process == 'Done' and item.particularDeliveredBy is not empty %}

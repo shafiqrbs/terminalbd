@@ -150,13 +150,13 @@
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                            {% if entity.hmsInvoice.paymentStatus == 'Paid' and entity.process == 'Done' and entity.particularDeliveredBy is empty %}
+                                            {% if entity.hmsInvoice.paymentStatus == 'Paid' and entity.hmsInvoice.process == 'Done' and entity.particularDeliveredBy is empty %}
                                                 <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
                                             {% endif %}
                                             {% if entity.process == 'Done' and entity.particularDeliveredBy is not empty %}
                                                 <a class="btn mini red"   href="javascript:"><i class="icon-truck"></i>&nbsp;Delivered </a>
                                             {% endif %}
-                                            {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.process == 'Done' %}
+                                            {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.process == 'Done' and entity.hmsInvoice.process == 'Done' %}
                                                 <a target="_blank" class="btn mini yellow" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Print </a>
                                             {% endif %}
                                             {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") and entity.process == 'Done' and entity.particularDeliveredBy is empty %}

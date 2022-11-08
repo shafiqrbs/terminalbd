@@ -47,6 +47,10 @@ hms_prescription_approve:
     path:     /{id}/invoice-approve
     defaults: { _controller: "HospitalBundle:Prescription:invoiceApprove" }
 
+hms_prescription_reverse:
+    path:     /{id}/prescription-reverse
+    defaults: { _controller: "HospitalBundle:Prescription:prescriptionReverse" }
+
 hms_prescription_print:
     path:     /{id}/invoice-print
     defaults: { _controller: "HospitalBundle:Prescription:print" }

@@ -244,7 +244,6 @@
                                                 {% if entity.process in ['Admitted','Released','Dead'] %}
                                                 <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green mini"><i class="icon-print"></i></a>
                                                 {% endif %}
-
                                                 <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                     <i class="icon-tasks"></i>
                                                 </a>
@@ -252,10 +251,10 @@
                                                     {% if entity.process in ['Released','Dead'] %}
                                                     <li><a target="_blank"  href="{{ path('hms_invoice_admission_print',{'id':entity.id}) }}" class="btn"><i class="icon-print"></i>&nbsp;Invoice Print</a></li>
                                                     {% endif %}
-                                                    {% if entity.customer is not empty %}
+                                                   {# {% if entity.customer is not empty %}
                                                     <li><a target="_blank" href="{{ path('hms_invoice_new',{'id':entity.id}) }}"  class="btn"><i class="icon-plus-sign-alt"></i> Diagnostic</a></li>
                                                     <li><a  href="{{ path('hms_prescription_generate',{'id':entity.id}) }}"  class="btn" ><i class="icon-plus-sign-alt"></i> Prescription</a></li>
-                                                    {% endif %}
+                                                    {% endif %}#}
                                                     {% if entity.process in ['Released','Dead'] %}
                                                         <li><a  href="{{ path('hms_invoicereturn_create',{'id':entity.id}) }}" class="btn"><i class="fa fa-refresh"></i>&nbsp;Return</a></li>
                                                     {% endif %}

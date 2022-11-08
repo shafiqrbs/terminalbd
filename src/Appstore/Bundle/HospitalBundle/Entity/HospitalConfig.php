@@ -85,6 +85,11 @@ class HospitalConfig
      **/
     private $particulars;
 
+     /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hospitalConfig")
+     **/
+    private $services;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular", mappedBy="hospitalConfig")
      **/
@@ -1302,7 +1307,21 @@ class HospitalConfig
         $this->printOff = $printOff;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
 
+    /**
+     * @param mixed $services
+     */
+    public function setServices($services)
+    {
+        $this->services = $services;
+    }
 
 
 }

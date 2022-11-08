@@ -58,16 +58,7 @@ class InvoiceEditType extends AbstractType
                 }
             ))
             /*->add('discount','hidden')*/
-            ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('printFor', 'choice', array(
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'diagnostic' => 'Diagnostic',
-                    'visit' => 'Visit',
-                ),
-            ))
+            ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12 textarea','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',

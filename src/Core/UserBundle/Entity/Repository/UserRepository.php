@@ -241,6 +241,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_HOSPITAL_DUTY_NURSE'            => 'Duty Nurse',
                 'ROLE_DOMAIN_HOSPITAL_OT'                    => 'OT',
                 'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Doctor',
+                'ROLE_DOMAIN_HOSPITAL_REPORT_REQUEST'        => 'Request Report',
                 'ROLE_DOMAIN_HOSPITAL_MASTERDATA'            => 'Master Data',
                 'ROLE_DOMAIN_HOSPITAL_REPORT'                => 'Reports',
                 'ROLE_HOSPITAL_FINANCIAL_APPROVE'            => 'Financial Approve',

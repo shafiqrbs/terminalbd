@@ -80,31 +80,15 @@
                                         </div>
 
                                     </div>
-                                    <div class="span2">
+                                    <div class="span3">
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="customerPrefix">Customer Prefix</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.customerPrefix) }}
-                                                        {{ form_errors(form.customerPrefix) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
-                                                    <label class="control-label " for="vatPercentage">Invoice Prefix</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.invoicePrefix) }}
-                                                        {{ form_errors(form.invoicePrefix) }}
-                                                    </div>
-                                                </div>
+                                                {{ form_widget(form.services) }}
+                                                {{ form_errors(form.services) }}
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span4">
+                                    <div class="span3">
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
@@ -155,6 +139,30 @@
                                                         <div class="control">
                                                             {{ form_widget(form.vatPercentage) }}
                                                             {{ form_errors(form.vatPercentage) }}%
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span4">
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="control-group">
+                                                        <label class="control-label " for="customerPrefix">Customer Prefix</label>
+                                                        <div class="control">
+                                                            {{ form_widget(form.customerPrefix) }}
+                                                            {{ form_errors(form.customerPrefix) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="control-group">
+                                                        <label class="control-label " for="vatPercentage">Invoice Prefix</label>
+                                                        <div class="control">
+                                                            {{ form_widget(form.invoicePrefix) }}
+                                                            {{ form_errors(form.invoicePrefix) }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -399,7 +407,7 @@
     <style>
         .check-list label {
             float: left;
-            width: 78%!important;
+            width: 82%!important;
         }
     </style>
 {% endblock %}

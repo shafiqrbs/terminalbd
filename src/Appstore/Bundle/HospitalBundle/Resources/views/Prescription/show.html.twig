@@ -235,7 +235,7 @@
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                     <span  id="show"  data-trigger="hover" data-original-title="All payment history" class="btn purple receivePayment tooltips" ><i class="icon-money"></i>&nbsp;Payment History</span>
                                      {% if app.user.granted("ROLE_DOMAIN") %}
-                                         <a  href="{{ path('hms_invoice_admission_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Diagnostic Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
+                                         <a  href="{{ path('hms_prescription_approve',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Diagnostic Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                      {% endif %}
                                      </div>
                                 </div>
