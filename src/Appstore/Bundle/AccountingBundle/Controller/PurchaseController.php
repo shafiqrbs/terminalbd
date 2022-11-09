@@ -7,9 +7,12 @@ use Appstore\Bundle\AccountingBundle\Entity\BusinessParticular;
 use Appstore\Bundle\AccountingBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\AccountingBundle\Entity\ExpenditureItem;
+use Appstore\Bundle\AccountingBundle\Form\AccountPurchaseType;
+use Appstore\Bundle\AccountingBundle\Form\PaymentPurchaseType;
 use Appstore\Bundle\AccountingBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,6 +74,128 @@ class PurchaseController extends Controller
         return $this->redirect($this->generateUrl('account_expense_purchase_edit', array('id' => $entity->getId())));
     }
 
+    /**
+     * Creates a form to create a AccountPurchase entity.
+     *
+     * @param AccountPurchase $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function paymentCreateForm(AccountPurchase $entity)
+    {
+        $global = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PaymentPurchaseType($global), $entity, array(
+            'action' => $this->generateUrl('account_purchase_payment_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'form-horizontal purchase',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_ACCOUNTING_PURCHASE,ROLE_DOMAIN_ACCOUNTING_OPERATOR,ROLE_DOMAIN")
+     */
+    public function paymentAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entity = new AccountPurchase();
+        $form   = $this->paymentCreateForm($entity);
+        return $this->render('AccountingBundle:Purchase:payment.html.twig', array(
+            'option'    => $globalOption,
+            'entity'    => $entity,
+            'form'      => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a new AccountPurchase entity.
+     */
+
+    public function paymentCreateAction(Request $request)
+    {
+        $entity = new AccountPurchase();
+        $form = $this->paymentCreateForm($entity);
+        $form->handleRequest($request);
+        $data = $request->request->all();
+        /* @var $global GlobalOption */
+        $global = $this->getUser()->getGlobalOption();
+        $method = empty($entity->getTransactionMethod()) ? '' : $entity->getTransactionMethod()->getSlug();
+        if($form->isValid() && empty($method)){
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($global);
+            if (empty($entity->getAccountVendor()) and !empty($data['companyName']) and !empty($data['customerMobile'])){
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->newExistingCustomerForSales($global, $mobile, $data);
+                $entity->setAccountVendor($customer);
+            }
+            $entity->setAccountVendor($entity->getAccountVendor());
+            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+            $entity->setProcessHead('accounting');
+            $entity->setProcessType('Due');
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:30:30");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }else{
+                $datetime = new \DateTime("now");
+                $entity->setUpdated($datetime);
+            }
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            if($this->getUser()->getCheckExistRole('ROLE_DOMAIN_ACCOUNTING_OPERATOR')){
+                return $this->redirect($this->generateUrl('account_purchase_new'));
+            }else{
+                return $this->redirect($this->generateUrl('account_purchase'));
+            }
+        }elseif(($form->isValid() && $method == 'cash') ||
+            ($form->isValid() && $method == 'bank' && $entity->getAccountBank()) ||
+            ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
+        ) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($global);
+            if (empty($entity->getAccountVendor()) and !empty($data['companyName']) and !empty($data['customerMobile'])){
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('AccountingBundle:AccountVendor')->newExistingCustomerForSales($global, $mobile, $data);
+                $entity->setAccountVendor($customer);
+            }
+            $entity->setAccountVendor($entity->getAccountVendor());
+            $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
+            $entity->setProcessHead('accounting');
+            $entity->setProcessType('Due');
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if($accountConfig == 1){
+                $datetime = new \DateTime("yesterday 23:30:30");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }else{
+                $datetime = new \DateTime("now");
+                $entity->setUpdated($datetime);
+            }
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('account_purchase'));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'notice',"May be you are missing to select bank or mobile account"
+        );
+        return $this->render('AccountingBundle:Purchase:payment.html.twig', array(
+            'global' => $global,
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
 
     public function editAction($id)
     {
@@ -78,7 +203,7 @@ class PurchaseController extends Controller
         $config = $this->getUser()->getGlobalOption()->getId();
         $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
+            throw $this->createNotFoundException('Unable to find invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
         return $this->render("AccountingBundle:Purchase:new.html.twig",[

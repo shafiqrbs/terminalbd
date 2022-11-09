@@ -18,6 +18,15 @@ account_purchase_new:
     path:     /new
     defaults: { _controller: "AccountingBundle:AccountPurchase:new" }
 
+account_purchase_payment:
+    path:     /payment
+    defaults: { _controller: "AccountingBundle:Purchase:payment" }
+
+account_purchase_payment_create:
+    path:     /payment-create
+    defaults: { _controller: "AccountingBundle:Purchase:paymentCreate" }
+    methods:  POST
+
 account_purchase_create:
     path:     /create
     defaults: { _controller: "AccountingBundle:AccountPurchase:create" }

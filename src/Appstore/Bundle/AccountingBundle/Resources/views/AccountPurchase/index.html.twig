@@ -175,16 +175,15 @@
                                     <tr id="show-{{ entity.id }}" class="showing-overview">
                                         <td colspan="11">
                                             <table class="table">
-                                                <tr><td>Remark</td><td>{{ entity.remark }}</td></tr>
-                                                <tr><td colspan="2">Transaction Information</td></tr>
+                                                <tr><td>Remark: {{ entity.remark }}</td></tr>
+                                                <tr><td>Transaction Information</td></tr>
                                                 {% if entity.accountBank is not empty %}
-                                                    <tr><td>Bank name</td><td>{{ entity.accountBank.bank.name }}</td></tr>
-                                                    <tr><td>Account no.</td><td>{{ entity.accountBank.accountNo }}</td></tr>
+                                                    <tr><td>Bank name: {{ entity.accountBank.bank.name }}</td></tr>
+                                                    <tr><td>Account no: {{ entity.accountBank.accountNo }}</td></tr>
                                                 {% endif %}
                                                 {% if entity.accountMobileBank is not empty %}
-                                                    <tr><td>Mobile Account</td><td>{{ entity.accountMobileBank.name }}</td></tr>
+                                                    <tr><td>Mobile Account: {{ entity.accountMobileBank.name }}</td></tr>
                                                 {% endif %}
-
                                             </table>
                                         </td>
                                     </tr>

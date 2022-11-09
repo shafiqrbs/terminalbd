@@ -103,10 +103,24 @@
                                                 <td class="span4">{{ item.particular }}</td>
                                                 <td class="span2">{{ item.price }}</td>
                                                 <td class="span1">{{ item.quantity }}</td>
-                                                <td class="span1">{{ item.subTotal|number_format }}</td>
+                                                <td class="span1">{{ item.subTotal|number_format(2) }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th colspan="4"><strong class="text-right">Total</strong></th>
+                                            <th class="span1">{{ entity.totalAmount|number_format(2) }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4"><strong class="text-right">Payment</strong></th>
+                                            <th class="span1">{{ entity.payment|number_format|number_format(2) }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4"><strong class="text-right">Due</strong></th>
+                                            <th class="span1">{{ (entity.totalAmount-entity.payment)|number_format(2) }}</th>
+                                        </tr>
+                                        </tfoot>
                                     </table>
                                 {% endif %}
                             </div>

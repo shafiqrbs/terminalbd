@@ -135,15 +135,16 @@
                                 </div>
                             </div>
                         </div>
-                        <!--/span-->
                     </div>
-
                     <div class="clearfix"></div>
                     <div class="row-fluid">
                         <div class="span12">
-                            <div class="control-group">
+                            <div class="control-group span10">
                                 {{ form_widget(form.accountVendor) }}
                                 {{ form_errors(form.accountVendor) }}
+                            </div>
+                            <div class="btn-group span2">
+                                <a class="btn red span12" target="_blank" href="{{ path('account_vendor_new') }}"><i class="icon-plus-sign"></i></a>
                             </div>
                         </div>
                     </div>

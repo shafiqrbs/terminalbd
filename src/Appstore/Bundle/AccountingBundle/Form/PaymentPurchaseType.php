@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class   AccountPurchaseType extends AbstractType
+class   PaymentPurchaseType extends AbstractType
 {
 
     /* @var $global GlobalOption */
@@ -20,7 +20,6 @@ class   AccountPurchaseType extends AbstractType
     public function __construct(GlobalOption $global)
     {
         $this->global = $global;
-
     }
 
     /**
@@ -49,17 +48,6 @@ class   AccountPurchaseType extends AbstractType
                         ->orderBy("e.id");
                 }
             ))
-	        ->add('processType', 'choice', array(
-		        'attr'=>array('class'=>'span12 m-wrap'),
-		        'expanded'      =>false,
-		        'multiple'      =>false,
-		        'choices' => array(
-			        'Due' => 'Payment of Due',
-			        'Advance' => 'Payment of Advance',
-			        'Debit' => 'Debit Adjustment',
-			        'Credit' => 'Credit Adjustment',
-		        ),
-	        ))
             ->add('accountBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
@@ -88,58 +76,19 @@ class   AccountPurchaseType extends AbstractType
             ))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
         ;
-        if($this->global->getMainApp()->getSlug() == 'miss'){
-
-            $builder->add('medicineVendor', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\MedicineBundle\Entity\MedicineVendor',
-                'empty_value' => '---Choose a vendor company---',
-                'property' => 'companyName',
-                'attr'=>array('class'=>'span12 m-wrap select2 vendor-ledger-medicine '),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.medicineConfig =".$this->global->getMedicineConfig()->getId())
-                        ->orderBy('e.companyName','ASC');
-                },
-            ));
-
-        }elseif($this->global->getMainApp()->getSlug() == 'inventory'){
-
-            $builder->add('vendor', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
-                'empty_value' => '---Choose a vendor company---',
-                'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2 m-wrap vendor-ledger-inventory'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.inventoryConfig =".$this->global->getInventoryConfig()->getId())
-                        ->orderBy('e.companyName','ASC');
-                },
-            ));
-        }else{
-            $builder->add('accountVendor', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
-                'empty_value' => '---Choose a vendor company---',
-                'property' => 'companyName',
-                'attr'=>array('class'=>'span10 select2  vendor-ledger-business'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.globalOption =".$this->global->getId())
-                        ->orderBy('e.companyName','ASC');
-                },
-            ));
-        }
+        $builder->add('accountVendor', 'entity', array(
+            'required'    => true,
+            'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
+            'empty_value' => '---Choose a vendor company---',
+            'property' => 'companyName',
+            'attr'=>array('class'=>'span12 select2  vendor-ledger-business'),
+            'query_builder' => function(EntityRepository $er){
+                return $er->createQueryBuilder('e')
+                    ->where("e.status = 1")
+                    ->andWhere("e.globalOption =".$this->global->getId())
+                    ->orderBy('e.companyName','ASC');
+            },
+        ));
 
     }
     
