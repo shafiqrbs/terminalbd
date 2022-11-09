@@ -308,7 +308,6 @@ class AdmissionPatientParticularController extends Controller
                 $invoiceDetails[$serviceName]['total'] = 0;
                 $invoiceDetails[$serviceName]['hasQuantity'] = ($hasQuantity == 1);
             }
-
             $invoiceDetails[$serviceName]['items'][] = $item;
             $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
         }
@@ -317,7 +316,6 @@ class AdmissionPatientParticularController extends Controller
             unset($invoiceDetails['Pathology']);
         }
         $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($transaction->getPayment());
-
         return $this->render('HospitalBundle:Print:payment.html.twig', array(
             'entity'                => $entity,
             'invoiceDetails'        => $invoiceDetails,

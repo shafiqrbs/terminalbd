@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tr class="head-black">
-            <th><strong class="pull-left" style="margin-left: 150px">Bill To</strong></th><th><strong class="pull-right" style="margin-right: 15px">Transaction</strong></th>
+            <th><strong class="pull-left" style="margin-left:15px">Bill To</strong></th><th><strong class="pull-right" style="margin-right: 15px">Transaction</strong></th>
         </tr>
         <tr>
             <td>
@@ -28,8 +28,14 @@
             </td>
             <td class="pull-right">
                 <ul class="unstyled">
+                    {% if entity.cabin is not empty %}
+                    <li><strong>C/B: </strong> {% if entity.cabin is not empty%} {{ entity.cabin.name }}{% endif %}</li>
+                    {% endif %}
                     <li><strong>Admission Date: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:i A') }}</strong></li>
+                    {% set processDone = {'Released':'Released','Dead':'Dead'} %}
+                    {% if entity.process in processDone %}
                     <li><strong>Release Date: </strong>&nbsp;<strong>{{ entity.releaseDate|date('d-m-Y h:i A') }}</strong></li>
+                    {% endif %}
                     <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                     <li><hr></li>
                     <li><strong>Patient status:</strong>&nbsp;{{  entity.process|capitalize }}</li>
@@ -88,7 +94,7 @@
                     </table>
 
                 </td></tr>
-            <tr><td colspan="4" style="text-align:right"><strong>Paid In word TK. </strong>({{ inWords|raw }} only).</td></tr>
+            <tr><td colspan="4" style="text-align:right"><strong>Paid In words</strong>{% if entity.payment > 0 %}({{ inWords|raw }} only).{% endif %}</td></tr>
             <tr><td colspan="4"><strong>Remarks</strong>{{ entity.comment|raw }}.</td></tr>
             </tfoot>
         </table>
@@ -98,27 +104,38 @@
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
                 <td class="span4">
-                    <ul class="unstyled">
-                        <li>Prepared By</li>
-                        <li>{{ entity.createdBy.profile.name }}</li>
-                    </ul>
+
                 </td>
                 <td class="span4 text-center">
-                    <ul class="unstyled">
-                        <li>Checked By</li>
-                        <li>Printed: {{ "now"|date("d-m-Y h:i A") }}</li>
-                    </ul>
+
                 </td>
                 <td class="span4 pull-right">
-                    <ul class="unstyled">
-                        <li>Printed By</li>
-                        <li>{{ app.user }}</li>
-                    </ul>
+
                 </td>
             </tr>
             <tr><td colspan="3">&nbsp;</td></tr>
         </table>
     {% endif %}
+    <div class="grid-print">
+        <div class="grid-print-item">
+            <ul class="unstyled">
+                <li>Prepared By</li>
+                <li>{{ entity.createdBy.profile.name }}</li>
+            </ul>
+        </div>
+        <div class="grid-print-item">
+            <ul class="unstyled">
+                <li>Checked By</li>
+                <li>Printed: {{ "now"|date("d-m-Y h:i A") }}</li>
+            </ul>
+        </div>
+        <div class="grid-print-item">
+            <ul class="unstyled">
+                <li>Printed By</li>
+                <li>{% if app.user.profile is not empty %}{{ app.user.profile.name }}{% endif %}</li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

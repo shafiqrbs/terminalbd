@@ -530,7 +530,8 @@ class MedicineStockRepository extends EntityRepository
             $query->andWhere($query->expr()->like("e.name", "'%$q%'"  ));
         }
         if($config->isRemainingQuantity() == 1){
-            $query->andWhere("e.remainingQuantity > 0");
+            $query->andWhere('e.purchaseQuantity > :searchTerm OR e.openingQuantity > :searchTerm');
+            $query->setParameter('searchTerm', 0);
         }
         $query->andWhere('e.status = 1');
         $query->groupBy('e.name');
@@ -747,7 +748,8 @@ class MedicineStockRepository extends EntityRepository
         $qb->addSelect('u.id as unitId','u.name as unitName');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
         if($config->isRemainingQuantity() == 1){
-            $qb->andWhere('e.remainingQuantity > 0');
+            $qb->andWhere('e.purchaseQuantity > :searchTerm OR e.openingQuantity > :searchTerm');
+            $qb->setParameter('searchTerm', 0);
         }
         $qb->andWhere('e.status = 1');
         $qb->orderBy('e.sku','ASC');

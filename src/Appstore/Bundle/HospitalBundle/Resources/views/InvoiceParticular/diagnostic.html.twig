@@ -44,6 +44,18 @@
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid" >
+                                <form action="javascript:" method="post" class="patient-global-search">
+                                    <div class="row-fluid">
+                                        <div class="span9">
+                                            <input type="text" id="select2Invoice" name="select2Invoice"  class="m-wrap span12 select2Invoice" value=""  autocomplete="off" placeholder="Global Search For : Diagnostic,Visit,Admission for Patient Details">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="barcode2Invoice" name="barcode2Invoice"  class="m-wrap span12" value=""  autocomplete="off" placeholder="Scan invoice barcode for invoice details">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row-fluid" >
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid" style="margin-bottom: 10px">
                                         <div class="span3">
@@ -195,9 +207,10 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/jquery-ui.css'
+        '@InventoryBundle/Resources/public/css/jquery-ui.css'
+        '@HospitalBundle/Resources/public/css/invoice.css'
     %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
+        <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
 {% block javascriptBlock %}

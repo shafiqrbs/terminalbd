@@ -40,7 +40,8 @@ class InvoiceParticularRepository extends EntityRepository
 		$particular = isset($data['particular'])? $data['particular'] :'';
 
 		if (!empty($invoice)) {
-			$qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
+		    $inv = trim($invoice);
+			$qb->andWhere($qb->expr()->like("e.invoice", "'%$inv%'"  ));
 		}
 		if (!empty($customerName)) {
 			$qb->join('e.customer','c');
@@ -134,15 +135,14 @@ class InvoiceParticularRepository extends EntityRepository
         }
     }
 
-    public function invoicePathologicalReportLists(User $user , $mode , $data)
+    public function invoicePathologicalReportLists(User $user,$data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('ip');
         $qb->join('ip.hmsInvoice','e');
-        $qb->join('ip.particular','p');
+        $qb->leftJoin('ip.particular','p');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
-        $qb->andWhere('e.commissionApproved != 1');
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.invoiceMode IN (:invoiceModes)")->setParameter('invoiceModes', array('diagnostic','admission'));
         $qb->andWhere("e.process IN (:process)")->setParameter('process', array('Done','In-progress','Diagnostic','Admitted'));

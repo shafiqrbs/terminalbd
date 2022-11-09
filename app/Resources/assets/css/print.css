@@ -358,6 +358,18 @@ table.table-no-border {
 }
 
 
+.grid-print {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding:1px;
+}
+.grid-print-item {
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 4px;
+    text-align: center;
+}
+
+
 /*
 tr:nth-child(even) {background: #CCC}
 tr:nth-child(odd) {background: #FFF}

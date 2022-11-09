@@ -1,28 +1,8 @@
 {% extends '::hms-print.html.twig' %}
 {% block body %}
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
-        {%  if entity.hospitalConfig.isPrintHeader == 1 %}
-            <table class="table">
-                <tr>
-                    <td>
-                        <div class="span4  pull-left invoice-logo-space">
-                            {%  if entity.hospitalConfig.invoicePrintLogo == 1 %}
-                                {% if entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') is not empty %}
-                                    <img style="max-width: 180px; max-height: 60px" src="/{{ entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') }}">
-                                {% endif %}
-                            {%  endif %}
-                        </div>
-                    </td>
-                    <td class="pull-right">
-                        <div class="span4">
-                            <ul class="unstyled">
-                                <li><strong>{{ entity.hospitalConfig.globalOption.name }}</strong></li>
-                                <li><p>{{ entity.hospitalConfig.address|raw }}</p></li>
-                             </ul>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+        {% if entity.hospitalConfig.isPrintHeader == 1 and entity.hospitalConfig.webHeaderPath is defined  and entity.hospitalConfig.webHeaderPath is not empty  %}
+            <img style="max-height:100px;width: 100%!important;" src="/{{ entity.hospitalConfig.webHeaderPath }}">
         {% endif %}
         <table class="table table-border" >
             <tr class="print-header">
@@ -43,6 +23,11 @@
                 </td>
                 <td class="pull-right">
                     <ul class="unstyled">
+                        {% if entity.invoiceMode == "diagnostic" and entity.parent is not empty %}
+                            <li><strong>Invoice & C/B: </strong> {{ entity.parent.invoice }} / {% if entity.parent.cabin is not empty%} {{ entity.parent.cabin.name }}{% endif %}</li>
+                        {% elseif entity.invoiceMode == "admission" and entity.cabin is not empty %} %}
+                            <li><strong>Invoice & C/B: </strong> {{ entity.invoice }} / {% if entity.cabin is not empty%} {{ entity.cabin.name }}{% endif %}</li>
+                        {% endif %}
                         <li><strong>Invoice: </strong>&nbsp;<strong>{{ entity.invoice }}/{{ transaction.transactionCode }}</strong></li>
                         <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:i A') }}</strong></li>
                         {% if entity.process is not empty %}<li><strong>Process: </strong>&nbsp;{{ entity.process }}</li>{% endif %}
@@ -83,38 +68,32 @@
             <tr><td colspan="4" style="text-align:right"><strong>Total TK. </strong>{{ transaction.total|number_format }}</td></tr>
             <tr><td colspan="4" style="text-align:right"><strong>Receive TK. </strong>{{ transaction.payment|number_format }}</td></tr>
             <tr><td colspan="4" style="text-align:right"><strong>Paid In word TK. </strong>({{ inWordTransaction|raw }} only).</td></tr>
-            <tr><td colspan="4"><strong>Remarks</strong>{{ entity.comment|raw }}.</td></tr>
+            <tr><td colspan="4"><strong>Remarks: </strong>{{ transaction.comment|raw }}.</td></tr>
             {% if entity.hospitalConfig.isPrintFooter == 1 %}
                 <tr><td colspan="4" class="text-center">{{ portal_power }}</td></tr>
             {% endif %}
             </tfoot>
         </table>
-        <table class="table table-border">
-            <tr><td colspan="3">&nbsp;</td></tr>
-            <tr><td colspan="3">&nbsp;</td></tr>
-            <tr><td colspan="3">&nbsp;</td></tr>
-            <tr>
-                <td class="span4">
-                    <ul class="unstyled">
-                        <li>Prepared By</li>
-                        <li>{{ entity.createdBy.profile.name }}</li>
-                    </ul>
-                </td>
-                <td class="span4 text-center">
-                    <ul class="unstyled">
-                        <li>Checked By</li>
-                        <li>Printed: {{ "now"|date("d-m-Y h:i A") }}</li>
-                    </ul>
-                </td>
-                <td class="span4 pull-right">
-                    <ul class="unstyled">
-                        <li>Printed By</li>
-                        <li>{{ app.user }}</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr><td colspan="3">&nbsp;</td></tr>
-        </table>
+        <div class="grid-print">
+            <div class="grid-print-item">
+                <ul class="unstyled">
+                    <li>Prepared By</li>
+                    <li>{{ entity.createdBy.profile.name }}</li>
+                </ul>
+            </div>
+            <div class="grid-print-item">
+                <ul class="unstyled">
+                    <li>Checked By</li>
+                    <li>Printed: {{ "now"|date("d-m-Y h:i A") }}</li>
+                </ul>
+            </div>
+            <div class="grid-print-item">
+                <ul class="unstyled">
+                    <li>Printed By</li>
+                    <li>{% if app.user.profile is not empty %}{{ app.user.profile.name }}{% endif %}</li>
+                </ul>
+            </div>
+        </div>
     </div>
 <style>
     .table td{

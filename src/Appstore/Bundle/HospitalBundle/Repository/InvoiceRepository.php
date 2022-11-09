@@ -1251,7 +1251,7 @@ class InvoiceRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
         $query->leftJoin('e.customer', 'c');
         $query->select('e.invoice as id');
-        $query->addSelect("CONCAT(e.invoiceMode,' => ', e.invoice,'-[',e.process,'] - ', c.name,' - Mob:', c.mobile) as text");
+        $query->addSelect("CONCAT(e.invoice,'-[',e.process,'] - ', c.name,' - Mob:', c.mobile) as text");
         $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
         $query->andWhere('e.invoice LIKE :searchTerm OR c.name LIKE :searchTerm OR c.mobile LIKE :searchTerm  OR c.customerId LIKE :searchTerm');
         $query->setParameter('searchTerm', '%'.trim($q).'%');
@@ -1267,11 +1267,13 @@ class InvoiceRepository extends EntityRepository
 
         $query = $this->createQueryBuilder('e');
         $query->leftJoin('e.customer', 'c');
+        $query->leftJoin('e.cabin', 'cb');
         $query->select('e.invoice as id');
-        $query->addSelect("CONCAT(e.invoiceMode,' => ', e.invoice,'-[',e.process,'] - ', c.name,' - Mob:', c.mobile) as text");
+        $query->addSelect("CONCAT(e.invoice,'-[',e.process,'] C/B: ',cb.name,' (', c.name,' -', c.mobile,')') as text");
         $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
         $query->andWhere('e.invoice LIKE :searchTerm OR c.name LIKE :searchTerm OR c.mobile LIKE :searchTerm OR c.customerId LIKE :searchTerm');
         $query->andWhere('e.invoiceMode = :mode')->setParameter('mode','admission') ;
+        $query->andWhere('e.cabin IS NOT NULL');
         $query->andWhere('e.process IN (:process)')->setParameter('process',array('Admitted','Release','Revised','Death')) ;
         $query->setParameter('searchTerm', '%'.trim($q).'%');
         $query->orderBy('e.created', 'DESC');

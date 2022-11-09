@@ -44,6 +44,18 @@
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid" >
+                                <form action="javascript:" method="post" class="patient-global-search">
+                                    <div class="row-fluid">
+                                        <div class="span9">
+                                            <input type="text" id="select2Invoice" name="select2Invoice"  class="m-wrap span12 select2Invoice" value=""  autocomplete="off" placeholder="Global Search For : Diagnostic,Visit,Admission for Patient Details">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="barcode2Invoice" name="barcode2Invoice"  class="m-wrap span12" value=""  autocomplete="off" placeholder="Scan invoice barcode for invoice details">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row-fluid" >
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid" style="margin-bottom: 10px">
                                         <div class="span3">
@@ -159,7 +171,7 @@
                                                     <a class="btn mini red " href="{{ path('hms_invoice_particular_machine_format', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Machine Report</a>
                                                 {% endif %}
                                             {% endif %}
-                                            {% if entity.particular.service.slug == 'diagnostic' and entity.hmsinvoice.process == 'Done' and entity.particularDeliveredBy is empty %}
+                                            {% if entity.particular.service.slug == 'diagnostic' and entity.hmsinvoice.due == 0 and entity.process == 'Done' and entity.particularDeliveredBy is empty %}
                                                 <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
                                                 {% if app.user.granted("ROLE_DOMAIN_HOSPITAL_REPORT_PRINT") and entity.particular.service.slug == 'diagnostic' and entity.process == 'Done' and entity.particularDeliveredBy is not empty %}
                                                     <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
@@ -198,7 +210,8 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/jquery-ui.css'
+        '@InventoryBundle/Resources/public/css/jquery-ui.css'
+        '@HospitalBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
