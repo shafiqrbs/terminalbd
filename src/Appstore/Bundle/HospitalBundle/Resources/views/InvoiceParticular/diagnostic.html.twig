@@ -162,9 +162,9 @@
                                         <td class="numeric" >{{ entity.process|capitalize }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                            {% if entity.hmsInvoice.paymentStatus == 'Paid' and entity.hmsInvoice.process == 'Done' and entity.particularDeliveredBy is empty %}
-                                                <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
-                                            {% endif %}
+                                                {% if entity.hmsinvoice.due == 0 and entity.process == 'Done' and entity.particularDeliveredBy is empty %}
+                                                    <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': entity.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
+                                                {% endif %}
                                             {% if entity.process == 'Done' and entity.particularDeliveredBy is not empty %}
                                                 <a class="btn mini red"   href="javascript:"><i class="icon-truck"></i>&nbsp;Delivered </a>
                                             {% endif %}
