@@ -48,7 +48,9 @@
         "symfony/validator": "^2.8",
         "symfony/security-acl": "^3.0",
         "ajaxray/php-watermark": "^0.1.1",
-        "beberlei/DoctrineExtensions": "^1.2"
+        "beberlei/doctrineextensions": "^1.2",
+        "lessclick-system/barcode": "^3.0"
+
     },
     "scripts": {
         "symfony-scripts": [
