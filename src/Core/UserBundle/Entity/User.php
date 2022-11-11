@@ -614,6 +614,26 @@ class User extends BaseUser
 	/* ==================================== HMS =========================================**/
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular", mappedBy="user" , cascade={"persist", "remove"})
+	 */
+	protected $hmsInvoiceTemporaryParticulars;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="deliveredBy" , cascade={"persist", "remove"})
+	 */
+	protected $hmsInvoiceDeliveredBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+	 */
+	protected $hmsInvoiceCreatedBy;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+	 */
+	protected $hmsInvoiceApprovedBy;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="user" , cascade={"persist", "remove"})
 	 */
 	protected $userAttendance;
