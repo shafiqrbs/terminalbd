@@ -435,7 +435,20 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
-        //$qb->andWhere('e.commissionApproved = 1');
+        $qb->andWhere('e.commissionApproved = 1');
+        if (!empty($data['startDate'])) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("ip.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("ip.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
@@ -462,10 +475,12 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.assignDoctor','doctor');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
         $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Done','Released','Dead'));
         $qb->andWhere('e.commissionApproved = :approved')->setParameter('approved', 'false') ;
+       // $qb->andWhere('doctor.sendToAccount = 1');
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $qb->getQuery();
@@ -713,6 +728,9 @@ class InvoiceRepository extends EntityRepository
         $qb->select('e.created as created','e.invoice as invoice','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('ad.name as doctor','rd.name as referred');
+        $qb->leftJoin('e.createdBy','cb');
+        $qb->leftJoin('cb.profile','up');
+        $qb->addSelect('up.name as createdUser');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $qb->andWhere("e.process IN (:process)");
@@ -763,6 +781,9 @@ class InvoiceRepository extends EntityRepository
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('d.name as doctor');
         $qb->addSelect('vt.name as visitType');
+        $qb->leftJoin('e.createdBy','cb');
+        $qb->leftJoin('cb.profile','up');
+        $qb->addSelect('up.name as createdUser');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         if(!empty($assignDoctor)){
@@ -820,6 +841,9 @@ class InvoiceRepository extends EntityRepository
         $qb->addSelect('dep.name as department');
         $qb->addSelect('ad.name as anesthesiaDoctor');
         $qb->addSelect('assist.name as assistantDoctor');
+        $qb->leftJoin('e.createdBy','cb');
+        $qb->leftJoin('cb.profile','up');
+        $qb->addSelect('up.name as createdUser');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', 'admission') ;
         $qb->andWhere("e.process IN (:process)");
@@ -848,21 +872,15 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.createdBy = :user");
             $qb->setParameter('user', $user);
         }
-        if (!empty($data['startDate']) ) {
+        if (!empty($data['startDate'])) {
+            $startDate = str_replace('T',' ',$data['startDate']);
             $qb->andWhere("e.updated >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+            $qb->setParameter('startDate', $startDate);
         }
         if (!empty($data['endDate'])) {
+            $endDate = str_replace('T',' ',$data['endDate']);
             $qb->andWhere("e.updated <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
-        }
-        if (!empty($data['startUpdated']) ) {
-            $qb->andWhere("e.updated >= :startUpdated");
-            $qb->setParameter('startUpdated', $data['startUpdated'].' 00:00:00');
-        }
-        if (!empty($data['endUpdated'])) {
-            $qb->andWhere("e.updated <= :endUpdated");
-            $qb->setParameter('endUpdated', $data['endUpdated'].' 23:59:59');
+            $qb->setParameter('endDate', $endDate);
         }
         if(!empty($process)){
             $qb->andWhere("e.process = :process");

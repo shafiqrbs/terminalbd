@@ -24,8 +24,8 @@
 </head>
 <body style="margin: 0px!important;">
 <div style="display: block">
-    <div style="margin-top:{{ global.hospitalConfig.printMarginReportTop }}px; margin-left:{{ global.hospitalConfig.printMarginReportLeft }}px;margin-right:{{ global.hospitalConfig.printMarginReportLeft }}px;" >
-        <table class="table table-border reportTable" style="border: 3px solid #383939!important; margin-top:160px" >
+    <div style="margin-top:{{ global.hospitalConfig.printMarginReportTop }}px; margin-left:{{ global.hospitalConfig.printMarginReportLeft }}px;margin-right:{{ global.hospitalConfig.printMarginReportLeft }}px; position: relative" >
+        <table class="table table-border reportTable" style="border: 1px solid #383939!important; margin-top:160px" >
             <tr class="print-header">
                 <td colspan="3" style="position: relative">
                     <span class="barcode-left">{{ barcodeInvoice|raw }}</span>
@@ -164,40 +164,42 @@
                 <tr><td>Comment: {{ entity.comment|raw }}</td></tr>
             </table>
         {% endif %}
-        <div class="grid-print">
-            <div class="grid-print-item">
-                <ul class="unstyled">
-                    <li>Prepared By</li>
-                    {% if entity.assignLabuser is not empty %}
-                        <li>
-                            {% if(entity.assignLabuser and entity.assignLabuser.webSignaturePath) %}
-                                <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.assignLabuser.webSignaturePath).resize(180,100) }}">
-                            {% endif %}
-                        </li>
-                        <li><strong>{{ entity.assignLabuser.name }}</strong></li>
-                        <li>{% if entity.assignLabuser.doctorSignature is not empty %}{{ entity.assignLabuser.doctorSignature|raw }}{% endif %}</li>
-                    {% endif %}
-                </ul>
-            </div>
-            <div class="grid-print-item">
-                <ul class="unstyled">
-                    <li>Printed By</li>
-                    <li><strong>{{ printUser.profile.name }}</strong></li>
-                    <li>{% if printUser.profile and printUser.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
-                    <li>{{ "now"|date('d-m-Y h:i A') }}</li>
-                </ul>
-            </div>
-            <div class="grid-print-item">
-                {% if entity.assignDoctor is not empty %}
+        <div style="position: fixed; bottom:50px; width: 100%">
+            <div class="grid-print">
+                <div class="grid-print-item">
                     <ul class="unstyled">
-                        <li> {% if(entity.assignDoctor.webSignaturePath) %}
-                                <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.assignDoctor.webSignaturePath).resize(180,100) }}">
-                            {% endif %}
-                        </li>
-                        <li><strong>{{ entity.assignDoctor.name }}</strong></li>
-                        <li>{{ entity.assignDoctor.doctorSignature|raw }}</li>
+                        <li>Prepared By</li>
+                        {% if entity.assignLabuser is not empty %}
+                            <li>
+                                {% if(entity.assignLabuser and entity.assignLabuser.webSignaturePath) %}
+                                    <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.assignLabuser.webSignaturePath).resize(180,100) }}">
+                                {% endif %}
+                            </li>
+                            <li><strong>{{ entity.assignLabuser.name }}</strong></li>
+                            <li>{% if entity.assignLabuser.doctorSignature is not empty %}{{ entity.assignLabuser.doctorSignature|raw }}{% endif %}</li>
+                        {% endif %}
                     </ul>
-                {% endif %}
+                </div>
+                <div class="grid-print-item">
+                    <ul class="unstyled">
+                        <li>Printed By</li>
+                        <li><strong>{{ printUser.profile.name }}</strong></li>
+                        <li>{% if printUser.profile and printUser.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
+                        <li>{{ "now"|date('d-m-Y h:i A') }}</li>
+                    </ul>
+                </div>
+                <div class="grid-print-item">
+                    {% if entity.assignDoctor is not empty %}
+                        <ul class="unstyled">
+                            <li> {% if(entity.assignDoctor.webSignaturePath) %}
+                                    <img class="fileupload-preview fileupload-exists" alt="" src="{{ image(entity.assignDoctor.webSignaturePath).resize(180,100) }}">
+                                {% endif %}
+                            </li>
+                            <li><strong>{{ entity.assignDoctor.name }}</strong></li>
+                            <li>{{ entity.assignDoctor.doctorSignature|raw }}</li>
+                        </ul>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

@@ -52,7 +52,7 @@
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center">
                 <p><strong style="font-size: 16px">{{ option.name }}</strong></p>
-                <p>Name of Report: Patient Invoice</p>
+                <p>Name of Report: Patient Visit Invoice</p>
             </div>
             <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}
                 <p><strong>Start Date:&nbsp;</strong><strong>{% if searchForm['startDate'] is defined and searchForm['startDate'] is not empty %}{{ searchForm['startDate']|date('d-m-Y') }}{% endif %}</strong>
@@ -75,6 +75,7 @@
                     <tbody><tr>
                         <th>SI.</th>
                         <th>Created</th>
+                        <th>Created By</th>
                         <th>Invoice</th>
                         <th>Name</th>
                         <th>Mobile</th>
@@ -91,6 +92,7 @@
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                            <td class="numeric" >{{ entity.createdUser }}</td>
                             <td class="numeric" >{{ entity.invoice }}</td>
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>
@@ -102,7 +104,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="7">Grand Balance</th>
+                        <th class="text-right" colspan="8">Grand Balance</th>
                         <th class="text-right">{{ sales|number_format(2) }}</th>
                     </tr>
                     </tfoot>

@@ -6,13 +6,13 @@
                 <div class="row">
                     <div class="col-md-5 margin-top">
                     </div>
-                    <div class="col-md-3 margin-top">
+                    <div class="col-md-2 margin-bottom-5">
                         <label>Start Date</label>
-                        <input type="date" class="m-wrap" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                        <input type="datetime-local" class="m-wrap datepicker"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                     </div>
-                    <div class="col-md-3 margin-top">
+                    <div class="col-md-2 margin-bottom-5">
                         <label>End Date</label>
-                        <input type="date" class="m-wrap" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
+                        <input type="datetime-local" class="m-wrap datepicker"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>
                     <div class="col-md-1 margin-top">
                         <label>&nbsp;</label>
@@ -53,26 +53,27 @@
                         <th>Mobile</th>
                         <th class="text-right">Sales</th>
                         <th class="text-right">Receive</th>
-                        <th class="text-right">Balance</th>
                     </tr>
                     <tbody>
-                    {% set balance = 0 %}
+                    {% set totalCredit = 0 %}
+                    {% set totalDebit = 0 %}
                     {% for entity in entities %}
-                        {% set balance = balance + entity.balance %}
+                        {% set totalCredit = totalCredit + entity.credit %}
+                        {% set totalDebit = totalDebit + entity.debit %}
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>
                             <td class="text-right" >{{ entity.debit|number_format(2) }}</td>
                             <td class="text-right" >{{ entity.credit|number_format(2) }}</td>
-                            <td class="text-right" >{{ entity.balance|number_format(2) }}</td>
                         </tr
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="5">Grand Balance</th>
-                        <th class="text-right">{{ balance|number_format(2) }}</th>
+                        <th class="text-right" colspan="3">Grand Balance</th>
+                        <th class="text-right">{{ totalDebit|number_format(2) }}</th>
+                        <th class="text-right">{{ totalCredit|number_format(2) }}</th>
                     </tr>
                     </tfoot>
                 </table>

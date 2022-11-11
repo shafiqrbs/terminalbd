@@ -364,7 +364,7 @@ table.table-no-border {
     padding:1px;
 }
 .grid-print-item {
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    border: 0px solid rgba(0, 0, 0, 0.8);
     padding: 4px;
     text-align: center;
 }

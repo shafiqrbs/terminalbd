@@ -695,10 +695,6 @@ class ReportController extends Controller
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        if (empty($data['posted'])) {
-            $datetime = new \DateTime("now");
-            $data['posted'] = $datetime->format('d-m-Y');
-        }
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5,6));
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
         return $this->render('ReportBundle:Hospital/Sales:sales-collection.html.twig', array(
@@ -722,7 +718,7 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        if(isset($data['posted']) and $data['posted']) {
+        if(isset($data['startDate']) and $data['endDate']) {
             $entities = $em->getRepository('HospitalBundle:Invoice')->hmsSalesCollectionComissionReports($user,$data);
             $pagination = $entities->getQuery()->getResult();
             $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital, $entities);

@@ -112,6 +112,8 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Referred</th>
                                     <th class="numeric" >Mode</th>
                                     <th class="numeric" >Total</th>
@@ -128,6 +130,8 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.customer.name }}</td>
+                                        <td class="numeric" >{{ entity.customer.mobile }}</td>
+                                        <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.invoiceMode|capitalize }}</td>
                                         <td class="numeric" >{{ entity.total|number_format }}</td>
@@ -135,7 +139,7 @@
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
                                         <td class="numeric" >{{ entity.commission|number_format }}</td>
                                         <td class="numeric" >
-                                            {% if entity.commissionApproved == false and entity.process == 'Done' %}
+                                            {% if entity.commissionApproved == false and entity.process == 'Done' and entity.invoiceMode == 'diagnostic' %}
                                                 <a href="{{ path('hms_doctor_invoice_new', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-money"></i> Add Commission</a>
                                                 <a href="javascript:" data-url="{{ path('hms_doctor_invoice_confirm',{'id':entity.id}) }}"  class="btn mini red confirm" ><i class="icon-remove"></i> Close</a>
                                             {% endif %}

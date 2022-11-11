@@ -39,7 +39,7 @@
                         </select>
                     </div>
                     <div class="col-md-1 margin-top">
-                        <label>Visit Process</label>
+                        <label>Process</label>
                         <select name="process" id="process" class="search-input span12 m-wrap">
                             <option value="" >--Select Process--</option>
                             {% for process in processes %}
@@ -101,6 +101,7 @@
                     <tr>
                         <th>SI.</th>
                         <th>Created</th>
+                        <th>Created By</th>
                         <th>Invoice</th>
                         <th>Name</th>
                         <th>Mobile</th>
@@ -126,6 +127,7 @@
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                            <td class="numeric" >{{ entity.createdUser }}</td>
                             <td class="numeric" >{{ entity.invoice }}</td>
                             <td class="numeric" >{{ entity.name }}</td>
                             <td class="numeric" >{{ entity.mobile }}</td>
@@ -139,7 +141,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th class="text-right" colspan="5">Grand Balance</th>
+                        <th class="text-right" colspan="6">Grand Balance</th>
                         <th class="text-right">{{ subTotal|number_format(2) }}</th>
                         <th class="text-right">{{ discount|number_format(2) }}</th>
                         <th class="text-right">{{ sales|number_format(2) }}</th>
