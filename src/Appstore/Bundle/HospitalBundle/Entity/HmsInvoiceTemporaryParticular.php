@@ -23,7 +23,6 @@ class HmsInvoiceTemporaryParticular
      */
     private $id;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsInvoiceTemporaryParticular" , cascade={"detach","merge"} )
      **/
@@ -34,9 +33,8 @@ class HmsInvoiceTemporaryParticular
      **/
     private $particular;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceTemporaryParticulars")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private $user;
 

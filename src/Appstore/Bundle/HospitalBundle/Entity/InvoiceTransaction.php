@@ -44,12 +44,12 @@ class InvoiceTransaction
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceCreatedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceApprovedBy" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
     private  $approvedBy;
 

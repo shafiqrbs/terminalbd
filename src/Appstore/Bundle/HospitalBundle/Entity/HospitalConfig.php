@@ -84,11 +84,7 @@ class HospitalConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="hospitalConfig")
      **/
     private $particulars;
-
-     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hospitalConfig")
-     **/
-    private $services;
+    
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular", mappedBy="hospitalConfig")
