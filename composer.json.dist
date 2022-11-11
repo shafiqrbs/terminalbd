@@ -40,7 +40,6 @@
         "liuggio/excelbundle":"^2.0",
         "eightpoints/guzzle-bundle": "4.5.*",
         "friendsofsymfony/comment-bundle": "^2.0",
-        "codeitnowin/barcode": "^3.0",
         "mike42/escpos-php": "1.5.*",
         "divi/ajax-login-bundle": "dev-master",
         "xiidea/ez-maintenance": "^1.0",
@@ -48,7 +47,8 @@
         "symfony/validator": "^2.8",
         "symfony/security-acl": "^3.0",
         "ajaxray/php-watermark": "^0.1.1",
-        "beberlei/DoctrineExtensions": "^1.2"
+        "beberlei/doctrineextensions": "^1.2",
+        "lessclick-system/barcode": "^3.0"
     },
     "scripts": {
         "symfony-scripts": [
