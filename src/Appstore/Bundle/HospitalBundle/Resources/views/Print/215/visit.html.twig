@@ -113,7 +113,14 @@
                 <td colspan="2" class="bottom-border"><strong class="strong3">Address</strong>: {{ entity.customer.address|raw }}</td>
             </tr>
             <tr>
-                <td colspan="2" class="bottom-border"><strong class="strong3">Doctor</strong>: {{ entity.assignDoctor.name }}</td>
+                <td class="bottom-border"><strong class="strong3">Doctor</strong>: {{ entity.assignDoctor.name }}</td>
+                {% if entity.referredDoctor is not empty and entity.referredDoctor.isDoctor == 1 and entity.assignDoctor is not empty and  entity.referredDoctor.id != entity.assignDoctor.id %}
+                    <td class="bottom-border"><strong>Referred By:</strong> {{ entity.referredDoctor.name }}</td>
+                {% elseif entity.referredDoctor is not empty and entity.referredDoctor.isDoctor == 1 and entity.assignDoctor is empty %}
+                    <td class="bottom-border"><strong>Referred By:</strong> {{ entity.referredDoctor.name }}</td>
+                {% elseif entity.referredDoctor is not empty and entity.referredDoctor.isDoctor != 1  %}
+                    <td class="bottom-border"><strong>Referred By:</strong> {{ entity.referredDoctor.particularCode }}</td>
+                {% endif %}
             </tr>
             <tr>
                 <td colspan="2" class="bottom-border"><strong class="strong3">In words</strong>: {{ inWords }}</td>
