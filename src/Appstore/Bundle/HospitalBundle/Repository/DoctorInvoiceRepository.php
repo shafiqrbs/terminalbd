@@ -108,6 +108,70 @@ class DoctorInvoiceRepository extends EntityRepository
 
     }
 
+    public function  commissionDoctorSummary(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('dc');
+        $qb->join('dc.hmsInvoice','e');
+        $qb->join('dc.assignDoctor','ad');
+        $qb->select('sum(dc.payment) as payment');
+        $qb->addSelect('ad.name','ad.particularCode','ad.mobile');
+        $qb->addSelect('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal,sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('dc.process = :process')->setParameter('process', 'Paid') ;
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
+        if (!empty($data['startDate'])) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("dc.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($data['endDate'])) {
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("dc.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        $qb->groupBy('ad.id');
+        $qb->orderBy('ad.name','ASC');
+        $results = $qb->getQuery()->getArrayResult();
+        return $results;
+    }
+
+    public function  commissionServicesSummary(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('dc');
+        $qb->leftJoin('dc.hmsInvoice','e');
+        $qb->leftJoin('dc.hmsCommission','ad');
+        $qb->select('sum(dc.payment) as payment');
+        $qb->addSelect('ad.name');
+        $qb->addSelect('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal,sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('dc.process = :process')->setParameter('process', 'Paid') ;
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
+        if (!empty($data['startDate'])) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("dc.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($data['endDate'])) {
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("dc.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        $qb->groupBy('ad.id');
+        $qb->orderBy('ad.name','ASC');
+        $results = $qb->getQuery()->getArrayResult();
+        return $results;
+
+
+    }
+
     public function  userCommissionSummary(User $user,$data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();

@@ -39,7 +39,16 @@
                     <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                     <li><hr></li>
                     <li><strong>Patient status:</strong>&nbsp;{{  entity.process|capitalize }}</li>
-                    {% if entity.referredDoctor is not empty %}<li><strong>Referred By:</strong>&nbsp;{{ entity.referredDoctor.particularCode }}-{{ entity.referredDoctor.name }}</li>{% endif %}
+                    {% if entity.assignDoctor is not empty %}
+                        <li><strong>Consultant:</strong> {{ entity.assignDoctor.name }}</li>
+                    {% endif %}
+                    {% if entity.referredDoctor is not empty and entity.referredDoctor.isDoctor == 1 and entity.assignDoctor is not empty and  entity.referredDoctor.id != entity.assignDoctor.id %}
+                        <li><strong>Referred By:</strong> {{ entity.referredDoctor.name }}</li>
+                    {% elseif entity.referredDoctor is not empty and entity.referredDoctor.isDoctor == 1 and entity.assignDoctor is empty %}
+                        <li><strong>Referred By:</strong> {{ entity.referredDoctor.name }}</li>
+                    {% elseif entity.referredDoctor is not empty and entity.referredDoctor.isDoctor != 1  %}
+                        <li><strong>Referred By:</strong> {{ entity.referredDoctor.particularCode }}</li>
+                    {% endif %}
                 </ul>
             </td>
         </tr>

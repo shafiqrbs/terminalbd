@@ -250,6 +250,7 @@ class DoctorController extends Controller
                 $entity->removeSignatureUpload();
             }
             $entity->upload();
+            $entity->setIsDoctor(1);
             $entity->signatureUpload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(

@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class InvoiceReferredDoctorType extends AbstractType
+class InvoiceDoctorType extends AbstractType
 {
 
     /**
@@ -25,9 +25,13 @@ class InvoiceReferredDoctorType extends AbstractType
         $builder
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Referred/agent name')))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
-            ->add('doctorSignature','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature'))
+            ->add('doctorSignature','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature'))
             )
-            ->add('isDoctor',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
+            ->add('doctorSignatureBangla','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature'))
+            )
+            ->add('specialist','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>2,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature'))
+            )
+            ->add('sendToAccount',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
         ;
 
     }
@@ -47,7 +51,7 @@ class InvoiceReferredDoctorType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_referred_doctor';
+        return 'doctor';
     }
 
 

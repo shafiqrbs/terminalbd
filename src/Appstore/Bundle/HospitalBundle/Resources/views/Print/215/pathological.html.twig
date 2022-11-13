@@ -40,7 +40,7 @@
                         <li><label>Patient ID:</label> {{ entity.hmsInvoice.customer.customerId }}</li>
                         <li><label>Name:</label> {{ entity.hmsInvoice.customer.name }}</li>
                         <li><label>Sample:</label> {{ entity.particular.sepcimen }}</li>
-                        <li><label>Ref. By:</label> {% if entity.hmsInvoice.assignDoctor is not empty %}<strong>{{ entity.hmsInvoice.assignDoctor.name }}</strong>{% endif %}</li>
+                        <li><label>Doctor Name:</label> {% if entity.hmsInvoice.assignDoctor is not empty %}<strong>{{ entity.hmsInvoice.assignDoctor.name }}</strong>{% endif %}</li>
                     </ul>
                 </td>
                 <td class="" style="width:30%!important;">

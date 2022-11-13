@@ -52,9 +52,14 @@
                         <li><strong>Invoice: </strong>&nbsp;<strong>{{ entity.invoice }}</strong></li>
                         <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:i A') }}</strong></li>
                         <li><strong>Report:</strong>&nbsp;{{  entity.process|capitalize }}</li>
-                        {% if entity.referredDoctor is not empty and entity.referredDoctor.isDoctor == 1 %}
-                            <li><strong>Referred By:</strong> {{ entity.referredDoctor.doctor }}</li>
-                        {% elseif entity.referredDoctor is not empty %}
+                        {% if entity.assignDoctor is not empty %}
+                            <li><strong>Consultant:</strong> {{ entity.assignDoctor.name }}</li>
+                        {% endif %}
+                        {% if entity.referredDoctor is not empty and entity.referredDoctor.isDoctor == 1 and entity.assignDoctor is not empty and  entity.referredDoctor.id != entity.assignDoctor.id %}
+                            <li><strong>Referred By:</strong> {{ entity.referredDoctor.name }}</li>
+                        {% elseif entity.referredDoctor is not empty and entity.referredDoctor.isDoctor == 1 and entity.assignDoctor is empty %}
+                            <li><strong>Referred By:</strong> {{ entity.referredDoctor.name }}</li>
+                        {% elseif entity.referredDoctor is not empty and entity.referredDoctor.isDoctor != 1  %}
                             <li><strong>Referred By:</strong> {{ entity.referredDoctor.particularCode }}</li>
                         {% endif %}
                         {% if entity.parent is not empty %}

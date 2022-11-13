@@ -179,8 +179,75 @@
             <div class="clearfix">&nbsp;</div>
         </div>
         <div class="span4 payment-info" style="background:#eaecef; padding: 5px;">
-            <div class="row-fluid margin-bottom-10">
-                {{ form_widget(form.assignDoctor) }}
+            <div class="row-fluid margin-bottom-10" id="consultant-box">
+                <div class="span10">
+                {{ form_widget(form.consultant) }}
+                </div>
+                <div class="span2" style="margin-top: 2px">
+                    <a href="javascript:" id="show" class="pull-left btn yellow addDoctor"><i class="icon-medkit"></i></a>
+                </div>
+            </div>
+            <div id="consultant" style="background: #f6f7e9">
+            <div class="row-fluid" id="" style="margin-top: 5px">
+                <div class="span12 input-append-border">
+                    {{ form_widget(form.assignDoctor.name) }}
+                </div>
+            </div>
+            <div class="row-fluid" id="">
+                <div class="span6 input-append-border">
+                    {{ form_widget(form.assignDoctor.mobile) }}
+                </div>
+                <label class="custom-control  custom-checkbox span6">Send to Account
+                    {{ form_widget(form.assignDoctor.sendToAccount) }}
+                    <span class="custom-control-indicator"></span>
+                </label>
+            </div>
+            <div class="row-fluid" id="">
+                <div class="span12 input-append-border">
+                    {{ form_widget(form.assignDoctor.doctorSignature) }}
+                </div>
+            </div>
+            <div class="row-fluid" id="">
+                <div class="span12 input-append-border">
+                    {{ form_widget(form.assignDoctor.doctorSignatureBangla) }}
+                </div>
+            </div>
+            <div class="row-fluid" id="">
+                <div class="span12 input-append-border">
+                    {{ form_widget(form.assignDoctor.specialist) }}
+                </div>
+            </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row-fluid" id="referred-box">
+                <div class="span10">
+                    {{ form_widget(form.referredId) }}
+                </div>
+                <div class="span2" style="margin-top: 2px">
+                    <a href="javascript:" id="show" class="pull-left btn yellow referredId"><i class="icon-user"></i></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div id="referredDoctor" style="background: #f6f6f3; margin-top: 10px">
+                <div class="row-fluid" id="" >
+                    <div class="span12 input-append-border">
+                        {{ form_widget(form.referredDoctor.name) }}
+                    </div>
+                </div>
+                <div class="row-fluid" id="">
+                    <div class="span8 input-append-border">
+                        {{ form_widget(form.referredDoctor.mobile) }}
+                    </div>
+                    <label class="custom-control  custom-checkbox span4">&nbsp;&nbsp;Is Doctor
+                        {{ form_widget(form.referredDoctor.isDoctor) }}
+                        <span class="custom-control-indicator"></span>
+                    </label>
+                </div>
+                <div class="row-fluid" id="">
+                    <div class="span12 input-append-border">
+                        {{ form_widget(form.referredDoctor.doctorSignature) }}
+                    </div>
+                </div>
             </div>
             <div class="row-fluid margin-bottom-10">
                 <div class="span6">
@@ -260,6 +327,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="clearfix"></div>
             <div class="row-fluid">
                 <div class="span12">
@@ -269,44 +337,6 @@
                 </div>
                 <!--/span-->
             </div>
-            <div class="clearfix"></div>
-            <div class="row-fluid">
-                <div class="span10">
-                    <select id="referredId" name="referredId" class="select2 m-wrap span12">
-                        <option value="">Select Referred Doctor, Agent & PC</option>
-                        {% for doctor in referredDoctors %}
-                            <option value="{{ doctor.id }}">{{ doctor.particularCode }} - {{ doctor.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="span2">
-                    <a href="javascript:" id="show" style="border: 0.18em solid #0052cc!important" class="pull-left btn blue addCustomer"><i class="icon-medkit"></i></a>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="row-fluid customer" id="">
-                <div class="span12 input-append-border">
-                    {{ form_widget(form.referredDoctor.name) }}
-                </div>
-            </div>
-            <div class="row-fluid customer" id="">
-                <div class="control-group">
-                    <div class="controls">
-                        <label class="control-label" style="padding-left:15px">Is Doctor {{ form_widget(form.referredDoctor.isDoctor) }}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid customer" id="">
-                <div class="span12 input-append-border">
-                    {{ form_widget(form.referredDoctor.doctorSignature) }}
-                </div>
-            </div>
-            <div class="row-fluid customer" id="">
-                <div class="span12 input-append-border">
-                    {{ form_widget(form.referredDoctor.mobile) }}
-                </div>
-            </div>
-            <div class="clearfix"></div>
         </div>
     </div>
     <div class="row-fluid" style="padding-top: 13px">
@@ -347,6 +377,24 @@
     #receive-label{
         background:#4b4851;
         height: 54px;
+    }
+
+    #referred-box{
+        background: #4b4851;
+        margin-top: -5px;
+        padding-left: 12px;
+        padding-top: 7px;
+        padding-bottom: 5px;
+        margin-bottom: 7px!important;
+    }
+
+    #consultant-box{
+        background: #4b4851;
+        margin-top: -5px;
+        padding-left: 12px;
+        padding-top: 7px;
+        padding-bottom: 8px;
+        margin-bottom: 7px!important;
     }
 
     .discount-type {
@@ -406,5 +454,8 @@
     }
     .investigation-box{
         padding: 7px 15px!important;
+    }
+    #consultant , #referredDoctor{
+        display: none;
     }
 </style>

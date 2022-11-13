@@ -175,6 +175,14 @@ function formSubmit() {
         $( ".customer" ).slideToggle( "slow" );
     });
 
+    $("form#invoicePatientForm").on('click', '.addDoctor', function() {
+        $( "#consultant" ).slideToggle( "slow" );
+    });
+
+    $("form#invoicePatientForm").on('click', '.referredId', function() {
+        $( "#referredDoctor" ).slideToggle( "slow" );
+    });
+
     $(document).on('change', '#particular', function() {
         var url = $(this).val();
         if(url == ''){

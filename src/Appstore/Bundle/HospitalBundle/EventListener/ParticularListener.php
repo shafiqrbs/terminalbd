@@ -19,9 +19,12 @@ class ParticularListener
         $entity = $args->getEntity();
 
         if ($entity instanceof Particular) {
-            $lastCode = $this->getLastCode($args,$entity);
-            $entity->setCode((int)$lastCode + 1);
-            $entity->setParticularCode(sprintf("%s%s",$entity->getService()->getCode(), str_pad($entity->getCode(),5, '0', STR_PAD_LEFT)));
+          //  echo $entity->getId();
+            if($entity->getId() > 0) {
+                $lastCode = $this->getLastCode($args, $entity);
+                $entity->setCode((int)$lastCode + 1);
+                $entity->setParticularCode(sprintf("%s%s", $entity->getService()->getCode(), str_pad($entity->getCode(), 5, '0', STR_PAD_LEFT)));
+            }
         }
     }
 

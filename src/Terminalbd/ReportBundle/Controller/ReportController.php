@@ -660,6 +660,12 @@ class ReportController extends Controller
         $salesTodaySalesCommission          = $em->getRepository('HospitalBundle:DoctorInvoice')->commissionUserSummary($user,$data);
         $invoiceReturn   = $em->getRepository('HospitalBundle:HmsInvoiceReturn')->userInvoiceReturnAmount($user,$data);
 
+        $doctorSales   = $em->getRepository('HospitalBundle:Invoice')->assignDoctorInvoice($user,$data);
+        $referredSales   = $em->getRepository('HospitalBundle:Invoice')->referredInvoice($user,$data);
+        $commissionDoctorSummary   = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->commissionDoctorSummary($user,$data);
+        $commissionServicesSummary   = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->commissionServicesSummary($user,$data);
+
+
         return $this->render('ReportBundle:Hospital:index.html.twig', array(
 
             'diagnosticOverview' => $diagnosticOverview,
@@ -676,11 +682,73 @@ class ReportController extends Controller
             'userSalesTodaySalesCommission'     => $userSalesTodaySalesCommission,
             'invoiceReturn'                     => $invoiceReturn ,
             'userInvoiceReturn'                 => $userInvoiceReturn ,
+            'doctorSales'                 => $doctorSales ,
+            'referredSales'                 => $referredSales ,
+            'commissionDoctorSummary'                 => $commissionDoctorSummary ,
+            'commissionServicesSummary'                 => $commissionServicesSummary ,
             'summary' => $summary,
             'searchForm' => $data,
             'option' => $globalOption,
 
         ));
+    }
+
+    /**
+     * @Route("/sales-hospital-invoice", methods={"GET", "POST"}, name="hms_report_hospital_invoice")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsSalesInvoiceAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
+        $anesthesiaDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssistantDoctor($hospital);
+        $departments = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDepartments($hospital);
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getHospitalProcess($hospital);
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getReferredDoctors($hospital);
+
+        return $this->render('ReportBundle:Hospital/Sales:invoice.html.twig', array(
+            'employees' => $employees,
+            'assignDoctors' => $assignDoctors,
+            'anesthesiaDoctors' => $anesthesiaDoctors,
+            'referredDoctors' => $referredDoctors,
+            'departments' => $departments,
+            'processes' => $processes,
+            'searchForm' => $data,
+            'option' => $user->getGlobalOption(),
+
+        ));
+    }
+
+    /**
+     * @Route("/sales-hospital-invoice-load", methods={"GET", "POST"}, name="hms_report_hospital_invoice_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function hmsSalesInvoiceAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        if(isset($data['startDate']) and $data['endDate']) {
+            $entities = $em->getRepository('HospitalBundle:Invoice')->reportHmsLists($user , $data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Hospital/Sales:invoice-ajax.html.twig', array(
+                    'entities' => $entities,
+                    'option' => $user->getGlobalOption(),
+                    'searchForm' => $data,
+                )
+            );
+            return new Response($htmlProcess);
+        }
+        return new Response('Record Does not found');
     }
 
     /**

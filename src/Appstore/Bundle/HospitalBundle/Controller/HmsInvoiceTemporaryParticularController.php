@@ -73,11 +73,12 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $hospital = $option->getHospitalConfig();
         $editForm = $this->createInvoiceCustomerForm($entity);
         $editForm->handleRequest($request);
-        $referredId = $request->request->get('referredId');
         $discountType = $request->request->get('discountType');
         $patientId = $request->request->get('customerId');
         $admissionId = $request->request->get('admissionId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
+        $referredId =$data['referredId'];
+        $consultantId = $data['consultant'];
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
         $entity->setService($service);
@@ -99,9 +100,17 @@ class HmsInvoiceTemporaryParticularController extends Controller
             $entity->setCustomer($customer);
             $entity->setMobile($mobile);
         }
+        if(!empty($data['assignDoctor']['name']) && !empty($data['assignDoctor']['mobile'])) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['assignDoctor']['mobile']);
+            $doctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingDoctor($hospital , $mobile,$data);
+            $entity->setAssignDoctor($doctor);
+        }elseif(!empty($consultantId)){
+            $consultant = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->find($consultantId);
+            $entity->setAssignDoctor($consultant);
+        }
         if(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
-            $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingCustomer($hospital , $mobile,$data);
+            $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingReferred($hospital , $mobile,$data);
             $entity->setReferredDoctor($referred);
         }elseif(!empty($referredId)){
             $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->find($referredId);

@@ -197,11 +197,13 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function findHmsExistingReferred($hospital, $mobile = '',$data)
+    public function findHmsExistingReferred($hospital, $mobile,$data)
     {
         $em = $this->_em;
-        $name = $data['name'];
-        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'name' => $name));
+        $name = $data['referredDoctor']['name'];
+        $doctorSignature = $data['referredDoctor']['doctorSignature'];
+        $isDoctor = isset($data['referredDoctor']['isDoctor']) ? 1 : 0;
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
         if($entity){
             return $entity;
         }else{
@@ -209,6 +211,8 @@ class ParticularRepository extends EntityRepository
             $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
             $entity->setMobile($mobile);
             $entity->setName($name);
+            $entity->setDoctorSignature($doctorSignature);
+            $entity->setIsDoctor($isDoctor);
             $entity->setHospitalConfig($hospital);
             $em->persist($entity);
             $em->flush($entity);
@@ -217,6 +221,34 @@ class ParticularRepository extends EntityRepository
 
     }
 
+    public function findHmsExistingDoctor($hospital, $mobile,$data)
+    {
+        $em = $this->_em;
+        $name = $data['assignDoctor']['name'];
+        $doctorSignature = $data['assignDoctor']['doctorSignature'];
+        $doctorSignatureBangla = $data['assignDoctor']['doctorSignatureBangla'];
+        $specialist = $data['assignDoctor']['specialist'];
+        $account = isset($data['assignDoctor']['sendToAccount']) ? 1 : 0;
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 5 ,'name' => $name));
+        if($entity){
+            return $entity;
+        }else{
+            $entity = new Particular();
+            $entity->setService($em->getRepository('HospitalBundle:Service')->find(5));
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setDoctorSignature($doctorSignature);
+            $entity->setDoctorSignatureBangla($doctorSignatureBangla);
+            $entity->setSpecialist($specialist);
+            $entity->setIsDoctor(1);
+            $entity->setSendToAccount($account);
+            $entity->setHospitalConfig($hospital);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+
+    }
 
     public function getPurchaseUpdateQnt(HmsPurchase $purchase){
 

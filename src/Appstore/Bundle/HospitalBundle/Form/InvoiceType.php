@@ -52,10 +52,11 @@ class InvoiceType extends AbstractType
             ))
             ->add('discountCalculation','number', array('attr'=>array('class'=>'tooltips initialDiscount span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter valid discount amount','autocomplete'=>'off'),
             ))
-            ->add('assignDoctor', 'entity', array(
+            ->add('consultant', 'entity', array(
                 'required'    => false,
+                'mapped'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'doctor',
+                'property' => 'particularNameCode',
                 'empty_value' => '---Select Consultant/Doctor---',
                 'attr'=>array('class'=>'span12 m-wrap select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -64,6 +65,24 @@ class InvoiceType extends AbstractType
                         ->andWhere("e.service = 5")
                         ->andWhere("e.status = 1")
                         ->orderBy("e.name","ASC");
+                }
+            ))
+            ->add('referredId', 'entity', array(
+                'required'    => false,
+                'mapped'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'particularNameCode',
+                'empty_value' => '---Select Referred---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'query_builder' => function(EntityRepository $er){
+                    $qb =  $er->createQueryBuilder('e');
+                    $qb->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId());
+                   // $qb    ->andWhere("e.service IN (:services)")->getParameter('services',array(5,6));
+                    $qb->andWhere("e.service IN (:services)")->setParameter('services', array('5','6'));
+                    $qb    ->andWhere("e.status = 1");
+                  //  $qb    ->andWhere("e.service = 6");
+                    $qb    ->orderBy("e.name","ASC");
+                    return $qb;
                 }
             ))
             ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
@@ -130,6 +149,7 @@ class InvoiceType extends AbstractType
             ))
         ;
         $builder->add('referredDoctor', new InvoiceReferredDoctorType());
+        $builder->add('assignDoctor', new InvoiceDoctorType());
         $builder->add('customer', new CustomerForHospitalType());
     }
     

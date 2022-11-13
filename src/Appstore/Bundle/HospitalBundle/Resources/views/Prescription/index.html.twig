@@ -112,7 +112,7 @@
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
                                         <div class="span3">
-                                            <select name="doctor" id="doctor" class="m-wrap span12">
+                                            <select name="doctor" id="doctor" class="m-wrap span12 select2">
                                                 <option value="" >--Assign Doctor--</option>
                                                 {% for doctor in assignDoctors %}
                                                     <option {% if searchForm.doctor is defined and searchForm.doctor == doctor.id %} selected="selected" {% endif %} value="{{ doctor.id }}" >{{ doctor.name }}</option>
@@ -120,7 +120,7 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <select name="referred" id="referred" class="m-wrap span12">
+                                            <select name="referred" id="referred" class="m-wrap span12 select2">
                                                 <option value="" >--Referred--</option>
                                                 {% for referred in referredDoctors %}
                                                     <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
@@ -128,7 +128,7 @@
                                             </select>
                                         </div>
                                         <div class="span3">
-                                            <select name="diseasesProfile" id="diseasesProfile" class="m-wrap span12">
+                                            <select name="diseasesProfile" id="diseasesProfile" class="m-wrap span12 select2">
                                                 <option value="" >--Diseases Profile--</option>
                                                 {% for profile in diseasesProfiles %}
                                                     <option {% if searchForm.diseasesProfile is defined and searchForm.diseasesProfile == profile.id %} selected="selected" {% endif %} value="{{ profile.id }}" >{{ profile.name }}</option>
@@ -180,6 +180,7 @@
                                     <th class="numeric" >Doctor</th>
                                     <th class="numeric" >Diseases</th>
                                     <th class="numeric" >Specialization</th>
+                                    <th class="numeric" >Referred</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Process</th>
@@ -214,6 +215,7 @@
                                         <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.diseasesProfile is not empty %}{{ entity.diseasesProfile.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.specialization is not empty %}{{ entity.specialization.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >
