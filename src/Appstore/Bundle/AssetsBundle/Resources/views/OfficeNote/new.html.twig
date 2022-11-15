@@ -45,11 +45,6 @@
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}
                         <!-- BEGIN FORM-->
-                        <div class="clearfix"><br/></div>
-                        <div class="form-actions portlet box yellow">
-                            <div class="portlet-title">  <div class="caption"><i class="icon-reorder"></i>Disposal Information</div></div>
-                        </div>
-                        <div class="clearfix"><br/></div>
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
@@ -92,16 +87,16 @@
                                             <div class="controls">
                                                 <div class="fileupload fileupload-new" data-provides="fileupload">
                                                     <div class="input-append span12">
-                                                        <div class="uneditable-input">
+                                                        <div class="uneditable-input span12">
                                                             <i class="icon-file fileupload-exists"></i>
                                                             <span class="fileupload-preview"></span>
                                                         </div>
                                                         <span class="btn btn-file">
-													<span class="fileupload-new blue">Select file</span>
-													<span class="fileupload-exists">Change</span>
-                                                            {{ form_widget(form.file) }}
-                                                            {{ form_errors(form.file) }}
-													</span>
+                                                        <span class="fileupload-new blue">Select file</span>
+                                                        <span class="fileupload-exists">Change</span>
+                                                                {{ form_widget(form.file) }}
+                                                                {{ form_errors(form.file) }}
+                                                        </span>
                                                         <a href="#" class="btn fileupload-exists red" data-dismiss="fileupload">Remove</a>
                                                     </div>
                                                 </div>

@@ -783,22 +783,24 @@ class InvoiceAdmissionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
+        /* @var $entity Invoice */
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$inventory,'invoice'=>$invoice));
-        $entity->setApprovedBy($this->getUser());
         if($process == 'confirm'){
             if($entity->getProcess() == 'Release'){
                 $entity->setProcess('Released');
             }elseif($entity->getProcess() == 'Death'){
                 $entity->setProcess('Dead');
             }
+            $entity->setApprovedBy($this->getUser());
+            $date = new \DateTime();
+            $entity->setReleaseDate($date);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->removePendingTransaction($entity);
             $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->insertHospitalFinalAccountInvoice($entity);
         }elseif($process == 'cancel'){
             $entity->setProcess('Admitted');
         }
-
         $em->flush();
-        exit;
+        return new Response('success');
     }
 
     public function admittedAction()

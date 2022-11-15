@@ -128,7 +128,11 @@ class HmsInvoiceTemporaryParticularController extends Controller
 	        $entity->setPaymentStatus("Paid");
 	        $entity->setDue(0);
         }
-	    $entity->setProcess('In-progress');
+        if($data['isHold'] == 1){
+            $entity->setProcess('Hold');
+        }else{
+            $entity->setProcess('In-progress');
+        }
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
         $entity->setPaymentInWord($amountInWords);
         $em->persist($entity);
@@ -141,6 +145,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         if($hospital->getInitialDiagnosticShow() != 1){
             $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
         }
+
         return new Response($entity->getId());
 
     }

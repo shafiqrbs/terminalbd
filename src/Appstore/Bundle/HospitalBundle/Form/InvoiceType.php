@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -84,6 +85,10 @@ class InvoiceType extends AbstractType
                     $qb    ->orderBy("e.name","ASC");
                     return $qb;
                 }
+            ))
+            ->add('isHold',CheckboxType::class, array(
+                'attr'=>array('class'=>'tooltips custom-control-input','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero')
+                ,'required'=> false,'mapped'=> false
             ))
             ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))

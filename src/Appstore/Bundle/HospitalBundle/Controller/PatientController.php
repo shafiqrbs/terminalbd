@@ -98,6 +98,73 @@ class PatientController extends Controller
 
     }
 
+    public function assignDoctorSelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticularIdName($config,array(5,6));
+        $items = array();
+            $items[] = array('value' => '','text'=> '-Change Doctor-');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity['id'],'text'=> $entity['particularCode'].'-'.$entity['name']);
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Doctor');
+        return new JsonResponse($items);
+
+    }
+
+    public function referredDoctorSelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticularIdName($config,array(5,6));
+        $items = array();
+        $items[] = array('value' => '','text'=> '-Change Referred-');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity['id'],'text'=> $entity['particularCode'].'-'.$entity['name']);
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Referred');
+        return new JsonResponse($items);
+
+    }
+
+    public function cabinSelectAction(Invoice $invoice)
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $cabin = ($invoice->getCabin()) ? $invoice->getCabin()->getId() : 0;
+        $cabins = $this->getDoctrine()->getRepository(Invoice::class)->getExistCabin($config,$cabin);
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getCurrentCabins($config,2,$cabins);
+        $items = array();
+        $items[] = array('value' => '','text'=> '-Change Patient Cabin-');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity['id'],'text'=> $entity['name']);
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Cabin');
+        return new JsonResponse($items);
+
+    }
+
+    public function inlinePatientUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository(Invoice::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        if($data['name']){
+            $filedName= "set{$data['name']}";
+            $setValue = $em->getRepository(Particular::class)->find($data['value']);
+            if($setValue){
+                $entity->$filedName($setValue);
+            }else {
+                $entity->$filedName(NULL);
+            }
+        }
+        $em->persist($entity);
+        $em->flush();
+        exit;
+
+    }
+
 
 
 }

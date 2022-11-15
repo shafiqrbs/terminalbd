@@ -68,7 +68,7 @@ class InvoicePatientType extends AbstractType
                   'query_builder' => function(EntityRepository $er){
                       return $er->createQueryBuilder('e')
                           ->where("e.service = 6")
-                          ->orderBy("e.name","ASC");
+                          ->orderBy("e.particularCode","ASC");
                   }
 
             ))

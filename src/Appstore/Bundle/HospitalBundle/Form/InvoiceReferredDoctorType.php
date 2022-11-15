@@ -23,11 +23,11 @@ class InvoiceReferredDoctorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Referred/agent name')))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
-            ->add('doctorSignature','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature'))
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Referred/agent name'),'required'=> false))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no'),'required'=> false))
+            ->add('doctorSignature','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 4,'autocomplete'=>'off','placeholder'=>'Enter Doctor signature'),'required'=> false)
             )
-            ->add('isDoctor',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
+            ->add('isDoctor',CheckboxType::class,  array('attr'=> array('class'=>'custom-control-input'),'required'=> false))
         ;
 
     }

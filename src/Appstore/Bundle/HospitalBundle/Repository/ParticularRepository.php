@@ -253,15 +253,10 @@ class ParticularRepository extends EntityRepository
     public function getPurchaseUpdateQnt(HmsPurchase $purchase){
 
         $em = $this->_em;
-
         /** @var HmsPurchaseItem $purchaseItem */
-
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
-
             /** @var Particular  $particular */
-
             $particular = $purchaseItem->getParticular();
-            
             $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
             $particular->setPurchaseQuantity($qnt);
             $em->persist($particular);
@@ -271,9 +266,6 @@ class ParticularRepository extends EntityRepository
     }
 
     public function insertAccessories(Invoice $invoice){
-
-        $em = $this->_em;
-
         $em = $this->_em;
         /** @var InvoiceParticular $item */
         if(!empty($invoice->getInvoiceParticulars())){
@@ -296,9 +288,7 @@ class ParticularRepository extends EntityRepository
         /** @var InvoiceParticular $item */
         if(!empty($invoice->getStockOutItems())){
             foreach($invoice->getStockOutItems() as $item ){
-
             	/** @var Particular  $particular */
-
                 $particular = $item->getParticular();
 	            $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
 	            $particular->setSalesQuantity($qnt);
@@ -400,6 +390,19 @@ class ParticularRepository extends EntityRepository
         if($cabins){
             $qb->andWhere('e.id NOT IN (:cabins)')->setParameter('cabins', $cabins);
         }
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function getParticularIdName($config,$services)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id', 'e.name as name','e.particularCode as particularCode');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
+        $qb->andWhere('e.status = 1');
+        $qb->andWhere('e.service IN (:service)')->setParameter('service', $services);
+        $qb->orderBy('e.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }

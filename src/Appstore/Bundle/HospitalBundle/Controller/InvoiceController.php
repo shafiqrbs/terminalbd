@@ -494,6 +494,12 @@ class InvoiceController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
         if ($inventory == $entity->getHospitalConfig()->getId()) {
+            if(in_array($entity->getProcess(),['Hold','Created','Revised','Pending'])){
+                $em = $this->getDoctrine()->getManager();
+                $entity->setProcess('In-progress');
+                $em->persist($entity);
+                $em->flush();
+            }
             $editForm = $this->createInvoicePaymentForm($entity, new InvoiceTransaction());
             return $this->render('HospitalBundle:Invoice:confirm.html.twig', array(
                 'entity' => $entity,

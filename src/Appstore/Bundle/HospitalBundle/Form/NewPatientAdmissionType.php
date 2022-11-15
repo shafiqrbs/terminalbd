@@ -116,7 +116,7 @@ class NewPatientAdmissionType extends AbstractType
                         ->where("b.status = 1")
                         ->andWhere('b.service IN(:service)') ->setParameter('service',array_values(array(5,6)))
                         ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
-                        ->orderBy("b.name", "ASC");
+                        ->orderBy("b.particularCode", "ASC");
                 }
             ))
 

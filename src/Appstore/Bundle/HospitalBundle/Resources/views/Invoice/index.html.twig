@@ -205,13 +205,14 @@
                                 <thead class="flip-content ">
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Created By</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >IPD No</th>
-                                    <th class="numeric" >Doctor</th>
-                                    <th class="numeric" >Referred</th>
                                     <th class="numeric" >CustomerID</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Doctor</th>
+                                    <th class="numeric" >Referred</th>
                                     <th class="numeric" >Delivery Date</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
@@ -224,20 +225,33 @@
                                 </thead>
                                 <tbody>
                                 {% set processArr = {'In-progress':'In-progress'} %}
-                                {% set processIntArr = ['Created','Pending','Revised','In-progress'] %}
+                                {% set processIntArr = ['Created','Pending','Revised','In-progress','Hold'] %}
+                                {% set processEdit = ['Created','Pending','Revised','In-progress','Hold'] %}
                                 {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due' ,'Paid':'Paid'} %}
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y h:i A') }}</td>
+                                        <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.parent is not empty %}<a target="_blank" href="{{ path('hms_invoice_admission_show',{'id':entity.id}) }}">{{ entity.parent.invoice }}</a>{% endif %}</td>
-                                        <td class="numeric" >{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</td>
-                                        <td class="numeric" >
-                                            {% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}
-                                        </td>
+
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
+                                        <td class="numeric" >
+                                            {% if (entity.process in processEdit and entity.assignDoctor is empty ) or (app.user.granted("ROLE_DOMAIN")) %}
+                                                <a  data-type="select" class="editable" id="AssignDoctor" data-name="AssignDoctor" href="javascript:" data-source="{{ path('hms_patient_assign_doctor') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ entity.id }}"  value="{% if entity.assignDoctor is defined and entity.assignDoctor is not empty  %}{{  entity.assignDoctor.id }}{% endif %}" data-value="{% if entity.assignDoctor is defined and entity.assignDoctor is not empty  %}{{  entity.assignDoctor.id }}{% endif %}" data-original-title="Enter doctor name">{% if entity.assignDoctor is defined and entity.assignDoctor is not empty  %}{{  entity.assignDoctor.name }}{% endif %}</a>
+                                            {% else %}
+                                                {% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }} {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        <td class="numeric" >
+                                            {% if (entity.process in processEdit and entity.assignDoctor is empty ) or (app.user.granted("ROLE_DOMAIN")) %}
+                                                <a  data-type="select" class="editable" id="ReferredDoctor" data-name="ReferredDoctor" href="javascript:" data-source="{{ path('hms_patient_assign_referred') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ entity.id }}"  value="{% if entity.referredDoctor is defined and entity.referredDoctor is not empty  %}{{  entity.referredDoctor.id }}{% endif %}" data-value="{% if entity.referredDoctor is defined and entity.referredDoctor is not empty  %}{{  entity.referredDoctor.id }}{% endif %}" data-original-title="Enter referred name">{% if entity.referredDoctor is defined and entity.referredDoctor is not empty  %}{{  entity.referredDoctor.name }}{% endif %}</a>
+                                            {% else %}
+                                                {% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }} {% endif %}
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" >{{ entity.deliveryDateTime }}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
@@ -254,7 +268,7 @@
                                         </td>
                                         <td class="numeric" >{% if entity.commissionApproved == 1 %}{{ entity.updated|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" >
-                                            {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
+                                            {% if (entity.paymentStatus in  PaymentArr|keys and  entity.process in processIntArr and entity.invoiceParticulars|length > 0) %}
                                                 <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-refresh"></i> Process</a>
                                             {% endif %}
                                             {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") and  entity.process in processIntArr )  %}
@@ -306,14 +320,16 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/diagnostic.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
-    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+        '@HospitalBundle/Resources/public/js/diagnostic.js'
+        '@HospitalBundle/Resources/public/js/approveProcess.js'
+        '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+        '@HospitalBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    EditableWithOutReloadInit();
     $(document).on('click', '.print', function(e){});
 {% endblock %}

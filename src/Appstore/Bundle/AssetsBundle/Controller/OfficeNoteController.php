@@ -39,7 +39,7 @@ class OfficeNoteController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
-		$entities = $em->getRepository('AssetsBundle:OfficeNote')->findAll();
+		$entities = $em->getRepository('AssetsBundle:OfficeNote')->findBy(array(),array('updated'=>'DESC'));
 		$pagination = $this->paginate($entities);
 		return $this->render('AssetsBundle:OfficeNote:index.html.twig', array(
 			'entities' => $pagination,

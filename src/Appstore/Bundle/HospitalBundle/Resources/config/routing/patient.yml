@@ -20,6 +20,33 @@ hms_patient_invoice_details:
     options:
         expose: true
 
+hms_patient_assign_doctor:
+    path:     /assign-doctor-search
+    defaults: { _controller: "HospitalBundle:Patient:assignDoctorSelect" }
+    options:
+        expose: true
+
+hms_patient_assign_referred:
+    path:     /assign-referred-search
+    defaults: { _controller: "HospitalBundle:Patient:referredDoctorSelect" }
+    options:
+        expose: true
+
+hms_patient_cabin_search:
+    path:     /{id}/inline-cabin-search
+    defaults: { _controller: "HospitalBundle:Patient:cabinSelect" }
+    options:
+        expose: true
+
+hms_patient_inline_update:
+    path:     /inline-patient-update
+    defaults: { _controller: "HospitalBundle:Patient:inlinePatientUpdate" }
+    methods:  POST
+    options:
+        expose: true
+
+
+
 hms_patient_info:
     path:      /{invoice}/info
     defaults: { _controller: "HospitalBundle:Patient:patientInfo" }
