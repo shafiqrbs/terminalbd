@@ -63,43 +63,9 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Requested By</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.requestedBy) }}{{ form_errors(form.requestedBy) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
                                             <label class="control-label" for="firstName">Content</label>
                                             <div class="controls">
                                                 {{ form_widget(form.content) }}{{ form_errors(form.content) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Attach file</label>
-                                            <div class="controls">
-                                                <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                    <div class="input-append span12">
-                                                        <div class="uneditable-input span12">
-                                                            <i class="icon-file fileupload-exists"></i>
-                                                            <span class="fileupload-preview"></span>
-                                                        </div>
-                                                        <span class="btn btn-file">
-                                                        <span class="fileupload-new blue">Select file</span>
-                                                        <span class="fileupload-exists">Change</span>
-                                                                {{ form_widget(form.file) }}
-                                                                {{ form_errors(form.file) }}
-                                                        </span>
-                                                        <a href="#" class="btn fileupload-exists red" data-dismiss="fileupload">Remove</a>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -110,12 +76,32 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
+                                            <label class="control-label" for="firstName">Note Mode<span class="required">*</span></label>
+                                            <div class="controls">
+                                                {{ form_widget(form.noteMode) }}{{ form_errors(form.noteMode) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
                                             <label class="control-label" for="firstName">Ref. No<span class="required">*</span></label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-sort-by-order"></i>
                                                     {{ form_widget(form.meetingNoteNo) }}{{ form_errors(form.meetingNoteNo) }}
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Requested By</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.requestedBy) }}{{ form_errors(form.requestedBy) }}
                                             </div>
                                         </div>
                                     </div>
@@ -153,6 +139,30 @@
                                             <label class="control-label" for="firstName">Process</label>
                                             <div class="controls">
                                                 {{ form_widget(form.process) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Attach file</label>
+                                    <div class="controls">
+                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                            <div class="input-append span12">
+                                                <div class="uneditable-input span12">
+                                                    <i class="icon-file fileupload-exists"></i>
+                                                    <span class="fileupload-preview"></span>
+                                                </div>
+                                                <span class="btn btn-file">
+                                                        <span class="fileupload-new blue">Select file</span>
+                                                        <span class="fileupload-exists">Change</span>
+                                                                {{ form_widget(form.file) }}
+                                                    {{ form_errors(form.file) }}
+                                                        </span>
+                                                <a href="#" class="btn fileupload-exists red" data-dismiss="fileupload">Remove</a>
                                             </div>
                                         </div>
                                     </div>

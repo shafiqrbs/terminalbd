@@ -28,7 +28,7 @@ class OfficeNoteType extends AbstractType
 
 		    ->add('meetingNoteNo',TextType::class, array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  serial no')))
 		    ->add('name',TextType::class, array('attr'=>array('class'=>'m-wrap span12','rows' => 5,'placeholder'=>'Enter disposal narration')))
-		    ->add('content',TextareaType::class, array('attr'=>array('class'=>'m-wrap span12','rows' => 5,'placeholder'=>'Enter disposal narration')))
+		    ->add('content',TextareaType::class, array('attr'=>array('class'=>'m-wrap span12 editor','rows' => 8,'placeholder'=>'Enter disposal narration')))
 		    ->add('requestedBy',TextType::class, array('attr'=>array('class'=>'m-wrap span12','rows' => 5,'placeholder'=>'Enter disposal narration')))
 		    ->add('amount',TextType::class, array('attr'=>array('class'=>'m-wrap span12','rows' => 5,'placeholder'=>'Enter disposal narration')))
 		    ->add('meetingDate', DateType::class, array(
@@ -45,6 +45,16 @@ class OfficeNoteType extends AbstractType
 				    'Hold' => 'Hold',
 			    ),
 		    ))
+            ->add('noteMode', 'choice', array(
+                'required'    => true,
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'choices' => array(
+                    'InHouse-Issue' => 'InHouse-Issue',
+                    'Club-Issue' => 'Club-Issue',
+                    'Local-Purchase' => 'Local-Purchase',
+                    'International-Purchase' => 'International-Purchase'
+                ),
+            ))
             ->add('file','file')
 	    ;
 

@@ -348,14 +348,20 @@ function formSubmit() {
                     $('#saveDiagnosticButton').html("Please Wait...").attr('disabled', 'disabled');
                 },
                 success: function(response){
+                    obj = JSON.parse(response);
+                    $('#consultant,#referredDoctor').hide();
+                    $("#appstore_bundle_hospitalbundle_invoice_consultant").html(obj['doctors']);
+                    $("#appstore_bundle_hospitalbundle_invoice_referredId").html(obj['referreds']);
                     $('form#invoicePatientForm')[0].reset();
                     $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
                     $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                     $('#appstore_bundle_hospitalbundle_invoice_discount').val(0);
                     $('#invoiceParticulars').hide();
-                    $("#appstore_bundle_hospitalbundle_invoice_assignDoctor").select2().select2("val","");
-                    $("#referredId").select2().select2("val","");
-                    window.open('/hms/invoice/'+response+'/print', '_blank');
+                    $("#appstore_bundle_hospitalbundle_invoice_consultant").select2().select2("val","");
+                    $("#appstore_bundle_hospitalbundle_invoice_referredId").select2().select2("val","");
+                    if(obj['process'] === "In-progress"){
+                        window.open('/hms/invoice/'+obj['entity']+'/print', '_blank');
+                    }
                 }
             });
 

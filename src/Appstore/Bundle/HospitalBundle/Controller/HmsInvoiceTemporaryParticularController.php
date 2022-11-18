@@ -128,7 +128,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
 	        $entity->setPaymentStatus("Paid");
 	        $entity->setDue(0);
         }
-        if($data['isHold'] == 1){
+        if(isset($data['isHold']) and $data['isHold'] == 1){
             $entity->setProcess('Hold');
         }else{
             $entity->setProcess('In-progress');
@@ -142,11 +142,22 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
         $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
+
+        $doctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticulars($hospital->getId(),array(5));
+        $referreds = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticulars($hospital->getId(),array(5,6));
         if($hospital->getInitialDiagnosticShow() != 1){
             $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
         }
+        $data = array(
+            'doctors' => $doctors,
+            'referreds' => $referreds,
+            'entity' => $entity->getId(),
+            'process' => $entity->getProcess(),
+            'success' => 'success'
+        );
+        return new Response(json_encode($data));
 
-        return new Response($entity->getId());
+
 
     }
 

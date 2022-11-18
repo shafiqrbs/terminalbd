@@ -118,6 +118,26 @@ class ParticularRepository extends EntityRepository
             return  $qb;
     }
 
+    public function getParticulars($hospital,$services){
+
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.service','s')
+            ->select('e.id')
+            ->addSelect('e.name')
+            ->addSelect('e.particularCode as code')
+            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
+            ->andWhere('s.id IN(:service)')
+            ->setParameter('service',array_values($services))
+            ->orderBy('e.name','ASC');
+        $results  = $qb->getQuery()->getArrayResult();
+        $selects = "";
+        foreach ($results as $row){
+            $selects .= "<option value='{$row['id']}'>{$row['code']}-{$row['name']}</option>";
+        }
+        return $selects;
+
+    }
+
     public function getMedicineParticular($hospital){
 
         $qb = $this->createQueryBuilder('e')

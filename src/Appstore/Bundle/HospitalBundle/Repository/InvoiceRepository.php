@@ -1312,7 +1312,7 @@ class InvoiceRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->andWhere('e.invoiceMode IN (:mode)')->setParameter('mode',array('visit','admission')) ;
+        $qb->andWhere('e.invoiceMode IN (:mode)')->setParameter('mode',array('visit','admission','diagnostic')) ;
         if($mode == "assign-doctor"){
             $qb->join('e.assignDoctor','d');
             $qb->select('d.id as id','d.name as name');

@@ -89,6 +89,14 @@ class OfficeNote
     private $process = "Draft";
 
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="noteMode", type="string", length=50, nullable=true)
+     */
+    private $noteMode;
+
+
      /**
      * @var integer
      *
@@ -572,6 +580,24 @@ class OfficeNote
     {
         $this->isDelete = $isDelete;
     }
+
+    /**
+     * @return string
+     */
+    public function getNoteMode()
+    {
+        return $this->noteMode;
+    }
+
+    /**
+     * @param string $noteMode
+     */
+    public function setNoteMode($noteMode)
+    {
+        $this->noteMode = $noteMode;
+    }
+
+
 
 }
 

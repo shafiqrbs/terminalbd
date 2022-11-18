@@ -741,6 +741,15 @@ class Builder extends ContainerAware
         $menu['Stock Inventory']->addChild('Stock Details', array('route' => 'assets_barcode_stock'));
         $menu['Stock Inventory']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
 
+         $menu
+            ->addChild('Master Data')
+            ->setAttribute('icon', 'icon-archive')
+            ->setAttribute('dropdown', true);
+        $menu['Master Data']->addChild('Club/Department',array('route' => 'assets_club'));
+        $menu['Master Data']->addChild('Brand',array('route' => 'assetsitembrand'));
+        $menu['Master Data']->addChild('Category',array('route' => 'assetscategory'));
+        $menu['Master Data']->addChild('Vendor',array('route' => 'assets_vendor'));
+
         $menu
             ->addChild('Fixed Assets')
             ->setAttribute('icon', 'icon-archive')
