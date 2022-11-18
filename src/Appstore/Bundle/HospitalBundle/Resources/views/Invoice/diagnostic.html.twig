@@ -33,6 +33,7 @@
                             </div>
                         </div>
                     </div>
+                    {% if  'admission' in hospital.invoiceProcess %}
                     <div class="span8">
                         <div class="">
                             <label class="control-label red" for="firstName">Admission ID</label>
@@ -41,6 +42,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="row-fluid patient-info">
                     <div class="span4">
@@ -93,13 +95,18 @@
         </div>
     </div>
     <div class="row-fluid investigation-box" style="padding-left: 15px" >
+        {% if hospital.advanceSearchParticular == 1 %}
+        <div class="row-fluid">
+            <div class="span12">{{ form_widget(form.particulars) }} </div>
+        </div>
+        {% else %}
         <div class="row-fluid">
             <div class="span7">
-            <select id="particular" name="particular" class="span12 m-wrap select2">
-                <option value="">Test Name, Accessories, Surgery etc. </option>
-                {{ particularService|raw }}
-            </select>
-        </div>
+                <select id="particular" name="particular" class="span12 m-wrap select2">
+                    <option value="">Test Name, Accessories, Surgery etc. </option>
+                    {{ particularService|raw }}
+                </select>
+            </div>
             <div class="span2">
             <div class="input-append span12" style="margin-bottom:0!important">
                 <div class="input-group">
@@ -112,7 +119,7 @@
                     </span>
                 </div>
             </div>
-        </div>
+            </div>
             <div class="span3">
             <div class="input-append span11" style="margin-bottom:0!important">
                 <input type="hidden" id="particularId" name="particularId" value="">
@@ -123,9 +130,7 @@
             </div>
         </div>
         </div>
-        {#<div class="row-fluid">
-            <div class="span12" id="instruction"></div>
-        </div>#}
+        {% endif %}
     </div>
     <div class="row-fluid" style="background:#ffffff!important;">
         <div class="span8" id="particular-table" >
@@ -300,8 +305,8 @@
             <div class="row-fluid">
                 <div class="span6"></div>
                 <div class="span6">
-                    <label class="custom-control  custom-checkbox span12 text-right">
-                        <strong>Is Hold</strong> {{ form_widget(form.isHold) }}
+                    <label class="custom-control  custom-checkbox span12 text-right" style="margin-top: -10px">
+                        <strong>Is Hold</strong>{{ form_widget(form.isHold) }}
                         <span class="custom-control-indicator"></span>
                     </label>
                 </div>

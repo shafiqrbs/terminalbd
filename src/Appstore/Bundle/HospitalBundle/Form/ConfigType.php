@@ -56,6 +56,7 @@ class ConfigType extends AbstractType
             ))
             ->add('prescriptionBuilder')
             ->add('commissionAutoApproved')
+            ->add('advanceSearchParticular')
             ->add('customPrint')
             ->add('invoicePrintLogo')
             ->add('isInvoiceTitle')

@@ -293,6 +293,7 @@ class InvoiceController extends Controller
 
     }
 
+
     public function addParticularAction(Request $request, Invoice $invoice)
     {
         $em = $this->getDoctrine()->getManager();

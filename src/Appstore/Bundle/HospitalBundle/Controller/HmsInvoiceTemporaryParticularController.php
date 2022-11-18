@@ -36,6 +36,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $subTotal = $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->getSubTotalAmount($user);
         $html = $this->renderView('HospitalBundle:Invoice:diagnostic.html.twig', array(
             'temporarySubTotal'   => $subTotal,
+            'hospital'   => $hospital,
             'initialDiscount'   => 0,
             'user'   => $user,
             'entity'   => $entity,
@@ -77,7 +78,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $patientId = $request->request->get('customerId');
         $admissionId = $request->request->get('admissionId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
-        $referredId =$data['referredId'];
+        $referredId = $data['referredId'];
         $consultantId = $data['consultant'];
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
@@ -142,15 +143,10 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
         $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
-
-        $doctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticulars($hospital->getId(),array(5));
-        $referreds = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticulars($hospital->getId(),array(5,6));
         if($hospital->getInitialDiagnosticShow() != 1){
             $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->removeInitialParticular($user);
         }
         $data = array(
-            'doctors' => $doctors,
-            'referreds' => $referreds,
             'entity' => $entity->getId(),
             'process' => $entity->getProcess(),
             'success' => 'success'
@@ -211,6 +207,23 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
         $price = $request->request->get('price');
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
+        $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->insertInvoiceItems($user, $invoiceItems);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($user,$msg);
+        return new Response(json_encode($result));
+
+
+    }
+
+     public function searchAddParticularAction(Particular $particular)
+    {
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $particularId =$particular->getId();
+        $quantity =1;
+        $price = $particular->getPrice() ;
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
         $this->getDoctrine()->getRepository('HospitalBundle:HmsInvoiceTemporaryParticular')->insertInvoiceItems($user, $invoiceItems);
         $msg = 'Particular added successfully';

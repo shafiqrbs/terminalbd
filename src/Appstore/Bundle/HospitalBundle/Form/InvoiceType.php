@@ -53,54 +53,20 @@ class InvoiceType extends AbstractType
             ))
             ->add('discountCalculation','number', array('attr'=>array('class'=>'tooltips initialDiscount span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Discount','data-original-title'=>'Enter valid discount amount','autocomplete'=>'off'),
             ))
-            ->add('consultant', 'entity', array(
-                'required'    => false,
-                'mapped'    => false,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'particularNameCode',
-                'empty_value' => '---Select Consultant/Doctor---',
-                'attr'=>array('class'=>'span12 m-wrap select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                        ->andWhere("e.service = 5")
-                        ->andWhere("e.status = 1")
-                        ->orderBy("e.name","ASC");
-                }
+            ->add('consultant','text', array('attr'=>array('class'=>'consultant select2 span12 m-wrap','placeholder'=>'Search consultant name','autocomplete'=>'off'),
+            'required'=> false,'mapped'=> false
             ))
-            ->add('referredId', 'entity', array(
-                'required'    => false,
-                'mapped'    => false,
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'particularNameCode',
-                'empty_value' => '---Select Referred---',
-                'attr'=>array('class'=>'span12 m-wrap select2'),
-                'query_builder' => function(EntityRepository $er){
-                    $qb =  $er->createQueryBuilder('e');
-                    $qb->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId());
-                   // $qb    ->andWhere("e.service IN (:services)")->getParameter('services',array(5,6));
-                    $qb->andWhere("e.service IN (:services)")->setParameter('services', array('5','6'));
-                    $qb    ->andWhere("e.status = 1");
-                  //  $qb    ->andWhere("e.service = 6");
-                    $qb    ->orderBy("e.name","ASC");
-                    return $qb;
-                }
+
+            ->add('referredId','text', array('attr'=>array('class'=>'referred select2 span12 m-wrap','placeholder'=>'Search referred name','autocomplete'=>'off'),
+            'required'=> false,'mapped'=> false
             ))
+
             ->add('isHold',CheckboxType::class, array(
                 'attr'=>array('class'=>'tooltips custom-control-input','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero')
                 ,'required'=> false,'mapped'=> false
             ))
             ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            /*->add('printFor', 'choice', array(
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'diagnostic' => 'Diagnostic',
-                    'visit' => 'Visit',
-                ),
-            ))*/
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -153,6 +119,12 @@ class InvoiceType extends AbstractType
                 }
             ))
         ;
+        if( $this->globalOption->getHospitalConfig()->isAdvanceSearchParticular() == 1 ){
+            $builder->add('particulars','text', array(
+                'attr'=>array('class'=>'particulars select2 span12 m-wrap','placeholder'=>'Test Name, Accessories, Surgery etc.','autocomplete'=>'off')
+            ,'required'=> false,'mapped'=> false
+            ));
+        }
         $builder->add('referredDoctor', new InvoiceReferredDoctorType());
         $builder->add('assignDoctor', new InvoiceDoctorType());
         $builder->add('customer', new CustomerForHospitalType());

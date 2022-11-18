@@ -60,6 +60,36 @@ class PatientController extends Controller
         return new JsonResponse($item);
     }
 
+    public function invoiceParticularSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig();
+            $item = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->searchParticularAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function invoiceDoctorSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig();
+            $item = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->searchDoctorReferredAutoComplete($item,$inventory,array(5));
+        }
+        return new JsonResponse($item);
+    }
+    
+    public function invoiceReferredSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig();
+            $item = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->searchDoctorReferredAutoComplete($item,$inventory,array(5,6));
+        }
+        return new JsonResponse($item);
+    }
+
     public function patientGlobalDetailsAction($invoice)
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();

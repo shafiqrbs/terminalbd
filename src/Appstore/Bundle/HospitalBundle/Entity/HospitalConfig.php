@@ -145,6 +145,13 @@ class HospitalConfig
      */
     private $isInventory = false;
 
+      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="advanceSearchParticular", type="boolean",  nullable = true)
+     */
+    private $advanceSearchParticular = false;
+
      /**
      * @var boolean
      *
@@ -1321,6 +1328,22 @@ class HospitalConfig
     public function setServices($services)
     {
         $this->services = $services;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdvanceSearchParticular()
+    {
+        return $this->advanceSearchParticular;
+    }
+
+    /**
+     * @param bool $advanceSearchParticular
+     */
+    public function setAdvanceSearchParticular($advanceSearchParticular)
+    {
+        $this->advanceSearchParticular = $advanceSearchParticular;
     }
 
 

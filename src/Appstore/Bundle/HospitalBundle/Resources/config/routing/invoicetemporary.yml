@@ -32,6 +32,13 @@ hms_invoice_temporary_particular_search:
     defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:particularSearch" }
 
 
+hms_invoice_temporary_particular_search_add:
+    path:     /{id}/particular-search-add
+    defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:searchAddParticular" }
+    methods:  GET
+    options:
+            expose: true
+
 hms_invoice_temporary_particular_add:
     path:     /particular-add
     defaults: { _controller: "HospitalBundle:HmsInvoiceTemporaryParticular:addParticular" }

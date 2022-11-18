@@ -7,6 +7,7 @@ use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
 use Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup;
 use Appstore\Bundle\HospitalBundle\Entity\HmsStockOut;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -459,5 +460,39 @@ class ParticularRepository extends EntityRepository
             }
         }
     }
+
+
+    public function searchParticularAutoComplete($q, HospitalConfig $config)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select("e.id as id");
+        $query->addSelect("CONCAT(e.particularCode,' - ',e.name,' => TK. ',e.price) as text");
+        $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
+        $query->andWhere('e.particularCode LIKE :searchTerm OR e.name LIKE :searchTerm');
+        $query->setParameter('searchTerm', '%'.trim($q).'%');
+        $query->andWhere('e.status =1');
+        $query->andWhere('e.service IN (:services)')->setParameter('services', array(1));
+        $query->orderBy('e.name', 'DESC');
+        $query->setMaxResults( '200' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchDoctorReferredAutoComplete($q, HospitalConfig $config,$services)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select("e.id as id");
+        $query->addSelect("CONCAT(e.particularCode,' - ',e.name) as text");
+        $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
+        $query->andWhere('e.particularCode LIKE :searchTerm OR e.name LIKE :searchTerm');
+        $query->setParameter('searchTerm', '%'.trim($q).'%');
+        $query->andWhere('e.status =1');
+        $query->andWhere('e.service IN (:services)')->setParameter('services',$services);
+        $query->orderBy('e.name', 'DESC');
+        $query->setMaxResults( '200' );
+        return $query->getQuery()->getResult();
+
+    }
+
 
 }

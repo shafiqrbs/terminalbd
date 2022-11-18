@@ -13,6 +13,29 @@ hms_patient_admission_invoice_search:
     options:
         expose: true
 
+hms_patient_select2_particular_search:
+    path:     /select2-particular-search
+    defaults: { _controller: "HospitalBundle:Patient:invoiceParticularSearch" }
+    methods:  GET
+    options:
+        expose: true
+
+hms_patient_select2_doctor_search:
+    path:     /select2-doctor-search
+    defaults: { _controller: "HospitalBundle:Patient:invoiceDoctorSearch" }
+    methods:  GET
+    options:
+        expose: true
+
+hms_patient_select2_referred_search:
+    path:     /select2-referred-search
+    defaults: { _controller: "HospitalBundle:Patient:invoiceReferredSearch" }
+    methods:  GET
+    options:
+        expose: true
+
+
+
 hms_patient_invoice_details:
     path:     /{invoice}/patient-invoice-details
     defaults: { _controller: "HospitalBundle:Patient:patientGlobalDetails" }
@@ -45,8 +68,6 @@ hms_patient_inline_update:
     options:
         expose: true
 
-
-
 hms_patient_info:
     path:      /{invoice}/info
     defaults: { _controller: "HospitalBundle:Patient:patientInfo" }
@@ -57,3 +78,4 @@ hms_patient_info:
 hms_patient:
     path:      /{id}
     defaults: { _controller: "HospitalBundle:Patient:patient" }
+

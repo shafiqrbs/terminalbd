@@ -88,7 +88,7 @@ $(document).on('click', '.addPatient', function() {
                 success: function (response) {
                     el.find('.dialogModal_content').html(response);
                     formSubmit();
-                    $('.select2').select2();
+                    $('#particular').select2();
                 }
             });
         },
@@ -116,8 +116,6 @@ $(document).on("click", ".saveButton", function() {
 });
 
 function formSubmit() {
-
-
 
     $('#appstore_bundle_hospitalbundle_invoice_customer_name').focus().keypress(function () {
         $('#appstore_bundle_hospitalbundle_invoice_customer_name').css('textTransform', 'capitalize');
@@ -185,7 +183,7 @@ function formSubmit() {
 
     $(document).on('change', '#particular', function() {
         var url = $(this).val();
-        if(url == ''){
+        if(url === ''){
             alert('You have to add particulars from drop down and this not service item');
             return false;
         }
@@ -203,13 +201,43 @@ function formSubmit() {
         })
     });
 
+    $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_particulars', function() {
+        var id = $(this).val();
+        if(id === ''){
+            alert('You have to add particulars from drop down and this not service item');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('hms_invoice_temporary_particular_search_add',{'id':id}),
+            type: 'GET',
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#invoiceParticulars').show().html(obj['invoiceParticulars']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.initialGrandTotal').html(obj['initialGrandTotal']);
+                $('#initialDue').val(obj['initialGrandTotal']);
+                $('.initialDiscount').html('');
+                $('#appstore_bundle_hospitalbundle_invoice_discountCalculation').val('').attr( "placeholder", 'Discount' );
+                $('#appstore_bundle_hospitalbundle_invoice_discount').val(0);
+                $("#appstore_bundle_hospitalbundle_invoice_particulars").select2("val", "").select2('open');
+                if(obj['initialGrandTotal'] > 0 ){
+                    $('#saveDiagnosticButton').attr("disabled", false);
+                }else{
+                    $('#saveDiagnosticButton').attr("disabled", true);
+                }
+            }
+        })
+    });
+
+
+
     $(document).on('click', '#temporaryParticular', function() {
 
         var particularId = $('#particularId').val();
         var quantity = parseInt($('#quantity').val());
         var price = parseInt($('#price').val());
         var url = $('#temporaryParticular').attr('data-url');
-        if(particularId == ''){
+        if(particularId === ''){
             $("#particular").select2('open');
             return false;
         }
@@ -350,15 +378,12 @@ function formSubmit() {
                 success: function(response){
                     obj = JSON.parse(response);
                     $('#consultant,#referredDoctor').hide();
-                    $("#appstore_bundle_hospitalbundle_invoice_consultant").html(obj['doctors']);
-                    $("#appstore_bundle_hospitalbundle_invoice_referredId").html(obj['referreds']);
+                    $(".consultant , .referred").select2("val", "");
                     $('form#invoicePatientForm')[0].reset();
                     $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
                     $('.subTotal, .initialGrandTotal, .due, .discountAmount, .initialDiscount').html('');
                     $('#appstore_bundle_hospitalbundle_invoice_discount').val(0);
                     $('#invoiceParticulars').hide();
-                    $("#appstore_bundle_hospitalbundle_invoice_consultant").select2().select2("val","");
-                    $("#appstore_bundle_hospitalbundle_invoice_referredId").select2().select2("val","");
                     if(obj['process'] === "In-progress"){
                         window.open('/hms/invoice/'+obj['entity']+'/print', '_blank');
                     }
@@ -372,6 +397,100 @@ function formSubmit() {
 
         ajax: {
             url: Routing.generate('domain_patient_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
+    $(".referred").select2({
+        ajax: {
+            url: Routing.generate('hms_patient_select2_referred_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
+    $(".consultant").select2({
+
+        ajax: {
+            url: Routing.generate('hms_patient_select2_doctor_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
+    $(".particulars").select2({
+        ajax: {
+            url: Routing.generate('hms_patient_select2_particular_search'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {
