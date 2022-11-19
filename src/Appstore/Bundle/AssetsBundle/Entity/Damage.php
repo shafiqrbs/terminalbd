@@ -40,10 +40,6 @@ class Damage
      **/
     private  $stockItems;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", inversedBy="damages" )
-     **/
-    private  $purchaseItem;
 
     /**
      * @Gedmo\Blameable(on="create")

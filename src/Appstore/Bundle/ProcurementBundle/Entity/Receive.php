@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\AssetsBundle\Entity;
+namespace Appstore\Bundle\ProcurementBundle\Entity;
 
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
@@ -16,8 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Purchase
  *
- * @ORM\Table(name="assets_receive")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\ReceiveRepository")
+ * @ORM\Table(name="pro_receive")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\ProcurementBundle\Repository\ReceiveRepository")
  */
     class Receive
     {
@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
         /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem", mappedBy="receive"  )
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ReceiveItem", mappedBy="receive"  )
          **/
         private  $receiveItems;
 
@@ -663,7 +663,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
         protected function getUploadRootDir()
         {
-            return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+            return __DIR__ . '/../../../../../web/' .$this->getUploadDir();
         }
 
         protected function getUploadDir()

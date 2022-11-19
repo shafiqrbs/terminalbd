@@ -43,5 +43,23 @@ services:
             tags:
                 - { name: doctrine.event_listener, event: prePersist }
 
+    medicine_name_importer_excel:
+        class: Appstore\Bundle\MedicineBundle\Importer\Excel
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    medicine_name.importer.excel_data_reader:
+        class: Appstore\Bundle\MedicineBundle\Importer\ExcelDataReader
+        arguments: [ @phpexcel ]
+
+
+    medicine_stock_update_importer_excel:
+        class: Appstore\Bundle\MedicineBundle\Importer\MedicineStockImport
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    medicine_stock_update.importer.excel_data_reader:
+        class: Appstore\Bundle\MedicineBundle\Importer\MedicineStockDataReader
+        arguments: [ @phpexcel ]
 
 

@@ -49,12 +49,13 @@
                         <div class="portlet-body form">
                             <div class="row-fluid">
                                 <div class="span4">
-                                    <h4>Branch Information:</h4>
+                                    <h4>Club/Department Information:</h4>
                                     <ul class="unstyled">
-                                        <li><strong>Branch Name #:</strong>{{ entity.branch.name }}/{{ entity.branch.branchCode }}</li>
-                                        <li><strong>Branch In Charge:</strong> {{ entity.branch.branchManager.profile.name }}</li>
-                                        <li><strong>Mobile</strong> {{ entity.branch.mobile }}</li>
-                                        <li><strong>Address:</strong> {{ entity.branch.address|raw }}</li>
+                                        {% if entity.club is not empty %}
+                                        <li><strong>Club Name #:</strong>{{ entity.club.name }}</li>
+                                        <li><strong>Mobile</strong> {{ entity.club.mobile }}</li>
+                                        <li><strong>Address:</strong> {{ entity.club.address|raw }}</li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                                 <div class="span4">
@@ -70,9 +71,9 @@
                                     <h4>Payment Details:</h4>
                                     <ul class="unstyled">
                                         <li><strong>Total BDT:</strong> {{ entity.totalAmount|number_format() }}</li>
-                                        <li><strong>Created By:</strong> {% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy.userNameDesignation }}{% endif %}</li>
-                                        <li><strong>Checked By:</strong> {% if entity.checkedBy is defined and entity.checkedBy is not empty %}{{ entity.checkedBy.userNameDesignation }}{% endif %}</li>
-                                        <li><strong>Approved By:</strong> {% if entity.approvedBy is defined and entity.approvedBy is not empty %}{{ entity.approvedBy.userNameDesignation }}{% endif %}</li>
+                                        <li><strong>Created By:</strong> {% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
+                                        <li><strong>Checked By:</strong> {% if entity.checkedBy is defined and entity.checkedBy is not empty %}{{ entity.checkedBy }}{% endif %}</li>
+                                        <li><strong>Approved By:</strong> {% if entity.approvedBy is defined and entity.approvedBy is not empty %}{{ entity.approvedBy }}{% endif %}</li>
 
                                     </ul>
                                 </div>
@@ -92,26 +93,27 @@
 
                                     <thead class="flip-content ">
                                     <tr class="head-green">
-                                        <th class="numeric" ><i class="icon-th-list"></i></th>
+                                        <th class="numeric" ><i class="icon-reorder"></i></th>
+                                        <th class="numeric" >Item Mode</th>
                                         <th class="numeric" >Item</th>
-                                        <th class="numeric" >Product Name</th>
-                                        <th class="numeric" >Qnt</th>
-                                        <th class="numeric" >Purchase price</th>
-                                        <th class="numeric" >Sub total</th>
+                                        <th class="numeric" >Product</th>
+                                        <th class="numeric" >QTY</th>
+                                        <th class="numeric" >Unit</th>
+                                        <th class="numeric" >Sub-total</th>
                                         <th class="numeric" ></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for purchaseItem in entity.purchaseItems %}
-
+                                    {% if entity.requisitionItems is not empty %}
+                                    {% for purchaseItem in entity.requisitionItems %}
                                         <tr>
                                             <td class="numeric" >{{ loop.index }}.</td>
+                                            <td class="numeric" >{% if purchaseItem.item.productGroup is not empty %}{{ purchaseItem.item.productGroup.name }}{% endif %}</td>
                                             <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                             <td class="numeric" >{{ purchaseItem.name }}</td>
                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                            <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
-                                            <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
-                                            <td class=" numeric" >
+                                            <td class="numeric" >{{purchaseItem.purchasePrice}}</td>
+                                            <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>                         <td class=" numeric" >
                                              <span class="pull-left">
                                                 {% if entity.approve != 'approved' %}
                                                     <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
@@ -120,6 +122,7 @@
                                             </td>
                                         </tr>
                                     {% endfor %}
+                                    {% endif %}
                                     </tbody>
 
                                 </table>

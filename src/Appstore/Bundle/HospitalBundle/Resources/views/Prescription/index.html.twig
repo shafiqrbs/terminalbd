@@ -171,6 +171,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Created By</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Appointment</th>
                                     <th class="numeric" >Serial No</th>
@@ -195,6 +196,7 @@
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{% if entity.createdBy.profile is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="span1">
                                             {% if entity.process != "Done" %}

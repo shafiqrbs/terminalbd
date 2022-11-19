@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    View Purchase Requisition Lists
+                    View Requisition Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('pro_purchaserequisition') }}">Purchase Requisition</a>
+                        <a href="{{ path('pro_purchaserequisition') }}">Requisition</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Purchase Requisition Lists</a></li>
+                    <li><a href="#">Requisition Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -30,9 +30,8 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Requisition Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Requisition Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('pro_purchaserequisition_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
@@ -76,8 +75,9 @@
                                 <thead>
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Created By</th>
                                     <th class="numeric" >PR No</th>
-                                    <th class="numeric" >Branch</th>
+                                    <th class="numeric" >Club/Department</th>
                                     <th class="numeric" >Ref no</th>
                                     <th class="numeric" >Item/Quantity</th>
                                     <th class="numeric" >Approx. Amount</th>
@@ -92,8 +92,9 @@
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" >{{ entity.grn }}</td>
-                                        <td class="numeric" >{{ entity.branch.name }}</td>
+                                        <td class="numeric" >{% if entity.club is not empty %}{{ entity.club.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.memo }}</td>
                                         <td class="numeric" >{{ entity.totalItem }}/{{ entity.totalQnt }}</td>
                                         <td class="numeric" >{{ entity.totalAmount|number_format() }}</td>

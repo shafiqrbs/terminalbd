@@ -24,7 +24,7 @@ class PurchaseOrderRepository extends EntityRepository
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $qb = $this->createQueryBuilder('purchase');
-        $qb->where("purchase.inventoryConfig = :inventory");
+        $qb->where("purchase.config = :inventory");
         $qb->setParameter('inventory', $inventory);
         if (!empty($receiveDate)) {
             $compareTo = new \DateTime($receiveDate);

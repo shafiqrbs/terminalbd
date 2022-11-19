@@ -79,12 +79,6 @@ class AssetsConfig
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="config" , cascade={"persist", "remove"})
-     **/
-    private $purchaseItem;
-
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", mappedBy="config" , cascade={"persist", "remove"})
      **/
     private $categories;

@@ -119,11 +119,6 @@ class Item
      **/
     private  $productUnit;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="item" )
-     **/
-    private  $purchaseItems;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemWarning", inversedBy="item")
@@ -152,6 +147,47 @@ class Item
      * @ORM\Column(name="vatName", type="text", nullable=true)
      */
     private $vatName;
+
+
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="skuName", type="text", nullable=true)
+     */
+    private $skuName;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="model", type="text", nullable=true)
+     */
+    private $model;
+
+
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="origin", type="text", nullable=true)
+     */
+    private $origin;
+
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="caliber", type="text", nullable=true)
+     */
+    private $caliber;
 
 
     /**
@@ -348,7 +384,7 @@ class Item
     /**
      * @var boolean
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="boolean", nullable=true)
      */
     private $status = true;
 
@@ -1297,6 +1333,102 @@ class Item
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLedgers()
+    {
+        return $this->ledgers;
+    }
+
+    /**
+     * @param mixed $ledgers
+     */
+    public function setLedgers($ledgers)
+    {
+        $this->ledgers = $ledgers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param string $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrigin()
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @param string $origin
+     */
+    public function setOrigin($origin)
+    {
+        $this->origin = $origin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCaliber()
+    {
+        return $this->caliber;
+    }
+
+    /**
+     * @param string $caliber
+     */
+    public function setCaliber($caliber)
+    {
+        $this->caliber = $caliber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSkuName()
+    {
+        return $this->skuName;
+    }
+
+    /**
+     * @param string $skuName
+     */
+    public function setSkuName($skuName)
+    {
+        $this->skuName = $skuName;
     }
 
 

@@ -61,18 +61,6 @@ class Product
     protected $ledgers;
 
 
-    /**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", inversedBy="products" )
-	 **/
-	private  $purchaseItem;
-
-
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem")
-	 **/
-	private  $receiveItem;
-
-
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Particular", inversedBy="branchProducts" )
 	 **/

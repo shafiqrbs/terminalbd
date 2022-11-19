@@ -31,20 +31,6 @@ class ItemWarning
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="assuranceFromVendor" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $purchaseItemFromVendors;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="assuranceToCustomer" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $purchaseItemForCustomers;
-
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable = true)

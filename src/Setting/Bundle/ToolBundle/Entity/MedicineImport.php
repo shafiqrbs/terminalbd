@@ -126,7 +126,7 @@ class MedicineImport
 
 	public function getUploadDir()
 	{
-		return 'uploads/medicine/';
+		return 'uploads/domain/medicine';
 	}
 
 	public function upload()

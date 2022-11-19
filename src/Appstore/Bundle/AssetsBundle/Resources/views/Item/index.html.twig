@@ -102,7 +102,7 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{% if entity.productGroup is not empty %}{{ entity.productGroup.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.category.name }}</td>
+                                        <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="">{{entity.sku}}</td>
                                         <td class="numeric" >{{entity.openingQuantity}}</td>
@@ -112,9 +112,6 @@
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% if  entity.category.categoryType == 'Assets' %}
-                                                    <a href="{{ path('assetsitem_edit_web', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-retweet"></i></a>
-                                                {% endif %}
                                                 <a  href="{{ path('assetsitem_edit', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-pencil"></i></a>
                                                 {% if entity.purchaseQuantity == 0 and entity.openingQuantity == 0 and entity.remainingQuantity == 0 %}
                                                     <a title="Are you sure went to delete ?" href="{{ path('item_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>

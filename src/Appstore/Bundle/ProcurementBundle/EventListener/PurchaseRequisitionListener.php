@@ -23,7 +23,7 @@ class PurchaseRequisitionListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setGrn(sprintf("%s%s%s",$entity->getCreatedBy()->getProfile()->getBranches()->getGenericCode(),$datetime->format('my'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
+            $entity->setGrn(sprintf("%s%s",$datetime->format('my'), str_pad($entity->getCode(),5, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -45,10 +45,9 @@ class PurchaseRequisitionListener
 
         $qb
             ->select('MAX(s.code)')
-            ->andWhere('s.updated >= :today_startdatetime')
-            ->andWhere('s.updated <= :today_enddatetime')
-            ->setParameter('today_startdatetime', $today_startdatetime)
-            ->setParameter('today_enddatetime', $today_enddatetime);
+            ->andWhere('s.config = :config')->setParameter('config', $entity->getId())
+            ->andWhere('s.updated >= :today_startdatetime')->setParameter('today_startdatetime', $today_startdatetime)
+            ->andWhere('s.updated <= :today_enddatetime')->setParameter('today_enddatetime', $today_enddatetime);
         $lastCode = $qb->getQuery()->getSingleScalarResult();
 
         if (empty($lastCode)) {

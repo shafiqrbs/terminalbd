@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\AssetsBundle\Entity;
+namespace Appstore\Bundle\ProcurementBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
 use Core\UserBundle\Entity\User;
@@ -13,8 +13,8 @@ use Setting\Bundle\ToolBundle\Entity\ItemWarning;
 /**
  * VoucherItem
  *
- * @ORM\Table(name ="assets_receive_item")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\ReceiveItemRepository")
+ * @ORM\Table(name ="pro_receive_item")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\ProcurementBundle\Repository\ReceiveItemRepository")
  */
 class ReceiveItem
 {
@@ -28,7 +28,7 @@ class ReceiveItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Receive", inversedBy="receiveItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\Receive", inversedBy="receiveItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $receive;
@@ -40,10 +40,10 @@ class ReceiveItem
     private  $item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", inversedBy="purchaseItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem", inversedBy="receiveItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $purchaseItem;
+    private  $orderItem;
 
 
     /**

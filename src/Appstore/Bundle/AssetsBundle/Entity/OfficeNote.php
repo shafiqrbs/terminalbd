@@ -32,6 +32,12 @@ class OfficeNote
     private  $config;
 
 
+     /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition", inversedBy="officeNote" )
+     **/
+    private  $purchaseRequisition;
+
+
     /**
      * @var string
      *
@@ -595,6 +601,22 @@ class OfficeNote
     public function setNoteMode($noteMode)
     {
         $this->noteMode = $noteMode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseRequisition()
+    {
+        return $this->purchaseRequisition;
+    }
+
+    /**
+     * @param mixed $purchaseRequisition
+     */
+    public function setPurchaseRequisition($purchaseRequisition)
+    {
+        $this->purchaseRequisition = $purchaseRequisition;
     }
 
 

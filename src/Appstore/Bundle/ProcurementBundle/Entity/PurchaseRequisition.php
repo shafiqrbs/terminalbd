@@ -39,6 +39,28 @@ class PurchaseRequisition
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig")
+     **/
+    private  $config;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\OfficeNote", mappedBy="purchaseRequisition")
+     **/
+    private  $officeNote;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Club")
+     **/
+    private  $club;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem", mappedBy="requisition")
+     **/
+    private  $purchaseRequisitionItems;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches")
      **/
     private  $branch;
@@ -496,24 +518,6 @@ class PurchaseRequisition
 
 
     /**
-     * @return $inventoryConfig
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
-
-
-
-    /**
      * @return string
      */
     public function getChalan()
@@ -878,6 +882,47 @@ class PurchaseRequisition
     {
         $this->globalOption = $globalOption;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getClub()
+    {
+        return $this->club;
+    }
+
+    /**
+     * @param mixed $club
+     */
+    public function setClub($club)
+    {
+        $this->club = $club;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param mixed $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseRequisitionItems()
+    {
+        return $this->purchaseRequisitionItems;
+    }
+
 
 }
 

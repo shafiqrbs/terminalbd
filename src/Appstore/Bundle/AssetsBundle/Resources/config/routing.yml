@@ -66,6 +66,10 @@ assets_category:
     prefix:     /category
     resource: "@AssetsBundle/Resources/config/routing/category.yml"
 
+assets_stock_import:
+    prefix:     /stock-item-import
+    resource: "@AssetsBundle/Resources/config/routing/stockItemImport.yml"
+
 voucher_item:
     resource: "@AssetsBundle/Resources/config/routing/voucheritem.yml"
     prefix:    /opening-item

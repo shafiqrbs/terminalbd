@@ -24,8 +24,45 @@ class PurchaseRequisitionRepository extends EntityRepository
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $qb = $this->createQueryBuilder('purchase');
-        $qb->where("purchase.globalOption = :inventory");
-        $qb->setParameter('inventory', $inventory);
+        $qb->where("purchase.config = :inventory")->setParameter('inventory', $inventory);
+        if (!empty($receiveDate)) {
+            $compareTo = new \DateTime($receiveDate);
+            $receiveDate =  $compareTo->format('Y-m-d');
+            $qb->andWhere("purchase.receiveDate LIKE :receiveDate");
+            $qb->setParameter('receiveDate', $receiveDate.'%');
+        }
+        if (!empty($memo)) {
+            $qb->andWhere("purchase.memo = :memo");
+            $qb->setParameter('memo', $memo);
+        }
+        if (!empty($grn)) {
+            $qb->andWhere("purchase.grn LIKE :grn");
+            $qb->setParameter('grn', $grn.'%');
+        }
+        if (!empty($vendor)) {
+            $qb->join('purchase.vendor', 'v');
+            $qb->andWhere("v.companyName = :companyName");
+            $qb->setParameter('companyName', $vendor);
+        }
+        $qb->orderBy('purchase.updated','DESC');
+        $qb->getQuery();
+        return  $qb;
+
+
+
+    }
+
+    public function findWithSearchApproved($inventory,$data)
+    {
+
+        $receiveDate = isset($data['receiveDate']) ? $data['receiveDate'] :'';
+        $memo = isset($data['memo'])? $data['memo'] :'';
+        $grn = isset($data['grn'])? $data['grn'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $qb = $this->createQueryBuilder('purchase');
+        $qb->where("purchase.config = :inventory")->setParameter('inventory', $inventory);
+        $qb->andWhere("purchase.approvedBy IS NOT NULL");
+        $qb->andWhere("purchase.approve ='approved'");
         if (!empty($receiveDate)) {
             $compareTo = new \DateTime($receiveDate);
             $receiveDate =  $compareTo->format('Y-m-d');
@@ -94,6 +131,8 @@ class PurchaseRequisitionRepository extends EntityRepository
 
     }
 
+
+
     public  function getSumPurchase($user,$inventory){
 
         $qb = $this->createQueryBuilder('p');
@@ -132,19 +171,17 @@ class PurchaseRequisitionRepository extends EntityRepository
     public  function purchaseSimpleUpdate(PurchaseRequisition $purchase){
 
         $qb = $this->createQueryBuilder('p');
-        $qb->join('p.purchaseItems', 'pvi');
+        $qb->join('p.requisitionItems', 'pvi');
         $qb->select('p.id as id');
         $qb->addSelect('SUM(pvi.quantity) AS quantity ');
-        $qb->addSelect('COUNT(pvi.id) AS item ');
-        $qb->addSelect('SUM(pvi.purchaseSubTotal) AS total');
-        $qb->where("p.id = :purchaseId");
-        $qb->setParameter('purchaseId', $purchase);
+        $qb->addSelect('COUNT(pvi.id) AS item');
+       // $qb->addSelect('SUM(pvi.purchaseSubTotal) AS total');
+        $qb->where("p.id = :purchaseId")->setParameter('purchaseId', $purchase);
         $row = $qb->getQuery()->getOneOrNullResult();
-
         $purchase->setTotalQnt($row['quantity']);
         $purchase->setTotalItem($row['item']);
-        $purchase->setTotalAmount($row['total']);
-        $purchase->setPaymentAmount($row['total']);
+      //  $purchase->setTotalAmount($row['total']);
+       // $purchase->setPaymentAmount($row['total']);
         $this->_em->persist($purchase);
         $this->_em->flush($purchase);
 

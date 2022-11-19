@@ -26,12 +26,37 @@ class Excel
 
         foreach($this->data as $key => $item) {
 
+            $name = $item['BrandName'];
+            $strength  = $item['Strength'];
+            $dosage = $item['Dosage'];
+            $name = $this->getDoctrain()->getRepository('MedicineBundle:MedicineBrand')->findOneBy(array('name' => $name,'strength' => $strength,'medicineForm' => $dosage));
+            if(empty($name) and !empty($item['BrandName']) ) {
+                $medicine = new MedicineBrand();
+                $medicine->setMedicineCompany( $this->getMedicineCompany( $item ) );
+                $medicine->setMedicineGeneric( $this->getMedicineGeneric( $item ) );
+                $medicine->setName( $item['BrandName'] );
+                $medicine->setStrength( $item['Strength'] );
+                $medicine->setMedicineForm( $item['Dosage'] );
+                $medicine->setUseFor( $item['UseFor'] );
+                $medicine->setDar( $item['DAR'] );
+                $this->persist( $medicine );
+                $this->flush();
+            }
+
+        }
+    }
+
+    public function importOld($data)
+    {
+        $this->data = $data;
+
+        foreach($this->data as $key => $item) {
+
           	$name = $item['BrandName'];
 	        $strength  = $item['Strength'];
 	        $dosage = $item['Dosage'];
             $name = $this->getDoctrain()->getRepository('MedicineBundle:MedicineBrand')->findOneBy(array('name' => $name,'strength' => $strength,'medicineForm' => $dosage));
 	        if(empty($name) and !empty($item['BrandName']) ) {
-
 		        $medicine = new MedicineBrand();
 		        $medicine->setMedicineCompany( $this->getMedicineCompany( $item ) );
 		        $medicine->setMedicineGeneric( $this->getMedicineGeneric( $item ) );

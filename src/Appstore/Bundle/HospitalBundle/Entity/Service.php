@@ -60,7 +60,7 @@ class Service
     private $hmsInvoices;
 
   /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", mappedBy="services")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", mappedBy="services")
      **/
     private $hospitalConfig;
 

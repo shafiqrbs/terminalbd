@@ -40,13 +40,13 @@ class PurchaseOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+         $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig()->getId();
         $entities = $em->getRepository('ProcurementBundle:PurchaseOrder')->findWithSearch($inventory,$data);
-        $purchaseOverview = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseOrder')->purchaseOverview($inventory,$data);
+      //  $purchaseOverview = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseOrder')->purchaseOverview($inventory,$data);
         $pagination = $this->paginate($entities);
         return $this->render('ProcurementBundle:PurchaseOrder:index.html.twig', array(
             'entities' => $pagination,
-            'purchaseOverview' => $purchaseOverview,
+            'purchaseOverview' => '',
             'searchForm' => $data
         ));
     }
@@ -60,9 +60,8 @@ class PurchaseOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new PurchaseOrder();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity->setInventoryConfig($inventory);
-        $entity->setBranch($this->getUser()->getProfile()->getBranches());
+        $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig()->getId();
+        $entity->setConfig($inventory);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('pro_purchaseorder_edit', array('id' => $entity->getId())));
@@ -100,9 +99,7 @@ class PurchaseOrderController extends Controller
         if (!$purchase) {
             throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
-        $purchaseItem = new PurchaseOrderItem();
         $editForm = $this->createEditForm($purchase);
-
         return $this->render('ProcurementBundle:PurchaseOrder:new.html.twig', array(
             'entity'      => $purchase,
             'form'   => $editForm->createView(),
@@ -118,8 +115,8 @@ class PurchaseOrderController extends Controller
     */
     private function createEditForm(PurchaseOrder $entity)
     {
-        $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new PurchaseOrderType($inventoryConfig), $entity, array(
+        $option =  $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PurchaseOrderType($option), $entity, array(
             'action' => $this->generateUrl('pro_purchaseorder_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

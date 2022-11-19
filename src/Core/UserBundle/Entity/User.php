@@ -275,17 +275,6 @@ class User extends BaseUser
 	protected $distributionApprovedBy;
 
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="stakeholder" , cascade={"persist", "remove"})
-	 **/
-	protected $purchaseItems;
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 **/
-	protected $purchaseItemApproves;
-
 
 	/* ----------------------------------inventory------------------*/
 

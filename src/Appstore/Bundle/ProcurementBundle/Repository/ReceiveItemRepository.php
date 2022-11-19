@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\AssetsBundle\Repository;
+namespace Appstore\Bundle\ProcurementBundle\Repository;
 use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\AssetsBundle\Entity\Item;

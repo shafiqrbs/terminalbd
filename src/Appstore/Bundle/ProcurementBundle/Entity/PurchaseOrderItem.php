@@ -32,18 +32,6 @@ class PurchaseOrderItem
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", mappedBy="purchaseOrderItem" , cascade={"remove"})
-     **/
-    private  $purchaseItems;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", inversedBy="purchaseOrderItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $purchase;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable = true)

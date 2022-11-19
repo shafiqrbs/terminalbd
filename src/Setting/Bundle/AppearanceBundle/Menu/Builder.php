@@ -93,12 +93,6 @@ class Builder extends ContainerAware
                 }
             }
 
-            $result = array_intersect($menuName, array('Institute'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_EDUCATION')){
-                    $menu = $this->InstituteMenu($menu);
-                }
-            }
 
             $result = array_intersect($menuName, array('Dps'));
             if (!empty($result)) {
@@ -725,6 +719,8 @@ class Builder extends ContainerAware
             ->addChild('Procurement')
             ->setAttribute('icon', 'icon-shopping-cart')
             ->setAttribute('dropdown', true);
+        $menu['Procurement']->addChild("Requisition List", array('route' => 'pro_purchaserequisition'));
+        $menu['Procurement']->addChild("New Requisition", array('route' => 'pro_purchaserequisition_new'));
         $menu['Procurement']->addChild("Purchase Order List", array('route' => 'assets_purchase'));
         $menu['Procurement']->addChild("New PO", array('route' => 'assets_purchase_new'));
         $menu['Procurement']->addChild('Manage Receive')->setAttribute('dropdown', true);
@@ -739,7 +735,9 @@ class Builder extends ContainerAware
         $menu['Stock Inventory']->addChild('Assets',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Assets')));
         $menu['Stock Inventory']->addChild('Inventory',array('route' => 'assets_stockitem', 'routeParameters' => array('type' => 'Inventory')));
         $menu['Stock Inventory']->addChild('Stock Details', array('route' => 'assets_barcode_stock'));
+        $menu['Stock Inventory']->addChild('Item', array('route' => 'assetsitem'));
         $menu['Stock Inventory']->addChild('Opening Stock', array('route' => 'assets_purchaseitem_new'));
+        $menu['Stock Inventory']->addChild('Item Import', array('route' => 'itemstock_import'));
 
          $menu
             ->addChild('Master Data')
@@ -1438,7 +1436,8 @@ class Builder extends ContainerAware
 		                                             ;
 	                $menu['Medicine']['Manage Stock']->addChild( 'Stock Adjustment', array( 'route' => 'stock_adjustment' ) )
 		                                             ;
-	                $menu['Medicine']['Manage Stock']->addChild( 'Damage', array( 'route' => 'medicine_damage' ) )
+	                $menu['Medicine']['Manage Stock']->addChild( 'Damage', array( 'route' => 'medicine_damage' ) );
+	                $menu['Medicine']['Manage Stock']->addChild( 'Import', array( 'route' => 'medicinestock_import' ) )
 		                                             ;
 	            }
             if ($securityContext->isGranted('ROLE_MEDICINE_MANAGER')) {

@@ -50,3 +50,12 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    assest_item_stock_update_importer_excel:
+        class: Appstore\Bundle\AssetsBundle\Importer\StockImport
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    assest_item_stock.importer.excel_data_reader:
+        class: Appstore\Bundle\AssetsBundle\Importer\StockDataReader
+        arguments: [ @phpexcel ]
+

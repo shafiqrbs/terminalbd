@@ -86,6 +86,10 @@ medicine_medicine_reverse:
     resource: "@MedicineBundle/Resources/config/routing/reverse.yml"
     prefix:   /reverse
 
+medicine_import:
+    resource: "@MedicineBundle/Resources/config/routing/medicinestockimport.yml"
+    prefix:   /medicine-stock-import
+
 medicine_homepage:
     path:     /
     defaults: { _controller: MedicineBundle:Default:index }
@@ -137,6 +141,8 @@ medicine_group_sales_reverse:
 medicine_group_sales_approved:
     path:      /group/sales/approved
     defaults: { _controller: "MedicineBundle:Sales:groupApproved" }
+
+
 
 
 

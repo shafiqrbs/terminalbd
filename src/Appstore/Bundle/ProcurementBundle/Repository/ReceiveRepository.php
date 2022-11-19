@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\AssetsBundle\Repository;
+namespace Appstore\Bundle\ProcurementBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AssetsBundle\Entity\AssetsPurchase;
 use Core\UserBundle\Entity\User;

@@ -37,6 +37,11 @@ class PurchaseOrder
      **/
     private  $config;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\OfficeNote", inversedBy="purchaseOrders" )
+     **/
+    private  $officeNote;
+
     /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
@@ -60,7 +65,6 @@ class PurchaseOrder
      **/
     private  $purchaseOrderItems;
 
-
 	 /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem", mappedBy="purchaseOrder" , cascade={"remove"})
      * @ORM\OrderBy({"id" = "ASC"})
@@ -69,7 +73,7 @@ class PurchaseOrder
 
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="purchases" , cascade={"detach","merge"} )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountVendor")
 	 **/
 	private  $vendor;
 
@@ -86,14 +90,6 @@ class PurchaseOrder
      * @ORM\Column(name="purchaseTo", type="string", length=50, nullable=true)
      */
     private $purchaseTo;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="vendorQuotation", type="string", length = 50, nullable=true)
-     */
-    private $vendorQuotation;
 
 
     /**
@@ -125,7 +121,7 @@ class PurchaseOrder
 
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="receiveDate", type="datetime", nullable=true)
      */
@@ -133,7 +129,7 @@ class PurchaseOrder
 
 
 	/**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="orderDate", type="datetime", nullable=true)
      */
@@ -220,12 +216,6 @@ class PurchaseOrder
      */
     private $taxAmount;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="commissionAmount", type="float", nullable=true)
-     */
-    private $commissionAmount;
 
     /**
      * @var integer
@@ -253,7 +243,7 @@ class PurchaseOrder
      *
      * @ORM\Column(name="computation", type="boolean")
      */
-    private $computation = true;
+    private $computation = false;
 
     /**
      * @var string
@@ -261,13 +251,6 @@ class PurchaseOrder
      * @ORM\Column(name="process", type="string", nullable=true)
      */
     private $process = "created";
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="approve", type="string", nullable=true)
-     */
-    private $approve = "in-progress";
 
     /**
      * @var string
@@ -306,70 +289,166 @@ class PurchaseOrder
     }
 
     /**
-     * Set invoice
-     *
-     * @param string $invoice
-     *
-     * @return Purchase
+     * @return mixed
      */
-    public function setInvoice($invoice)
+    public function getConfig()
     {
-        $this->invoice = $invoice;
-
-        return $this;
+        return $this->config;
     }
 
     /**
-     * Get invoice
-     *
+     * @param mixed $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOfficeNote()
+    {
+        return $this->officeNote;
+    }
+
+    /**
+     * @param mixed $officeNote
+     */
+    public function setOfficeNote($officeNote)
+    {
+        $this->officeNote = $officeNote;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param mixed $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCheckedBy()
+    {
+        return $this->checkedBy;
+    }
+
+    /**
+     * @param mixed $checkedBy
+     */
+    public function setCheckedBy($checkedBy)
+    {
+        $this->checkedBy = $checkedBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param mixed $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseOrderItems()
+    {
+        return $this->purchaseOrderItems;
+    }
+
+    /**
+     * @param mixed $purchaseOrderItems
+     */
+    public function setPurchaseOrderItems($purchaseOrderItems)
+    {
+        $this->purchaseOrderItems = $purchaseOrderItems;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseRequisitionItems()
+    {
+        return $this->purchaseRequisitionItems;
+    }
+
+    /**
+     * @param mixed $purchaseRequisitionItems
+     */
+    public function setPurchaseRequisitionItems($purchaseRequisitionItems)
+    {
+        $this->purchaseRequisitionItems = $purchaseRequisitionItems;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
+    }
+
+    /**
+     * @param mixed $vendor
+     */
+    public function setVendor($vendor)
+    {
+        $this->vendor = $vendor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttachFiles()
+    {
+        return $this->attachFiles;
+    }
+
+    /**
+     * @param mixed $attachFiles
+     */
+    public function setAttachFiles($attachFiles)
+    {
+        $this->attachFiles = $attachFiles;
+    }
+
+    /**
      * @return string
      */
-    public function getInvoice()
+    public function getPurchaseTo()
     {
-        return $this->invoice;
+        return $this->purchaseTo;
     }
 
     /**
-     * Set memo
-     *
-     * @param string $memo
-     *
-     * @return Purchase
+     * @param string $purchaseTo
      */
-    public function setMemo($memo)
+    public function setPurchaseTo($purchaseTo)
     {
-        $this->memo = $memo;
-
-        return $this;
+        $this->purchaseTo = $purchaseTo;
     }
 
     /**
-     * Get memo
-     *
-     * @return string
-     */
-    public function getMemo()
-    {
-        return $this->memo;
-    }
-
-    /**
-     * Set paymentType
-     *
-     * @param string $paymentType
-     *
-     * @return Purchase
-     */
-    public function setPaymentType($paymentType)
-    {
-        $this->paymentType = $paymentType;
-
-        return $this;
-    }
-
-    /**
-     * Get paymentType
-     *
      * @return string
      */
     public function getPaymentType()
@@ -378,23 +457,63 @@ class PurchaseOrder
     }
 
     /**
-     * Set receiveDate
-     *
-     * @param string $receiveDate
-     *
-     * @return Purchase
+     * @param string $paymentType
      */
-    public function setReceiveDate($receiveDate)
+    public function setPaymentType($paymentType)
     {
-        $this->receiveDate = $receiveDate;
-
-        return $this;
+        $this->paymentType = $paymentType;
     }
 
     /**
-     * Get receiveDate
-     *
+     * @return mixed
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param mixed $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
      * @return string
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * @param string $invoice
+     */
+    public function setInvoice($invoice)
+    {
+        $this->invoice = $invoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefNo()
+    {
+        return $this->refNo;
+    }
+
+    /**
+     * @param string $refNo
+     */
+    public function setRefNo($refNo)
+    {
+        $this->refNo = $refNo;
+    }
+
+    /**
+     * @return \DateTime
      */
     public function getReceiveDate()
     {
@@ -402,22 +521,30 @@ class PurchaseOrder
     }
 
     /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Purchase
+     * @param \DateTime $receiveDate
      */
-    public function setCreated($created)
+    public function setReceiveDate($receiveDate)
     {
-        $this->created = $created;
-
-        return $this;
+        $this->receiveDate = $receiveDate;
     }
 
     /**
-     * Get created
-     *
+     * @return \DateTime
+     */
+    public function getOrderDate()
+    {
+        return $this->orderDate;
+    }
+
+    /**
+     * @param \DateTime $orderDate
+     */
+    public function setOrderDate($orderDate)
+    {
+        $this->orderDate = $orderDate;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreated()
@@ -425,6 +552,93 @@ class PurchaseOrder
         return $this->created;
     }
 
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * @return float
+     */
+    public function getEstimateTotal()
+    {
+        return $this->estimateTotal;
+    }
+
+    /**
+     * @param float $estimateTotal
+     */
+    public function setEstimateTotal($estimateTotal)
+    {
+        $this->estimateTotal = $estimateTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
+    }
+
+    /**
+     * @param float $totalAmount
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrandTotal()
+    {
+        return $this->grandTotal;
+    }
+
+    /**
+     * @param float $grandTotal
+     */
+    public function setGrandTotal($grandTotal)
+    {
+        $this->grandTotal = $grandTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param float $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+    }
 
     /**
      * @return float
@@ -538,72 +752,86 @@ class PurchaseOrder
         $this->totalItem = $totalItem;
     }
 
-
     /**
-     * @return $inventoryConfig
+     * @return bool
      */
-    public function getInventoryConfig()
+    public function isStatus()
     {
-        return $this->inventoryConfig;
+        return $this->status;
     }
 
     /**
-     * @param mixed $inventoryConfig
+     * @param bool $status
      */
-    public function setInventoryConfig($inventoryConfig)
+    public function setStatus($status)
     {
-        $this->inventoryConfig = $inventoryConfig;
+        $this->status = $status;
     }
 
+    /**
+     * @return bool
+     */
+    public function isComputation()
+    {
+        return $this->computation;
+    }
 
+    /**
+     * @param bool $computation
+     */
+    public function setComputation($computation)
+    {
+        $this->computation = $computation;
+    }
 
     /**
      * @return string
      */
-    public function getChalan()
+    public function getProcess()
     {
-        return $this->chalan;
+        return $this->process;
     }
 
     /**
-     * @param string $chalan
+     * @param string $process
      */
-    public function setChalan($chalan)
+    public function setProcess($process)
     {
-        $this->chalan = $chalan;
+        $this->process = $process;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getTotalAmount()
+    public function getGrn()
     {
-        return $this->totalAmount;
+        return $this->grn;
     }
 
     /**
-     * @param float $totalAmount
+     * @param string $grn
      */
-    public function setTotalAmount($totalAmount)
+    public function setGrn($grn)
     {
-        $this->totalAmount = $totalAmount;
+        $this->grn = $grn;
     }
 
     /**
-     * @return float
+     * @return int
      */
-    public function getCommissionAmount()
+    public function getCode()
     {
-        return $this->commissionAmount;
+        return $this->code;
     }
 
     /**
-     * @param float $commissionAmount
+     * @param int $code
      */
-    public function setCommissionAmount($commissionAmount)
+    public function setCode($code)
     {
-        $this->commissionAmount = $commissionAmount;
+        $this->code = $code;
     }
+
 
     /**
      * Sets file.
@@ -674,402 +902,6 @@ class PurchaseOrder
         $this->file = null;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param boolean $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * @return $purchaseItems
-     */
-    public function getPurchaseItems()
-    {
-        return $this->purchaseItems;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * @param mixed $createdBy
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getApprovedBy()
-    {
-        return $this->approvedBy;
-    }
-
-    /**
-     * @param mixed $approvedBy
-     */
-    public function setApprovedBy($approvedBy)
-    {
-        $this->approvedBy = $approvedBy;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProcess()
-    {
-        return $this->process;
-    }
-
-    /**
-     * @param string $process
-     * created
-     * progress
-     * complete
-     * approved
-     */
-    public function setProcess($process)
-    {
-        $this->process = $process;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGrn()
-    {
-        return $this->grn;
-    }
-
-    /**
-     * @param string $grn
-     */
-    public function setGrn($grn)
-    {
-        $this->grn = $grn;
-    }
-
-
-    /**
-     * @return integer
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param integer $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * @param \DateTime $updated
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getPurchaseTo()
-    {
-        return $this->purchaseTo;
-    }
-
-    /**
-     * @param string $purchaseTo
-     */
-    public function setPurchaseTo($purchaseTo)
-    {
-        $this->purchaseTo = $purchaseTo;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getAsInvestment()
-    {
-        return $this->asInvestment;
-    }
-
-    /**
-     * @param bool $asInvestment
-     */
-    public function setAsInvestment($asInvestment)
-    {
-        $this->asInvestment = $asInvestment;
-    }
-
-    public function  getPurchaseItemSum()
-    {
-        $quantity = 0;
-        foreach($this->purchaseItems AS $item) {
-            $quantity += $item->getQuantity(); //$recipecost now $this->recipecost.
-        }
-        return $quantity ;
-    }
-
-	/**
-	 * @return User
-	 */
-	public function getCheckedBy() {
-		return $this->checkedBy;
-	}
-
-	/**
-	 * @param User $checkedBy
-	 */
-	public function setCheckedBy( $checkedBy ) {
-		$this->checkedBy = $checkedBy;
-	}
-
-	/**
-	 * @return Branches
-	 */
-	public function getBranch() {
-		return $this->branch;
-	}
-
-	/**
-	 * @param Branches $branch
-	 */
-	public function setBranch( $branch ) {
-		$this->branch = $branch;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getApprove() {
-		return $this->approve;
-	}
-
-	/**
-	 * @param string $approve
-	 */
-	public function setApprove( $approve ) {
-		$this->approve = $approve;
-	}
-
-	/**
-	 * @return PurchaseOrder
-	 */
-	public function getPurchaseRequisitionItems() {
-		return $this->purchaseRequisitionItems;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getEstimateTotal() {
-		return $this->estimateTotal;
-	}
-
-	/**
-	 * @param float $estimateTotal
-	 */
-	public function setEstimateTotal( $estimateTotal ) {
-		$this->estimateTotal = $estimateTotal;
-	}
-
-	/**
-	 * @return datetime
-	 */
-	public function getOrderDate() {
-		return $this->orderDate;
-	}
-
-	/**
-	 * @param datetime $orderDate
-	 */
-	public function setOrderDate( $orderDate ) {
-		$this->orderDate = $orderDate;
-	}
-
-	/**
-	 * @return Vendor
-	 */
-	public function getVendor() {
-		return $this->vendor;
-	}
-
-	/**
-	 * @param Vendor $vendor
-	 */
-	public function setVendor( $vendor ) {
-		$this->vendor = $vendor;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getVendorQuotation() {
-		return $this->vendorQuotation;
-	}
-
-	/**
-	 * @param string $vendorQuotation
-	 */
-	public function setVendorQuotation( $vendorQuotation ) {
-		$this->vendorQuotation = $vendorQuotation;
-	}
-
-	/**
-	 * @return TransactionMethod
-	 */
-	public function getTransactionMethod() {
-		return $this->transactionMethod;
-	}
-
-	/**
-	 * @param TransactionMethod $transactionMethod
-	 */
-	public function setTransactionMethod( $transactionMethod ) {
-		$this->transactionMethod = $transactionMethod;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getRefNo() {
-		return $this->refNo;
-	}
-
-	/**
-	 * @param string $refNo
-	 */
-	public function setRefNo( $refNo ) {
-		$this->refNo = $refNo;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isComputation() {
-		return $this->computation;
-	}
-
-	/**
-	 * @param bool $computation
-	 */
-	public function setComputation( $computation ) {
-		$this->computation = $computation;
-	}
-
-	/**
-	 * @return ProcurementAttachFile
-	 */
-	public function getAttachFiles() {
-		return $this->attachFiles;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getGrandTotal() {
-		return $this->grandTotal;
-	}
-
-	/**
-	 * @param float $grandTotal
-	 */
-	public function setGrandTotal( $grandTotal ) {
-		$this->grandTotal = $grandTotal;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getDiscount() {
-		return $this->discount;
-	}
-
-	/**
-	 * @param float $discount
-	 */
-	public function setDiscount( $discount ) {
-		$this->discount = $discount;
-	}
-
-	/**
-	 * @return PurchaseOrder
-	 */
-	public function getPurchases() {
-		return $this->purchases;
-	}
-
-    /**
-     * @return GlobalOption
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param GlobalOption $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
-
-    /**
-     * @return PurchaseOrderItem
-     */
-    public function getPurchaseOrderItems()
-    {
-        return $this->purchaseOrderItems;
-    }
-
-    /**
-     * @return PurchaseOrder
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * @param PurchaseOrder $config
-     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-    }
 
 }
 

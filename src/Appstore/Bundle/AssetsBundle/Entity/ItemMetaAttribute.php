@@ -41,7 +41,7 @@ class ItemMetaAttribute
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", inversedBy="itemMetaAttributes" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ReceiveItem", inversedBy="itemMetaAttributes" )
      * @ORM\JoinColumn(onDelete="CASCADE")
     **/
     private  $purchaseItem;

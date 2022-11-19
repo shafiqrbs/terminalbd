@@ -39,24 +39,12 @@ class StockItem
      */
     protected $item;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\PurchaseItem", inversedBy="stockItems")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    protected $purchaseItem;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\ReceiveItem")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ReceiveItem")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $receiveItem;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Purchase", inversedBy="stockItems")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    protected $purchase;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Sales", inversedBy="stockItems")

@@ -3,7 +3,9 @@
 namespace Appstore\Bundle\ProcurementBundle\Form;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -12,11 +14,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PurchaseOrderType extends AbstractType
 {
 
-    public  $inventoryConfig;
+    public  $option;
 
-    public function __construct(InventoryConfig $inventoryConfig)
+    public function __construct(GlobalOption $option)
     {
-        $this->inventoryConfig = $inventoryConfig;
+        $this->option = $option;
 
     }
 
@@ -30,7 +32,7 @@ class PurchaseOrderType extends AbstractType
 
 	        ->add('vendor', 'entity', array(
 		        'required'    => true,
-		        'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
+		        'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountVendor',
 		        'empty_value' => '---Choose a vendor ---',
 		        'property' => 'companyName',
 		        'attr'=>array('class'=>'span12 select2'),
@@ -38,7 +40,7 @@ class PurchaseOrderType extends AbstractType
 		        'query_builder' => function(EntityRepository $er){
 			        return $er->createQueryBuilder('wt')
 			                  ->where("wt.status = 1")
-			                  ->andWhere("wt.inventoryConfig =".$this->inventoryConfig->getId());
+			                  ->andWhere("wt.globalOption =".$this->option->getId());
 		        },
 	        ))
 	        ->add('paymentType', 'choice', array(

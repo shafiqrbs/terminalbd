@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\ProcurementBundle\Controller;
 
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
+use Appstore\Bundle\ProcurementBundle\Entity\Requisition;
 use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,8 +40,8 @@ class PurchaseRequisitionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('ProcurementBundle:PurchaseRequisition')->findWithSearch($inventory,$data);
+        $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig();
+        $entities = $em->getRepository('ProcurementBundle:PurchaseRequisition')->findWithSearch($inventory->getId(),$data);
         $purchaseOverview = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisition')->purchaseOverview($inventory,$data);
         $pagination = $this->paginate($entities);
         return $this->render('ProcurementBundle:PurchaseRequisition:index.html.twig', array(
@@ -59,9 +60,8 @@ class PurchaseRequisitionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new PurchaseRequisition();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity->setInventoryConfig($inventory);
-        $entity->setBranch($this->getUser()->getProfile()->getBranches());
+        $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig();
+        $entity->setConfig($inventory);
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('pro_purchaserequisition_edit', array('id' => $entity->getId())));
@@ -113,13 +113,13 @@ class PurchaseRequisitionController extends Controller
     /**
     * Creates a form to edit a Purchase entity.
     *
-    * @param Purchase $entity The entity
+    * @param PurchaseRequisition $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
     private function createEditForm(PurchaseRequisition $entity)
     {
-        $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventoryConfig =  $this->getUser()->getGlobalOption()->getAssetsConfig();
         $form = $this->createForm(new PurchaseRequisitionType($inventoryConfig), $entity, array(
             'action' => $this->generateUrl('pro_purchaserequisition_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -136,13 +136,13 @@ class PurchaseRequisitionController extends Controller
     /**
     * Creates a form to edit a Purchase entity.
     *
-    * @param Purchase $entity The entity
+    * @param Requisition $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
     private function createPurchaseItemForm(PurchaseRequisitionItem $purchaseItem , PurchaseRequisition $entity)
     {
-        $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $inventoryConfig =  $this->getUser()->getGlobalOption()->getAssetsConfig();
         $form = $this->createForm(new PurchaseRequisitionItemType($inventoryConfig), $purchaseItem, array(
             'action' => $this->generateUrl('pro_purchaserequisition_create', array('purchase' => $entity->getId())),
             'method' => 'POST',
@@ -284,9 +284,9 @@ class PurchaseRequisitionController extends Controller
         $editForm = $this->createEditForm($purchase);
         $purchaseItemForm->handleRequest($request);
         if ($purchaseItemForm->isValid()) {
-            $purchaseItem->setPurchase($purchase);
-            $purchaseItem->setPurchasePrice($purchaseItem->getItem()->getPurchasePrice());
-            $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPurchasePrice());
+            $purchaseItem->setRequisition($purchase);
+            $purchaseItem->setPurchasePrice($purchaseItem->getItem()->getSalesPrice());
+            $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getSalesPrice());
             $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
             $em->persist($purchaseItem);
             $em->flush();

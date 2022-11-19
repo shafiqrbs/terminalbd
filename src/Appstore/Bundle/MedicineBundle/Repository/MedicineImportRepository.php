@@ -1,7 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineImport;
 use Doctrine\ORM\EntityRepository;
+
 
 
 /**
@@ -12,5 +14,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class MedicineImportRepository extends EntityRepository
 {
+    public function fileUpload(MedicineImport $entity,$data = '')
+    {
+
+        $em = $this->_em;
+        if(isset($file['file'])){
+            $img = $file['file'];
+            $fileName = $img->getClientOriginalName();
+            $imgName =  uniqid(). '.' .$fileName;
+            $img->move($entity->getUploadDir(), $imgName);
+            $entity->setFile($imgName);
+        }
+        $em->persist($entity);
+        $em->flush();
+
+    }
 
 }

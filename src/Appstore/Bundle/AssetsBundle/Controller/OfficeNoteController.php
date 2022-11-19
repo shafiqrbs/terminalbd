@@ -74,9 +74,14 @@ class OfficeNoteController extends Controller
 		if (!$entity) {
 			throw $this->createNotFoundException('Unable to find OfficeNote entity.');
 		}
-		return $this->render('AssetsBundle:OfficeNote:show.html.twig', array(
-			'entity' => $entity,
-		));
+        $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig();
+        $data = '';
+        $entities = $em->getRepository('ProcurementBundle:PurchaseRequisition')->findWithSearchApproved($inventory->getId(),$data);
+        $pagination = $entities->getQuery()->getResult();
+        return $this->render('AssetsBundle:OfficeNote:show.html.twig', array(
+            'entity'      => $entity,
+            'entities'      => $pagination,
+        ));
 	}
 
 	/**
@@ -92,8 +97,13 @@ class OfficeNoteController extends Controller
 			throw $this->createNotFoundException('Unable to find OfficeNote entity.');
 		}
 		$editForm = $this->createEditForm($officeNote);
-		return $this->render('AssetsBundle:OfficeNote:new.html.twig', array(
+        $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig();
+        $data = '';
+        $entities = $em->getRepository('ProcurementBundle:PurchaseRequisition')->findWithSearchApproved($inventory->getId(),$data);
+        $pagination = $entities->getQuery()->getResult();
+        return $this->render('AssetsBundle:OfficeNote:new.html.twig', array(
 			'entity'      => $officeNote,
+			'entities'      => $pagination,
 			'form'   => $editForm->createView(),
 		));
 	}
@@ -147,8 +157,14 @@ class OfficeNoteController extends Controller
 	{
 		set_time_limit(0);
 		$em = $this->getDoctrine()->getManager();
-		$OfficeNote->setCheckedBy($this->getUser());
-		$OfficeNote->setProcess('In-progress');
+		if(empty($OfficeNote->getCheckedBy())  and $OfficeNote->getProcess() == "Complete"){
+            $OfficeNote->setProcess('Checked');
+            $OfficeNote->setCheckedBy($this->getUser());
+        }
+        if(empty($OfficeNote->getApprovedBy())  and $OfficeNote->getProcess() == "Checked"){
+            $OfficeNote->setApprovedBy($this->getUser());
+            $OfficeNote->setProcess('Checked');
+        }
 		$em->persist($OfficeNote);
         $em->flush();
 		return new Response(json_encode(array('success'=>'success')));
