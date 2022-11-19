@@ -1,9 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\ProcurementBundle\Entity;
-use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
-use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
-use Core\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -67,7 +64,7 @@ class ReceiveItem
     private  $itemMetaAttributes;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="purchaseItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", inversedBy="purchaseItem" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $config;

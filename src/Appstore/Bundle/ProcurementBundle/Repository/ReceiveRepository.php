@@ -22,7 +22,7 @@ class ReceiveRepository extends EntityRepository
     {
         $em =  $this->_em;
         $qb = $em->createQueryBuilder();
-        $qb->from('AssetsBundle:ReceiveItem','e');
+        $qb->from('ProcurementBundle:ReceiveItem','e');
         $qb->select('SUM(e.subTotal) AS amount');
         $qb->where("e.receive = :receive")->setParameter('receive', $receive->getId());
         $result = $qb->getQuery()->getSingleScalarResult();
