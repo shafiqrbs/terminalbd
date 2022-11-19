@@ -61,7 +61,7 @@ class ExcelDataReader
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
-                $key = $dataArray['MedicineName'].$dataArray['ProductId']. $dataArray['Unit'].$dataArray['MinStock'].$dataArray['PurchasePrice'].$dataArray['MRP'].$dataArray['Category'];
+                $key = $dataArray['MedicineName'].$dataArray['ProductId']. $dataArray['Unit'].$dataArray['MinStock'].$dataArray['TP'].$dataArray['MRP'].$dataArray['Category'];
                 $namedDataArray[$key] = $dataArray;
 
             }

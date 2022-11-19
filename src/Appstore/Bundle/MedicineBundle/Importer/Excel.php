@@ -49,8 +49,8 @@ class Excel
                 $medicine->setName(ucfirst(strtolower($name)));
                 $medicine->setBarcode($ProductId);
                 $medicine->setMinQuantity($item['MinStock']);
-                $medicine->setAveragePurchasePrice( $item['PurchasePrice'] );
-                $medicine->setPurchasePrice( $item['PurchasePrice'] );
+                $medicine->setAveragePurchasePrice( $item['TP'] );
+                $medicine->setPurchasePrice( $item['TP'] );
                 $medicine->setAverageSalesPrice( $item['MRP'] );
                 $medicine->setSalesPrice( $item['MRP'] );
                 $Category = $item['Category'];

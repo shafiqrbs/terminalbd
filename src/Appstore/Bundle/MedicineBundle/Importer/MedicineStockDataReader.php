@@ -61,7 +61,7 @@ class MedicineStockDataReader
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
-                $key = $dataArray['MedicineName'].$dataArray['ProductId']. $dataArray['Unit'].$dataArray['PurchasePrice'].$dataArray['Stock'].$dataArray['MRP'];
+                $key = $dataArray['MedicineName'].$dataArray['ProductId']. $dataArray['Unit'].$dataArray['TP'].$dataArray['Stock'].$dataArray['MRP'];
                 $namedDataArray[$key] = $dataArray;
 
             }
