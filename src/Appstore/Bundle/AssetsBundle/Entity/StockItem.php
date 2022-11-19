@@ -40,12 +40,6 @@ class StockItem
     protected $item;
 
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ReceiveItem")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
-    protected $receiveItem;
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Sales", inversedBy="stockItems")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -1310,22 +1304,6 @@ class StockItem
     public function setSalesReturn($salesReturn)
     {
         $this->salesReturn = $salesReturn;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getReceiveItem()
-    {
-        return $this->receiveItem;
-    }
-
-    /**
-     * @param mixed $receiveItem
-     */
-    public function setReceiveItem($receiveItem)
-    {
-        $this->receiveItem = $receiveItem;
     }
 
 
