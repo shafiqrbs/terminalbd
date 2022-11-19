@@ -14,7 +14,7 @@ use Setting\Bundle\ToolBundle\Entity\ItemWarning;
  * VoucherItem
  *
  * @ORM\Table(name ="assets_stock_issue_item")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\ReceiveItemRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AssetsBundle\Repository\StockIssueItemRepository")
  */
 class StockIssueItem
 {
@@ -45,12 +45,6 @@ class StockIssueItem
      **/
     private  $item;
 
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ReceiveItem", inversedBy="stockIssueItems" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $purchaseItem;
 
 
     /**

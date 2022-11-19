@@ -40,13 +40,6 @@ class ItemMetaAttribute
     private  $categoryMeta;
 
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ReceiveItem", inversedBy="itemMetaAttributes" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-    **/
-    private  $purchaseItem;
-
-
     /**
      * @var string
      *
