@@ -5,8 +5,6 @@ use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\AssetsBundle\Entity\Item;
 use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
-use Appstore\Bundle\AssetsBundle\Entity\Receive;
-use Appstore\Bundle\AssetsBundle\Entity\ReceiveItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 

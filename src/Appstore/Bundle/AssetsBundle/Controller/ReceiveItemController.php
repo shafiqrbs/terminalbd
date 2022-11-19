@@ -3,10 +3,6 @@
 namespace Appstore\Bundle\AssetsBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
-use Appstore\Bundle\AssetsBundle\Entity\Purchase;
-use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
-use Appstore\Bundle\AssetsBundle\Entity\Receive;
-use Appstore\Bundle\AssetsBundle\Entity\ReceiveItem;
 use Appstore\Bundle\AssetsBundle\Form\PurchaseType;
 use Appstore\Bundle\AssetsBundle\Form\ReceiveType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
