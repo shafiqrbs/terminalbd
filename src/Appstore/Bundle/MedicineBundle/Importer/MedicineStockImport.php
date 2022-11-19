@@ -45,6 +45,7 @@ class MedicineStockImport
                 $stock = isset($item['Stock']) ? $item['Stock']:0;
                 $medicine = $exist;
                 $medicine->setOpeningQuantity($stock);
+                $medicine->setRemainingQuantity($stock);
                 $medicine->setPurchasePrice( $item['PurchasePrice'] );
                 $medicine->setAveragePurchasePrice( $item['PurchasePrice'] );
                 $medicine->setAverageSalesPrice( $item['MRP'] );
@@ -53,6 +54,7 @@ class MedicineStockImport
                 $this->flush();
 
             }else{
+
                 $stock = isset($item['Stock']) ? $item['Stock']:0;
                 $minStock = isset($item['MinStock']) ? $item['MinStock']:1;
                 $Category = isset($item['Category']) ? $item['Category']:'';
@@ -62,7 +64,10 @@ class MedicineStockImport
                 $medicine->setName(ucfirst(strtolower($name)));
                 $medicine->setBarcode($ProductId);
                 $medicine->setOpeningQuantity($stock);
+                $medicine->setRemainingQuantity($stock);
                 $medicine->setMinQuantity($minStock);
+                $medicine->setAverageSalesPrice( $item['PurchasePrice'] );
+                $medicine->setPurchasePrice( $item['PurchasePrice'] );
                 $medicine->setAverageSalesPrice( $item['MRP'] );
                 $medicine->setSalesPrice( $item['MRP'] );
                 if ($Category) {
