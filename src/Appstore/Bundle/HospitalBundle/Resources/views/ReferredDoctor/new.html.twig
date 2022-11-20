@@ -48,7 +48,16 @@
             {{ form_row(form._token) }}
             <div class="row-fluid">
                 <!--/span-->
-                <div class="span8">
+                <div class="span2">
+                    <div class="control-group">
+                        <label class="control-label" for="name">Referred Code</label>
+                        <div class="controls">
+                            {{ form_widget(form.particularCode) }}
+                            {{ form_errors(form.particularCode) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
                     <div class="control-group">
                         <label class="control-label" for="name">Referred Name <span class="required">*</span></label>
                         <div class="controls">

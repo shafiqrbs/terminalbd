@@ -13,8 +13,6 @@ $("form#invoiceForm").on('click', '.addCustomer', function() {
     $( ".customer" ).slideToggle( "slow" );
 });
 
-
-
 $( "#name" ).autocomplete({
 
     source: function( request, response ) {

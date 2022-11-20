@@ -79,6 +79,9 @@ class DoctorController extends Controller
             $entity->setHospitalConfig($globalOption->getHospitalConfig());
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(5);
             $entity->setService($service);
+            if($entity->getParticularCode()){
+               $entity->setParticularCode($entity->getParticularCode());
+            }
             $entity->setIsDoctor(1);
             $em->persist($entity);
             $entity->upload();
@@ -248,6 +251,9 @@ class DoctorController extends Controller
             }
             if($entity->signatureUpload() && !empty($entity->getSignatureFile())){
                 $entity->removeSignatureUpload();
+            }
+            if($entity->getParticularCode()){
+                $entity->setParticularCode($entity->getParticularCode());
             }
             $entity->upload();
             $entity->setIsDoctor(1);

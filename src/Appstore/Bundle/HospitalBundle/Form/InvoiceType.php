@@ -62,10 +62,20 @@ class InvoiceType extends AbstractType
             ))
 
             ->add('isHold',CheckboxType::class, array(
-                'attr'=>array('class'=>'tooltips custom-control-input','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero')
+                'attr'=>array('class'=>'tooltips custom-control-input','data-trigger' => 'hover','placeholder'=>'Receive')
+                ,'required'=> false,'mapped'=> false
+            ))
+            ->add('isDiscount',CheckboxType::class, array(
+                'attr'=>array('class'=>'tooltips custom-control-input isDiscount','data-trigger' => 'hover','placeholder'=>'Receive')
                 ,'required'=> false,'mapped'=> false
             ))
             ->add('discount','hidden',array('attr'=>array('class'=>'discount')))
+            ->add('isDiscount',CheckboxType::class, array(
+                'attr'=>array('class'=>'tooltips custom-control-input','data-trigger' => 'hover','placeholder'=>'Receive')
+            ,'required'=> false,'mapped'=> false
+            ))
+            ->add('discountRequestedBy','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount requested by','autocomplete'=>'off')))
+            ->add('discountRequestedComment','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount requested comment','autocomplete'=>'off')))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
@@ -125,8 +135,8 @@ class InvoiceType extends AbstractType
             ,'required'=> false,'mapped'=> false
             ));
         }
-        $builder->add('referredDoctor', new InvoiceReferredDoctorType());
-        $builder->add('assignDoctor', new InvoiceDoctorType());
+        $builder->add('referredDoctor', new InvoiceReferredDoctorType(),array('mapped'=> false));
+        $builder->add('assignDoctor', new InvoiceDoctorType(),array('mapped'=> false));
         $builder->add('customer', new CustomerForHospitalType());
     }
     

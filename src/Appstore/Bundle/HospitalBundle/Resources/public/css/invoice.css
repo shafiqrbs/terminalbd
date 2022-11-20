@@ -8,6 +8,9 @@
 #showPayment{
     display: none;
 }
+.bankHide , .mobileBankHide , .customer, #discount-box{
+    display: none;
+}
 .particular-info{
     background: #ddd;
     padding: 10px;

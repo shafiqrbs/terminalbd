@@ -9,6 +9,11 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
+$(document).on('change', '.checker', function() {
+    $( "#discount-box" ).slideToggle( "slow" );
+});
+
+
 $(".select2Invoice").select2({
 
     ajax: {

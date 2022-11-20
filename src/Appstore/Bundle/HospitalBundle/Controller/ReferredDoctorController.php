@@ -70,6 +70,9 @@ class ReferredDoctorController extends Controller
             $entity->setHospitalConfig($globalOption -> getHospitalConfig());
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(6);
             $entity->setService($service);
+            if($entity->getParticularCode()){
+                $entity->setParticularCode($entity->getParticularCode());
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -194,6 +197,9 @@ class ReferredDoctorController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if($entity->getParticularCode()){
+                $entity->setParticularCode($entity->getParticularCode());
+            }
             $em->flush();
 
             $this->get('session')->getFlashBag()->add(

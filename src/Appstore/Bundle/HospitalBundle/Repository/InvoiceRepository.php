@@ -5,6 +5,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -639,7 +640,57 @@ class InvoiceRepository extends EntityRepository
 
     }
 
+    public function updateAdmissionInvoiceTotalPrice(InvoiceTransaction $transaction)
+    {
+        /* @var $invoice Invoice */
 
+        $invoice = $transaction->getHmsInvoice();
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('HospitalBundle:InvoiceParticular','si')
+            ->select('sum(si.subTotal) as subTotal')
+            ->addSelect('sum(si.commission) as subCommission')
+            ->where('si.hmsInvoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId())
+            ->getQuery()->getOneOrNullResult();
+
+        $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        $subCommission = !empty($total['subCommission']) ? $total['subCommission'] :0;
+        if($subTotal > 0){
+
+            if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+                $totalAmount = ($subTotal- $invoice->getDiscount());
+                $vat = $this->getCulculationVat($invoice,$totalAmount);
+                $invoice->setVat($vat);
+            }
+            $invoice->setDiscountRequestedBy($transaction->getDiscountRequestedBy());
+            $invoice->setDiscountRequestedComment($transaction->getDiscountRequestedComment());
+            $invoice->setSubTotal($subTotal);
+            $invoice->setSubTotal($subTotal);
+            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setEstimateCommission($subCommission);
+            $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
+            if($invoice->getTotal() <= $invoice->getPayment()){
+                $invoice->setDue(null);
+                $invoice->setPayment($invoice->getTotal());
+            }
+
+        }else{
+
+            $invoice->setSubTotal(0);
+            $invoice->setEstimateCommission(0);
+            $invoice->setTotal(0);
+            $invoice->setDue(0);
+            $invoice->setDiscount(0);
+            $invoice->setVat(0);
+        }
+
+        $em->persist($invoice);
+        $em->flush();
+
+        return $invoice;
+
+    }
 
     public function updateAdmissionPaymentReceive(Invoice $invoice)
     {

@@ -154,6 +154,21 @@ class InvoiceTransaction
     /**
      * @var string
      *
+     * @ORM\Column(name="discountRequestedBy", type="string", nullable=true)
+     */
+    private $discountRequestedBy;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountRequestedComment", type="string", nullable=true)
+     */
+    private $discountRequestedComment;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
@@ -606,8 +621,53 @@ class InvoiceTransaction
         $this->approvedBy = $approvedBy;
     }
 
+    /**
+     * @return string
+     */
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
 
+    /**
+     * @param string $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+    }
 
+    /**
+     * @return string
+     */
+    public function getDiscountRequestedBy()
+    {
+        return $this->discountRequestedBy;
+    }
+
+    /**
+     * @param string $discountRequestedBy
+     */
+    public function setDiscountRequestedBy($discountRequestedBy)
+    {
+        $this->discountRequestedBy = $discountRequestedBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountRequestedComment()
+    {
+        return $this->discountRequestedComment;
+    }
+
+    /**
+     * @param string $discountRequestedComment
+     */
+    public function setDiscountRequestedComment($discountRequestedComment)
+    {
+        $this->discountRequestedComment = $discountRequestedComment;
+    }
 
 }
 

@@ -266,7 +266,7 @@ class AdmissionPatientParticularController extends Controller
         if($transaction->getPayment() > 0){
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionInvoiceTransactionUpdate($transaction);
         }
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateAdmissionInvoiceTotalPrice($transaction);
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
         $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);
         exit;

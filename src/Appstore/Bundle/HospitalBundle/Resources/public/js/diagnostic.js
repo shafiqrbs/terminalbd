@@ -169,6 +169,10 @@ function formSubmit() {
         }
     });
 
+    $("form#invoicePatientForm").on('click', '.custom-control-indicator', function() {
+        $( "#discount-box" ).slideToggle( "slow" );
+    });
+
     $("form#invoicePatientForm").on('click', '.addCustomer', function() {
         $( ".customer" ).slideToggle( "slow" );
     });
@@ -377,7 +381,7 @@ function formSubmit() {
                 },
                 success: function(response){
                     obj = JSON.parse(response);
-                    $('#consultant,#referredDoctor').hide();
+                    $('#consultant,#referredDoctor,#discount-box').hide();
                     $(".consultant , .referred").select2("val", "");
                     $('form#invoicePatientForm')[0].reset();
                     $('#saveDiagnosticButton').html("<i class='icon-save'></i> Save").attr('disabled', 'disabled');
