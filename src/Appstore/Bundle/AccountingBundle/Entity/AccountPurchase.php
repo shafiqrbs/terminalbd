@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
-use Appstore\Bundle\AssetsBundle\Entity\VoucherItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessVendor;
 use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
@@ -1124,22 +1123,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
             // clean up the file property as you won't need it anymore
             $this->file = null;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getAssetsReceive()
-        {
-            return $this->assetsReceive;
-        }
-
-        /**
-         * @param mixed $assetsReceive
-         */
-        public function setAssetsReceive($assetsReceive)
-        {
-            $this->assetsReceive = $assetsReceive;
         }
 
 

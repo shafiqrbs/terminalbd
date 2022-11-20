@@ -126,6 +126,13 @@ class InvoiceTransaction
     /**
      * @var string
      *
+     * @ORM\Column(name="subTotal", type="decimal", nullable=true)
+     */
+    private $subTotal= 0;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="total", type="decimal", nullable=true)
      */
     private $total= 0;

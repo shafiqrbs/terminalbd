@@ -10,6 +10,10 @@ procurement_purchase_order:
     resource: "@ProcurementBundle/Resources/config/routing/purchaseorder.yml"
     prefix:   /purchase-order
 
+procurement_receive:
+    resource: "@ProcurementBundle/Resources/config/routing/receive.yml"
+    prefix:   /receive
+
 procurement_homepage:
     path:     /hello/{name}
     defaults: { _controller: ProcurementBundle:Default:index }
