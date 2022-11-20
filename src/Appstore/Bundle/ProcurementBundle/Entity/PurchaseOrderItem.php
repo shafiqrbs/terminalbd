@@ -32,6 +32,18 @@ class PurchaseOrderItem
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", inversedBy="orderItems" )
+     **/
+    private  $purchaseOrder;
+
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem", inversedBy="orderItems" )
+     **/
+    private  $requisitionItem;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable = true)
@@ -206,113 +218,6 @@ class PurchaseOrderItem
     }
 
 
-
-
-    /**
-     * Set salesPrice
-     *
-     * @param float $salesPrice
-     *
-     * @return PurchaseItem
-     */
-    public function setSalesPrice($salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get salesPrice
-     *
-     * @return float
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
-    }
-
-    /**
-     * Set purchaseSubTotal
-     *
-     * @param float $purchaseSubTotal
-     *
-     * @return PurchaseItem
-     */
-    public function setPurchaseSubTotal($purchaseSubTotal)
-    {
-        $this->purchaseSubTotal = $purchaseSubTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseSubTotal
-     *
-     * @return float
-     */
-    public function getPurchaseSubTotal()
-    {
-        return $this->purchaseSubTotal;
-    }
-
-    /**
-     * Set salesSubTotal
-     *
-     * @param float $salesSubTotal
-     *
-     * @return PurchaseItem
-     */
-    public function setSalesSubTotal($salesSubTotal)
-    {
-        $this->salesSubTotal = $salesSubTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get salesSubTotal
-     *
-     * @return float
-     */
-    public function getSalesSubTotal()
-    {
-        return $this->salesSubTotal;
-    }
-
-    /**
-     * @return ProductGroup
-     */
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    /**
-     * @param ProductGroup $item
-     */
-    public function setItem($item)
-    {
-        $this->item = $item;
-    }
-
-
-    /**
-     * @return PurchaseOrder
-     */
-    public function getPurchase()
-    {
-        return $this->purchase;
-    }
-
-    /**
-     * @param PurchaseOrder $purchase
-     */
-    public function setPurchase($purchase)
-    {
-        $this->purchase = $purchase;
-    }
-
     /**
      * @return string
      */
@@ -360,14 +265,6 @@ class PurchaseOrderItem
         return 0;
     }
 
-
-    /**
-     * @param mixed $branchInvoiceItems
-     */
-    public function setBranchInvoiceItems($branchInvoiceItems)
-    {
-        $this->branchInvoiceItems = $branchInvoiceItems;
-    }
 
     public function getStockItemQuantity()
     {
@@ -449,13 +346,52 @@ class PurchaseOrderItem
 		$this->estimateQuantity = $estimateQuantity;
 	}
 
+    /**
+     * @return mixed
+     */
+    public function getPurchaseOrder()
+    {
+        return $this->purchaseOrder;
+    }
 
     /**
-     * @return PurchaseItem
+     * @param mixed $purchaseOrder
      */
-    public function getPurchaseItems()
+    public function setPurchaseOrder($purchaseOrder)
     {
-        return $this->purchaseItems;
+        $this->purchaseOrder = $purchaseOrder;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRequisitionItem()
+    {
+        return $this->requisitionItem;
+    }
+
+    /**
+     * @param mixed $requisitionItem
+     */
+    public function setRequisitionItem($requisitionItem)
+    {
+        $this->requisitionItem = $requisitionItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param mixed $item
+     */
+    public function setItem($item)
+    {
+        $this->item = $item;
     }
 
 

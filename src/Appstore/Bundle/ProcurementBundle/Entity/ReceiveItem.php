@@ -25,13 +25,20 @@ class ReceiveItem
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", inversedBy="receiveItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $config;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\Receive", inversedBy="receiveItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $receive;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="purchaseItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="receiveItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $item;
@@ -44,17 +51,17 @@ class ReceiveItem
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy = "purchaseItem", cascade={"persist"} )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy = "receiveItem", cascade={"persist"} )
      **/
     private  $stockItems;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemWarning", inversedBy="purchaseItemFromVendors")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemWarning")
      **/
     private  $assuranceFromVendor;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemWarning", inversedBy="purchaseItemForCustomers")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemWarning")
      **/
     private  $assuranceToCustomer;
 
@@ -63,11 +70,6 @@ class ReceiveItem
      **/
     private  $itemMetaAttributes;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", inversedBy="purchaseItem" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private $config;
 
 
     /**
@@ -707,6 +709,22 @@ class ReceiveItem
     public function setPurchaseItem($purchaseItem)
     {
         $this->purchaseItem = $purchaseItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderItem()
+    {
+        return $this->orderItem;
+    }
+
+    /**
+     * @param mixed $orderItem
+     */
+    public function setOrderItem($orderItem)
+    {
+        $this->orderItem = $orderItem;
     }
 
 

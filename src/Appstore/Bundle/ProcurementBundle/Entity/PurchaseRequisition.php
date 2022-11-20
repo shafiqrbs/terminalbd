@@ -49,7 +49,6 @@ class PurchaseRequisition
      **/
     private  $officeNote;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Club")
      **/
@@ -58,7 +57,7 @@ class PurchaseRequisition
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem", mappedBy="requisition")
      **/
-    private  $purchaseRequisitionItems;
+    private  $requisitionItems;
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches")
@@ -883,21 +882,6 @@ class PurchaseRequisition
         $this->globalOption = $globalOption;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getClub()
-    {
-        return $this->club;
-    }
-
-    /**
-     * @param mixed $club
-     */
-    public function setClub($club)
-    {
-        $this->club = $club;
-    }
 
     /**
      * @return mixed
@@ -915,12 +899,13 @@ class PurchaseRequisition
         $this->config = $config;
     }
 
+
     /**
      * @return mixed
      */
-    public function getPurchaseRequisitionItems()
+    public function getRequisitionItems()
     {
-        return $this->purchaseRequisitionItems;
+        return $this->requisitionItems;
     }
 
 

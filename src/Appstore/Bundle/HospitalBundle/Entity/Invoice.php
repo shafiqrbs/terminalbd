@@ -147,32 +147,35 @@ class Invoice
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceCreatedBy")
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceApprovedBy")
      **/
     private  $approvedBy;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User",inversedBy="hmsInvoiceDeliveredBy" )
      **/
     private  $deliveredBy;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsDischargeBy")
      **/
     private  $dischargeBy;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
-     **/
-    private  $discountRequestedBy;
+     * @var string
+     *
+     * @ORM\Column(name="discountRequestedBy", type="string", nullable=true)
+     */
+    private $discountRequestedBy;
+
 
     /**
      * @var string

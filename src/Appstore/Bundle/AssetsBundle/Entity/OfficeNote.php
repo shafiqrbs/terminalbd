@@ -27,7 +27,7 @@ class OfficeNote
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="items" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig")
      **/
     private  $config;
 
@@ -36,6 +36,12 @@ class OfficeNote
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition", inversedBy="officeNote" )
      **/
     private  $purchaseRequisition;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrder", mappedBy="officeNote" )
+     **/
+    private  $purchaseOrders;
 
 
     /**
@@ -619,6 +625,13 @@ class OfficeNote
         $this->purchaseRequisition = $purchaseRequisition;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPurchaseOrders()
+    {
+        return $this->purchaseOrders;
+    }
 
 
 }

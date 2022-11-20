@@ -623,6 +623,11 @@ class User extends BaseUser
 	protected $hmsInvoiceApprovedBy;
 
 	/**
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="dischargeBy" , cascade={"persist", "remove"})
+	 */
+	protected $hmsDischargeBy;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="user" , cascade={"persist", "remove"})
 	 */
 	protected $userAttendance;

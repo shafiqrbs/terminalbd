@@ -25,16 +25,21 @@ class PurchaseRequisitionItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="purchaseRequisitionItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item",inversedBy="purchaseR equisitionItems")
      **/
     private  $item;
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition", inversedBy="purchaseRequisitionItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition", inversedBy="requisitionItems" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $requisition;
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem", mappedBy="requisitionItem" )
+     **/
+    private  $orderItems;
 
     /**
      * @var string
@@ -332,6 +337,13 @@ class PurchaseRequisitionItem
         $this->barcode = $barcode;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOrderItems()
+    {
+        return $this->orderItems;
+    }
 
 
 }

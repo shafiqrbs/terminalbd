@@ -30,10 +30,10 @@ class PurchaseRequisitionType extends AbstractType
         $config = $this->inventoryConfig;
         $builder
 
-            ->add('club', 'entity', array(
+            ->add('branch', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Club',
-                'empty_value' => '---Choose a Club/Department ---',
+                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Particular',
+                'empty_value' => '---Choose a Branch/Department ---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'constraints' =>array(
@@ -46,7 +46,6 @@ class PurchaseRequisitionType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-
             ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  memo no'))

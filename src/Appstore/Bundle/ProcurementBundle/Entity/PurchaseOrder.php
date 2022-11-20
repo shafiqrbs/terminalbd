@@ -43,6 +43,11 @@ class PurchaseOrder
     private  $officeNote;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem", mappedBy="purchaseOrder" )
+     **/
+    private  $orderItems;
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
@@ -59,17 +64,6 @@ class PurchaseOrder
     private  $approvedBy;
 
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem", mappedBy="purchase" , cascade={"remove"})
-     * @ORM\OrderBy({"id" = "ASC"})
-     **/
-    private  $purchaseOrderItems;
-
-	 /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem", mappedBy="purchaseOrder" , cascade={"remove"})
-     * @ORM\OrderBy({"id" = "ASC"})
-     **/
-    private  $purchaseRequisitionItems;
 
 
 	/**
@@ -900,6 +894,22 @@ class PurchaseOrder
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderItems()
+    {
+        return $this->orderItems;
+    }
+
+    /**
+     * @param mixed $orderItems
+     */
+    public function setOrderItems($orderItems)
+    {
+        $this->orderItems = $orderItems;
     }
 
 
