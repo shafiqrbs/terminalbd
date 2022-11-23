@@ -170,7 +170,7 @@ function formSubmit() {
         }
     });
 
-    $("form#invoicePatientForm").on('click', '.custom-control-indicator discount-indicator', function() {
+    $("form#invoicePatientForm").on('click', '.discount-indicator', function() {
         $( "#discount-box" ).slideToggle( "slow" );
     });
 
