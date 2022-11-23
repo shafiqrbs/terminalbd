@@ -78,9 +78,10 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
+                                    <th class="numeric" >Department/Club</th>
                                     <th class="numeric" >SKU Name </th>
                                     <th class="numeric" >Received</th>
-                                    <th class="numeric" >GRN</th>
+                                    <th class="numeric" >Requisition No</th>
                                     <th class="numeric" >Reaming Qnt</th>
                                     <th class="numeric" >Qnt</th>
                                     <th class="numeric" >Purchase price</th>
@@ -91,11 +92,12 @@
                                 {% set arrs = ['issued','rejected'] %}
                                 {% for purchaseItem in entities %}
                                     <tr {% if purchaseItem.process in arrs %} class="disabled" aria-disabled="true" {% endif %}>
-                                        <td><input {% if purchaseItem.id in selected %} checked="checked" {% endif %} id="action-{{ purchaseItem.id }}"  data-id="{{ purchaseItem.id }}" data-url="{{ path('account_bank_approve',{'id':purchaseItem.id}) }}" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="PO Issue"  ></td>
+                                        <td><input {% if purchaseItem.id in selected %} checked="checked" {% endif %} id="action-{{ purchaseItem.id }}"  data-id="{{ purchaseItem.id }}" data-url="" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="PO Issue"  ></td>
+                                        <td class="numeric" >{% if purchaseItem.requisition.club is not empty %}{{ purchaseItem.requisition.club.name }}{% endif %}</td>
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
-                                        <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.updated|date('d-m-Y') }}{% endif %}</td>
-                                        <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
-                                        <td class="numeric" >{{ purchaseItem.item.remainingQnt }}</td>
+                                        <td class="numeric" >{% if purchaseItem.requisition is not empty %}{{ purchaseItem.requisition.updated|date('d-m-Y') }}{% endif %}</td>
+                                        <td class="numeric" >{% if purchaseItem.requisition is not empty %}{{ purchaseItem.requisition.grn }}{% endif %}</td>
+                                        <td class="numeric" >{{ purchaseItem.item.remainingQuantity }}</td>
                                         <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                         <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
                                         <td class="numeric" >{{ purchaseItem.process|capitalize }}</td>

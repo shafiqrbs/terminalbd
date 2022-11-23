@@ -30,9 +30,9 @@ class PurchaseRequisitionType extends AbstractType
         $config = $this->inventoryConfig;
         $builder
 
-            ->add('branch', 'entity', array(
+            ->add('club', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Particular',
+                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Club',
                 'empty_value' => '---Choose a Branch/Department ---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),

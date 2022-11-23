@@ -98,7 +98,6 @@ class PurchaseOrderItemRepository extends EntityRepository
 		//$qb->where("purchase.approve = :approve")->setParameter('approve','approved' );
 		//$qb->andWhere("purchase.process = :process")->setParameter('process','Po-issue' );
 		if (!empty($item)) {
-
 			$qb->join('item.masterItem', 'm');
 			$qb->andWhere("m.name = :name");
 			$qb->setParameter('name', $item);
@@ -455,7 +454,6 @@ class PurchaseOrderItemRepository extends EntityRepository
     {
         foreach ($data as $row){
 
-        	/* @var $item PurchaseOrderItem */
 	        $item = $this->find($row);
 	        $item->setProcess($process);
 	        $this->_em->persist($item);

@@ -51,6 +51,14 @@ class AssetsItemType extends AbstractType
                 )
             ))
 
+             ->add( 'price', 'text', array(
+                'attr'        => array( 'class' => 'm-wrap span12 numeric', 'placeholder' => 'Enter  item price' )
+            ))
+
+             ->add( 'description', 'textarea', array(
+                'attr'=> array( 'class' => 'm-wrap span12','rows' => 6, 'placeholder' => 'Enter  item description' )
+            ))
+
             ->add('category', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select product category---',

@@ -61,6 +61,7 @@ $(document).on('change', '#select2Invoice, #barcode2Invoice', function() {
                 async: true,
                 success: function (response) {
                     el.find('.dialogModal_content').html(response);
+                    EditableWithOutReloadInit();
                 }
             });
         },
@@ -169,7 +170,7 @@ function formSubmit() {
         }
     });
 
-    $("form#invoicePatientForm").on('click', '.custom-control-indicator', function() {
+    $("form#invoicePatientForm").on('click', '.custom-control-indicator discount-indicator', function() {
         $( "#discount-box" ).slideToggle( "slow" );
     });
 
@@ -432,6 +433,37 @@ function formSubmit() {
     $(".referred").select2({
         ajax: {
             url: Routing.generate('hms_patient_select2_referred_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
+    $(".requested2User").select2({
+        ajax: {
+            url: Routing.generate('domain_user_profilename_search'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {

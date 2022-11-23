@@ -37,7 +37,7 @@
                     <div class="caption"><i class="icon-reorder"></i>Purchase Requisition Information</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn red" href="{{ path('pro_purchaserequisition') }}"><i class="icon-th-list"></i>&nbsp;Purchase Requisition</a>
+                            <a class="btn red" href="{{ path('pro_purchaserequisition') }}"><i class="icon-th-list"></i>&nbsp;Requisition</a>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                                     <th class="numeric" >Item</th>
                                     <th class="numeric" >Product</th>
                                     <th class="numeric" >Qnt</th>
-                                    <th class="numeric" >Unit</th>
+                                    <th class="numeric" >Unit Price</th>
                                     <th class="numeric" >Sub-total</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -113,7 +113,7 @@
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                         <td class="numeric" >{{ purchaseItem.name }}</td>
                                         <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                        <td class="numeric" >{{purchaseItem.purchasePrice}}</td>
+                                        <td class="numeric" >{{purchaseItem.price}}</td>
                                         <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>
                                         <td><a href="javascript:" data-url="{{ path('pro_purchaserequisition_item_delete',{'purchase':entity.id ,'id':purchaseItem.id }) }}" class="btn red mini purchaseItemDelete"><i class="icon-trash"></i> Delete</a> </td>
                                     </tr>
@@ -122,9 +122,9 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td colspan="3" class="numeric"><strong class=" pull-right">Total Quantity</strong></td>
+                                    <td colspan="4" class="numeric"><strong class=" pull-right">Total Quantity</strong></td>
                                     <td class="numeric" ><strong>{{ entity.totalQnt }}</strong></td>
-                                    <td colspan="2" class="numeric" ><strong class=" pull-right">Total Purchase</strong></td>
+                                    <td class="numeric" ><strong class=" pull-right">Total Amount</strong></td>
                                     <td class="numeric" colspan="4" ><strong>{{ entity.totalAmount|number_format }}</strong></td>
                                 </tr>
                                 </tfoot>
@@ -148,7 +148,7 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Department/Branch<span class="required">*</span></label>
                                             <div class="controls">
-                                                {{ form_widget(form.branch) }}{{ form_errors(form.branch) }}
+                                                {{ form_widget(form.club) }}{{ form_errors(form.club) }}
                                             </div>
                                         </div>
                                     </div>
@@ -171,22 +171,8 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Attach file</label>
                                             <div class="controls">
-                                                <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                    <div class="input-append">
-                                                        <div class="uneditable-input">
-                                                            <i class="icon-file fileupload-exists"></i>
-                                                            <span class="fileupload-preview"></span>
-                                                        </div>
-                                                        <span class="btn btn-file">
-													<span class="fileupload-new blue">Select file</span>
-													<span class="fileupload-exists">Change</span>
-                                                            {{ form_widget(form.file) }}
-                                                            {{ form_errors(form.file) }}
-													</span>
-                                                        <a href="#" class="btn fileupload-exists red" data-dismiss="fileupload">Remove</a>
-                                                    </div>
-                                                </div>
-
+                                                {{ form_widget(form.file) }}
+                                                {{ form_errors(form.file) }}
                                             </div>
                                         </div>
                                     </div>

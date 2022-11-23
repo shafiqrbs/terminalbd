@@ -19,10 +19,9 @@ class OfficeNoteListener
 
         // perhaps you only want to act on some "Purchase" entity
         if ($entity instanceof OfficeNote) {
-
             $lastCode = $this->getLastCode($args, $entity);
             $entity->setCode($lastCode+1);
-            $month = $entity->getUpdated()->format('F-y');
+            $month = $entity->getUpdated()->format('M-y');
             $entity->setRefNo(sprintf("%s%s%s", "BSSF/",$month,str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
         }
     }

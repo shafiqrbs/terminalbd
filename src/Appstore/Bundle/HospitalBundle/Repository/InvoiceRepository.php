@@ -983,6 +983,7 @@ class InvoiceRepository extends EntityRepository
         $user = isset($data['user'])? $data['user'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $mode = isset($data['mode'])? $data['mode'] :'';
+        $referredMode = isset($data['referredMode'])? $data['referredMode'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.customer','c');
         $qb->leftJoin('e.department','dep');
@@ -990,7 +991,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('e.assignDoctor','d');
         $qb->leftJoin('e.referredDoctor','rd');
         $qb->leftJoin('e.anesthesiaDoctor','ad');
-        $qb->select('e.created as created','e.updated as updated','e.invoice as invoice','e.invoiceMode as invoiceMode','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive');
+        $qb->select('e.created as created','e.updated as updated','e.id as invoice','e.invoiceMode as invoiceMode','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive','e.discountRequestedBy as discountRequestedBy');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('d.name as assignDoctor');
         $qb->addSelect('ad.name as anesthesiaDoctor');
@@ -1001,6 +1002,17 @@ class InvoiceRepository extends EntityRepository
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','In-progress','Release','Released','Dead','Death','Admitted'));
+        if($referredMode == 'doctor'){
+            $qb->andWhere("e.assignDoctor IS NOT NULL");
+        }elseif($referredMode == 'referred'){
+            $qb->andWhere("e.referredDoctor IS NOT NULL");
+        }elseif($referredMode == 'assistant'){
+            $qb->andWhere("e.assignDoctor IS NOT NULL");
+        }elseif($referredMode == 'anesthesia'){
+            $qb->andWhere("e.anesthesiaDoctor IS NOT NULL");
+        }elseif($referredMode == 'discountBy'){
+            $qb->andWhere("e.discountRequestedBy IS NOT NULL");
+        }
         if(!empty($assignDoctor)){
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
@@ -1374,7 +1386,7 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere('e.assignDoctor IS NOT NULL');
         }elseif ($mode == "referred-doctor"){
             $qb->join('e.referredDoctor','d');
-            $qb->select('d.id as id','d.name as name');
+            $qb->select('d.id as id','d.name as name','d.mobile as mobile');
             $qb->andWhere('e.referredDoctor IS NOT NULL');
         }
         $qb->groupBy('d.id');
@@ -1431,6 +1443,18 @@ class InvoiceRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.referredDoctor','d');
+        $qb->select('d.id as id','d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+     public function getDiscountedUsers($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.getDiscountedUsers','d');
         $qb->select('d.id as id','d.name as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->groupBy('d.id');

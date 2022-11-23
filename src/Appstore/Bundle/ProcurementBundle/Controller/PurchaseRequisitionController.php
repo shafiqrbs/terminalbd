@@ -62,6 +62,7 @@ class PurchaseRequisitionController extends Controller
         $entity = new PurchaseRequisition();
         $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig();
         $entity->setConfig($inventory);
+        $entity->upload();
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('pro_purchaserequisition_edit', array('id' => $entity->getId())));
@@ -187,7 +188,6 @@ class PurchaseRequisitionController extends Controller
 		$approve = $_REQUEST['approve'];
         set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
-        $purchase->setApprovedBy($this->getUser());
         if($approve == 'checked'){
         	$purchase->setCheckedBy($this->getUser());
         }elseif($approve == 'approved'){
@@ -285,12 +285,12 @@ class PurchaseRequisitionController extends Controller
         $purchaseItemForm->handleRequest($request);
         if ($purchaseItemForm->isValid()) {
             $purchaseItem->setRequisition($purchase);
-            $purchaseItem->setPurchasePrice($purchaseItem->getItem()->getSalesPrice());
-            $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getSalesPrice());
+            $purchaseItem->setPrice($purchaseItem->getItem()->getPrice());
+            $purchaseItem->setPurchasePrice($purchaseItem->getItem()->getPrice());
+            $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPrice());
             $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
             $em->persist($purchaseItem);
             $em->flush();
-         //   $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->generatePurchaseVendorItem($purchase);
             $em->getRepository('ProcurementBundle:PurchaseRequisition')->purchaseSimpleUpdate($purchase);
             return $this->redirect($this->generateUrl('pro_purchaserequisition_edit', array('id' => $purchase->getId())));
         }

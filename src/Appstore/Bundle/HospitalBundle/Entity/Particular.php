@@ -624,7 +624,7 @@ class Particular
     }
 
     public function getDoctor(){
-       $designation = empty($this->doctorSignature) ? '' : " (".$this->doctorSignature.")";
+       $designation = empty($this->designation) ? '' : " (".$this->designation.")";
         return $this->name.$designation;
     }
 
@@ -633,7 +633,7 @@ class Particular
         if($this->getService()->getId() == 6 ){
             return $this->particularCode.' - '.$this->name;
         }else{
-            $designation = empty($this->doctorSignature) ? '' : " (".$this->doctorSignature.")";
+            $designation = empty($this->designation) ? '' : " (".$this->designation.")";
             return $this->particularCode.' - '.$this->name.$designation;
         }
 

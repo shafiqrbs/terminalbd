@@ -78,6 +78,7 @@
                                         <div class="span3">
                                             <h4>Admission:</h4>
                                             <ul class="unstyled">
+                                                <li><strong>Created by:</strong>&nbsp;{% if entity.createdBy.profile is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</li>
                                                 <li><strong>Patient Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
                                                 <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y H:i') }}</li>
                                                 <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y H:i') }}{% endif %}</li>
@@ -197,14 +198,95 @@
 
                                             </tr>
                                             <tr>
-                                                <td class="span2" ><strong>Remark</strong></td>
-                                                <td colspan="7" class="span10">{{ entity.comment|raw }}</td>
+                                                <td class="span2" colspan="3" ><strong>Remark</strong></td>
+                                                <td colspan="5" class="span10">{{ entity.comment|raw }}</td>
                                             </tr>
+                                            {% if entity.discountRequestedBy %}
+                                                <tr>
+                                                    <td class="span2" colspan="3" ><strong>Discounted By</strong></td>
+                                                    <td class="numeric" colspan="5">{{ entity.discountRequestedBy }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="numeric" colspan="3"><strong>Discounted Comment</strong></td>
+                                                    <td class="numeric" colspan="5">{{ entity.discountRequestedComment }}</td>
+                                                </tr>
+                                            {% endif %}
 
                                             </tfoot>
                                         </table>
                                     {% endif %}
                                 </div>
+                                <div class="clearfix">&nbsp;</div>
+                                {% if entity.children  is not empty %}
+                                <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                    <thead class="flip-content ">
+                                    <tr class="head-green">
+                                        <th class="numeric" >Created</th>
+                                        <th class="numeric" >Created By</th>
+                                        <th class="numeric" >Invoice No</th>
+                                        <th class="numeric" >Doctor</th>
+                                        <th class="numeric" >Referred</th>
+                                        <th class="numeric" >Delivery Date</th>
+                                        <th class="numeric" >Net Total</th>
+                                        <th class="numeric" >Payment</th>
+                                        <th class="numeric" >Balance</th>
+                                        <th class="numeric" >Status</th>
+                                        <th class="numeric" >Report</th>
+                                        <th class="numeric" >Closed</th>
+                                        <th class="numeric" >Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% set processArr = {'In-progress':'In-progress'} %}
+                                    {% set processIntArr = ['Created','Pending','Revised','In-progress','Hold'] %}
+                                    {% set processEdit = ['Created','Pending','Revised','In-progress','Hold'] %}
+                                    {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due' ,'Paid':'Paid'} %}
+                                    {% for child in entity.children %}
+                                        <tr id="delete-{{ child.id }}">
+                                            <td class="numeric" >{{ child.created|date('d-m-Y h:i A') }}</td>
+                                            <td class="numeric" >{{ child.createdBy }}</td>
+                                            <td class="numeric" >{{ child.invoice }}</td>
+                                           <td class="numeric" >
+                                                {% if (child.process in processEdit and child.assignDoctor is empty ) or (app.user.granted("ROLE_DOMAIN")) %}
+                                                    <a  data-type="select" class="editable" id="AssignDoctor" data-name="AssignDoctor" href="javascript:" data-source="{{ path('hms_patient_assign_doctor') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ child.id }}"  value="{% if child.assignDoctor is defined and child.assignDoctor is not empty  %}{{  child.assignDoctor.id }}{% endif %}" data-value="{% if child.assignDoctor is defined and child.assignDoctor is not empty  %}{{  child.assignDoctor.id }}{% endif %}" data-original-title="Enter doctor name">{% if child.assignDoctor is defined and child.assignDoctor is not empty  %}{{  child.assignDoctor.name }}{% endif %}</a>
+                                                {% else %}
+                                                    {% if child.assignDoctor is not empty %}{{ child.assignDoctor.name }} {% endif %}
+                                                {% endif %}
+                                            </td>
+                                            <td class="numeric" >
+                                                {% if (child.process in processEdit and child.assignDoctor is empty ) or (app.user.granted("ROLE_DOMAIN")) %}
+                                                    <a  data-type="select" class="editable" id="ReferredDoctor" data-name="ReferredDoctor" href="javascript:" data-source="{{ path('hms_patient_assign_referred') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ child.id }}"  value="{% if child.referredDoctor is defined and child.referredDoctor is not empty  %}{{  child.referredDoctor.id }}{% endif %}" data-value="{% if child.referredDoctor is defined and child.referredDoctor is not empty  %}{{  child.referredDoctor.id }}{% endif %}" data-original-title="Enter referred name">{% if child.referredDoctor is defined and child.referredDoctor is not empty  %}{{  child.referredDoctor.name }}{% endif %}</a>
+                                                {% else %}
+                                                    {% if child.referredDoctor is not empty %}{{ child.referredDoctor.name }} {% endif %}
+                                                {% endif %}
+                                            </td>
+                                            <td class="numeric" >{{ child.deliveryDateTime }}</td>
+                                            <td class="numeric" >{{ child.total }}</td>
+                                            <td class="numeric" >{{ child.payment }}</td>
+                                            <td class="numeric" >{{ child.due }}</td>
+                                            <td class="numeric" >{{ child.paymentStatus }}</td>
+                                            <td class="numeric" >
+                                                {% if child.revised == 1 %}
+                                                    <a target="_blank" href="{{ path('hms_invoice_reverse_show', { 'id': child.id }) }}" class="btn black mini"><i class="icon-retweet"></i> Revised</a>
+                                                {% elseif child.process == 'Returned' %}
+                                                    <span class="btn mini yellow">{{ child.process }}</span>
+                                                {% else %}
+                                                    {{ child.process }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="numeric" >{% if child.commissionApproved == 1 %}{{ child.updated|date('d-m-Y') }}{% endif %}</td>
+                                            <td class="numeric" >
+                                                {% if (child.paymentStatus in  PaymentArr|keys and  child.process in processIntArr and child.invoiceParticulars|length > 0) %}
+                                                    <a target="_blank" href="{{ path('hms_invoice_confirm', { 'id': child.id }) }}" class="btn yellow mini" ><i class="icon-refresh"></i> Process</a>
+                                                {% endif %}
+                                                <a target="_blank" href="{{ path('hms_invoice_show', { 'id': child.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% endif %}
                                 <div class="clearfix">&nbsp;</div>
                                 {% if invoiceTransaction is defined and invoiceTransaction is defined is not empty  %}
                                     <div class="form-actions portlet box blue">
@@ -290,9 +372,6 @@
                                                     <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                                     <td class="span2"><strong class="total">{{ invoiceTransaction.total|number_format }}</strong></td>
                                                     <td class="span1"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="8" class="span12">Remark: {{ entity.comment|raw }}</td>
                                                 </tr>
                                                 </tfoot>
                                             </table>
@@ -764,12 +843,6 @@
     {% block documentready %}
         {{ parent() }}
         EditableInit();
-        $(document).on('click', '.showTransaction', function() {
-            var id = $(this).attr('data-id');
-            $('#transaction-'+id).slideToggle();
-            $("i", this).toggleClass("fa-minus fa-plus");
-        });
-
         $(document).on('click', '.processConfirm', function() {
             var process = $(this).attr('data-title');
             $('.process').hide();

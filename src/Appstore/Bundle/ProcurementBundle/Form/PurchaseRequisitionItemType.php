@@ -34,7 +34,7 @@ class PurchaseRequisitionItemType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AssetsBundle\Entity\Item',
                 'empty_value' => '---Choose a item ---',
-                'property' => 'name',
+                'property' => 'productItemWithPrice',
                 'attr'=>array('class'=>'span12 select2'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))

@@ -47,7 +47,7 @@ class InvoicePaymentType extends AbstractType
                 'attr'=>array('class'=>'custom-control-input isDiscount')
             ,'required'=> false,'mapped'=> false
             ))
-            ->add('discountRequestedBy','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount requested by','autocomplete'=>'off')))
+            ->add('discountRequestedBy','text', array('attr'=>array('class'=>'m-wrap span12 requested2User','placeholder'=>'Discount requested by','autocomplete'=>'off')))
             ->add('discountRequestedComment','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount requested comment','autocomplete'=>'off')))
 
             ->add('discount','number',array('attr'=>array('class'=>'m-wrap span12 discount numeric','placeholder'=>'Enter Discount'),'required'=> false))

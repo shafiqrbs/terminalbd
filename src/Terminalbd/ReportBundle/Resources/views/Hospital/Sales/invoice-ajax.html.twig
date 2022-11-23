@@ -39,6 +39,7 @@
                 <th class="text-right">Total</th>
                 <th class="text-right">Receive</th>
                 <th class="text-right">Balance</th>
+                <th class="text-right">Discounted By</th>
             </tr>
             <tbody>
             {% set subTotal = 0 %}
@@ -69,6 +70,7 @@
                     <td class="text-right" >{{ entity.total|number_format(2) }}</td>
                     <td class="text-right" >{{ entity.receive|number_format(2) }}</td>
                     <td class="text-right" >{{ (entity.total-entity.receive)|number_format(2) }}</td>
+                    <td class="text-right" >{{ entity.discountRequestedBy }}</td>
                 </tr
             {% endfor %}
             </tbody>
@@ -80,6 +82,7 @@
                 <th class="text-right">{{ sales|number_format(2) }}</th>
                 <th class="text-right">{{ receive|number_format(2) }}</th>
                 <th class="text-right">{{ balance|number_format(2) }}</th>
+                <th class="text-right"></th>
             </tr>
             </tfoot>
         </table>

@@ -50,7 +50,26 @@ class UserRepository extends EntityRepository
         $query->setParameter('globalOption', $globalOption->getId());
         $query->groupBy('e.id');
         $query->orderBy('e.username', 'ASC');
-        $query->setMaxResults( '10' );
+        $query->setMaxResults( '100' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchAutoCompleteProfile($q, GlobalOption $globalOption)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.profile','p');
+        $query->select('p.name as id');
+        $query->addSelect('p.name as text');
+        $query->where("e.globalOption = :globalOption");
+        $query->setParameter('globalOption', $globalOption->getId());
+        if (!empty($q)) {
+            $query->andWhere('e.username LIKE :searchTerm OR p.name LIKE :searchTerm OR p.mobile LIKE :searchTerm');
+            $query->setParameter('searchTerm', '%'.trim($q).'%');
+        }
+        $query->groupBy('e.id');
+        $query->orderBy('p.name', 'ASC');
+        $query->setMaxResults( '100' );
         return $query->getQuery()->getResult();
 
     }

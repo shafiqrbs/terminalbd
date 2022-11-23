@@ -129,9 +129,8 @@
                             <div class="span12">
                                 <div class="control-group">
                                     <label class="control-label red" for="firstName"><span>Cabin/Ward/Bed<span class="required">*</span></span></label>
-                                    <div class="controls select-error-tooltip">
-                                        {{ form_widget(form.cabin) }}
-                                        {{ form_errors(form.cabin) }}
+                                    <div class="controls    ">
+                                        <label class="">  {% if  entity.cabin%} {{ entity.cabin.name }}{% endif %}</label>
                                     </div>
                                 </div>
                             </div>

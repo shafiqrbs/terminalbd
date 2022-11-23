@@ -908,6 +908,22 @@ class PurchaseRequisition
         return $this->requisitionItems;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getClub()
+    {
+        return $this->club;
+    }
+
+    /**
+     * @param mixed $club
+     */
+    public function setClub($club)
+    {
+        $this->club = $club;
+    }
+
 
 }
 

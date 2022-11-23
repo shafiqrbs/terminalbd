@@ -13,6 +13,36 @@ $(document).on('change', '.checker', function() {
     $( "#discount-box" ).slideToggle( "slow" );
 });
 
+$(".requested2User").select2({
+    ajax: {
+        url: Routing.generate('domain_user_profilename_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    allowClear: true,
+    minimumInputLength: 1
+});
 
 $(".select2Invoice").select2({
 
@@ -66,6 +96,8 @@ $(document).on('change', '#select2Invoice, #barcode2Invoice', function() {
                 async: true,
                 success: function (response) {
                     el.find('.dialogModal_content').html(response);
+                    EditableWithOutReloadInit();
+                    eventShowHide();
                 }
             });
         },
@@ -75,7 +107,19 @@ $(document).on('change', '#select2Invoice, #barcode2Invoice', function() {
 
 });
 
+$(document).on('click', '.showTransaction', function() {
+    var id = $(this).attr('data-id');
+    $('#transaction-'+id).slideToggle();
+    $("i", this).toggleClass("fa-minus fa-plus");
+});
 
+function eventShowHide(){
+    $(document).on('click', '.showTransaction', function() {
+        var id = $(this).attr('data-id');
+        $('#transaction-'+id).slideToggle();
+        $("i", this).toggleClass("fa-minus fa-plus");
+    });
+}
 
 
 

@@ -62,14 +62,14 @@
                                         {% set quantity = quantity + entity.quantity %}
                                         <tr>
                                             <td class="numeric" >{{ loop.index }}.</td>
-                                            <td class="numeric" >{{ entity.purchase.updated|date('d-m-y') }}</td>
-                                            <td class="numeric" >{{ entity.purchase.branch.name }}</td>
+                                            <td class="numeric" >{{ entity.requisition.updated|date('d-m-y') }}</td>
+                                            <td class="numeric" >{{ entity.requisition.club.name }}</td>
                                             <td class="numeric" >{{ entity.item.name }}</td>
                                             <td class="numeric" >{{ entity.name }}</td>
                                             <td class="numeric" >{{ entity.purchasePrice }}</td>
                                             <td class="numeric" >{{ entity.quantity }}</td>
                                             <td class="numeric" >
-                                                <input type="text" name="issueQuantity[]" class="span4 numeric" id="" value="{{ entity.itemStock }}" >
+                                                <input type="text" name="issueQuantity[]" class="span4 numeric" id="" value="" >
                                                 <input type="hidden" name="item[]" value="{{ entity.id }}">
                                             </td>
                                         </tr>

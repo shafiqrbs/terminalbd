@@ -6,6 +6,7 @@ namespace Appstore\Bundle\AssetsBundle\Controller;
 
 use Appstore\Bundle\AssetsBundle\Entity\OfficeNote;
 use Appstore\Bundle\AssetsBundle\Form\OfficeNoteType;
+use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -101,9 +102,14 @@ class OfficeNoteController extends Controller
         $data = '';
         $entities = $em->getRepository('ProcurementBundle:PurchaseRequisition')->findWithSearchApproved($inventory->getId(),$data);
         $pagination = $entities->getQuery()->getResult();
+
+
+        $records = $this->getDoctrine()->getRepository(PurchaseRequisitionItem::class)->purchaseGroupItemQuantity($inventory);
+
         return $this->render('AssetsBundle:OfficeNote:new.html.twig', array(
 			'entity'      => $officeNote,
 			'entities'      => $pagination,
+			'records'      => $records,
 			'form'   => $editForm->createView(),
 		));
 	}

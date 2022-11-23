@@ -43,17 +43,27 @@
 
                 </div>
                 <div class="row">
+                    <div class="col-md-1 margin-top">
+                        <label>Mode</label>
+                        <select class="search-input span12 m-wrap" id="referredMode" name="referredMode">
+                            <option value="">--Mode--</option>
+                            {% set referredModes = {'all':'All','doctor':'Doctor','referred':'Referred','assistant':'Assistant Doctor','anesthesia':'Anesthesia','discountBy':'Discount By'} %}
+                            {% for key,mode in referredModes %}
+                                <option {% if searchForm.referredMode is defined and searchForm.referredMode == key %} selected="selected" {% endif %} value="{{ key }}">{{ mode }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                     <div class="col-md-2 margin-top">
                         <label>Process</label>
                         <select class="search-input span12 m-wrap" id="mode" name="mode">
-                            <option value="">--Select Invoice Mode--</option>
+                            <option value="">--Invoice Mode--</option>
                             {% set modes = {'diagnostic':'Diagnostic','admission':'Admission','visit':'Visit'} %}
                             {% for key,mode in modes %}
                                 <option {% if searchForm.mode is defined and searchForm.mode == key %} selected="selected" {% endif %} value="{{ key }}">{{ mode }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-3 margin-top">
+                    <div class="col-md-2 margin-top">
                         <label>Process</label>
                         <select class="search-input span12 m-wrap" id="process" name="process">
                             <option value="">--Select Process--</option>

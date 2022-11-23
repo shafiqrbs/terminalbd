@@ -256,6 +256,14 @@ class Item
 	 /**
 	 * @var float
 	 *
+	 * @ORM\Column(name="price", type="float", nullable=true)
+	 */
+	private $price;
+
+
+	 /**
+	 * @var float
+	 *
 	 * @ORM\Column(name="unitPrice", type="float", nullable=true)
 	 */
 	private $unitPrice;
@@ -621,6 +629,11 @@ class Item
 	 */
 	public function getDistributions() {
 		return $this->distributions;
+	}
+
+	public function productItemWithPrice()
+	{
+		return $product = $this->getSku().' - '.$this->getName().' - BDT. '.$this->getPrice();
 	}
 
 	public function productItem()
@@ -1429,6 +1442,22 @@ class Item
     public function setSkuName($skuName)
     {
         $this->skuName = $skuName;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
     }
 
 

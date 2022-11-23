@@ -72,6 +72,14 @@ class PurchaseRequisitionItem
 
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="price", type="float", nullable=true)
+     */
+    private $price;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="code", type="integer", nullable = true)
@@ -343,6 +351,22 @@ class PurchaseRequisitionItem
     public function getOrderItems()
     {
         return $this->orderItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
     }
 
 

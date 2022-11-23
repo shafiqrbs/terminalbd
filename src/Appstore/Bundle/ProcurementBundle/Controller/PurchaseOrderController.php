@@ -60,7 +60,7 @@ class PurchaseOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new PurchaseOrder();
-        $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig()->getId();
+        $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig();
         $entity->setConfig($inventory);
         $em->persist($entity);
         $em->flush();
@@ -283,7 +283,7 @@ class PurchaseOrderController extends Controller
     public function poIssueAction(Request $request)
     {
 		$data = $_REQUEST;
-    	$entities = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseOrderItem')->listPoIssueItem($data);
+    	$entities = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->listPoIssueItem($data);
 	    $pagination = $this->paginate($entities);
     	return $this->render('ProcurementBundle:PurchaseOrder:po-item.html.twig', array(
 		    'selected' => explode(',', $request->cookies->get('barcodes', '')),
@@ -302,7 +302,7 @@ class PurchaseOrderController extends Controller
 			}
 			return $this->redirect($this->generateUrl('pro_purchaseorder_poissue'));
 		}else{
-			$this->getDoctrine()->getRepository('ProcurementBundle:PurchaseOrderItem')->prProcess('issued',$data);
+			$this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->prProcess('issued',$data);
 			$entities = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseOrderItem')->getPoItem($data);
 			return $this->render('@Procurement/PurchaseOrder/po-generate.html.twig', array(
 				'entities'      => $entities

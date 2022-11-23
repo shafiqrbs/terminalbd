@@ -110,7 +110,7 @@
                                             <select name="referred" id="referred" class="m-wrap span12">
                                                 <option value="" >--Referred--</option>
                                                 {% for referred in referredDoctors %}
-                                                    <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
+                                                    <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.mobile }} - {{ referred.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

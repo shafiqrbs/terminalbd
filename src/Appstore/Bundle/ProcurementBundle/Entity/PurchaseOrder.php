@@ -95,6 +95,14 @@ class PurchaseOrder
 
 
 	/**
+     * @var string
+     *
+     * @ORM\Column(name="vendorQuotation", type="string", length = 50, nullable=true)
+     */
+    private $vendorQuotation;
+
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="purchase" )
 	 **/
 	private  $transactionMethod;
@@ -910,6 +918,22 @@ class PurchaseOrder
     public function setOrderItems($orderItems)
     {
         $this->orderItems = $orderItems;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVendorQuotation()
+    {
+        return $this->vendorQuotation;
+    }
+
+    /**
+     * @param string $vendorQuotation
+     */
+    public function setVendorQuotation($vendorQuotation)
+    {
+        $this->vendorQuotation = $vendorQuotation;
     }
 
 

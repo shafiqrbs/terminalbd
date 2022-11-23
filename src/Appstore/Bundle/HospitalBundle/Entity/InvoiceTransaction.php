@@ -149,7 +149,7 @@ class InvoiceTransaction
      *
      * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
-    private $process ='Created';
+    private $process ='Pending';
 
     /**
      * @var string

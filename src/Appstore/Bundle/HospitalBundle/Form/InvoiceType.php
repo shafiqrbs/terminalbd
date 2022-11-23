@@ -74,7 +74,7 @@ class InvoiceType extends AbstractType
                 'attr'=>array('class'=>'tooltips custom-control-input','data-trigger' => 'hover','placeholder'=>'Receive')
             ,'required'=> false,'mapped'=> false
             ))
-            ->add('discountRequestedBy','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount requested by','autocomplete'=>'off')))
+            ->add('discountRequestedBy','text', array('attr'=>array('class'=>'m-wrap span12 requested2User','placeholder'=>'Discount requested by','autocomplete'=>'off')))
             ->add('discountRequestedComment','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount requested comment','autocomplete'=>'off')))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(

@@ -90,7 +90,7 @@ class PurchaseRequisitionItemRepository extends EntityRepository
 		$barcode = isset($data['barcode'])? $data['barcode'] :'';
 
 		$qb = $this->createQueryBuilder('pi');
-		$qb->join("pi.purchase",'purchase');
+		$qb->join("pi.requisition",'purchase');
 		$qb->join("pi.item",'item');
 		//$qb->where("purchase.approve = :approve")->setParameter('approve','approved' );
 		//$qb->andWhere("purchase.process = :process")->setParameter('process','Po-issue' );
@@ -193,6 +193,49 @@ class PurchaseRequisitionItemRepository extends EntityRepository
         return $item;
     }
 
+    public function purchaseGroupItemQuantity($config)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.requisition','r');
+        $qb->join('e.item','i');
+        $qb->select('i.name  as name','i.id  as item','SUM(e.quantity)  as quantity','i.remainingQuantity as remainQty','(i.remainingQuantity - SUM(e.quantity))  as stock');
+        $qb->where("r.config = :inventory");
+        $qb->setParameter('inventory', $config->getId());
+        $qb->groupBy('i.id');
+        $qb->orderBy('i.name','ASC');
+        $items = $qb->getQuery()->getArrayResult();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.requisition','r');
+        $qb->join('r.club','c');
+        $qb->select('c.id  as clubId','c.name  as clubName');
+        $qb->where("r.config = :inventory");
+        $qb->setParameter('inventory', $config->getId());
+        $qb->groupBy('c.id');
+        $clubs = $qb->getQuery()->getArrayResult();
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.requisition','r');
+        $qb->join('r.club','c');
+        $qb->leftJoin('e.item','i');
+        $qb->select('SUM(e.quantity)  as quantity');
+        $qb->addSelect('i.name  as name','i.id  as item');
+        $qb->addSelect('c.id  as club');
+        $qb->where("r.config = :inventory")->setParameter('inventory', $config->getId());
+        $qb->groupBy('i.id');
+        $qb->addOrderBy('c.id');
+        $result = $qb->getQuery()->getArrayResult();
+
+        $data = array();
+        foreach ($result as $row){
+            $grn = "{$row['club']}-{$row['item']}";
+            $data[$grn] = $row;
+        }
+        return $records = array('items' => $items, 'clubs' => $clubs,'data' => $data);
+
+    }
 
     public function getPurchaseItemQuantity($purchase,$purchaseVendorItem = 0 )
     {

@@ -175,13 +175,13 @@ class PurchaseRequisitionRepository extends EntityRepository
         $qb->select('p.id as id');
         $qb->addSelect('SUM(pvi.quantity) AS quantity ');
         $qb->addSelect('COUNT(pvi.id) AS item');
-       // $qb->addSelect('SUM(pvi.purchaseSubTotal) AS total');
+        $qb->addSelect('SUM(pvi.purchaseSubTotal) AS total');
         $qb->where("p.id = :purchaseId")->setParameter('purchaseId', $purchase);
         $row = $qb->getQuery()->getOneOrNullResult();
         $purchase->setTotalQnt($row['quantity']);
         $purchase->setTotalItem($row['item']);
-      //  $purchase->setTotalAmount($row['total']);
-       // $purchase->setPaymentAmount($row['total']);
+        $purchase->setTotalAmount($row['total']);
+        /// $purchase->setPaymentAmount($row['total']);
         $this->_em->persist($purchase);
         $this->_em->flush($purchase);
 

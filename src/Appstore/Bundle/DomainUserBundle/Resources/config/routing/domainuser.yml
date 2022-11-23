@@ -69,6 +69,13 @@ domain_user_search:
     options:
             expose: true
 
+domain_user_profilename_search:
+    path:     /search-profile-name
+    defaults: { _controller: "DomainUserBundle:DomainUser:autoSearchProfileName" }
+    options:
+        expose: true
+
+
 domain_user_name:
     path:      /{user}/user-name
     defaults: { _controller: "DomainUserBundle:DomainUser:searchUserName" }

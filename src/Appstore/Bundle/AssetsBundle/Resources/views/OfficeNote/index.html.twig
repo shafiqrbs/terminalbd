@@ -79,6 +79,7 @@
                                     <th class="numeric" >Meeting Date</th>
                                     <th class="numeric" >Meeting Note No</th>
                                     <th class="numeric" >Amount</th>
+                                    <th class="numeric" >File</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -93,6 +94,7 @@
                                         <td class="numeric" >{{ entity.meetingDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.meetingNoteNo }}</td>
                                         <td class="numeric" >{{ entity.amount|number_format(2) }}</td>
+                                        <td class="numeric" >{% if  entity.webPath is not empty %}<a target="_blank" href="/{{ entity.webPath }}">Download</a>{% endif %}</td>
                                         <td class="numeric pull-center" ><a title="Approve" href="javascript:" class="btn green disabled mini" >&nbsp;{{ entity.process|capitalize }}</a></td>
                                         <td class="numeric" id="action-{{ entity.id }}"  >
                                             <div class="btn-group">

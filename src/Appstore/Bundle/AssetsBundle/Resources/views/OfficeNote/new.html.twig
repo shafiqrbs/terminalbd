@@ -169,6 +169,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <table class="table table-bordered table-striped table-condensed flip-content">
 
                             <thead>
@@ -201,48 +202,52 @@
                                     <td class="numeric pull-center" ><a title="Approve" href="javascript:" class="btn green disabled mini" >&nbsp;{{ entity.process|capitalize }}</a></td>
 
                                 </tr>
-                                <tr>
-                                   <td colspan="12"> <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                           <thead class="flip-content ">
-                                           <tr class="head-gray">
-                                               <th class="numeric" ><i class="icon-reorder"></i></th>
-                                               <th class="numeric" >Item Mode</th>
-                                               <th class="numeric" >Item</th>
-                                               <th class="numeric" >Product</th>
-                                               <th class="numeric" >QTY</th>
-                                               <th class="numeric" >Unit</th>
-                                               <th class="numeric" >Sub-total</th>
-                                               <th class="numeric" ></th>
-                                           </tr>
-                                           </thead>
-                                           <tbody>
-                                           {% if entity.requisitionItems is not empty %}
-                                               {% for purchaseItem in entity.requisitionItems %}
-                                                   <tr>
-                                                       <td class="numeric" >{{ loop.index }}.</td>
-                                                       <td class="numeric" >{% if purchaseItem.item.productGroup is not empty %}{{ purchaseItem.item.productGroup.name }}{% endif %}</td>
-                                                       <td class="numeric" >{{ purchaseItem.item.name }}</td>
-                                                       <td class="numeric" >{{ purchaseItem.name }}</td>
-                                                       <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                                       <td class="numeric" >{{purchaseItem.purchasePrice}}</td>
-                                                       <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>                         <td class=" numeric" >
-                                             <span class="pull-left">
-                                                {% if entity.approve != 'approved' %}
-                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
-                                                {% endif %}
-                                             </span>
-                                                       </td>
-                                                   </tr>
-                                               {% endfor %}
-                                           {% endif %}
-                                           </tbody>
-
-                                       </table></td>
-
-                                </tr>
                             {% endfor %}
                             </tbody>
+                        </table>
+                        <table class="table table-bordered table-striped table-condensed flip-content">
+
+                            <thead>
+                            <tr class="head-blue">
+                                <th>Department/Branch</th>
+                                {% if records is not empty %}
+                                    {% for item in records['items'] %}
+                                        <th class="numeric" >{{ item.name }}</th>
+                                    {% endfor %}
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if records['clubs'] is not empty %}
+                                {% for club in records['clubs'] %}
+                                    <tr>
+                                        <th>{{ club.clubName }}</th>
+                                        {% for item in records['items'] %}
+                                            <td class="text-right">{% set row = club['clubId']~'-'~item['item'] %}
+                                                {{ records['data'][row].quantity }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Current Stock</th>
+                                    {% if records is not empty %}
+                                        {% for item in records['items'] %}
+                                            <th class="text-right">{{ item.remainQty }}</th>
+                                        {% endfor %}
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <th>Remaining Stock</th>
+                                    {% if records is not empty %}
+                                        {% for item in records['items'] %}
+                                            <th class="text-right" >{{ item.stock }}</th>
+                                        {% endfor %}
+                                    {% endif %}
+                                </tr>
+                            </tfoot>
                         </table>
                         <div class="form-actions portlet box grey">
                             <div class="pull-right">

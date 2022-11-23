@@ -292,6 +292,8 @@ class AccountSalesRepository extends EntityRepository
 
     public function reportFindWithSearch($option,$data = '')
     {
+        $startDateTime = isset($data['startDateTime'])? $data['startDateTime'] :'';
+        $endDateTime = isset($data['endDateTime'])? $data['endDateTime'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.updated as created','e.totalAmount as debit','e.amount as credit','e.balance as balance','e.processHead as mode','e.sourceInvoice as invoice');
         $qb->addSelect('c.name as name','c.mobile as mobile');
@@ -301,6 +303,14 @@ class AccountSalesRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $option);
         $this->handleSearchBetween($qb,$data);
+        if (!empty($startDateTime) ) {
+            $startDate = str_replace('T',' ',$startDateTime);
+            $qb->andWhere("e.updated >= :startDate")->setParameter('startDate', $startDate);
+        }
+        if (!empty($endDateTime)) {
+            $endDate = str_replace('T',' ',$endDateTime);
+            $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$endDate);
+        }
         $qb->orderBy('e.updated','ASC');
         $qb->setFirstResult(0);
         $qb->setMaxResults(1000);

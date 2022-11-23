@@ -722,7 +722,7 @@ class Builder extends ContainerAware
         $menu['Procurement']->addChild("Requisition List", array('route' => 'pro_purchaserequisition'));
         $menu['Procurement']->addChild("New Requisition", array('route' => 'pro_purchaserequisition_new'));
         $menu['Procurement']->addChild("Purchase Order List", array('route' => 'pro_purchaseorder'));
-        $menu['Procurement']->addChild("New PO", array('route' => 'pro_purchaseorder_new'));
+        $menu['Procurement']->addChild("PO issue", array('route' => 'pro_purchaseorder_poissue'));
         $menu['Procurement']->addChild("Item Receive", array('route' => 'pro_receive'));
         $menu['Procurement']->addChild("Receive Voucher", array('route' => 'pro_receive'));
 

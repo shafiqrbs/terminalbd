@@ -312,6 +312,16 @@ class DomainUserController extends Controller
         return new JsonResponse($item);
     }
 
+    public function autoSearchProfileNameAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $go = $this->getUser()->getGlobalOption();
+            $item = $this->getDoctrine()->getRepository('UserBundle:User')->searchAutoCompleteProfile($item,$go);
+        }
+        return new JsonResponse($item);
+    }
+
     public function searchUserNameAction($user)
     {
         return new JsonResponse(array(

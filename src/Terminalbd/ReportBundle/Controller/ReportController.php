@@ -578,7 +578,7 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = "";
-        if(isset($data['startDate']) and $data['startDate'] and isset($data['endDate']) and $data['endDate'] ) {
+        if(isset($data['startDateTime']) and $data['startDateTime'] and isset($data['endDateTime']) and $data['endDateTime'] ) {
             $entities = $em->getRepository('AccountingBundle:AccountSales')->reportFindWithSearch($globalOption,$data);
             $htmlProcess = $this->renderView(
                 'ReportBundle:Accounting/Sales:sales-data.html.twig', array(
@@ -711,6 +711,7 @@ class ReportController extends Controller
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
         $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getHospitalProcess($hospital);
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getReferredDoctors($hospital);
+        $discountedUsers = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDiscountedUsers($hospital);
 
         return $this->render('ReportBundle:Hospital/Sales:invoice.html.twig', array(
             'employees' => $employees,

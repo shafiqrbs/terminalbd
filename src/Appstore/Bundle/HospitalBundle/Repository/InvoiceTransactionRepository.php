@@ -493,6 +493,7 @@ class InvoiceTransactionRepository extends EntityRepository
     public function admissionInvoiceTransactionUpdate(InvoiceTransaction $entity )
     {
         $em = $this->_em;
+        /* @var $invoice Invoice */
         $invoice = $entity->getHmsInvoice();
         if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
             $vat = $this->getCulculationVat($invoice, $entity->getPayment());
@@ -501,6 +502,9 @@ class InvoiceTransactionRepository extends EntityRepository
         if(empty($entity->getTransactionMethod())){
             $entity->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         }
+        $invoice->setDiscountRequestedBy($entity->getDiscountRequestedBy());
+        $invoice->setDiscountRequestedComment($entity->getDiscountRequestedComment());
+        $invoice->setComment($entity->getComment());
         $em->persist($entity);
         $em->flush($entity);
         $em->getRepository('AccountingBundle:AccountSales')->insertHospitalAccountInvoice($entity);
