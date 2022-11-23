@@ -24,7 +24,7 @@ class AssetsConfigRepository extends EntityRepository
         $em = $this->_em;
         $option = $option->getAssetsConfig()->getId();
 
-            $transaction = $em->createQuery('DELETE AssetsBundle:Disposal e WHERE e.config = '.$option);
+        $transaction = $em->createQuery('DELETE AssetsBundle:Disposal e WHERE e.config = '.$option);
         $transaction->execute();
 
         $transaction = $em->createQuery('DELETE AssetsBundle:Product e WHERE e.config = '.$option);
@@ -36,13 +36,7 @@ class AssetsConfigRepository extends EntityRepository
         $transaction = $em->createQuery('DELETE AssetsBundle:StockItem e WHERE e.config = '.$option);
         $transaction->execute();
 
-        $transaction = $em->createQuery('DELETE AssetsBundle:PurchaseItem e WHERE e.config = '.$option);
-        $transaction->execute();
-
         $transaction = $em->createQuery('DELETE AssetsBundle:Sales e WHERE e.config = '.$option);
-        $transaction->execute();
-
-        $transaction = $em->createQuery('DELETE AssetsBundle:Purchase e WHERE e.config = '.$option);
         $transaction->execute();
 
     }
