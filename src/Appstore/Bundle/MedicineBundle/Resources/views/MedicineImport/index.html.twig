@@ -61,9 +61,9 @@
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" ><a href="/{{ entity.webPath }}">Download File</a> </td>
                                         <td class="numeric" >
-                                            {% if entity.progress != 'invalid' %}
+                                            {% if entity.progress != 'migrated'  %}
                                                 <a title="" href="{{ path('medicinestock_import_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Import Medicine</i></a>
-                                                <a title="" href="{{ path('medicinestock_import_stock_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Import Stock</i></a>
+                                              {#  <a title="" href="{{ path('medicinestock_import_stock_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Import Stock</i></a>#}
                                             {% endif %}
                                             <a href="{{ path('medicinestock_import_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                         </td>
