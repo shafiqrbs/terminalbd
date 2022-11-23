@@ -109,21 +109,7 @@ class ItemMetaAttribute
         $this->item = $item;
     }
 
-    /**
-     * @return PurchaseItem
-     */
-    public function getPurchaseItem()
-    {
-        return $this->purchaseItem;
-    }
 
-    /**
-     * @param PurchaseItem $purchaseItem
-     */
-    public function setPurchaseItem($purchaseItem)
-    {
-        $this->purchaseItem = $purchaseItem;
-    }
 
     /**
      * @return mixed

@@ -1332,13 +1332,6 @@ class AssetsConfig
         return $this->purchase;
     }
 
-    /**
-     * @return PurchaseItem
-     */
-    public function getPurchaseItem()
-    {
-        return $this->purchaseItem;
-    }
 
 
     /**

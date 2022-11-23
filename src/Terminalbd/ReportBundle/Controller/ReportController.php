@@ -712,12 +712,12 @@ class ReportController extends Controller
         $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getHospitalProcess($hospital);
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getReferredDoctors($hospital);
         $discountedUsers = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDiscountedUsers($hospital);
-
         return $this->render('ReportBundle:Hospital/Sales:invoice.html.twig', array(
             'employees' => $employees,
             'assignDoctors' => $assignDoctors,
             'anesthesiaDoctors' => $anesthesiaDoctors,
             'referredDoctors' => $referredDoctors,
+            'discountedUsers' => $discountedUsers,
             'departments' => $departments,
             'processes' => $processes,
             'searchForm' => $data,

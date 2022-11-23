@@ -984,6 +984,7 @@ class InvoiceRepository extends EntityRepository
         $process = isset($data['process'])? $data['process'] :'';
         $mode = isset($data['mode'])? $data['mode'] :'';
         $referredMode = isset($data['referredMode'])? $data['referredMode'] :'';
+        $discountedBy = isset($data['discountedBy'])? $data['discountedBy'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.customer','c');
         $qb->leftJoin('e.department','dep');
@@ -1024,6 +1025,10 @@ class InvoiceRepository extends EntityRepository
         if(!empty($anesthesiaDoctor)){
             $qb->andWhere("e.anesthesiaDoctor = :anesthesiaDoctor");
             $qb->setParameter('anesthesiaDoctor', $anesthesiaDoctor);
+        }
+         if(!empty($discountedBy)){
+            $qb->andWhere("e.discountRequestedBy = :discountedBy");
+            $qb->setParameter('discountedBy', $discountedBy);
         }
         if(!empty($user)){
             $qb->andWhere("e.createdBy = :user");
@@ -1454,11 +1459,11 @@ class InvoiceRepository extends EntityRepository
      public function getDiscountedUsers($hospital)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.getDiscountedUsers','d');
-        $qb->select('d.id as id','d.name as name');
+        $qb->select('e.discountRequestedBy as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->groupBy('d.id');
-        $qb->orderBy('d.name','ASC');
+        $qb->andWhere('e.discountRequestedBy IS NOT NULL');
+        $qb->groupBy('e.discountRequestedBy');
+        $qb->orderBy('e.discountRequestedBy','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
     }

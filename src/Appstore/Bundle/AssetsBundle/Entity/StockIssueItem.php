@@ -28,7 +28,7 @@ class StockIssueItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", inversedBy="purchaseItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig")
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $config;

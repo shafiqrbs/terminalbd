@@ -1203,13 +1203,7 @@ class Item
         $this->vatPercentage = $vatPercentage;
     }
 
-    /**
-     * @return \Appstore\Bundle\AssetsBundle\Entity\PurchaseItem
-     */
-    public function getPurchaseItems()
-    {
-        return $this->purchaseItems;
-    }
+
 
     /**
      * @return DepreciationModel
