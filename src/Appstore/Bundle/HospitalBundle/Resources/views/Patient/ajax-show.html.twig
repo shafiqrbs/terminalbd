@@ -210,7 +210,7 @@
                             <tbody>
                             {% set processArr = {'In-progress':'In-progress'} %}
                             {% set processIntArr = ['Created','Pending','Revised','In-progress','Hold'] %}
-                            {% set processEdit = ['Created','Pending','Revised','In-progress','Hold'] %}
+                            {% set processEdit = ['Created','Pending','Revised','In-progress','Hold','Admitted'] %}
                             {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due' ,'Paid':'Paid'} %}
                             {% for child in entity.children %}
                                 <tr id="delete-{{ child.id }}">
@@ -225,10 +225,10 @@
                                         {% endif %}
                                     </td>
                                     <td class="numeric" >
-                                        {% if (child.process in processEdit and child.assignDoctor is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) %}
+                                        {% if (child.process in processEdit and child.referredDoctor is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) %}
                                             <a  data-type="select" class="editable" id="ReferredDoctor" data-name="ReferredDoctor" href="javascript:" data-source="{{ path('hms_patient_assign_referred') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ child.id }}"  value="{% if child.referredDoctor is defined and child.referredDoctor is not empty  %}{{  child.referredDoctor.id }}{% endif %}" data-value="{% if child.referredDoctor is defined and child.referredDoctor is not empty  %}{{  child.referredDoctor.id }}{% endif %}" data-original-title="Enter referred name">{% if child.referredDoctor is defined and child.referredDoctor is not empty  %}{{  child.referredDoctor.name }}{% endif %}</a>
                                         {% else %}
-                                            {% if child.cabin is not empty %}{{ child.cabin.name }} {% endif %}
+                                            {% if child.referredDoctor is not empty %}{{ child.referredDoctor.name }} {% endif %}
                                         {% endif %}
                                     </td>
                                     <td class="numeric" >{{ child.deliveryDateTime }}</td>

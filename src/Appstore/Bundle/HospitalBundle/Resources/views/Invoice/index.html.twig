@@ -239,14 +239,14 @@
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >
-                                            {% if (entity.process in processEdit and entity.assignDoctor is empty ) or (app.user.granted("ROLE_DOMAIN")) %}
+                                            {% if (entity.process in processEdit and entity.assignDoctor is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) %}
                                                 <a  data-type="select" class="editable" id="AssignDoctor" data-name="AssignDoctor" href="javascript:" data-source="{{ path('hms_patient_assign_doctor') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ entity.id }}"  value="{% if entity.assignDoctor is defined and entity.assignDoctor is not empty  %}{{  entity.assignDoctor.id }}{% endif %}" data-value="{% if entity.assignDoctor is defined and entity.assignDoctor is not empty  %}{{  entity.assignDoctor.id }}{% endif %}" data-original-title="Enter doctor name">{% if entity.assignDoctor is defined and entity.assignDoctor is not empty  %}{{  entity.assignDoctor.name }}{% endif %}</a>
                                             {% else %}
                                                 {% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }} {% endif %}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            {% if (entity.process in processEdit and entity.assignDoctor is empty ) or (app.user.granted("ROLE_DOMAIN")) %}
+                                            {% if (entity.process in processEdit and entity.referredDoctor is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) %}
                                                 <a  data-type="select" class="editable" id="ReferredDoctor" data-name="ReferredDoctor" href="javascript:" data-source="{{ path('hms_patient_assign_referred') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ entity.id }}"  value="{% if entity.referredDoctor is defined and entity.referredDoctor is not empty  %}{{  entity.referredDoctor.id }}{% endif %}" data-value="{% if entity.referredDoctor is defined and entity.referredDoctor is not empty  %}{{  entity.referredDoctor.id }}{% endif %}" data-original-title="Enter referred name">{% if entity.referredDoctor is defined and entity.referredDoctor is not empty  %}{{  entity.referredDoctor.name }}{% endif %}</a>
                                             {% else %}
                                                 {% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }} {% endif %}
