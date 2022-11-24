@@ -389,7 +389,7 @@ class AccountSalesRepository extends EntityRepository
 			$qb->andWhere("e.updated <= :endDate");
 			$qb->setParameter('endDate',$end);
 		}
-		$qb->orderBy('e.id','ASC');
+		$qb->orderBy('e.updated','ASC');
 		$result = $qb->getQuery()->getResult();
 		return $result;
 
@@ -1005,6 +1005,7 @@ class AccountSalesRepository extends EntityRepository
         }
         $accountSales->setProcessHead('Advance');
         $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setCreatedBy($entity->getCreatedBy());
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setCreated($entity->getCreated());
@@ -1044,6 +1045,7 @@ class AccountSalesRepository extends EntityRepository
             $accountSales->setTotalAmount($entity->getTotal());
             $accountSales->setProcessHead($entity->getInvoiceMode());
             $accountSales->setApprovedBy($entity->getCreatedBy());
+            $accountSales->setCreatedBy($entity->getCreatedBy());
             $accountSales->setProcessType('Sales');
             $accountSales->setProcess('approved');
             $accountSales->setCreated($entity->getCreated());
@@ -1072,6 +1074,7 @@ class AccountSalesRepository extends EntityRepository
             $accountSales->setTotalAmount($entity->getPayment());
             $accountSales->setAmount($entity->getPayment());
             $accountSales->setProcessHead($entity->getInvoiceMode());
+            $accountSales->setCreatedBy($entity->getCreatedBy());
             $accountSales->setApprovedBy($entity->getCreatedBy());
             $accountSales->setProcessType('Sales');
             $accountSales->setProcess('approved');

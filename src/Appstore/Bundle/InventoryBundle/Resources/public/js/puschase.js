@@ -234,5 +234,20 @@ function InventoryPurchasePage(){
     $('form.purchase').on('click', '.remove', function(){
         $(this).closest('.clone').remove();
     });
+
+    $(document).on('change', '.mode', function() {
+        var url = $(this).val();
+        if(url === ''){
+            alert('You have to add particulars from drop down and this not service item');
+            return false;
+        }
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+            }
+        })
+    });
 }
 

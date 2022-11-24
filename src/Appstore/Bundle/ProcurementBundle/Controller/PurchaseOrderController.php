@@ -192,8 +192,6 @@ class PurchaseOrderController extends Controller
         }else{
             return new Response('failed');
         }
-
-        exit;
     }
 
 
@@ -234,11 +232,11 @@ class PurchaseOrderController extends Controller
         $data = $request->request->all();
 	    $em = $this->getDoctrine()->getManager();
 	    $entity = new PurchaseOrder();
-	    $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-	    $entity->setInventoryConfig($inventory);
+	    $inventory = $this->getUser()->getGlobalOption()->getProcurementConfig();
+	    $entity->setConfig($inventory);
 	    $em->persist($entity);
 	    $em->flush();
-	    $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->insertPoItem($entity,$data);
+	//    $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseOrderItem')->insertPoItem($entity,$data);
 	    $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseOrderItem')->insertPoItem($entity,$data);
 	    $em->getRepository('ProcurementBundle:PurchaseOrder')->purchaseSimpleUpdate($entity);
 	    return $this->redirect($this->generateUrl('pro_purchaseorder_edit', array('id' => $entity->getId())));
@@ -261,7 +259,6 @@ class PurchaseOrderController extends Controller
 	     }else{
 		    return new Response('invalid');
 	     }
-	    exit;
     }
 
 

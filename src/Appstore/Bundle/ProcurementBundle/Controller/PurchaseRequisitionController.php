@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\ProcurementBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
 use Appstore\Bundle\ProcurementBundle\Entity\Requisition;
 use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionType;
@@ -385,6 +386,28 @@ class PurchaseRequisitionController extends Controller
 	    ));
     }
 
+    public function purchaseIssueAction(Request $request)
+    {
+        $data = $_REQUEST;
+        $entities = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->listPoIssueItem($data);
+        $pagination = $this->paginate($entities);
+        return $this->render('ProcurementBundle:PurchaseRequisition:purchase-item.html.twig', array(
+            'selected' => explode(',', $request->cookies->get('barcodes', '')),
+            'entities' => $pagination,
+        ));
+    }
+
+    public function stockIssueAction(Request $request)
+    {
+        $data = $_REQUEST;
+        $entities = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->listPoIssueItem($data);
+        $pagination = $this->paginate($entities);
+        return $this->render('ProcurementBundle:PurchaseRequisition:issue-item.html.twig', array(
+            'selected' => explode(',', $request->cookies->get('barcodes', '')),
+            'entities' => $pagination,
+        ));
+    }
+
 	public function prItemProcessAction(Request $request,$process)
 	{
 		$data = explode(',',$request->cookies->get('barcodes'));
@@ -401,10 +424,21 @@ class PurchaseRequisitionController extends Controller
 				'entities'      => $entities
 			));
 		}
-
-
-
 	}
+
+    /**
+     * Deletes a PurchaseItem entity.
+     *
+     */
+    public function modeUpdateAction(PurchaseRequisitionItem $purchaseItem, $mode)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $purchaseItem->setMode($mode);
+        $em->persist($purchaseItem);
+        $em->flush();
+        return new Response('success');
+    }
+
 
 
 

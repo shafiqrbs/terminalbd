@@ -721,8 +721,12 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Procurement']->addChild("Requisition List", array('route' => 'pro_purchaserequisition'));
         $menu['Procurement']->addChild("New Requisition", array('route' => 'pro_purchaserequisition_new'));
+        $menu['Procurement']->addChild('Issue', array('route' => ''))
+            ->setAttribute('dropdown', true);
+        $menu['Procurement']['Issue']->addChild('PO Issue', array('route' => 'pro_purchaserequisition_poissue'));
+        $menu['Procurement']['Issue']->addChild('Stock Issue', array('route' => 'pro_purchaserequisition_stockissue'));
+        $menu['Procurement']['Issue']->addChild('Local Purchase Issue', array('route' => 'pro_purchaserequisition_purchaseissue'));
         $menu['Procurement']->addChild("Purchase Order List", array('route' => 'pro_purchaseorder'));
-        $menu['Procurement']->addChild("PO issue", array('route' => 'pro_purchaseorder_poissue'));
         $menu['Procurement']->addChild("Item Receive", array('route' => 'pro_receive'));
         $menu['Procurement']->addChild("Receive Voucher", array('route' => 'pro_receive'));
 

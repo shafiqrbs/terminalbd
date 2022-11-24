@@ -6,6 +6,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -464,7 +465,7 @@ class PurchaseRequisitionItemRepository extends EntityRepository
 
     	foreach ($data['item'] as $key => $item ) {
 
-		    /* @var $item PurchaseRequisitionItem */
+		    /* @var $item PurchaseOrderItem */
 
 		    $item = $this->find( $item );
 		    $item->setPurchaseOrder( $entity );

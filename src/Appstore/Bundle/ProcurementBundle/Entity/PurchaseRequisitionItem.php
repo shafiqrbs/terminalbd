@@ -112,12 +112,21 @@ class PurchaseRequisitionItem
      * @ORM\Column(name="webPrice", type="float", nullable = true)
      */
     private $webPrice;
+
+
     /**
      * @var float
      *
      * @ORM\Column(name="process", type="string", nullable = true)
      */
     private $process= 'created';
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="mode", type="string", nullable = true)
+     */
+    private $mode = '';
 
     /**
      * @var string
@@ -368,6 +377,24 @@ class PurchaseRequisitionItem
     {
         $this->price = $price;
     }
+
+    /**
+     * @return float
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param float $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+
 
 
 }

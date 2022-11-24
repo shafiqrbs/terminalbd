@@ -102,10 +102,12 @@
                                         <th class="numeric" >Remain. QTY</th>
                                         <th class="numeric" >Unit</th>
                                         <th class="numeric" >Sub-total</th>
+                                        <th class="numeric" >Mode</th>
                                         <th class="numeric" ></th>
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    {% set modes = ['Purchase','PO Issue','Issue'] %}
                                     {% if entity.requisitionItems is not empty %}
                                     {% for purchaseItem in entity.requisitionItems %}
                                         <tr>
@@ -117,10 +119,23 @@
                                             <td class="numeric" >{{ purchaseItem.item.remainingQuantity }}</td>
                                             <td class="numeric" >{{ (purchaseItem.item.remainingQuantity - purchaseItem.quantity) }}</td>
                                             <td class="numeric" >{{purchaseItem.purchasePrice}}</td>
-                                            <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>                         <td class=" numeric" >
+                                            <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>
+                                            <td class="numeric" >
+                                            {% if entity.approve != 'approved'  %}
+                                                <select class="m-wrap span12 mode" name="mode[]" id="mode-{{ purchaseItem.id }}">
+                                                    <option value="">Process Mode </option>
+                                                    {% for mode in modes %}
+                                                        <option {% if purchaseItem.mode is not empty and purchaseItem.mode == mode %} selected {% endif %}  value="{{ path('pro_purchaseitem_mode', { 'id': purchaseItem.id,'mode': mode }) }}" >{{ mode }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% else %}
+                                                {{ purchaseItem.mode }}
+                                            {% endif %}
+                                            </td>
+                                            <td class=" numeric" >
                                              <span class="pull-left">
                                                 {% if entity.approve != 'approved' %}
-                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
+                                                    <a href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                              </span>
                                             </td>

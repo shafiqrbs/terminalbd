@@ -105,15 +105,17 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="" >
-                                            {% if ( app.user.granted("ROLE_HOSPITAL_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editableText" data-name="Name" href="#"  data-url="{{ path('hms_pathology_inline_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change  name" value="{{ entity.name }}">{{ entity.name }}</a>
+                                            {% else %}
+                                                {{ entity.name }}
                                             {% endif %}
                                         </td>
                                         <td class="numeric">{% if entity.category is not empty %}{{ entity.category.name|default('---') }}{% endif %}</td>
                                         <td class="numeric">{% if entity.department is not empty %}{{ entity.department.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.overHeadCost|number_format }}</td>
                                         <td class="numeric" >
-                                            {% if ( app.user.granted("ROLE_HOSPITAL_MANAGER") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                 <a  class="editableText" data-name="Price" href="#"  data-url="{{ path('hms_pathology_inline_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change  price">{{ entity.price }}</a>
                                             {% endif %}
                                         </td>

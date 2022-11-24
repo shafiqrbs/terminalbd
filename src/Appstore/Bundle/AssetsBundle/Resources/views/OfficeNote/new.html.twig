@@ -224,7 +224,7 @@
                                         <th>{{ club.clubName }}</th>
                                         {% for item in records['items'] %}
                                             <td class="text-right">{% set row = club['clubId']~'-'~item['item'] %}
-                                                {{ records['data'][row].quantity }}</td>
+                                             {% if records['data'][row] is defined and records['data'][row] is not empty %}{{ records['data'][row].quantity }}{% endif %}</td>
                                         {% endfor %}
                                     </tr>
                                 {% endfor %}

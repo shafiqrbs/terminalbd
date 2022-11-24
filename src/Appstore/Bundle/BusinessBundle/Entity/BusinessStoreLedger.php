@@ -48,6 +48,11 @@ class BusinessStoreLedger
      **/
     private  $transactionMethod;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="businessInvoice" )
+     **/
+    private  $paymentCard;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank")
@@ -58,6 +63,29 @@ class BusinessStoreLedger
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank")
      **/
     private  $accountMobileBank;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cardNo", type="string", length=100, nullable=true)
+     */
+    private $cardNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
+     */
+    private $paymentMobile;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
+     */
+    private $transactionId;
+
 
 
     /**
@@ -294,13 +322,6 @@ class BusinessStoreLedger
         $this->accountBank = $accountBank;
     }
 
-    /**
-     * @param mixed $accountMobileBank
-     */
-    public function setAccountMobileBank($accountMobileBank)
-    {
-        $this->accountMobileBank = $accountMobileBank;
-    }
 
     /**
      * @return mixed
@@ -445,6 +466,90 @@ class BusinessStoreLedger
     {
         $this->status = $status;
     }
+
+    /**
+     * @return string
+     */
+    public function getCardNo()
+    {
+        return $this->cardNo;
+    }
+
+    /**
+     * @param string $cardNo
+     */
+    public function setCardNo($cardNo)
+    {
+        $this->cardNo = $cardNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMobile()
+    {
+        return $this->paymentMobile;
+    }
+
+    /**
+     * @param string $paymentMobile
+     */
+    public function setPaymentMobile($paymentMobile)
+    {
+        $this->paymentMobile = $paymentMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentCard()
+    {
+        return $this->paymentCard;
+    }
+
+    /**
+     * @param mixed $paymentCard
+     */
+    public function setPaymentCard($paymentCard)
+    {
+        $this->paymentCard = $paymentCard;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param mixed $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+
+
+
 
 
 }

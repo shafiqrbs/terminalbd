@@ -156,19 +156,21 @@ class BusinessInvoice
      */
     private $cardNo;
 
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="venue", type="string", length=256, nullable=true)
-     */
-    private $venue;
-
     /**
      * @var string
      *
      * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
      */
     private $paymentMobile;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="venue", type="string", length=256, nullable=true)
+     */
+    private $venue;
+
 
     /**
      * @var string

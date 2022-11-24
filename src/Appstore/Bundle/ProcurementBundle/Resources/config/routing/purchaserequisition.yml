@@ -6,6 +6,14 @@ pro_purchaserequisition_poissue:
     path:     /po-issue-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:poIssue" }
 
+pro_purchaserequisition_stockissue:
+    path:     /stock-issue-item
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:stockIssue" }
+
+pro_purchaserequisition_purchaseissue:
+    path:     /purchase-issue-item
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:purchaseIssue" }
+
 pro_purchaserequisition_itemprocess:
     path:     /{process}/po-issue-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:prItemProcess" }
@@ -77,3 +85,7 @@ pro_grn_name:
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:searchName" }
     options:
            expose: true
+
+pro_purchaseitem_mode:
+    path:     /{id}/{mode}/mode-process
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:modeUpdate" }

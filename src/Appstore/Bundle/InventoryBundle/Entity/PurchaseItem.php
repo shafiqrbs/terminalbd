@@ -171,6 +171,13 @@ class PurchaseItem
      */
     private $serialNo;
 
+     /**
+     * @var text
+     *
+     * @ORM\Column(name="mode", type="text", nullable = true)
+     */
+    private $mode;
+
     /**
      * @var string
      *
@@ -720,6 +727,21 @@ class PurchaseItem
         return $this->itemSerials;
     }
 
+    /**
+     * @return text
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param text $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
 
 
 }
