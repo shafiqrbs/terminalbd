@@ -308,13 +308,32 @@ class InvoiceTransactionRepository extends EntityRepository
         $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
         $entity->setProcess('Done');
         $entity->setTransactionCode($transactionCode);
-        $entity->setDiscount($invoice->getDiscount());
-        $entity->setTotal($invoice->getSubTotal());
-        $entity->setPayment($invoice->getPayment());
         $this->_em->persist($entity);
         $this->_em->flush($entity);
         return $entity;
 
+    }
+
+   public function insertDefaultAdmissionParticular(Invoice $invoice){
+
+       $em = $this->_em;
+       $records = $em->getRepository("HospitalBundle:Particular")->findBy(array('hospitalConfig'=>$invoice->getHospitalConfig(),'admissionDefault' => 1));
+       if(count($records) > 0){
+           $code = $this->getLastCode($invoice);
+           $entity = New InvoiceTransaction();
+           $entity->setHmsInvoice($invoice);
+           $entity->setCode($code + 1);
+           $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+           $entity->setProcess('In-progress');
+           $entity->setTransactionCode($transactionCode);
+           $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+           $entity->setTransactionMethod($transactionMethod);
+           $this->_em->persist($entity);
+           $this->_em->flush($entity);
+           $em->getRepository('HospitalBundle:AdmissionPatientParticular')->insertDefaultInvoiceItems($entity,$records);
+           $em->getRepository('HospitalBundle:AdmissionPatientParticular')->updateInvoiceTransactionTotalPrice($entity);
+           return $entity;
+       }
     }
 
     public function initialInsertAdmissionInvoiceTransaction(Invoice $invoice){
@@ -324,7 +343,7 @@ class InvoiceTransactionRepository extends EntityRepository
         $entity->setHmsInvoice($invoice);
         $entity->setCode($code + 1);
         $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
-        $entity->setProcess('Create');
+        $entity->setProcess('In-progress');
         $entity->setTransactionCode($transactionCode);
         $entity->setPayment($invoice->getReceive());
         $entity->setTransactionMethod($invoice->getTransactionMethod());
@@ -388,7 +407,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setCode($code + 1);
             $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
             $entity->setTransactionCode($transactionCode);
-            $entity->setProcess('Done');
+            $entity->setProcess('In-progress');
             $entity->setDiscount($invoice->getDiscount());
             $entity->setPayment($invoice->getPayment());
             $entity->setTotal($invoice->getTotal());

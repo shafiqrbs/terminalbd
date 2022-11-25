@@ -167,6 +167,7 @@ class InvoiceAdmissionController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
+            $this->getDoctrine()->getRepository(InvoiceTransaction::class)->insertDefaultAdmissionParticular($entity);
             return $this->redirect($this->generateUrl('hms_invoice_admission_daily_invoice',array('invoice' => $entity->getInvoice())));
         }
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(

@@ -6,6 +6,7 @@ use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -17,6 +18,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdmissionPatientParticularRepository extends EntityRepository
 {
+
+    public function insertDefaultInvoiceItems($transaction,$records)
+    {
+        $em = $this->_em;
+        /* @var $record Particular */
+        foreach ($records as $record){
+            $entity = new AdmissionPatientParticular();
+            $entity->setQuantity(1);
+            $entity->setSalesPrice($record->getPrice());
+            $entity->setSubTotal($record->getPrice());
+            $entity->setInvoiceTransaction($transaction);
+            $entity->setParticular($record);
+            $entity->setEstimatePrice($record->getPrice());
+            $em->persist($entity);
+            $em->flush();
+        }
+
+
+    }
 
     public function insertInvoiceItems($transaction, $data)
     {

@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Other Services
+                   Manage Services & Procedures
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                     <li><a href="#">Other Services</a></li>
+                     <li><a href="#">Services & Procedures</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -28,7 +28,7 @@
 
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Other Services</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Services & Procedures</div>
                     </div>
                     <div class="portlet-body form">
                         <div class="portlet-body ">
@@ -40,14 +40,27 @@
                                 <!--/span-->
                                 <div class="span6">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Service name<span class="required">*</span></label>
+                                        <label class="control-label" for="name">Services & Procedures Name<span class="required">*</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.name) }}
                                             {{ form_errors(form.name) }}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3">
+                                <div class="span2">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="price">&nbsp;</label>
+                                                <div class="controls">
+                                                    Admission Default &nbsp; {{ form_widget(form.admissionDefault) }}
+                                                    {{ form_errors(form.admissionDefault) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
@@ -60,7 +73,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3">
+                                <div class="span2">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
@@ -105,6 +118,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Admission Default</th>
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >Minimum Price</th>
                                     <th class="numeric" >Action</th>
@@ -115,6 +129,7 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_cabin_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{% if entity.admissionDefault == 1 %} Yes {% endif %}</td>
                                         <td class="numeric" >{{ entity.price|number_format }}</td>
                                         <td class="numeric" >{{ entity.minimumPrice|number_format }}</td>
                                         <td class="numeric" >

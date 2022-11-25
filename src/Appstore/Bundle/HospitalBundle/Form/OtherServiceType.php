@@ -28,6 +28,7 @@ class OtherServiceType extends AbstractType
                         new NotBlank(array('message'=>'Please enter service name'))
                     ))
             )
+            ->add('admissionDefault')
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter content')))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room rent'),
                 'constraints' =>array(

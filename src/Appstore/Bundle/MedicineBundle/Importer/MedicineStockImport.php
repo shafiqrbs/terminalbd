@@ -46,8 +46,8 @@ class MedicineStockImport
                 $medicine = $exist;
                 $medicine->setOpeningQuantity($stock);
                 $medicine->setRemainingQuantity($stock);
-                $medicine->setPurchasePrice( $item['TP'] );
-                $medicine->setAveragePurchasePrice( $item['TP'] );
+                $medicine->setPurchasePrice( $item['PurchasePrice'] );
+                $medicine->setAveragePurchasePrice( $item['PurchasePrice'] );
                 $medicine->setAverageSalesPrice( $item['MRP'] );
                 $medicine->setSalesPrice( $item['MRP'] );
                 $this->persist( $medicine );
@@ -66,8 +66,8 @@ class MedicineStockImport
                 $medicine->setOpeningQuantity($stock);
                 $medicine->setRemainingQuantity($stock);
                 $medicine->setMinQuantity($minStock);
-                $medicine->setAverageSalesPrice( $item['TP'] );
-                $medicine->setPurchasePrice( $item['TP'] );
+                $medicine->setAverageSalesPrice( $item['PurchasePrice'] );
+                $medicine->setPurchasePrice( $item['PurchasePrice'] );
                 $medicine->setAverageSalesPrice( $item['MRP'] );
                 $medicine->setSalesPrice( $item['MRP'] );
                 if ($Category) {

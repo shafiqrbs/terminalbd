@@ -185,61 +185,20 @@
                                     </table>
                                 {% endif %}
                             </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <div class="row-fluid" id="showPayment">
-                                <div class="span12">
-                                    <table class="table table-bordered table-striped table-condensed table-fixed">
-                                        <thead>
-                                        <tr class="head-blue">
-                                            <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
-                                            <th class="numeric">Created</th>
-                                            <th class="numeric">Payment Method</th>
-                                            <th class="numeric">Discount</th>
-                                            <th class="numeric">Vat/Tax</th>
-                                            <th class="numeric">Amount</th>
-                                            <th class="numeric">Created By</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="invoiceTransaction">
-                                        {% for transaction in entity.invoiceTransactions %}
-                                            <tr>
-                                                <td  class="numeric">{{ loop.index }}</td>
-                                                <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                                <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
-                                                <td class="numeric">{{ transaction.discount }}</td>
-                                                <td class="numeric">{{ transaction.vat }}</td>
-                                                <td class="numeric">{{ transaction.payment }}</td>
-                                                <td class="numeric">{{ transaction.createdBy }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
-                                            <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
-                                            <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
-                                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
-                                            <td class="numeric"></td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                  <div class="pull-right" id="action-{{ entity.id }}">
                                      <div class="btn-group">
-                                    <a target="_blank"  href="{{ path('hms_prescription_print',{'id':entity.id}) }}" class="btn blue"><i class="icon-print"></i>&nbsp;Print</a>
-                                     {% if entity.hospitalConfig.appointmentPrescription == 1 and entity.process == "Done" %}
+                                        <a target="_blank"  href="{{ path('hms_prescription_print',{'id':entity.id}) }}" class="btn purple"><i class="icon-print"></i>&nbsp;Print</a>
+                                        {% if entity.hospitalConfig.appointmentPrescription == 1 and entity.process == "Done" %}
                                          <a target="_blank"  href="{{ path('hms_prescription_doctor_print',{'id':entity.id}) }}"  class="btn green tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i> Prescription</a>
-                                     {% endif %}
-                                    <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
-                                    <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
-                                     {% if app.user.granted("ROLE_DOMAIN") %}
+                                        {% endif %}
+                                        <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
+                                        <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                                        {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and entity.updated|date("d-m-Y") == "now"|date("d-m-Y")) %}
                                          <a  href="{{ path('hms_prescription_reverse',{'id':entity.id}) }}"  data-trigger="hover" data-original-title="Doctor Visit Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
-                                     {% endif %}
+                                        {% endif %}
                                      </div>
-                                </div>
+                                </div>x
                            </div>
                         </div>
                     </div>

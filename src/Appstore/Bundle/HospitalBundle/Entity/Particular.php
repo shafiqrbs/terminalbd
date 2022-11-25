@@ -480,6 +480,15 @@ class Particular
     private $isDoctor = false;
 
 
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="admissionDefault", type="boolean", nullable=true)
+     */
+    private $admissionDefault = false;
+
+
     /**
      * @var boolean
      *
@@ -1969,6 +1978,22 @@ class Particular
     public function setSendToAccount($sendToAccount)
     {
         $this->sendToAccount = $sendToAccount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmissionDefault()
+    {
+        return $this->admissionDefault;
+    }
+
+    /**
+     * @param bool $admissionDefault
+     */
+    public function setAdmissionDefault($admissionDefault)
+    {
+        $this->admissionDefault = $admissionDefault;
     }
 
 
