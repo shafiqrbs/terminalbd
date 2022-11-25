@@ -58,6 +58,7 @@ class MedicineStockImport
                 $stock = isset($item['Stock']) ? $item['Stock']:0;
                 $minStock = isset($item['MinStock']) ? $item['MinStock']:1;
                 $Category = isset($item['Category']) ? $item['Category']:'';
+                $Brand = isset($item['BrandName']) ? $item['BrandName']:'';
                 $medicine = new MedicineStock();
                 $medicine->setMedicineConfig($config);
                 $medicine->setBrandName(ucfirst(strtolower($brand)));
@@ -66,6 +67,7 @@ class MedicineStockImport
                 $medicine->setOpeningQuantity($stock);
                 $medicine->setRemainingQuantity($stock);
                 $medicine->setMinQuantity($minStock);
+                $medicine->setBrandName($Brand);
                 $medicine->setAverageSalesPrice( $item['PurchasePrice'] );
                 $medicine->setPurchasePrice( $item['PurchasePrice'] );
                 $medicine->setAverageSalesPrice( $item['MRP'] );
