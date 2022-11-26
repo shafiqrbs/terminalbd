@@ -992,7 +992,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('e.assignDoctor','d');
         $qb->leftJoin('e.referredDoctor','rd');
         $qb->leftJoin('e.anesthesiaDoctor','ad');
-        $qb->select('e.created as created','e.updated as updated','e.id as invoice','e.invoiceMode as invoiceMode','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive','e.discountRequestedBy as discountRequestedBy');
+        $qb->select('e.created as created','e.updated as updated','e.invoice as invoice','e.invoiceMode as invoiceMode','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive','e.discountRequestedBy as discountRequestedBy');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('d.name as assignDoctor');
         $qb->addSelect('ad.name as anesthesiaDoctor');
@@ -1050,7 +1050,7 @@ class InvoiceRepository extends EntityRepository
         if(!empty($process)){
             $qb->andWhere("e.process = :process")->setParameter('process', $process);
         }
-        $qb->orderBy('e.created','ASC');
+        $qb->orderBy('e.updated','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
     }
