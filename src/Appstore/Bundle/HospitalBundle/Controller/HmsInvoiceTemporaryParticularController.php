@@ -123,7 +123,6 @@ class HmsInvoiceTemporaryParticularController extends Controller
         if($deliveryDateTime){
             $entity->setDeliveryDateTime($datetime);
         }
-        $entity->setDiscountType($discountType);
         if($entity->getTotal() > 0 and $entity->getPayment() >= $entity->getTotal() ){
 	        $entity->setPayment($entity->getTotal());
 	        $entity->setPaymentStatus("Paid");

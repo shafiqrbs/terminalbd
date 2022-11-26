@@ -48,7 +48,6 @@ class MedicineStockDataReader
 
         $headingsArray = $objWorksheet->rangeToArray('A1:' . $highestColumn . '1', NULL, TRUE, TRUE, TRUE);
         $headingsArray = $headingsArray[1];
-
         $namedDataArray = array();
 
         for ($row = 2; $row <= $highestRow; ++$row) {

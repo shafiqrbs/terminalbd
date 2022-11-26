@@ -407,7 +407,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setCode($code + 1);
             $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
             $entity->setTransactionCode($transactionCode);
-            $entity->setProcess('In-progress');
+            $entity->setProcess('Done');
             $entity->setDiscount($invoice->getDiscount());
             $entity->setPayment($invoice->getPayment());
             $entity->setTotal($invoice->getTotal());
