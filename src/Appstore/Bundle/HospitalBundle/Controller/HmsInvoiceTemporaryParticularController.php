@@ -62,6 +62,7 @@ class HmsInvoiceTemporaryParticularController extends Controller
                 'novalidate' => 'novalidate',
             )
         ));
+
         return $form;
     }
 
@@ -77,7 +78,8 @@ class HmsInvoiceTemporaryParticularController extends Controller
         $discountType = $request->request->get('discountType');
         $patientId = $request->request->get('customerId');
         $admissionId = $request->request->get('admissionId');
-        $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
+        $record = $request->request->all();
+        $data = $record['appstore_bundle_hospitalbundle_invoice'];
         $referredId = $data['referredId'];
         $consultantId = $data['consultant'];
         $entity->setHospitalConfig($hospital);
