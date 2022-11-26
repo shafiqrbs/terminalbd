@@ -230,7 +230,7 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            {% if (entity.process in processEdit and entity.assignDoctor is empty and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) %}
+                                            {% if ((entity.process in processEdit and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) or (entity.process in processEdit and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER"))) %}
                                                 <a  data-type="select" class="editable" id="Cabin" data-name="Cabin" href="javascript:" data-source="{{ path('hms_patient_cabin_search',{'id':entity.id}) }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ entity.id }}"  value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-original-title="Enter cabin name">{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.name }}{% endif %}</a>
                                             {% else %}
                                                 {% if entity.cabin is not empty %}{{ entity.cabin.name }} {% endif %}

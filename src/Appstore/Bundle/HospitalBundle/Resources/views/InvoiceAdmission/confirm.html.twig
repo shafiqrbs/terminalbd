@@ -84,7 +84,7 @@
                                                 <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y H:i') }}{% endif %}</li>
                                                 <li><strong>Cabin/Bed:</strong>
                                                     {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admitted':'Admitted'} %}
-                                                    {% if entity.process in processEdit %}
+                                                    {% if ((entity.process in processEdit and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) or (entity.process in processEdit and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER"))) %}
                                                         <a  data-type="select" class="editable" id="Cabin" data-name="Cabin" href="javascript:" data-source="{{ path('hms_invoice_admission_cabin_search',{'id':entity.id}) }}"  data-url="{{ path('hms_invoice_admission_cabin_inline_update') }}" data-pk="{{ entity.id }}" value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{ entity.cabin.id }}{% endif %}" data-original-title="Enter cabin name">{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.name }}{% endif %}</a>
                                                     {% endif %}
                                                 </li>
