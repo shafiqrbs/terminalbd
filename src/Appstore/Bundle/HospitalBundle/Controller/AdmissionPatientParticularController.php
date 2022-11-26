@@ -62,7 +62,7 @@ class AdmissionPatientParticularController extends Controller
         $it->setTransactionCode($transactionCode);
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $it->setTransactionMethod($transactionMethod);
-        $it->setProcess('In-progress');
+        $it->setProcess('Pending');
         $it->setHmsInvoice($entity);
         $it->setCreatedBy($this->getUser());
         $em->persist($it);

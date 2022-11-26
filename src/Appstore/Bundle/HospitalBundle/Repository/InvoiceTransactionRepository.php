@@ -343,7 +343,7 @@ class InvoiceTransactionRepository extends EntityRepository
         $entity->setHmsInvoice($invoice);
         $entity->setCode($code + 1);
         $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
-        $entity->setProcess('In-progress');
+        $entity->setProcess('Pending');
         $entity->setTransactionCode($transactionCode);
         $entity->setPayment($invoice->getReceive());
         $entity->setTransactionMethod($invoice->getTransactionMethod());
