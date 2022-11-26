@@ -145,11 +145,8 @@ class InvoiceTransactionRepository extends EntityRepository
                 $qb->setParameter('startDate', $startDate);
                 $qb->andWhere("it.updated >= :startDate");
                 $qb->setParameter('startDate', $startDate);
-
-
             }
             if (!empty($data['endDate'])) {
-
                 $compareTo = new \DateTime($data['endDate']);
                 $endDate =  $compareTo->format('Y-m-d 23:59:59');
                 $qb->andWhere("it.updated <= :endDate");
@@ -324,12 +321,12 @@ class InvoiceTransactionRepository extends EntityRepository
            $entity->setHmsInvoice($invoice);
            $entity->setCode($code + 1);
            $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
-           $entity->setProcess('In-progress');
+           $entity->setProcess('Pending');
            $entity->setTransactionCode($transactionCode);
            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
            $entity->setTransactionMethod($transactionMethod);
            $this->_em->persist($entity);
-           $this->_em->flush($entity);
+           $this->_em->flush();
            $em->getRepository('HospitalBundle:AdmissionPatientParticular')->insertDefaultInvoiceItems($entity,$records);
            $em->getRepository('HospitalBundle:AdmissionPatientParticular')->updateInvoiceTransactionTotalPrice($entity);
            return $entity;

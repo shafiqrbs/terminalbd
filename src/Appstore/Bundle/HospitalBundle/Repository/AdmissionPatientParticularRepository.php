@@ -22,8 +22,8 @@ class AdmissionPatientParticularRepository extends EntityRepository
     public function insertDefaultInvoiceItems($transaction,$records)
     {
         $em = $this->_em;
-        /* @var $record Particular */
         foreach ($records as $record){
+            /* @var $record Particular */
             $entity = new AdmissionPatientParticular();
             $entity->setQuantity(1);
             $entity->setSalesPrice($record->getPrice());
@@ -34,8 +34,6 @@ class AdmissionPatientParticularRepository extends EntityRepository
             $em->persist($entity);
             $em->flush();
         }
-
-
     }
 
     public function insertInvoiceItems($transaction, $data)

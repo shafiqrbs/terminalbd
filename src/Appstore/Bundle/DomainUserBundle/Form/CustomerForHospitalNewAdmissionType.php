@@ -47,17 +47,14 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
             ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span6','autocomplete'=>'off','placeholder'=>'Mother name'),
 
             ))
-            ->add('age','number', array('attr'=>array('class'=>'m-wrap span3 numeric patientAge','placeholder'=>'Age'),
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span6 numeric patientAge','placeholder'=>'Age'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Patient age')),
                 )))
             ->add('ageType', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span3 select-custom ageType'),
+                'attr'=>array('class'=>'m-wrap span6 select-custom ageType'),
                 'expanded'      =>false,
                 'multiple'      =>false,
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'patient age type')),
-                ),
                 'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
             ->add('gender', 'choice', array(
@@ -75,7 +72,7 @@ class CustomerForHospitalNewAdmissionType extends AbstractType
             ->add('dob','date', array(
                 'years' => range(date('Y'), date('Y')-100),
                 'required' => false,
-                'attr'=>array('class'=>'m-wrap span6 dob','placeholder'=>'Patient date of birth'),
+                'attr'=>array('class'=>'m-wrap span12 dob','placeholder'=>'Patient date of birth'),
             ))
 
             ->add('bloodGroup', 'choice', array(

@@ -5,8 +5,8 @@
         <p>Name of Report: All Invoices</p>
     </div>
     <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}
-        <p><strong>Start Date:&nbsp;</strong><strong>{% if searchForm['startDate'] is defined and searchForm['startDate'] is not empty %}{{ searchForm['startDate']|date('d-m-Y') }}{% endif %}</strong>
-            <strong>End Date:&nbsp;<strong>{% if searchForm['endDate'] is defined and searchForm['endDate'] is not empty %}{{ searchForm['endDate']|date('d-m-Y') }}{% endif %}</strong></strong>
+        <p><strong>Start Date:&nbsp;</strong><strong>{% if searchForm['startDate'] is defined and searchForm['startDate'] is not empty %}{{ searchForm['startDate']|date('d-m-Y h:i A') }}{% endif %}</strong>
+            <strong>End Date:&nbsp;<strong>{% if searchForm['endDate'] is defined and searchForm['endDate'] is not empty %}{{ searchForm['endDate']|date('d-m-Y h:i A') }}{% endif %}</strong></strong>
         </p>
         <p></p>
     </div>
@@ -58,13 +58,20 @@
                     <td class="numeric" >{{ entity.updated|date('d-m-Y h:i A') }}</td>
                     <td class="numeric" >{{ entity.createdUser }}</td>
                     <td class="numeric" >{{ entity.invoiceMode|capitalize }}</td>
-                    <td class="numeric" >{{ entity.invoice }}</td>
+                    <td>
+                        {% if entity.invoiceMode == "admission" %}
+                            <a target="_blank" href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}">{{ entity.invoice }}</a>
+                        {% elseif(entity.invoiceMode == "diagnostic") %}
+                            <a target="_blank" href="{{ path('hms_invoice_show', { 'id': entity.id }) }}">{{ entity.invoice }}</a>
+                        {% else %}
+                            <a target="_blank" href="{{ path('hms_prescription_show', { 'id': entity.id }) }}">{{ entity.invoice }}</a>
+                        {% endif %}
+                    </td>
                     <td class="numeric" >{{ entity.name }}</td>
                     <td class="numeric" >{{ entity.mobile }}</td>
                     <td class="numeric" >{{ entity.assignDoctor }}</td>
                     <td class="numeric" >{{ entity.anesthesiaDoctor }}</td>
                     <td class="numeric" >{{ entity.referred }}</td>
-
                     <td class="text-right" >{{ entity.subTotal|number_format(2) }}</td>
                     <td class="text-right" >{{ entity.discount|number_format(2) }}</td>
                     <td class="text-right" >{{ entity.total|number_format(2) }}</td>

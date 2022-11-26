@@ -233,7 +233,7 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y h:i A') }}</td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{% if entity.parent is not empty %}<a target="_blank" href="{{ path('hms_invoice_admission_show',{'id':entity.id}) }}">{{ entity.parent.invoice }}</a>{% endif %}</td>
+                                        <td class="numeric" >{% if entity.parent is not empty %}<a target="_blank" href="{{ path('hms_invoice_admission_show',{'id':entity.parent.id}) }}">{{ entity.parent.invoice }}</a>{% endif %}</td>
 
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
@@ -277,7 +277,7 @@
                                             {% if (app.user.granted("ROLE_DOMAIN") and  entity.process in processIntArr) or (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") and  entity.process in processIntArr )  %}
                                                 <a  id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
+                                            {% if entity.paymentStatus in  PaymentArr|keys  %}
                                                 <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
                                             {% endif %}
                                             <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>

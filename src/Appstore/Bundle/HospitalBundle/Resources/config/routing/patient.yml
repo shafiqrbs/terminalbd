@@ -68,6 +68,13 @@ hms_patient_inline_update:
     options:
         expose: true
 
+hms_patient_inline_visitdoctor_update:
+    path:     /inline-patient-visit-doctor-update
+    defaults: { _controller: "HospitalBundle:Patient:inlinePatientVisitDoctorUpdate" }
+    methods:  POST
+    options:
+        expose: true
+
 hms_patient_info:
     path:      /{invoice}/info
     defaults: { _controller: "HospitalBundle:Patient:patientInfo" }

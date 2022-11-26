@@ -99,9 +99,6 @@ class NewPatientAdmissionType extends AbstractType
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select department')),
-                ),
                 'choices'=> $this->DepartmentChoiceList()
             ))
 

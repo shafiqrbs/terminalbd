@@ -131,7 +131,7 @@ class PatientController extends Controller
     public function assignDoctorSelectAction()
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticularIdName($config,array(5,6));
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getParticularIdName($config,array(5));
         $items = array();
             $items[] = array('value' => '','text'=> '-Change Doctor-');
         foreach ($entities as $entity):
@@ -178,7 +178,7 @@ class PatientController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository(Invoice::class)->find($data['pk']);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+            throw $this->createNotFoundException('Unable to find entity.');
         }
         if($data['name']){
             $filedName= "set{$data['name']}";
@@ -192,6 +192,34 @@ class PatientController extends Controller
         $em->persist($entity);
         $em->flush();
         exit;
+
+    }
+
+    public function inlinePatientVisitDoctorUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository(Invoice::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find entity.');
+        }
+        if($data['name']){
+            $setValue = $em->getRepository(Particular::class)->find($data['value']);
+            if($setValue){
+                $entity->setAssignDoctor($setValue);
+                $entity->setSubTotal($setValue->getPrice());
+                $entity->setTotal($setValue->getPrice());
+                $entity->setPayment($setValue->getPrice());
+            }else {
+                $entity->setAssignDoctor(NULL);
+                $entity->setSubTotal(0);
+                $entity->setTotal(0);
+                $entity->setPayment(0);
+            }
+        }
+        $em->persist($entity);
+        $em->flush();
+        return new Response('success');
 
     }
 

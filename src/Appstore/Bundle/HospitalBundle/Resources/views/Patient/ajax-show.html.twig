@@ -250,7 +250,10 @@
                                         {% if (child.paymentStatus in  PaymentArr|keys and  child.process in processIntArr and child.invoiceParticulars|length > 0) %}
                                             <a target="_blank" href="{{ path('hms_invoice_confirm', { 'id': child.id }) }}" class="btn yellow mini" ><i class="icon-refresh"></i> Process</a>
                                         {% endif %}
-                                        <a target="_blank" href="{{ path('hms_invoice_show', { 'id': child.id }) }}" class="btn mini purple"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
+                                        {% if entity.paymentStatus in  PaymentArr|keys  %}
+                                            <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':child.id}) }}"  class="btn purple mini tooltips" data-trigger = "hover" data-original-title = "Print"><i class="icon-print"></i></a>
+                                        {% endif %}
+                                        <a target="_blank" href="{{ path('hms_invoice_show', { 'id': child.id }) }}" class="btn mini green"><i class="icon-eye-open tooltips" data-trigger = "hover" data-original-title = "View"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -290,7 +293,7 @@
                                             <td class="numeric">{{ transaction.process }}</td>
                                             <td class="numeric">
                                                 {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
-                                                    <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction blue mini"><i class="fa fa-eye"></i> Particulars</a>
+                                                    <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-eye"></i></a>
                                                 {% endif %}
                                                 {% if transaction.process not in processArr %}
                                                     <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
