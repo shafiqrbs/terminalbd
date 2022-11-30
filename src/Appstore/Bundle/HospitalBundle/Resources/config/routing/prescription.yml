@@ -2,6 +2,10 @@ hms_prescription:
     path:     /
     defaults: { _controller: "HospitalBundle:Prescription:index" }
 
+hms_appoionment:
+    path:     /appoionment
+    defaults: { _controller: "HospitalBundle:DoctorAppointment:appointmentInvoice" }
+
 hms_prescription_show:
     path:     /{id}/show
     defaults: { _controller: "HospitalBundle:Prescription:show" }

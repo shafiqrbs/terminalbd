@@ -47,11 +47,19 @@ class DoctorAppointmentController extends Controller
 
     public function appointmentInvoiceAction()
     {
+        ini_set('max_execution_time', 0);
+        ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'visit' , $data);
+        $records = $entities->getResult();
+        foreach ($records as $invoice){
+            if($invoice->getProcess() == "Done"){
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertVisitTransaction($invoice);
+            }
+        }
+        exit;
         $pagination = $this->paginate($entities);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
@@ -62,8 +70,6 @@ class DoctorAppointmentController extends Controller
         ));
 
     }
-
-
 
     public function newAction()
     {
@@ -113,8 +119,8 @@ class DoctorAppointmentController extends Controller
         $entity->setHospitalConfig($hospital);
         $assignDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->find($data['assignDoctor']);
         $entity->setAssignDoctor($assignDoctor);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
+       // $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+       // $entity->setTransactionMethod($transactionMethod);
         $entity->setInvoiceMode('visit');
         $entity->setPrintFor('visit');
         $entity->setCreatedBy($this->getUser());
@@ -126,7 +132,7 @@ class DoctorAppointmentController extends Controller
             $entity->setMobile($mobile);
         }
         $entity->setSubTotal($assignDoctor->getPrice());
-        $entity->setTotal($assignDoctor->getPrice());
+        $entity->setTotal($entity->getPayment());
         if($entity->getPayment() > 0 and $isConfirm == 1 ){
             $entity->setApprovedBy($this->getUser());
             $entity->setProcess('Done');
@@ -140,6 +146,9 @@ class DoctorAppointmentController extends Controller
         $entity->setPaymentInWord($amountInWords);
         $em->persist($entity);
         $em->flush();
+        if($entity->getPayment() > 0 and $isConfirm == 1 ){
+            $this->invoiceApproveAction($entity);
+        }
         $prescriptionLink = $this->generateUrl('hms_prescription_doctor_print',array('id' => $entity->getId()));
         $printLink = $this->generateUrl('hms_prescription_print',array('id'=> $entity->getId()));
         $array = array(
@@ -165,6 +174,21 @@ class DoctorAppointmentController extends Controller
         return new Response($amount);
     }
 
+    public function invoiceApproveAction(Invoice $invoice)
+    {
+        if($invoice->getPayment() > 0){
+            $em = $this->getDoctrine()->getManager();
+            $invoice->setApprovedBy($this->getUser());
+            $invoice->setProcess('Done');
+            $em->persist($invoice);
+            $em->flush();
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertVisitTransaction($invoice);
+            if($invoice->getAssignDoctor()->isSendToAccount() == 1){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalVisitAccount($invoice);
+            }
+        }
+        return new Response('Success');
+    }
 
 }
 

@@ -52,6 +52,20 @@ class InvoiceTransactionRepository extends EntityRepository
         return $result;
     }
 
+    public function getFindEmployees($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.createdBy','u');
+        $qb->join('u.profile','p');
+        $qb->join('e.hmsInvoice','i');
+        $qb->select('u.id as id, p.name as name');
+        $qb->where('i.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('p.name IS NOT NULL');
+        $qb->groupBy("u.id");
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function todaySalesOverview(User $user , $data , $previous ='', $modes = array())
     {
 
@@ -396,6 +410,36 @@ class InvoiceTransactionRepository extends EntityRepository
         $this->_em->flush($entity);
 
     }
+
+    public function insertVisitTransaction(Invoice $invoice)
+    {
+        $entity = New InvoiceTransaction();
+        $code = $this->getLastCode($invoice);
+        $entity->setHmsInvoice($invoice);
+        $entity->setCode($code + 1);
+        $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+        $entity->setTransactionCode($transactionCode);
+        $entity->setProcess('Done');
+        $entity->setCreatedBy($invoice->getCreatedBy());
+        $entity->setApprovedBy($invoice->getCreatedBy());
+        $entity->setDiscount($invoice->getDiscount());
+        $entity->setPayment($invoice->getPayment());
+        $entity->setTotal($invoice->getTotal());
+        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $entity->setAccountBank($invoice->getAccountBank());
+        $entity->setPaymentCard($invoice->getPaymentCard());
+        $entity->setCardNo($invoice->getCardNo());
+        $entity->setBank($invoice->getBank());
+        $entity->setAccountMobileBank($invoice->getAccountMobileBank());
+        $entity->setPaymentMobile($invoice->getPaymentMobile());
+        $entity->setTransactionId($invoice->getTransactionId());
+        $entity->setComment($invoice->getComment());
+        $entity->setCreated($invoice->getCreated());
+        $entity->setIsMaster(true);
+        $this->_em->persist($entity);
+        $this->_em->flush();
+    }
+
     public function insertTransaction(Invoice $invoice)
     {
             $entity = New InvoiceTransaction();

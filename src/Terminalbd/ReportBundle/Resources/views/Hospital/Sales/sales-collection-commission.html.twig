@@ -2,23 +2,23 @@
 {% block body %}
     <div class="row">
         <div class="col-md-12 print-bar">
-            <form name="searchForm" id="searchForm" action="{{ path('hms_report_daily_sales_collection_ajax') }}" method="post">
+            <form name="searchForm" id="searchForm" action="{{ path('hms_report_daily_sales_collection_commission_ajax') }}" method="post">
                 <div class="row">
                     <div class="col-md-2 margin-top">
-                        <label>Received Employee</label>
+                        <label>Created Employee</label>
                         <select class="search-input select span12 m-wrap" id="user" name="user">
-                            <option value="">--Select Received User--</option>
+                            <option value="">--Select Created User--</option>
                             {% for employee in employees %}
                                 <option {% if searchForm.user is defined and searchForm.user == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-2 margin-top">
-                        <label>Discounted By</label>
-                        <select class="search-input span12 m-wrap" id="discountedBy" name="discountedBy">
-                            <option value="">--Select discounted By--</option>
-                            {% for employee in discountedUsers %}
-                                <option {% if searchForm.discountedBy is defined and searchForm.discountedBy == employee.name %} selected="selected" {% endif %} value="{{ employee.name }}">{{ employee.name }}</option>
+                        <label>Referred</label>
+                        <select name="referred" id="referred" class="search-input select2 span12 m-wrap">
+                            <option value="" >--Doctor/Referred--</option>
+                            {% for doctor in referredDoctors %}
+                                <option {% if searchForm.doctor is defined and searchForm.doctor == doctor.id %} selected="selected" {% endif %} value="{{ doctor.id }}" >{{ doctor.particularCode }}-{{ doctor.name }}</option>
                             {% endfor %}
                         </select>
                     </div>

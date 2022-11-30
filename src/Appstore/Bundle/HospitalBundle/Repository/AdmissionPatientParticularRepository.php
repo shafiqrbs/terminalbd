@@ -32,8 +32,8 @@ class AdmissionPatientParticularRepository extends EntityRepository
             $entity->setParticular($record);
             $entity->setEstimatePrice($record->getPrice());
             $em->persist($entity);
-            $em->flush();
         }
+        $em->flush();
     }
 
     public function insertInvoiceItems($transaction, $data)

@@ -303,6 +303,7 @@ class PrescriptionController extends Controller
             $invoice->setProcess('Done');
             $em->persist($invoice);
             $em->flush();
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertVisitTransaction($invoice);
             if($invoice->getAssignDoctor()->isSendToAccount() == 1){
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalVisitAccount($invoice);
             }

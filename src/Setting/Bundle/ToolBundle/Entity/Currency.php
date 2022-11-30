@@ -48,7 +48,6 @@ class Currency
      */
     private $symbol;
 
-
     /**
      * Get id
      *

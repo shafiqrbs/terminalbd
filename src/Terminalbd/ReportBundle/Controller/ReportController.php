@@ -764,11 +764,11 @@ class ReportController extends Controller
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5,6));
-        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->getFindEmployees($hospital);
+        $discountedUsers = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDiscountedUsers($hospital);
         return $this->render('ReportBundle:Hospital/Sales:sales-collection.html.twig', array(
-            'referredDoctors' => $referredDoctors,
             'employees' => $employees,
+            'discountedUsers' => $discountedUsers,
             'option' => $user->getGlobalOption(),
             'searchForm' => $data,
         ));
@@ -788,15 +788,166 @@ class ReportController extends Controller
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         if(isset($data['startDate']) and $data['endDate']) {
+            $entities = $em->getRepository('HospitalBundle:Invoice')->hmsSalesCollectionReports($user,$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Hospital/Sales:sales-collection-ajax.html.twig', array(
+                    'entities' => $entities,
+                    'option' => $user->getGlobalOption(),
+                    'searchForm' => $data,
+                )
+            );
+            return new Response($htmlProcess);
+        }
+        return new Response('Record Does not found');
+    }
+
+
+    /**
+     * @Route("/daily-sales-collection-commission", methods={"GET", "POST"}, name="hms_report_sales_collection_commission")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsSalesCollectionCommissionAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5,6));
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        return $this->render('ReportBundle:Hospital/Sales:sales-collection-commission.html.twig', array(
+            'referredDoctors' => $referredDoctors,
+            'employees' => $employees,
+            'option' => $user->getGlobalOption(),
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/daily-sales-collection-commission-load", methods={"GET", "POST"}, name="hms_report_daily_sales_collection_commission_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function hmsSalesCollectionCommissionAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        if(isset($data['startDate']) and $data['endDate']) {
             $entities = $em->getRepository('HospitalBundle:Invoice')->hmsSalesCollectionComissionReports($user,$data);
             $pagination = $entities->getQuery()->getResult();
             $commissionSummary = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommissionSummary($hospital, $entities);
             $commissions = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->getInvoiceBaseCommission($hospital, $entities);
             $htmlProcess = $this->renderView(
-                'ReportBundle:Hospital/Sales:sales-collection-ajax.html.twig', array(
+                'ReportBundle:Hospital/Sales:sales-collection-commission-ajax.html.twig', array(
                     'entities' => $pagination,
                     'commissions' => $commissions,
                     'commissionSummary' => $commissionSummary,
+                    'option' => $user->getGlobalOption(),
+                    'searchForm' => $data,
+                )
+            );
+            return new Response($htmlProcess);
+        }
+        return new Response('Record Does not found');
+    }
+
+
+    /**
+     * @Route("/collection-commission-group", methods={"GET", "POST"}, name="hms_report_collection_commission_group")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsCommissionGroupAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5,6));
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        return $this->render('ReportBundle:Hospital/Sales:collection-commission-group.html.twig', array(
+            'referredDoctors' => $referredDoctors,
+            'employees' => $employees,
+            'option' => $user->getGlobalOption(),
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/collection-commission-group-load", methods={"GET", "POST"}, name="hms_report_collection_commission_group_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function  hmsCommissionGroupAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        if(isset($data['startDate']) and $data['endDate']) {
+            $entities = $em->getRepository('HospitalBundle:Invoice')->hmsCommissionGroupReports($user,$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Hospital/Sales:collection-commission-group-ajax.html.twig', array(
+                    'entities' => $entities,
+                    'option' => $user->getGlobalOption(),
+                    'searchForm' => $data,
+                )
+            );
+            return new Response($htmlProcess);
+        }
+        return new Response('Record Does not found');
+    }
+
+
+
+     /**
+     * @Route("/collection-commission-deatils", methods={"GET", "POST"}, name="hms_report_collection_commission_details")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+
+    public function hmsCommissionDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital, array(5,6));
+        $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
+        return $this->render('ReportBundle:Hospital/Sales:sales-commission-details.html.twig', array(
+            'referredDoctors' => $referredDoctors,
+            'employees' => $employees,
+            'option' => $user->getGlobalOption(),
+            'searchForm' => $data,
+        ));
+    }
+
+    /**
+     * @Route("/collection-commission-deatils-load", methods={"GET", "POST"}, name="hms_report_collection_commission_details_ajax")
+     * @Secure(roles="ROLE_REPORT_FINANCIAL,ROLE_REPORT, ROLE_DOMAIN")
+     */
+
+    public function  hmsCommissionDetailsAjaxAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        if(isset($data['startDate']) and $data['endDate']) {
+            $entities = $em->getRepository('HospitalBundle:Invoice')->hmsCommissionReportDetails($user,$data);
+            $htmlProcess = $this->renderView(
+                'ReportBundle:Hospital/Sales:sales-commission-details-ajax.html.twig', array(
+                    'entities' => $entities,
                     'option' => $user->getGlobalOption(),
                     'searchForm' => $data,
                 )
@@ -851,7 +1002,6 @@ class ReportController extends Controller
             'serviceOverview' => $serviceOverview,
             'transactionOverview' => $transactionOverview,
             'commissionOverview' => $commissionOverview,
-
             'salesTodayUsers' => $salesTodayUser,
             'salesTodayTransactionOverview'     => $salesTodayTransactionOverview,
             'previousSalesTransactionOverview'  => $previousSalesTransactionOverview,
@@ -932,7 +1082,6 @@ class ReportController extends Controller
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAssignDoctor($hospital);
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
         $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'visit',$data);
-
         return $this->render('ReportBundle:Hospital/Sales:visit-invoice.html.twig', array(
             'employees' => $employees,
             'assignDoctors' => $assignDoctors,

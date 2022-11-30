@@ -540,26 +540,165 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.invoiceTransactions','ip');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $qb->andWhere('e.commissionApproved = 1');
-        if (!empty($data['startDate'])) {
+        if (!empty($data['startDate']) ) {
             $startDate = str_replace('T',' ',$data['startDate']);
             $qb->andWhere("e.updated >= :startDate");
             $qb->setParameter('startDate', $startDate);
         }
-        if (!empty($data['startDate']) ) {
-            $qb->andWhere("ip.updated >= :startDate");
-            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
-        }
         if (!empty($data['endDate'])) {
-            $qb->andWhere("ip.updated <= :endDate");
-            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
         }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
+    }
+
+    public function hmsCommissionGroupReports(User $user,$data)
+    {
+        $em = $this->_em;
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $em->createQueryBuilder();
+        $qb->from("HospitalBundle:DoctorInvoice",'e');
+        $qb->join('e.hmsCommission','c');
+        $qb->select('COUNT(e.id) as totalInvoice','SUM(e.payment) as total');
+        $qb->addSelect('c.id as id','c.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        if (!empty($data['startDate']) ) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($data['endDate'])) {
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        if(!empty($mode)){
+            $qb->leftJoin('e.hmsInvoice','i');
+            $qb->andWhere("i.invoiceMode = :mode")->setParameter('mode', $mode);
+        }
+        $user = isset($data['user'])? $data['user'] :'';
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        $referred = isset($data['referred'])? $data['referred'] :'';
+        if(!empty($referred)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $referred);
+        }
+        $qb->groupBy('c.id');
+        $qb->orderBy('c.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function hmsCommissionReportDetails(User $user,$data)
+    {
+        $em = $this->_em;
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $em->createQueryBuilder();
+        $qb->from("HospitalBundle:DoctorInvoice",'e');
+        $qb->join('e.hmsCommission','c');
+        $qb->leftJoin('e.hmsInvoice','i');
+        $qb->leftJoin('i.referredDoctor','r');
+        $qb->leftJoin('i.assignDoctor','d');
+        $qb->leftJoin('i.customer','p');
+        $qb->select('e.payment as commission','e.updated as updated');
+        $qb->addSelect('c.id as id','c.name as commissionName');
+        $qb->addSelect('r.name as referred');
+        $qb->addSelect('d.name as doctor');
+        $qb->addSelect('p.name as customer');
+        $qb->addSelect('i.created as created','i.invoice as invoice','i.subTotal as subTotal','i.discount as discount','i.total as total','i.payment as payment','i.discountRequestedBy as discountRequestedBy','i.invoiceMode as invoiceMode');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        if (!empty($data['startDate']) ) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("e.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($data['endDate'])) {
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("e.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        $mode = isset($data['mode'])? $data['mode'] :'';
+        if(!empty($mode)){
+            $qb->andWhere("i.invoiceMode = :mode")->setParameter('mode', $mode);
+        }
+        $user = isset($data['user'])? $data['user'] :'';
+        if(!empty($user)){
+            $qb->andWhere("e.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        $referred = isset($data['referred'])? $data['referred'] :'';
+        if(!empty($referred)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $referred);
+        }
+        $qb->orderBy('e.updated','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+
+    public function hmsSalesCollectionReports(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $qb->from(InvoiceTransaction::class,'ip');
+        $qb->join('ip.hmsInvoice','e');
+        $qb->join('ip.createdBy','ipui');
+        $qb->join('e.createdBy','eui');
+        $qb->leftJoin('e.assignDoctor','ad');
+        $qb->leftJoin('e.referredDoctor','rd');
+        $qb->join('e.customer','c');
+        $qb->leftJoin('ip.transactionMethod','m');
+        $qb->select('ip.updated as received','ip.transactionCode as transactionCode','ip.subTotal as subTotal','ip.total as total','ip.discount as discount','ip.payment as payment','ip.discountRequestedBy as discountRequestedBy');
+        $qb->addSelect('e.id as invoiceId','e.invoice as invoice','e.created as created','e.invoiceMode as invoiceMode');
+        $qb->addSelect('ipui.username as receivedBy');
+        $qb->addSelect('eui.username as createdBy');
+        $qb->addSelect('ad.name as doctor');
+        $qb->addSelect('rd.name as referred');
+        $qb->addSelect('c.name as customer');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere("ip.process = 'Done'");
+        if (!empty($data['startDate']) ) {
+            $startDate = str_replace('T',' ',$data['startDate']);
+            $qb->andWhere("ip.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate);
+        }
+        if (!empty($data['endDate'])) {
+            $endDate = str_replace('T',' ',$data['endDate']);
+            $qb->andWhere("ip.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate);
+        }
+        $user = isset($data['user'])? $data['user'] :'';
+        if(!empty($user)){
+            $qb->andWhere("ip.createdBy = :user");
+            $qb->setParameter('user', $user);
+        }
+        $discountedBy = isset($data['discountedBy'])? $data['discountedBy'] :'';
+        if(!empty($discountedBy)){
+            $qb->andWhere("ip.discountRequestedBy = :discountRequestedBy");
+            $qb->setParameter('discountRequestedBy', $discountedBy);
+        }
+        $invoiceMode = isset($data['mode'])? $data['mode'] :'';
+        if(!empty($invoiceMode)){
+            $qb->andWhere("e.invoiceMode = :invoiceMode");
+            $qb->setParameter('invoiceMode', $invoiceMode);
+        }
+        $qb->orderBy('ip.updated','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
     }
 
 
@@ -898,12 +1037,12 @@ class InvoiceRepository extends EntityRepository
         }
         if (!empty($data['startDate'])) {
             $startDate = str_replace('T',' ',$data['startDate']);
-            $qb->andWhere("e.updated >= :startDate");
+            $qb->andWhere("e.created >= :startDate");
             $qb->setParameter('startDate', $startDate);
         }
         if (!empty($data['endDate'])) {
             $endDate = str_replace('T',' ',$data['endDate']);
-            $qb->andWhere("e.updated <= :endDate");
+            $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
         if(!empty($assignDoctor)){
@@ -957,12 +1096,12 @@ class InvoiceRepository extends EntityRepository
         }
         if (!empty($data['startDate'])) {
             $startDate = str_replace('T',' ',$data['startDate']);
-            $qb->andWhere("e.updated >= :startDate");
+            $qb->andWhere("e.created >= :startDate");
             $qb->setParameter('startDate', $startDate);
         }
         if (!empty($data['endDate'])) {
             $endDate = str_replace('T',' ',$data['endDate']);
-            $qb->andWhere("e.updated <= :endDate");
+            $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
         if(!empty($process)){
@@ -1113,12 +1252,12 @@ class InvoiceRepository extends EntityRepository
         }
         if (!empty($data['startDate'])) {
             $startDate = str_replace('T',' ',$data['startDate']);
-            $qb->andWhere("e.updated >= :startDate");
+            $qb->andWhere("e.created >= :startDate");
             $qb->setParameter('startDate', $startDate);
         }
         if (!empty($data['endDate'])) {
             $endDate = str_replace('T',' ',$data['endDate']);
-            $qb->andWhere("e.updated <= :endDate");
+            $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
         if(!empty($process)){
