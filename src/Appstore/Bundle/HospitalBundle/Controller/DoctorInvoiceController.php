@@ -136,7 +136,7 @@ class DoctorInvoiceController extends Controller
     /**
      * Creates a form to create a Vendor entity.
      *
-     * @param Vendor $entity The entity
+     * @param DoctorInvoice $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -163,18 +163,26 @@ class DoctorInvoiceController extends Controller
         $entity = new DoctorInvoice();
         $form = $this->createCreateForm($entity,$invoice);
         $form->handleRequest($request);
-        $exits = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->findOneBy(array('hmsInvoice'=> $invoice ,'hmsCommission' => $entity->getHmsCommission() ));
-        if (empty($exits) and $form->isValid() and $invoice->getPayment() > $entity -> getPayment() ) {
+        $commission = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->updateCommissionInvoice($invoice);
+        $totalCommission = ($entity->getPayment() + $commission);
+        $exits = $this->getDoctrine()->getRepository('HospitalBundle:DoctorInvoice')->findOneBy(array('hmsInvoice'=> $invoice ,'hmsCommission' => $entity->getHmsCommission()));
+        if (empty($exits) and $form->isValid() and $invoice->getPayment() >= $entity -> getPayment() and  $invoice->getPayment() >= $totalCommission) {
             $em = $this->getDoctrine()->getManager();
             $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
             $entity->setHospitalConfig($hospital);
             $entity->setHmsInvoice($invoice);
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
             return $this->redirect($this->generateUrl('hms_doctor_invoice_new', array('id' => $invoice->getId())));
+        }
+        if (empty($exits) and $form->isValid() and $invoice->getPayment() >= $entity -> getPayment() and  $invoice->getPayment() >= $totalCommission) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Amount is not valid, amount must be less/equal receive amount"
+            );
         }
         $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
         foreach ($invoice->getInvoiceParticulars() as $item) {

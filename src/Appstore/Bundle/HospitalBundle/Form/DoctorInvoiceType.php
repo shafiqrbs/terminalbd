@@ -99,7 +99,7 @@ class DoctorInvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-
+            ->add('file')
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',

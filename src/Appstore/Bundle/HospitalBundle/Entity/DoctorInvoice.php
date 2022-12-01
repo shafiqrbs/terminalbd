@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Invoice
@@ -175,6 +177,18 @@ class DoctorInvoice
      * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $path;
+
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $file;
+
 
     /**
      * Get id
@@ -537,6 +551,75 @@ class DoctorInvoice
     public function getExpenditure()
     {
         return $this->expenditure;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param Particular $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return Particular
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/domain/'.$this->getHospitalConfig()->getGlobalOption()->getId().'/hms/';
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $filename = date('YmdHmi') . "_" . $this->getFile()->getClientOriginalName();
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $filename ;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
     }
 
 }
