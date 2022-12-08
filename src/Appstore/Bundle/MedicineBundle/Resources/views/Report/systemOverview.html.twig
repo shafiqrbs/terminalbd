@@ -48,6 +48,10 @@
                                 <div class="clearfix">&nbsp;</div>
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
                                     <tr>
+                                        <th class="numeric" >Current Stock Quantity</th>
+                                        <td class="numeric" >{{ currentStockPrice.quantity }}</td>
+                                    </tr>
+                                    <tr>
                                         <th class="numeric" >Approximately Sales Price</th>
                                         <td class="numeric" >{{ currentStockPrice.salesPrice|number_format }}</td>
                                     </tr>
@@ -73,6 +77,7 @@
                                     {% for expense in income.expenditures %}
                                         {% set totalExpense = totalExpense + expense.amount  %}
                                     {% endfor %}
+                                    {#<tr><th class="numeric" >Total Sales Quantity</th><td>{{ currentStockPrice.salesQuantity }}</td></tr>#}
                                     <tr><th class="numeric" >Total Sales</th><td>{{ income.sales|number_format }}</td></tr>
                                     <tr><th class="numeric" >Purchase Price</th><td>{{ income.purchase|number_format }}</td></tr>
                                     <tr><th class="numeric" >Expenditure</th><td>{{ totalExpense|number_format }}</td></tr>
