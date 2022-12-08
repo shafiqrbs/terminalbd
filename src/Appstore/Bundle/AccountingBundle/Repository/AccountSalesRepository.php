@@ -134,10 +134,10 @@ class AccountSalesRepository extends EntityRepository
     public function getProcessModes($global)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.processType as name');
+        $qb->select('e.processHead as name');
         $qb->where("e.globalOption = :global")->setParameter('global', $global);
-        $qb->groupBy('e.processType');
-        $qb->orderBy('e.processType', 'ASC');
+        $qb->groupBy('e.processHead');
+        $qb->orderBy('e.processHead', 'ASC');
         return $qb->getQuery()->getArrayResult();
 
     }
