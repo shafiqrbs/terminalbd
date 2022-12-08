@@ -158,12 +158,20 @@ class MedicineConfig
      */
     private $printOutstanding = false;
 
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="isRemainingQuantity", type="boolean",  nullable=true)
      */
     private $isRemainingQuantity = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isActiveQuantity", type="boolean",  nullable=true)
+     */
+    private $isActiveQuantity = false;
 
     /**
      * @var boolean
@@ -1185,9 +1193,21 @@ class MedicineConfig
         $this->isRemainingQuantity = $isRemainingQuantity;
     }
 
+    /**
+     * @return bool
+     */
+    public function isActiveQuantity()
+    {
+        return $this->isActiveQuantity;
+    }
 
-
-
+    /**
+     * @param bool $isActiveQuantity
+     */
+    public function setIsActiveQuantity($isActiveQuantity)
+    {
+        $this->isActiveQuantity = $isActiveQuantity;
+    }
 
 
 }

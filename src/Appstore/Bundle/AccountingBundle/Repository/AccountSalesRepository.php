@@ -528,6 +528,8 @@ class AccountSalesRepository extends EntityRepository
     public function userSummary($globalOption, $data = array())
     {
         $amount = isset($data['amount']) ? $data['amount']:0;
+        $startDateTime = isset($data['startDate']) ? $data['startDate']:'';
+        $endDateTime = isset($data['endDate']) ? $data['endDate']:'';
         $qb = $this->createQueryBuilder('e');
         $qb->select('profile.id as customerId ,profile.name as name , profile.mobile as mobile,COALESCE(SUM(e.totalAmount),0) as debit, COALESCE(SUM(e.amount),0) as credit,(COALESCE(SUM(e.totalAmount),0) - COALESCE(SUM(e.amount),0)) as balance ');
         $qb->join('e.createdBy','u');
@@ -535,7 +537,14 @@ class AccountSalesRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         $qb->andWhere("e.process = 'approved'");
         $qb->groupBy('u.id');
-        $this->handleSearchBetween($qb,$data);
+        if (!empty($startDateTime) ) {
+            $startDate = str_replace('T',' ',$startDateTime);
+            $qb->andWhere("e.updated >= :startDate")->setParameter('startDate', $startDate);
+        }
+        if (!empty($endDateTime)) {
+            $endDate = str_replace('T',' ',$endDateTime);
+            $qb->andWhere("e.updated <= :endDate")->setParameter('endDate',$endDate);
+        }
         $qb->orderBy('balance', 'DESC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;

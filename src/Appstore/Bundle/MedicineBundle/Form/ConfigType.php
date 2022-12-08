@@ -41,6 +41,7 @@ class ConfigType extends AbstractType
                 ),
             ))
 
+            ->add('isActiveQuantity')
             ->add('isRemainingQuantity')
             ->add('invoiceActualPrice')
             ->add('printPreviousDue')
