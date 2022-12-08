@@ -7,7 +7,7 @@
     {% set totalCredit = totalCredit + entity.credit %}
     <tr>
         <td>{{ loop.index }}</td>
-        <td class="numeric" >{{ entity.created|date('d-m-Y H:i A') }}</td>
+        <td class="numeric" >{{ entity.created|date('d-m-Y h:i A') }}</td>
         <td class="numeric" >{{ entity.name }}</td>
         <td class="numeric" >{{ entity.mobile }}</td>
         <td class="numeric" >{{ entity.invoice }}</td>

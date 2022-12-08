@@ -52,7 +52,7 @@ class DoctorAppointmentType extends AbstractType
             ->add('payment','number', array('attr'=>array('class'=>'tooltips payment numeric number span11 input2 m-wrap','data-trigger' => 'hover','placeholder'=>'Receive','data-original-title'=>'Enter valid receive amount, if receive amount is due input zero','autocomplete'=>'off'),
             ))
             ->add('smsAlert',CheckboxType::class, array('attr'=> array('class'=>'custom-control-input')))
-            ->add('isConfirm',CheckboxType::class, array('attr'=> array('class'=>'m-wrap custom-control-input'),'mapped' => false,'data' => true))
+            ->add('isConfirm',CheckboxType::class, array('attr'=> array('class'=>'m-wrap custom-control-input'),'mapped' => false,'data' => false))
             ->add('appointmentDate', DateType::class, array(
                 'widget' => 'single_text',
                 'html5' => true,
@@ -91,7 +91,7 @@ class DoctorAppointmentType extends AbstractType
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                 'property' => 'referredName',
-                'attr'=>array('class'=>'span12 select2 m-wrap'),
+                'attr'=>array('class'=>'span12 select2 m-wrap referredDoctor'),
                 'empty_value' => '--- Choose Referred ---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
@@ -107,7 +107,7 @@ class DoctorAppointmentType extends AbstractType
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'empty_value' => '---Select diseases profile---',
-                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'attr'=>array('class'=>'span12 m-wrap select2 diseasesProfile'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
@@ -122,7 +122,7 @@ class DoctorAppointmentType extends AbstractType
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
                 'property' => 'name',
                 'empty_value' => '--- Select Specialization ---',
-                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'attr'=>array('class'=>'span12 m-wrap select2 specialization'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())

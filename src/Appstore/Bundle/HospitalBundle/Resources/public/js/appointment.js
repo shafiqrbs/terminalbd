@@ -14,7 +14,7 @@ $(document).on('click', '.addAppointment', function() {
                 success: function (response) {
                     el.find('.dialogModal_content').html(response);
                     appointmentFormSubmit();
-                    $('.select2').select2();
+                    $('.referredDoctor,.assignDoctor,.diseasesProfile,.specialization').select2();
                 }
             });
         },

@@ -59,7 +59,6 @@ class DoctorAppointmentController extends Controller
                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertVisitTransaction($invoice);
             }
         }
-        exit;
         $pagination = $this->paginate($entities);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
@@ -176,16 +175,16 @@ class DoctorAppointmentController extends Controller
 
     public function invoiceApproveAction(Invoice $invoice)
     {
-        if($invoice->getPayment() > 0){
-            $em = $this->getDoctrine()->getManager();
-            $invoice->setApprovedBy($this->getUser());
-            $invoice->setProcess('Done');
-            $em->persist($invoice);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $invoice->setApprovedBy($this->getUser());
+        $invoice->setProcess('Done');
+        $em->persist($invoice);
+        $em->flush();
+        if($invoice->getPayment() > 0) {
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertVisitTransaction($invoice);
-            if($invoice->getAssignDoctor()->isSendToAccount() == 1){
-                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalVisitAccount($invoice);
-            }
+        }
+        if($invoice->getAssignDoctor()->isSendToAccount() == 1){
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertHospitalVisitAccount($invoice);
         }
         return new Response('Success');
     }
