@@ -41,6 +41,7 @@ class ConfigType extends AbstractType
                 ),
             ))
 
+            ->add('salesAvgHide')
             ->add('isActiveQuantity')
             ->add('isRemainingQuantity')
             ->add('invoiceActualPrice')

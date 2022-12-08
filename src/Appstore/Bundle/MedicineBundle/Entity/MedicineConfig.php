@@ -173,12 +173,20 @@ class MedicineConfig
      */
     private $isActiveQuantity = false;
 
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="invoiceActualPrice", type="boolean",  nullable=true)
      */
     private $invoiceActualPrice = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="salesAvgHide", type="boolean",  nullable=true)
+     */
+    private $salesAvgHide = false;
 
     /**
      * @var boolean
@@ -1207,6 +1215,22 @@ class MedicineConfig
     public function setIsActiveQuantity($isActiveQuantity)
     {
         $this->isActiveQuantity = $isActiveQuantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSalesAvgHide()
+    {
+        return $this->salesAvgHide;
+    }
+
+    /**
+     * @param bool $salesAvgHide
+     */
+    public function setSalesAvgHide($salesAvgHide)
+    {
+        $this->salesAvgHide = $salesAvgHide;
     }
 
 

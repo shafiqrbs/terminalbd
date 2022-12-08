@@ -11,10 +11,12 @@
             <td><a  data-type="select" class="editableText" id="BrandName" data-name="BrandName" href="#" data-source="{{ path('medicine_stock_select_brand') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ item.medicineStock.id }}" data-value="{% if  item.medicineStock.brandName is not empty %}{{ item.medicineStock.brandName }}{% endif %}" data-original-title="Enter select brand name">{% if  item.medicineStock.brandName is not empty %}{{ item.medicineStock.brandName }}{% endif %}</a>
             <td><a  data-type="select" class="editableText" id="rackNo" data-name="rackNo" href="#" data-source="{{ path('medicine_stock_rack') }}"  data-url="{{ path('medicine_stock_inline') }}" data-pk="{{ item.medicineStock.id }}" data-value="{% if  item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.id }}{% endif %}" data-original-title="Enter select rack no">{% if  item.medicineStock.rackNo is not empty %}{{ item.medicineStock.rackNo.name }}{% endif %}</a>
             <td class="span1">
-                {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %}
-                    <a class="editableText" data-name="AveragePurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-original-title="Change purchase avg price">{{ item.medicineStock.averagePurchasePrice }}</a>
-                {% else %}
-                    {{ item.medicineStock.averagePurchasePrice|number_format(2) }}
+                {% if config.salesAvgHide != 1 %}
+                    {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %}
+                        <a class="editableText" data-name="AveragePurchasePrice" href="#"  data-url="{{ path('medicine_stock_inline') }}" data-type="text" data-pk="{{ item.medicineStock.id }}" data-original-title="Change purchase avg price">{{ item.medicineStock.averagePurchasePrice }}</a>
+                    {% else %}
+                        {{ item.medicineStock.averagePurchasePrice|number_format(2) }}
+                    {% endif %}
                 {% endif %}
             </td>
             <td class="span1">{{ item.estimatePrice }}</td>

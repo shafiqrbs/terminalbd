@@ -152,7 +152,7 @@
         <tr>
             <td colspan="4" class="span12 border-top"></td>
         </tr>
-        {% if entity.printWithoutDiscount == 1 or entity.medicineConfig.invoiceActualPrice == 1 %}
+
             {% if entity.medicineSalesItems is not empty %}
                 {% set subTotal = 0 %}
                 {% set total = 0 %}
@@ -180,38 +180,6 @@
                 <td class="span2 center"><strong>TK.</strong></td>
                 <td class="span2 left"><strong id="">{{ total|number_format }}</strong></td>
             </tr>
-        {% else %}
-            {% if entity.medicineSalesItems is not empty %}
-                {% for item in entity.medicineSalesItems %}
-                    <tr>
-                        <td class="span8 left">{{ loop.index }}. {{ item.medicineStock.name }}</td>
-                        <td class="span2 center">{{ item.mrpPrice|number_format(2) }}</td>
-                        <td class="span2 center">{{ item.quantity }}</td>
-                        <td class="span2 right">{{ item.subTotal|number_format(2) }}</td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            <tr>
-                <td colspan="4" class="span12 border-top"></td>
-            </tr>
-            <tr>
-                <td class="span8" colspan="2" ><strong>Sub-total</strong></td>
-                <td class="span2 center">TK.</td>
-                <td class="span2 right"><strong id="">{{ entity.subTotal|number_format }}</strong></td>
-            </tr>
-            <tr>
-                <td class="span8" colspan="2"><strong>Discount {% if entity.medicineConfig.printDiscountPercent == 1 and entity.discountType == "percentage" %}({{ entity.discountCalculation }}%){% endif %}</strong></td>
-                <td class="span2 center">TK.</td>
-                <td class="span2 right"><strong id="">{{ entity.discount|number_format }}</strong></td>
-            </tr>
-            <tr>
-                <td colspan="4" class="span12 border-top"></td>
-            </tr>
-            <tr>
-                <td class="span8" colspan="2"><strong>Net Payable</strong></td>
-                <td class="span2 center">TK.</td>
-                <td class="span2 right"><strong id="">{{ entity.netTotal|number_format }}</strong></td>
-            </tr>
             {% if entity.customer.name != "Default" and previousDue > 0 and entity.medicineConfig.printPreviousDue == 1  %}
             <tr>
                 <td class="span8" colspan="2"><strong>Previous Due</strong></td>
@@ -231,8 +199,6 @@
                 <td class="span2 right"><strong id="">{{ (previousDue) |number_format }}</strong></td>
             </tr>
             {% endif %}
-        {% endif %}
-
         <tr>
             <td colspan="4" class="span12 center footer">
                 {% if entity.medicineConfig.printFooterText is not empty %}

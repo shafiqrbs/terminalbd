@@ -432,6 +432,7 @@ function jqueryTemporaryLoad() {
                     $('#salesTemporaryItemForm')[0].reset();
                     $('#addTemporaryItem').html('<i class="fa fa-shopping-cart"></i> Add').attr("disabled", true);
                     $('.salesBtn').prop("disabled", false);
+                    $('#printWithoutDiscount, #process').prop('checked', false);
                     $('.editableText').editable();
                 }
             });
