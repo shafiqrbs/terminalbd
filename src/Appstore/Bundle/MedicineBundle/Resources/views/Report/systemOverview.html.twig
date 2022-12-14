@@ -119,12 +119,11 @@
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
                                     {% set payable = (accountPurchase.purchaseAmount - accountPurchase.payment) %}
                                     {% set receivable = (accountSales.totalAmount - accountSales.receiveAmount) %}
-
                                     <tr><td class="numeric" >Cash in hand</td><td>{{ ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit']) - transactionCashOverviews['credit'])|number_format }}</td></tr>
                                     <tr><td class="numeric" >Stock Purchase Price</td><td>{{ currentStockPrice.purchasePrice|number_format }}</td></tr>
-                                    <tr><td class="numeric" >Sales Receivable Amount</td><td>{{ (receivable)|number_format }}</td></tr>
-                                    <tr><td class="numeric" >Purchase Payable Amount</td><td>({{ payable|number_format }})</td></tr>
-                                    <tr><th class="numeric" >Capital</th><th>{{ ((currentStockPrice.purchasePrice + receivable + ((transactionCashOverviews['openingBalance']+transactionCashOverviews['debit']) - transactionCashOverviews['credit']))-payable)|number_format }}</th></tr>
+                                    <tr><td class="numeric" >Sales Receivable</td><td>{{ (receivable)|number_format }}</td></tr>
+                                    <tr><td class="numeric" >Purchase Payable</td><td>({{ payable|number_format }})</td></tr>
+                                    <tr><th class="numeric" >Capital</th><th>{{ ((currentStockPrice.purchasePrice + receivable + ((transactionCashOverviews['openingBalance'] + transactionCashOverviews['debit']) - transactionCashOverviews['credit'])) - payable)|number_format }}</th></tr>
                                 </table>
                             </div>
 

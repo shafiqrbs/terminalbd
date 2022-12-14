@@ -801,16 +801,14 @@ class MedicineStockRepository extends EntityRepository
     {
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.brandName as name' );
+        $qb->select('e.brandName as name','SUM(e.remainingQuantity) as quantity' );
         $qb->addSelect('COALESCE(SUM(e.averagePurchasePrice * e.remainingQuantity),0) as avgPurchase');
         $qb->addSelect('COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0) as purchase');
         $qb->addSelect('COALESCE(SUM(e.averageSalesPrice * e.remainingQuantity),0) as avgSales ' );
         $qb->addSelect('COALESCE(SUM(e.salesPrice * e.remainingQuantity),0) as sales ' );
         $qb->addSelect('(COALESCE(SUM(e.averageSalesPrice * e.remainingQuantity),0))-(COALESCE(SUM(e.averagePurchasePrice * e.remainingQuantity),0)) as avgProfit');
         $qb->addSelect('(COALESCE(SUM(e.salesPrice * e.remainingQuantity),0))-(COALESCE(SUM(e.purchasePrice * e.remainingQuantity),0)) as profit');
-        $qb->where('e.medicineConfig = :config');
-        $qb->setParameter('config', $config);
-   //     $this->handleSearchBetween($qb,$data);
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config);
         $qb->groupBy("e.brandName");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
