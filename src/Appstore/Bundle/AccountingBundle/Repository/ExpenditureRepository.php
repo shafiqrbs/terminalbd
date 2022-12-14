@@ -31,6 +31,8 @@ class ExpenditureRepository extends EntityRepository
         $endDate        = isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate']:'';
         $toUser         = isset($data['toUser'])? $data['toUser'] :'';
         $user =    isset($data['user'])? $data['user'] :'';
+        $invoice =    isset($data['invoice'])? $data['invoice'] :'';
+        $remark =    isset($data['remark'])? $data['remark'] :'';
         $accountHead    = isset($data['accountHead'])? $data['accountHead'] :'';
         $transactionMethod    = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $category       = isset($data['category'])? $data['category'] :'';
@@ -70,6 +72,12 @@ class ExpenditureRepository extends EntityRepository
         if (!empty($category)) {
             $qb->andWhere("e.expenseCategory = :category");
             $qb->setParameter('category', $category);
+        }
+        if (!empty($invoice)) {
+            $qb->andWhere($qb->expr()->like("e.accountRefNo", "'%$invoice%'" ));
+        }
+        if (!empty($remark)) {
+            $qb->andWhere($qb->expr()->like("e.remark", "'%$remark%'" ));
         }
     }
 

@@ -71,7 +71,7 @@
                                         </select>
                                     </div>
                                     <div class="span2">
-                                        <select class="search-input span12 m-wrap" id="toUser" name="toUser">
+                                        <select class="search-input span12 m-wrap select2" id="toUser" name="toUser">
                                             <option value="">--Select System User--</option>
                                             {% for employee in employees %}
                                                 <option {% if searchForm.toUser is defined and searchForm.toUser == employee.username %} selected="selected" {% endif %} value="{{ employee.username }}">{{ employee.name }}</option>
@@ -85,6 +85,18 @@
                                         <div class="controls">
                                             <div class="input-append span11">
                                                 <input type="text" id="endDate" name="endDate"  class="span10 search-input m-wrap  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined and searchForm.endDate is not empty %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span8">
+                                        <input type="text" id="remark" name="remark"  class="span12 search-input m-wrap  date-picker" value="{% if searchForm.remark is defined and searchForm.remark is not empty %}{{ searchForm.remark }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.remark is defined %}{{ searchForm.remark }}{% else %}Search any keyword...{% endif %} ">
+                                    </div>
+                                    <div class="span4">
+                                        <div class="controls">
+                                            <div class="input-append span11">
+                                                <input type="text" id="invoice" name="invoice"  class="span10 search-input m-wrap  m-ctrl-medium" value="{% if searchForm.invoice is defined and searchForm.invoice is not empty %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %} Ref no {% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
