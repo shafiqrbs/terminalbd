@@ -723,7 +723,7 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.assignDoctor','doctor');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
+       // $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
         $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Done','Released','Dead'));
         $qb->andWhere('e.commissionApproved = :approved')->setParameter('approved', 'false') ;
        // $qb->andWhere('doctor.sendToAccount = 1');
