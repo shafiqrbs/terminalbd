@@ -51,10 +51,10 @@
                                 <div class="span4">
                                     <h4>Department/Branch Information:</h4>
                                     <ul class="unstyled">
-                                        {% if entity.club is not empty %}
-                                        <li>{{ entity.club.name }}</li>
-                                        <li><strong>Mobile</strong> {{ entity.club.mobile }}</li>
-                                        <li><strong>Address:</strong> {{ entity.club.address|raw }}</li>
+                                        {% if entity.customer is not empty %}
+                                        <li>{{ entity.customer.name }}</li>
+                                        <li><strong>Mobile</strong> {{ entity.customer.mobile }}</li>
+                                        <li><strong>Address:</strong> {{ entity.customer.address|raw }}</li>
                                         {% endif %}
                                     </ul>
                                 </div>
@@ -122,7 +122,7 @@
                                             <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>
                                             <td class="numeric" >
                                             {% if entity.approve != 'approved'  %}
-                                                <select class="m-wrap span12 mode" name="mode[]" id="mode-{{ purchaseItem.id }}">
+                                                <select class="m-wrap-custom span12 mode" name="mode[]" id="mode-{{ purchaseItem.id }}">
                                                     <option value="">Process Mode </option>
                                                     {% for mode in modes %}
                                                         <option {% if purchaseItem.mode is not empty and purchaseItem.mode == mode %} selected {% endif %}  value="{{ path('pro_purchaseitem_mode', { 'id': purchaseItem.id,'mode': mode }) }}" >{{ mode }}</option>
@@ -148,9 +148,11 @@
                                         <th colspan="4">Total Item & QTY</th>
                                         <th colspan="">{{ entity.totalItem }}/{{ entity.totalQnt }}</th>
                                         <th colspan="3">Grand Total</th>
-                                        <th>{{ entity.totalAmount }}</th><td></td></tr>
+                                        <th>{{ entity.totalAmount }}</th>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                     </tfoot>
-
                                 </table>
 
 
@@ -179,6 +181,11 @@
             </div>
         </div>
     </div>
+    <style>
+        .m-wrap-custom{
+            margin-bottom: 0!important;
+        }
+    </style>
 {% endblock %}
 {% block javascriptBlock %}
     {{ parent() }}

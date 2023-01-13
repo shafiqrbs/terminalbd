@@ -116,8 +116,17 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Expense Category <span class="required">*</span></label>
                                             <div class="controls">
+                                                <div class="row-fluid">
+                                            <div class="span8">
                                                 {{ form_widget(form.expenseCategory) }}
                                                 {{ form_errors(form.expenseCategory) }}
+                                            </div>
+                                            <div class="span4">
+                                                <div class="btn-group">
+                                                    <a href="{{ path('expensecategory_new') }}" target="_blank" class="pull-left btn purple"><i class="icon-plus"></i> Add Category</a>
+                                                </div>
+                                            </div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>

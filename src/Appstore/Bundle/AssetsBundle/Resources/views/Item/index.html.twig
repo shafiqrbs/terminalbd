@@ -85,14 +85,18 @@
                                     <th class="numeric" ><span class="tooltips" data-original-title="Stock Keeping Unit">SKU</span></th>
                                     <th class="numeric" >Name </th>
                                     <th class="numeric" >Price</th>
-                                    <th class="numeric" ><span class="tooltips" data-original-title="Opening Quantity">Open</span></th>
-                                    <th class="numeric" ><span class="tooltips" data-original-title="Purchase Quantity">
+                                    <th class="numeric" ><span class="tooltips" data-original-title="Opening QTY">Open</span></th>
+                                    <th class="numeric" ><span class="tooltips" data-original-title="Purchase QTY">
                                             Purchase </span> </th>
-                                    <th class="numeric" ><span class="tooltips" data-original-title="Purchase Return Quantity">
-                                            P. Return </span> </th>
-                                    <th class="numeric" ><span class="tooltips" data-original-title="Damage Quantity">
+                                    <th class="numeric" ><span class="tooltips" data-original-title="Issue QTY">
+                                            Issue </span> </th>
+                                    <th class="numeric" ><span class="tooltips" data-original-title="Damage QTY">
                                             Damage </span> </th>
                                     <th class="numeric" ><span class="tooltips" data-original-title="Remaining Quantity">Remaining</span></th>
+                                    <th class="numeric" ><span class="tooltips" data-original-title="In-progress QTY">
+                                            In-progress </span> </th>
+                                    <th class="numeric" ><span class="tooltips" data-original-title="Current Stock QTY">
+                                            Current Stock </span> </th>
                                     <th class="numeric" >Total Price</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -107,9 +111,11 @@
                                         <td class="">{{entity.price}}</td>
                                         <td class="numeric" >{{entity.openingQuantity}}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
-                                        <td class="numeric" >{{ entity.purchaseReturnQuantity }}</td>
+                                        <td class="numeric" >{{ entity.salesQuantity }}</td>
                                         <td class="numeric" >{{ entity.damageQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
+                                        <td class="numeric" >{{ entity.progressQuantity }}</td>
+                                        <td class="numeric" >{{ entity.remainingQuantity - entity.progressQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity * entity.price }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">

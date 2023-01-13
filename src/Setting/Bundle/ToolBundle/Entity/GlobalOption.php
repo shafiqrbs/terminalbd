@@ -133,6 +133,12 @@ class GlobalOption
     protected $employeePayroll;
 
 
+     /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption")
+     **/
+    protected $linkDomain;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsSender", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
@@ -2542,5 +2548,23 @@ class GlobalOption
         // clean up the file property as you won't need it anymore
         $this->file = null;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLinkDomain()
+    {
+        return $this->linkDomain;
+    }
+
+    /**
+     * @param mixed $linkDomain
+     */
+    public function setLinkDomain($linkDomain)
+    {
+        $this->linkDomain = $linkDomain;
+    }
+
+
 
 }

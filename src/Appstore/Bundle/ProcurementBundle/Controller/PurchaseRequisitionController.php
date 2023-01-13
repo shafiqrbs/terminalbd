@@ -95,16 +95,13 @@ class PurchaseRequisitionController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $purchase = $em->getRepository('ProcurementBundle:PurchaseRequisition')->find($id);
-
         if (!$purchase) {
             throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
         $purchaseItem = new PurchaseRequisitionItem();
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
         $editForm = $this->createEditForm($purchase);
-
         return $this->render('ProcurementBundle:PurchaseRequisition:new.html.twig', array(
             'entity'      => $purchase,
             'purchaseItemForm'   => $purchaseItemForm->createView(),
@@ -121,7 +118,7 @@ class PurchaseRequisitionController extends Controller
     */
     private function createEditForm(PurchaseRequisition $entity)
     {
-        $inventoryConfig =  $this->getUser()->getGlobalOption()->getAssetsConfig();
+        $inventoryConfig =  $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseRequisitionType($inventoryConfig), $entity, array(
             'action' => $this->generateUrl('pro_purchaserequisition_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -138,7 +135,7 @@ class PurchaseRequisitionController extends Controller
     /**
     * Creates a form to edit a Purchase entity.
     *
-    * @param Requisition $entity The entity
+    * @param PurchaseRequisition $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
@@ -216,8 +213,6 @@ class PurchaseRequisitionController extends Controller
         }else{
             return new Response('failed');
         }
-
-        exit;
     }
 
 
@@ -282,28 +277,55 @@ class PurchaseRequisitionController extends Controller
         $data = $request->request->all();
         $purchaseItem = new PurchaseRequisitionItem();
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
-        $editForm = $this->createEditForm($purchase);
         $purchaseItemForm->handleRequest($request);
-        if ($purchaseItemForm->isValid()) {
-            $purchaseItem->setRequisition($purchase);
-            $purchaseItem->setPrice($purchaseItem->getItem()->getPrice());
-            $purchaseItem->setPurchasePrice($purchaseItem->getItem()->getPrice());
-            $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPrice());
-            $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
-            $em->persist($purchaseItem);
-            $em->flush();
-            $em->getRepository('ProcurementBundle:PurchaseRequisition')->purchaseSimpleUpdate($purchase);
-            return $this->redirect($this->generateUrl('pro_purchaserequisition_edit', array('id' => $purchase->getId())));
-        }
-
-        return $this->render('ProcurementBundle:PurchaseRequisition:new.html.twig', array(
-            'entity' => $purchase,
-            'form'   => $editForm->createView(),
-            'purchaseItemForm'   => $purchaseItemForm->createView(),
-        ));
+        $purchaseItem->setRequisition($purchase);
+        $purchaseItem->setPrice($purchaseItem->getItem()->getPrice());
+        $purchaseItem->setPurchasePrice($purchaseItem->getItem()->getPrice());
+        $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPrice());
+        $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
+        $em->persist($purchaseItem);
+        $em->flush();
+        $em->getRepository('ProcurementBundle:PurchaseRequisition')->purchaseSimpleUpdate($purchase);
+        $em->getRepository(PurchaseRequisitionItem::class)->updateStockProgressItem($purchaseItem);
+        $records = $this->returnResultData($purchaseItem->getRequisition());
+        return new Response($records);
 
     }
 
+
+
+    /**
+     * Creates a new PurchaseRequisition entity.
+     *
+     */
+    public function updatePurchaseItemAction(Request $request,PurchaseRequisitionItem $purchaseItem)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $quantity =  empty($data['quantity']) ? 0 : $data['quantity'];
+        $price = empty($data['price']) ? 0 : $data['price'];
+        $description = empty($data['description']) ? 0 : $data['description'];
+        $purchaseItem->setName($description);
+        $purchaseItem->setPrice($price);
+        $purchaseItem->setPurchasePrice($price);
+        $purchaseItem->setQuantity($quantity);
+        $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPrice());
+        $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
+        $em->persist($purchaseItem);
+        $em->flush();
+        $em->getRepository(PurchaseRequisitionItem::class)->updateStockProgressItem($purchaseItem);
+        $em->getRepository('ProcurementBundle:PurchaseRequisition')->purchaseSimpleUpdate($purchaseItem->getRequisition());
+        $records = $this->returnResultData($purchaseItem->getRequisition());
+        return new Response($records);
+    }
+
+    public function returnResultData(PurchaseRequisition $entity){
+
+        return $invoiceParticulars = $this->renderView('ProcurementBundle:PurchaseRequisition:requisition-item.html.twig', array(
+            'entity' => $entity,
+        ));
+
+    }
 
 
     public function purchaseItemDeleteAction(PurchaseRequisition $purchase, PurchaseRequisitionItem $purchaseItem)
@@ -438,9 +460,5 @@ class PurchaseRequisitionController extends Controller
         $em->flush();
         return new Response('success');
     }
-
-
-
-
 
 }

@@ -640,7 +640,7 @@ class Particular
     public function getReferredName(){
 
         if($this->getService()->getId() == 6 ){
-            return $this->particularCode.' - '.$this->name;
+            return $this->particularCode." - {$this->name} ( {$this->mobile} )";
         }else{
             $designation = empty($this->designation) ? '' : " (".$this->designation.")";
             return $this->particularCode.' - '.$this->name.$designation;

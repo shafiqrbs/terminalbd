@@ -34,7 +34,7 @@ class GlobalOptionType extends AbstractType
     {
         $userID = (!empty($options['data'])) ? $options['data']->getId():0;
         $syndicateId = (!empty($options['data'])) ? $options['data']->getSyndicate()->getParent()->getId():0;
-
+        $optionID = (!empty($options['data'])) ? $options['data']->getId():0;
         if($userID > 0){
             parent::buildForm($builder, $options);
             $builder
@@ -44,6 +44,19 @@ class GlobalOptionType extends AbstractType
                         new NotBlank(array('message'=>'Please input required')),
                         new Length(array('max'=>200))
                     )
+                ))
+                ->add('linkDomain', 'entity', array(
+                    'required'    => true,
+                    'class' => 'Setting\Bundle\ToolBundle\Entity\GlobalOption',
+                    'empty_value' => '---Select Link Domain ---',
+                    'property' => 'name',
+                    'attr'     =>array('id' => '' , 'class' => 'm-wrap span12 select2'),
+                    'query_builder' => function(EntityRepository $er) use($optionID){
+                        return $er->createQueryBuilder('s')
+                            ->andWhere("s.status = 1")
+                            ->andWhere("s.id != {$optionID}")
+                            ->orderBy('s.name','ASC');
+                    },
                 ))
                 ->add('location', 'entity', array(
                     'required'    => false,

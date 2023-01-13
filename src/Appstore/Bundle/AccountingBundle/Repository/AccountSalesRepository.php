@@ -158,8 +158,9 @@ class AccountSalesRepository extends EntityRepository
 	public function getCreatedUsers($global)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('u.id as id','u.username as name');
+        $qb->select('u.id as id','p.name as name');
         $qb->join('e.createdBy','u');
+        $qb->join('u.profile','p');
         $qb->where("e.globalOption = :global")->setParameter('global', $global);
         $qb->groupBy('e.createdBy');
         $qb->orderBy('u.username', 'ASC');
@@ -187,7 +188,6 @@ class AccountSalesRepository extends EntityRepository
 		return $result;
 
 	}
-
 
 
 	public function salesOverview(User $user,$data, $process = [])
@@ -244,6 +244,7 @@ class AccountSalesRepository extends EntityRepository
         $globalOption = $user->getGlobalOption();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','c');
+        $qb->join('e.transactionMethod','transactionMethod');
         $qb->select("c.id","c.name","COALESCE(SUM(e.amount),0) AS amount");
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
@@ -298,8 +299,11 @@ class AccountSalesRepository extends EntityRepository
         $qb->select('e.updated as created','e.totalAmount as debit','e.amount as credit','e.balance as balance','e.processHead as mode','e.sourceInvoice as invoice');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('t.name as method');
+        $qb->addSelect('profile.name as createdBy');
         $qb->join('e.customer','c');
-        $qb->leftJoin('e.transactionMethod','t');
+        $qb->join('e.createdBy','u');
+        $qb->leftJoin('u.profile','profile');
+        $qb->join('e.transactionMethod','t');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $option);
         $this->handleSearchBetween($qb,$data);
@@ -510,7 +514,7 @@ class AccountSalesRepository extends EntityRepository
         $mode = isset($data['mode']) ? $data['mode']:0;
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.customer','customer');
-        $qb->leftJoin('e.transactionMethod','m');
+        $qb->join('e.transactionMethod','m');
         $qb->select('e.created as created','m.name as method','customer.id as customerId ,customer.name as name , customer.mobile as mobile,COALESCE(e.totalAmount) as debit, COALESCE(e.amount,0) as credit,(COALESCE(e.totalAmount,0) - COALESCE(e.amount,0)) as balance ');
         $qb->where("e.globalOption = :globalOption")->setParameter('globalOption', $globalOption->getId());
         if($mode == "Sales"){
@@ -998,34 +1002,39 @@ class AccountSalesRepository extends EntityRepository
     public function insertHospitalAccountInvoice(InvoiceTransaction $entity)
     {
         $em = $this->_em;
-        $accountSales = new AccountSales();
+        $sourceInvoice = $entity->getHmsInvoice()->getInvoice()."-".$entity->getId();
+        $exist = $this->findOneBy(array('globalOption' => $entity->getHmsInvoice()->getHospitalConfig()->getGlobalOption(),'sourceInvoice' => $sourceInvoice,'customer' => $entity->getHmsInvoice()->getCustomer()));
+        if(empty($exist)){
+            $accountSales = new AccountSales();
+            $accountSales->setAccountBank($entity->getAccountBank());
+            $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+            $accountSales->setGlobalOption($entity->getHmsInvoice()->getHospitalConfig()->getGlobalOption());
+            $accountSales->setHmsInvoices($entity->getHmsInvoice());
+            $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice()."-".$entity->getId());
+            $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
+            if ($entity->getPayment() > 0){
+                $accountSales->setAmount($entity->getPayment());
+                $accountSales->setTransactionMethod($entity->getTransactionMethod());
+            }else{
+                $accountSales->setAmount(0);
+            }
+            $accountSales->setProcessHead('Advance');
+            $accountSales->setApprovedBy($entity->getCreatedBy());
+            $accountSales->setCreatedBy($entity->getCreatedBy());
+            $accountSales->setProcessType('Sales');
+            $accountSales->setProcess('approved');
+            $accountSales->setCreated($entity->getCreated());
+            $accountSales->setUpdated($entity->getCreated());
+            $em->persist($accountSales);
+            $em->flush();
+            $this->updateCustomerBalance($accountSales);
+            if ($entity->getPayment() > 0) {
+                $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+            }
+            return $accountSales;
+        }
+        return  $exist;
 
-        $accountSales->setAccountBank($entity->getAccountBank());
-        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
-        $accountSales->setGlobalOption($entity->getHmsInvoice()->getHospitalConfig()->getGlobalOption());
-        $accountSales->setHmsInvoices($entity->getHmsInvoice());
-	    $accountSales->setSourceInvoice( $entity->getHmsInvoice()->getInvoice()."-".$entity->getId());
-	    $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
-        if ($entity->getPayment() > 0){
-            $accountSales->setAmount($entity->getPayment());
-            $accountSales->setTransactionMethod($entity->getTransactionMethod());
-        }else{
-            $accountSales->setAmount(0);
-        }
-        $accountSales->setProcessHead('Advance');
-        $accountSales->setApprovedBy($entity->getCreatedBy());
-        $accountSales->setCreatedBy($entity->getCreatedBy());
-        $accountSales->setProcessType('Sales');
-        $accountSales->setProcess('approved');
-        $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getCreated());
-        $em->persist($accountSales);
-        $em->flush();
-        $this->updateCustomerBalance($accountSales);
-        if ($entity->getPayment() > 0) {
-            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-        }
-        return $accountSales;
     }
 
     public function insertHospitalInvoiceDelete(InvoiceTransaction $entity)

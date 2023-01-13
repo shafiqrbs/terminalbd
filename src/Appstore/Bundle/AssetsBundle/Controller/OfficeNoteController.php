@@ -40,7 +40,8 @@ class OfficeNoteController extends Controller
 	{
 		$em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;
-		$entities = $em->getRepository('AssetsBundle:OfficeNote')->findBy(array(),array('updated'=>'DESC'));
+        $config = $this->getUser()->getGlobalOption()->getAssetsConfig();
+		$entities = $em->getRepository('AssetsBundle:OfficeNote')->findWithSearch($config,$data);
 		$pagination = $this->paginate($entities);
 		return $this->render('AssetsBundle:OfficeNote:index.html.twig', array(
 			'entities' => $pagination,
@@ -102,15 +103,12 @@ class OfficeNoteController extends Controller
         $data = '';
         $entities = $em->getRepository('ProcurementBundle:PurchaseRequisition')->findWithSearchApproved($inventory->getId(),$data);
         $pagination = $entities->getQuery()->getResult();
-
-
         $records = $this->getDoctrine()->getRepository(PurchaseRequisitionItem::class)->purchaseGroupItemQuantity($inventory);
-
         return $this->render('AssetsBundle:OfficeNote:new.html.twig', array(
-			'entity'      => $officeNote,
+			'entity'        => $officeNote,
 			'entities'      => $pagination,
-			'records'      => $records,
-			'form'   => $editForm->createView(),
+			'records'       => $records,
+			'form'          => $editForm->createView(),
 		));
 	}
 

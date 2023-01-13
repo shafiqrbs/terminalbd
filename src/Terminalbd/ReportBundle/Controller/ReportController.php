@@ -2,6 +2,7 @@
 
 namespace Terminalbd\ReportBundle\Controller;
 
+use Core\UserBundle\Entity\User;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -578,11 +579,17 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = "";
+        $salesBy = "";
         if(isset($data['startDateTime']) and $data['startDateTime'] and isset($data['endDateTime']) and $data['endDateTime'] ) {
             $entities = $em->getRepository('AccountingBundle:AccountSales')->reportFindWithSearch($globalOption,$data);
+            if(isset($data['user']) and !empty($data['user'])){
+                $salesBy = $this->getDoctrine()->getRepository(User::class)->find($data['user']);
+            }
             $htmlProcess = $this->renderView(
                 'ReportBundle:Accounting/Sales:sales-data.html.twig', array(
                     'entities' => $entities,
+                    'data' => $data,
+                    'salesBy' => $salesBy,
                 )
             );
             return new Response($htmlProcess);

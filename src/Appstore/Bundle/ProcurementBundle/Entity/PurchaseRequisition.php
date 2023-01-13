@@ -50,6 +50,11 @@ class PurchaseRequisition
     private  $officeNote;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer")
+     **/
+    private  $customer;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Club")
      **/
     private  $club;
@@ -922,6 +927,22 @@ class PurchaseRequisition
     public function setClub($club)
     {
         $this->club = $club;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param mixed $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
     }
 
 

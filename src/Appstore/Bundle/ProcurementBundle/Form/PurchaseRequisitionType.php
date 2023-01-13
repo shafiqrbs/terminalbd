@@ -5,6 +5,7 @@ namespace Appstore\Bundle\ProcurementBundle\Form;
 use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -13,11 +14,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PurchaseRequisitionType extends AbstractType
 {
 
-    public  $inventoryConfig;
+    public  $global;
 
-    public function __construct(AssetsConfig $inventoryConfig)
+    public function __construct(GlobalOption $global)
     {
-        $this->inventoryConfig = $inventoryConfig;
+        $this->global = $global;
 
     }
 
@@ -27,13 +28,13 @@ class PurchaseRequisitionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $config = $this->inventoryConfig;
+        $config = $this->global;
         $builder
 
-            ->add('club', 'entity', array(
+            ->add('customer', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AssetsBundle\Entity\Club',
-                'empty_value' => '---Choose a Branch/Department ---',
+                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Customer',
+                'empty_value' => '---Choose a Client ---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'constraints' =>array(
@@ -41,7 +42,7 @@ class PurchaseRequisitionType extends AbstractType
                 ),
                 'query_builder' => function(EntityRepository $er) use($config){
                     return $er->createQueryBuilder('p')
-                        ->where("p.config = {$config->getId()}")
+                        ->where("p.globalOption = {$config->getId()}")
                         ->andWhere("p.status = 1")
                         ->orderBy("p.name","ASC");
                 },

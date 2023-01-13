@@ -172,8 +172,8 @@ function InventoryPurchasePage(){
         var quantity = $("input[name='quantity[]']").val();
         quantity = (quantity != '') ?  parseInt(quantity) : 0 ;
         var subTotal = ( purchasePrice * quantity );
-        alert(subTotal);
         $(this).closest('.subTotalPurchase').val(subTotal);
+
     });
 
     var validator =  $("from#purchaseForm").validate({

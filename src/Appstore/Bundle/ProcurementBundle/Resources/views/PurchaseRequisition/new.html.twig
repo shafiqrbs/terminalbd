@@ -50,9 +50,9 @@
                         {{ form_row(purchaseItemForm._token) }}
                         <div class="row-fluid">
                             <div class="span4">
-                                <div class="control-group">
+                                <div class="control-group ">
                                     <label class="control-label" for="name">Item <span class="required">*</span></label>
-                                    <div class="controls">
+                                    <div class="controls select-error-tooltip">
                                         {{ form_widget(purchaseItemForm.item) }}
                                         {{ form_errors(purchaseItemForm.item) }}
                                     </div>
@@ -61,7 +61,7 @@
                             </div>
                              <div class="span6">
                                 <div class="control-group">
-                                    <label class="control-label" for="name">Product Name <span class="required">*</span></label>
+                                    <label class="control-label" for="name">Description</label>
                                     <div class="controls">
                                         {{ form_widget(purchaseItemForm.name) }}
                                         {{ form_errors(purchaseItemForm.name) }}
@@ -74,7 +74,7 @@
                                     <div class="controls">
                                         <div class="input-append">
                                             {{ form_widget(purchaseItemForm.quantity) }}
-                                            <div class="btn-group"> <button type="submit" id="addPurchaseForm1" name="addPurchaseForm1"  class="btn blue"><i class="icon-save"></i>&nbsp;Save</button></div>
+                                            <div class="btn-group"> <button type="submit" id="addPurchaseForm" name="addPurchaseForm"  class="btn blue"><i class="icon-save"></i>&nbsp;Save</button></div>
                                         </div>
                                         {{ form_errors(purchaseItemForm.quantity) }}
                                     </div>
@@ -97,8 +97,8 @@
                                     <th class="numeric" ><i class="icon-reorder"></i></th>
                                     <th class="numeric" >Item Mode</th>
                                     <th class="numeric" >Item</th>
-                                    <th class="numeric" >Product</th>
-                                    <th class="numeric" >Qnt</th>
+                                    <th class="numeric" >Description</th>
+                                    <th class="numeric" >QTY</th>
                                     <th class="numeric" >Unit Price</th>
                                     <th class="numeric" >Sub-total</th>
                                     <th class="numeric" >Action</th>
@@ -111,25 +111,21 @@
                                         <td class="numeric" >{{ loop.index }}.</td>
                                         <td class="numeric" >{% if purchaseItem.item.productGroup is not empty %}{{ purchaseItem.item.productGroup.name }}{% endif %}</td>
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
-                                        <td class="numeric" >{{ purchaseItem.name }}</td>
-                                        <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                        <td class="numeric" >{{purchaseItem.price}}</td>
-                                        <td class="numeric" >{{ purchaseItem.purchaseSubTotal|number_format() }}</td>
+                                        <td class="" ><input data-action="{{ path('pro_purchaserequisition_item_update',{'id':purchaseItem.id}) }}" data-id="{{ purchaseItem.id }}" class="td-inline-input-text updateItem" type="text" autocomplete = "off" name="description-{{ purchaseItem.id }}" id="description-{{ purchaseItem.id }}" value="{{ purchaseItem.name }}" /></td>
+                                        <td class="numeric" ><input data-action="{{ path('pro_purchaserequisition_item_update',{'id':purchaseItem.id}) }}" data-id="{{ purchaseItem.id }}" class="td-inline-input updateItem" type="text" autocomplete = "off" name="quantity-{{ purchaseItem.id }}" id="quantity-{{ purchaseItem.id }}" value="{{ purchaseItem.quantity }}" /></td>
+                                        <td class="numeric" ><input data-action="{{ path('pro_purchaserequisition_item_update',{'id':purchaseItem.id}) }}" data-id="{{ purchaseItem.id }}" class="td-inline-input updateItem" type="text" autocomplete = "off" name="price-{{ purchaseItem.id }}" id="price-{{ purchaseItem.id }}" value="{{ purchaseItem.price }}" /></td>
+                                        <td class="numeric" id="subTotal-{{ purchaseItem.id }}">{{ purchaseItem.purchaseSubTotal|number_format() }}</td>
                                         <td><a href="javascript:" data-url="{{ path('pro_purchaserequisition_item_delete',{'purchase':entity.id ,'id':purchaseItem.id }) }}" class="btn red mini purchaseItemDelete"><i class="icon-trash"></i> Delete</a> </td>
                                     </tr>
                                 {% endfor %}
                                 {% endif %}
-                                </tbody>
-                                <tfoot>
                                 <tr>
                                     <td colspan="4" class="numeric"><strong class=" pull-right">Total Quantity</strong></td>
                                     <td class="numeric" ><strong>{{ entity.totalQnt }}</strong></td>
                                     <td class="numeric" ><strong class=" pull-right">Total Amount</strong></td>
                                     <td class="numeric" colspan="4" ><strong>{{ entity.totalAmount|number_format }}</strong></td>
                                 </tr>
-                                </tfoot>
-
-
+                                </tbody>
                             </table>
                         </div>
                         <div class="clearfix"><br/></div>
@@ -146,9 +142,9 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Department/Branch<span class="required">*</span></label>
+                                            <label class="control-label" for="firstName">Client<span class="required">*</span></label>
                                             <div class="controls">
-                                                {{ form_widget(form.club) }}{{ form_errors(form.club) }}
+                                                {{ form_widget(form.customer) }}{{ form_errors(form.customer) }}
                                             </div>
                                         </div>
                                     </div>
@@ -212,6 +208,33 @@
             line-height: 30px !important;
         }
 
+        .numeric input {
+            margin-bottom: 0;
+            min-height: 15px!important;
+            width: 50px;
+            height: 15px!important;
+            border: 1px solid #999;
+            font-size: 13px!important;
+            line-height: 15px!important;
+        }
+
+        .td-inline-input{
+            height: 15px!important;
+            line-height: 13px!important;
+            font-size: 13px!important;
+            border: 2px solid #4d90fe!important;
+            width: 60px;
+            margin-bottom:0!important;
+        }
+
+        .td-inline-input-text{
+            height: 15px!important;
+            line-height: 13px!important;
+            font-size: 13px!important;
+            border: 2px solid #4d90fe!important;
+            margin-bottom:0!important;
+        }
+
         #inventoryItem{
             display: none;
         }
@@ -221,8 +244,7 @@
     {% block javascriptBlock %}
         {{ parent() }}
         {% javascripts
-        '@InventoryBundle/Resources/public/js/puschase.js'
-        '@InventoryBundle/Resources/public/js/approveProcess.js'
+        '@ProcurementBundle/Resources/public/js/requisition.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -232,8 +254,4 @@
     $( ".datePicker" ).datepicker({
         dateFormat: "dd-mm-yy"
     });
-    InventoryPurchasePage();
-    ApproveProcess();
-
-
     {% endblock %}

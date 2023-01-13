@@ -173,6 +173,9 @@ class AccountSalesController extends Controller
             }else{
                 $entity->setAmount(abs($entity->getAmount()));
             }
+            if( in_array($entity->getProcessHead(),array('Credit','Discount'))){
+                $entity->setTransactionMethod(null);
+            }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){
                 $datetime = new \DateTime("yesterday 23:30:30");
@@ -218,6 +221,9 @@ class AccountSalesController extends Controller
                 $entity->setTransactionMethod(null);
             }else{
                 $entity->setAmount(abs($entity->getAmount()));
+            }
+            if( in_array($entity->getProcessHead(),array('Credit','Discount'))){
+                $entity->setTransactionMethod(null);
             }
             $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
             if($accountConfig == 1){

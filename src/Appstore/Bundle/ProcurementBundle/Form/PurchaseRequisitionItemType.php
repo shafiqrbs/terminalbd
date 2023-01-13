@@ -46,8 +46,7 @@ class PurchaseRequisitionItemType extends AbstractType
                         ->orderBy("p.sku","ASC");
                 },
             ))
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Item name')))
-
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Item name'),'required'=>false))
 	        ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>'Quantity'),
 	                                       'constraints' =>array(
 		                                       new NotBlank(array('message'=>'Add item quantity')))))

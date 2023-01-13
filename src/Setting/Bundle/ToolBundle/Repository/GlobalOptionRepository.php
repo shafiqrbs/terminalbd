@@ -16,6 +16,7 @@ use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
+use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Appstore\Bundle\TicketBundle\Entity\TicketConfig;
 use Core\UserBundle\Entity\Profile;
@@ -539,6 +540,12 @@ class GlobalOptionRepository extends EntityRepository
         $assetsConfig = $this->_em->getRepository('AssetsBundle:AssetsConfig')->findOneBy(array('globalOption' => $globalOption));
         if(empty($assetsConfig)){
             $config = new AssetsConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+        $ProcurementConfig = $this->_em->getRepository('ProcurementBundle:ProcurementConfig')->findOneBy(array('globalOption' => $globalOption));
+        if(empty($ProcurementConfig)){
+            $config = new ProcurementConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }

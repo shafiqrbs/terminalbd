@@ -77,7 +77,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Created By</th>
                                     <th class="numeric" >PR No</th>
-                                    <th class="numeric" >Department/Branch</th>
+                                    <th class="numeric" >Client</th>
                                     <th class="numeric" >Ref no</th>
                                     <th class="numeric" >Item/Quantity</th>
                                     <th class="numeric" >Approx. Amount</th>
@@ -95,7 +95,7 @@
                                         <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" >{{ entity.grn }}</td>
-                                        <td class="numeric" >{% if entity.club is not empty %}{{ entity.club.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.memo }}</td>
                                         <td class="numeric" >{{ entity.totalItem }}/{{ entity.totalQnt }}</td>
                                         <td class="numeric" >{{ entity.totalAmount|number_format() }}</td>

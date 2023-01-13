@@ -32,28 +32,28 @@ class Club
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=255)
+     * @ORM\Column(name="code", type="string", length=255, nullable=true)
      */
     private $code;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="contactName", type="string", length=255)
+     * @ORM\Column(name="contactName", type="string", length=255, nullable=true)
      */
     private $contactName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="contactMobile", type="string", length=255)
+     * @ORM\Column(name="contactMobile", type="string", length=255, nullable=true)
      */
     private $contactMobile;
 
@@ -61,21 +61,21 @@ class Club
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="text", length=255)
+     * @ORM\Column(name="address", type="text", length=255, nullable=true)
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile", type="text", length=255)
+     * @ORM\Column(name="mobile", type="text", length=255, nullable=true)
      */
     private $mobile;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="text", length=255)
+     * @ORM\Column(name="email", type="text", length=255, nullable=true)
      */
     private $email;
 

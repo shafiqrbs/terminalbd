@@ -69,6 +69,14 @@ pro_purchaserequisition_create_stock_item:
     methods:  [POST, PUT]
 
 
+pro_purchaserequisition_item_update:
+    path:      /{id}/update-requisition-item
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:updatePurchaseItem" }
+    methods:  [POST]
+    options:
+            expose: true
+
+
 pro_purchaserequisition_item_delete:
     path:     /{purchase}/{id}/purchase-simple-item-delete
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:purchaseItemDelete" }

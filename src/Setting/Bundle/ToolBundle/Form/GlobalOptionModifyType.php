@@ -31,6 +31,7 @@ class  GlobalOptionModifyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $userID = (!empty($options['data'])) ? $options['data']->getId():0;
+        $optionID = (!empty($options['data'])) ? $options['data']->getId():0;
         $syndicateId = (!empty($options['data'])) ? $options['data']->getSyndicate()->getParent()->getId():0;
 
         if($userID > 0){
@@ -93,6 +94,20 @@ class  GlobalOptionModifyType extends AbstractType
                                 ->orderBy('s.name','ASC');
                         },
                 ))*/
+
+                ->add('linkDomain', 'entity', array(
+                   'required'    => true,
+                   'class' => 'Setting\Bundle\ToolBundle\Entity\GlobalOption',
+                   'empty_value' => '---Select Link Domain ---',
+                   'property' => 'name',
+                   'attr'     =>array('id' => '' , 'class' => 'm-wrap span12 select2'),
+                   'query_builder' => function(EntityRepository $er) use($optionID){
+                           return $er->createQueryBuilder('s')
+                               ->andWhere("s.status = 1")
+                               ->andWhere("s.id != {$optionID}")
+                               ->orderBy('s.name','ASC');
+                       },
+               ))
 
                 ->add('domain','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter domain name'),
                     'constraints' =>array(

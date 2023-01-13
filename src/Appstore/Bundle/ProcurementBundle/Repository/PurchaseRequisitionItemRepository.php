@@ -1,11 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\ProcurementBundle\Repository;
-use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
-use Appstore\Bundle\InventoryBundle\Entity\Item;
-use Appstore\Bundle\InventoryBundle\Entity\Purchase;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseOrderItem;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
 use Doctrine\ORM\EntityRepository;
@@ -286,6 +281,25 @@ class PurchaseRequisitionItemRepository extends EntityRepository
             ->where('pi.item = :item')
             ->setParameter('item', $item->getId())
             ->getQuery()->getSingleResult();
+    }
+
+    public function updateStockProgressItem(PurchaseRequisitionItem $requisitionItem)
+    {
+        $em = $this->_em;
+        $quantity = $this->createQueryBuilder('pi')
+            ->select("(COALESCE(SUM(pi.quantity),0)  - COALESCE(SUM(pi.issueQuantity),0)) as remaining")
+            ->where('pi.item = :item')
+            ->setParameter('item', $requisitionItem->getItem()->getId())
+            ->andWhere('pi.item = :item')
+            ->setParameter('item',$requisitionItem->getItem()->getId())
+            ->getQuery()->getSingleResult();
+
+        /* @var $item \Appstore\Bundle\AssetsBundle\Entity\Item */
+
+        $item = $requisitionItem->getItem();
+        $item->setProgressQuantity($quantity['remaining']);
+        $em->persist($item);
+        $em->flush();
     }
 
     public function getItemList($purchase)

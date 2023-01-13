@@ -93,17 +93,9 @@ class OfficeNoteRepository extends EntityRepository
 
     public function findWithSearch($config,$data)
     {
-
-        $item = isset($data['item'])? $data['item'] :'';
         $branch = isset($data['branch'])? $data['branch'] :'';
-        $category = isset($data['category'])? $data['category'] :'';
-        $parent = isset($data['parent'])? $data['parent'] :'';
-        $depreciation = isset($data['depreciation'])? $data['depreciation'] :'';
-        $qb = $this->createQueryBuilder('item');
-        $qb->where("item.status IS NOT NULL");
-        $qb->andWhere("item.config = :config")->setParameter('config', $config);
-        $qb->andWhere("item.productType = :type")->setParameter('type', $type);
-        $this->handleWithSearch($qb,$data);
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("item.config = :config")->setParameter('config', $config);
         $qb->orderBy('item.name','ASC');
         $qb->getQuery();
         return  $qb;

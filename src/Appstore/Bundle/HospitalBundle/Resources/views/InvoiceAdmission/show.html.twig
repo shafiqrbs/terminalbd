@@ -76,7 +76,11 @@
                                         <ul class="unstyled">
                                             <li><strong>Patient Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
                                             <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
-                                            <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
+                                            {% if entity.invoiceMode == 'admission' %}
+                                                <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y h:i a') }}{% endif %}</li>
+                                                <li><strong>Discharge By:</strong>&nbsp;{% if entity.dischargeBy is not empty %}{{ entity.dischargeBy.profile.name }}{% endif %}</li>
+                                                <li><strong>Approved By:</strong>&nbsp;{% if entity.approvedBy is not empty %}{{ entity.approvedBy.profile.name }}{% endif %}</li>
+                                            {% endif %}
                                             <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}</li>
                                             <li><strong>Referred:</strong>&nbsp;{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</li>
                                         </ul>

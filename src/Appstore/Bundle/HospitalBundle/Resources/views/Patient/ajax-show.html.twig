@@ -46,11 +46,20 @@
                                     <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy.profile is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</li>
                                     <li><strong>Patient Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
                                     {% if entity.invoiceMode == 'admission' %}
-                                    <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
-                                    <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
+                                    <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y h:i a') }}</li>
+                                    {% if entity.invoiceMode == 'admission' %}
+                                        <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y h:i a') }}{% endif %}</li>
+                                        <li><strong>Discharge By:</strong>&nbsp;{% if entity.dischargeBy is not empty %}{{ entity.dischargeBy.profile.name }}{% endif %}</li>
+                                        <li><strong>Approved By:</strong>&nbsp;{% if entity.approvedBy is not empty %}{{ entity.approvedBy.profile.name }}{% endif %}</li>
                                     {% endif %}
                                     {% if entity.cabin is not empty %}
-                                    <li><strong>Cabin/Bed:</strong>{{ entity.cabin.name }}</li>
+                                    <li><strong>Cabin/Bed: </strong>
+                                        {% if (entity.process in processEdit) or (app.user.granted("ROLE_DOMAIN")) %}
+                                            <a  data-type="select" class="editable" id="Cabin" data-name="Cabin" href="javascript:" data-source="{{ path('hms_patient_cabin_search',{'id':entity.id}) }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ entity.id }}"  value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-original-title="Enter cabin name">{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.name }}{% endif %}</a>
+                                        {% else %}
+                                            {% if entity.cabin is not empty %}{{ entity.cabin.name }} {% endif %}
+                                        {% endif %}
+                                    </li>
                                     {% endif %}
                                     <li><strong>Referred:</strong>&nbsp;
                                         {% if (entity.process in processEdit and entity.assignDoctor is empty ) or (app.user.granted("ROLE_DOMAIN")) %}

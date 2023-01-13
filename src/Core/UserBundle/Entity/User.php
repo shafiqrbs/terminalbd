@@ -911,6 +911,15 @@ class User extends BaseUser
 		return false;
 	}
 
+    public function hasRoles($role)
+    {
+        $array = array_intersect($role, $this->getRoles());
+        if(!empty($array)){
+            return true;
+        }
+        return false;
+    }
+
 	/**
 	 * Set username;
 	 *

@@ -29,21 +29,20 @@ class AccountSalesType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span6 numeric removeZero','placeholder'=>'Received amount'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span4 numeric removeZero','placeholder'=>'Received amount'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add payment amount'))
                 )))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remark')))
-
             ->add('customer','text', array('attr'=>array('class'=>'m-wrap span9 select2Customer leftMargin','placeholder'=>'Select customer name','focus' => true)))
             ->add('smsAlert',CheckboxType::class, array('attr'=>array('class'=>'')))
-
             ->add('processHead', 'choice', array(
 		        'attr'=>array('class'=>'span12 m-wrap'),
 		        'expanded'      =>false,
 		        'multiple'      =>false,
 		        'choices' => array(
                     'Due' => 'Receive from Due',
+                    'Discount' => 'Discount',
                     'Advance' => 'Receive of Advance',
                     'Debit' => 'Debit Adjustment(Receive)',
                     'Credit' => 'Credit Adjustment(Payment)',

@@ -482,9 +482,9 @@ class ParticularRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('e');
         $query->select("e.id as id");
-        $query->addSelect("CONCAT(e.particularCode,' - ',e.name) as text");
+        $query->addSelect("CONCAT(e.particularCode,' - ',e.name,'( ',e.mobile,')') as text");
         $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
-        $query->andWhere('e.particularCode LIKE :searchTerm OR e.name LIKE :searchTerm');
+        $query->andWhere('e.particularCode LIKE :searchTerm OR e.name LIKE :searchTerm OR e.mobile LIKE :searchTerm');
         $query->setParameter('searchTerm', '%'.trim($q).'%');
         $query->andWhere('e.status =1');
         $query->andWhere('e.service IN (:services)')->setParameter('services',$services);

@@ -410,7 +410,9 @@ class MedicineStockRepository extends EntityRepository
                 $stock->setOpeningQuantity($openStock);
             }
             $stock->setPack($pack);
-            $stock->setMinQuantity($min);
+            if($min > 0){
+                $stock->setMinQuantity($min);
+            }
             $stock->setBonusQuantity($bonusQnt);
             $stock->setPurchaseQuantity($qnt);
         }

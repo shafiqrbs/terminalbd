@@ -81,7 +81,11 @@
                                                 <li><strong>Created by:</strong>&nbsp;{% if entity.createdBy.profile is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</li>
                                                 <li><strong>Patient Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
                                                 <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y H:i') }}</li>
-                                                <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y H:i') }}{% endif %}</li>
+                                                {% if entity.invoiceMode == 'admission' %}
+                                                    <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y h:i a') }}{% endif %}</li>
+                                                    <li><strong>Discharge By:</strong>&nbsp;{% if entity.dischargeBy is not empty %}{{ entity.dischargeBy.profile.name }}{% endif %}</li>
+                                                    <li><strong>Approved By:</strong>&nbsp;{% if entity.approvedBy is not empty %}{{ entity.approvedBy.profile.name }}{% endif %}</li>
+                                                {% endif %}
                                                 <li><strong>Cabin/Bed:</strong>
                                                     {% set processEdit = {'Created':'Created','Revised':'Revised','Release':'Release','Death':'Death','Admitted':'Admitted'} %}
                                                     {% if ((entity.process in processEdit and app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) or (entity.process in processEdit and app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER"))) %}
@@ -784,16 +788,14 @@
                                                 {% if entity.total == entity.payment and entity.process not in ['Released','Dead','Release','Death'] %}
                                                     <a class="btn green processConfirm" data-title="release" href="javascript:">Discharge</a>
                                                 {% endif %}
-                                                {% if ( app.user.granted("ROLE_DOMAIN") or app.user.granted("ROLE_DOMAIN_HOSPITAL_MANAGER") or app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN"))  %}
-                                                    {% if entity.process in ['Release','Death'] and entity.total <= entity.payment %}
-                                                        <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                                            Process <i class="icon-tasks"></i>
-                                                        </a>
-                                                        <ul class="dropdown-menu pull-right action">
-                                                            <li> <a class="btn red confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice,'process':'cancel'}) }}" ><i class="fa fa-close"></i> Cancel</a></li>
-                                                            <li><a class="btn green confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice,'process':'confirm'}) }}" ><i class="icon-ok"></i> {{ entity.process }} Confirm</a></li>
-                                                        </ul>
-                                                    {% endif %}
+                                                {% if app.user.hasRoles(["ROLE_DOMAIN","ROLE_DOMAIN_HOSPITAL_MANAGER","ROLE_DOMAIN_HOSPITAL_ADMIN"]) and entity.process in ['Release','Death'] and entity.total <= entity.payment  %}
+                                                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                        Process <i class="icon-tasks"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu pull-right action">
+                                                        <li> <a class="btn red confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice,'process':'cancel'}) }}" ><i class="fa fa-close"></i> Cancel</a></li>
+                                                        <li><a class="btn green confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice,'process':'confirm'}) }}" ><i class="icon-ok"></i> {{ entity.process }} Confirm</a></li>
+                                                    </ul>
                                                 {% endif %}
                                             </div>
                                         </div>

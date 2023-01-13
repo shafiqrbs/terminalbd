@@ -311,6 +311,13 @@ class Item
      */
     private $maxQuantity;
 
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="progressQuantity", type="integer", nullable=true)
+     */
+    private $progressQuantity;
+
     /**
      * @var integer
      *
@@ -1452,6 +1459,22 @@ class Item
     public function setPrice($price)
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProgressQuantity()
+    {
+        return $this->progressQuantity;
+    }
+
+    /**
+     * @param int $progressQuantity
+     */
+    public function setProgressQuantity($progressQuantity)
+    {
+        $this->progressQuantity = $progressQuantity;
     }
 
 

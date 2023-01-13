@@ -770,6 +770,7 @@ class InvoiceAdmissionController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$inventory,'id'=>$id));
         /* @var $entity Invoice */
+        $entity->setDeliveredBy($this->getUser());
         $entity->setMedicine($data['medicine']);
         $entity->setAdvice($data['advice']);
         $entity->setCaseOfDeath($data['caseOfDeath']);
@@ -793,7 +794,7 @@ class InvoiceAdmissionController extends Controller
                 $entity->setProcess('Dead');
             }
             $entity->setApprovedBy($this->getUser());
-            $date = new \DateTime();
+            $date = new \DateTime("now");
             $entity->setReleaseDate($date);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->removePendingTransaction($entity);
             $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->insertHospitalFinalAccountInvoice($entity);

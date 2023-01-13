@@ -9,7 +9,7 @@
                         <select class="search-input col-md-12 m-wrap select2" name="customerId" id="customerId">
                             {% if customers is not empty %}
                                 {% for customer in customers %}
-                                    <option {% if searchForm.customer is defined and searchForm.customer is not empty and customer.customerId == searchForm.customer %} selected="selected" {% endif %} value="{{ customer.customerId }}">{{ customer.customerMobile }} - {{ customer.customerName }} Balance: ({{ customer.customerBalance }}) </option>
+                                    <option {% if searchForm.customer is defined and searchForm.customer is not empty and customer.customerId == searchForm.customer %} selected="selected" {% endif %} value="{{ customer.customerId }}">{{ customer.customerMobile }} - {{ customer.customerName }} Balance: ({{ customer.customerBalance|number_format() }}) </option>
                                 {% endfor %}
                             {% endif %}
                         </select>

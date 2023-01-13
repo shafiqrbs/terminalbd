@@ -71,8 +71,6 @@ $(document).on('change', '#select2Invoice, #barcode2Invoice', function() {
 
 });
 
-
-
 $(document).on('click', '.addPatient', function() {
 
     $('.dialogModal_header').html('Patient Information');
