@@ -23,36 +23,38 @@ use Doctrine\ORM\EntityRepository;
  */
 class ParticularRepository extends EntityRepository
 {
-    public function findWithSearch($config,$service, $data = ""){
+    public function findWithSearch($config, $service, $data = "")
+    {
 
-        $name = isset($data['name'])? $data['name'] :'';
-        $category = isset($data['category'])? $data['category'] :'';
-        $department = isset($data['department'])? $data['department'] :'';
+        $name = isset($data['name']) ? $data['name'] : '';
+        $category = isset($data['category']) ? $data['category'] : '';
+        $department = isset($data['department']) ? $data['department'] : '';
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :config')->setParameter('config', $config) ;
-        $qb->andWhere('e.service = :service')->setParameter('service', $service) ;
+        $qb->where('e.hospitalConfig = :config')->setParameter('config', $config);
+        $qb->andWhere('e.service = :service')->setParameter('service', $service);
         if (!empty($name)) {
             $qb->andWhere('e.name LIKE :searchTerm OR e.particularCode LIKE :searchTerm');
-            $qb->setParameter('searchTerm', '%'.trim($name).'%');
+            $qb->setParameter('searchTerm', '%' . trim($name) . '%');
         }
-        if(!empty($category)){
+        if (!empty($category)) {
             $qb->andWhere("e.category = :category");
             $qb->setParameter('category', $category);
         }
-        if(!empty($department)){
+        if (!empty($department)) {
             $qb->andWhere("e.department = :department");
             $qb->setParameter('department', $department);
         }
-        $qb->orderBy('e.name','ASC');
+        $qb->orderBy('e.name', 'ASC');
         $qb->getQuery();
-        return  $qb;
+        return $qb;
     }
 
-    public function getFindWithParticular($hospital,$services){
+    public function getFindWithParticular($hospital, $services)
+    {
 
         $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
+            ->leftJoin('e.service', 's')
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.name')
@@ -65,15 +67,16 @@ class ParticularRepository extends EntityRepository
             ->addSelect('s.code as serviceCode')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:service)')
-            ->setParameter('service',array_values($services))
-            ->orderBy('e.service','ASC')
-            ->orderBy('e.name','ASC')
+            ->setParameter('service', array_values($services))
+            ->orderBy('e.service', 'ASC')
+            ->orderBy('e.name', 'ASC')
             ->getQuery()->getArrayResult();
-        return  $qb;
+        return $qb;
     }
 
-    public function getServices($hospital,$services){
-        $particulars = $this->getServiceWithParticular($hospital,$services);
+    public function getServices($hospital, $services)
+    {
+        $particulars = $this->getServiceWithParticular($hospital, $services);
         $data = '';
         $service = '';
         foreach ($particulars as $particular) {
@@ -81,27 +84,28 @@ class ParticularRepository extends EntityRepository
                 if ($service != '') {
                     $data .= '</optgroup>';
                 }
-                $data .= '<optgroup label="' .ucfirst($particular['serviceName']).'">';
+                $data .= '<optgroup label="' . ucfirst($particular['serviceName']) . '">';
             }
-            if ($particular['serviceCode'] != '04'){
+            if ($particular['serviceCode'] != '04') {
                 $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'] . ' to ' . $particular['minimumPrice'] . '</option>';
-            }else{
-                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'].'</option>';
+            } else {
+                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'] . '</option>';
             }
             $service = $particular['serviceName'];
         }
         if ($service != '') {
             $data .= '</optgroup>';
         }
-        return $data ;
+        return $data;
 
     }
 
 
-    public function getServiceWithParticular($hospital,$services){
+    public function getServiceWithParticular($hospital, $services)
+    {
 
         $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
+            ->leftJoin('e.service', 's')
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
@@ -112,38 +116,40 @@ class ParticularRepository extends EntityRepository
             ->addSelect('s.code as serviceCode')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:service)')
-            ->setParameter('service',array_values($services))
-            ->orderBy('e.service','ASC')
-          //  ->orderBy('e.name','ASC')
+            ->setParameter('service', array_values($services))
+            ->orderBy('e.service', 'ASC')
+            //  ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
-            return  $qb;
+        return $qb;
     }
 
-    public function getParticulars($hospital,$services){
+    public function getParticulars($hospital, $services)
+    {
 
         $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
+            ->leftJoin('e.service', 's')
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.particularCode as code')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:service)')
-            ->setParameter('service',array_values($services))
-            ->orderBy('e.name','ASC');
-        $results  = $qb->getQuery()->getArrayResult();
+            ->setParameter('service', array_values($services))
+            ->orderBy('e.name', 'ASC');
+        $results = $qb->getQuery()->getArrayResult();
         $selects = "";
-        foreach ($results as $row){
+        foreach ($results as $row) {
             $selects .= "<option value='{$row['id']}'>{$row['code']}-{$row['name']}</option>";
         }
         return $selects;
 
     }
 
-    public function getMedicineParticular($hospital){
+    public function getMedicineParticular($hospital)
+    {
 
         $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->leftJoin('e.unit','u')
+            ->leftJoin('e.service', 's')
+            ->leftJoin('e.unit', 'u')
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
@@ -161,16 +167,18 @@ class ParticularRepository extends EntityRepository
             ->addSelect('e.purchaseQuantity')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(4)))
-            ->orderBy('e.name','ASC')
+            ->setParameter('process', array_values(array(4)))
+            ->orderBy('e.name', 'ASC')
             ->getQuery()->getArrayResult();
-            return  $qb;
+        return $qb;
     }
-    public function getAccessoriesParticular($hospital){
+
+    public function getAccessoriesParticular($hospital)
+    {
 
         $qb = $this->createQueryBuilder('e')
-            ->leftJoin('e.service','s')
-            ->leftJoin('e.unit','u')
+            ->leftJoin('e.service', 's')
+            ->leftJoin('e.unit', 'u')
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
@@ -188,22 +196,22 @@ class ParticularRepository extends EntityRepository
             ->addSelect('e.purchaseQuantity')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(8)))
-            ->orderBy('e.name','ASC')
+            ->setParameter('process', array_values(array(8)))
+            ->orderBy('e.name', 'ASC')
             ->getQuery()->getArrayResult();
-            return  $qb;
+        return $qb;
     }
 
-    public function findHmsExistingCustomer($hospital, $mobile,$data)
+    public function findHmsExistingCustomer($hospital, $mobile, $data)
     {
         $em = $this->_em;
         $name = $data['referredDoctor']['name'];
         $doctorSignature = $data['referredDoctor']['doctorSignature'];
         $isDoctor = isset($data['referredDoctor']['isDoctor']) ? 1 : 0;
-        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
-        if($entity){
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital, 'service' => 6, 'mobile' => $mobile));
+        if ($entity) {
             return $entity;
-        }else{
+        } else {
             $entity = new Particular();
             $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
             $entity->setMobile($mobile);
@@ -218,16 +226,16 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function findHmsExistingReferred($hospital, $mobile,$data)
+    public function findHmsExistingReferred($hospital, $mobile, $data)
     {
         $em = $this->_em;
         $name = $data['referredDoctor']['name'];
         $doctorSignature = $data['referredDoctor']['doctorSignature'];
         $isDoctor = isset($data['referredDoctor']['isDoctor']) ? 1 : 0;
-        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
-        if($entity){
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital, 'service' => 6, 'mobile' => $mobile));
+        if ($entity) {
             return $entity;
-        }else{
+        } else {
             $entity = new Particular();
             $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
             $entity->setMobile($mobile);
@@ -242,7 +250,7 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function findHmsExistingDoctor($hospital, $mobile,$data)
+    public function findHmsExistingDoctor($hospital, $mobile, $data)
     {
         $em = $this->_em;
         $name = $data['assignDoctor']['name'];
@@ -250,10 +258,10 @@ class ParticularRepository extends EntityRepository
         $doctorSignatureBangla = $data['assignDoctor']['doctorSignatureBangla'];
         $specialist = $data['assignDoctor']['specialist'];
         $account = isset($data['assignDoctor']['sendToAccount']) ? 1 : 0;
-        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 5 ,'name' => $name));
-        if($entity){
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital, 'service' => 5, 'name' => $name));
+        if ($entity) {
             return $entity;
-        }else{
+        } else {
             $entity = new Particular();
             $entity->setService($em->getRepository('HospitalBundle:Service')->find(5));
             $entity->setMobile($mobile);
@@ -271,12 +279,13 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function getPurchaseUpdateQnt(HmsPurchase $purchase){
+    public function getPurchaseUpdateQnt(HmsPurchase $purchase)
+    {
 
         $em = $this->_em;
         /** @var HmsPurchaseItem $purchaseItem */
-        foreach($purchase->getPurchaseItems() as $purchaseItem ){
-            /** @var Particular  $particular */
+        foreach ($purchase->getPurchaseItems() as $purchaseItem) {
+            /** @var Particular $particular */
             $particular = $purchaseItem->getParticular();
             $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
             $particular->setPurchaseQuantity($qnt);
@@ -286,14 +295,15 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function insertAccessories(Invoice $invoice){
+    public function insertAccessories(Invoice $invoice)
+    {
         $em = $this->_em;
         /** @var InvoiceParticular $item */
-        if(!empty($invoice->getInvoiceParticulars())){
-            foreach($invoice->getInvoiceParticulars() as $item ){
-                /** @var Particular  $particular */
+        if (!empty($invoice->getInvoiceParticulars())) {
+            foreach ($invoice->getInvoiceParticulars() as $item) {
+                /** @var Particular $particular */
                 $particular = $item->getParticular();
-                if( $particular->getService()->getId() == 4 ){
+                if ($particular->getService()->getId() == 4) {
                     $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
                     $particular->setSalesQuantity($qnt);
                     $em->persist($particular);
@@ -303,34 +313,36 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function insertIssueItem(HmsStockOut $invoice){
+    public function insertIssueItem(HmsStockOut $invoice)
+    {
 
         $em = $this->_em;
         /** @var InvoiceParticular $item */
-        if(!empty($invoice->getStockOutItems())){
-            foreach($invoice->getStockOutItems() as $item ){
-            	/** @var Particular  $particular */
+        if (!empty($invoice->getStockOutItems())) {
+            foreach ($invoice->getStockOutItems() as $item) {
+                /** @var Particular $particular */
                 $particular = $item->getParticular();
-	            $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-	            $particular->setSalesQuantity($qnt);
-	            $em->persist($particular);
-	            $em->flush();
+                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+                $particular->setSalesQuantity($qnt);
+                $em->persist($particular);
+                $em->flush();
             }
         }
     }
 
-    public function getSalesUpdateQnt(Invoice $invoice){
+    public function getSalesUpdateQnt(Invoice $invoice)
+    {
 
         $em = $this->_em;
 
         /** @var InvoiceParticular $item */
 
-        foreach($invoice->getInvoiceParticulars() as $item ){
+        foreach ($invoice->getInvoiceParticulars() as $item) {
 
-            /** @var Particular  $particular */
+            /** @var Particular $particular */
 
             $particular = $item->getParticular();
-            if( $particular->getService()->getId() == 4 ){
+            if ($particular->getService()->getId() == 4) {
 
                 $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
                 $particular->setSalesQuantity($qnt);
@@ -340,19 +352,20 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function admittedPatientAccessories(InvoiceTransaction $transaction){
+    public function admittedPatientAccessories(InvoiceTransaction $transaction)
+    {
 
         $em = $this->_em;
 
         /** @var InvoiceParticular $item */
-        if(!empty($transaction->getAdmissionPatientParticulars())){
+        if (!empty($transaction->getAdmissionPatientParticulars())) {
 
-            foreach($transaction->getAdmissionPatientParticulars() as $item ){
+            foreach ($transaction->getAdmissionPatientParticulars() as $item) {
 
-                /** @var Particular  $particular */
+                /** @var Particular $particular */
 
                 $particular = $item->getParticular();
-                if( $particular->getService()->getId() == 4 ){
+                if ($particular->getService()->getId() == 4) {
                     $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
                     $particular->setSalesQuantity($qnt);
                     $em->persist($particular);
@@ -363,19 +376,20 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function groupServiceBy(){
+    public function groupServiceBy()
+    {
 
         $pass2 = array();
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :config')->setParameter('config', 1) ;
+        $qb->where('e.hospitalConfig = :config')->setParameter('config', 1);
         $qb->andWhere('e.service IN(:service)')
-            ->setParameter('service',array_values(array(1,2,3,4)));
-        $qb->orderBy('e.name','ASC');
+            ->setParameter('service', array_values(array(1, 2, 3, 4)));
+        $qb->orderBy('e.name', 'ASC');
         $data = $qb->getQuery()->getResult();
 
-        foreach ($data as $parent => $children){
+        foreach ($data as $parent => $children) {
 
-            foreach($children as $child => $none){
+            foreach ($children as $child => $none) {
                 $pass2[$parent][$child] = true;
                 $pass2[$child][$parent] = true;
             }
@@ -383,12 +397,12 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function  processStockMigration($from, $to)
+    public function processStockMigration($from, $to)
     {
 
         $em = $this->_em;
         $stock = $em->createQuery("DELETE HospitalBundle:Particular e WHERE e.hospitalConfig={$to}");
-        if($stock){
+        if ($stock) {
             $stock->execute();
         }
         $elem = "INSERT INTO hms_particular(`name`,`sepcimen`,`department_id`,`category_id`,`testDuration`, `reportFormat`,`discountValid`,`room`,`instruction`,`minimumPrice`,`commission`,`overHeadCost`,price,status,`hospitalConfig_id`)
@@ -401,38 +415,39 @@ class ParticularRepository extends EntityRepository
 
     }
 
-    public function getCurrentCabins($config,$service,$cabins)
+    public function getCurrentCabins($config, $service, $cabins)
     {
 
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.id as id', 'e.name as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
         $qb->andWhere('e.service = :service')->setParameter('service', $service);
-        if($cabins){
+        if ($cabins) {
             $qb->andWhere('e.id NOT IN (:cabins)')->setParameter('cabins', $cabins);
         }
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 
-    public function getParticularIdName($config,$services)
+    public function getParticularIdName($config, $services)
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.id as id', 'e.name as name','e.particularCode as particularCode');
+        $qb->select('e.id as id', 'e.name as name', 'e.particularCode as particularCode');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
         $qb->andWhere('e.status = 1');
         $qb->andWhere('e.service IN (:service)')->setParameter('service', $services);
-        $qb->orderBy('e.name','ASC');
+        $qb->orderBy('e.name', 'ASC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
     }
 
-    public function insertDoctorVisitModes(Particular $doctor,$data){
+    public function insertDoctorVisitModes(Particular $doctor, $data)
+    {
 
         $em = $this->_em;
-        if(!empty($data['visitMod'])){
-            foreach($data['visitMod'] as $key => $item ){
+        if (!empty($data['visitMod'])) {
+            foreach ($data['visitMod'] as $key => $item) {
                 $entity = new HmsDoctorVisitMode();
                 $particular = $em->getRepository(HmsServiceGroup::class)->find($key);
                 $entity->setDoctor($doctor);
@@ -443,18 +458,20 @@ class ParticularRepository extends EntityRepository
             }
         }
     }
-    public function updateDoctorVisitModes(Particular $doctor,$data){
+
+    public function updateDoctorVisitModes(Particular $doctor, $data)
+    {
 
         $em = $this->_em;
-        if(!empty($data['visitMod'])){
-            foreach($data['visitMod'] as $key => $item ){
-                $entity = $em->getRepository(HmsDoctorVisitMode::class)->findOneBy(array('doctor' => $doctor->getId(),'service'=> $key));
-                if($entity){
+        if (!empty($data['visitMod'])) {
+            foreach ($data['visitMod'] as $key => $item) {
+                $entity = $em->getRepository(HmsDoctorVisitMode::class)->findOneBy(array('doctor' => $doctor->getId(), 'service' => $key));
+                if ($entity) {
                     $entity->setAmount($item);
                     $em->persist($entity);
                     $em->flush();
-                }else{
-                   $this->insertDoctorVisitModes($doctor,$data);
+                } else {
+                    $this->insertDoctorVisitModes($doctor, $data);
                 }
 
             }
@@ -469,30 +486,32 @@ class ParticularRepository extends EntityRepository
         $query->addSelect("CONCAT(e.particularCode,' - ',e.name,' => TK. ',e.price) as text");
         $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
         $query->andWhere('e.particularCode LIKE :searchTerm OR e.name LIKE :searchTerm');
-        $query->setParameter('searchTerm', '%'.trim($q).'%');
+        $query->setParameter('searchTerm', '%' . trim($q) . '%');
         $query->andWhere('e.status =1');
         $query->andWhere('e.service IN (:services)')->setParameter('services', array(1));
         $query->orderBy('e.name', 'DESC');
-        $query->setMaxResults( '200' );
+        $query->setMaxResults('200');
         return $query->getQuery()->getResult();
 
     }
 
-    public function searchDoctorReferredAutoComplete($q, HospitalConfig $config,$services)
+    public function searchDoctorReferredAutoComplete($q, HospitalConfig $config, $services)
     {
         $query = $this->createQueryBuilder('e');
+        $query->join('e.service','s');
         $query->select("e.id as id");
-        $query->addSelect("CONCAT(e.particularCode,' - ',e.name,'( ',e.mobile,')') as text");
+        $query->addSelect("CASE WHEN (e.mobile IS NOT NULL AND s.slug = 'refrerred' ) THEN CONCAT(e.particularCode,' - ',e.name,' (',e.mobile,')') ELSE CONCAT(e.particularCode,' - ',e.name) END  as text");
         $query->where("e.hospitalConfig = :config")->setParameter('config', $config->getId());
         $query->andWhere('e.particularCode LIKE :searchTerm OR e.name LIKE :searchTerm OR e.mobile LIKE :searchTerm');
-        $query->setParameter('searchTerm', '%'.trim($q).'%');
+        $query->setParameter('searchTerm', '%' . trim($q) . '%');
         $query->andWhere('e.status =1');
-        $query->andWhere('e.service IN (:services)')->setParameter('services',$services);
+        $query->andWhere('e.service IN (:services)')->setParameter('services', $services);
         $query->orderBy('e.name', 'DESC');
-        $query->setMaxResults( '200' );
+        $query->setMaxResults('200');
         return $query->getQuery()->getResult();
 
     }
-
-
 }
+
+
+
