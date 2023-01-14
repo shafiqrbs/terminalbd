@@ -1083,6 +1083,7 @@ class AccountSalesRepository extends EntityRepository
         $exist = $this->findOneBy(array('hmsInvoices'=>$entity->getId(),'processHead' => $entity->getInvoiceMode(),'processType'=>'Sales'));
         if(empty($exist)){
             $accountSales = new AccountSales();
+            $accountSales->setTransactionMethod($entity->getTransactionMethod());
             $accountSales->setAccountBank($entity->getAccountBank());
             $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
             $accountSales->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
@@ -1101,6 +1102,9 @@ class AccountSalesRepository extends EntityRepository
             $em->persist($accountSales);
             $em->flush();
             $this->updateCustomerBalance($accountSales);
+            if($accountSales->getAmount() > 0){
+                $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+            }
             return $accountSales;
         }
         return $exist;
