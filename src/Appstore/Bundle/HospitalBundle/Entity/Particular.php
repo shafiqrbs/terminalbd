@@ -122,6 +122,11 @@ class Particular
      **/
     private  $assignOperator;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $marketingExecutive;
+
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup")
      **/
@@ -1995,6 +2000,32 @@ class Particular
     {
         $this->admissionDefault = $admissionDefault;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMarketingExecutive()
+    {
+        return $this->marketingExecutive;
+    }
+
+     /**
+     * @return mixed
+     */
+    public function marketingExecutiveEmployee()
+    {
+        return "{$this->particularCode} - {$this->marketingExecutive->getProfile()->getName()}";
+    }
+
+    /**
+     * @param mixed $marketingExecutive
+     */
+    public function setMarketingExecutive($marketingExecutive)
+    {
+        $this->marketingExecutive = $marketingExecutive;
+    }
+
+
 
 
 }

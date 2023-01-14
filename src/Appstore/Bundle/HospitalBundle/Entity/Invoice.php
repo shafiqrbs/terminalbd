@@ -107,6 +107,11 @@ class Invoice
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoice", cascade={"persist"}  )
      **/
+    private  $marketingExecutive;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoice", cascade={"persist"}  )
+     **/
     private  $referredDoctor;
 
     /**
@@ -1881,6 +1886,22 @@ class Invoice
     public function getDpsInvoice()
     {
         return $this->dpsInvoice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMarketingExecutive()
+    {
+        return $this->marketingExecutive;
+    }
+
+    /**
+     * @param mixed $marketingExecutive
+     */
+    public function setMarketingExecutive($marketingExecutive)
+    {
+        $this->marketingExecutive = $marketingExecutive;
     }
 
 

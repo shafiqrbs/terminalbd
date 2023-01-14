@@ -145,12 +145,19 @@ class HospitalConfig
      */
     private $isInventory = false;
 
-      /**
+     /**
      * @var boolean
      *
      * @ORM\Column(name="advanceSearchParticular", type="boolean",  nullable = true)
      */
     private $advanceSearchParticular = false;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isMarketingExecutive", type="boolean",  nullable = true)
+     */
+    private $isMarketingExecutive = false;
 
      /**
      * @var boolean
@@ -1344,6 +1351,22 @@ class HospitalConfig
     public function setAdvanceSearchParticular($advanceSearchParticular)
     {
         $this->advanceSearchParticular = $advanceSearchParticular;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMarketingExecutive()
+    {
+        return $this->isMarketingExecutive;
+    }
+
+    /**
+     * @param bool $isMarketingExecutive
+     */
+    public function setIsMarketingExecutive($isMarketingExecutive)
+    {
+        $this->isMarketingExecutive = $isMarketingExecutive;
     }
 
 

@@ -511,6 +511,7 @@ class ParticularRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
 }
 
 

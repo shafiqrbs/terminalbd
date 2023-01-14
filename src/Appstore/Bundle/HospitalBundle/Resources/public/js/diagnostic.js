@@ -88,6 +88,7 @@ $(document).on('click', '.addPatient', function() {
                     el.find('.dialogModal_content').html(response);
                     formSubmit();
                     $('#particular').select2();
+                    $('.marketingExecutive').select2();
                 }
             });
         },

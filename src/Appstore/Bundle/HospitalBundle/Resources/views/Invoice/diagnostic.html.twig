@@ -184,6 +184,13 @@
             <div class="clearfix">&nbsp;</div>
         </div>
         <div class="span4 payment-info" style="background:#eaecef; padding: 5px;">
+            {% if hospital.isMarketingExecutive == 1 %}
+            <div class="row-fluid margin-bottom-10">
+                <div class="span12">
+                    {{ form_widget(form.marketingExecutive) }}
+                </div>
+            </div>
+            {% endif %}
             <div class="row-fluid margin-bottom-10" id="consultant-box">
                 <div class="span10">
                 {{ form_widget(form.consultant) }}

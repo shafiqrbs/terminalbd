@@ -6,6 +6,7 @@ use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
@@ -29,12 +30,17 @@ class InvoiceType extends AbstractType
     /** @var  GlobalOption */
     private $globalOption;
 
+    /** @var  HospitalConfig */
+    private $config;
+
+
 
     function __construct(GlobalOption $globalOption , HmsCategoryRepository $emCategory ,  LocationRepository $location)
     {
         $this->location         = $location;
         $this->emCategory       = $emCategory;
         $this->globalOption     = $globalOption;
+        $this->config     = $globalOption->getHospitalConfig();
     }
 
 
@@ -128,7 +134,25 @@ class InvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+
         ;
+        if( $this->config->isMarketingExecutive() == 1){
+
+            $builder->add('marketingExecutive', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'marketingExecutiveEmployee',
+                'attr'=>array('class'=>'span12 select2 m-wrap marketingExecutive'),
+                'empty_value' => '--- Choose Marketing Executive ---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere('b.service IN(:service)') ->setParameter('service',array_values(array(14)))
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ));
+        }
         if( $this->globalOption->getHospitalConfig()->isAdvanceSearchParticular() == 1 ){
             $builder->add('particulars','text', array(
                 'attr'=>array('class'=>'particulars select2 span12 m-wrap','placeholder'=>'Test Name, Accessories, Surgery etc.','autocomplete'=>'off')
@@ -138,6 +162,7 @@ class InvoiceType extends AbstractType
         $builder->add('referredDoctor', new InvoiceReferredDoctorType(),array('mapped'=> false));
         $builder->add('assignDoctor', new InvoiceDoctorType(),array('mapped'=> false));
         $builder->add('customer', new CustomerForHospitalType());
+
     }
     
     /**

@@ -138,8 +138,10 @@ class InvoiceAdmissionController extends Controller
     {
         $entity = new Invoice();
         $globalOption = $this->getUser()->getGlobalOption();
+        $hospital = $globalOption->getHospitalConfig();
         $form   = $this->createCreateForm($entity);
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
+            'hospital' => $hospital,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -172,6 +174,7 @@ class InvoiceAdmissionController extends Controller
         }
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
+            'hospital' => $hospital,
             'form' => $editForm->createView(),
         ));
     }

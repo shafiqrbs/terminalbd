@@ -25,6 +25,7 @@ class ConfigType extends AbstractType
             ->add('invoicePrefix','text', array('attr'=>array('class'=>'m-wrap span12 ','maxlength'=> 4,'placeholder'=>'max 4 char')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5','max'=> 100)))
             ->add('vatEnable')
+            ->add('isMarketingExecutive')
             ->add('initialDiagnosticShow')
             ->add('services', 'entity', array(
                 'required'    => false,
