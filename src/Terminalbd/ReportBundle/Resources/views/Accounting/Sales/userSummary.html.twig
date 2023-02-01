@@ -30,8 +30,8 @@
                 <p>Name of Report: User base Sales & Collection</p>
             </div>
             <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}
-                <p><strong>Start Date:&nbsp;</strong><strong>{% if data['startDate'] is defined and data['startDate'] is not empty %}{{ data['startDate']|date('d-m-Y') }}{% endif %}</strong>
-                    <strong>End Date:&nbsp;<strong>{% if data['endDate'] is defined and data['endDate'] is not empty %}{{ data['endDate']|date('d-m-Y') }}{% endif %}</strong></strong>
+                <p><strong>Start Date:&nbsp;</strong><strong>{% if searchForm['startDate'] is defined and searchForm['startDate'] is not empty %}{{ searchForm['startDate']|date('d-m-Y h:i A') }}{% endif %}</strong>
+                    <strong>End Date:&nbsp;<strong>{% if searchForm['endDate'] is defined and searchForm['endDate'] is not empty %}{{ searchForm['endDate']|date('d-m-Y h:i A') }}{% endif %}</strong></strong>
                 </p>
                 <p></p>
             </div>

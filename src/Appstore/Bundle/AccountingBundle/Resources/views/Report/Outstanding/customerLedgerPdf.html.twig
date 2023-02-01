@@ -462,7 +462,7 @@
                     {% endfor %}
                 {% elseif entity.medicineSales is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'miss' %}
                     {% for item in entity.medicineSales.medicineSalesItems  %}
-                        <p>{{ loop.index }}. {{ item.medicineStock.name }}</p>
+                        <p>{{ loop.index }}. {{ item.medicineStock.name }} ({{ item.quantity }}x{{ item.price }}={{  item.subTotal }}) </p>
                     {% endfor %}
                 {% elseif entity.hotelInvoice is not empty and customer is not empty and customer.globalOption.mainApp.slug == 'hotel' %}
                     {% for item in entity.hotelInvoice.hotelInvoiceParticulars  %}

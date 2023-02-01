@@ -155,11 +155,12 @@
                                     <div class="input-append">
                                         <div class="input-group">
                                             <input type="checkbox" class="tooltips hover" data-original-title="For short list" name="salesTemporaryItem[isShort]" id="isShort" value="1">
-                                            {{ form_widget(salesItem.salesPrice) }}
-                                            {{ form_errors(salesItem.salesPrice) }}
                                             {{ form_widget(salesItem.quantity) }}
                                             {{ form_errors(salesItem.quantity) }}
                                             {{ form_widget(salesItem.itemPercent) }}
+                                            {{ form_widget(salesItem.salesPrice) }}
+                                            {{ form_errors(salesItem.salesPrice) }}
+
                                             <button type="submit" class="btn blue" id="addTemporaryItem"> <span class="fa fa-shopping-cart"></span> Add</button>
                                         </div>
                                     </div>
@@ -183,6 +184,7 @@
                                     <th class="span1">AVG PP</th>
                                     <th class="span1">MRP</th>
                                     <th class="span1">Price</th>
+                                    <th class="span1">Stock</th>
                                     <th class="span1">Quantity</th>
                                     <th class="span1">Discount(%)</th>
                                     <th class="span1">Sub-total</th>
@@ -221,6 +223,7 @@
                                                     <input type="text" class=" numeric td-inline-input salesPrice" data-id="{{ item.id }}" autocomplete = "off"  id="salesPrice-{{ item.id }}" name="salesPrice-{{ item.id }}" value="{{ item.salesPrice|number_format(2) }}" >
                                                 {% endif %}
                                             </td>
+                                            <td class="span1">{{ item.medicineStock.remainingQuantity }}</td>
                                             <td class="span1">
                                                 <input type="text" class=" numeric td-inline-input quantity" data-id="{{ item.id }}" autocomplete = "off" min="1" max="{{ item.quantity }}"  id="quantity-{{ item.id }}" name="quantity[]" value="{{ item.quantity }}" placeholder="{{ item.quantity }}">
                                             </td>
@@ -238,25 +241,25 @@
                                     {% endfor %}
                                 {% endif %}
                                 <tr>
-                                    <td colspan="10" class="span12" style="border: 1px double #000"></td>
+                                    <td colspan="11" class="span12" style="border: 1px double #000"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                    <td colspan="9" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                     <td class=""><strong id="subTotal">{{ result.subTotal|number_format(2) }}</strong></td>
                                     <td class="span1"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                    <td colspan="9" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                     <td class=""><strong class="discount"></strong></td>
                                     <td class="span1"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
+                                    <td colspan="9" class="span9"><span class="pull-right"><strong>Grand-Total TK.</strong> =</span></td>
                                     <td class=""><strong id="grandTotal">{{ result.subTotal|number_format(2) }}</strong></td>
                                     <td class="span1"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" class="span9"><span class="pull-right"></span></td>
+                                    <td colspan="9" class="span9"><span class="pull-right"></span></td>
                                     <td class=""><strong id="profit">{{ (result.subTotal - avgTotal)|number_format(2) }}</strong></td>
                                     <td class="span1"><a href="javascript:" class="btn mini blue profitBtn"><i class="icon-eye-open"></i> Show</a></td>
                                 </tr>

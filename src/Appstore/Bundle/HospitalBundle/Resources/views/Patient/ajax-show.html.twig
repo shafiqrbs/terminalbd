@@ -67,6 +67,11 @@
                                             {% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }} {% endif %}
                                         {% endif %}
                                     </li>
+                                    <li><strong>Marketing By:</strong>&nbsp;
+                                        {% if (app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN")) or (app.user.granted("ROLE_DOMAIN")) %}
+                                            <a  data-type="select" class="editable" id="MarketingExecutive" data-name="MarketingExecutive" href="javascript:" data-source="{{ path('hms_patient_assign_marketing_executive') }}"  data-url="{{ path('hms_patient_inline_update') }}" data-pk="{{ entity.id }}"  value="{% if entity.marketingExecutive is defined and entity.marketingExecutive is not empty  %}{{  entity.marketingExecutive.id }}{% endif %}" data-value="{% if entity.marketingExecutive is defined and entity.marketingExecutive is not empty  %}{{  entity.marketingExecutive.id }}{% endif %}" data-original-title="Enter referred name">{% if entity.marketingExecutive is defined and entity.marketingExecutive is not empty  %}{{  entity.marketingExecutive.marketingExecutive.username }}{% endif %}</a>
+                                        {% endif %}
+                                    </li>
                                 </ul>
                             </div>
 

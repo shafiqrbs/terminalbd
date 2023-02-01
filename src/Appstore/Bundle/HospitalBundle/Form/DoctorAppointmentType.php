@@ -185,6 +185,23 @@ class DoctorAppointmentType extends AbstractType
                 }
             ))
         ;
+        if( $this->globalOption->getHospitalConfig()->isMarketingExecutive() == 1){
+
+            $builder->add('marketingExecutive', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'marketingExecutiveEmployee',
+                'attr'=>array('class'=>'span12 select2 m-wrap marketingExecutive'),
+                'empty_value' => '--- Choose Marketing Executive ---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere('b.service IN(:service)') ->setParameter('service',array_values(array(14)))
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ));
+        }
         $builder->add('customer', new PatientForDoctorAppointmentType());
     }
     

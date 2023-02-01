@@ -34,18 +34,14 @@
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Sales Details</div>
-
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" id="temporarySales" href="javascript:" data-url="{{ path('medicine_sales_temporary_new') }}"><i class="icon-plus-sign"></i> Add Sales</a>
                                 <a class="btn black" href="{{ path('medicine_sales') }}"><i class="icon-th-list"></i> Sales</a>
                             </div>
                         </div>
-
                     </div>
-
                     <div class="portlet-body">
-
                         <div class="portlet-body form">
                             <div class="row-fluid">
                                 <div class="span4">
@@ -55,7 +51,9 @@
                                         {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}</li>{% endif %}
                                         {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
-                                        <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
+                                        <li><strong>Created:</strong>
+                                            <a href="javascript:" id="created-{{ entity.id }}" class="created" data-type="date" data-name="created" data-pk="{{ entity.id }}" data-url="{{ path('medicine_sales_inline_update') }}" data-title="Enter created date" >{% if entity.created is not empty %}{{ entity.created|date('d-m-Y') }}{% endif %}</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="span4 invoice-payment">
@@ -163,15 +161,25 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@MedicineBundle/Resources/public/js/temporary-sales.js'
+        '@MedicineBundle/Resources/public/js/temporary-sales.js'
+        '@MedicineBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    EditableWithLoadInit();
     jqueryTemporaryLoad();
     jqueryInstantTemporaryLoad();
     $('#salesTemporaryItem_stockName').focus();
+    $('.created').editable({
+    format: 'yyyy-mm-dd',
+    viewformat: 'dd-mm-yyyy',
+    datepicker: {
+    minYear: {{ "now"|date('YY') }},
+    maxYear: {{ "now"|date_modify("+5 year")|date('YY') }},
+    minuteStep: 1
+    }
+    });
 {% endblock %}
-

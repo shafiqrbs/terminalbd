@@ -1124,6 +1124,7 @@ class InvoiceRepository extends EntityRepository
         $mode = isset($data['mode'])? $data['mode'] :'';
         $referredMode = isset($data['referredMode'])? $data['referredMode'] :'';
         $discountedBy = isset($data['discountedBy'])? $data['discountedBy'] :'';
+        $marketingUser = isset($data['marketingUser'])? $data['marketingUser'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.customer','c');
         $qb->leftJoin('e.department','dep');
@@ -1131,6 +1132,8 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('e.assignDoctor','d');
         $qb->leftJoin('e.referredDoctor','rd');
         $qb->leftJoin('e.anesthesiaDoctor','ad');
+        $qb->leftJoin('e.marketingExecutive','me');
+        $qb->leftJoin('me.marketingExecutive','mu');
         $qb->select('e.id as id','e.created as created','e.updated as updated','e.invoice as invoice','e.invoiceMode as invoiceMode','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive','e.discountRequestedBy as discountRequestedBy');
         $qb->addSelect('c.name as name','c.mobile as mobile');
         $qb->addSelect('d.name as assignDoctor');
@@ -1139,6 +1142,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('e.createdBy','cb');
         $qb->leftJoin('cb.profile','up');
         $qb->addSelect('up.name as createdUser');
+        $qb->addSelect('mu.username as marketing');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','In-progress','Release','Released','Dead','Death','Admitted'));
@@ -1156,6 +1160,10 @@ class InvoiceRepository extends EntityRepository
         if(!empty($assignDoctor)){
             $qb->andWhere("e.assignDoctor = :assignDoctor");
             $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+         if(!empty($marketingUser)){
+            $qb->andWhere("e.marketingExecutive = :marketingUser");
+            $qb->setParameter('marketingUser', $marketingUser);
         }
         if(!empty($referred)){
             $qb->andWhere("e.referredDoctor = :referredDoctor");
@@ -1589,6 +1597,19 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.referredDoctor','d');
         $qb->select('d.id as id','d.name as name');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->groupBy('d.id');
+        $qb->orderBy('d.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+      public function getMarketingUser($hospital)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.marketingExecutive','d');
+        $qb->join('d.marketingExecutive','u');
+        $qb->select('d.id as id','u.username as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->groupBy('d.id');
         $qb->orderBy('d.name','ASC');

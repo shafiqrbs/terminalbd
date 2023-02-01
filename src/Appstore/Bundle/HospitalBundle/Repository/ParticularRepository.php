@@ -442,6 +442,19 @@ class ParticularRepository extends EntityRepository
         return $result;
     }
 
+    public function getMarketingExecutiveName($config, $services)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id', 'mu.username as name', 'e.particularCode as particularCode');
+        $qb->join('e.marketingExecutive','mu');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
+        $qb->andWhere('e.status = 1');
+        $qb->andWhere('e.service IN (:service)')->setParameter('service', $services);
+        $qb->orderBy('e.name', 'ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
     public function insertDoctorVisitModes(Particular $doctor, $data)
     {
 

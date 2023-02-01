@@ -140,6 +140,12 @@
                     </div>
                 </div>
                 <div class="span4 payment-info" style="background:#ffffff80!important; padding: 15px;">
+                    {% if hospital.marketingExecutive == 1 %}
+                        <div class="row-fluid">
+                            {{ form_widget(form.marketingExecutive) }}
+                            {{ form_errors(form.marketingExecutive) }}
+                        </div>
+                    {% endif %}
                     <div class="row-fluid">
                         {{ form_widget(form.customer.address) }}
                         {{ form_errors(form.customer.address) }}

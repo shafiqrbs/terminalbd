@@ -34,8 +34,6 @@ hms_patient_select2_referred_search:
     options:
         expose: true
 
-
-
 hms_patient_invoice_details:
     path:     /{invoice}/patient-invoice-details
     defaults: { _controller: "HospitalBundle:Patient:patientGlobalDetails" }
@@ -52,6 +50,12 @@ hms_patient_assign_doctor:
 hms_patient_assign_referred:
     path:     /assign-referred-search
     defaults: { _controller: "HospitalBundle:Patient:referredDoctorSelect" }
+    options:
+        expose: true
+
+hms_patient_assign_marketing_executive:
+    path:     /assign-marketing-executive
+    defaults: { _controller: "HospitalBundle:Patient:marketingExecutiveSelect" }
     options:
         expose: true
 

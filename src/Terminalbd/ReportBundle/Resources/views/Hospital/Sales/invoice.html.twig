@@ -53,6 +53,15 @@
 
                 </div>
                 <div class="row">
+                    <div class="col-md-2 margin-top">
+                        <label>Marketing Users By</label>
+                        <select class="search-input span12 m-wrap" id="marketingUser" name="marketingUser">
+                            <option value="">--Select Marketing User By--</option>
+                            {% for employee in marketingUsers %}
+                                <option {% if searchForm.marketingUser is defined and searchForm.marketingUser == employee.id %} selected="selected" {% endif %} value="{{ employee.id }}">{{ employee.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                     <div class="col-md-1 margin-top">
                         <label>Mode</label>
                         <select class="search-input span12 m-wrap" id="referredMode" name="referredMode">
@@ -73,7 +82,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-2 margin-top">
+                    <div class="col-md-1 margin-top">
                         <label>Process</label>
                         <select class="search-input span12 m-wrap" id="process" name="process">
                             <option value="">--Select Process--</option>

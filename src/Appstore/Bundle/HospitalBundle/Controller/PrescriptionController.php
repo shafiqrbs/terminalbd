@@ -195,6 +195,7 @@ class PrescriptionController extends Controller
         $editForm = $this->createEditForm($entity);
         return $this->render('HospitalBundle:Prescription:new.html.twig', array(
             'entity' => $entity,
+            'hospital' => $hospital,
             'searchForm' => 'hide',
             'form' => $editForm->createView(),
         ));

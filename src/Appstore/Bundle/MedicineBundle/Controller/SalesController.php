@@ -998,6 +998,23 @@ class SalesController extends Controller
 
     }
 
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('MedicineBundle:MedicineSales')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        if(!empty($data['value'])){
+            $expirationEndDate = $data['value'];
+            $expirationEndDate = (new \DateTime($expirationEndDate));
+            $entity->setCreated($expirationEndDate);
+            $em->flush();
+        }
+        exit;
+    }
+
 
 
 }

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * MedicineBrand
@@ -361,6 +362,20 @@ class MedicineStock
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
 
 
     /**

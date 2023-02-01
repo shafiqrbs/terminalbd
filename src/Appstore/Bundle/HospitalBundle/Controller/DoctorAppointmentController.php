@@ -81,6 +81,7 @@ class DoctorAppointmentController extends Controller
             'initialDiscount'   => 0,
             'user'   => $user,
             'entity'   => $entity,
+            'hospital'   => $hospital,
             'form'   => $form->createView(),
         ));
         return New Response($html);

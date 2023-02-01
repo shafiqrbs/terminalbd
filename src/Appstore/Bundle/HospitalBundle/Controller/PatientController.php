@@ -156,6 +156,20 @@ class PatientController extends Controller
 
     }
 
+    public function marketingExecutiveSelectAction()
+    {
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getMarketingExecutiveName($config,array(14));
+        $items = array();
+        $items[] = array('value' => '','text'=> '-Change Marketing Executive-');
+        foreach ($entities as $entity):
+            $items[] = array('value' => $entity['id'],'text'=> $entity['particularCode'].'-'.$entity['name']);
+        endforeach;
+        $items[]=array('value' => '0','text'=> 'Empty Marketing Executive');
+        return new JsonResponse($items);
+
+    }
+
     public function cabinSelectAction(Invoice $invoice)
     {
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();

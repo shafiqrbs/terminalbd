@@ -140,3 +140,9 @@ medicine_sales_print_invoice:
     path:     /{id}/print
     defaults: { _controller: "MedicineBundle:Sales:invoicePrint" }
 
+medicine_sales_inline_update:
+    path:     /sales-created-inline-update
+    defaults: { _controller: "MedicineBundle:Sales:inlineUpdate" }
+    methods:  POST
+    options:
+        expose: true

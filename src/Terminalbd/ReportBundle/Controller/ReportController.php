@@ -718,6 +718,7 @@ class ReportController extends Controller
         $employees = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getFindEmployees($hospital);
         $processes = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getHospitalProcess($hospital);
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getReferredDoctors($hospital);
+        $marketingUsers = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getMarketingUser($hospital);
         $discountedUsers = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getDiscountedUsers($hospital);
         return $this->render('ReportBundle:Hospital/Sales:invoice.html.twig', array(
             'employees' => $employees,
@@ -725,6 +726,7 @@ class ReportController extends Controller
             'anesthesiaDoctors' => $anesthesiaDoctors,
             'referredDoctors' => $referredDoctors,
             'discountedUsers' => $discountedUsers,
+            'marketingUsers' => $marketingUsers,
             'departments' => $departments,
             'processes' => $processes,
             'searchForm' => $data,

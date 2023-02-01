@@ -308,7 +308,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
+    EditableWithOutReloadInit();
     $(document).on('click', '.print', function(e){});
     $('.appointmentDate').editable({
     format: 'yyyy-mm-dd',
