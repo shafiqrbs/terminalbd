@@ -83,6 +83,9 @@
                                                     <a href="javascript:" id="delete-{{ entity.id }}" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_cashreconciliation_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
                                                     <a  class="btn blue mini" href="{{ path('account_cashreconciliation_edit',{'id':entity.id}) }}"><i class="icon-pencil"></i></a>
                                                     {% endif %}
+                                                    {% if  app.user.granted("ROLE_DOMAIN") %}
+                                                        <a href="javascript:" id="delete-{{ entity.id }}" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_cashreconciliation_delete',{'id':entity.id}) }}">Force Delete</a>
+                                                    {% endif %}
                                                     <a  class="btn green mini"  href="{{ path('account_cashreconciliation_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i></a>
                                                     <a  target="_blank" class="btn yellow mini"  href="{{ path('account_cashreconciliation_pdf',{'id':entity.id}) }}"><i class="icon-download"></i> Download</a>
                                                 </div>
