@@ -25,7 +25,7 @@ class PurchaseRequisitionItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item",inversedBy="purchaseR equisitionItems")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item",inversedBy="purchaseRequisitionItems")
      **/
     private  $item;
 

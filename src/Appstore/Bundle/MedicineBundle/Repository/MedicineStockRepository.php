@@ -283,7 +283,7 @@ class MedicineStockRepository extends EntityRepository
 		$qb->setParameter('config', $config);
 		$qb->andWhere("item.minQuantity > 0");
 		$qb->andWhere("item.minQuantity >= item.remainingQuantity");
-		$count = $qb->getQuery()->getOneOrNullResult()['totalShortList'];
+		$count = $qb->getQuery()->getSingleScalarResult();
 		return  $count;
 
 	}

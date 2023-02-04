@@ -52,7 +52,7 @@ class AccountCashRepository extends EntityRepository
         $user  =    isset($data['user'])? $data['user'] :'';
 
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.transactionMethod','t');
+      //  $qb->join('e.transactionMethod','t');
         $qb->select('COALESCE(SUM(e.debit)) AS debit, COALESCE(SUM(e.credit)) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
@@ -65,7 +65,7 @@ class AccountCashRepository extends EntityRepository
             $qb->andWhere("user.id = :user")->setParameter('user', $user);
         }
         if(!empty($transactionMethods)){
-            $qb->andWhere("t.id IN(:transactionMethod)");
+            $qb->andWhere("e.transactionMethod IN(:transactionMethod)");
             $qb->setParameter('transactionMethod',array_values($transactionMethods));
         }
         if (!empty($accountBank)) {
@@ -122,25 +122,72 @@ class AccountCashRepository extends EntityRepository
         $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.transactionMethod','t');
         $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $userId  = isset($data['user'])? $data['user'] :'';
         if (!empty($userId)) {
             $qb->andWhere("e.createdBy = :user")->setParameter('user',$userId);
         }
-        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->andWhere("e.transactionMethod IN(:transactionMethod)");
         $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         $openingBalance = $this->openingBalance($user,$transactionMethods,$data);
         $data =  array('openingBalance'=> $openingBalance , 'debit'=> $result['debit'],'credit'=> $result['credit']);
         return $data;
+
+    }
+
+    public function cashMedicineOverview(User $user,$transactionMethods,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $userId  = isset($data['user'])? $data['user'] :'';
+        if (!empty($userId)) {
+            $qb->andWhere("e.createdBy = :user")->setParameter('user',$userId);
+        }
+        $qb->andWhere("e.transactionMethod IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $openingBalance = $this->openingBalance($user,$transactionMethods,$data);
+        $records =  array('openingBalance'=> $openingBalance ,'debit'=> $result['debit'],'credit'=> $result['credit']);
+
+
+
+        /*$startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+
+        $compareStart = new \DateTime();
+        if (!empty($startDate) ) {
+            $compareStart = new \DateTime($startDate);
+        }
+        $start =  $compareStart->format('2022-12-01');
+
+        $compareEnd = new \DateTime();
+        if (!empty($endDate) ) {
+            $compareEnd = new \DateTime($endDate);
+        }
+        $end =  $compareEnd->format('2022-12-31');
+
+        $sql = "SELECT  COALESCE(SUM(e.debit),0) as debit , COALESCE(SUM(e.credit),0) as credit
+                FROM AccountCash as e
+                WHERE date (e.created) >=:startDate AND date(e.created) =:endDate";
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('user', $user);
+        $stmt->bindValue('startDate', $start);
+        $stmt->bindValue('endDate', $end);
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
+        var_dump($result);
+        exit;*/
+        return $records;
+
 
     }
 

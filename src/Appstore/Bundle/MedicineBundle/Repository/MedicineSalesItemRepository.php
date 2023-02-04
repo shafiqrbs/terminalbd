@@ -64,13 +64,12 @@ class MedicineSalesItemRepository extends EntityRepository
     {
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('item');
-        $qb->join('item.medicineStock','s');
+        $qb->join('item.medicineSales','s');
         $qb->select('COUNT(item.id) as counts');
         $qb->where("s.medicineConfig = :config")->setParameter('config', $config);
-        $qb->andWhere("item.isShort = 1");
-        $count = $qb->getQuery()->getOneOrNullResult()['counts'];
+        $qb->andWhere("item.isShort = 0");
+        $count = $qb->getQuery()->getSingleScalarResult();
         return  $count;
-
     }
 
     public function topSalesItem(User $user,$data)

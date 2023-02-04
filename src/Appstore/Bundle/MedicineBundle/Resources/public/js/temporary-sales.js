@@ -75,7 +75,8 @@ $(document).on("click", ".inlineAddItem", function() {
     });
 });
 
-$('#search').focus().val('');
+$('#salesTemporaryItem_stockName').focus().val('');
+
 $(document).on('click', '.search-clear', function() {
     $('.table-responsive').hide();
     $('#search').focus().val('');
@@ -304,14 +305,14 @@ function jqueryTemporaryLoad() {
                     break;
 
                 case 'salesTemporaryItem_quantity':
-                    $('#salesTemporaryItem_price').focus();
+                    $('#salesTemporaryItem_itemPercent').focus();
                     break;
 
                 case 'salesTemporaryItem_itemPercent':
-                    $('#salesTemporaryItem_price').focus();
+                    $('#salesTemporaryItem_salesPrice').focus();
                     break;
 
-                case 'salesTemporaryItem_price':
+                case 'salesTemporaryItem_salesPrice':
                     $('#addTemporaryItem').click();
                     $('#salesTemporaryItem_stockName').select2('open');
                     break;
