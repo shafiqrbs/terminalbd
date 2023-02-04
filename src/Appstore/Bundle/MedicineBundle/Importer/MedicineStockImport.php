@@ -20,8 +20,6 @@ class MedicineStockImport
     /* @var $medicineImport  MedicineImport */
     protected $medicineImport;
 
-
-
     public function isValid($data) {
 
 		return true;
@@ -37,28 +35,31 @@ class MedicineStockImport
         $this->data = $data;
         foreach($this->data as $key => $item) {
             $name = $item['MedicineName'];
-            $ProductId  = $item['ProductId'];
+            $ProductId = isset($item['ProductId']) ? $item['ProductId']:'';
             $brand  = $this->medicineImport->getName();
             $config = $this->medicineImport->getMedicineConfig();
             $exist = $this->getDoctrain()->getRepository('MedicineBundle:MedicineStock')->findOneBy(array('medicineConfig' => $config,'barcode' => $ProductId));
+            $stock = isset($item['Stock']) ? $item['Stock']:0;
+            $MRP = isset($item['MRP']) ? $item['MRP']:0;
+            $PurchasePrice = isset($item['PurchasePrice']) ? $item['PurchasePrice']:0;
+            $minStock = isset($item['MinStock']) ? $item['MinStock']:1;
+            $Category = isset($item['Category']) ? $item['Category']:'';
+            $Brand = isset($item['BrandName']) ? $item['BrandName']:'';
+            $Unit = isset($item['Unit']) ? $item['Unit']:'';
+
             if($exist) {
-                $stock = isset($item['Stock']) ? $item['Stock']:0;
                 $medicine = $exist;
                 $medicine->setOpeningQuantity($stock);
                 $medicine->setRemainingQuantity($stock);
-                $medicine->setPurchasePrice( $item['PurchasePrice'] );
-                $medicine->setAveragePurchasePrice( $item['PurchasePrice'] );
-                $medicine->setAverageSalesPrice( $item['MRP'] );
-                $medicine->setSalesPrice( $item['MRP'] );
+                $medicine->setPurchasePrice($PurchasePrice);
+                $medicine->setAveragePurchasePrice($PurchasePrice);
+                $medicine->setAverageSalesPrice($MRP);
+                $medicine->setSalesPrice($MRP);
                 $this->persist( $medicine );
                 $this->flush();
 
             }else{
 
-                $stock = isset($item['Stock']) ? $item['Stock']:0;
-                $minStock = isset($item['MinStock']) ? $item['MinStock']:1;
-                $Category = isset($item['Category']) ? $item['Category']:'';
-                $Brand = isset($item['BrandName']) ? $item['BrandName']:'';
                 $medicine = new MedicineStock();
                 $medicine->setMedicineConfig($config);
                 $medicine->setBrandName(ucfirst(strtolower($brand)));
@@ -68,18 +69,17 @@ class MedicineStockImport
                 $medicine->setRemainingQuantity($stock);
                 $medicine->setMinQuantity($minStock);
                 $medicine->setBrandName($Brand);
-                $medicine->setAverageSalesPrice( $item['PurchasePrice'] );
-                $medicine->setPurchasePrice( $item['PurchasePrice'] );
-                $medicine->setAverageSalesPrice( $item['MRP'] );
-                $medicine->setSalesPrice( $item['MRP'] );
+                $medicine->setPurchasePrice($PurchasePrice);
+                $medicine->setAveragePurchasePrice($PurchasePrice);
+                $medicine->setAverageSalesPrice($MRP);
+                $medicine->setSalesPrice($MRP);
                 if ($Category) {
                     $cat = $this->getcategory(ucfirst(strtolower($Category)));
                     $medicine->setCategory($cat);
                 }
-                $Unit = $item['Unit'];
                 if ($Unit) {
-                    $cat = $this->getProductUnit(ucfirst(strtolower($Unit)));
-                    $medicine->setUnit($cat);
+                    $punit = $this->getProductUnit(ucfirst(strtolower($Unit)));
+                    $medicine->setUnit($punit);
                 }
                 $this->persist( $medicine );
                 $this->flush();

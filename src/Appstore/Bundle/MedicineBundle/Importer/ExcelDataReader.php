@@ -67,6 +67,7 @@ class ExcelDataReader
             }
 
         }
+
         return $namedDataArray;
     }
 

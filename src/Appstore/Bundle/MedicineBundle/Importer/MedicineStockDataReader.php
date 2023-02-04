@@ -56,11 +56,10 @@ class MedicineStockDataReader
             if ((isset($dataRow[$row]['A'])) && ($dataRow[$row]['A'] > '')) {
 
                 $dataArray = array();
-
                 foreach ($headingsArray as $columnKey => $columnHeading) {
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
-                $key = $dataArray['MedicineName'].$dataArray['ProductId']. $dataArray['Unit'].$dataArray['PurchasePrice'].$dataArray['Stock'].$dataArray['MRP'];
+                $key = $dataArray['MedicineName'];
                 $namedDataArray[$key] = $dataArray;
 
             }
