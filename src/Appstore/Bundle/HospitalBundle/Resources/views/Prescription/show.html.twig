@@ -67,6 +67,9 @@
                                             <li><strong>Date of Birth:</strong>&nbsp;{% if entity.customer.dob %}{{ entity.customer.dob|date('d-m-Y') }}{% endif %}</li>
                                             <li><strong>Marital:</strong>&nbsp;{{ entity.customer.maritalStatus }}</li>
                                             <li><strong>Blood Group:</strong>&nbsp;{{ entity.customer.bloodGroup }}</li>
+                                            <li><strong>Referred By:</strong>&nbsp;{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</li>
+                                            <li><strong>Marketing By:</strong>&nbsp;{% if entity.marketingExecutive is not empty %}{{ entity.marketingExecutive.marketingExecutive.username }}{% endif %}</li>
+
                                         </ul>
                                     </div>
 
@@ -79,8 +82,6 @@
                                             <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}</li>
                                             <li><strong>Department:</strong>&nbsp;{% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
                                             <li><strong>Assign Doctor:</strong>&nbsp;{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</li>
-                                            <li><strong>Anesthesia Doctor:</strong>&nbsp;{% if entity.anesthesiaDoctor is not empty %}{{ entity.anesthesiaDoctor.name }}{% endif %}</li>
-                                            <li><strong>Assistant Doctor:</strong>&nbsp;{% if entity.assistantDoctor is not empty %}{{ entity.assistantDoctor.name }}{% endif %}</li>
                                         </ul>
                                     </div>
 

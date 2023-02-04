@@ -242,6 +242,28 @@ class DoctorInvoiceController extends Controller
 
     }
 
+    public function printAction(DoctorInvoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($invoice->getPayment());
+        if($hospital->isCustomPrint() == 1){
+            $template = "DoctorInvoice:print/{$hospital->getGlobalOption()->getSubDomain()}";
+        }else{
+            $template = "DoctorInvoice:print";
+        }
+        $entity = $invoice->getHmsInvoice();
+        return $this->render("HospitalBundle:{$template}.html.twig", array(
+            'invoice'               => $invoice,
+            'entity'                => $entity,
+            'config'                => $entity->getHospitalConfig(),
+            'global'                => $entity->getHospitalConfig()->getGlobalOption(),
+            'inWords'               => $inWords,
+
+        ));
+
+    }
+
     public function payAction(DoctorInvoice $entity)
     {
 

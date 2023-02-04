@@ -1040,10 +1040,11 @@ class AccountSalesRepository extends EntityRepository
     public function insertHospitalInvoiceDelete(InvoiceTransaction $entity)
     {
         $em = $this->_em;
-        $sourceId = $entity->getHmsInvoice()->getInvoice()."-".$entity->getId();
-        $entity = $this->findOneBy(array('sourceInvoice'=>$sourceId,'hmsInvoices'=>$entity));
-        if($entity){
-            $em->remove($entity);
+        $hmsInvoices = $entity->getHmsInvoice();
+        $sourceId = $hmsInvoices->getInvoice()."-".$entity->getId();
+        $exist = $this->findOneBy(array('sourceInvoice'=>$sourceId,'hmsInvoices'=>$hmsInvoices));
+        if($exist){
+            $em->remove($exist);
             $em->flush();
         }
     }

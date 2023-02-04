@@ -135,12 +135,15 @@
                                         <td class="numeric">{{ transaction.hmsInvoice.total }}</td>
                                         <td class="numeric">{{ transaction.payment }}</td>
                                         <td class="numeric">
+                                            <div class="btn-group">
                                             {% if transaction.process != 'Paid' %}
                                                 <a class="btn purple mini addPay" data-url="{{ path('hms_doctor_invoice_pay',{'id':transaction.id}) }}"><i class="icon-money"></i>&nbsp;Pay</a>
-                                                <a title="Are you sure went to delete ?" data-url="{{ path('hms_doctor_invoice_delete', { 'id': transaction.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                <a data-url="{{ path('hms_doctor_invoice_delete', { 'id': transaction.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% else %}
                                                 <a class="btn green mini"><i class="icon-ok"></i></a>
+                                                <a target="_blank" href="{{ path('hms_doctor_invoice_print', { 'id': transaction.id }) }}" class="btn yellow mini" ><i class="icon-print"></i></a>
                                             {% endif %}
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}

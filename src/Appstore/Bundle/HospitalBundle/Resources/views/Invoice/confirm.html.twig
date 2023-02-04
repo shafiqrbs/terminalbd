@@ -80,6 +80,8 @@
                                             <li>Name:&nbsp;{{ entity.referredDoctor.name }}</li>
                                             <li>Mobile:&nbsp;{{ entity.referredDoctor.mobile }}</li>
                                         {% endif %}
+                                        <li><strong>Marketing By:</strong>&nbsp;{% if entity.marketingExecutive is not empty %}{{ entity.marketingExecutive.marketingExecutive.username }}{% endif %}</li>
+
                                     </ul>
                                 </div>
                             </div>

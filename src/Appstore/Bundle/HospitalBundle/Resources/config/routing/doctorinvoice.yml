@@ -32,5 +32,9 @@ hms_doctor_invoice_confirm:
     path:     /{id}/invoice-confirm
     defaults: { _controller: "HospitalBundle:DoctorInvoice:confirm" }
 
+hms_doctor_invoice_print:
+    path:     /{id}/invoice-print
+    defaults: { _controller: "HospitalBundle:DoctorInvoice:print" }
+
 
 

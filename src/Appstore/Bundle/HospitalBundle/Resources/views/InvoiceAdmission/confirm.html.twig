@@ -72,6 +72,9 @@
                                                 <li><strong>Date of Birth:</strong>&nbsp;{% if entity.customer.dob %}{{ entity.customer.dob|date('d-m-Y') }}{% endif %}</li>
                                                 <li><strong>Marital:</strong>&nbsp;{{ entity.customer.maritalStatus }}</li>
                                                 <li><strong>Blood Group:</strong>&nbsp;{{ entity.customer.bloodGroup }}</li>
+                                                <li><strong>Referred By:</strong>&nbsp;{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</li>
+                                                <li><strong>Marketing By:</strong>&nbsp;{% if entity.marketingExecutive is not empty %}{{ entity.marketingExecutive.marketingExecutive.username }}{% endif %}</li>
+
                                             </ul>
                                         </div>
 
@@ -92,7 +95,6 @@
                                                         <a  data-type="select" class="editable" id="Cabin" data-name="Cabin" href="javascript:" data-source="{{ path('hms_invoice_admission_cabin_search',{'id':entity.id}) }}"  data-url="{{ path('hms_invoice_admission_cabin_inline_update') }}" data-pk="{{ entity.id }}" value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.id }}{% endif %}" data-value="{% if entity.cabin is defined and entity.cabin is not empty  %}{{ entity.cabin.id }}{% endif %}" data-original-title="Enter cabin name">{% if entity.cabin is defined and entity.cabin is not empty  %}{{  entity.cabin.name }}{% endif %}</a>
                                                     {% endif %}
                                                 </li>
-                                                <li><strong>Referred:</strong>&nbsp;{% if entity.referredDoctor is not empty %}{{ entity.referredDoctor.name }}{% endif %}</li>
                                             </ul>
                                         </div>
 
