@@ -414,6 +414,42 @@ class ReportController extends Controller
         ));
     }
 
+    public function purchaseItemReportAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $user = $this->getUser();
+        $pagination = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->purchaseStockItem($user,$data);
+        $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseBrandReport($user, $pagination, $data);
+        $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesBrandReport($user, $pagination, $data);
+        return $this->render('MedicineBundle:Report:purchase/purchaseItem.html.twig', array(
+            'option' => $user->getGlobalOption(),
+            'purchasePrice' => $purchasePrice,
+            'salesPrice' => $salesPrice,
+            'brands' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function remainingStockReportAction()
+    {
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption, $data);
+        $pagination = $this->paginate($entities);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption, $data);
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent = array(5));
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'asc'));
+        return $this->render('MedicineBundle:Report:purchase/purchase.html.twig', array(
+            'globalOption'          => $globalOption,
+            'entities'              => $pagination,
+            'accountHead'           => $accountHead,
+            'transactionMethods'    => $transactionMethods,
+            'searchForm'            => $data,
+            'overview'              => $overview,
+        ));
+    }
+
     public function purchaseVendorSalesAction()
     {
         $em = $this->getDoctrine()->getManager();
