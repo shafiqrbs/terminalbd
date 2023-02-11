@@ -1498,12 +1498,14 @@ class Builder extends ContainerAware
 	                                        ->setAttribute('dropdown', true);
                 $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Summary', array('route' => 'medicine_report_purchase_summary'))
                     ;
+                $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Item', array('route' => 'medicine_report_purchase_item'));
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Ledger', array('route' => 'medicine_report_purchase_vendor'));
                 $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Details', array('route' => 'medicine_report_purchase_vendor_details'));
 	            $menu['Medicine']['Reports']['Purchase']->addChild('Vendor Stock', array('route' => 'medicine_report_product_stock_sales'));
 		        $menu['Medicine']['Reports']['Purchase']->addChild('Purchase Wise Sales', array('route' => 'medicine_report_purchase_stock'));
 	            $menu['Medicine']['Reports']->addChild('Brand', array('route' => 'medicine_report_purchase_brand_sales'));
 	            $menu['Medicine']['Reports']->addChild('Stock Adjustment', array('route' => 'stock_adjustment_summary'));
+	            $menu['Medicine']['Reports']->addChild('Remaining Stock', array('route' => 'medicine_report_remaining_stock'));
 	            $menu['Medicine']['Reports']->addChild('Brand Stock Price', array('route' => 'medicine_report_brand_stock'));
 	            $menu['Medicine']['Reports']->addChild('Brand Details', array('route' => 'medicine_report_purchase_brand_sales_details'));
 

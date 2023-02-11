@@ -323,6 +323,24 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function findWithRemainingStock($config,$brand)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id ,e.brandName as brandName , e.name as name','e.purchasePrice as purchasePrice , e.salesPrice as salesPrice','e.remainingQuantity as quantity , e.pack as pack');
+        $qb->addSelect('u.name as unit');
+        $qb->join("e.unit",'u');
+        $qb->where("e.medicineConfig = :config");
+        $qb->setParameter('config', $config);
+        if (!empty($brand)) {
+            $qb->andWhere($qb->expr()->like("e.brandName", "'%$brand%'"  ));
+        }
+        $qb->orderBy('e.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+
+    }
+
 
     public function findWithSelectedItems($config,$ids)
     {

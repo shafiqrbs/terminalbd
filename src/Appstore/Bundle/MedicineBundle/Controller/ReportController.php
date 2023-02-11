@@ -419,36 +419,35 @@ class ReportController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $pagination = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->purchaseStockItem($user,$data);
-        $purchasePrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getPurchaseBrandReport($user, $pagination, $data);
-        $salesPrice = $em->getRepository('MedicineBundle:MedicinePurchase')->getSalesBrandReport($user, $pagination, $data);
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $brand = (isset($data['brandName']) and $data['brandName']) ? $data['brandName']:'';
+        $pagination = "";
+        if($brand){
+            $pagination = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseItemReport($config,$data);
+        }
         return $this->render('MedicineBundle:Report:purchase/purchaseItem.html.twig', array(
-            'option' => $user->getGlobalOption(),
-            'purchasePrice' => $purchasePrice,
-            'salesPrice' => $salesPrice,
-            'brands' => $pagination,
+            'entities' => $pagination,
             'searchForm' => $data,
         ));
+
     }
 
     public function remainingStockReportAction()
     {
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption, $data);
-        $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption, $data);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent = array(5));
-        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'asc'));
-        return $this->render('MedicineBundle:Report:purchase/purchase.html.twig', array(
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $brand = (isset($data['brandName']) and $data['brandName']) ? $data['brandName']:'';
+        $pagination = "";
+        if($brand){
+            $pagination = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->findWithRemainingStock($config,$brand);
+        }
+        return $this->render('MedicineBundle:Report:stock/remaining.html.twig', array(
             'globalOption'          => $globalOption,
             'entities'              => $pagination,
-            'accountHead'           => $accountHead,
-            'transactionMethods'    => $transactionMethods,
-            'searchForm'            => $data,
-            'overview'              => $overview,
         ));
     }
+
 
     public function purchaseVendorSalesAction()
     {

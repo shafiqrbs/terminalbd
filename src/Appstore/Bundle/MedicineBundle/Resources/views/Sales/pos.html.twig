@@ -193,8 +193,10 @@
                                 </thead>
                                 <tbody id="invoiceParticulars">
                                 {% set avgTotal = 0 %}
+                                {% set totalQuantity = 0 %}
                                 {% if user.medicineSalesTemporary is not empty %}
                                     {% for item in user.medicineSalesTemporary %}
+                                        {% set totalQuantity = totalQuantity + item.quantity %}
                                         {% set avgTotal = avgTotal +(item.medicineStock.averagePurchasePrice * item.quantity) %}
                                         <tr id="remove-{{ item.id }}" {% if item.medicineStock.averagePurchasePrice >= item.medicineStock.salesPrice or item.medicineStock.averagePurchasePrice == 0 %} class="warning" {% endif %}>
                                             {#<td  class="span1">{% if item.medicinePurchaseItem is not empty %}{{ item.medicinePurchaseItem.barcode }}{% endif %}</td>#}
@@ -244,7 +246,9 @@
                                     <td colspan="11" class="span12" style="border: 1px double #000"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="9" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                    <td colspan="7"><span class="pull-right">QTY</span></td>
+                                    <td>{{ totalQuantity }}</td>
+                                    <td><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                     <td class=""><strong id="subTotal">{{ result.subTotal|number_format(2) }}</strong></td>
                                     <td class="span1"></td>
                                 </tr>

@@ -57,6 +57,15 @@ medicine_report_purchase_details:
     path:     /purchase-vendor
     defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }
 
+medicine_report_purchase_item:
+    path:     /purchase-item-report
+    defaults: { _controller: "MedicineBundle:Report:purchaseItemReport" }
+
+
+medicine_report_remaining_stock:
+    path:     /remaining-stock-report
+    defaults: { _controller: "MedicineBundle:Report:remainingStockReport" }
+
 medicine_report_purchase_stock:
     path:     /purchase-vendor
     defaults: { _controller: "MedicineBundle:Report:purchaseVendor" }

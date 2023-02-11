@@ -148,6 +148,27 @@ class MedicinePurchaseItemRepository extends EntityRepository
         return  $qb;
     }
 
+    public function purchaseItemReport(MedicineConfig $config,$data = array()){
+
+        $vendor = isset($data['vendor'])? $data['vendor']:'';
+        $qb = $this->createQueryBuilder('mpi');
+        $qb->select('mpi.quantity as quantity','s.brandName as brandName','mpi.purchasePrice as purchasePrice','mpi.salesPrice as salesPrice');
+        $qb->addSelect('e.created as created','e.grn as grn','mv.companyName as company');
+        $qb->addSelect('s.name as name');
+        $qb->join('mpi.medicinePurchase','e');
+        $qb->join('e.medicineVendor','mv');
+        $qb->join('mpi.medicineStock','s');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
+        if($vendor){
+            $qb->andWhere('e.medicineVendor = :vendor')->setParameter('vendor', $vendor);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('s.id');
+        $qb->orderBy('s.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
     public function purchaseStockItem(MedicineConfig $config,$data = array()){
 
         $vendor = isset($data['vendor'])? $data['vendor']:'';

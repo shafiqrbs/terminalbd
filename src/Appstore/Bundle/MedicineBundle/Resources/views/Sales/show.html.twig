@@ -94,8 +94,10 @@
                                     </tr>
                                     </thead>
                                     <tbody id="">
+                                    {% set totalQuantity = 0 %}
                                     {% if entity.medicineSalesItems is not empty %}
                                         {% for item in entity.medicineSalesItems %}
+                                            {% set totalQuantity = totalQuantity + item.quantity %}
                                             <tr id="remove-{{ item.id }}">
                                                 {#<td  class="span1">{{ loop.index }}. {{ item.getMedicinePurchaseItem.barcode }}</td>#}
                                                 <td class="span3">{{ loop.index }}. {{ item.medicineStock.name }}</td>
@@ -111,7 +113,8 @@
                                         <td colspan="4" class="span12" style="border: 1px double #000"></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                        <td colspan="2" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                        <td class="span2"><strong id="">{{ totalQuantity }}</strong></td>
                                         <td class="span2"><strong id="">{{ entity.subTotal|number_format }}</strong></td>
                                     </tr>
                                     <tr>
