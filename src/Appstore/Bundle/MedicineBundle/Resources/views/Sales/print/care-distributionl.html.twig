@@ -149,9 +149,9 @@
         </tr>
         <tr>
             <th class="span4 left">Item Name</th>
+            <th class="span2 center">QTY</th>
             <th class="span2 center">Unit</th>
             <th class="span2 center">(%)</th>
-            <th class="span2 center">QTY</th>
             <th class="span2 right">Amount</th>
         </tr>
         <tr>
@@ -165,9 +165,9 @@
                     {% set total = total + (item.quantity * item.mrpPrice) %}
                     <tr>
                         <td class="span4 left">{{ loop.index }}. {{ item.medicineStock.name }}</td>
-                        <td class="span2 center">{{ item.mrpPrice|number_format(2) }}</td>
-                        <td class="span2 center">{{ item.itemPercent }}</td>
                         <td class="span2 center">{{ item.quantity }}</td>
+                        <td class="span2 center">{{ item.salesPrice|number_format(2) }}</td>
+                        <td class="span2 center">{{ item.itemPercent }}</td>
                         <td class="span2 right">{{ item.subTotal|number_format(2) }}</td>
                     </tr>
                 {% endfor %}

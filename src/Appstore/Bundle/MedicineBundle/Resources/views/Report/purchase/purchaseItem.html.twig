@@ -105,25 +105,22 @@
     </div>
     <script>
         function exportExcel() {
-           /* var table = document.querySelector('#downloadExcel');
-            TableToExcel.convert(table);*/
+            var table = document.querySelector('#downloadExcel');
+            TableToExcel.convert(table);
         }
-
     </script>
 
 {% endblock %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-        '@MedicineBundle/Resources/public/js/editable.js'
         '@MedicineBundle/Resources/public/js/approveProcess.js'
     %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableWithLoadInit();
 {% endblock %}
 
 
