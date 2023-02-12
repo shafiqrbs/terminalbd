@@ -1120,13 +1120,13 @@ class AccountSalesRepository extends EntityRepository
         $em = $this->_em;
         $accountSales = new AccountSales();
 
-        $accountSales->setAccountBank($entity->getAccountBank());
-        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getRestaurantConfig()->getGlobalOption());
         $accountSales->setRestaurantInvoice($entity);
         $accountSales->setSourceInvoice($entity->getInvoice());
         $accountSales->setCustomer($entity->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setPurchasePrice($entity->getPurchasePrice());
         $accountSales->setVat($entity->getVat());
@@ -1378,8 +1378,9 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcessType('Sales');
         $accountSales->setProcess('approved');
         $accountSales->setApprovedBy($sales->getCreatedBy());
-        $method = $em->getRepository("SettingToolBundle:TransactionMethod")->find(1);
-        $accountSales->setTransactionMethod($method);
+        $accountSales->setTransactionMethod($sales->getTransactionMethod());
+        $accountSales->setAccountBank($sales->getAccountBank());
+        $accountSales->setAccountMobileBank($sales->getAccountMobileBank());
         $em->persist($accountSales);
         $em->flush();
         $this->updateCustomerBalance($accountSales);
