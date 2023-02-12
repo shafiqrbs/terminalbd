@@ -114,38 +114,38 @@
     <table class="">
         {% if  entity.medicineConfig.globalOption.templateCustomize.webPath is defined and entity.medicineConfig.globalOption.templateCustomize.webPath('logo') is not empty and entity.medicineConfig.invoicePrintLogo == 1 %}
         <tr>
-            <td colspan="5" class="span12 center logo"><img style="max-width: 380px; max-height: 180px" src="/{{ entity.medicineConfig.globalOption.templateCustomize.webPath('logo') }}"></td>
+            <td colspan="6" class="span12 center logo"><img style="max-width: 380px; max-height: 180px" src="/{{ entity.medicineConfig.globalOption.templateCustomize.webPath('logo') }}"></td>
         </tr>
         {% endif %}
         {% if entity.medicineConfig.isPrintHeader == 1 %}
         <tr>
-            <td colspan="5" class="span12 center header"><strong>{{ entity.medicineConfig.globalOption.name }}</strong></td>
+            <td colspan="6" class="span12 center header"><strong>{{ entity.medicineConfig.globalOption.name }}</strong></td>
         </tr>
         {% endif %}
         <tr>
-            <td colspan="5" class="span12 center address">{{ entity.medicineConfig.address|raw }}</td>
+            <td colspan="6" class="span12 center address">{{ entity.medicineConfig.address|raw }}</td>
         </tr>
-        <tr><td colspan="5"><br/></td></tr>
+        <tr><td colspan="6"><br/></td></tr>
         <tr>
-            <td colspan="5" class="span12 center"><strong class="invoice">Invoice: {{ entity.invoice }}</strong></td>
-        </tr>
-        <tr>
-            <td colspan="5" class="label"><div class="row"><span class="span7">Date :{{ entity.created|date('d-m-y h:i A') }}</span><span class="span5 right">Pay Mode :{{ entity.transactionMethod.name }}</span></div></td>
+            <td colspan="6" class="span12 center"><strong class="invoice">Invoice: {{ entity.invoice }}</strong></td>
         </tr>
         <tr>
-            <td colspan="5" class="label"><div class="row"><span class="span12">Sales By :{% if entity.salesBy.profile is defined and entity.salesBy.profile is not empty %}{{ entity.salesBy.profile.name }}{% endif %}</span></div></td>
+            <td colspan="6" class="label"><div class="row"><span class="span7">Date :{{ entity.created|date('d-m-y h:i A') }}</span><span class="span5 right">Pay Mode :{{ entity.transactionMethod.name }}</span></div></td>
+        </tr>
+        <tr>
+            <td colspan="6" class="label"><div class="row"><span class="span12">Sales By :{% if entity.salesBy.profile is defined and entity.salesBy.profile is not empty %}{{ entity.salesBy.profile.name }}{% endif %}</span></div></td>
         </tr>
 
         {% if entity.customer.name != "Default"%}
             <tr>
-                <td colspan="5" class="label"><div class="row"><span class="span7">Customer: {{ entity.customer.name }}</span><span class="span5 right">Mobile :{{ entity.customer.mobile }}</span></div></td>
+                <td colspan="6" class="label"><div class="row"><span class="span7">Customer: {{ entity.customer.name }}</span><span class="span5 right">Mobile :{{ entity.customer.mobile }}</span></div></td>
             </tr>
             <tr>
-                <td colspan="5" class="span12">Address: {{ entity.customer.address|raw }}</td>
+                <td colspan="6" class="span12">Address: {{ entity.customer.address|raw }}</td>
             </tr>
         {% endif %}
         <tr>
-            <td colspan="5" class="span12 border-top"></td>
+            <td colspan="6" class="span12 border-top"></td>
         </tr>
         <tr>
             <th class="span4 left">Item Name</th>
@@ -156,7 +156,7 @@
             <th class="span2 right">Amount</th>
         </tr>
         <tr>
-            <td colspan="5" class="span12 border-top"></td>
+            <td colspan="6" class="span12 border-top"></td>
         </tr>
             {% if entity.medicineSalesItems is not empty %}
                 {% set subTotal = 0 %}
