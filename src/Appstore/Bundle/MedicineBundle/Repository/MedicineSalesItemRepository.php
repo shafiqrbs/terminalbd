@@ -543,7 +543,7 @@ class MedicineSalesItemRepository extends EntityRepository
         $qb->setParameter('process', 'Done');
         $this->handleSearchStockBetween($qb,$data);
         $qb->orderBy('mds.name','ASC');
-        $qb->orderBy('mds.brandName','ASC');
+        $qb->addOrderBy('mds.brandName','ASC');
         $qb->groupBy('mds.id');
         return $qb->getQuery()->getArrayResult();
     }
