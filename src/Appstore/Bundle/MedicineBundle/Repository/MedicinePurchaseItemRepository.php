@@ -4,10 +4,8 @@ namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
-use Appstore\Bundle\RestaurantBundle\Form\StockType;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -163,7 +161,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $qb->andWhere('e.medicineVendor = :vendor')->setParameter('vendor', $vendor);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->groupBy('s.id');
+        $qb->groupBy('s.name');
         $qb->orderBy('s.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
@@ -180,7 +178,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->andWhere('e.medicineVendor = :vendor')->setParameter('vendor', $vendor);
         $this->handleDateRangeFind($qb,$data);
         $qb->groupBy('s.id');
-        $qb->orderBy('s.name','ASC');
+        $qb->orderBy('s.brandName','ASC');
+        $qb->addOrderBy('s.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
     }
