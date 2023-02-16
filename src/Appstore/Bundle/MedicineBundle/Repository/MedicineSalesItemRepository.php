@@ -542,8 +542,8 @@ class MedicineSalesItemRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchStockBetween($qb,$data);
-        $qb->orderBy('mds.name','ASC');
-        $qb->addOrderBy('mds.brandName','ASC');
+        $qb->orderBy('mds.brandName','ASC');
+        $qb->addOrderBy('mds.name','ASC');
         $qb->groupBy('mds.id');
         return $qb->getQuery()->getArrayResult();
     }
