@@ -38,16 +38,10 @@ class MedicineSalesReturnInvoice
 
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineSalesReturnInvoice")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn", mappedBy="medicineSalesReturnInvoice", cascade={"remove"} )
      **/
     private $medicineSalesReturns;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="medicineSales", cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $accountSales;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="medicineSales" ,cascade={"persist"} )
@@ -499,14 +493,6 @@ class MedicineSalesReturnInvoice
     }
 
 
-    /**
-     * @return MedicineReverse
-     */
-    public function getMedicineReverse()
-    {
-        return $this->medicineReverse;
-    }
-
 
     /**
      * @return MedicineConfig
@@ -542,14 +528,6 @@ class MedicineSalesReturnInvoice
         $this->netTotal = $netTotal;
     }
 
-
-    /**
-     * @return MedicineSalesItem
-     */
-    public function getMedicineSalesItems()
-    {
-        return $this->medicineSalesItems;
-    }
 
     /**
      * @return User
