@@ -42,6 +42,21 @@ $(document).on('keyup', '.returnQuantity , .returnPrice', function() {
 
 });
 
+$(document).on('keyup', '#payment', function() {
+
+    var sum = 0;
+    var returnSubTotal     = parseFloat($('#returnTotal').val()  != '' ? $('#returnTotal').val() : 0 );
+    var payment = parseFloat($('#payment').val()  != '' ? $('#payment').val() : 0 );
+    var amount = (returnSubTotal - payment);
+    if (returnSubTotal < amount) {
+        alert("Invalid amount & adjustment amount");
+        $(this).val(0);
+        return false;
+    }else{
+        $('#adjustment').val(amount);
+    }
+});
+
 $(document).on("click", ".approve", function() {
     var url = $(this).attr('data-url');
     var id = $(this).attr('data-id');

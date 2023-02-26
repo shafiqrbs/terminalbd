@@ -30,16 +30,17 @@ class MedicineSalesReturn
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem", inversedBy="medicineSalesReturns", cascade={"persist"} )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private $medicinePurchaseItem;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", inversedBy="medicineSalesReturns", cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $medicineStock;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturnInvoice", inversedBy="medicineSalesReturns", cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $medicineSalesReturnInvoice;
 
 
     /**
@@ -104,6 +105,7 @@ class MedicineSalesReturn
      * @ORM\Column(name="subTotal", type="float",nullable=true)
      */
     private $subTotal;
+
 
     /**
      * @var \DateTime
@@ -399,6 +401,40 @@ class MedicineSalesReturn
     {
         $this->adjustment = $adjustment;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param mixed $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMedicineSalesReturnInvoice()
+    {
+        return $this->medicineSalesReturnInvoice;
+    }
+
+    /**
+     * @param mixed $medicineSalesReturnInvoice
+     */
+    public function setMedicineSalesReturnInvoice($medicineSalesReturnInvoice)
+    {
+        $this->medicineSalesReturnInvoice = $medicineSalesReturnInvoice;
+    }
+
+
 
 }
 

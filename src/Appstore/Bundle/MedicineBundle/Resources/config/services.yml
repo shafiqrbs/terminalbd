@@ -33,6 +33,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.medicine.sales.return.invoice.event.listener:
+        class: Appstore\Bundle\MedicineBundle\EventListener\MedicineSalesReturnInvoiceListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.medicine.particular.item.event.listener:
         class: Appstore\Bundle\MedicineBundle\EventListener\MedicineParticularListener
         tags:

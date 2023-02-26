@@ -15,9 +15,6 @@ use Setting\Bundle\AppearanceBundle\Entity\MegaMenu;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Setting\Bundle\AppearanceBundle\Entity\MenuGrouping;
-use Product\Bundle\ProductBundle\Entity\Category;
-use Symfony\Component\HttpFoundation\Request;
 
 
 class Builder extends ContainerAware
@@ -1382,12 +1379,14 @@ class Builder extends ContainerAware
                     ;
         	    $menu['Medicine']['Manage Sales']->addChild('Hold Sales', array('route' => 'medicine_sales_hold'))
                     ;
-        	    $menu['Medicine']['Manage Sales']->addChild('Android Sales', array('route' => 'medicine_sales_android'))
+                $menu['Medicine']['Manage Sales']->addChild('Sales Return')->setAttribute('dropdown', true);
+        	    $menu['Medicine']['Manage Sales']['Sales Return']->addChild('Add Item Return', array('route' => 'medicine_sales_item'))
                     ;
-                $menu['Medicine']['Manage Sales']->addChild('Add Sales Return', array('route' => 'medicine_sales_item'))
-                    ;
-                $menu['Medicine']['Manage Sales']->addChild('Sales Return', array('route' => 'medicine_sales_return'))
-                    ;
+                $menu['Medicine']['Manage Sales']['Sales Return']->addChild('Item Return', array('route' => 'medicine_sales_return'));
+                $menu['Medicine']['Manage Sales']['Sales Return']->addChild('Add Invoice Return', array('route' => 'medicine_sales_customer_item'));
+                $menu['Medicine']['Manage Sales']['Sales Return']->addChild('Invoice Return', array('route' => 'medicine_sales_customer_return_invoice'));
+
+
                 if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
 	                $menu['Medicine']['Manage Sales']->addChild('Customer', array('route' => 'domain_customer'));
 	                $menu['Medicine']['Manage Sales']->addChild('Notepad', array('route' => 'domain_notepad'));

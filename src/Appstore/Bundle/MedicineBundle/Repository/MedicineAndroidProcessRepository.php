@@ -2,10 +2,6 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
-use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesParticular;
 use Appstore\Bundle\MedicineBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
@@ -38,7 +34,6 @@ class MedicineAndroidProcessRepository extends EntityRepository
     public function insertAndroidProcess(GlobalOption $option,$device,$process,$data)
     {
         $em =  $this->_em;
-
         $device = $em->getRepository('SettingToolBundle:AndroidDeviceSetup')->findOneBy(array('globalOption'=> $option,'id' => $device));
         $entity = new MedicineAndroidProcess();
         $entity->setMedicineConfig($option->getMedicineConfig());

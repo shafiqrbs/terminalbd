@@ -12,6 +12,7 @@ use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturnInvoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -417,7 +418,33 @@ class AccountJournalRepository extends EntityRepository
 
 	}
 
+    public function insertMedicineAccountSalesReturnInvoice(MedicineSalesReturnInvoice $salesReturn)
+    {
+        $global = $salesReturn->getMedicineConfig()->getGlobalOption();
+        $journalSource = "Sales-Return-Invoice{$salesReturn->getId()}";
+        $entity = new AccountJournal();
+        $accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(6);
+        $accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
+        $transaction = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionType('Credit');
+        $entity->setAmount($salesReturn->getPayment());
+        $entity->setTransactionMethod($transaction);
+        $entity->setApprovedBy($salesReturn->getCreatedBy());
+        $entity->setCreatedBy($salesReturn->getCreatedBy());
+        $entity->setGlobalOption($salesReturn->getCreatedBy()->getGlobalOption());
+        $entity->setAccountHeadCredit($accountHeadCredit);
+        $entity->setAccountHeadDebit($accountCashHead);
+        $entity->setJournalSource($journalSource);
+        $entity->setRemark($journalSource);
+        $entity->setGlobalOption($global);
+        $entity->setProcess('approved');
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity);
+        $this->_em->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
+        return $entity->getAccountRefNo();
 
+    }
 
 	public function insertEcommerceOrderPayable(OrderPayment $salesReturn)
 	{

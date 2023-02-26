@@ -33,6 +33,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn red" href="{{ path('medicine_sales_item') }}"><i class="icon-plus-sign"></i> Add Sales Return</a>
+                                <a class="btn purple" href="{{ path('medicine_sales_customer_item') }}"><i class="icon-user"></i> Customer Return</a>
                             </div>
                         </div>
                     </div>
@@ -40,9 +41,7 @@
                     <div class="portlet-body">
                         <div class="clearfix"><br/></div>
                         <div class="portlet-body flip-scroll">
-
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
@@ -61,7 +60,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% if entities is not empty %}
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
@@ -86,14 +85,15 @@
                                         </td>
                                     </tr>
                                 {% endfor %}
-
+                                {% endif %}
                                 </tbody>
                             </table>
-
+                            <div class="pagination pull-center" >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

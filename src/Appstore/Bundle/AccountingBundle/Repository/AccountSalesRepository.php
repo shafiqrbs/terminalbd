@@ -16,6 +16,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturn;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesReturnInvoice;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineTransfer;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Core\UserBundle\Entity\User;
@@ -1233,6 +1234,28 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setApprovedBy($entity->getCreatedBy());
 	    $accountSales->setMedicineSales($entity->getMedicineSalesItem()->getMedicineSales());
 	    $accountSales->setSourceInvoice($entity->getMedicineSalesItem()->getMedicineSales()->getInvoice());
+        $accountSales->setCreated($entity->getCreated());
+        $accountSales->setUpdated($entity->getCreated());
+        $em->persist($accountSales);
+        $em->flush();
+        $this->updateCustomerBalance($accountSales);
+        return $accountSales;
+
+    }
+
+    public function insertMedicineAccountSalesReturnInvoice(MedicineSalesReturnInvoice $entity)
+    {
+        $global = $entity->getMedicineConfig()->getGlobalOption();
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+        $accountSales->setGlobalOption($global);
+        $accountSales->setCustomer($entity->getCustomer());
+        $accountSales->setAmount($entity->getAdjustment());
+        $accountSales->setProcessHead('sales-return');
+        $accountSales->setProcessType('Sales-Return');
+        $accountSales->setProcess('approved');
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setSourceInvoice($entity->getInvoice());
         $accountSales->setCreated($entity->getCreated());
         $accountSales->setUpdated($entity->getCreated());
         $em->persist($accountSales);
