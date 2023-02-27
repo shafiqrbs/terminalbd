@@ -30,6 +30,12 @@ class MedicineSalesReturn
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem", inversedBy="medicineSalesReturns", cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $medicinePurchaseItem;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", inversedBy="medicineSalesReturns", cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
