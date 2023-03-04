@@ -381,8 +381,8 @@ class ApiEcommerceController extends Controller
             /* @var $entity GlobalOption */
             $search = $_REQUEST;
             $entity = $this->checkApiValidation($request);
-            $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$search);
-            $result = $this->paginate($entities);
+            $result = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$search);
+         //   $result = $this->paginate($entities);
             $data = array();
             if($result){
                 foreach($result as $key => $row) {
