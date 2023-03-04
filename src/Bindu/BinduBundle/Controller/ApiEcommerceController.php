@@ -200,6 +200,78 @@ class ApiEcommerceController extends Controller
 
     }
 
+
+    public function configurationAction(Request $request)
+    {
+
+        $formData = $request->request->all();
+        $key =  $this->getParameter('x-api-key');
+        $value =  $this->getParameter('x-api-value');
+        $uniqueCode = $formData['activeKey'];
+        $mobile = $formData['license'];
+        $data = array();
+        $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $uniqueCode,'mobile' => $mobile,'status'=>1));
+        if (empty($entity) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
+            return new Response('Unauthorized access.', 401);
+        }else{
+
+            /* @var $option GlobalOption */
+
+            $address = '';
+            $vatRegNo = '';
+            $vatPercentage = '';
+            $vatEnable = '';
+
+            $entity = $option->getEcommerceConfig();
+
+            $productColumn = $entity->getEcommerceConfig()->getMobileProductColumn();
+            $productFeatureColumn = $entity->getEcommerceConfig()->getMobileFeatureColumn();
+            $currency = $entity->getEcommerceConfig()->getCurrency();
+            $address = $entity->getEcommerceConfig()->getAddress();
+            $preOrder = $entity->getEcommerceConfig()->getIsPreorder();
+            $cartProcess = $entity->getEcommerceConfig()->getCartProcess();
+            $shippingCharge = $entity->getEcommerceConfig()->getShippingCharge();
+            $cashOnDelivery = $entity->getEcommerceConfig()->isCashOnDelivery();
+            $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
+            $path = $entity->getEcommerceConfig()->getWebPath();
+            $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
+
+            $data = array(
+                'setupId' => $entity->getId(),
+                'uniqueCode' => $entity->getUniqueCode(),
+                'name' => $entity->getName(),
+                'mobile' => $mobile,
+                'email' => $entity->getEmail(),
+                'locationId' => $entity->getLocation()->getId(),
+                'address' => $address,
+                'locationName' => $entity->getLocation()->getName(),
+                'main_app' => $entity->getMainApp()->getId(),
+                'main_app_name' => $entity->getMainApp()->getSlug(),
+                'appsManual' => $entity->getMainApp()->getApplicationManual(),
+                'website' => $entity->getDomain(),
+                'vatRegNo' => $vatRegNo,
+                'vatPercentage' => $vatPercentage,
+                'productColumn' => $productColumn,
+                'productFeatureColumn' => $productFeatureColumn,
+                'currency' => $currency,
+                'preOrder' => $preOrder,
+                'cartProcess' => $cartProcess,
+                'shippingCharge' => $shippingCharge,
+                'cashOnDelivery' => $cashOnDelivery,
+                'pickupLocation' => $pickupLocation,
+                'vatEnable' => $vatEnable,
+                'logo'      =>  $_SERVER['HTTP_HOST']."/{$path}"
+            );
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($data));
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+
+    }
+
     public function menuAction(Request $request)
     {
         set_time_limit(0);
@@ -382,7 +454,6 @@ class ApiEcommerceController extends Controller
             $search = $_REQUEST;
             $entity = $this->checkApiValidation($request);
             $result = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$search);
-         //   $result = $this->paginate($entities);
             $data = array();
             if($result){
                 foreach($result as $key => $row) {

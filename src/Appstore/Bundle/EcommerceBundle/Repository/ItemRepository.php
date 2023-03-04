@@ -769,6 +769,7 @@ class ItemRepository extends EntityRepository
         if($result){
             foreach($result as $key => $row) {
                 $data[$key]['product_id']               = (int) $row['id'];
+                $data[$key]['item_id']                  = (int) rand(time(),10);
                 $data[$key]['name']                     = $row['name'];
                 $data[$key]['nameBn']                   = $row['nameBn'];
                 $data[$key]['quantity']                 = $row['quantity'];
@@ -823,6 +824,7 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($row){
             $data['product_id']               = (int) $row['itemId'];
+            $data['item_id']                  = (int) rand(time(),10);
             $data['name']                     = $row['name'];
             $data['nameBn']                   = $row['nameBn'];
             $data['quantity']                 = $row['quantity'];
