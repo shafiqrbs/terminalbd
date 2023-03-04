@@ -266,9 +266,16 @@ class EcommerceConfig
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isPurchaseStock", type="boolean")
+     * @ORM\Column(name="isOrderPoint", type="boolean")
      */
-    private $isPurchaseStock = false;
+    private $isOrderPoint = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isInventoryStock", type="boolean")
+     */
+    private $isInventoryStock = false;
 
     /**
      * @var boolean
@@ -1617,19 +1624,34 @@ class EcommerceConfig
     /**
      * @return bool
      */
-    public function isPurchaseStock()
+    public function isOrderPoint()
     {
-        return $this->isPurchaseStock;
+        return $this->isOrderPoint;
     }
 
     /**
-     * @param bool $isPurchaseStock
+     * @param bool $isOrderPoint
      */
-    public function setIsPurchaseStock($isPurchaseStock)
+    public function setIsOrderPoint($isOrderPoint)
     {
-        $this->isPurchaseStock = $isPurchaseStock;
+        $this->isOrderPoint = $isOrderPoint;
     }
 
+    /**
+     * @return bool
+     */
+    public function isInventoryStock()
+    {
+        return $this->isInventoryStock;
+    }
+
+    /**
+     * @param bool $isInventoryStock
+     */
+    public function setIsInventoryStock($isInventoryStock)
+    {
+        $this->isInventoryStock = $isInventoryStock;
+    }
 
 
 

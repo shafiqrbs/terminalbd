@@ -2,16 +2,14 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Order
@@ -267,6 +265,13 @@ class Order
      * @ORM\Column(name="apiId", type="integer", nullable = true)
      */
     private $apiId;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="orderPoint", type="integer", nullable = true)
+     */
+    private $orderPoint;
 
     /**
      * @var float

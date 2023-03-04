@@ -4,9 +4,9 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Item
@@ -100,6 +100,11 @@ class Item
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="item" , cascade={"remove"} )
      */
     protected $deliveryReturns;
+
+   /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="inventoryItem" , cascade={"remove"} )
+     */
+    protected $ecommerceItem;
 
     /**
      * @var string
@@ -1319,7 +1324,13 @@ class Item
         return $this->itemSerials;
     }
 
-
+    /**
+     * @return mixed
+     */
+    public function getEcommerceItem()
+    {
+        return $this->ecommerceItem;
+    }
 
 
 }

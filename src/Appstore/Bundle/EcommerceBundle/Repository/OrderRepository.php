@@ -640,6 +640,7 @@ class OrderRepository extends EntityRepository
             /* @var $subs OrderItem */
             foreach ($orderItems as $i => $subs):
                 $data['orderItem'][$i]['itemId'] = (integer)$subs->getId();
+                $data['orderItem'][$i]['orderId'] = (int)$row->getId();
                 $data['orderItem'][$i]['name'] = (string)$subs->getItemName();
                 $data['orderItem'][$i]['price'] = (integer)$subs->getPrice();
                 $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();

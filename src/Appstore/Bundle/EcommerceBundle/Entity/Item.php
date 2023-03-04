@@ -88,6 +88,11 @@ class Item
     protected $medicine;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", inversedBy="ecommerceItem")
+     */
+    protected $inventoryItem;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor")
      * @ORM\OrderBy({"id" = "ASC"})
      **/
@@ -413,6 +418,14 @@ class Item
      */
     private $source = "ecommerce";
 
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDelete", type="boolean", nullable = true)
+     */
+    private $isDelete;
+
     /**
      * @var text
      *
@@ -421,12 +434,28 @@ class Item
     private $shortContent;
 
 
+      /**
+     * @var text
+     *
+     * @ORM\Column(name="shortContenBnt", type="text", nullable=true)
+     */
+    private $shortContentBn;
+
+
      /**
      * @var text
      *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="contentBn", type="text", nullable=true)
+     */
+    private $contentBn;
+
 
 
     /**
@@ -1577,7 +1606,69 @@ class Item
         $this->nameBn = $nameBn;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getInventoryItem()
+    {
+        return $this->inventoryItem;
+    }
 
+    /**
+     * @param mixed $inventoryItem
+     */
+    public function setInventoryItem($inventoryItem)
+    {
+        $this->inventoryItem = $inventoryItem;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param bool $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
+    }
+
+    /**
+     * @return text
+     */
+    public function getShortContentBn()
+    {
+        return $this->shortContentBn;
+    }
+
+    /**
+     * @param text $shortContentBn
+     */
+    public function setShortContentBn($shortContentBn)
+    {
+        $this->shortContentBn = $shortContentBn;
+    }
+
+    /**
+     * @return text
+     */
+    public function getContentBn()
+    {
+        return $this->contentBn;
+    }
+
+    /**
+     * @param text $contentBn
+     */
+    public function setContentBn($contentBn)
+    {
+        $this->contentBn = $contentBn;
+    }
 
 }
 
