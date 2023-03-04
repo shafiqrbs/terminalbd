@@ -2,8 +2,6 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Form;
 
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
-use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -23,6 +21,7 @@ class TimePeriodType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please enter period name'))
             )))
+            ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Time period name'),))
             ->add('status');
     }
     

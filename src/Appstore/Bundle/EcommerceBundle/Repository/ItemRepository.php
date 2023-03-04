@@ -10,7 +10,6 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
 use Product\Bundle\ProductBundle\Entity\Category;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
@@ -728,7 +727,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
+        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
@@ -753,7 +752,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
+        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
         $qb->addSelect('random() as HIDDEN rand');
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
@@ -771,6 +770,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['product_id']               = (int) $row['id'];
                 $data[$key]['name']                     = $row['name'];
+                $data[$key]['nameBn']                   = $row['nameBn'];
                 $data[$key]['quantity']                 = $row['quantity'];
                 $data[$key]['price']                    = $row['price'];
                 $data[$key]['discountPrice']            = $row['discountPrice'];
@@ -811,7 +811,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.itemSubs','subProduct');
         $qb->leftJoin('subProduct.size','subSize');
         $qb->leftJoin('subProduct.productUnit','subUnit');
-        $qb->select('item.id as itemId','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.shortContent as shortContent','item.content as description','item.subProduct as subItemStatus','item.maxQuantity as maxQuantity');
+        $qb->select('item.id as itemId','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.shortContent as shortContent','item.content as description','item.subProduct as subItemStatus','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.id as categoryId','category.name as categoryName');
         $qb->addSelect('brand.id as brandId','brand.name as brandName');
         $qb->addSelect('productUnit.name as unitName');
@@ -824,6 +824,7 @@ class ItemRepository extends EntityRepository
         if($row){
             $data['product_id']               = (int) $row['itemId'];
             $data['name']                     = $row['name'];
+            $data['nameBn']                   = $row['nameBn'];
             $data['quantity']                 = $row['quantity'];
             $data['price']                    = $row['price'];
             $data['discountPrice']            = ($row['discountPrice']) ? $row['discountPrice']:null;
@@ -926,7 +927,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','category');
-        $qb->select('category.id as id','category.name as name','category.imagePath as path');
+        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('category.id');
         $qb->orderBy('category.id','DESC');
@@ -936,6 +937,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['category_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                $data[$key]['nameBn']           = $row['nameBn'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -953,7 +955,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','category');
-        $qb->select('category.id as id','category.name as name','category.imagePath as path');
+        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("category.feature = 1");
         $qb->groupBy('category.id');
@@ -964,6 +966,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['category_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                $data[$key]['nameBn']           = $row['nameBn'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -981,7 +984,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
-        $qb->select('brand.id as id','brand.name as name','brand.path as path');
+        $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('brand.id');
         $qb->orderBy('brand.id','DESC');
@@ -991,6 +994,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['brand_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                $data[$key]['nameBn']           = $row['nameBn'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1008,7 +1012,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
-        $qb->select('brand.id as id','brand.name as name','brand.path as path');
+        $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("brand.feature = 1");
         $qb->groupBy('brand.id');
@@ -1019,6 +1023,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['brand_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                $data[$key]['nameBn']           = $row['nameBn'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1043,7 +1048,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.promotion','promotion');
-        $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
+        $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Promotion"%');
         $qb->groupBy('promotion.id');
@@ -1054,6 +1059,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['promotion_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                $data[$key]['nameBn']           = $row['nameBn'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1071,7 +1077,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.tag','promotion');
-        $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
+        $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Tag"%');
         $qb->groupBy('promotion.id');
@@ -1082,6 +1088,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['tag_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                $data[$key]['nameBn']           = $row['nameBn'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1099,7 +1106,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.discount','discount');
-        $qb->select('discount.id as id','discount.name as name','discount.discountAmount as amount','discount.type as type','discount.path as path');
+        $qb->select('discount.id as id','discount.name as name','discount.nameBn as nameBn','discount.discountAmount as amount','discount.type as type','discount.path as path');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->orderBy('discount.id','DESC');
         $qb->groupBy('discount.id');
@@ -1109,6 +1116,7 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['discount_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
+                $data[$key]['nameBn']           = $row['nameBn'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1165,6 +1173,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['product_id']               = (int) $row['id'];
                     $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
+                    $data[$key]['nameBn']                   = $row['nameBn'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
                     $data[$key]['discountPrice']            = $row['discountPrice'];
@@ -1202,6 +1211,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['product_id']               = (int) $row['id'];
                     $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
+                    $data[$key]['nameBn']                   = $row['nameBn'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
                     $data[$key]['discountPrice']            = $row['discountPrice'];
@@ -1239,6 +1249,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['product_id']               = (int) $row['id'];
                     $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
+                    $data[$key]['nameBn']                   = $row['nameBn'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
                     $data[$key]['discountPrice']            = $row['discountPrice'];
@@ -1277,6 +1288,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['product_id']               = (int) $row['id'];
                     $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
+                    $data[$key]['nameBn']                   = $row['nameBn'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
                     $data[$key]['discountPrice']            = $row['discountPrice'];
@@ -1317,7 +1329,7 @@ class ItemRepository extends EntityRepository
             $config = $option->getEcommerceConfig()->getId();
             $qb = $this->createQueryBuilder('e');
             $qb->join('e.category','category');
-            $qb->select('category.id as id','category.name as name','category.imagePath as path');
+            $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path');
             $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
             $qb->andWhere("category.feature = 1");
             $qb->andWhere("e.isFeatureCategory = 1");
@@ -1330,6 +1342,7 @@ class ItemRepository extends EntityRepository
 
                 $data[$key]['id']               = (int) $parent['id'];
                 $data[$key]['name']             = $parent['name'];
+                $data[$key]['nameBn']             = $parent['nameBn'];
                 if($parent['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$parent['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1344,6 +1357,7 @@ class ItemRepository extends EntityRepository
                         $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
                         $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                         $data[$key]['products'][$p]['name']                     = $row['name'];
+                        $data[$key]['products'][$p]['nameBn']                   = $row['nameBn'];
                         $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                         $data[$key]['products'][$p]['price']                    = $row['price'];
                         $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
@@ -1376,7 +1390,7 @@ class ItemRepository extends EntityRepository
             $config =$option->getEcommerceConfig()->getId();
             $qb = $this->createQueryBuilder('e');
             $qb->join('e.brand','brand');
-            $qb->select('brand.id as id','brand.name as name','brand.path as path');
+            $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path');
             $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
             $qb->andWhere("brand.feature = 1");
             $qb->andWhere("e.isFeatureBrand = 1");
@@ -1388,6 +1402,7 @@ class ItemRepository extends EntityRepository
                 foreach($result as $key => $parent) {
                     $data[$key]['id']    = (int) $parent['id'];
                     $data[$key]['name']           = $parent['name'];
+                    $data[$key]['nameBn']           = $parent['nameBn'];
                     if($parent['path']){
                         $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$parent['path']}");
                         $data[$key]['imagePath']            =  $path;
@@ -1402,6 +1417,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
                             $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['nameBn']                   = $row['nameBn'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];
                             $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
@@ -1437,7 +1453,7 @@ class ItemRepository extends EntityRepository
             $config =$option->getEcommerceConfig()->getId();
             $qb = $this->createQueryBuilder('e');
             $qb->join('e.promotion','promotion');
-            $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
+            $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path');
             $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
             $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Promotion"%');
             $qb->groupBy('promotion.id');
@@ -1448,6 +1464,7 @@ class ItemRepository extends EntityRepository
                 foreach($result as $key => $parent) {
                     $data[$key]['id']               = (int) $parent['id'];
                     $data[$key]['name']             = $parent['name'];
+                    $data[$key]['nameBn']             = $parent['nameBn'];
                     if($parent['path']){
                         $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$parent['path']}");
                         $data[$key]['imagePath']     =  $path;
@@ -1461,6 +1478,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
                             $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['nameBn']                   = $row['nameBn'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];
                             $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
@@ -1496,7 +1514,7 @@ class ItemRepository extends EntityRepository
             $config =$option->getEcommerceConfig()->getId();
             $qb = $this->createQueryBuilder('e');
             $qb->join('e.promotion','promotion');
-            $qb->select('promotion.id as id','promotion.name as name','promotion.path as path');
+            $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path');
             $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
             $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Tag"%');
             $qb->groupBy('promotion.id');
@@ -1507,6 +1525,7 @@ class ItemRepository extends EntityRepository
                 foreach($result as $key => $parent) {
                     $data[$key]['id']               = (int) $parent['id'];
                     $data[$key]['name']             = $parent['name'];
+                    $data[$key]['nameBn']             = $parent['nameBn'];
                     if($parent['path']){
                         $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$parent['path']}");
                         $data[$key]['imagePath']     =  $path;
@@ -1520,6 +1539,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
                             $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['nameBn']                   = $row['nameBn'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];
                             $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
@@ -1554,7 +1574,7 @@ class ItemRepository extends EntityRepository
             $config =$option->getEcommerceConfig()->getId();
             $qb = $this->createQueryBuilder('e');
             $qb->join('e.discount','discount');
-            $qb->select('discount.id as id','discount.name as name','discount.path as path');
+            $qb->select('discount.id as id','discount.name as name','discount.nameBn as nameBn','discount.path as path');
             $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
             $qb->groupBy('discount.id');
             $qb->orderBy('discount.id','DESC');
@@ -1564,6 +1584,7 @@ class ItemRepository extends EntityRepository
                 foreach($result as $key => $parent) {
                     $data[$key]['id']               = (int) $parent['id'];
                     $data[$key]['name']             = $parent['name'];
+                    $data[$key]['nameBn']             = $parent['nameBn'];
                     if($parent['path']){
                         $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$parent['path']}");
                         $data[$key]['imagePath']     =  $path;
@@ -1577,6 +1598,7 @@ class ItemRepository extends EntityRepository
                             $data[$key]['products'][$p]['product_id']               = (int) $row['id'];
                             $data[$key]['products'][$p]['item_id']                  = (int) rand(time(),10);
                             $data[$key]['products'][$p]['name']                     = $row['name'];
+                            $data[$key]['products'][$p]['nameBn']                   = $row['nameBn'];
                             $data[$key]['products'][$p]['quantity']                 = $row['quantity'];
                             $data[$key]['products'][$p]['price']                    = $row['price'];
                             $data[$key]['products'][$p]['discountPrice']            = $row['discountPrice'];
@@ -1618,7 +1640,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
+        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');

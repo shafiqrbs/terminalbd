@@ -152,6 +152,7 @@ class EcommerceConfigType extends AbstractType
                 ),
             ))
             ->add('file')
+            ->add('isPurchaseStock')
             ->add('cashOnDelivery')
             ->add('mobileFilter')
             ->add('cartSearch')

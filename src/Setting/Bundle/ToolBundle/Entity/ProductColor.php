@@ -4,7 +4,6 @@ namespace Setting\Bundle\ToolBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ItemColor
@@ -37,6 +36,7 @@ class ProductColor
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
 
     /**
      * @Gedmo\Slug(fields={"name"})

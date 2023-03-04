@@ -9,7 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class CustomCategoryType extends AbstractType
 {
@@ -40,6 +39,9 @@ class CustomCategoryType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
+            ))
+
+            ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter category name bangla'),
             ))
 
             ->add('parent', 'entity', array(

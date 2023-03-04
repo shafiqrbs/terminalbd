@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\EcommerceBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Product\Bundle\ProductBundle\Entity\Category;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
@@ -38,6 +37,7 @@ class DiscountType extends AbstractType
         $builder
 
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount title')))
+            ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount title(Bangla) ')))
             ->add('discountAmount','number', array('attr'=>array('class'=>'m-wrap span6 numeric','placeholder'=>'Add discount amount percentage/flat'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add discount amount percentage/flat'))

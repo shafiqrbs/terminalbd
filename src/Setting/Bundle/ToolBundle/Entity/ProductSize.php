@@ -2,11 +2,8 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Product\Bundle\ProductBundle\Entity\Category;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ProductSize
@@ -32,6 +29,14 @@ class ProductSize
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="nameBn", type="string", length=255)
+     */
+    private $nameBn;
 
 
     /**
@@ -179,14 +184,24 @@ class ProductSize
         return $code;
     }
 
-    
+
     /**
-     * @return OrderItem
+     * @return string
      */
-    public function getOrderItem()
+    public function getNameBn()
     {
-        return $this->orderItem;
+        return $this->nameBn;
     }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
+    }
+
+
 
     
 }

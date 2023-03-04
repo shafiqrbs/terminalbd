@@ -10,6 +10,7 @@ use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Promotion
  *
@@ -93,6 +94,13 @@ class Promotion
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="nameBn", type="string", length=255)
+     */
+    private $nameBn;
 
     /**
      * @var array
@@ -519,6 +527,22 @@ class Promotion
     public function getEcommerceMenuTag()
     {
         return $this->ecommerceMenuTag;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameBn()
+    {
+        return $this->nameBn;
+    }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
     }
 
 }

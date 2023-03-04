@@ -3,12 +3,6 @@
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
-use Setting\Bundle\AppearanceBundle\Entity\Feature;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 /**
@@ -44,6 +38,14 @@ class TimePeriod
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="nameBn", type="string", length=255)
+     */
+    private $nameBn;
 
 
     /**
@@ -167,6 +169,22 @@ class TimePeriod
     public function getOrders()
     {
         return $this->orders;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameBn()
+    {
+        return $this->nameBn;
+    }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
     }
 
 

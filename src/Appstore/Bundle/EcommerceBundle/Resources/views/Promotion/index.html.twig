@@ -39,34 +39,47 @@
 
                             <div class="row-fluid">
                                 <div class="span6">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="">Type</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.type) }}
-                                                {{ form_errors(form.type) }}
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="">Type</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.type) }}
+                                                    {{ form_errors(form.type) }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="">Name</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-font"></i>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="">Name</label>
+                                                <div class="controls">
                                                     {{ form_widget(form.name) }}
                                                     {{ form_errors(form.name) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="">Is Feature</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.feature) }}
-                                                {{ form_errors(form.feature) }}
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="">Name (Bangla)</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.nameBn) }}
+                                                    {{ form_errors(form.nameBn) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="">Is Feature</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.feature) }}
+                                                    {{ form_errors(form.feature) }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -131,6 +144,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Name(Bangla)</th>
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Type</th>
                                     <th class="numeric" >Feature</th>
@@ -150,6 +164,7 @@
                                                 <li><img src="{% if entity.webPath is not empty  %}{{ image(entity.webPath).scaleResize(300,300) }}{% endif %}" alt="" /></li>
                                             </ul>
                                         </td>
+                                        <td class="numeric" >{{ entity.nameBn }}</td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >
                                             {% if(entity.type is not empty) %}

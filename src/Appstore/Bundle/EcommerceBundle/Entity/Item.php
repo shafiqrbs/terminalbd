@@ -12,9 +12,7 @@ use Setting\Bundle\ToolBundle\Entity\ItemAssurance;
 use Setting\Bundle\ToolBundle\Entity\ProductColor;
 use Setting\Bundle\ToolBundle\Entity\ProductSize;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -160,6 +158,14 @@ class Item
      * @ORM\Column(name="productBengalName", type="string", length=255, nullable = true)
      */
     private $productBengalName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nameBn", type="string", length=255, nullable = true)
+     */
+    private $nameBn;
 
 
     /**
@@ -1555,6 +1561,21 @@ class Item
         $this->adjustmentQuantity = $adjustmentQuantity;
     }
 
+    /**
+     * @return string
+     */
+    public function getNameBn()
+    {
+        return $this->nameBn;
+    }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
+    }
 
 
 

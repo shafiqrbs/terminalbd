@@ -45,10 +45,13 @@
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
-                                    <div class="span6">
+                                    <div class="span4">
                                         <input type="text" id="parent" name="parent" class="span12 m-wrap" value="{% if searchForm.parent is defined %}{{ searchForm.parent }}{% endif %}" autocomplete="off" placeholder="Enter category parent name ">
                                     </div>
-                                    <div class="span6">
+                                    <div class="span4">
+                                        <input type="text" id="nameBn" name="nameBn" class="span12 m-wrap" value="{% if searchForm.nameBn is defined %}{{ searchForm.nameBn }}{% endif %}" autocomplete="off" placeholder="Enter category name bangla ">
+                                    </div>
+                                    <div class="span4">
                                         <div class="controls">
                                             <div class="input-append span11">
                                                 <input type="text" id="name" name="name" class="span11 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}" autocomplete="off" placeholder="Enter name ">
@@ -68,6 +71,7 @@
                                 {%  set sort = app.request.query.get('sort') %}
                                 {%  set direction = app.request.query.get('direction') %}
                                 <th {% if pagination.isSorted('e.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'e.name') }}{% if( direction == 'desc' and sort == 'e.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
+                                <th {% if pagination.isSorted('e.nameBn') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name(Bangla)', 'e.nameBn') }}{% if( direction == 'desc' and sort == 'e.nameBn') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                 <th {% if pagination.isSorted('p.name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Parent', 'p.name') }}{% if( direction == 'desc' and sort == 'p.name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                 <th {% if pagination.isSorted('e.feature') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Is Feature', 'e.feature') }}{% if( direction == 'desc' and sort == 'e.feature') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                 <th {% if pagination.isSorted('e.path') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Image', 'e.path') }}{% if( direction == 'desc' and sort == 'e.path') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
@@ -81,6 +85,7 @@
                             {% for entity in pagination %}
                                 <tr>
                                     <td class="numeric" ><a href="{{ path('ecommerce_category_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                    <td class="numeric" >{{ entity.nameBn }}</td>
                                     <td class="numeric">{% if entity.parent is not empty %}{{ entity.parent.name|default('---') }}{% endif %}</td>
                                     <td class="numeric" >
                                         {% if entity.feature == 1 %}

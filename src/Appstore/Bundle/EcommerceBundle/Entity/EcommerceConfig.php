@@ -5,8 +5,8 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * EcommerceConfig
@@ -261,6 +261,14 @@ class EcommerceConfig
      * @ORM\Column(name="uploadFile", type="boolean")
      */
     private $uploadFile = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPurchaseStock", type="boolean")
+     */
+    private $isPurchaseStock = false;
 
     /**
      * @var boolean
@@ -1605,6 +1613,24 @@ class EcommerceConfig
     {
         $this->productMode = $productMode;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPurchaseStock()
+    {
+        return $this->isPurchaseStock;
+    }
+
+    /**
+     * @param bool $isPurchaseStock
+     */
+    public function setIsPurchaseStock($isPurchaseStock)
+    {
+        $this->isPurchaseStock = $isPurchaseStock;
+    }
+
+
 
 
 }

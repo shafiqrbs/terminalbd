@@ -20,7 +20,9 @@ class PromotionType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add your promotion/tag name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add your promotion/tag name'))
-                )))
+            )))
+            ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add your promotion/tag name bangla'),
+            ))
             ->add('feature')
             ->add('type', 'choice', array(
                 'attr'=>array('class'=>'check-list'),

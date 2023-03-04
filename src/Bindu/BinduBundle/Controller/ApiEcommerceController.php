@@ -2,20 +2,13 @@
 
 namespace Bindu\BinduBundle\Controller;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
-use Appstore\Bundle\EcommerceBundle\Entity\Item;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Gregwar\Image\Image;
-use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -396,6 +389,7 @@ class ApiEcommerceController extends Controller
                     $data[$key]['product_id']               = (int) $row['id'];
                     $data[$key]['item_id']                  = (int) rand(time(),10);
                     $data[$key]['name']                     = $row['name'];
+                    $data[$key]['nameBn']                   = $row['nameBn'];
                     $data[$key]['quantity']                 = $row['quantity'];
                     $data[$key]['price']                    = $row['price'];
                     $data[$key]['discountPrice']            = $row['discountPrice'];

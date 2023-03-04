@@ -7,8 +7,8 @@ use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -70,6 +70,14 @@ class ItemBrand  implements CodeAwareEntity
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nameBn", type="string", length=255)
+     */
+    private $nameBn;
 
 
     /**
@@ -458,6 +466,23 @@ class ItemBrand  implements CodeAwareEntity
     {
         $this->feature = $feature;
     }
+
+    /**
+     * @return string
+     */
+    public function getNameBn()
+    {
+        return $this->nameBn;
+    }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
+    }
+
 
 
 }

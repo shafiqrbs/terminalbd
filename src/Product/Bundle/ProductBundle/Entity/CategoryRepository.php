@@ -4,8 +4,6 @@ namespace Product\Bundle\ProductBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
-use Doctrine\Common\Util\Debug;
-use Doctrine\ORM\Query\Expr\Orx;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 
 /**
@@ -24,12 +22,16 @@ class CategoryRepository extends MaterializedPathRepository
         $direction = isset($data['direction'])? $data['direction'] :'ASC';
 
         $name = isset($data['name'])? $data['name'] :'';
+        $nameBn = isset($data['nameBn'])? $data['nameBn'] :'';
         $parent = isset($data['parent'])? $data['parent'] :'';
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.parent','p');
         $qb->where('e.ecommerceConfig = :config')->setParameter('config', $config) ;
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+         if (!empty($nameBn)) {
+            $qb->andWhere($qb->expr()->like("e.nameBn", "'%$nameBn%'"  ));
         }
         if(!empty($parent)){
             $qb->andWhere("p.name LIKE :parent");

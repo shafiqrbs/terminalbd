@@ -5,18 +5,18 @@ namespace Product\Bundle\ProductBundle\Entity;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemCategoryGrouping;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
+use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureCategory;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\ContentBundle\Entity\MallConnect;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Category
@@ -160,6 +160,12 @@ class Category
      */
     private $name;
 
+     /**
+     * @var string
+     * @ORM\Column(name="nameBn", type="string", length=255)
+     */
+    private $nameBn;
+
     /**
      * @var string
      * @ORM\Column(name="content", type="text", nullable=true)
@@ -176,6 +182,17 @@ class Category
      * @Doctrine\ORM\Mapping\Column(unique=false)
      */
     private $slug;
+
+    /**
+     * @Gedmo\Slug(handlers={
+     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
+     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="parent"),
+     *          @Gedmo\SlugHandlerOption(name="separator", value="-")
+     *      })
+     * }, fields={"nameBn"})
+     * @Doctrine\ORM\Mapping\Column(unique=false)
+     */
+    private $slugBn;
 
     /**
      * @Gedmo\TreeParent
@@ -706,6 +723,40 @@ class Category
     {
         $this->itemGroup = $itemGroup;
     }
+
+    /**
+     * @return string
+     */
+    public function getNameBn()
+    {
+        return $this->nameBn;
+    }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlugBn()
+    {
+        return $this->slugBn;
+    }
+
+    /**
+     * @param mixed $slugBn
+     */
+    public function setSlugBn($slugBn)
+    {
+        $this->slugBn = $slugBn;
+    }
+
+
 
 
 }
