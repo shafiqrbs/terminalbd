@@ -718,7 +718,6 @@ class ItemRepository extends EntityRepository
 
     public function getApiProduct(GlobalOption $option,$data = array())
     {
-
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('item');
         $qb->leftJoin('item.productUnit','productUnit');
@@ -728,12 +727,12 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
         $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
-        $qb->addSelect('category.name as categoryName','category.id as categoryId');
-        $qb->addSelect('brand.name as brandName','brand.id as brandId');
+        $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
+        $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
-        $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
-        $qb->addSelect('promotion.name as promotionName','promotion.id as promotionId');
-        $qb->addSelect('tag.name as tagName','tag.id as tagId');
+        $qb->addSelect('discount.name as discountName','discount.nameBn as discountNameBn','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
+        $qb->addSelect('promotion.name as promotionName','promotion.nameBn as promotionNameBn','promotion.id as promotionId');
+        $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $this->handleApiSearchBetween($qb,$data);
         $qb->orderBy('item.webName','DESC');
@@ -752,14 +751,14 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable');
-        $qb->addSelect('random() as HIDDEN rand');
-        $qb->addSelect('category.name as categoryName','category.id as categoryId');
-        $qb->addSelect('brand.name as brandName','brand.id as brandId');
+        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
+        $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
+        $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
-        $qb->addSelect('discount.name as discountName','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
-        $qb->addSelect('promotion.name as promotionName','promotion.id as promotionId');
-        $qb->addSelect('tag.name as tagName','tag.id as tagId');
+        $qb->addSelect('discount.name as discountName','discount.nameBn as discountNameBn','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
+        $qb->addSelect('promotion.name as promotionName','promotion.nameBn as promotionNameBn','promotion.id as promotionId');
+        $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
+        $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $this->handleApiSearchBetween($qb,$data);
         $qb->setMaxResults(24);
