@@ -4,17 +4,17 @@
         <div class="col-md-12 print-bar">
             <form action="" method="get">
                 <div class="row">
-                    <div class="col-md-2 margin-top">
+                    <div class="col-md-3 margin-top">
                         <label>Service Group</label>
                         <select name="serviceGroup" id="serviceGroup" class="search-input select2 span12 m-wrap">
                             <option value="" >--Select Service Group--</option>
                             {% for group in serviceGroups %}
-                                <option {% if searchForm.serviceGroup is defined and searchForm.serviceGroup == group.id %} selected="selected" {% endif %} value="{{ group.id }}" >{{ group.name }}</option>
+                                <option {% if searchForm.group is defined and searchForm.serviceGroup == group.id %} selected="selected" {% endif %} value="{{ group.id }}" >{{ group.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-2 margin-top">
-                        <label>Surgery</label>
+                    <div class="col-md-3 margin-top">
+                        <label>Surgery Department</label>
                         <select name="surgeryDepartment" id="surgeryDepartment" class="search-input select2 span12 m-wrap">
                             <option value="" >--Select Surgery Department--</option>
                             {% for item in surgeryDepartment %}
@@ -22,29 +22,31 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-2 margin-top">
-                        <label>Category</label>
-                        <select name="category" id="category" class="select2 span12">
-                            <option value="">---Select category---</option>
-                            {% for cat in categories %}
-                                <option value="{{ cat.id }}" {% if searchForm.category is defined and cat.id == searchForm.category %} selected="selected" {% endif %}>{{ cat.name }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="span4">
+                        <div class="controls">
+                            <select name="category" id="category" class="select2 span12">
+                                <option value="">---Select category---</option>
+                                {% for cat in categories %}
+                                    <option value="{{ cat.id }}" {% if searchForm.category is defined and cat.id == searchForm.category %} selected="selected" {% endif %}>{{ cat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-2 margin-top">
-                        <label>Category</label>
-                        <select name="department" id="department" class="select2 span12">
-                            <option value="">---Select department---</option>
-                            {% for dep in departments %}
-                                <option value="{{ dep.id }}" {% if searchForm.department is defined and dep.id == searchForm.department %} selected="selected" {% endif %}>{{ dep.name }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="span4">
+                        <div class="controls">
+                            <select name="department" id="department" class="select2 span12">
+                                <option value="">---Select department---</option>
+                                {% for dep in departments %}
+                                    <option value="{{ dep.id }}" {% if searchForm.department is defined and dep.id == searchForm.department %} selected="selected" {% endif %}>{{ dep.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-1 margin-top">
+                    <div class="col-md-3 margin-top">
                         <label>Start Date</label>
                         <input type="date" class="m-wrap datepicker"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                     </div>
-                    <div class="col-md-1 margin-top">
+                    <div class="col-md-2 margin-top">
                         <label>End Date</label>
                         <input type="date" class="m-wrap datepicker"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>

@@ -57,6 +57,10 @@ hms_invoice_admission_reverse_show:
     path:     /{invoice}/reverse-show
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionInvoiceReverseShow" }
 
+hms_invoice_admission_admission_card:
+    path:     /{id}/admission_card
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionCard" }
+
 hms_invoice_admission_particular_search:
     path:     /particular-search
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:particularSearch" }

@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
-use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -13,9 +12,9 @@ use Appstore\Bundle\HospitalBundle\Form\NewPatientAdmissionType;
 use Appstore\Bundle\HospitalBundle\Form\PatientAdmissionType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -696,6 +695,28 @@ class InvoiceAdmissionController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
         if ($inventory == $entity->getHospitalConfig()->getId()) {
             return $this->render('HospitalBundle:InvoiceAdmission:show.html.twig', array(
+                'entity' => $entity,
+            ));
+        } else {
+            return $this->redirect($this->generateUrl('hms_invoice_admission'));
+        }
+
+    }
+
+    public function admissionCardAction(Invoice $entity)
+    {
+
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        if ($hospital->getId() == $entity->getHospitalConfig()->getId()) {
+            if($hospital->isCustomPrint() == 1){
+                $template = "Print/{$hospital->getGlobalOption()->getId()}";
+            }else{
+                $template = "Print";
+            }
+            $barcode = $this->getBarcode($entity->getCustomer()->getPatientId());
+            return $this->render("HospitalBundle:{$template}:admission-card.html.twig", array(
+                'config' => $hospital,
+                'barcode' => $barcode,
                 'entity' => $entity,
             ));
         } else {

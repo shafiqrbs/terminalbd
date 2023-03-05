@@ -204,6 +204,15 @@ class Order
     private $comment;
 
 
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+
     /**
      * @var string
      *
@@ -1485,6 +1494,22 @@ class Order
     public function setIsArchive($isArchive)
     {
         $this->isArchive = $isArchive;
+    }
+
+    /**
+     * @return text
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param text $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 
 

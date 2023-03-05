@@ -98,6 +98,13 @@ api_ecommerce_order:
     options:
             expose: true
 
+api_ecommerce_upload_order:
+    path:     /order-upload
+    defaults: { _controller: BinduBundle:ApiEcommerce:orderUpload }
+    methods:  POST
+    options:
+            expose: true
+
 api_ecommerce_order_list:
     path:     /order-list
     defaults: { _controller: BinduBundle:ApiEcommerce:orderList }

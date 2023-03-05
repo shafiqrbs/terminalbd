@@ -6,7 +6,6 @@ use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -1281,8 +1280,8 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
-        $assistantDoctor = isset($data['assistantDoctor'])? $data['assistantDoctor'] :'';
-        $anesthesiaDoctor = isset($data['anesthesiaDoctor'])? $data['anesthesiaDoctor'] :'';
+        $department = isset($data['department'])? $data['department'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
         $user = isset($data['user'])? $data['user'] :'';
         $process = isset($data['process'])? $data['process'] :'';
         $surgeryDepartment = isset($data['surgeryDepartment'])? $data['surgeryDepartment'] :'';
@@ -1306,8 +1305,16 @@ class InvoiceRepository extends EntityRepository
             $qb->setParameter('assignDoctor', $assignDoctor);
         }
         if(!empty($surgeryDepartment)){
-            $qb->andWhere("sd.id = :department");
-            $qb->setParameter('department', $surgeryDepartment);
+            $qb->andWhere("sd.id = :surgeryDepartment");
+            $qb->setParameter('surgeryDepartment', $surgeryDepartment);
+        }
+        if(!empty($category)){
+            $qb->andWhere("p.category = :category");
+            $qb->setParameter('category', $department);
+        }
+        if(!empty($department)){
+            $qb->andWhere("p.department = :department");
+            $qb->setParameter('department', $department);
         }
         if(!empty($user)){
             $qb->andWhere("e.createdBy = :user");

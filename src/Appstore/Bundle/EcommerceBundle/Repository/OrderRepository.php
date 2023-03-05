@@ -240,6 +240,7 @@ class OrderRepository extends EntityRepository
         }else{
             $order->setCashOnDelivery(true);
         }
+
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $order->setShippingCharge($shippingCharge);
         $vat = $this->getCulculationVat($globalOption, $cart->total());
@@ -395,6 +396,52 @@ class OrderRepository extends EntityRepository
         $entity->setDueAmount($due);
         $em->persist($entity);
         $em->flush();
+    }
+
+    public function insertAndroidUploadOrder(GlobalOption $option , $orderJson= array())
+    {
+
+
+        $userId         = empty($userJson['userId']) ? '' : $userJson['userId'];
+        $user           = $em->getRepository('UserBundle:User')->find($userId);
+        $address        = empty($userJson['address']) ? '' : $userJson['address'];
+        $mobile         = empty($userJson['mobile']) ? '' : $userJson['mobile'];
+        $location       = empty($userJson['location']) ? '' : $userJson['location'];
+
+        $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
+        $comment        = empty($orderJson['comment']) ? '' : $orderJson['comment'];
+        $deliveryDate   = empty($orderJson['deliveryDate']) ? '' : $orderJson['deliveryDate'];
+        $timePeriod     = empty($orderJson['timePeriod']) ? '' : $orderJson['timePeriod'];
+        $find = $this->findOneBy(array('globalOption' => $option,'orderId'=> $orderId));
+        if(empty($find)){
+            $order = new Order();
+            $order->setGlobalOption($option);
+            $order->setCreatedBy($user);
+            $order->setAddress($address);
+            $order->setCustomerMobile($mobile);
+            $order->setComment($mobile);
+            $order->setOrderId($orderId);
+            if($location){
+                $loc = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($location);
+                $order->setLocation($loc);
+            }
+            if($timePeriod){
+                $period = $em->getRepository('EcommerceBundle:TimePeriod')->find($timePeriod);
+                $order->setTimePeriod($period);
+            }
+            if(empty($deliveryDate)){
+                $order->setDeliveryDate(new \DateTime("now"));
+            }else{
+                $date =new \DateTime($deliveryDate);
+                $order->setDeliveryDate($date);
+            }
+            $order->setCashOnDelivery(true);
+            $order->setEcommerceConfig($option->getEcommerceConfig());
+            $em->persist($order);
+            $em->flush();
+            return $order;
+        }
+        return false;
     }
 
     public function insertAndroidOrder(GlobalOption $option , $data= array())

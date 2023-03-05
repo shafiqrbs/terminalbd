@@ -2,14 +2,13 @@
 
 namespace Terminalbd\ReportBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Core\UserBundle\Entity\User;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 
 /**
  * @Route("/mis")
@@ -1164,10 +1163,14 @@ class ReportController extends Controller
         $serviceGroups = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getServiceGroups($hospital);
         $surgeryDepartment = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=> $hospital,'service'=>10),array('name'=>"ASC"));
         $entities = $em->getRepository('HospitalBundle:Invoice')->reportAdmissionService($user , $mode = 'admission' , $data);
+        $categories = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>2),array('name' =>'asc' ));
+        $departments = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>7),array('name' =>'asc' ));
         return $this->render('ReportBundle:Hospital/Sales:service.html.twig', array(
             'entities' => $entities,
             'serviceGroups' => $serviceGroups,
+            'departments' => $departments,
             'surgeryDepartment' => $surgeryDepartment,
+            'categories' => $categories,
             'searchForm' => $data,
             'option' => $globalOption,
 

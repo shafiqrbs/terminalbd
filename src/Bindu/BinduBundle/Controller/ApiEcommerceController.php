@@ -519,10 +519,9 @@ class ApiEcommerceController extends Controller
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['tagBn']                    = $row['tagNameBn'];
                     $data[$key]['unitName']                 = $row['unitName'];
-                    $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
+                    $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
                     $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
-                        //$path = $this->resizeFilter("uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}");
                         $data[$key]['imagePath']            =  $_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";
                     }else{
                         $data[$key]['imagePath']            = "";
@@ -856,6 +855,38 @@ class ApiEcommerceController extends Controller
             $entity = $this->checkApiValidation($request);
 
             $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
+            if($order){
+                $returnData = array('orderId'=>$order->getId(),'invoice'=>$order->getInvoice(),'status'=>'success');
+            }else{
+                $returnData = array('orderId'=>'','invoice'=>'','status'=>'failed');
+            }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($returnData));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+
+    public function orderUploadAction(Request $request)
+    {
+
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+            $entity = $this->checkApiValidation($request);
+
+            $data = $request->request->all();
+            $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($entity,$data);
             if($order){
                 $returnData = array('orderId'=>$order->getId(),'invoice'=>$order->getInvoice(),'status'=>'success');
             }else{
