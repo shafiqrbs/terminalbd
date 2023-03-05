@@ -1070,6 +1070,84 @@ class TemplateCustomize
     private $footerAnchorColorHover;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="appBarColor", type="string", length=15, nullable=true)
+     */
+    private $appBarColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appPrimaryColor", type="string", length=15, nullable=true)
+     */
+    private $appPrimaryColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appSecondaryColor", type="string", length=15, nullable=true)
+     */
+    private $appSecondaryColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appTextTitle", type="string", length=15, nullable=true)
+     */
+    private $appTextTitle;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appTextColor", type="string", length=15, nullable=true)
+     */
+    private $appTextColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appBorderColor", type="string", length=15, nullable=true)
+     */
+    private $appBorderColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appMoreColor", type="string", length=15, nullable=true)
+     */
+    private $appMoreColor;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="appCartColor", type="string", length=15, nullable=true)
+     */
+    private $appCartColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appNegativeColor", type="string", length=15, nullable=true)
+     */
+    private $appNegativeColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appPositiveColor", type="string", length=15, nullable=true)
+     */
+    private $appPositiveColor;
+
+
     /**
      * @var text
      *
@@ -3686,6 +3764,167 @@ class TemplateCustomize
     {
         $this->contactEmail = $contactEmail;
     }
+
+    /**
+     * @return string
+     */
+    public function getAppBarColor()
+    {
+        return $this->appBarColor;
+    }
+
+    /**
+     * @param string $appBarColor
+     */
+    public function setAppBarColor($appBarColor)
+    {
+        $this->appBarColor = $appBarColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppPrimaryColor()
+    {
+        return $this->appPrimaryColor;
+    }
+
+    /**
+     * @param string $appPrimaryColor
+     */
+    public function setAppPrimaryColor($appPrimaryColor)
+    {
+        $this->appPrimaryColor = $appPrimaryColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppSecondaryColor()
+    {
+        return $this->appSecondaryColor;
+    }
+
+    /**
+     * @param string $appSecondaryColor
+     */
+    public function setAppSecondaryColor($appSecondaryColor)
+    {
+        $this->appSecondaryColor = $appSecondaryColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppTextTitle()
+    {
+        return $this->appTextTitle;
+    }
+
+    /**
+     * @param string $appTextTitle
+     */
+    public function setAppTextTitle($appTextTitle)
+    {
+        $this->appTextTitle = $appTextTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppTextColor()
+    {
+        return $this->appTextColor;
+    }
+
+    /**
+     * @param string $appTextColor
+     */
+    public function setAppTextColor($appTextColor)
+    {
+        $this->appTextColor = $appTextColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppBorderColor()
+    {
+        return $this->appBorderColor;
+    }
+
+    /**
+     * @param string $appBorderColor
+     */
+    public function setAppBorderColor($appBorderColor)
+    {
+        $this->appBorderColor = $appBorderColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppMoreColor()
+    {
+        return $this->appMoreColor;
+    }
+
+    /**
+     * @param string $appMoreColor
+     */
+    public function setAppMoreColor($appMoreColor)
+    {
+        $this->appMoreColor = $appMoreColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppCartColor()
+    {
+        return $this->appCartColor;
+    }
+
+    /**
+     * @param string $appCartColor
+     */
+    public function setAppCartColor($appCartColor)
+    {
+        $this->appCartColor = $appCartColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppNegativeColor()
+    {
+        return $this->appNegativeColor;
+    }
+
+    /**
+     * @param string $appNegativeColor
+     */
+    public function setAppNegativeColor($appNegativeColor)
+    {
+        $this->appNegativeColor = $appNegativeColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppPositiveColor()
+    {
+        return $this->appPositiveColor;
+    }
+
+    /**
+     * @param string $appPositiveColor
+     */
+    public function setAppPositiveColor($appPositiveColor)
+    {
+        $this->appPositiveColor = $appPositiveColor;
+    }
+
 
 
 }

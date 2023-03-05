@@ -131,6 +131,21 @@ class ApiEcommerceController extends Controller
 
     }
 
+    function hex6ToHex8($hex6) {
+        // Convert the 6-digit HEX color code to RGB values
+        $r = hexdec(substr($hex6, 0, 2));
+        $g = hexdec(substr($hex6, 2, 2));
+        $b = hexdec(substr($hex6, 4, 2));
+
+        // Calculate the alpha value as fully opaque (255)
+        $alpha = str_pad(dechex(255), 2, '0', STR_PAD_LEFT);
+
+        // Convert the RGB values and alpha value to an 8-digit HEX color code
+        $hex8 = $alpha . str_pad(dechex($r), 2, '0', STR_PAD_LEFT) . str_pad(dechex($g), 2, '0', STR_PAD_LEFT) . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
+        return $hex8;
+
+    }
+
     public function setupAction(Request $request)
     {
 
@@ -164,6 +179,18 @@ class ApiEcommerceController extends Controller
             $path = $entity->getEcommerceConfig()->getWebPath();
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
+            $appPrimaryColor = $entity->getTemplateCustomize()->getAppPrimaryColor();
+            $appSecondaryColor = $entity->getTemplateCustomize()->getAppSecondaryColor();
+            $appBarColor = $entity->getTemplateCustomize()->getAppBarColor();
+            $appTextTitle = $entity->getTemplateCustomize()->getAppTextTitle();
+            $appTextColor = $entity->getTemplateCustomize()->getAppTextColor();
+            $appCartColor = $entity->getTemplateCustomize()->getAppCartColor();
+            $appMoreColor = $entity->getTemplateCustomize()->getAppMoreColor();
+            $appBorderColor = $entity->getTemplateCustomize()->getAppBorderColor();
+            $appPositiveColor = $entity->getTemplateCustomize()->getAppPositiveColor();
+            $appNegativeColor = $entity->getTemplateCustomize()->getAppNegativeColor();
+
+
             $data = array(
                     'setupId' => $entity->getId(),
                     'uniqueCode' => $entity->getUniqueCode(),
@@ -188,6 +215,16 @@ class ApiEcommerceController extends Controller
                     'cashOnDelivery' => $cashOnDelivery,
                     'pickupLocation' => $pickupLocation,
                     'vatEnable' => $vatEnable,
+                    'appPrimaryColor' => (string)empty($appPrimaryColor)?'':$this->hex6ToHex8($appPrimaryColor),
+                    'appSecondaryColor' => (string)empty($appSecondaryColor)?'':$this->hex6ToHex8($appSecondaryColor) ,
+                    'appBarColor' => (string)empty($appBarColor)?'':$this->hex6ToHex8($appBarColor) ,
+                    'appTextTitle' => (string)empty($appTextTitle)?'':$this->hex6ToHex8($appTextTitle) ,
+                    'appTextColor' => (string)empty($appTextColor)?'':$this->hex6ToHex8($appTextColor) ,
+                    'appCartColor' => (string)empty($appCartColor)?'':$this->hex6ToHex8($appCartColor) ,
+                    'appMoreColor' => (string)empty($appMoreColor)?'':$this->hex6ToHex8($appMoreColor) ,
+                    'appBorderColor' => (string)empty($appBorderColor)?'':$this->hex6ToHex8($appBorderColor) ,
+                    'appPositiveColor' => (string)empty($appPositiveColor)?'':$this->hex6ToHex8($appPositiveColor) ,
+                    'appNegativeColor' => (string)empty($appNegativeColor)?'':$this->hex6ToHex8($appNegativeColor) ,
                     'logo'      =>  $_SERVER['HTTP_HOST']."/{$path}"
                 );
             }
