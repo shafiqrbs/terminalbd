@@ -1379,6 +1379,8 @@ class Builder extends ContainerAware
                     ;
         	    $menu['Medicine']['Manage Sales']->addChild('Hold Sales', array('route' => 'medicine_sales_hold'))
                     ;
+                $menu['Medicine']['Manage Sales']->addChild('Android Sales', array('route' => 'medicine_sales_android'))
+            ;
                 $menu['Medicine']['Manage Sales']->addChild('Sales Return')->setAttribute('dropdown', true);
         	    $menu['Medicine']['Manage Sales']['Sales Return']->addChild('Add Item Return', array('route' => 'medicine_sales_item'))
                     ;
