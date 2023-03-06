@@ -503,13 +503,13 @@ class ApiEcommerceController extends Controller
                     $data[$key]['discountPrice']            = $row['discountPrice'];
                     $data[$key]['categoryId']               = $row['categoryId'];
                     $data[$key]['category']                 = $row['categoryName'];
-                    $data[$key]['categoryBn']                 = $row['categoryNameBn'];
+                    $data[$key]['categoryBn']               = $row['categoryNameBn'];
                     $data[$key]['brandId']                  = $row['brandId'];
                     $data[$key]['brand']                    = $row['brandName'];
-                    $data[$key]['brandBn']                    = $row['brandNameBn'];
+                    $data[$key]['brandBn']                  = $row['brandNameBn'];
                     $data[$key]['discountId']               = $row['discountId'];
                     $data[$key]['discount']                 = $row['discountName'];
-                    $data[$key]['discountBn']                 = $row['discountNameBn'];
+                    $data[$key]['discountBn']               = $row['discountNameBn'];
                     $data[$key]['discountType']             = $row['discountType'];
                     $data[$key]['discountAmount']           = $row['discountAmount'];
                     $data[$key]['promotionId']              = $row['promotionId'];
@@ -518,8 +518,11 @@ class ApiEcommerceController extends Controller
                     $data[$key]['tagId']                    = $row['tagId'];
                     $data[$key]['tag']                      = $row['tagName'];
                     $data[$key]['tagBn']                    = $row['tagNameBn'];
+                    $data[$key]['shortDescription']         = $row['shortContent'];
+                    $data[$key]['shortDescriptionBn']       = $row['shortContentBn'];
+                    $data[$key]['tagBn']                    = $row['tagNameBn'];
                     $data[$key]['unitName']                 = $row['unitName'];
-                    $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
+                    $data[$key]['quantityApplicable']       = ($row['quantityApplicable']);
                     $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
                         $data[$key]['imagePath']            =  $_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";

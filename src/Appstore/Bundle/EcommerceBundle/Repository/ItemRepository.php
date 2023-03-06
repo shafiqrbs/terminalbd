@@ -726,7 +726,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
+        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity','item.shortContent as shortContent','item.shortContentBn as shortContentBn');
         $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
