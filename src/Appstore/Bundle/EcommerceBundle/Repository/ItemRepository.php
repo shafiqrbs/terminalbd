@@ -815,6 +815,149 @@ class ItemRepository extends EntityRepository
 
     public function getApiProductDetails(GlobalOption $option,$id)
     {
+
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('item');
+        $qb->leftJoin('item.productUnit','productUnit');
+        $qb->leftJoin('item.category','category');
+        $qb->leftJoin('item.brand','brand');
+        $qb->leftJoin('item.discount','discount');
+        $qb->leftJoin('item.promotion','promotion');
+        $qb->leftJoin('item.tag','tag');
+        $qb->leftJoin('item.itemColors','color');
+        $qb->leftJoin('item.country','c');
+        $qb->leftJoin('item.itemAssurance','ia');
+        $qb->leftJoin('item.itemSubs','subProduct');
+        $qb->leftJoin('subProduct.size','subSize');
+        $qb->leftJoin('subProduct.productUnit','subUnit');
+        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn',
+            'item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
+            'item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory','item.warningLabel as warningLabel','item.content as content','item.contentBn as contentBn');
+        $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
+        $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
+        $qb->addSelect('c.name as country');
+        $qb->addSelect('productUnit.name as unitName');
+        $qb->addSelect('ia.name as itemAssurance');
+        $qb->addSelect('discount.name as discountName','discount.nameBn as discountNameBn','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
+        $qb->addSelect('promotion.name as promotionName','promotion.nameBn as promotionNameBn','promotion.id as promotionId');
+        $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
+        $qb->addSelect('GROUP_CONCAT(tag.name) as tags');
+        $qb->addSelect('GROUP_CONCAT(tag.nameBn) as tagsBn');
+        $qb->addSelect('GROUP_CONCAT(color.name) as colors');
+        $qb->addSelect('GROUP_CONCAT(color.nameBn) as colorsBn');
+        $qb->addSelect("CASE WHEN (item.subProduct = 1 AND subProduct.id IS NOT NULL) THEN GROUP_CONCAT(CONCAT(subProduct.id,'*#*',subSize.name,'*#*',subUnit.name,'*#*', subProduct.salesPrice))  ELSE  '' END  as subProducts");
+        $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->andWhere("item.id = :pid")->setParameter('pid', $id);
+        $row = $qb->getQuery()->getOneOrNullResult();
+        $data = array();
+        if($row){
+            $data['product_id']               = (int) $row['id'];
+            $data['item_id']                  = (int) rand(time(),10);
+            $data['name']                     = $row['name'];
+            $data['nameBn']                   = $row['nameBn'];
+            $data['quantity']                 = $row['quantity'];
+            $data['price']                    = $row['price'];
+            $data['discountPrice']            = $row['discountPrice'];
+            $data['categoryId']               = $row['categoryId'];
+            $data['category']                 = $row['categoryName'];
+            $data['categoryBn']               = $row['categoryNameBn'];
+            $data['brandId']                  = $row['brandId'];
+            $data['brand']                    = $row['brandName'];
+            $data['brandBn']                  = $row['brandNameBn'];
+            $data['discountId']               = $row['discountId'];
+            $data['discount']                 = $row['discountName'];
+            $data['discountBn']               = $row['discountNameBn'];
+            $data['discountType']             = $row['discountType'];
+            $data['discountAmount']           = $row['discountAmount'];
+            $data['promotionId']              = $row['promotionId'];
+            $data['promotion']                = $row['promotionName'];
+            $data['promotionBn']              = $row['promotionNameBn'];
+            $data['tag']                      = $row['tags'];
+            $data['tagBn']                    = $row['tagsBn'];
+            $data['colors']                   = $row['colors'];
+            $data['colorsBn']                 = $row['colorsBn'];
+            $data['country']                  = $row['country'];
+            $data['shortDescription']         = $row['shortContent'];
+            $data['shortDescriptionBn']       = $row['shortContentBn'];
+            $data['description']              = $row['content'];
+            $data['descriptionBn']            = $row['contentBn'];
+            $data['tagBn']                    = $row['tagNameBn'];
+            $data['unitName']                 = $row['unitName'];
+            $data['itemAssurance']            = $row['itemAssurance'];
+            $data['warningLabel']             = $row['warningLabel'];
+            $data['isFeatureBrand']           = ($row['isFeatureBrand']) ? 1 : 0;
+            $data['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
+            $data['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
+            $data['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
+            if($row['path']){
+                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                $data['imagePath']            =  $path;
+            }else{
+                $data['imagePath']            = "";
+            }
+            $subProducts = explode(',', $row['subProducts']);
+            if(!empty($row['subProducts'])){
+                for ($i = 0 ; count($subProducts) > $i ; $i++ ){
+                    $subs  = explode("*#*",$subProducts[$i]);
+                    $data['measurement'][$i]['subItemId'] = (integer)$subs[0];
+                    $data['measurement'][$i]['name'] = (string)$subs[1];
+                    $data['measurement'][$i]['unit'] = (string)$subs[2];
+                    $data['measurement'][$i]['price'] = (integer)$subs[3];
+                }
+
+            }else{
+                $data['measurement'] = array();
+            }
+            /* @var $item Item */
+
+            $item = $this->find($row['id']);
+
+
+            if($item->getItemColors()){
+                foreach ($item->getItemColors() as $key => $sub ){
+                    $data['color'][$key]['colorId'] = (integer)$sub->getId();
+                    $data['color'][$key]['name'] = (string)$sub->getName();
+                    $data['color'][$key]['colorPlate'] =  (string)$sub->getColorPlate();
+                }
+
+            }else{
+                $data['color'] = array();
+            }
+
+            if($item->getItemKeyValues()){
+                foreach ($item->getItemKeyValues() as $key => $sub ){
+                    $data['specification'][$key]['metaId'] = (integer)$sub->getId();
+                    $data['specification'][$key]['label'] = (string)$sub->getMetaKey();
+                    $data['specification'][$key]['value'] = (string)$sub->getMetavalue();
+                }
+
+            }else{
+                $data['specification'] = array();
+            }
+
+            if($item->getItemGalleries()){
+                $data['gallery'][0]['imageId'] = -100;
+                $data['gallery'][0]['imagePath'] = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                $key = 1;
+                foreach ($item->getItemGalleries() as $sub ){
+                    $data['gallery'][$key]['imageId'] = (integer)$sub->getId();
+                    if($sub->getPath()){
+                        $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/item/{$item->getId()}/gallery/{$sub->getPath()}");
+                        $data['gallery'][$key]['imagePath']            =  $path;
+                    }else{
+                        $data['gallery'][$key]['imagePath']            = "";
+                    }
+                    $key++;
+                }
+            }else{
+                $data['gallery'] = array();
+            }
+        }
+        return $data;
+    }
+
+    public function getApiProductDetailsx(GlobalOption $option,$id)
+    {
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('item');
         $qb->leftJoin('item.productUnit','productUnit');
@@ -833,6 +976,8 @@ class ItemRepository extends EntityRepository
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("item.id = :pid")->setParameter('pid', $id);
         $row = $qb->getQuery()->getOneOrNullResult();
+        var_dump($row);
+        exit;
         $data = array();
         if($row){
             $data['product_id']               = (int) $row['itemId'];
