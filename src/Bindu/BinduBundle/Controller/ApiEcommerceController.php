@@ -522,7 +522,7 @@ class ApiEcommerceController extends Controller
                     $data[$key]['shortDescriptionBn']       = $row['shortContentBn'];
                     $data[$key]['tagBn']                    = $row['tagNameBn'];
                     $data[$key]['unitName']                 = $row['unitName'];
-                    $data[$key]['quantityApplicable']       = ($row['quantityApplicable']);
+                    $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
                     $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
                         $data[$key]['imagePath']            =  $_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";
