@@ -38,6 +38,14 @@ class ProductColor
     private $name;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="nameBn", type="string", length=255)
+     */
+    private $nameBn;
+
+
     /**
      * @Gedmo\Slug(fields={"name"})
      * @Doctrine\ORM\Mapping\Column(length=255)
@@ -203,6 +211,24 @@ class ProductColor
     {
         $this->colorPlate = $colorPlate;
     }
+
+    /**
+     * @return string
+     */
+    public function getNameBn()
+    {
+        return $this->nameBn;
+    }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
+    }
+
+
 
 }
 

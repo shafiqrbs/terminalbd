@@ -726,13 +726,24 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity','item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory');
+        $qb->leftJoin('item.itemColors','color');
+        $qb->leftJoin('item.country','c');
+        $qb->leftJoin('item.itemAssurance','ia');
+        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn',
+            'item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
+            'item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory','item.warningLabel as warningLabel');
         $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
+        $qb->addSelect('c.name as country');
         $qb->addSelect('productUnit.name as unitName');
+        $qb->addSelect('ia.name as itemAssurance');
         $qb->addSelect('discount.name as discountName','discount.nameBn as discountNameBn','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
         $qb->addSelect('promotion.name as promotionName','promotion.nameBn as promotionNameBn','promotion.id as promotionId');
         $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
+        $qb->addSelect('GROUP_CONCAT(tag.name) as tags');
+        $qb->addSelect('GROUP_CONCAT(tag.nameBn) as tagsBn');
+        $qb->addSelect('GROUP_CONCAT(color.name) as colors');
+        $qb->addSelect('GROUP_CONCAT(color.nameBn) as colorsBn');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $this->handleApiSearchBetween($qb,$data);
         $qb->orderBy('item.webName','DESC');
