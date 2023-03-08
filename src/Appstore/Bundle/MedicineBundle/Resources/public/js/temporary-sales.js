@@ -549,7 +549,8 @@ function jqueryTemporaryLoad() {
         var quantity = parseFloat($('#quantity-'+id).val());
         var price = parseFloat($('#salesPrice-'+id).val());
         var estimatePrice = parseFloat($('#estimatePrice-'+id).val());
-        var itemPercent = parseFloat($('#itemPercent-'+id).val());
+        var itemPercent     = parseFloat($('#itemPercent-'+id).val()  != '' ? $('#itemPercent-'+id).val() : 0 );
+
         var amount = (estimatePrice-(estimatePrice*itemPercent/100));
         var subTotal  = (quantity * amount);
 

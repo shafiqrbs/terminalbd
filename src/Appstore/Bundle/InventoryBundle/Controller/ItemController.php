@@ -3,21 +3,19 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\InventoryBundle\Form\EditItemType;
 use Appstore\Bundle\InventoryBundle\Form\ItemSearchType;
+use Appstore\Bundle\InventoryBundle\Form\ItemType;
 use Appstore\Bundle\InventoryBundle\Form\ItemWebType;
-use Cassandra\Time;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Appstore\Bundle\InventoryBundle\Entity\Item;
-use Appstore\Bundle\InventoryBundle\Form\ItemType;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Item controller.
@@ -137,6 +135,8 @@ class ItemController extends Controller
                 $entity->upload();
                 $em->persist($entity);
                 $em->flush();
+                $this->getDoctrine()->getRepository(\Appstore\Bundle\EcommerceBundle\Entity\Item::class)->insertNewInventoryItem($entity);
+
                 $this->get('session')->getFlashBag()->add(
                     'success', "Item has been added successfully"
                 );

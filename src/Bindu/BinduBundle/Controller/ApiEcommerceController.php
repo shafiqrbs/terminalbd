@@ -492,6 +492,7 @@ class ApiEcommerceController extends Controller
             $entity = $this->checkApiValidation($request);
             $result = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$search);
             $data = array();
+            /*
             if($result){
                 foreach($result as $key => $row) {
                     $data[$key]['product_id']               = (int) $row['id'];
@@ -537,9 +538,10 @@ class ApiEcommerceController extends Controller
                     }
                 }
             }
+            */
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode($result));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }

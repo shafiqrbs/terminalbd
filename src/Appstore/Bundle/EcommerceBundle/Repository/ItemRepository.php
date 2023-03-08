@@ -384,6 +384,29 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function insertNewInventoryItem(\Appstore\Bundle\InventoryBundle\Entity\Item  $copyEntity)
+    {
+        $em = $this->_em;
+        if($copyEntity)
+            $config = $copyEntity->getInventoryConfig()->getGlobalOption()->getEcommerceConfig();
+        $exist = $this->findOneBy(array('ecommerceConfig' => $config, 'webName' => $copyEntity->getName(), 'inventoryItem' => $copyEntity->getId()));
+        if(empty($exist)){
+            $entity = new Item();
+            $entity->setEcommerceConfig($config);
+            $entity->setInventoryItem($copyEntity);
+            $entity->setName($copyEntity->getName());
+            $entity->setWebName($copyEntity->getName());
+            $entity->setQuantity($copyEntity->getRemainingQuantity());
+            $entity->setPurchasePrice($copyEntity->getPurchasePrice());
+            $entity->setSalesPrice($copyEntity->getSalesPrice());
+            $entity->setItemGroup("inventory");
+            $em->persist($entity);
+            $em->flush();
+
+        }
+
+    }
+
     public function getSliderFeatureProduct($config, $limit = 3)
     {
 
@@ -748,9 +771,56 @@ class ItemRepository extends EntityRepository
         $this->handleApiSearchBetween($qb,$data);
         $qb->groupBy('item.id');
         $qb->orderBy('item.webName','DESC');
-
         $result = $qb->getQuery()->getArrayResult();
-        return $result;
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+                $data[$key]['product_id']               = (int) $row['id'];
+                $data[$key]['item_id']                  = (int) rand(time(),10);
+                $data[$key]['name']                     = $row['name'];
+                $data[$key]['nameBn']                   = $row['nameBn'];
+                $data[$key]['quantity']                 = $row['quantity'];
+                $data[$key]['price']                    = $row['price'];
+                $data[$key]['discountPrice']            = $row['discountPrice'];
+                $data[$key]['categoryId']               = $row['categoryId'];
+                $data[$key]['category']                 = $row['categoryName'];
+                $data[$key]['categoryBn']               = $row['categoryNameBn'];
+                $data[$key]['brandId']                  = $row['brandId'];
+                $data[$key]['brand']                    = $row['brandName'];
+                $data[$key]['brandBn']                  = $row['brandNameBn'];
+                $data[$key]['discountId']               = $row['discountId'];
+                $data[$key]['discount']                 = $row['discountName'];
+                $data[$key]['discountBn']               = $row['discountNameBn'];
+                $data[$key]['discountType']             = $row['discountType'];
+                $data[$key]['discountAmount']           = $row['discountAmount'];
+                $data[$key]['promotionId']              = $row['promotionId'];
+                $data[$key]['promotion']                = $row['promotionName'];
+                $data[$key]['promotionBn']              = $row['promotionNameBn'];
+                $data[$key]['tag']                      = $row['tags'];
+                $data[$key]['tagBn']                    = $row['tagsBn'];
+                $data[$key]['colors']                   = $row['colors'];
+                $data[$key]['colorsBn']                 = $row['colorsBn'];
+                $data[$key]['country']                  = $row['country'];
+                $data[$key]['shortDescription']         = $row['shortContent'];
+                $data[$key]['shortDescriptionBn']       = $row['shortContentBn'];
+                $data[$key]['tagBn']                    = $row['tagNameBn'];
+                $data[$key]['unitName']                 = $row['unitName'];
+                $data[$key]['itemAssurance']                 = $row['itemAssurance'];
+                $data[$key]['warningLabel']                 = $row['warningLabel'];
+                $data[$key]['isFeatureBrand']           = ($row['isFeatureBrand']) ? 1 : 0;
+                $data[$key]['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
+                $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
+                $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}",400,400);
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function getApiRelatedProduct(GlobalOption $option,$data = array())
@@ -771,11 +841,10 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('discount.name as discountName','discount.nameBn as discountNameBn','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
         $qb->addSelect('promotion.name as promotionName','promotion.nameBn as promotionNameBn','promotion.id as promotionId');
         $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
-        $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $this->handleApiSearchBetween($qb,$data);
         $qb->setMaxResults(24);
-        $qb->orderBy('rand');
+      //  $qb->orderBy('rand');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
         if($result){
@@ -803,7 +872,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['quantityApplicable']       = $row['quantityApplicable'];
                 $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                 if($row['path']){
-                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}");
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}",400,400);
                     $data[$key]['imagePath']            =  $path;
                 }else{
                     $data[$key]['imagePath']            = "";

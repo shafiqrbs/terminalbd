@@ -100,6 +100,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% if inventory.isModel == 1  %}
+                                        <div class="row-fluid">
+                                            <div class="span9">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Model Name <span class="required">*</span></label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.model) }}
+                                                        {{ form_errors(form.model) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    {% endif %}
                                     {% if inventory.usingBarcode == "item" %}
                                     <div class="row-fluid">
                                         <div class="span12">
@@ -214,23 +228,6 @@
                                         </div>
                                     </div>
                                 {% endif %}
-
-                                {% if inventory.isModel == 1  %}
-                                    <div class="row-fluid">
-                                        <div class="span9">
-                                            <div class="control-group">
-                                                <label class="control-label" for="firstName">Model Name <span class="required">*</span></label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.model) }}
-                                                    {{ form_errors(form.model) }}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                {% endif %}
-
-
 
                             </div>
                             <div class="span4">

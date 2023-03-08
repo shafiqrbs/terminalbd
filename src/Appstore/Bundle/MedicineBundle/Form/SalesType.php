@@ -2,14 +2,12 @@
 
 namespace Appstore\Bundle\MedicineBundle\Form;
 
-use Appstore\Bundle\DomainUserBundle\Form\CustomerForMedicineType;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SalesType extends AbstractType
 {
@@ -114,10 +112,6 @@ class SalesType extends AbstractType
                         ->orderBy("u.username", "ASC");
                 }
             ))
-            ->add('doctor','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor name','data-original-title'=>'Enter prescribe doctor name','autocomplete'=>'off')))
-            ->add('doctorMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile salesInput','placeholder'=>'Enter doctor mobile no','data-original-title'=>'Enter doctor mobile no','autocomplete'=>'off')))
-            ->add('doctorAddress','text', array('attr'=>array('class'=>'m-wrap span12 salesInput','placeholder'=>'Enter prescribe doctor address','data-original-title'=>'Enter prescribe doctor address','autocomplete'=>'off')))
-
         ;
       //  $builder->add('customer', new CustomerForMedicineType());
     }

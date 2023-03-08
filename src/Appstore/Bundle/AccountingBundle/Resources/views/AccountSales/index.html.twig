@@ -151,12 +151,13 @@
                                     <th class="numeric" >Method</th>
                                     <th class="numeric" >Sales</th>
                                     <th class="numeric" >Received</th>
+                                    <th class="numeric" >Adjustment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% set modes = ['Due','Advance','Credit'] %}
+                                {% set modes = ['Due','Advance','Credit','Discount'] %}
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td><span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
@@ -178,9 +179,16 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            {% if entity.process != 'approved' and entity.processHead in modes  %}
+                                            {% if entity.process != 'approved' and entity.method is not empty and entity.processHead in modes  %}
                                                 <a  class="editable" data-name="Amount" href="javascript:"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
-                                            {% else %}
+                                            {% elseif(entity.method and entity.process == 'approved') %}
+                                                {{ entity.amount|number_format(2) }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="numeric" >
+                                            {% if entity.process != 'approved' and entity.method is empty and entity.processHead in modes  %}
+                                                <a  class="editable" data-name="Amount" href="javascript:"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
+                                            {% elseif(entity.method is empty and entity.process == 'approved') %}
                                                 {{ entity.amount|number_format(2) }}
                                             {% endif %}
                                         </td>

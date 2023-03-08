@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
@@ -14,14 +13,11 @@ use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesType;
 use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use Knp\Snappy\Image;
-use Knp\Snappy\Pdf;
 use Mike42\Escpos\Printer;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 
 class SalesController extends Controller
@@ -315,13 +311,22 @@ class SalesController extends Controller
        $id = $data['id'];
        $quantity = $data['quantity'];
        $price = $data['salesPrice'];
+       $itemPercent = empty($data['itemPercent']) ? 0 : $data['itemPercent'];
 
        /* @var $salesItem MedicineSalesItem */
 
        $salesItem = $this->getDoctrine()->getRepository(MedicineSalesItem::class)->find($id);
+       if($itemPercent > 0){
+           $salesItem->setItemPercent($itemPercent);
+           $salesPrice = $salesItem->getMedicineStock()->getSalesPrice();
+           $initialDiscount = (($salesPrice *  $itemPercent)/100);
+           $initialGrandTotal =($salesPrice  - $initialDiscount);
+           $salesItem->setSalesPrice( round( $initialGrandTotal, 2 ) );
+       }else{
+           $salesItem->setSalesPrice( round($price, 2 ) );
+       }
        $salesItem->setQuantity($quantity);
-       $salesItem->setSalesPrice($price);
-       $salesItem->setSubTotal($price * $quantity);
+       $salesItem->setSubTotal($salesItem->getSalesPrice() * $quantity);
        $em->flush();
        $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($salesItem->getMedicineStock(),'sales');
        $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($salesItem->getMedicineSales());

@@ -139,17 +139,30 @@ var form = $("#salesItemForm").validate({
     }
 });
 
-$(document).on('change', '.quantity ,.salesPrice', function() {
+function financial(val) {
+    var number =  Number.parseFloat(val).toFixed(2);
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+$(document).on('change', '.quantity ,.salesPrice, .itemPercent', function() {
 
     var id = $(this).attr('data-id');
     var quantity = parseFloat($('#quantity-'+id).val());
     var salesPrice = parseFloat($('#salesPrice-'+id).val());
-    var subTotal  = (quantity * salesPrice);
-    $("#subTotal-"+id).html(subTotal);
+    var estimatePrice = parseFloat($('#estimatePrice-'+id).val());
+    var itemPercent     = parseFloat($('#itemPercent-'+id).val()  != '' ? $('#itemPercent-'+id).val() : 0 );
+    if(itemPercent > 0){
+        var amount = (estimatePrice-(estimatePrice * itemPercent/100));
+    }else{
+        var amount = salesPrice;
+    }
+    var subTotal  = (quantity * amount);
+    $("#subTotal-"+id).html(financial(subTotal));
+
     $.ajax({
         url: Routing.generate('medicine_sales_item_update'),
         type: 'POST',
-        data:'id='+ id +'&quantity='+ quantity+'&salesPrice='+ salesPrice,
+        data:'id='+ id +'&quantity='+ quantity+'&salesPrice='+ salesPrice+'&itemPercent='+ itemPercent,
         success: function(response) {
             obj = JSON.parse(response);
             $('#subTotal').html(obj['subTotal']);

@@ -158,7 +158,7 @@ class MedicinePurchaseItemRepository extends EntityRepository
         $qb->join('mpi.medicineStock','s');
         $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
         if($vendor){
-            $qb->andWhere('e.medicineVendor = :vendor')->setParameter('vendor', $vendor);
+            $qb->andWhere($qb->expr()->like("mv.companyName", "'%$vendor%'"  ));
         }
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('s.name');

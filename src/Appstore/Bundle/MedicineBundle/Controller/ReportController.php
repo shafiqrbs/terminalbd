@@ -3,21 +3,10 @@
 namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
-use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
-use Appstore\Bundle\MedicineBundle\Form\SalesItemType;
-use Appstore\Bundle\MedicineBundle\Form\SalesType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Knp\Snappy\Pdf;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-
 
 
 class ReportController extends Controller
@@ -421,8 +410,9 @@ class ReportController extends Controller
         $user = $this->getUser();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
         $brand = (isset($data['brandName']) and $data['brandName']) ? $data['brandName']:'';
+        $vendor = (isset($data['vendor']) and $data['vendor']) ? $data['vendor']:'';
         $pagination = "";
-        if($brand){
+        if($brand or $vendor){
             $pagination = $this->getDoctrine()->getRepository('MedicineBundle:MedicinePurchaseItem')->purchaseItemReport($config,$data);
         }
         return $this->render('MedicineBundle:Report:purchase/purchaseItem.html.twig', array(
