@@ -773,7 +773,7 @@ class ItemRepository extends EntityRepository
         $qb->orderBy('item.webName','DESC');
         return $result = $qb->getQuery()->getArrayResult();
         $data = array();
-      /*  if($result){
+        if($result){
             foreach($result as $key => $row) {
                 $data[$key]['product_id']               = (int) $row['id'];
                 $data[$key]['item_id']                  = (int) rand(time(),10);
@@ -818,7 +818,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['imagePath']            = "";
                 }
             }
-        }*/
+        }
 
         return $data;
     }
