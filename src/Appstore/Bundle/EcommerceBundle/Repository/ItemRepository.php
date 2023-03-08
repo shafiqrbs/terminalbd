@@ -771,9 +771,9 @@ class ItemRepository extends EntityRepository
         $this->handleApiSearchBetween($qb,$data);
         $qb->groupBy('item.id');
         $qb->orderBy('item.webName','DESC');
-        $result = $qb->getQuery()->getArrayResult();
+        return $result = $qb->getQuery()->getArrayResult();
         $data = array();
-        if($result){
+      /*  if($result){
             foreach($result as $key => $row) {
                 $data[$key]['product_id']               = (int) $row['id'];
                 $data[$key]['item_id']                  = (int) rand(time(),10);
@@ -818,7 +818,7 @@ class ItemRepository extends EntityRepository
                     $data[$key]['imagePath']            = "";
                 }
             }
-        }
+        }*/
 
         return $data;
     }

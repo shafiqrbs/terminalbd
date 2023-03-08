@@ -492,7 +492,6 @@ class ApiEcommerceController extends Controller
             $entity = $this->checkApiValidation($request);
             $result = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$search);
             $data = array();
-            /*
             if($result){
                 foreach($result as $key => $row) {
                     $data[$key]['product_id']               = (int) $row['id'];
@@ -532,16 +531,15 @@ class ApiEcommerceController extends Controller
                     $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
                     $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
                     if($row['path']){
-                        $data[$key]['imagePath']            =  $_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";
+                        $data[$key]['imagePath']            =  "http://".$_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";
                     }else{
                         $data[$key]['imagePath']            = "";
                     }
                 }
             }
-            */
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($result));
+            $response->setContent(json_encode($data));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
