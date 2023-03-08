@@ -1266,7 +1266,7 @@ class ItemRepository extends EntityRepository
     public function resizeFilter($pathToImage, $width = 256, $height = 256)
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
-        return "{$_SERVER['HTTP_HOST']}{$path}";
+        return "http://{$_SERVER['HTTP_HOST']}{$path}";
     }
 
 
