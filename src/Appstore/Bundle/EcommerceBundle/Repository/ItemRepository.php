@@ -771,7 +771,7 @@ class ItemRepository extends EntityRepository
         $this->handleApiSearchBetween($qb,$data);
         $qb->groupBy('item.id');
         $qb->orderBy('item.webName','DESC');
-        return $result = $qb->getQuery()->getArrayResult();
+        $result = $qb->getQuery()->getArrayResult();
         $data = array();
         if($result){
             foreach($result as $key => $row) {

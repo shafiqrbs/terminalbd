@@ -539,7 +539,7 @@ class ApiEcommerceController extends Controller
             }*/
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode($result));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
