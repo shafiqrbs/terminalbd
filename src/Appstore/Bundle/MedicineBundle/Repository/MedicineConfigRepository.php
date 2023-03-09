@@ -1,10 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
-use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -110,11 +106,11 @@ class MedicineConfigRepository extends EntityRepository
         $android = $em->createQuery('DELETE MedicineBundle:MedicineAndroidProcess e WHERE e.medicineConfig = '.$config);
         $android->execute();
 
-        $delete = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
-        $delete->execute();
+        $MedicineStock = $em->createQuery('DELETE MedicineBundle:MedicineStock e WHERE e.medicineConfig = '.$config);
+        $MedicineStock->execute();
 
-        $delete = $em->createQuery('DELETE MedicineBundle:MedicineVendor e WHERE e.medicineConfig = '.$config);
-        $delete->execute();
+        $MedicineVendor = $em->createQuery('DELETE MedicineBundle:MedicineVendor e WHERE e.medicineConfig = '.$config);
+        $MedicineVendor->execute();
 
 
     }

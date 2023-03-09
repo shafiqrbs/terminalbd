@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Service\ImageResizer;
 
 /**
  * PurchaseVendorItemRepository
@@ -811,8 +812,10 @@ class ItemRepository extends EntityRepository
                 $data[$key]['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
                 $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
                 $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
-                if($row['path']){
-                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}",400,400);
+                $pathFile = "uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}";
+                if($row['path'] and file_exists($pathFile)){
+                    $imageResizer = new ImageResizer();
+                    $path = $imageResizer->customResizeImage("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}","uploads/domain/{$option->getId()}/ecommerce/product/{$row['id']}.jpg",400,400);
                     $data[$key]['imagePath']            =  $path;
                 }else{
                     $data[$key]['imagePath']            = "";
@@ -1267,6 +1270,50 @@ class ItemRepository extends EntityRepository
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
         return "http://{$_SERVER['HTTP_HOST']}{$path}";
+    }
+
+    function resizeImage($sourceImage, $targetImage, $maxWidth, $maxHeight, $quality = 80)
+    {
+        // Obtain image from given source file.
+        if (!$image = @imagecreatefromjpeg($sourceImage))
+        {
+            return false;
+        }
+
+        // Get dimensions of source image.
+        list($origWidth, $origHeight) = getimagesize($sourceImage);
+
+        if ($maxWidth == 0)
+        {
+            $maxWidth  = $origWidth;
+        }
+
+        if ($maxHeight == 0)
+        {
+            $maxHeight = $origHeight;
+        }
+
+        // Calculate ratio of desired maximum sizes and original sizes.
+        $widthRatio = $maxWidth / $origWidth;
+        $heightRatio = $maxHeight / $origHeight;
+
+        // Ratio used for calculating new image dimensions.
+        $ratio = min($widthRatio, $heightRatio);
+
+        // Calculate new image dimensions.
+        $newWidth  = (int)$origWidth  * $ratio;
+        $newHeight = (int)$origHeight * $ratio;
+
+        // Create final image with new dimensions.
+        $newImage = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($newImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight);
+        imagejpeg($newImage, $targetImage, $quality);
+
+        // Free up the memory.
+        imagedestroy($image);
+        imagedestroy($newImage);
+
+        return true;
     }
 
 
