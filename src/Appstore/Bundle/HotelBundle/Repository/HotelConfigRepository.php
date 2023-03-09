@@ -14,20 +14,25 @@ class HotelConfigRepository extends EntityRepository
 {
 
 
-    public function businessReset(GlobalOption $option)
+    public function hotelReset(GlobalOption $option)
     {
 
 	    $em = $this->_em;
 	    $config = $option->getHotelConfig()->getId();
 
-	    $sales = $em->createQuery('DELETE HotelBundle:HotelInvoice e WHERE e.businessConfig = '.$config);
+	    $sales = $em->createQuery('DELETE HotelBundle:HotelInvoice e WHERE e.hotelConfig = '.$config);
 	    $sales->execute();
 
-	    $purchase = $em->createQuery('DELETE HotelBundle:HotelPurchase e WHERE e.businessConfig = '.$config);
+	    $purchase = $em->createQuery('DELETE HotelBundle:HotelPurchase e WHERE e.hotelConfig = '.$config);
 	    $purchase->execute();
 
-	 //   $stock = $em->createQuery('DELETE HotelBundle:HotelParticular e WHERE e.businessConfig = '.$config);
-	  //  $stock->execute();
+        $stock = $em->createQuery('DELETE HotelBundle:HotelOption e WHERE e.hotelConfig = '.$config);
+        $stock->execute();
+
+	    $stock = $em->createQuery('DELETE HotelBundle:HotelParticular e WHERE e.hotelConfig = '.$config);
+        $stock->execute();
+
+
 
     }
 }

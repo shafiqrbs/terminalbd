@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * Service
@@ -60,7 +59,7 @@ class Service
     private $hmsInvoices;
 
   /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", mappedBy="services")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", mappedBy="services",cascade={"remove"})
      **/
     private $hospitalConfig;
 

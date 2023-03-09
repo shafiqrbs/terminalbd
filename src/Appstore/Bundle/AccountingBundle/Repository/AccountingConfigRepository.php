@@ -1,11 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
-use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Doctrine\ORM\EntityRepository;
 use Proxies\__CG__\Appstore\Bundle\DomainUserBundle\Entity\PaymentSalary;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -56,6 +51,9 @@ class AccountingConfigRepository extends EntityRepository
 
         $Expenditure = $em->createQuery('DELETE AccountingBundle:Expenditure e WHERE e.globalOption = '.$option);
         $Expenditure->execute();
+
+        $android = $em->createQuery('DELETE AccountingBundle:ExpenseAndroidProcess e WHERE e.globalOption = '.$option);
+        $android->execute();
 
         $Reconciliation = $em->createQuery('DELETE AccountingBundle:CashReconciliation e WHERE e.globalOption = '.$option);
         $Reconciliation->execute();

@@ -1,7 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
-use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTableInvoice;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -39,6 +38,37 @@ class RestaurantConfigRepository extends EntityRepository
         $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
         $qb1->bindValue('config', $config);
         $qb1->execute();
+
+    }
+
+    public function delete(GlobalOption $option)
+    {
+
+        $em = $this->_em;
+        $config = $option->getRestaurantConfig()->getId();
+
+        $history = $em->createQuery('DELETE RestaurantBundle:RestaurantStockHistory e WHERE e.restaurantConfig = '.$config);
+        $history->execute();
+
+        $batch = $em->createQuery('DELETE RestaurantBundle:ProductionBatch e WHERE e.restaurantConfig = '.$config);
+        $batch->execute();
+
+        $invoice = $em->createQuery('DELETE RestaurantBundle:Invoice e WHERE e.restaurantConfig = '.$config);
+        $invoice->execute();
+
+        $purchase = $em->createQuery('DELETE RestaurantBundle:Purchase e WHERE e.restaurantConfig = '.$config);
+        $purchase->execute();
+
+        $purchase = $em->createQuery('DELETE RestaurantBundle:ItemImport e WHERE e.restaurantConfig = '.$config);
+        $purchase->execute();
+
+        $Particular = $em->createQuery('DELETE RestaurantBundle:Particular e WHERE e.restaurantConfig = '.$config);
+        $Particular->execute();
+
+        $purchase = $em->createQuery('DELETE RestaurantBundle:Category e WHERE e.restaurantConfig = '.$config);
+        $purchase->execute();
+
+
 
     }
 

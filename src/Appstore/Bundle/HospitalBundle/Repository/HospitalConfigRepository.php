@@ -39,4 +39,30 @@ class HospitalConfigRepository extends EntityRepository
        // $Particular->execute();
 
     }
+
+    public function hospitalDelete(GlobalOption $option)
+    {
+
+        $em = $this->_em;
+        $config = $option->getHospitalConfig()->getId();
+
+        $DoctorInvoice = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hospitalConfig = '.$config);
+        $DoctorInvoice->execute();
+
+        $Invoice = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
+        $Invoice->execute();
+
+        $reverse = $em->createQuery('DELETE HospitalBundle:HmsReverse e WHERE e.hospitalConfig = '.$config);
+        $reverse->execute();
+
+        $PathologicalReport = $em->createQuery('DELETE HospitalBundle:PathologicalReport e WHERE e.hospitalConfig = '.$config);
+        $PathologicalReport->execute();
+
+        $hmsPurchase = $em->createQuery('DELETE HospitalBundle:HmsPurchase e WHERE e.hospitalConfig = '.$config);
+        $hmsPurchase->execute();
+
+        $Particular = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
+        $Particular->execute();
+
+    }
 }

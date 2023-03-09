@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup;
@@ -31,7 +30,7 @@ class ExpenseAndroidProcess
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup", inversedBy="expenseAndroidProcess" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup", inversedBy="expenseAndroidProcess")
      **/
     private  $androidDevice;
 

@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * Service
@@ -24,6 +23,7 @@ class HmsServiceGroup
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsServiceGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hospitalConfig;
 

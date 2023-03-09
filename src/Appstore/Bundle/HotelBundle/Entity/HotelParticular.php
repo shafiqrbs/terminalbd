@@ -3,15 +3,11 @@
 namespace Appstore\Bundle\HotelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Core\UserBundle\Entity\User;
-use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * HotelParticular
  *
@@ -56,38 +52,22 @@ class HotelParticular
     private $roomType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularRoomFloors" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularRoomFloors")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $roomFloor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularCategories" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularCategories" , cascade={"detach","merge"} )
      **/
     private $roomCategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularViewPositions" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularViewPositions" , cascade={"detach","merge"} )
      **/
     private $viewPosition;
 
-    /**
-     * @ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularComplimentary")
-     * @JoinTable(name="hotel_room_complimentary",
-     *      joinColumns={@JoinColumn(name="particular_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="hotel_option_id", referencedColumnName="id")}
-     *      )
-     */
-    private $complimentary;
 
-
-    /**
-     * @ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelOption", inversedBy="particularAmenities")
-     * @JoinTable(name="hotel_room_amenities",
-     *      joinColumns={@JoinColumn(name="particular_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="hotel_option_id", referencedColumnName="id")}
-     *      )
-     */
-    private $amenities;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoiceParticular", mappedBy="hotelParticular" )

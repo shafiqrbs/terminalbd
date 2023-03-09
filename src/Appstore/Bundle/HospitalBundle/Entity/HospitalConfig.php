@@ -86,7 +86,7 @@ class HospitalConfig
     private $particulars;
 
      /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hospitalConfig")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hospitalConfig", cascade={"remove"})
      **/
     private $services;
 

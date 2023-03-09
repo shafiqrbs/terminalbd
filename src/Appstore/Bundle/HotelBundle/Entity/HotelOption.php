@@ -23,7 +23,7 @@ class HotelOption
 	private $id;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelConfig", inversedBy="hotelOptions" , cascade={"detach","merge"} )
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelConfig", inversedBy="hotelOptions" )
 	 **/
 	private  $hotelConfig;
 
@@ -44,21 +44,25 @@ class HotelOption
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="viewPosition" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	private $particularViewPositions;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="complimentary" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	private $particularComplimentary;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="amenities" )
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	private $particularAmenities;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="roomFloor" )
+	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="roomFloor",cascade={"remove","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	private $particularRoomFloors;
 
@@ -207,6 +211,14 @@ class HotelOption
 	public function getParticularAmenities() {
 		return $this->particularAmenities;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getParticularRoomFloors()
+    {
+        return $this->particularRoomFloors;
+    }
 
 
 }
