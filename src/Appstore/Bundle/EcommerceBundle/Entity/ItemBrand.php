@@ -80,6 +80,14 @@ class ItemBrand  implements CodeAwareEntity
     private $nameBn;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="bgcolor", type="string", nullable = true)
+     */
+    private $bgcolor;
+
+
     /**
      * @var string
      *
@@ -482,6 +490,26 @@ class ItemBrand  implements CodeAwareEntity
     {
         $this->nameBn = $nameBn;
     }
+
+    /**
+     * @return string
+     */
+    public function getBgcolor()
+    {
+        return $this->bgcolor;
+    }
+
+    /**
+     * @param string $bgcolor
+     */
+    public function setBgcolor($bgcolor)
+    {
+        $this->bgcolor = $bgcolor;
+    }
+
+
+
+
 
 
 

@@ -98,6 +98,13 @@ class Order
     private $customer;
 
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress", inversedBy="orders")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $customerAddress;
+
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank")
      **/

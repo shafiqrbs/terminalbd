@@ -32,15 +32,10 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn purple" href="{{ path('ecommerce_item_download') }}" target="_blank"><i class="icon-download"></i>&nbsp; Download</a>
+                                {% if config.globalOption.ecommerceConfig.isInventoryStock == 1  %}
+                                <a class="btn red" href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
+                                {% else %}
                                 <a class="btn red" href="{{ path('ecommerce_item_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
-                                {% if app.user.granted("ROLE_DOMAIN")  %}
-                                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                        <i class="icon-tasks"></i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="{{ path('ecommerce_item_delete') }}">Item</a></li>
-                                        <li><a href="{{ path('ecommerce_category_delete') }}">Category</a></li>
-                                    </ul>
                                 {% endif %}
                             </div>
                         </div>
@@ -136,9 +131,9 @@
                                            </td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %} <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="SalesPrice" href="#"   data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.salesPrice }}" data-original-title="Enter sales price">{{ entity.salesPrice }}</a>{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
 
-                                        <td class="numeric" >{{ entity.purchaseQuantity }}</td>
-                                        <td class="numeric" >{{ entity.salesQuantity }}</td>
-                                        <td class="numeric" >{{ entity.quantity }}</td>
+                                        <td class="numeric" > {% if entity.inventoryItem %} {{ entity.inventoryItem.purchaseQuantity }} {% else %}  {{ entity.purchaseQuantity }} {% endif %}</td>
+                                        <td class="numeric" > {% if entity.inventoryItem %} {{ entity.inventoryItem.salesQuantity }} {% else %}  {{ entity.salesQuantity }} {% endif %}</td>
+                                        <td class="numeric" > {% if entity.inventoryItem %} {{ entity.inventoryItem.remainingQnt }} {% else %}  {{ entity.quantity }} {% endif %}</td>
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('ecommerce_item_inline_discount_search') }}"  data-url="{{ path('ecommerce_item_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.discount is not empty %}{{ entity.discount.id }}{% endif %}" data-original-title="Enter discount method">{% if entity.discount is not empty %}{{ entity.discount.name }}-({{ entity.discount.discountAmount }}) {% if  entity.discount.type == 'percentage' %}%{% endif %}{% endif %}</a>
                                         </td>
@@ -159,8 +154,9 @@
                                                     <a href="{{ path('ecommerce_item_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i>&nbsp;</a>
                                                     <a href="{{ path('ecommerce_item_show',{'id':entity.id}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                                     <a href="javascript:" data-id="{{ entity.id }}"  data-url="{{ path('ecommerce_item_remove',{'id':entity.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                    {% if entity.inventoryItem is empty %}
                                                     <a target="_blank" href="{{ path('ecommerce_item_copy',{'id':entity.id}) }}" class="btn blue mini" ><i class="icon-copy"></i>&nbsp;Copy</a>
-
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </td>

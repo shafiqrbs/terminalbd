@@ -16,13 +16,14 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Doctrine\DQL\Date;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\LocationBundle\Entity\Country;
 use Setting\Bundle\LocationBundle\Entity\Location;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Customer
  *
@@ -65,6 +66,12 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress", mappedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $customerAddresses;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="customer")
@@ -1896,6 +1903,13 @@ class Customer
         $this->creditLimit = $creditLimit;
     }
 
+    /**
+     * @return CustomerAddress
+     */
+    public function getCustomerAddresses()
+    {
+        return $this->customerAddresses;
+    }
 
 
 

@@ -146,7 +146,11 @@
                                                 <a href="{{ path('item_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif  %}
                                             <a href="{{ path('item_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-eye-open"></i></a>
-                                            {#<a href="{{ path('item_edit_web', { 'id': entity.id }) }}" class="btn purple mini" >Web</a>#}
+                                            {% if config.globalOption.ecommerceConfig.isInventoryStock == 1 and entity.isWeb != 1 %}
+                                                <a href="{{ path('item_web_status', { 'id': entity.id }) }}" class="btn purple mini" >Web</a>
+                                            {% elseif(entity.ecommerceItem) %}
+                                                <a href="{{ path('ecommerce_item_edit', { 'id': entity.ecommerceItem.id }) }}" class="btn purple mini" >Web Edit</a>
+                                            {% endif %}
                                             </div>
                                         </td>
                                     </tr>

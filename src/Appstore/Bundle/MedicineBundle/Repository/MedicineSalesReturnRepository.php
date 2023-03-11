@@ -152,7 +152,7 @@ class MedicineSalesReturnRepository extends EntityRepository
         $query = $qb->getQuery()->getArrayResult();
         $returnItems = array();
         foreach ($query as $row){
-            $returnItems[$row['salesId']]=$row;
+            $returnItems[$row['salesId']] = $row;
         }
         return $returnItems;
     }

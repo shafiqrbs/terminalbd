@@ -23,19 +23,19 @@ use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
-use Setting\Bundle\ToolBundle\Entity\AppModule;
-use Setting\Bundle\ToolBundle\Entity\Designation;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\AppearanceBundle\Entity\MenuGrouping;
+use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ContentBundle\Entity\ContactPage;
 use Setting\Bundle\ContentBundle\Entity\HomePage;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\AdsTool;
+use Setting\Bundle\ToolBundle\Entity\AppModule;
+use Setting\Bundle\ToolBundle\Entity\Designation;
 use Setting\Bundle\ToolBundle\Entity\FooterSetting;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\MobileIcon;
 use Setting\Bundle\ToolBundle\Entity\SiteSetting;
-use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 
 /**
  * GlobalOptionRepository
@@ -426,6 +426,7 @@ class GlobalOptionRepository extends EntityRepository
         $em->persist($globalOption);
         $em->flush();
 
+
         $name = $data['domain']['profile']['name'];
         $username = $data['domain']['profile']['username'];
         $email = "{$username}@gmail.com";
@@ -436,7 +437,7 @@ class GlobalOptionRepository extends EntityRepository
         $user->setAppPassword('@123456');
         $user->setEnabled(1);
         $user->setGlobalOption($globalOption);
-        $user->setUserGroup(2);
+        $user->setUserGroup("user");
         $em->persist($user);
         $em->flush();
 

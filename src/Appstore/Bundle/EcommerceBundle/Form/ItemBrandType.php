@@ -21,6 +21,10 @@ class ItemBrandType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  brand name'))
             )))
+            ->add('bgcolor','text', array('attr'=>array(
+                'class'=>'m-wrap span11 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  brand name bangla'),))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Brand description')))
             ->add('feature')

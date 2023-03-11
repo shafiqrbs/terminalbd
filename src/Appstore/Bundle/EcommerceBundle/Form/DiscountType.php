@@ -42,6 +42,10 @@ class DiscountType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Add discount amount percentage/flat'))
                 )))
+            ->add('bgcolor','text', array('attr'=>array(
+                'class'=>'m-wrap span11 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('type', 'choice', array(
                 'attr'=>array('class'=>'span6'),
                 'choices' => array(

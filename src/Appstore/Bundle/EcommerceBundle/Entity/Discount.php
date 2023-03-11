@@ -86,6 +86,14 @@ class Discount
     private $nameBn;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="bgcolor", type="string", nullable = true)
+     */
+    private $bgcolor;
+
+
+    /**
      * @Gedmo\Slug(fields={"name"})
      * @Doctrine\ORM\Mapping\Column(length=255)
      */
@@ -509,6 +517,27 @@ class Discount
     {
         $this->nameBn = $nameBn;
     }
+
+    /**
+     * @return string
+     */
+    public function getBgcolor()
+    {
+        return $this->bgcolor;
+    }
+
+    /**
+     * @param string $bgcolor
+     */
+    public function setBgcolor($bgcolor)
+    {
+        $this->bgcolor = $bgcolor;
+    }
+
+
+
+
+
 
 
 

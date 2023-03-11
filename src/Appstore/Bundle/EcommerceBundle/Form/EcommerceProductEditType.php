@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\EcommerceBundle\Form;
 
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
-use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
@@ -37,9 +36,9 @@ class EcommerceProductEditType extends AbstractType
 	{
 		$builder
 
-            ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Product name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Product name'),
         'constraints' =>array( new NotBlank(array('message'=>'Enter product name')))))
-            ->add('productBengalName', 'text', array('attr' => array('class' => 'm-wrap span12 ', 'placeholder' => 'Product Bengal name')))
+            ->add('nameBn', 'text', array('attr' => array('class' => 'm-wrap span12 ', 'placeholder' => 'Product Bengal name')))
 			->add('category', 'entity', array(
 				'required'    => true,
 				'empty_value' => '---Select product category---',

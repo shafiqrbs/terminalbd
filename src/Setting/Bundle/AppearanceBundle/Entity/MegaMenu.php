@@ -53,6 +53,7 @@ class MegaMenu
 
     /**
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="megaMenu")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     private $categories;

@@ -152,6 +152,13 @@ api_ecommerce_registration:
     options:
             expose: true
 
+api_ecommerce_additional_address:
+    path:     /customer-address
+    defaults: { _controller: BinduBundle:ApiEcommerce:customerAddress }
+    methods:  POST
+    options:
+            expose: true
+
 api_ecommerce_update_registration:
     path:     /update-register
     defaults: { _controller: BinduBundle:ApiEcommerce:userUpdateProfile }

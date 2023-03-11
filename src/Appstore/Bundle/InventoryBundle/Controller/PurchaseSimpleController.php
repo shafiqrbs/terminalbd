@@ -2,23 +2,17 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
-use Appstore\Bundle\InventoryBundle\Form\ItemType;
 use Appstore\Bundle\InventoryBundle\Form\PurchaseApproveType;
 use Appstore\Bundle\InventoryBundle\Form\PurchaseItemSimpleType;
-use Appstore\Bundle\InventoryBundle\Form\PurchaseItemType;
+use Appstore\Bundle\InventoryBundle\Form\PurchaseType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Appstore\Bundle\InventoryBundle\Entity\Purchase;
-use Appstore\Bundle\InventoryBundle\Form\PurchaseType;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * PurchaseOrder controller.
@@ -219,6 +213,9 @@ class PurchaseSimpleController extends Controller
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
         }
         $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($purchase);
+        if( $this->getUser()->getGlobalOption()->getEcommerceConfig()->isInventoryStock() == 1) {
+            $this->getDoctrine()->getRepository(\Appstore\Bundle\EcommerceBundle\Entity\Item::class)->updatePurchaseInventoryItem($purchase);
+        }
         return new Response(json_encode(array('success'=>'success')));
 
     }
@@ -237,8 +234,6 @@ class PurchaseSimpleController extends Controller
         }else{
             return new Response('failed');
         }
-
-        exit;
     }
 
 
@@ -383,7 +378,7 @@ class PurchaseSimpleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all()['purchaseitem'];
         $item = $data['item'];
-        $serialNo = $data['serialNo'];
+        $serialNo = isset($data['serialNo']) ? $data['serialNo'] : '';
         $stock = $this->getDoctrine()->getRepository("InventoryBundle:Item")->find($item);
         $exist = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('purchase'=>$purchase,'item'=>$item));
 

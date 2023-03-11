@@ -44,6 +44,11 @@ class CustomCategoryType extends AbstractType
             ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter category name bangla'),
             ))
 
+            ->add('bgcolor','text', array('attr'=>array(
+                'class'=>'m-wrap span11 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
             ->add('parent', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select parent category---',

@@ -117,6 +117,14 @@ class Item
     /**
      * @var string
      *
+     * @ORM\Column(name="nameBn", type="string", length=255,nullable = true)
+     */
+    private $nameBn;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="sku", type="string", length=255,nullable = true)
      */
     private $sku;
@@ -1331,6 +1339,24 @@ class Item
     {
         return $this->ecommerceItem;
     }
+
+    /**
+     * @return string
+     */
+    public function getNameBn()
+    {
+        return $this->nameBn;
+    }
+
+    /**
+     * @param string $nameBn
+     */
+    public function setNameBn($nameBn)
+    {
+        $this->nameBn = $nameBn;
+    }
+
+
 
 
 }

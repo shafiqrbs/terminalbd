@@ -6,6 +6,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
@@ -363,17 +364,19 @@ class ItemRepository extends EntityRepository
         $em = $this->_em;
         if($copyEntity)
             $config = $copyEntity->getInventoryConfig()->getGlobalOption()->getEcommerceConfig();
-        $exist = $this->findOneBy(array('ecommerceConfig' => $config,'itemGroup'=> $copyEntity->getMode(), 'webName' => $copyEntity->getName()));
+        $exist = $this->findOneBy(array('ecommerceConfig' => $config,'inventoryItem'=> $copyEntity));
         if(empty($exist)){
             $entity = new Item();
             $entity->setEcommerceConfig($config);
+            $entity->setInventoryItem($copyEntity);
             $entity->setName($copyEntity->getName());
+            $entity->setNameBn($copyEntity->getNameBn());
             $entity->setWebName($copyEntity->getName());
-            $entity->setQuantity($copyEntity->getRemainingQuantity());
-            $entity->setPurchasePrice($copyEntity->setPurchasePrice());
+            $entity->setCategory($copyEntity->getCategory());
+            $entity->setPurchasePrice($copyEntity->getPurchasePrice());
             $entity->setSalesPrice($copyEntity->getSalesPrice());
-            $entity->setItemGroup($copyEntity->getMode());
-            if($copyEntity->getBrandName()){
+            $entity->setItemGroup('inventory');
+            if($copyEntity->getBrand()){
                 $brand  = $em->getRepository('EcommerceBundle:ItemBrand')->insertBrand($copyEntity);
                 $entity->setBrand($brand);
             }
@@ -394,7 +397,9 @@ class ItemRepository extends EntityRepository
             $entity = new Item();
             $entity->setEcommerceConfig($config);
             $entity->setInventoryItem($copyEntity);
+            $entity->setCategory($copyEntity->getCategory());
             $entity->setName($copyEntity->getName());
+            $entity->setNameBn($copyEntity->getNameBn());
             $entity->setWebName($copyEntity->getName());
             $entity->setQuantity($copyEntity->getRemainingQuantity());
             $entity->setPurchasePrice($copyEntity->getPurchasePrice());
@@ -405,6 +410,32 @@ class ItemRepository extends EntityRepository
 
         }
 
+    }
+
+    public function updatePurchaseInventoryItem(Purchase $purchase)
+    {
+        $em = $this->_em;
+        /* @var $item \Appstore\Bundle\InventoryBundle\Entity\Item */
+
+        foreach ($purchase->getPurchaseItems() as $item){
+
+            if($item->getEcommerceItem()){
+
+                /* @var $update Item */
+
+                $remainingQnt = ($item->getPurchaseQuantity() + $item->getSalesQuantityReturn() + $item->getAdjustmentQuantity()) - ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn()+$item->getDamageQuantity());
+                $purchaseQnt = ($item->getPurchaseQuantity() + $item->getSalesQuantityReturn() + $item->getAdjustmentQuantity());
+                $salesQnt = ($item->getSalesQuantity() + $item->getPurchaseQuantityReturn()+$item->getDamageQuantity());
+                $update = $item->getEcommerceItem();
+                $update->setPurchaseQuantity($purchaseQnt);
+                $update->setSalesQuantity($salesQnt);
+                $update->setQuantity($remainingQnt);
+                $em->persist($update);
+                $em->flush();
+
+            }
+
+        }
     }
 
     public function getSliderFeatureProduct($config, $limit = 3)
@@ -1155,7 +1186,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','category');
-        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path');
+        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path','category.bgcolor as bgcolor','category.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('category.id');
         $qb->orderBy('category.id','DESC');
@@ -1163,9 +1194,13 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
+                $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['category_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1177,13 +1212,28 @@ class ItemRepository extends EntityRepository
         return $data;
     }
 
+    function hex6ToHex8($hex6) {
+        // Convert the 6-digit HEX color code to RGB values
+        $r = hexdec(substr($hex6, 0, 2));
+        $g = hexdec(substr($hex6, 2, 2));
+        $b = hexdec(substr($hex6, 4, 2));
+
+        // Calculate the alpha value as fully opaque (255)
+        $alpha = str_pad(dechex(255), 2, '0', STR_PAD_LEFT);
+
+        // Convert the RGB values and alpha value to an 8-digit HEX color code
+        $hex8 = $alpha . str_pad(dechex($r), 2, '0', STR_PAD_LEFT) . str_pad(dechex($g), 2, '0', STR_PAD_LEFT) . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
+        return $hex8;
+
+    }
+
     public function getApiFeatureCategory(GlobalOption $option)
     {
 
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','category');
-        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path');
+        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path','category.bgcolor as bgcolor','category.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("category.feature = 1");
         $qb->groupBy('category.id');
@@ -1192,9 +1242,13 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
+                $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['category_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['nameBn']         = $row['nameBn'];
+                $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1212,7 +1266,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
-        $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path');
+        $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path','brand.bgcolor as bgcolor','brand.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('brand.id');
         $qb->orderBy('brand.id','DESC');
@@ -1220,9 +1274,13 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
+                $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['brand_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['nameBn']         = $row['nameBn'];
+                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1240,7 +1298,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
-        $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path');
+        $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path','brand.bgcolor as bgcolor','brand.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("brand.feature = 1");
         $qb->groupBy('brand.id');
@@ -1249,9 +1307,13 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
-                $data[$key]['brand_id']    = (int) $row['id'];
+                $data[$key]['id']             = (int) $row['id'];
+                $data[$key]['brand_id']       = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['nameBn']         = $row['nameBn'];
+                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1276,7 +1338,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.promotion','promotion');
-        $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path');
+        $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path','promotion.bgcolor as bgcolor','promotion.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Promotion"%');
         $qb->groupBy('promotion.id');
@@ -1285,9 +1347,13 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
+                $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['promotion_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1305,7 +1371,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.tag','promotion');
-        $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path');
+        $qb->select('promotion.id as id','promotion.name as name','promotion.nameBn as nameBn','promotion.path as path','promotion.bgcolor as bgcolor','promotion.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("promotion.type LIKE :type")->setParameter('type', '%"Tag"%');
         $qb->groupBy('promotion.id');
@@ -1314,9 +1380,13 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
-                $data[$key]['tag_id']    = (int) $row['id'];
+                $data[$key]['id']             = (int) $row['id'];
+                $data[$key]['tag_id']           = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1334,7 +1404,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.discount','discount');
-        $qb->select('discount.id as id','discount.name as name','discount.nameBn as nameBn','discount.discountAmount as amount','discount.type as type','discount.path as path');
+        $qb->select('discount.id as id','discount.name as name','discount.nameBn as nameBn','discount.discountAmount as amount','discount.type as type','discount.path as path','discount.bgcolor as bgcolor','discount.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->orderBy('discount.id','DESC');
         $qb->groupBy('discount.id');
@@ -1342,9 +1412,13 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
+                $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['discount_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['nameBn']         = $row['nameBn'];
+                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -2193,7 +2267,5 @@ WHERE i.ecommerceConfig_id={$config}";
         return $result;
 
     }
-
-
 
 }

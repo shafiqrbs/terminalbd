@@ -23,6 +23,10 @@ class PromotionType extends AbstractType
             )))
             ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add your promotion/tag name bangla'),
             ))
+            ->add('bgcolor','text', array('attr'=>array(
+                'class'=>'m-wrap span11 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('feature')
             ->add('type', 'choice', array(
                 'attr'=>array('class'=>'check-list'),

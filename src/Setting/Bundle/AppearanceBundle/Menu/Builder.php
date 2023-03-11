@@ -44,8 +44,10 @@ class Builder extends ContainerAware
           //  $menu = $this->reservationMenu($menu);
 
         }
-
-            $modules = $globalOption->getSiteSetting()->getAppModules();
+            $modules = "";
+            if($globalOption->getSiteSetting()){
+                $modules = $globalOption->getSiteSetting()->getAppModules();
+            }
             $arrSlugs = array();
             $menuName = array();
             if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
@@ -63,7 +65,7 @@ class Builder extends ContainerAware
                     if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES')) {
                         $menu = $this->InventorySalesMenu($menu);
                     }
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY')) {
+                    if ($securityContext->isGranted('ROLE_INVENTORY')) {
                         $menu = $this->InventoryMenu($menu);
                     }
                 }
@@ -810,45 +812,6 @@ class Builder extends ContainerAware
            $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'));
            $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'));
 
-           /*$deliveryProcess = $inventory->getDeliveryProcess();
-           if (!empty($deliveryProcess)) {
-
-               if ('pos' == $deliveryProcess) {
-
-               }
-               if ('general-sales' == $deliveryProcess) {
-                   $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', 'icon icon-plus');
-                   $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesonline'));
-                   $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
-                   $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
-               }
-               if ('general-x-sales' == $deliveryProcess) {
-                   $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon', 'icon icon-plus');
-                   $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'));
-                   $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon icon-share-alt');
-                   $menu['Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon icon-upload');
-
-               }
-               if ('manual-sales' == $deliveryProcess) {
-                   $menu['Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_new'))->setAttribute('icon', 'fa fa-cart-plus');
-                   $menu['Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon', 'fa icon-th-list');
-                   $menu['Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-exchange');
-               }
-
-               if ('order' == $deliveryProcess) {
-                   if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ORDER')){
-                       $menu['Sales']
-                           ->addChild('Online Order')
-
-                           ->setAttribute('dropdown', true);
-                       $menu['Sales']['Online Order']->addChild('Online Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
-                       $menu['Sales']['Online Order']->addChild('Order', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
-                       if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
-                           $menu['Sales']['Online Order']->addChild('Order Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
-                       }
-                   }
-               }
-           }*/
             if ($securityContext->isGranted('ROLE_CRM') or $securityContext->isGranted('ROLE_DOMAIN')) {
                 $menu['Sales']->addChild('Customer', array('route' => 'domain_customer'));
             }
@@ -900,12 +863,6 @@ class Builder extends ContainerAware
             $menu['Inventory']['Manage Purchase']['Reports']->addChild('Purchase with price', array('route' => 'inventory_report_purchase'));
             }
         }
-/*
-        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
-            $menu['Inventory']->addChild('Purchase Item for Web', array('route' => 'inventory_purchasevendoritem'))
-                ->setAttribute('icon', 'icon-info-sign');
-        }*/
-
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_STOCK')) {
 
             $menu['Inventory']->addChild('Manage Stock')->setAttribute('dropdown', true);
@@ -941,17 +898,6 @@ class Builder extends ContainerAware
             }
         }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH')) {
-
-            if ($inventory->getIsBranch() == 1) {
-                $menu['Inventory']
-                    ->addChild('Branch Delivery')
-                    ->setAttribute('dropdown', true);
-                $menu['Inventory']['Branch Delivery']->addChild('Delivery Invoice', array('route' => 'inventory_delivery'));
-                $menu['Inventory']['Branch Delivery']->addChild('Return Invoice', array('route' => 'inventory_deliveryreturn'));
-
-            }
-        }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_CONFIG')) {
 
             $menu['Inventory']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
@@ -973,19 +919,6 @@ class Builder extends ContainerAware
             $menu['Inventory']['Reports']->addChild('Purchase with price', array('route' => 'inventory_report_purchase'));
 
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
-            if ($inventory->getIsBranch() == 1) {
-                $menu['Inventory']->addChild('Branch Reports')
-
-                    ->setAttribute('dropdown', true);
-                $menu['Inventory']['Branch Reports']->addChild('Stock Overview', array('route' => 'inventory_branch_report_overview'));
-                $menu['Inventory']['Branch Reports']->addChild('Item wise Stock', array('route' => 'inventory_branch_report_stock'));
-                $menu['Inventory']['Branch Reports']->addChild('Barcode wise Stock', array('route' => 'inventory_branch_report_barcode_item'));
-                $menu['Inventory']['Branch Reports']->addChild('Item Stock', array('route' => 'inventory_branch_report_item'));
-                $menu['Inventory']['Branch Reports']->addChild('Sales Item', array('route' => 'inventory_branch_report_sales'));
-            }
-        }
-
         return $menu;
 
     }

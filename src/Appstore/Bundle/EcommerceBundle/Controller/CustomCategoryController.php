@@ -5,13 +5,10 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Form\CustomCategoryType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Product\Bundle\ProductBundle\Entity\Category;
-use Product\Bundle\ProductBundle\Form\CategoryType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -66,6 +63,8 @@ class CustomCategoryController extends Controller
             $em = $this->getDoctrine()->getManager();
             $config =  $this->getUser()->getGlobalOption()->getEcommerceConfig();
             $entity->setEcommerceConfig($config);
+            $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            $entity->setInventoryConfig($this->getUser()->getGlobalOption()->getInventoryConfig());
             $entity->setStatus(true);
             $entity->setPermission('private');
             $entity->upload();
@@ -127,7 +126,6 @@ class CustomCategoryController extends Controller
     {
         $entity = new Category();
         $form   = $this->createCreateForm($entity);
-
         return $this->render('EcommerceBundle:CustomCategory:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -143,16 +141,11 @@ class CustomCategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('ProductProductBundle:Category')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('EcommerceBundle:CustomCategory:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'entity'      => $entity
         ));
     }
 

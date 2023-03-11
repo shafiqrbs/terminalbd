@@ -3,21 +3,13 @@
 namespace Appstore\Bundle\InventoryBundle\Form;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
-use Appstore\Bundle\InventoryBundle\Entity\ItemTypeGrouping;
-use Appstore\Bundle\InventoryBundle\Repository\ItemTypeGroupingRepository;
 use Doctrine\ORM\EntityRepository;
-use Product\Bundle\ProductBundle\Entity\Category;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
-use Product\Bundle\ProductBundle\Entity\ItemGroup;
 use Product\Bundle\ProductBundle\Entity\ItemGroupRepository;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\NotNull;
 
 class ItemType extends AbstractType
 {
@@ -47,21 +39,18 @@ class ItemType extends AbstractType
     {
 
         $builder
-
-
             ->add('category', 'text', array(
-                'required'    => true,
-                'mapped'    => false,
-                'attr'=>array('class'=>'span12','list'=>'categories','autocomplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
+                'required' => true,
+                'mapped' => false,
+                'attr' => array('class' => 'span12', 'list' => 'categories', 'autocomplete' => 'off'),
+                'constraints' => array(
+                    new NotBlank(array('message' => 'Please input required'))
                 )
             ))
-            ->add('inventoryConfig','hidden',
+            ->add('inventoryConfig', 'hidden',
                 array(
-                    'mapped'    => false,
+                    'mapped' => false,
                     'attr' => array('data' => $this->inventoryConfig->getId())))
-
             /*->add('itemGroup', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select item group---',
@@ -70,45 +59,48 @@ class ItemType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->ItemGroupChoiceList()
             ))*/
+
             ->add('name', 'text', array(
-                'required'    => true,
-                'attr'=>array('class'=>'span12','list'=>'masterItem','autocomplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
+                'required' => true,
+                'attr' => array('class' => 'span12', 'list' => 'masterItem', 'autocomplete' => 'off'),
+                'constraints' => array(
+                    new NotBlank(array('message' => 'Please input required'))
                 )
             ))
+            ->add('nameBn', 'text', array(
+                'required' => false,
+                'attr' => array('class' => 'span12', 'list' => 'masterItem', 'autocomplete' => 'off')
+            ))
             ->add('itemUnit', 'entity', array(
-                'required'    => false,
+                'required' => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
                 'property' => 'name',
                 'data' => 4,
                 'empty_value' => '---Choose a item unit ---',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
+                'attr' => array('class' => 'span12 select2'),
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->orderBy("p.name","ASC");
+                        ->orderBy("p.name", "ASC");
                 },
             ))
             ->add('salesPrice', 'text', array(
-                'required'    => false,
-                'attr'=>array('class'=>'span12')
+                'required' => false,
+                'attr' => array('class' => 'span12')
             ))
             ->add('purchasePrice', 'text', array(
-                'required'    => false,
-                'attr'=>array('class'=>'span12')
+                'required' => false,
+                'attr' => array('class' => 'span12')
             ))
-            ->add('file');
-            if($this->inventoryConfig->getUsingBarcode() == "item" ){
+           /* ->add('file')*/
 
-                $builder
-                    ->add('barcode', 'text', array(
-                        'required'    => true,
-                        'attr'=>array('class'=>'span12 barcode')
-                    ));
-
+            ->add('barcode', 'text', array(
+            'required'    => false,
+            'attr'=>array('class'=>'span12 barcode')
+        ));
+            if ($this->inventoryConfig->getGlobalOption()->getEcommerceConfig()->isInventoryStock() == 1){
+                $builder->add('isWeb');
             }
-
             if($this->inventoryConfig->getIsVendor() == 1 ){
 
                 $builder

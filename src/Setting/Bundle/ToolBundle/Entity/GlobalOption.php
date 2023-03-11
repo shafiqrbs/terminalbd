@@ -32,15 +32,15 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureCategory;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
-use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ContentBundle\Entity\ContactPage;
@@ -52,11 +52,9 @@ use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\MediaBundle\Entity\PageFile;
 use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
@@ -138,6 +136,11 @@ class GlobalOption
      **/
     protected $linkDomain;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $categories;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsSender", mappedBy="globalOption" , cascade={"persist", "remove"} )

@@ -3,6 +3,8 @@
 namespace Bindu\BinduBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Gregwar\Image\Image;
@@ -1156,9 +1158,90 @@ class ApiEcommerceController extends Controller
                 $returnData['email'] = $user->getProfile()->getEmail();
                 $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
                 $returnData['password'] = $a;
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+                $addreses = $customer->getCustomerAddresses();
+                $returnData['address'] = array();
+                if($addreses) {
+                    /* @var $address CustomerAddress */
+                    foreach ($addreses as $address) {
+                        $returnData['address'][$address->getId()]['id'] = (integer)$address->getId();
+                        $returnData['address'][$address->getId()]['name'] = (string)$address->getName();
+                        $returnData['address'][$address->getId()]['mobile'] = (string)$address->getMobile();
+                        $returnData['address'][$address->getId()]['address'] = (string)$address->getAddress();
+                        $returnData['address'][$address->getId()]['mode'] = (string)$address->getMode();
+                    }
+                }else{
+                    $returnData['address'] = array();
+                }
                 $returnData['msg'] = "valid";
             }else{
                 $returnData['msg'] = "invalid";
+            }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($returnData));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+
+        }
+
+    }
+
+    public function customerAddressAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiWithoutSecretValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            $data = $request->request->all();
+
+            /* @var $entity GlobalOption */
+
+            $intlMobile =$data['mobile'];
+            $em = $this->getDoctrine()->getManager();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
+            /* @var $user User */
+            if(empty($user)){
+                $data['msg'] = "invalid";
+            }else{
+                $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->findOneBy(array('globalOption'=>$user->getGlobalOption(),'user'=>$user->getId()));
+                if(empty($customer)){
+                    $customer = new Customer();
+                    $customer->setUser($user->getId());
+                    $customer->setGlobalOption($user->getGlobalOption());
+                    $customer->setName($user->getProfile()->getName());
+                    $customer->setMobile($data['mobile']);
+                    $customer->setAddress($data['address']);
+                    $em->persist($customer);
+                    $em->flush();
+
+                    $customerAddress = new CustomerAddress();
+                    $customerAddress->setCustomer($customer);
+                    $customerAddress->setName($data['name']);
+                    $customerAddress->setMode('Home');
+                    $customerAddress->setAddress($data['address']);
+                    $customerAddress->setMobile($data['mobile']);
+                    $em->persist($customerAddress);
+                    $em->flush();
+
+                }else{
+
+                    $customerAddress = new CustomerAddress();
+                    $customerAddress->setCustomer($customer);
+                    $customerAddress->setName($data['name']);
+                    $customerAddress->setMode($data['mode']);
+                    $customerAddress->setAddress($data['address']);
+                    $customerAddress->setMobile($data['mobile']);
+                    $em->persist($customerAddress);
+                    $em->flush();
+                    $returnData['address_id'] = $customerAddress->getId();
+                }
+                $returnData['msg'] = "valid";
             }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
@@ -1220,9 +1303,35 @@ class ApiEcommerceController extends Controller
                 $profile->setMobile($mobile);
                 $profile->setAdditionalPhone($mobile);
                 $profile->setAddress($address);
-
                 $em->persist($profile);
                 $em->flush();
+
+                $customerId = isset($data['customerId']) ? $data['customerId'] : '';
+                $gender = isset($data['gender']) ? $data['gender'] : '';
+
+                $customer = new Customer();
+                $customer->setUser($user->getId());
+                $customer->setGlobalOption($user->getGlobalOption());
+                $customer->setName($profile->getName());
+                $customer->setMobile($profile->getMobile());
+                $customer->setAddress($profile->getAddress());
+                if($customerId){
+                    $customer->getCustomerId($customerId);
+                }
+                if($gender){
+                    $customer->setGender($gender);
+                }
+                $em->persist($customer);
+                $em->flush();
+
+                $customerAddress = new CustomerAddress();
+                $customerAddress->setCustomer($customer);
+                $customerAddress->setMode('Home');
+                $customerAddress->setAddress($customer->getAddress());
+                $customerAddress->setMobile($customer->getMobile());
+                $em->persist($customerAddress);
+                $em->flush();
+
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($user,$setup));
 

@@ -50,11 +50,8 @@
                                 <div class="control-group">
                                     <label class="control-label" for="name">Product Name <span class="required">*</span></label>
                                     <div class="controls">
-                                        <div class="input-icon left">
-                                            <i class="icon-font"></i>
-                                            {{ form_widget(form.webName) }}
-                                            {{ form_errors(form.webName) }}
-                                        </div>
+                                        {{ form_widget(form.name) }}
+                                        {{ form_errors(form.name) }}
                                     </div>
                                 </div>
                             </div>
@@ -79,8 +76,8 @@
                                             <div class="control-group">
                                                 <label class="control-label" for="firstName">Product Bangla Name</label>
                                                 <div class="controls">
-                                                    {{ form_widget(form.productBengalName) }}
-                                                    {{ form_errors(form.productBengalName) }}
+                                                    {{ form_widget(form.nameBn) }}
+                                                    {{ form_errors(form.nameBn) }}
                                                 </div>
                                             </div>
                                         </div>

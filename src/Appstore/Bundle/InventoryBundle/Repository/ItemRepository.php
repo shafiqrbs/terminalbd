@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
@@ -17,12 +16,10 @@ use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Core\UserBundle\Entity\User;
+use Doctrine\ORM\EntityRepository;
 use Gregwar\Image\Image;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Symfony\Component\DependencyInjection\Container;
-
-use Doctrine\ORM\EntityRepository;
 
 /**
  * ItemTypeGroupingRepository
@@ -1004,12 +1001,14 @@ class ItemRepository extends EntityRepository
     public function getExistCategory($inventory,$name)
     {
         $em = $this->_em;
-        $exist = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig'=>$inventory,'name'=>$name,'permission'=>'private'));
+        $exist = $em->getRepository('ProductProductBundle:Category')->findOneBy(array('inventoryConfig' => $inventory,'name'=>$name,'permission'=>'private'));
         if($exist){
             return $exist;
         }else{
             $entity = new Category();
+            $entity->setGlobalOption($inventory->getGlobalOption());
             $entity->setInventoryConfig($inventory);
+            $entity->setEcommerceConfig($inventory->getGlobalOption()->getEcommerceConfig());
             $entity->setName($name);
             $entity->setStatus(true);
             $entity->setPermission('private');

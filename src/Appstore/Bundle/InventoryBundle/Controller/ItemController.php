@@ -53,6 +53,7 @@ class ItemController extends Controller
         //$formSearch = $this->searchCreateForm(new Item());
         return $this->render('InventoryBundle:Item:index.html.twig', array(
             'entities' => $pagination,
+            'config' => $inventory,
             'searchForm' => $data
             //'search' => $formSearch->createView(),
         ));
@@ -83,6 +84,7 @@ class ItemController extends Controller
     public function createAction(Request $request)
     {
         /* @var $inventory InventoryConfig  */
+
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $em = $this->getDoctrine()->getManager();
         $entity = new Item();
@@ -132,11 +134,13 @@ class ItemController extends Controller
                 }elseif(empty($entity->getBarcode()) and !empty($entity->getModel())){
                     $entity->setBarcode($entity->getModel());
                 }
-                $entity->upload();
+                // $entity->upload();
                 $em->persist($entity);
                 $em->flush();
-                $this->getDoctrine()->getRepository(\Appstore\Bundle\EcommerceBundle\Entity\Item::class)->insertNewInventoryItem($entity);
+                if( $this->getUser()->getGlobalOption()->getEcommerceConfig()->isInventoryStock() == 1 and $entity->getIsWeb() == 1){
+                    $this->getDoctrine()->getRepository(\Appstore\Bundle\EcommerceBundle\Entity\Item::class)->insertCopyInventoryItem($entity);
 
+                }
                 $this->get('session')->getFlashBag()->add(
                     'success', "Item has been added successfully"
                 );
@@ -548,7 +552,7 @@ class ItemController extends Controller
      * Status a Page entity.
      *
      */
-    public function isWebAction(Request $request,Item $entity)
+    public function webStatusAction(Request $request,Item $entity)
     {
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig'=> $config,'id' => $entity->getId()));
@@ -556,7 +560,7 @@ class ItemController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
         }
-        $status = $entity->isWeb();
+        $status = $entity->getIsWeb();
         if($status == 1){
             $entity->setIsWeb(0);
         } else{

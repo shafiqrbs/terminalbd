@@ -4,6 +4,108 @@
         <!-- END PAGE HEADER-->
         <div class="portlet-body">
             <div class="row-fluid" >
+                <form action="javascript:" method="post" class="patient-global-search">
+                    <div class="row-fluid">
+                        <div class="span9">
+                            <input type="text" id="select2Invoice" name="select2Invoice"  class="m-wrap span12 select2Invoice" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Global Search For : Diagnostic,Visit,Admission for Patient Details{% endif %} ">
+                        </div>
+                        <div class="span3">
+                            <input type="text" id="barcode2Invoice" name="barcode2Invoice"  class="m-wrap span12" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Scan invoice barcode for invoice details{% endif %} ">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row-fluid" style="margin-bottom:2px;background:#ccc">
+                <div class="span4">
+                    <div class="box effect1">
+                        <h3>Effect 1</h3>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="box effect1">
+                        <h3>Effect 1</h3>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="box effect1">
+                        <h3>Effect 1</h3>
+                    </div>
+                </div>
+            </div>
+           <div class="row-fluid" style="margin-bottom:2px;background:#ccc">
+
+               <div class="box effect1">
+                   <h3>Effect 1</h3>
+               </div>
+
+               <div class="box effect2">
+                   <h3>Effect 2</h3>
+               </div>
+
+               <div class="box effect3">
+                   <h3>Effect 3</h3>
+               </div>
+
+               <div class="box effect4">
+                   <h3>Effect 4</h3>
+               </div>
+
+               <div class="box effect5">
+                   <h3>Effect 5</h3>
+               </div>
+
+               <div class="box effect6">
+                   <h3>Effect 6</h3>
+               </div>
+
+               <div class="box effect7">
+                   <h3>Effect 7</h3>
+               </div>
+
+               <div class="box effect8">
+                   <h3>Effect 8</h3>
+               </div>
+            </div>
+           {# <div class="row-fluid" >
+                <div class="span3">
+                    <div class="btn-group" style="width:88%!important">
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in option.hospitalConfig.invoiceProcess) or  (app.user.granted("ROLE_DOMAIN") and 'diagnostic' in  option.hospitalConfig.invoiceProcess)) %}
+                            <a href="{{ path('hms_invoice_particular') }}" style="width: 100%" class="btn yellow big"><i class="fa fa-truck"></i> Report Delivery</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="span5">
+                    <div class="btn-group" style="width: 100%!important;">
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in  option.hospitalConfig.invoiceProcess) or  (app.user.granted("ROLE_DOMAIN") and  'diagnostic' in  option.hospitalConfig.invoiceProcess) ) %}
+                            <a class="btn red big addPatient" style="width:26%" href="javascript:"> <i class="fa fa-ambulance"></i> Add Diagnostic  </a>
+                        {% endif %}
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_OPERATOR") and 'diagnostic' in option.hospitalConfig.invoiceProcess) or  (app.user.granted("ROLE_DOMAIN") and  'diagnostic' in  option.hospitalConfig.invoiceProcess)) %}
+                            <a href="{{ path('hms_invoice') }}" style="width:27%" class="btn green big"><i class="fa fa-money"></i> Diagnostic</a>
+                        {% endif %}
+                        {% if (app.user.granted("ROLE_DOMAIN_HOSPITAL_LAB") and  'diagnostic' in  option.hospitalConfig.invoiceProcess) or ( app.user.granted("ROLE_DOMAIN_HOSPITAL_DOCTOR") and 'diagnostic' in  option.hospitalConfig.invoiceProcess) or  (app.user.granted("ROLE_DOMAIN") and  'diagnostic' in  option.hospitalConfig.invoiceProcess) %}
+                            <a href="{{ path('hms_invoice_report_process') }}" style="width: 27%" class="btn blue big"><i class="fa fa-stethoscope"></i> Report Prepared </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="btn-group" style="width:100%!important;">
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_VISIT") and 'visit' in option.hospitalConfig.invoiceProcess)) or  ('visit' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
+                            <a  href="{{ path('hms_prescription') }}" style="width: 88%" class="btn yellow big"><i class="fa fa-stethoscope"></i> Doctor Visit</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="btn-group" style="width: 100%!important;">
+                        {% if ((app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMISSION") and 'admission' in option.hospitalConfig.invoiceProcess)) or  ('admission' in option.hospitalConfig.invoiceProcess and app.user.granted("ROLE_DOMAIN")) %}
+                            <a  href="{{ path('hms_invoice_admission') }}" style="width:75%" class="btn red big"><i class="fa fa-ambulance"></i> Admission</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>#}
+        </div>
+        <div class="portlet-body">
+
+            <div class="row-fluid" >
                 <div class="span1">
                     {% if globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ globalOption.templateCustomize.webPath('logo') }}">{% endif %}
                 </div>
@@ -28,12 +130,25 @@
             </div>
         </div>
     </div>
+    <style>
+        #diagonestic {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        #visit {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        #admission {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/dashboard.css'
+        '@MedicineBundle/Resources/public/css/dashboard.css'
+        '@EcommerceBundle/Resources/public/css/shadow.css'
+        '@EcommerceBundle/Resources/public/css/style.css'
     %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
+        <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
 {% block javascriptBlock %}

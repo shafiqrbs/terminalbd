@@ -3,9 +3,9 @@
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
-use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemGallery;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemKeyValue;
+use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceMedicineEditType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceMedicineType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductEditType;
@@ -13,12 +13,11 @@ use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductSubItemType;
 use Appstore\Bundle\EcommerceBundle\Form\EcommerceProductType;
 use Appstore\Bundle\EcommerceBundle\Form\ProductImageType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
 
 /**
  * Item controller.
@@ -61,6 +60,7 @@ class ItemController extends Controller
 		return $this->render("EcommerceBundle:Item:{$theme}.html.twig", array(
 			'promotions' => '',
 			'pagination' => $pagination,
+			'config' => $config,
             'searchForm' => $data,
 		));
 	}

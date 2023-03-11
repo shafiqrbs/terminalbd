@@ -39,6 +39,11 @@ class Category
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="categories")
+     **/
+    protected $globalOption;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="categories")
      **/
     protected $inventoryConfig;
@@ -144,7 +149,7 @@ class Category
     protected $branding;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="categories" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="categories", cascade={"remove"} )
      **/
     protected $megaMenu;
 
@@ -162,7 +167,7 @@ class Category
 
      /**
      * @var string
-     * @ORM\Column(name="nameBn", type="string", length=255)
+     * @ORM\Column(name="nameBn", type="string", length=255, nullable=true)
      */
     private $nameBn;
 
@@ -235,6 +240,14 @@ class Category
      * @ORM\Column(name="permission", type="string")
      */
     private $permission = 'public';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bgcolor", type="string", nullable = true)
+     */
+    private $bgcolor;
+
 
     /**
      * @var boolean
@@ -755,6 +768,39 @@ class Category
     {
         $this->slugBn = $slugBn;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param mixed $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBgcolor()
+    {
+        return $this->bgcolor;
+    }
+
+    /**
+     * @param string $bgcolor
+     */
+    public function setBgcolor($bgcolor)
+    {
+        $this->bgcolor = $bgcolor;
+    }
+
 
 
 
