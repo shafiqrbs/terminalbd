@@ -181,16 +181,21 @@ class ApiEcommerceController extends Controller
             $path = $entity->getEcommerceConfig()->getWebPath();
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
-            $appPrimaryColor = $entity->getTemplateCustomize()->getAppPrimaryColor();
-            $appSecondaryColor = $entity->getTemplateCustomize()->getAppSecondaryColor();
-            $appBarColor = $entity->getTemplateCustomize()->getAppBarColor();
-            $appTextTitle = $entity->getTemplateCustomize()->getAppTextTitle();
-            $appTextColor = $entity->getTemplateCustomize()->getAppTextColor();
-            $appCartColor = $entity->getTemplateCustomize()->getAppCartColor();
-            $appMoreColor = $entity->getTemplateCustomize()->getAppMoreColor();
-            $appBorderColor = $entity->getTemplateCustomize()->getAppBorderColor();
-            $appPositiveColor = $entity->getTemplateCustomize()->getAppPositiveColor();
-            $appNegativeColor = $entity->getTemplateCustomize()->getAppNegativeColor();
+            $androidHeaderBg = (string) trim($entity->getTemplateCustomize()->getAndroidHeaderBg());
+            $appPrimaryColor = (string) trim($entity->getTemplateCustomize()->getAppPrimaryColor());
+            $appSecondaryColor =(string) trim($entity->getTemplateCustomize()->getAppSecondaryColor());
+            $appBarColor = (string) trim($entity->getTemplateCustomize()->getAppBarColor());
+            $appTextTitle = (string) trim($entity->getTemplateCustomize()->getAppTextTitle());
+            $appTextColor = (string) trim($entity->getTemplateCustomize()->getAppTextColor());
+            $appCartColor = (string) trim($entity->getTemplateCustomize()->getAppCartColor());
+            $appMoreColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
+            $appBorderColor =(string) trim( $entity->getTemplateCustomize()->getAppBorderColor());
+            $appPositiveColor =(string) trim( $entity->getTemplateCustomize()->getAppPositiveColor());
+            $appNegativeColor = (string) trim($entity->getTemplateCustomize()->getAppNegativeColor());
+            $appIconColor = (string) trim($entity->getTemplateCustomize()->getAndroidIconColor());
+            //$appAnchorColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
+            $appDiscountColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
+            $appAnchorHoverColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorHoverColor());
 
 
             $data = array(
@@ -217,17 +222,20 @@ class ApiEcommerceController extends Controller
                     'cashOnDelivery' => $cashOnDelivery,
                     'pickupLocation' => $pickupLocation,
                     'vatEnable' => $vatEnable,
-                    'appPrimaryColor' => (string)empty($appPrimaryColor)?'':$this->hex6ToHex8($appPrimaryColor),
-                    'appSecondaryColor' => (string)empty($appSecondaryColor)?'':$this->hex6ToHex8($appSecondaryColor) ,
-                    'appBarColor' => (string)empty($appBarColor)?'':$this->hex6ToHex8($appBarColor) ,
-                    'appTextTitle' => (string)empty($appTextTitle)?'':$this->hex6ToHex8($appTextTitle) ,
-                    'appTextColor' => (string)empty($appTextColor)?'':$this->hex6ToHex8($appTextColor) ,
-                    'appCartColor' => (string)empty($appCartColor)?'':$this->hex6ToHex8($appCartColor) ,
-                    'appMoreColor' => (string)empty($appMoreColor)?'':$this->hex6ToHex8($appMoreColor) ,
-                    'appBorderColor' => (string)empty($appBorderColor)?'':$this->hex6ToHex8($appBorderColor) ,
-                    'appPositiveColor' => (string)empty($appPositiveColor)?'':$this->hex6ToHex8($appPositiveColor) ,
-                    'appNegativeColor' => (string)empty($appNegativeColor)?'':$this->hex6ToHex8($appNegativeColor) ,
-                    'logo'      =>  $_SERVER['HTTP_HOST']."/{$path}"
+                     'appHeaderBg' => empty($androidHeaderBg) ? '' : $this->hex6ToHex8($androidHeaderBg),
+                     'appPrimaryColor' => empty($androidHeaderBg) ? '' : $this->hex6ToHex8($appPrimaryColor),
+                     'appSecondaryColor' => empty($appSecondaryColor) ? '' : $this->hex6ToHex8($appSecondaryColor),
+                     'appBarColor' => empty($appBarColor)?'':$this->hex6ToHex8($appBarColor) ,
+                     'appTextTitle' => empty($appTextTitle)?'':$this->hex6ToHex8($appTextTitle) ,
+                     'appTextColor' => empty($appTextColor)?'':$this->hex6ToHex8($appTextColor) ,
+                     'appCartColor' => empty($appCartColor)?'':$this->hex6ToHex8($appCartColor) ,
+                     'appMoreColor' => empty($appMoreColor)?'':$this->hex6ToHex8($appMoreColor) ,
+                     'appBorderColor' => empty($appBorderColor)?'':$this->hex6ToHex8($appBorderColor) ,
+                     'appPositiveColor' => empty($appPositiveColor)?'':$this->hex6ToHex8($appPositiveColor) ,
+                     'appNegativeColor' => empty($appNegativeColor)?'':$this->hex6ToHex8($appNegativeColor) ,
+                     'appDiscountColor' => empty($appDiscountColor)?'':$this->hex6ToHex8($appDiscountColor) ,
+                     'appIconColor' => empty($appIconColor)?'':$this->hex6ToHex8($appIconColor) ,
+                     'logo'      =>  $_SERVER['HTTP_HOST']."/{$path}"
                 );
             }
 
