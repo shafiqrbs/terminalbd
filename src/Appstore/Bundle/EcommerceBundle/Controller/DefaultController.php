@@ -6,7 +6,6 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
-
 class DefaultController extends Controller
 {
     public function indexAction()
@@ -61,9 +60,11 @@ class DefaultController extends Controller
             'medicineSalesMonthly'      => $medicineSalesMonthlyArr ,
             'medicinePurchaseMonthly'   => $medicinePurchaseMonthlyArr ,
             'salesUserReport'           => $salesUserReport ,
-            'userSalesAmount'           => $userSalesAmount ,
             'employees'                 => $employees ,
             'shortMedicineCount'        => $shortMedicineCount ,
+            'expiryMedicineCount'       => '' ,
+            'medicineSalesDaily'        => '' ,
+            'medicineSalesHourly'       => '' ,
             'searchForm'                => $data ,
 
         ));

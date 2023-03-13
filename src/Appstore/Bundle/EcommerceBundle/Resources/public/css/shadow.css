@@ -211,6 +211,17 @@
     -o-transform:skew(8deg) rotate(3deg);
     transform:skew(8deg) rotate(3deg);
 }
+.box h3{
+    text-align:center;
+    position:relative;
+    top:80px;
+}
+.box {
+    width:100%;
+    height:auto;
+    margin:0px auto;
+    background: #ECECEC;
+}
 
 /*==================================================
  * Effect 8
