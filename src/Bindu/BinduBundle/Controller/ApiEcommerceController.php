@@ -134,7 +134,10 @@ class ApiEcommerceController extends Controller
     }
 
     function hex6ToHex8($hex6) {
-        // Convert the 6-digit HEX color code to RGB values
+
+        return str_replace("#","0xFF",$hex6);
+
+       /* // Convert the 6-digit HEX color code to RGB values
         $r = hexdec(substr($hex6, 0, 2));
         $g = hexdec(substr($hex6, 2, 2));
         $b = hexdec(substr($hex6, 4, 2));
@@ -144,7 +147,7 @@ class ApiEcommerceController extends Controller
 
         // Convert the RGB values and alpha value to an 8-digit HEX color code
         $hex8 = $alpha . str_pad(dechex($r), 2, '0', STR_PAD_LEFT) . str_pad(dechex($g), 2, '0', STR_PAD_LEFT) . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
-        return $hex8;
+        return $hex8;*/
 
     }
 
