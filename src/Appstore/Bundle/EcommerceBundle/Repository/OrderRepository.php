@@ -94,12 +94,25 @@ class OrderRepository extends EntityRepository
         $qb->where("e.globalOption = :option")->setParameter('option', $option);
         $qb->andWhere("e.process != :head")->setParameter('head', "Delete");
         $qb->andWhere("e.isArchive != 1");
+        $this->handleSearchBetween($qb,$data);
         if (empty($data['sortBy'])){
             $qb->orderBy('e.updated', 'DESC');
         }else{
             $qb->orderBy($sort ,$order);
         }
         $res = $qb->getQuery();
+        return  $res;
+
+    }
+
+    public function todayOrderDashboard($option)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :option")->setParameter('option', $option);
+        $qb->andWhere("e.process != :head")->setParameter('head', "Delete");
+        $qb->andWhere("e.isArchive != 1");
+        $qb->orderBy('e.updated', 'DESC');
+        $res = $qb->getQuery()->getResult();
         return  $res;
 
     }

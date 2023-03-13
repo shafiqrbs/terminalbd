@@ -20,6 +20,7 @@
                    <div class="row-fluid">
                        <div class="span12"><h3>Dashboard</h3></div>
                    </div>
+
                    <div class="row-fluid">
                        <div class="span4">
                            <div class="box effect1">
@@ -70,6 +71,71 @@
                            </div>
                        </div>
                    </div>
+                   <div class="row-fluid">
+                       <div class="span12"><h3>Recent orders</h3></div>
+                   </div>
+                   <div class="row-fluid">
+                       <div class="span12">
+                           <div class="box effect1">
+                               <table id="product" class="table table-bordered table-striped table-condensed flip-content ">
+                                   <thead class="flip-content ">
+                                   <tr class="head-blue">
+                                       <td>&nbsp;&nbsp;<i class="icon-list"></i> Created</td>
+                                       <th class="numeric" >Slot</th>
+                                       <th class="numeric" >Name</th>
+                                       <th class="numeric" >Mobile</th>
+                                       <th class="numeric" >Invoice</th>
+                                       <th class="numeric" >Item</th>
+                                       <th class="numeric" >Total</th>
+                                       <th class="numeric" >File</th>
+                                       <th class="numeric" >Process</th>
+                                       <th class="numeric" >Action</th>
+                                   </tr>
+                                   </thead>
+                                   <tbody style="height: 250px; overflow-y: scroll">
+
+                                   {% for entity in entities %}
+                                       <tr id="remove-tr-{{ entity.id }}">
+                                           <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                           <td class="numeric" >{{ entity.deliverySlot }}</td>
+                                           <td class="numeric" >{{ entity.customerName }}</td>
+                                           <td class="numeric" >{{ entity.customerMobile }}</td>
+                                           <td class="numeric" >{{ entity.invoice }}</td>
+                                           <td class="numeric" >{{ entity.item }}</td>
+                                           <td class="numeric" >{{ entity.total }}</td>
+                                           <td class="numeric" >{% if entity.path is not empty %}<a href="{{ path('customer_order_attach_download',{'id':entity.id}) }}" > <i class="fa fa-download"></i> <strong>Download</strong></a>{% endif %}</td>
+                                           <td class="numeric" >
+                                               {% set postCondition = {'delivered': 'delivered' ,'cancel':'cancel','returend':'returend','delete':'delete'} %}
+                                               {% if entity.process in  postCondition|keys %}
+                                                   <span class="btn mini yellow">{{ entity.process|capitalize }}</span>
+                                               {% else %}
+                                                   <a  data-type="select" class="btn mini editable" id="discount" data-name="Discount" href="#" data-source="{{ path('customer_order_data_source') }}"  data-url="{{ path('customer_order_update_inline') }}" data-pk="{{ entity.id }}" data-value="{{ entity.process }}" data-original-title="Select Order Process Status">{{ entity.process|capitalize }}</a>
+                                               {% endif %}
+                                           </td>
+                                           <td class="numeric" >
+                                               <div class="btn-group">
+                                                   {% set postCondition = {'delivered': 'delivered' ,'cancel':'cancel','returend':'returend','delete':'delete'} %}
+                                                   {% if entity.process not in  postCondition|keys %}
+                                                       <a target="_blank"  href="{{ path('customer_order_edit', { 'id': entity.id }) }}" class="btn blue mini " >Manage</a>
+                                                   {% endif %}
+                                                   <a href="javascript:" data-title="Invoice No.{{ entity.invoice }}" data-action="{{ path('customer_order_show', { 'id': entity.id }) }}" class="btn green mini view" ><i class="icon-eye-open"></i>&nbsp;</a>
+                                                   <a  href="{{ path('customer_order_print_invoice',{id:entity.id}) }}" target="_blank" data-url=""  class="btn mini purple"><i class="icon-print"></i></a>
+
+                                               </div>
+                                           </td>
+                                       </tr>
+
+                                   {% endfor %}
+
+                                   </tbody>
+                               </table>
+                           </div>
+                       </div>
+
+                   </div>
+                   <div class="row-fluid">
+                       <div class="span12">&nbsp;</div>
+                   </div>
                    <div class="row-fluid" >
                        <div class="span6">
                            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
@@ -83,51 +149,7 @@
                            <div id="optionsYearlyMonthlyDailySales" style="height: 330px; width: 100%;"></div>
                        </div>
                    </div>
-                   <div class="row-fluid">
-                       <div class="span12"><h3>Recent orders</h3></div>
-                   </div>
-                   <div class="row-fluid">
-                       <div class="span12">
-                           <div class="box effect1">
-                               <table class="table table-bordered table-striped table-condensed flip-content ">
-                                   <thead class="flip-content">
-                                   <tr class="head-green">
-                                       <th class="numeric"><strong>Received Mode</strong></th>
-                                       <th class="numeric"><strong>Count</strong></th>
-                                       <th class="numeric"><strong>Total</strong></th>
-                                       <th class="numeric"><strong>Received</strong></th>
-                                       <th class="numeric"><strong>Balance</strong></th>
-                                   </tr>
-                                   </thead>
-                                   <tbody>
-                                   <tr>
-                                       <td class="numeric"><strong>Business</strong></td>
-                                       <td class="numeric"><strong>557</strong></td>
-                                       <td class="numeric"><strong>20,341,507</strong></td>
-                                       <td class="numeric"><strong>15,316,092</strong></td>
-                                       <td class="numeric"><strong>5,025,415</strong></td>
-                                   </tr>
-                                   <tr>
-                                       <td class="numeric"><strong>Opening</strong></td>
-                                       <td class="numeric"><strong>72</strong></td>
-                                       <td class="numeric"><strong>554,040</strong></td>
-                                       <td class="numeric"><strong>0</strong></td>
-                                       <td class="numeric"><strong>554,040</strong></td>
-                                   </tr>
-                                   <tr>
-                                       <td class="numeric"><strong>Store payment</strong></td>
-                                       <td class="numeric"><strong>952</strong></td>
-                                       <td class="numeric"><strong>0</strong></td>
-                                       <td class="numeric"><strong>4,735,364</strong></td>
-                                       <td class="numeric"><strong></strong></td>
-                                   </tr>
-                                   </tbody>
-                                   <tbody><tr><th>Summary</th><th>1581</th><th>20,895,547</th><th>20,051,456</th><th>844,091</th></tr>
-                                   </tbody></table>
-                           </div>
-                       </div>
 
-                   </div>
                </div>
            </div>
         </div>
@@ -150,20 +172,36 @@
         '@EcommerceBundle/Resources/public/css/shadow.css'
         '@EcommerceBundle/Resources/public/css/style.css'
     %}
-        <link rel="stylesheet" href="{{ asset_url }}"/>
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@MedicineBundle/Resources/public/js/approveProcess.js'
-    '@MedicineBundle/Resources/public/js/jquery-canvas.js'
+    '@EcommerceBundle/Resources/public/js/approveProcess.js'
+    '@EcommerceBundle/Resources/public/js/jquery-canvas.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    $(".editable").editable();
+    ApproveProcess();
+    $('#product').DataTable( {
+        scrollY:        '60vh',
+        scrollCollapse: true,
+        paging:         false,
+        bInfo : false,
+        orderable: false,
+        bSort: false,
+        aoColumnDefs: [
+        {
+        bSortable: false,
+            aTargets: [ -1 ]
+        }
+        ]
+    });
     window.onload = function () {
 
     var optionsUserSales = {

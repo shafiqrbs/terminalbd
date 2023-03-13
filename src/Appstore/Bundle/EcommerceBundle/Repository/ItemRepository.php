@@ -784,10 +784,12 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.country','c');
         $qb->leftJoin('item.itemAssurance','ia');
         $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn',
-            'item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
+            'item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
             'item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory','item.warningLabel as warningLabel');
         $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
+        $qb->addSelect("CASE WHEN (item.discountPrice IS NOT NULL) THEN item.discountPrice  ELSE  item.salesPrice END  as price");
+        $qb->addSelect("CASE WHEN (item.discountPrice IS NOT NULL) THEN item.salesPrice  ELSE 0  END  as discountPrice");
         $qb->addSelect('c.name as country');
         $qb->addSelect('productUnit.name as unitName');
         $qb->addSelect('ia.name as itemAssurance');

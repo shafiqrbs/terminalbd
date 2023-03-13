@@ -2,13 +2,14 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryAndroidProcess;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
-use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -132,7 +133,7 @@ class SalesRepository extends EntityRepository
 
     public function findAndroidDeviceSales($x)
     {
-        $ids = [];
+        $ids = array();
         foreach ($x as $y){
             $ids[]=$y['id'];
         }
@@ -855,6 +856,73 @@ class SalesRepository extends EntityRepository
         $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($sales);
         return $sales->getId();
 
+    }
+
+    public function insertEcommerceSales(Order $order)
+    {
+        $em = $this->_em;
+        $option = $order->getGlobalOption();
+
+        $sales = new Sales();
+        $sales->setInventoryConfig($option->getInventoryConfig());
+        $sales->setDeviceSalesId($order->getInvoice());
+        $sales->setSubTotal($order->getSubTotal());
+        $sales->setDiscount($order->getDiscount());
+        $sales->setTotal($order->getTotal());
+        $sales->setPayment($order->getReceive());
+        $sales->setReceive($order->getReceive());
+        $sales->setVat($order->getVat());
+        $sales->setDeliveryCharge($order->getShippingCharge());
+        $sales->setDue($order->getDue());
+        $sales->setTransactionMethod($order->getTransactionMethod());
+        $sales->setTransactionId($order->getTransaction());
+        $sales->setPaymentMobile($order->getPaymentMobile());
+        if($order->getAccountMobileBank()){
+            $sales->setAccountMobileBank($order->getAccountMobileBank());
+        }
+        $sales->setCreatedBy($order->getProcessBy());
+        $sales->setCustomer($order->getCustomer());
+        $sales->setCreated($order->getCreated());
+        $sales->setUpdated($order->getUpdated());
+        $sales->setSalesBy($order->getProcessBy());
+        $sales->setProcess("Done");
+        $sales->setSalesMode("Ecommerce");
+        $sales->setPaymentStatus("Paid");
+        $em->persist($sales);
+        $em->flush();
+        $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($sales);
+        return $sales->getId();
+
+    }
+
+    private function insertEcommerecSalesItem(Sales $sales,Order $order)
+    {
+        $em = $this->_em;
+        if($order->getOrderItems()){
+
+            /* @var $item OrderItem */
+
+            foreach ($order->getOrderItems() as $item):
+
+                $salesItem = new SalesItem();
+                $salesItem->setSales($sales);
+                $stockId = $item->getItem()->getInventoryItem();
+                if ($stockId) {
+                    /* @var Item $stockId */
+                    $salesItem->setItem($stockId);
+                    $salesItem->setPurchasePrice($stockId->getAvgPurchasePrice());
+                }
+                $salesItem->setQuantity($item->getQuantity());
+                $salesItem->setEstimatePrice(floatval($item->getPrice()));
+                $salesItem->setSalesPrice(floatval($item->getPrice()));
+                $salesItem->setSubTotal($salesItem->getQuantity() * $salesItem->getSalesPrice());
+                $em->persist($salesItem);
+                $em->flush();
+            endforeach;
+
+        }
+        $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($sales);
+        $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($sales->getId());
     }
 
     private function insertPosSalesItem($sales,$cart)

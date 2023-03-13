@@ -49,6 +49,10 @@ class DefaultController extends Controller
             $medicinePurchaseMonthlyArr[$row['month']] = $row['total'];
         }
 
+
+        $entities = $em->getRepository('EcommerceBundle:Order')->todayOrderDashboard($globalOption->getId());
+
+
         return $this->render('EcommerceBundle:Default:index.html.twig', array(
 
             'option'                    => $user->getGlobalOption() ,
@@ -62,6 +66,7 @@ class DefaultController extends Controller
             'salesUserReport'           => $salesUserReport ,
             'employees'                 => $employees ,
             'shortMedicineCount'        => $shortMedicineCount ,
+            'entities'                  => $entities ,
             'expiryMedicineCount'       => '' ,
             'medicineSalesDaily'        => '' ,
             'medicineSalesHourly'       => '' ,

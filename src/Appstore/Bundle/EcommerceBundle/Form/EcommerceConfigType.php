@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -25,6 +26,18 @@ class EcommerceConfigType extends AbstractType
                     '৳'       => 'Taka(৳)',
                     '$'       => 'Dollar($)'
                 ),
+            ))
+            ->add('stockApplication', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\AppModule',
+                'empty_value' => '---Select Main Application ---',
+                'property' => 'name',
+                'attr'     =>array('id' => '' , 'class' => 'm-wrap span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('s')
+                        ->andWhere("s.status = 1")
+                        ->orderBy('s.name','ASC');
+                },
             ))
             ->add('showBengal', 'choice', array(
                 'attr'=>array('class'=>'span12'),

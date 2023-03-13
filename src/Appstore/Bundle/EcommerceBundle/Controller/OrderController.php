@@ -5,20 +5,19 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\EcommerceBundle\Entity\CourierService;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\MedicineItemType;
 use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Knp\Snappy\Pdf;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Knp\Snappy\Pdf;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -56,7 +55,6 @@ class OrderController extends Controller
         $entities = $em->getRepository('EcommerceBundle:Order')->findWithSearch($globalOption->getId(),$data);
         $pagination = $this->paginate($entities);
         $couriers = $this->getDoctrine()->getRepository(CourierService::class)->findBy(array('ecommerceConfig'=>$globalOption->geteCommerceConfig(),'status'=>1));
-
         return $this->render('EcommerceBundle:Order:index.html.twig', array(
             'entities' => $pagination,
             'couriers' => $couriers,
@@ -381,7 +379,7 @@ class OrderController extends Controller
         if($entity->getShippingCharge() > 0 ){
             $em->getRepository('EcommerceBundle:Order')->updateOrder($entity);
         }
-        exit;
+        return new Response('success');
 
     }
 
@@ -494,7 +492,11 @@ class OrderController extends Controller
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
         if($order->getProcess() == "delivered"){
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+            if($order->getEcommerceConfig()->getStockApplication()->getSlug() == 'inventory' and $order->getEcommerceConfig()->isInventoryStock() == 1){
+                $this->getDoctrine()->getRepository('InventoryBundle:Sales')->insertEcommerceSales($order);
+            }else{
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+            }
         }
         return new Response('success');
     }
@@ -622,20 +624,23 @@ class OrderController extends Controller
                 //$em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
                 //$online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
                 //$em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
-
-                $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
-
+                if($order->getDeliveryDate()){
+                    $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+                }
             }else{
-
                 $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.order_comment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
 
             }
             if($order->getProcess() == "delivered"){
-                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+                if($order->getEcommerceConfig()->getStockApplication()->getSlug() == 'inventory' and $order->getEcommerceConfig()->isInventoryStock() == 1){
+                    $this->getDoctrine()->getRepository('InventoryBundle:Sales')->insertEcommerceSales($order);
+                }else{
+                    $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+                }
             }
             return $this->redirect($this->generateUrl('customer_order_payment',array('id' => $order->getId())));
         }

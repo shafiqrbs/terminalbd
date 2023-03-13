@@ -4,6 +4,7 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\AppModule;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,6 +32,12 @@ class EcommerceConfig
      **/
 
     private $globalOption;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule")
+     **/
+
+    private $stockApplication;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
@@ -1652,6 +1659,23 @@ class EcommerceConfig
     {
         $this->isInventoryStock = $isInventoryStock;
     }
+
+    /**
+     * @return AppModule
+     */
+    public function getStockApplication()
+    {
+        return $this->stockApplication;
+    }
+
+    /**
+     * @param AppModule $stockApplication
+     */
+    public function setStockApplication($stockApplication)
+    {
+        $this->stockApplication = $stockApplication;
+    }
+
 
 
 
