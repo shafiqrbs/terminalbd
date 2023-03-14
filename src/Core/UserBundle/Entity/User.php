@@ -19,7 +19,6 @@ use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
-use Appstore\Bundle\HumanResourceBundle\Entity\Payroll;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
@@ -31,11 +30,9 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantTemporary;
-use Doctrine\Common\Collections\ArrayCollection;
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -1003,7 +1000,7 @@ class User extends BaseUser
 	}
 
 	/**
-	 * @return mixed
+	 * @return Profile
 	 */
 	public function getProfile()
 	{

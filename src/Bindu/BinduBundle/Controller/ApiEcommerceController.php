@@ -134,21 +134,7 @@ class ApiEcommerceController extends Controller
     }
 
     function hex6ToHex8($hex6) {
-
         return str_replace("#","0xFF",$hex6);
-
-       /* // Convert the 6-digit HEX color code to RGB values
-        $r = hexdec(substr($hex6, 0, 2));
-        $g = hexdec(substr($hex6, 2, 2));
-        $b = hexdec(substr($hex6, 4, 2));
-
-        // Calculate the alpha value as fully opaque (255)
-        $alpha = str_pad(dechex(255), 2, '0', STR_PAD_LEFT);
-
-        // Convert the RGB values and alpha value to an 8-digit HEX color code
-        $hex8 = $alpha . str_pad(dechex($r), 2, '0', STR_PAD_LEFT) . str_pad(dechex($g), 2, '0', STR_PAD_LEFT) . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
-        return $hex8;*/
-
     }
 
     public function setupAction(Request $request)
@@ -504,52 +490,6 @@ class ApiEcommerceController extends Controller
             $search = $_REQUEST;
             $entity = $this->checkApiValidation($request);
             $result = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiProduct($entity,$search);
-         /*   $data = array();
-            if($result){
-                foreach($result as $key => $row) {
-                    $data[$key]['product_id']               = (int) $row['id'];
-                    $data[$key]['item_id']                  = (int) rand(time(),10);
-                    $data[$key]['name']                     = $row['name'];
-                    $data[$key]['nameBn']                   = $row['nameBn'];
-                    $data[$key]['quantity']                 = $row['quantity'];
-                    $data[$key]['price']                    = $row['price'];
-                    $data[$key]['discountPrice']            = $row['discountPrice'];
-                    $data[$key]['categoryId']               = $row['categoryId'];
-                    $data[$key]['category']                 = $row['categoryName'];
-                    $data[$key]['categoryBn']               = $row['categoryNameBn'];
-                    $data[$key]['brandId']                  = $row['brandId'];
-                    $data[$key]['brand']                    = $row['brandName'];
-                    $data[$key]['brandBn']                  = $row['brandNameBn'];
-                    $data[$key]['discountId']               = $row['discountId'];
-                    $data[$key]['discount']                 = $row['discountName'];
-                    $data[$key]['discountBn']               = $row['discountNameBn'];
-                    $data[$key]['discountType']             = $row['discountType'];
-                    $data[$key]['discountAmount']           = $row['discountAmount'];
-                    $data[$key]['promotionId']              = $row['promotionId'];
-                    $data[$key]['promotion']                = $row['promotionName'];
-                    $data[$key]['promotionBn']              = $row['promotionNameBn'];
-                    $data[$key]['tag']                      = $row['tags'];
-                    $data[$key]['tagBn']                    = $row['tagsBn'];
-                    $data[$key]['colors']                   = $row['colors'];
-                    $data[$key]['colorsBn']                 = $row['colorsBn'];
-                    $data[$key]['country']                  = $row['country'];
-                    $data[$key]['shortDescription']         = $row['shortContent'];
-                    $data[$key]['shortDescriptionBn']       = $row['shortContentBn'];
-                    $data[$key]['tagBn']                    = $row['tagNameBn'];
-                    $data[$key]['unitName']                 = $row['unitName'];
-                    $data[$key]['itemAssurance']                 = $row['itemAssurance'];
-                    $data[$key]['warningLabel']                 = $row['warningLabel'];
-                    $data[$key]['isFeatureBrand']           = ($row['isFeatureBrand']) ? 1 : 0;
-                    $data[$key]['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
-                    $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
-                    $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
-                    if($row['path']){
-                        $data[$key]['imagePath']            =  "http://".$_SERVER['HTTP_HOST']."/uploads/domain/{$entity->getId()}/ecommerce/product/{$row['path']}";
-                    }else{
-                        $data[$key]['imagePath']            = "";
-                    }
-                }
-            }*/
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($result));
@@ -1317,8 +1257,9 @@ class ApiEcommerceController extends Controller
                 $em->persist($profile);
                 $em->flush();
 
-                $customerId = isset($data['customerId']) ? $data['customerId'] : '';
+                $customerId = isset($data['employeeId']) ? $data['employeeId'] : '';
                 $gender = isset($data['gender']) ? $data['gender'] : '';
+                $age = isset($data['age']) ? $data['age'] : '';
 
                 $customer = new Customer();
                 $customer->setUser($user->getId());
@@ -1326,16 +1267,15 @@ class ApiEcommerceController extends Controller
                 $customer->setName($profile->getName());
                 $customer->setMobile($profile->getMobile());
                 $customer->setAddress($profile->getAddress());
-                if($customerId){
-                    $customer->getCustomerId($customerId);
-                }
-                if($gender){
-                    $customer->setGender($gender);
-                }
+                $customer->setGender($gender);
+                $customer->setAge($age);
+                if($customerId){$customer->getCustomerId($customerId); }
+                if($gender){ $customer->setGender($gender); }
                 $em->persist($customer);
                 $em->flush();
 
                 $customerAddress = new CustomerAddress();
+                $customerAddress->setName($customer->getName());
                 $customerAddress->setCustomer($customer);
                 $customerAddress->setMode('Home');
                 $customerAddress->setAddress($customer->getAddress());
@@ -1353,16 +1293,29 @@ class ApiEcommerceController extends Controller
                 $this->get('fos_user.user_manager')->updateUser($user);
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
-
             }
-
             $returnData['user_id'] = (int) $user->getId();
             $returnData['username'] = $user->getUsername();
             $returnData['password'] = $a;
             $returnData['name'] = $user->getProfile()->getName();
-            $returnData['address'] = $user->getProfile()->getAddress();
             $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
             $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
+
+            $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+            $addreses = $customer->getCustomerAddresses();
+            $returnData['address'] = array();
+            if($addreses) {
+                /* @var $address CustomerAddress */
+                foreach ($addreses as $address) {
+                    $returnData['address'][$address->getId()]['id'] = (integer)$address->getId();
+                    $returnData['address'][$address->getId()]['name'] = (string)$address->getName();
+                    $returnData['address'][$address->getId()]['mobile'] = (string)$address->getMobile();
+                    $returnData['address'][$address->getId()]['address'] = (string)$address->getAddress();
+                    $returnData['address'][$address->getId()]['mode'] = (string)$address->getMode();
+                }
+            }else{
+                $returnData['address'] = array();
+            }
             $returnData['msg'] = "valid";
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
@@ -1431,10 +1384,24 @@ class ApiEcommerceController extends Controller
             $returnData['user_id'] = (int) $user->getId();
             $returnData['username'] = $user->getUsername();
             $returnData['name'] = $user->getProfile()->getName();
-            $returnData['address'] = $user->getProfile()->getAddress();
             $returnData['email'] = $user->getProfile()->getEmail();
             $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
             $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
+            $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+            $addreses = $customer->getCustomerAddresses();
+            $returnData['address'] = array();
+            if($addreses) {
+                /* @var $address CustomerAddress */
+                foreach ($addreses as $address) {
+                    $returnData['address'][$address->getId()]['id'] = (integer)$address->getId();
+                    $returnData['address'][$address->getId()]['name'] = (string)$address->getName();
+                    $returnData['address'][$address->getId()]['mobile'] = (string)$address->getMobile();
+                    $returnData['address'][$address->getId()]['address'] = (string)$address->getAddress();
+                    $returnData['address'][$address->getId()]['mode'] = (string)$address->getMode();
+                }
+            }else{
+                $returnData['address'] = array();
+            }
             $returnData['msg'] = "valid";
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');

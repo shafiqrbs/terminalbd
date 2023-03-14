@@ -34,13 +34,13 @@ class ProductExcel
 
             $name = ucfirst(strtolower($item['ProductName']));
             $category = ucfirst(strtolower($item['Category']));
-          //  $productID = $item['ProductID'];
+            $productID = $item['ProductID'];
             $productOld = $this->getDoctrain()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $inventory,'name' => $name));
             if(empty($productOld)){
                 $salesPrice = empty($item['SalesPrice']) ? 0 : $item['SalesPrice'];
                 $purchasePrice = empty($item['PurchasePrice']) ? 0 : $item['PurchasePrice'];
                 $unit = empty($item['Unit']) ? 'Pcs' : $item['Unit'];
-                $barcode = empty($item['Barcode']) ? time() : $item['Barcode'];
+                $barcode = empty($item['Barcode']) ? $productID  : time();
                 $model = empty($item['model']) ? time() : $item['model'];
                 $product = new Item();
                 $product->setInventoryConfig($inventory);
@@ -101,11 +101,12 @@ class ProductExcel
     private function getCategory($item)
     {
         $config = $this->excelImport->getInventoryConfig();
+        $global = $this->excelImport->getInventoryConfig()->getGlobalOption();
         $categoryRepository = $this->getCategoryRepository();
 
         $category = $categoryRepository->findOneBy(
             array(
-                'inventoryConfig'   => $config,
+                'globalOption'   => $global,
                 'name' => $item,
                 'permission' => 'private',
             )
@@ -115,6 +116,7 @@ class ProductExcel
         }else{
             $category = new Category();
             $category->setName($item);
+            $category->setGlobalOption($global);
             $category->setinventoryConfig($config);
             $category->setPermission('private');
             $category->setStatus(true);

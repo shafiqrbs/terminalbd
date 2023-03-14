@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Coupon;
+use Appstore\Bundle\EcommerceBundle\Entity\CustomerAddress;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
@@ -459,19 +460,22 @@ class OrderRepository extends EntityRepository
 
     public function insertAndroidOrder(GlobalOption $option , $data= array())
     {
-        $jsonUser = json_decode($data['jsonUser'],true);
-        $userJson = $jsonUser[0];
+
         $jsonOrder = json_decode($data['jsonOrder'],true);
         $orderJson = $jsonOrder[0];
         $em = $this->_em;
+        var_dump($orderJson);
+        var_dump($data);
+        $userId        = empty($orderJson['userId']) ? '' : $orderJson['userId'];
+        echo $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
 
-        $userId         = empty($userJson['userId']) ? '' : $userJson['userId'];
-        $user           = $em->getRepository('UserBundle:User')->find($userId);
-        $address        = empty($userJson['address']) ? '' : $userJson['address'];
-        $mobile         = empty($userJson['mobile']) ? '' : $userJson['mobile'];
-        $location       = empty($userJson['location']) ? '' : $userJson['location'];
+        exit;
+
+        $user = $em->getRepository(User::class)->find($userId);
+        $addressInfo = $em->getRepository(CustomerAddress::class)->find($addressId);
 
         $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
+        $location     = empty($orderJson['locationId']) ? '' : $orderJson['locationId'];
         $couponCode     = empty($orderJson['couponCode']) ? '' : $orderJson['couponCode'];
         $comment        = empty($orderJson['comment']) ? '' : $orderJson['comment'];
         $deliveryDate   = empty($orderJson['deliveryDate']) ? '' : $orderJson['deliveryDate'];
@@ -488,8 +492,10 @@ class OrderRepository extends EntityRepository
             $order = new Order();
             $order->setGlobalOption($option);
             $order->setCreatedBy($user);
-            $order->setAddress($address);
-            $order->setCustomerMobile($mobile);
+            $order->setAddress($addressInfo->getAddress());
+            $order->setCustomerMobile($addressInfo->getMobile());
+            $order->setCustomerName($addressInfo->getName());
+            $order->setCustomer($addressInfo->getCustomer());
             $order->setOrderId($orderId);
             if($location){
                 $loc = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($location);

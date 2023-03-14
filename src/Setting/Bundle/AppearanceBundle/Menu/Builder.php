@@ -883,12 +883,12 @@ class Builder extends ContainerAware
                     ;
             }
             $menu['Inventory']['Manage Stock']->addChild('Stock Adjustment', array('route' => 'inv_stock_adjustment'));
-            $menu['Inventory']['Manage Stock']->addChild('Damage', array('route' => 'inventory_damage'))
-                ->setAttribute('icon', ' icon-trash');
+            $menu['Inventory']['Manage Stock']->addChild('Damage', array('route' => 'inventory_damage'));
 
             $menu['Inventory']->addChild('Master Data', array('route' => ''))
                 ->setAttribute('dropdown', true);
             $menu['Inventory']['Master Data']->addChild('Master Item', array('route' => 'inventory_product'));
+            $menu['Inventory']['Master Data']->addChild('Item Import', array('route' => 'inventory_excelimproter'));
            // $menu['Inventory']['Master Data']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())));
             $menu['Inventory']['Master Data']->addChild('Brand', array('route' => 'itembrand'));;
             $menu['Inventory']['Master Data']->addChild('Size Group', array('route' => 'itemsize_group'));;

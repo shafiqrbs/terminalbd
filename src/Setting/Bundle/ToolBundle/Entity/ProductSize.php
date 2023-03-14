@@ -34,7 +34,7 @@ class ProductSize
      /**
      * @var string
      *
-     * @ORM\Column(name="nameBn", type="string", length=255)
+     * @ORM\Column(name="nameBn", type="string", length=255,nullable=true)
      */
     private $nameBn;
 

@@ -3,13 +3,14 @@
 namespace Appstore\Bundle\InventoryBundle\Importer;
 
 
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemImport;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+use Appstore\Bundle\EcommerceBundle\Repository\PromotionRepository;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\ProductSize;
+use Setting\Bundle\ToolBundle\Repository\ProductSizeRepository;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class ItemExcel
@@ -126,10 +127,11 @@ class ItemExcel
     private function getCategory($item)
     {
         $config = $this->itemImport->getEcommerceConfig();
+        $global = $this->itemImport->getEcommerceConfig()->getGlobalOption();
         $categoryRepository = $this->getCategoryRepository();
 
         $category = $categoryRepository->findOneBy(array(
-            'ecommerceConfig'   => $config,
+            'globalOption'   => $global,
             'name'              => $item
         ));
         if($category){
@@ -137,6 +139,7 @@ class ItemExcel
         }else{
             $category = new Category();
             $category->setName($item);
+            $category->setGlobalOption($global);
             $category->setEcommerceConfig($config);
             $category = $this->save($category);
             return $category;
@@ -270,19 +273,19 @@ class ItemExcel
     }
 
     /**
-     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository
+     * @return PromotionRepository
      */
     private function getPromotionRepository()
     {
-        return $this->getDoctrain()->getRepository('EcommerceBundle:Promotion');
+        return $this->getDoctrain()->getRepository(Promotion::class);
     }
 
     /**
-     * @return \Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository
+     * @return ProductSizeRepository
      */
     private function getSizeRepository()
     {
-        return $this->getDoctrain()->getRepository();
+        return $this->getDoctrain()->getRepository(ProductSize::class);
     }
 
     /**

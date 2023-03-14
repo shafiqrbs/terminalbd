@@ -161,6 +161,19 @@ class DefaultController extends Controller
         $StockItem->execute();
         return $this->redirect($this->generateUrl('item'));
     }
+
+
+     public function itemToecommerceAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $option = $this->getUser()->getGlobalOption();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Item')->copyInventoryStockToEcommerce($option);
+        return new Response('success');
+
+    }
+
+
     public function masterItemDeleteAction()
     {
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();

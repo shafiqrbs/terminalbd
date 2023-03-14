@@ -1215,18 +1215,7 @@ class ItemRepository extends EntityRepository
     }
 
     function hex6ToHex8($hex6) {
-        // Convert the 6-digit HEX color code to RGB values
-        $r = hexdec(substr($hex6, 0, 2));
-        $g = hexdec(substr($hex6, 2, 2));
-        $b = hexdec(substr($hex6, 4, 2));
-
-        // Calculate the alpha value as fully opaque (255)
-        $alpha = str_pad(dechex(255), 2, '0', STR_PAD_LEFT);
-
-        // Convert the RGB values and alpha value to an 8-digit HEX color code
-        $hex8 = $alpha . str_pad(dechex($r), 2, '0', STR_PAD_LEFT) . str_pad(dechex($g), 2, '0', STR_PAD_LEFT) . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
-        return $hex8;
-
+        return str_replace("#","0xFF",$hex6);
     }
 
     public function getApiFeatureCategory(GlobalOption $option)
@@ -2069,6 +2058,29 @@ class ItemRepository extends EntityRepository
         $qb1->bindValue('config', $medicineConfig);
         $qb1->execute();
 
+    }
+
+    public function isInteger($input){
+        return(ctype_digit(strval($input)));
+    }
+
+    public function copyInventoryStockToEcommerce(GlobalOption $option)
+    {
+        $config =$option->getInventoryConfig()->getId();
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Item','item');
+        $qb->select('item.id as id','item.barcode as barcode');
+        $qb->where("item.inventoryConfig = :config")->setParameter('config', $config);
+        $result = $qb->getQuery()->getArrayResult();
+        foreach ($result as $row){
+            if($this->isInteger($row['barcode'])){
+                $item = $row['id'];
+                $barcode = $row['barcode'];
+                $stockUpdate = "UPDATE ecommerce_item SET inventoryItem_id = {$item} WHERE  id ={$barcode}";
+                $qb1 = $this->getEntityManager()->getConnection()->prepare($stockUpdate);
+                $qb1->execute();
+            }
+        }
     }
 
     public function updateBrandItem(ItemBrand $brand,$status){
