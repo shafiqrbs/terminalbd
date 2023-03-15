@@ -105,7 +105,6 @@ class FeatureWidgetRepository extends EntityRepository
 
             foreach ($items as $key => $row) {
 
-
                 $url = "/android-api-ecommerce/home";
                 if ($row->getFeature()->getTargetTo() == "Category") {
                     $url = "/android-api-ecommerce/product-search?category={$row->getFeature()->getCategory()->getId()}";
@@ -136,7 +135,7 @@ class FeatureWidgetRepository extends EntityRepository
     public function resizeFilter($pathToImage, $width = 720, $height = 720)
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
-        return "http://".$_SERVER['HTTP_HOST'].$path;
+        return "http://{$_SERVER['HTTP_HOST']}{$path}";
     }
 
 }
