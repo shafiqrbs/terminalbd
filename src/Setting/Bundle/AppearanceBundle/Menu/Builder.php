@@ -718,7 +718,7 @@ class Builder extends ContainerAware
             ->addChild('Procurement')
             ->setAttribute('icon', 'icon-shopping-cart')
             ->setAttribute('dropdown', true);
-        $menu['Procurement']->addChild("Requisition List", array('route' => 'pro_purchaserequisition'));
+      //  $menu['Procurement']->addChild("Requisition List", array('route' => 'pro_purchaserequisition'));
         $menu['Procurement']->addChild("New Requisition", array('route' => 'pro_purchaserequisition_new'));
         $menu['Procurement']->addChild('Issue', array('route' => ''))
             ->setAttribute('dropdown', true);
