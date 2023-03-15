@@ -2,9 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
-use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
-use Appstore\Bundle\AccountingBundle\Entity\AccountCondition;
 use Appstore\Bundle\AccountingBundle\Entity\AccountConditionLedger;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournalItem;
@@ -18,13 +16,8 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
-use Appstore\Bundle\AccountingBundle\Entity\Transaction;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
-use Appstore\Bundle\InventoryBundle\Entity\Purchase;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Core\UserBundle\Entity\User;
-use Core\UserBundle\UserBundle;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -39,7 +32,6 @@ class AccountCashRepository extends EntityRepository
     public function openingBalance(User $user,$transactionMethods = [], $data =[]){
 
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
         if(isset($data['startDate'])){
             $date = new \DateTime($data['startDate']);
         }else{
@@ -56,10 +48,6 @@ class AccountCashRepository extends EntityRepository
         $qb->select('COALESCE(SUM(e.debit)) AS debit, COALESCE(SUM(e.credit)) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         if (!empty($user)) {
             $qb->join('e.createdBy','user');
             $qb->andWhere("user.id = :user")->setParameter('user', $user);
@@ -88,7 +76,6 @@ class AccountCashRepository extends EntityRepository
     public function openingBalanceGroup(User $user,$transactionMethods,$data){
 
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
         if(isset($data['startDate'])){
             $date = new \DateTime($data['startDate']);
         }else{
@@ -101,10 +88,6 @@ class AccountCashRepository extends EntityRepository
         $qb->select('(COALESCE(SUM(e.debit),0) - COALESCE(SUM(e.credit),0)) AS balance');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $user  =    isset($data['user'])? $data['user'] :'';
         if (!empty($user)) {
             $qb->join('e.createdBy','user');
@@ -119,7 +102,6 @@ class AccountCashRepository extends EntityRepository
     public function cashOverview(User $user,$transactionMethods,$data)
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
@@ -213,7 +195,6 @@ class AccountCashRepository extends EntityRepository
     public function transactionCashOverview(User $user,$method,$data)
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption");
@@ -221,10 +202,6 @@ class AccountCashRepository extends EntityRepository
         $qb->andWhere("e.transactionMethod = :transactionMethod");
         $qb->setParameter('transactionMethod',$method);
 
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         if(!empty($method)){
             $qb->andWhere("e.transactionMethod = :transactionMethod");
             $qb->setParameter('transactionMethod',$method);
@@ -303,16 +280,11 @@ class AccountCashRepository extends EntityRepository
     {
 
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
         $qb->select('e.processHead as name , COALESCE(SUM(e.debit),0) AS debit, COALESCE(SUM(e.credit),0) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy("e.processHead");
         $result = $qb->getQuery()->getArrayResult();
@@ -324,16 +296,12 @@ class AccountCashRepository extends EntityRepository
 	{
 
 		$globalOption = $user->getGlobalOption();
-		$branch = $user->getProfile()->getBranches();
+
 
 		$qb = $this->createQueryBuilder('e');
 		$qb->join('e.transactionMethod','t');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
-		if (!empty($branch)){
-			$qb->andWhere("e.branches = :branch");
-			$qb->setParameter('branch', $branch);
-		}
 		//$qb->andWhere("t.id IN(:transactionMethod)");
 		//$qb->setParameter('transactionMethod',array_values($transactionMethods));
 		$this->handleSearchBetween($qb,$data);
@@ -347,16 +315,10 @@ class AccountCashRepository extends EntityRepository
     {
 
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
-
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $qb->andWhere("t.id IN(:transactionMethod)");
         $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);

@@ -4,7 +4,6 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\ExpenseAndroidProcess;
 use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
-use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -107,7 +106,6 @@ class ExpenditureRepository extends EntityRepository
     public function expenditureOverview(User $user , $data)
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->_em->createQueryBuilder();
         $qb->from('AccountingBundle:Expenditure','e');
@@ -116,10 +114,6 @@ class ExpenditureRepository extends EntityRepository
         $qb->setParameter('process', 'approved');
         $qb->andWhere('e.globalOption = :globalOption');
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $amount = $qb->getQuery()->getOneOrNullResult();
         return  $amount['amount'] ;
@@ -178,7 +172,6 @@ class ExpenditureRepository extends EntityRepository
     public function findWithSearch(User $user , $data)
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.createdBy','cu');
@@ -199,10 +192,6 @@ class ExpenditureRepository extends EntityRepository
         $qb->addSelect('ab.accountNo as accountNo');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
