@@ -136,7 +136,7 @@ class FeatureWidgetRepository extends EntityRepository
     public function resizeFilter($pathToImage, $width = 720, $height = 720)
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
-        return $_SERVER['HTTP_HOST'].$path;
+        return "http://".$_SERVER['HTTP_HOST'].$path;
     }
 
 }

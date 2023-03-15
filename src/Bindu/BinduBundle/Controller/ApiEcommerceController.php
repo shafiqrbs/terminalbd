@@ -375,7 +375,7 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity Page */
 
-            $path = $_SERVER['HTTP_HOST'].'/'.$entity->getWebPath();
+            $path = "http://".$_SERVER['HTTP_HOST'].'/'.$entity->getWebPath();
             $data = array(
                 'id' => $entity->getId(),
                 'name' => $entity->getName(),
@@ -400,7 +400,7 @@ class ApiEcommerceController extends Controller
                     $data['gallery'][$key]['imageId'] = (integer)$sub->getId();
                     if($sub->getPath()){
                         $path = $sub->getWebPath($option->getId(),$entity->getPhotoGallery()->getId());
-                        $data['gallery'][$key]['imagePath'] =  $_SERVER['HTTP_HOST'].'/'.$path;
+                        $data['gallery'][$key]['imagePath'] =  "http://".$_SERVER['HTTP_HOST'].'/'.$path;
                     }else{
                         $data['gallery'][$key]['imagePath'] = "";
                     }
