@@ -265,7 +265,7 @@ function ApproveProcess(){
     });
 
 
-    $(document).on("click", " .submitOrder", function() {
+    $(document).on("click", " .submitOrder", function(e) {
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
@@ -273,7 +273,7 @@ function ApproveProcess(){
                $("#ecommerce-payment").submit();
             }
         });
-        e.preventDefault();
+        e.preventDefault(e);
     });
 
     $(document).on("click", " .submitPayment", function(e) {

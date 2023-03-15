@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\CourierService;
 use Appstore\Bundle\EcommerceBundle\Entity\Item;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
@@ -300,7 +301,6 @@ class OrderController extends Controller
         }else{
             $theme = 'ecommerce';
         }
-
         $html =  $this->renderView("EcommerceBundle:Order/ecommerce:ajaxOrderItem.html.twig", array(
             'globalOption' => $entity->getGlobalOption(),
             'entity' => $entity,
@@ -329,7 +329,7 @@ class OrderController extends Controller
     public function autoCustomerSearchAction(Request $request)
     {
         $q = $_REQUEST['term'];
-        $option = $this->getUser()->getGlobalOption()->getId();
+        $option = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->searchEcommerceCustomer($option,$q);
         $items = array();
         foreach ($entities as $entity):
@@ -343,13 +343,19 @@ class OrderController extends Controller
         $data = $_REQUEST;
         $order = $data['order'];
         $userId = $data['customer'];
+        $em = $this->getDoctrine()->getManager();
         /* @var $entity Order */
         $entity = $this->getDoctrine()->getRepository("EcommerceBundle:Order")->find($order);
         $user = $this->getDoctrine()->getRepository("UserBundle:User")->find($userId);
-        $em = $this->getDoctrine()->getManager();
+        $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user'=>$user->getId()));
+
         $entity->setCustomerName($user->getProfile()->getName());
         $entity->setCustomerMobile($user->getProfile()->getMobile());
         $entity->setAddress($user->getProfile()->getAddress());
+        if(empty($customer)){
+            $customer = $this->getDoctrine()->getRepository(Customer::class)->insertEcommerceCustomer($user->getProfile());
+        }
+        $entity->setCustomer($customer);
         $em->flush();
         return new Response('success');
     }
@@ -407,7 +413,6 @@ class OrderController extends Controller
         $this->updateOrderInformation($order, $data);
         $em = $this->getDoctrine()->getManager();
         if(isset($data['transactionType']) and $data['transactionType'] and $order->getTotal() > 0){
-
             $entity = new OrderPayment();
             $entity->setOrder($order);
             if($data['transactionType'] == 'Return'){
@@ -438,7 +443,7 @@ class OrderController extends Controller
         }
         $em->persist($order);
         $em->flush();
-        return new Response('success');
+        return $this->redirect($this->generateUrl('customer_order_edit',array('id' => $order->getId())));
 
     }
 
@@ -514,7 +519,7 @@ class OrderController extends Controller
         $entity->setSubTotal($entity->getPrice() *  floatval($data['value']));
         $em->flush();
         $em->getRepository('EcommerceBundle:Order')->updateOrder($entity->getOrder());
-        exit;
+        return new Response('success');
     }
 
     /**
@@ -614,16 +619,10 @@ class OrderController extends Controller
             }
             $em->flush();
             if($order->getProcess() == 'confirm'){
-
                 $em->getRepository('EcommerceBundle:OrderItem')->updateOrderItem($order);
                 $em->getRepository('EcommerceBundle:Order')->updateOrder($order);
                 $em->getRepository('EcommerceBundle:OrderPayment')->updateOrderPayment($order);
                 $em->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-
-                //$em->getRepository('InventoryBundle:Item')->onlineOrderUpdate($order);
-                //$em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
-                //$online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
-                //$em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
                 if($order->getDeliveryDate()){
                     $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
                     $dispatcher = $this->container->get('event_dispatcher');
@@ -679,16 +678,18 @@ class OrderController extends Controller
         $order->setProcess($data['value']);
         $em->flush();
         if($order->getProcess() == 'confirm') {
-
             $em->getRepository('EcommerceBundle:OrderItem')->updateOrderItem($order);
             $em->getRepository('EcommerceBundle:Order')->updateOrder($order);
             $em->getRepository('EcommerceBundle:OrderPayment')->updateOrderPayment($order);
             $em->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
-        }
-        if($order->getProcess() == "delivered"){
-            
+        }elseif($order->getProcess() == "delivered"){
+            if($order->getEcommerceConfig()->getStockApplication()->getSlug() == 'inventory' and $order->getEcommerceConfig()->isInventoryStock() == 1){
+                $this->getDoctrine()->getRepository('InventoryBundle:Sales')->insertEcommerceSales($order);
+            }else{
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertEcommerceSales($order);
+            }
         }
         return new Response('success');
 

@@ -890,6 +890,7 @@ class SalesRepository extends EntityRepository
         $sales->setPaymentStatus("Paid");
         $em->persist($sales);
         $em->flush();
+        $this->insertEcommerecSalesItem($sales,$order);
         $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($sales);
         return $sales->getId();
 

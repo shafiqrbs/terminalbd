@@ -2,8 +2,10 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -446,7 +448,38 @@ class CustomerRepository extends EntityRepository
 
     }
 
-    public function insertContactCustomer($globalOption,$data,$mobile='')
+    public function insertEcommerceCustomer(Profile $profile)
+    {
+        $em = $this->_em;
+        $user = $profile->getUser()->getId();
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('user' => $user));
+        if(empty($entity)){
+            $entity = new Customer();
+            $entity->setUser($user);
+            $entity->setEmail($profile->getEmail());
+            $entity->setMobile($profile->getMobile());
+            $entity->setName($profile->getName());
+            $entity->setAddress($profile->getAddress());
+            $entity->setGlobalOption($profile->getUser()->getGlobalOption());
+            $entity->setCustomerType('ecommerce');
+            $em->persist($entity);
+            $em->flush();
+            $customerAddress = new CustomerAddress();
+            $customerAddress->setCustomer($entity);
+            $customerAddress->setName($entity->getName());
+            $customerAddress->setMode('Home');
+            $customerAddress->setAddress($entity->getAddress());
+            $customerAddress->setMobile($entity->getMobile());
+            $em->persist($customerAddress);
+            $em->flush();
+            return $entity;
+        }else {
+            return $entity;
+        }
+
+    }
+
+     public function insertContactCustomer($globalOption,$data,$mobile='')
     {
         $em = $this->_em;
         $entity  ='';
@@ -478,6 +511,8 @@ class CustomerRepository extends EntityRepository
         }
 
     }
+
+
 
     public function insertStudentMember(User $user,$data)
     {
