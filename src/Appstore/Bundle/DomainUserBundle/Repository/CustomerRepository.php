@@ -452,18 +452,19 @@ class CustomerRepository extends EntityRepository
     {
         $em = $this->_em;
         $user = $profile->getUser()->getId();
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('user' => $user));
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $profile->getUser()->getGlobalOption(),'mobile'=> $profile->getUser()->getUsername()));
         if(empty($entity)){
             $entity = new Customer();
             $entity->setUser($user);
             $entity->setEmail($profile->getEmail());
-            $entity->setMobile($profile->getMobile());
+            $entity->setMobile($profile->getUser()->getUsername());
             $entity->setName($profile->getName());
             $entity->setAddress($profile->getAddress());
             $entity->setGlobalOption($profile->getUser()->getGlobalOption());
             $entity->setCustomerType('ecommerce');
             $em->persist($entity);
             $em->flush();
+
             $customerAddress = new CustomerAddress();
             $customerAddress->setCustomer($entity);
             $customerAddress->setName($entity->getName());

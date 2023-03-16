@@ -137,6 +137,13 @@ class ApiEcommerceController extends Controller
         return str_replace("#","0xFF",$hex6);
     }
 
+    function random_color_code() {
+        $red = str_pad(dechex(rand(0, 255)), 2, '0', STR_PAD_LEFT);
+        $green = str_pad(dechex(rand(0, 255)), 2, '0', STR_PAD_LEFT);
+        $blue = str_pad(dechex(rand(0, 255)), 2, '0', STR_PAD_LEFT);
+        return '#' . $red . $green . $blue;
+    }
+
     public function setupAction(Request $request)
     {
 
@@ -211,20 +218,20 @@ class ApiEcommerceController extends Controller
                     'cashOnDelivery' => $cashOnDelivery,
                     'pickupLocation' => $pickupLocation,
                     'vatEnable' => $vatEnable,
-                     'appHeaderBg' => empty($androidHeaderBg) ? '' : $this->hex6ToHex8($androidHeaderBg),
-                     'appPrimaryColor' => empty($androidHeaderBg) ? '' : $this->hex6ToHex8($appPrimaryColor),
-                     'appSecondaryColor' => empty($appSecondaryColor) ? '' : $this->hex6ToHex8($appSecondaryColor),
-                     'appBarColor' => empty($appBarColor)?'':$this->hex6ToHex8($appBarColor) ,
-                     'appTextTitle' => empty($appTextTitle)?'':$this->hex6ToHex8($appTextTitle) ,
-                     'appTextColor' => empty($appTextColor)?'':$this->hex6ToHex8($appTextColor) ,
-                     'appCartColor' => empty($appCartColor)?'':$this->hex6ToHex8($appCartColor) ,
-                     'appMoreColor' => empty($appMoreColor)?'':$this->hex6ToHex8($appMoreColor) ,
-                     'appBorderColor' => empty($appBorderColor)?'':$this->hex6ToHex8($appBorderColor) ,
-                     'appPositiveColor' => empty($appPositiveColor)?'':$this->hex6ToHex8($appPositiveColor) ,
-                     'appNegativeColor' => empty($appNegativeColor)?'':$this->hex6ToHex8($appNegativeColor) ,
-                     'appDiscountColor' => empty($appDiscountColor)?'':$this->hex6ToHex8($appDiscountColor) ,
-                     'appIconColor' => empty($appIconColor)?'':$this->hex6ToHex8($appIconColor) ,
-                     'logo'      =>  $_SERVER['HTTP_HOST']."/{$path}"
+                     'appHeaderBg' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($androidHeaderBg),
+                     'appPrimaryColor' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appPrimaryColor),
+                     'appSecondaryColor' => empty($appSecondaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appSecondaryColor),
+                     'appBarColor' => empty($appBarColor) ? $this->hex6ToHex8($this->random_color_code()) :$this->hex6ToHex8($appBarColor) ,
+                     'appTextTitle' => empty($appTextTitle)? $this->hex6ToHex8($this->random_color_code()) :$this->hex6ToHex8($appTextTitle) ,
+                     'appTextColor' => empty($appTextColor)? $this->hex6ToHex8($this->random_color_code()) :$this->hex6ToHex8($appTextColor) ,
+                     'appCartColor' => empty($appCartColor)? $this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appCartColor) ,
+                     'appMoreColor' => empty($appMoreColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appMoreColor) ,
+                     'appBorderColor' => empty($appBorderColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appBorderColor) ,
+                     'appPositiveColor' => empty($appPositiveColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appPositiveColor) ,
+                     'appNegativeColor' => empty($appNegativeColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appNegativeColor) ,
+                     'appDiscountColor' => empty($appDiscountColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appDiscountColor) ,
+                     'appIconColor' => empty($appIconColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appIconColor) ,
+                     'logo'      =>  "http://{$_SERVER['HTTP_HOST']}/{$path}"
                 );
             }
 
@@ -233,9 +240,7 @@ class ApiEcommerceController extends Controller
         $response->setContent(json_encode($data));
         $response->setStatusCode(Response::HTTP_OK);
         return $response;
-
     }
-
 
     public function configurationAction(Request $request)
     {
@@ -444,8 +449,6 @@ class ApiEcommerceController extends Controller
         }
 
     }
-
-
 
     public function featureProductAction(Request $request)
     {
@@ -778,8 +781,6 @@ class ApiEcommerceController extends Controller
 
     }
 
-
-
     public function orderCreateAction(Request $request)
     {
 
@@ -794,28 +795,28 @@ class ApiEcommerceController extends Controller
 
             $userId = 1;
             $attachFile = '';
-            $jsonUser = '[
-                {
+            $jsonUser = '{
                 "userId":"1538","address":"Dhaka","mobile":"01828148148","location":"Mirpur"
-                }
-            ]';
+            }';
+            $jsonOrder = '
+                { "id":"051900113","userId":"4491","deliveryAddress":1,"locationId":1,"bankAccount":"","cashOnDelivery":"yes","couponCode":"","deliveryDate":"2021-06-21","discount":"0","discountCoupon":"","id":"1624269101","mobileBankAccount":"","paymentCard":"","paymentCardNo":"","paymentMobile":"","remark":"","shippingCharge":"50","subTotal":"85","timePeriod":"10.30 am","total":"35","transactionId":"","transactionMethod":"cash","vat":"0"}
+            ';
 
-            $jsonOrder = '[
-                {
-                "id":"051900113","userId":"2","subTotal":"1200","discount":"200","vat":"0","total":"1000","shippingCharge":"100","couponCode":"434234234","timePeriod":"10.30 AM","deliveryDate":"2021-06-01","transactionMethod":"cash","cashOnDelivery":"1","discountCoupon":"123443","receiveAccount":"","paymentMobile":"","paymentCard":"","paymentCardNo":"","transactionId":"","comment":""
-                }
-            ]';
-
-            $jsonOrderItem = '[
+            /*$jsonOrderItem = '[
             {"id":"051900113","itemId":"051900113","orderId":"051900113","name":"ItemName","price":"120","quantity":"2","size":"XL","color":"Red","quantity":"2","subTotal":"240","url":"http://www.terminalbd.com/uploads/domain/4/ecommerce/product/Teer semolina suji.jpg"},
             {"id":"051900114","itemId":"051900114","orderId":"051900113","name":"ItemName","price":"120","quantity":"2","size":"XL","color":"Red","quantity":"2","subTotal":"240","url":"http://www.terminalbd.com/uploads/domain/4/ecommerce/product/Teer semolina suji.jpg"}
+            ]';*/
+
+            $jsonOrderItem1 = '[
+            {"itemId":"27489","orderId":"1323","quantity":"1","unitPrice":"35"},
+            {"itemId":"27490","orderId":"1323","quantity":"1","unitPrice":"35"},
+            {"itemId":"27491","orderId":"1323","quantity":"1","unitPrice":"35"}
             ]';
 
-            $data = $request->request->all();
 
+            $data = $request->request->all();
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
-
             $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
             if($order){
                 $returnData = array('orderId'=>$order->getId(),'invoice'=>$order->getInvoice(),'status'=>'success');
@@ -830,7 +831,6 @@ class ApiEcommerceController extends Controller
         }
 
     }
-
 
     public function orderUploadAction(Request $request)
     {
@@ -1160,14 +1160,14 @@ class ApiEcommerceController extends Controller
             if(empty($user)){
                 $data['msg'] = "invalid";
             }else{
-                $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->findOneBy(array('globalOption'=>$user->getGlobalOption(),'user'=>$user->getId()));
+                $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->findOneBy(array('globalOption'=>$user->getGlobalOption(),'mobile'=>$user->getUsername()));
                 if(empty($customer)){
                     $customer = new Customer();
                     $customer->setUser($user->getId());
                     $customer->setGlobalOption($user->getGlobalOption());
                     $customer->setName($user->getProfile()->getName());
-                    $customer->setMobile($data['mobile']);
-                    $customer->setAddress($data['address']);
+                    $customer->setMobile($user->getUsername());
+                    $customer->setAddress($user->getProfile()->getAddress());
                     $em->persist($customer);
                     $em->flush();
 
@@ -1265,11 +1265,11 @@ class ApiEcommerceController extends Controller
                 $customer->setUser($user->getId());
                 $customer->setGlobalOption($user->getGlobalOption());
                 $customer->setName($profile->getName());
-                $customer->setMobile($profile->getMobile());
+                $customer->setMobile($user->getUsername());
                 $customer->setAddress($profile->getAddress());
                 $customer->setGender($gender);
                 $customer->setAge($age);
-                if($customerId){$customer->getCustomerId($customerId); }
+                if($customerId){$customer->setCustomerId($customerId); }
                 if($gender){ $customer->setGender($gender); }
                 $em->persist($customer);
                 $em->flush();

@@ -117,7 +117,6 @@ class FeatureWidgetRepository extends EntityRepository
                 } elseif ($row->getFeature()->getTargetTo() == "Brand") {
                     $url = "/android-api-ecommerce/product-search?brand={$row->getFeature()->getBrand()->getId()}";
                 }
-
                 $data[$key]['id'] = (int)$row->getId();
                 $data[$key]['name'] = $row->getFeature()->getName();
                 $data[$key]['url'] = $url;

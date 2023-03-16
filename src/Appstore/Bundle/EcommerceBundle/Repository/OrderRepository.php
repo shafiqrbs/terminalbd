@@ -461,21 +461,18 @@ class OrderRepository extends EntityRepository
     public function insertAndroidOrder(GlobalOption $option , $data= array())
     {
 
-        $jsonOrder = json_decode($data['jsonOrder'],true);
-        $orderJson = $jsonOrder[0];
+        $orderJson = json_decode($data['jsonOrder'],true);
+        $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
         $em = $this->_em;
-        var_dump($orderJson);
-        var_dump($data);
-        $userId        = empty($orderJson['userId']) ? '' : $orderJson['userId'];
-        echo $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
 
-        exit;
+        $userId        = empty($orderJson['userId']) ? '' : $orderJson['userId'];
+        $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
 
         $user = $em->getRepository(User::class)->find($userId);
         $addressInfo = $em->getRepository(CustomerAddress::class)->find($addressId);
 
         $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
-        $location     = empty($orderJson['locationId']) ? '' : $orderJson['locationId'];
+        $location       = empty($orderJson['locationId']) ? '' : $orderJson['locationId'];
         $couponCode     = empty($orderJson['couponCode']) ? '' : $orderJson['couponCode'];
         $comment        = empty($orderJson['comment']) ? '' : $orderJson['comment'];
         $deliveryDate   = empty($orderJson['deliveryDate']) ? '' : $orderJson['deliveryDate'];
@@ -487,15 +484,17 @@ class OrderRepository extends EntityRepository
         $subTotal       = empty($orderJson['subTotal']) ? '' : $orderJson['subTotal'];
         $total          = empty($orderJson['total']) ? '' : $orderJson['total'];
         $shippingCharge = empty($orderJson['shippingCharge']) ? '' : $orderJson['shippingCharge'];
-        $find = $this->findOneBy(array('globalOption' => $option,'orderId'=> $orderId));
+        $find = $this->findOneBy(array('globalOption' => $option->getId(),'orderId'=> $orderId));
         if(empty($find)){
             $order = new Order();
             $order->setGlobalOption($option);
             $order->setCreatedBy($user);
-            $order->setAddress($addressInfo->getAddress());
-            $order->setCustomerMobile($addressInfo->getMobile());
-            $order->setCustomerName($addressInfo->getName());
-            $order->setCustomer($addressInfo->getCustomer());
+            if($addressInfo){
+                $order->setAddress($addressInfo->getAddress());
+                $order->setCustomerMobile($addressInfo->getMobile());
+                $order->setCustomerName($addressInfo->getName());
+                $order->setCustomer($addressInfo->getCustomer());
+            }
             $order->setOrderId($orderId);
             if($location){
                 $loc = $em->getRepository('EcommerceBundle:DeliveryLocation')->find($location);
@@ -571,13 +570,12 @@ class OrderRepository extends EntityRepository
                 $orderItem->setOrderId($row['orderId']);
                 if($item){
                     $orderItem->setItem($item);
+                    $orderItem->setCategoryName($item->getCategory()->getName());
+                    $orderItem->setBrandName($item->getBrand()->getName());
                 }
                 $orderItem->setPrice($row['price']);
                 $orderItem->setQuantity($row['quantity']);
-                $orderItem->setItemName($row['name']);
-                $orderItem->setSize($row['size']);
-                $orderItem->setColor($row['color']);
-                $orderItem->setImagePath($row['url']);
+                $orderItem->setItemName($item->getName());
                 $orderItem->setSubTotal($row['price'] * $row['quantity']);
                 $em->persist($orderItem);
                 $em->flush();

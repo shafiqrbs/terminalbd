@@ -2,14 +2,10 @@
 
 namespace Setting\Bundle\AppearanceBundle\Form;
 
-use Product\Bundle\ProductBundle\Entity\Category;
-use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class WebsiteWidgetType extends AbstractType
 {
@@ -70,6 +66,7 @@ class WebsiteWidgetType extends AbstractType
                     'sidebar-bottom'            => 'Sidebar Bottom',
                     'footer'                    => 'Footer',
                     'mobile'                    => 'Mobile',
+                    'mobile-intro'              => 'Mobile Intro',
                 ),
             ))
             ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
