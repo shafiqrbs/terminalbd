@@ -92,6 +92,8 @@ class FeatureWidgetRepository extends EntityRepository
 
     }
 
+
+
     public function getFeatureSlider(FeatureWidget $feature)
     {
 
@@ -131,10 +133,53 @@ class FeatureWidgetRepository extends EntityRepository
         return $data;
     }
 
+    public function getAppIntroSlider(FeatureWidget $feature)
+    {
+
+        $data = array();
+
+        /* @var $row FeatureWidgetItem */
+
+        $items = $feature->getFeatureWidgetItems();
+
+        if ($items) {
+
+            foreach ($items as $key => $row) {
+
+                $data[$key]['id'] = (int)$row->getId();
+                $data[$key]['name'] = $row->getFeature()->getName();
+                $data[$key]['content'] = $row->getFeature()->getContent();
+                $data[$key]['buttonName'] = $row->getFeature()->getButtonName();
+                $data[$key]['buttonBg'] = ($row->getFeature()->getButtonBg()) ? $this->hex6ToHex8($row->getFeature()->getButtonBg()): $this->hex6ToHex8($this->random_color_code());
+                $data[$key]['captionBgColor'] = ($row->getFeature()->getCaptionBgColor()) ? $this->hex6ToHex8($row->getFeature()->getCaptionBgColor()): $this->hex6ToHex8($this->random_color_code());
+                $data[$key]['captionFontColor'] = ($row->getFeature()->getCaptionFontColor()) ? $this->hex6ToHex8($row->getFeature()->getCaptionFontColor()): $this->hex6ToHex8($this->random_color_code());
+                $data[$key]['url'] = $row->getFeature()->getCustomUrl();
+                if ( $row->getFeature()->getPath()) {
+                    $path = $this->resizeFilter("uploads/domain/{$feature->getGlobalOption()->getId()}/content/{$row->getFeature()->getPath()}");
+                    $data[$key]['imagePath'] = $path;
+                } else {
+                    $data[$key]['imagePath'] = "";
+                }
+            }
+        }
+        return $data;
+    }
+
     public function resizeFilter($pathToImage, $width = 720, $height = 720)
     {
         $path = '/' . Image::open(__DIR__.'/../../../../../web/' . $pathToImage)->cropResize($width, $height, 'transparent', 'top', 'left')->guess();
         return "http://{$_SERVER['HTTP_HOST']}{$path}";
+    }
+
+    function hex6ToHex8($hex6) {
+        return str_replace("#","0xFF",$hex6);
+    }
+
+    function random_color_code() {
+        $red = str_pad(dechex(rand(0, 255)), 2, '0', STR_PAD_LEFT);
+        $green = str_pad(dechex(rand(0, 255)), 2, '0', STR_PAD_LEFT);
+        $blue = str_pad(dechex(rand(0, 255)), 2, '0', STR_PAD_LEFT);
+        return '#' . $red . $green . $blue;
     }
 
 }

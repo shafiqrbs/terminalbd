@@ -54,6 +54,11 @@ class DiscountType extends AbstractType
                 ),
             ))
 
+            ->add('featureItem','text', array('attr'=>array(
+                'class'=>'m-wrap',
+                'placeholder'=>'Feature item limit')
+            ))
+
             ->add('category', 'entity', array(
                 'required'    => true,
                 'multiple'    => true,

@@ -25,6 +25,10 @@ class ItemBrandType extends AbstractType
                 'class'=>'m-wrap span11 colorpicker-default',
                 'placeholder'=>'')
             ))
+            ->add('featureItem','text', array('attr'=>array(
+                'class'=>'m-wrap',
+                'placeholder'=>'Feature item limit')
+            ))
             ->add('nameBn','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  brand name bangla'),))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Brand description')))
             ->add('feature')

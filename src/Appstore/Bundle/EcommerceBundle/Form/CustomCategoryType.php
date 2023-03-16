@@ -49,6 +49,11 @@ class CustomCategoryType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('featureItem','text', array('attr'=>array(
+                'class'=>'m-wrap',
+                'placeholder'=>'Feature item limit')
+            ))
+
             ->add('parent', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select parent category---',

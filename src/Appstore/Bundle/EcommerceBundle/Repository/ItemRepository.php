@@ -1188,7 +1188,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.category','category');
-        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.imagePath as path','category.bgcolor as bgcolor','category.feature as feature');
+        $qb->select('category.id as id','category.name as name','category.nameBn as nameBn','category.featureItem as featureItem','category.imagePath as path','category.bgcolor as bgcolor','category.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('category.id');
         $qb->orderBy('category.id','DESC');
@@ -1201,6 +1201,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']           = $row['nameBn'];
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
@@ -1264,7 +1265,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.brand','brand');
-        $qb->select('brand.id as id','brand.name as name','brand.nameBn as nameBn','brand.path as path','brand.bgcolor as bgcolor','brand.feature as feature');
+        $qb->select('brand.id as id','brand.name as name','brand.featureItem as featureItem','brand.nameBn as nameBn','brand.path as path','brand.bgcolor as bgcolor','brand.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->groupBy('brand.id');
         $qb->orderBy('brand.id','DESC');
@@ -1277,6 +1278,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']         = $row['nameBn'];
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
@@ -1350,8 +1352,9 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']           = $row['nameBn'];
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
-                $data[$key]['bgcolor']        = $row['bgcolor'];
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
+
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1383,8 +1386,8 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']           = $row['nameBn'];
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
-                $data[$key]['bgcolor']        = $row['bgcolor'];
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;
@@ -1402,7 +1405,7 @@ class ItemRepository extends EntityRepository
         $config =$option->getEcommerceConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.discount','discount');
-        $qb->select('discount.id as id','discount.name as name','discount.nameBn as nameBn','discount.discountAmount as amount','discount.type as type','discount.path as path','discount.bgcolor as bgcolor','discount.feature as feature');
+        $qb->select('discount.id as id','discount.name as name','discount.nameBn as nameBn','discount.featureItem as featureItem','discount.discountAmount as amount','discount.type as type','discount.path as path','discount.bgcolor as bgcolor','discount.feature as feature');
         $qb->where("e.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->orderBy('discount.id','DESC');
         $qb->groupBy('discount.id');
@@ -1414,9 +1417,10 @@ class ItemRepository extends EntityRepository
                 $data[$key]['discount_id']    = (int) $row['id'];
                 $data[$key]['name']           = $row['name'];
                 $data[$key]['nameBn']         = $row['nameBn'];
-                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor'])?'':$this->hex6ToHex8($row['bgcolor']);
-                $data[$key]['bgcolor']        = $row['bgcolor'];
+                $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
+                $data[$key]['featureItem']    = ($row['featureItem']) ? $row['featureItem'] : 12;
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$row['path']}");
                     $data[$key]['imagePath']            =  $path;

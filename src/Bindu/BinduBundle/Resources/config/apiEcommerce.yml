@@ -26,6 +26,10 @@ api_ecommerce_home_feature_slider:
     path:     /home-feature-slider
     defaults: { _controller: BinduBundle:ApiEcommerce:homeFeatureSlider }
 
+api_ecommerce_intro_slider:
+    path:     /intro-slider
+    defaults: { _controller: BinduBundle:ApiEcommerce:introSlider }
+
 api_ecommerce_feature_widget_product:
     path:     /feature-widget-product
     defaults: { _controller: BinduBundle:ApiEcommerce:featureProduct }

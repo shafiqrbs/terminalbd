@@ -122,6 +122,13 @@ class Discount
     private $code;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="featureItem", nullable=true, type="integer")
+     */
+    private $featureItem = 12;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="discountSubItem", type="boolean")
@@ -534,12 +541,21 @@ class Discount
         $this->bgcolor = $bgcolor;
     }
 
+    /**
+     * @return int
+     */
+    public function getFeatureItem()
+    {
+        return $this->featureItem;
+    }
 
-
-
-
-
-
+    /**
+     * @param int $featureItem
+     */
+    public function setFeatureItem($featureItem)
+    {
+        $this->featureItem = $featureItem;
+    }
 
 
 }

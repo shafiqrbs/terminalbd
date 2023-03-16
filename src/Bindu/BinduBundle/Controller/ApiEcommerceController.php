@@ -192,7 +192,8 @@ class ApiEcommerceController extends Controller
             //$appAnchorColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
             $appDiscountColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
             $appAnchorHoverColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorHoverColor());
-
+            $searchPageBgColor = (string) trim($entity->getTemplateCustomize()->getSearchPageBgColor());
+            $cartPageBgColor = (string) trim($entity->getTemplateCustomize()->getCartPageBgColor());
 
             $data = array(
                     'setupId' => $entity->getId(),
@@ -231,6 +232,8 @@ class ApiEcommerceController extends Controller
                      'appNegativeColor' => empty($appNegativeColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appNegativeColor) ,
                      'appDiscountColor' => empty($appDiscountColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appDiscountColor) ,
                      'appIconColor' => empty($appIconColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appIconColor) ,
+                     'searchPageBgColor' => empty($searchPageBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($searchPageBgColor) ,
+                     'cartPageBgColor' => empty($cartPageBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($cartPageBgColor) ,
                      'logo'      =>  "http://{$_SERVER['HTTP_HOST']}/{$path}"
                 );
             }
@@ -440,6 +443,35 @@ class ApiEcommerceController extends Controller
             $feature = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->getFeatureWidget($entity,"Home");
             if($feature){
                 $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->getFeatureSlider($feature);
+            }
+            $response = new Response();
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+
+    }
+
+    public function introSliderAction(Request $request)
+    {
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+            $data = "";
+
+            $entity = $this->checkApiValidation($request);
+            $feature = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findOneBy(array('globalOption' => $entity,'position'=>'mobile-intro'));
+            if($feature){
+                $data = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->getAppIntroSlider($feature);
             }
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');

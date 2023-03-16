@@ -2,10 +2,8 @@
 
 namespace Setting\Bundle\AppearanceBundle\Form;
 
-use Product\Bundle\ProductBundle\Entity\Category;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -66,6 +64,7 @@ class FeatureWidgetType extends AbstractType
                     'body-bottom'               => 'Body Bottom',
                     'footer'                    => 'Footer',
                     'mobile'                    => 'Mobile',
+                    'mobile-intro'              => 'Mobile Intro',
                 ),
             ))
             ->add('category', 'entity', array(

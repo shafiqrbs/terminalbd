@@ -3,15 +3,15 @@
 namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
-use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\EcommerceBundle\Entity\ItemBrand;
+use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Feature
@@ -136,6 +136,13 @@ class Feature
      * @ORM\Column(name="targetTo", type="string", length=50 , nullable=true)
      */
     private $targetTo;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="customUrl", type="string", nullable=true)
+     */
+    private $customUrl;
 
     /**
      * @var array
@@ -747,5 +754,23 @@ class Feature
     {
         $this->isSliderTitle = $isSliderTitle;
     }
+
+    /**
+     * @return string
+     */
+    public function getCustomUrl()
+    {
+        return $this->customUrl;
+    }
+
+    /**
+     * @param string $customUrl
+     */
+    public function setCustomUrl($customUrl)
+    {
+        $this->customUrl = $customUrl;
+    }
+
+
 
 }

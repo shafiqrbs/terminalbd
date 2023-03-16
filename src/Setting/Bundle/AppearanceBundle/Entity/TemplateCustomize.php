@@ -383,6 +383,20 @@ class TemplateCustomize
      */
      private $breadcrumbBorderColor;
 
+	 /**
+     * @var string
+     *
+     * @ORM\Column(name="searchPageBgColor",type="string", length=20, nullable=true)
+     */
+     private $searchPageBgColor;
+
+	 /**
+     * @var string
+     *
+     * @ORM\Column(name="cartPageBgColor",type="string", length=20, nullable=true)
+     */
+     private $cartPageBgColor;
+
 	/**
      * @var int
      *
@@ -3924,6 +3938,56 @@ class TemplateCustomize
     {
         $this->appPositiveColor = $appPositiveColor;
     }
+
+    /**
+     * @return string
+     */
+    public function getSearchPageBgColor()
+    {
+        return $this->searchPageBgColor;
+    }
+
+    /**
+     * @param string $searchPageBgColor
+     */
+    public function setSearchPageBgColor($searchPageBgColor)
+    {
+        $this->searchPageBgColor = $searchPageBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCartPageBgColor()
+    {
+        return $this->cartPageBgColor;
+    }
+
+    /**
+     * @param string $cartPageBgColor
+     */
+    public function setCartPageBgColor($cartPageBgColor)
+    {
+        $this->cartPageBgColor = $cartPageBgColor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAndroidLogoFile()
+    {
+        return $this->androidLogoFile;
+    }
+
+    /**
+     * @param mixed $androidLogoFile
+     */
+    public function setAndroidLogoFile($androidLogoFile)
+    {
+        $this->androidLogoFile = $androidLogoFile;
+    }
+
+
 
 
 

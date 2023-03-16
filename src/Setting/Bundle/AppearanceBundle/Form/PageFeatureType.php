@@ -2,10 +2,7 @@
 
 namespace Setting\Bundle\AppearanceBundle\Form;
 
-use Product\Bundle\ProductBundle\Entity\Category;
-use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -49,6 +46,7 @@ class PageFeatureType extends AbstractType
                         ->orderBy('e.menu','ASC');
                 },
             ))
+            ->add('customUrl','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Custom URL path')))
             ->add('buttonName','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Button Text')))
             ->add('buttonBg','text', array('attr'=>array('class'=>'span10 m-wrap colorpicker-default','placeholder'=>'Button Bg')))
             ->add('captionBgColor','text', array('attr'=>array('class'=>'span11 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
