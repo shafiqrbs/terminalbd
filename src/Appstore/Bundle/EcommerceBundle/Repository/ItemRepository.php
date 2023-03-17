@@ -828,9 +828,9 @@ class ItemRepository extends EntityRepository
                 $data[$key]['itemId']                  = (int) rand(time(),10);
                 $data[$key]['name']                     = $this->stringNullChecker($row['name']);
                 $data[$key]['nameBn']                   = $this->stringNullChecker($row['nameBn']);
-                $data[$key]['quantity']                 = $this->numberNullChecker($row['quantity']);
+                $data[$key]['quantity']                 = (int)($row['quantity']);
                 $data[$key]['price']                    = $this->numberNullChecker($row['price']);
-                $data[$key]['discountPrice']            = (int)($row['discountPrice']);
+                $data[$key]['discountPrice']            = $this->numberNullChecker($row['discountPrice']);
                 $data[$key]['categoryId']               = (int)($row['categoryId']);
                 $data[$key]['category']                 = $this->stringNullChecker($row['categoryName']);
                 $data[$key]['categoryBn']               = $this->stringNullChecker($row['categoryNameBn']);
@@ -841,7 +841,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['discount']                 = $this->stringNullChecker($row['discountName']);
                 $data[$key]['discountBn']               = $this->stringNullChecker($row['discountNameBn']);
                 $data[$key]['discountType']             = $this->stringNullChecker($row['discountType']);
-                $data[$key]['discountAmount']           = (int)($row['discountAmount']);
+                $data[$key]['discountAmount']           = $this->numberNullChecker($row['discountAmount']);
                 $data[$key]['promotionId']              = (int)($row['promotionId']);
                 $data[$key]['promotion']                = $this->stringNullChecker($row['promotionName']);
                 $data[$key]['promotionBn']              = $this->stringNullChecker($row['promotionNameBn']);
