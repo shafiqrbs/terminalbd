@@ -830,19 +830,19 @@ class ItemRepository extends EntityRepository
                 $data[$key]['nameBn']                   = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['quantity']                 = $this->numberNullChecker($row['quantity']);
                 $data[$key]['price']                    = $this->numberNullChecker($row['price']);
-                $data[$key]['discountPrice']            = $this->numberNullChecker($row['discountPrice']);
-                $data[$key]['categoryId']               = $this->numberNullChecker($row['categoryId']);
+                $data[$key]['discountPrice']            = (int)($row['discountPrice']);
+                $data[$key]['categoryId']               = (int)($row['categoryId']);
                 $data[$key]['category']                 = $this->stringNullChecker($row['categoryName']);
                 $data[$key]['categoryBn']               = $this->stringNullChecker($row['categoryNameBn']);
-                $data[$key]['brandId']                  = $this->numberNullChecker($row['brandId']);
+                $data[$key]['brandId']                  = (int)($row['brandId']);
                 $data[$key]['brand']                    = $this->stringNullChecker($row['brandName']);
                 $data[$key]['brandBn']                  = $this->stringNullChecker($row['brandNameBn']);
-                $data[$key]['discountId']               = $this->numberNullChecker($row['discountId']);
+                $data[$key]['discountId']               = (int)($row['discountId']);
                 $data[$key]['discount']                 = $this->stringNullChecker($row['discountName']);
                 $data[$key]['discountBn']               = $this->stringNullChecker($row['discountNameBn']);
-                $data[$key]['discountType']             = $this->numberNullChecker($row['discountType']);
-                $data[$key]['discountAmount']           = $this->numberNullChecker($row['discountAmount']);
-                $data[$key]['promotionId']              = $this->numberNullChecker($row['promotionId']);
+                $data[$key]['discountType']             = $this->stringNullChecker($row['discountType']);
+                $data[$key]['discountAmount']           = (int)($row['discountAmount']);
+                $data[$key]['promotionId']              = (int)($row['promotionId']);
                 $data[$key]['promotion']                = $this->stringNullChecker($row['promotionName']);
                 $data[$key]['promotionBn']              = $this->stringNullChecker($row['promotionNameBn']);
                 $data[$key]['tag']                      = $this->stringNullChecker($row['tags']);
@@ -859,7 +859,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['isFeatureBrand']           = ($row['isFeatureBrand']) ? 1 : 0;
                 $data[$key]['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
                 $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
-                $data[$key]['maxQuantity']              = ($row['maxQuantity']) ? $row['maxQuantity']:'';
+                $data[$key]['maxQuantity']              = (int)($row['maxQuantity']) ? $row['maxQuantity']:'';
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}",400,400);
                     $data[$key]['imagePath']            =  $path;
@@ -1094,8 +1094,6 @@ class ItemRepository extends EntityRepository
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere("item.id = :pid")->setParameter('pid', $id);
         $row = $qb->getQuery()->getOneOrNullResult();
-        var_dump($row);
-        exit;
         $data = array();
         if($row){
             $data['product_id']               = (int) $row['itemId'];

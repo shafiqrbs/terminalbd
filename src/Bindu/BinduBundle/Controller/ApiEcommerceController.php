@@ -220,7 +220,6 @@ class ApiEcommerceController extends Controller
             $messenger = (string) trim($entity->getTemplateCustomize()->getFbMessenger());
             $analytic = (string) trim($entity->getTemplateCustomize()->getGoogleAnalytic());
 
-
            $logo = empty($entity->getTemplateCustomize()->getWebPath('logo')) ? "" : $entity->getTemplateCustomize()->getWebPath('logo');
            $introImage = empty($entity->getTemplateCustomize()->getWebPath('androidLogo')) ? '': $entity->getTemplateCustomize()->getWebPath('androidLogo');
 
