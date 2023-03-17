@@ -824,8 +824,8 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
-                $data[$key]['product_id']               = (int) $row['id'];
-                $data[$key]['item_id']                  = (int) rand(time(),10);
+                $data[$key]['productId']               = (int) $row['id'];
+                $data[$key]['itemId']                  = (int) rand(time(),10);
                 $data[$key]['name']                     = $this->stringNullChecker($row['name']);
                 $data[$key]['nameBn']                   = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['quantity']                 = $this->numberNullChecker($row['quantity']);
