@@ -221,8 +221,8 @@ class ApiEcommerceController extends Controller
             $analytic = (string) trim($entity->getTemplateCustomize()->getGoogleAnalytic());
 
 
-           $logo = $entity->getTemplateCustomize()->getWebPath('logo');
-           $introImage = $entity->getTemplateCustomize()->getWebPath('androidLogo');
+           $logo = empty($entity->getTemplateCustomize()->getWebPath('logo')) ? "" : $entity->getTemplateCustomize()->getWebPath('logo');
+           $introImage = empty($entity->getTemplateCustomize()->getWebPath('androidLogo')) ? '': $entity->getTemplateCustomize()->getWebPath('androidLogo');
 
            $data = array(
                     'setupId' => $entity->getId(),
@@ -241,10 +241,10 @@ class ApiEcommerceController extends Controller
                     'main_app_name' => $entity->getMainApp()->getSlug(),
                     'appsManual' => $this->stringNullChecker($entity->getMainApp()->getApplicationManual()),
                     'website' => $this->stringNullChecker($entity->getDomain()),
-                    'vatRegNo' => $vatRegNo,
-                    'vatPercentage' => $vatPercentage,
-                    'productColumn' => $productColumn,
-                    'productFeatureColumn' => $productFeatureColumn,
+                    'vatRegNo' =>  $this->stringNullChecker($vatRegNo),
+                    'vatPercentage' =>  $this->numberNullChecker($vatPercentage),
+                    'productColumn' =>  $this->numberNullChecker($productColumn),
+                    'productFeatureColumn' =>  $this->numberNullChecker($productFeatureColumn),
                     'currency' => $currency,
                     'preOrder' => $this->numberNullChecker($preOrder),
                     'cartProcess' => $this->stringNullChecker($cartProcess),
