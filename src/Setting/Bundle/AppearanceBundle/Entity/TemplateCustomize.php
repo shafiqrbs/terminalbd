@@ -252,6 +252,22 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="poweredBy", type="string", nullable=true)
+     */
+    private $poweredBy;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="introTitle", type="string", nullable=true)
+     */
+    private $introTitle;
+
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="fbMessenger", type="string", nullable=true)
      */
     private $fbMessenger;
@@ -3986,6 +4002,40 @@ class TemplateCustomize
     {
         $this->androidLogoFile = $androidLogoFile;
     }
+
+    /**
+     * @return string
+     */
+    public function getPoweredBy()
+    {
+        return $this->poweredBy;
+    }
+
+    /**
+     * @param string $poweredBy
+     */
+    public function setPoweredBy($poweredBy)
+    {
+        $this->poweredBy = $poweredBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntroTitle()
+    {
+        return $this->introTitle;
+    }
+
+    /**
+     * @param string $introTitle
+     */
+    public function setIntroTitle($introTitle)
+    {
+        $this->introTitle = $introTitle;
+    }
+
+
 
 
 

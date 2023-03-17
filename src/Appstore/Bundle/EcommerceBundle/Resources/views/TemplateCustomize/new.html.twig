@@ -49,24 +49,25 @@
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="clearfix">&nbsp;</div>
+
                         <div class="row-fluid">
-                            <div class="span3">
+                            <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label"  for="firstName">Site Language</label>
+                                    <label class="control-label"  for="firstName">Powered By</label>
                                     <div class="controls">
-                                        {{ form_widget(form.siteLanguage) }}
+                                        {{ form_widget(form.poweredBy) }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="span3">
+                            <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label"  for="firstName">OTP Login</label>
+                                    <label class="control-label"  for="firstName">Intro Title</label>
                                     <div class="controls">
-                                        {{ form_widget(form.otpLogin) }}
+                                        {{ form_widget(form.introTitle) }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="span6">
+                            <div class="span4">
                                 <div class="control-group">
                                     <label class="control-label"  for="firstName">Contact Email</label>
                                     <div class="controls">
@@ -78,6 +79,14 @@
 
                        <div class="row-fluid">
 
+                           <div class="span3">
+                               <div class="control-group">
+                                   <label class="control-label"  for="firstName">OTP Login</label>
+                                   <div class="controls">
+                                       {{ form_widget(form.otpLogin) }}
+                                   </div>
+                               </div>
+                           </div>
                             <div class="span3">
                                 <div class="control-group">
                                     <label class="control-label"  for="firstName">Show  Logo</label>
@@ -86,6 +95,14 @@
                                     </div>
                                 </div>
                             </div>
+                           <div class="span3">
+                               <div class="control-group">
+                                   <label class="control-label"  for="firstName">Site Language</label>
+                                   <div class="controls">
+                                       {{ form_widget(form.siteLanguage) }}
+                                   </div>
+                               </div>
+                           </div>
                             <div class="span3">
                                 <div class="control-group">
                                     <label class="control-label"  for="firstName">Icon Type</label>
@@ -386,26 +403,28 @@
                                 </div>
                             </div>
                             <div  class="span4">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Logo Width</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.logoWidth) }}
-                                                {{ form_errors(form.logoWidth) }}
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <div data-provides="fileupload" class="fileupload fileupload-new">
+                                            <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
+                                                {% if(entity.webPath('androidLogo') is defined ) %}
+                                                    <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath('androidLogo') }}">
+                                                {% else %}
+                                                    <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                {% endif %}
+                                            </div>
+                                            <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                            <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select Apps Intro Logo</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        <input type="file" name="androidLogoFile" id="androidLogoFile">
+                                                    </span>
+                                                <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Logo Height</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.logoHeight) }}
-                                                {{ form_errors(form.logoHeight) }}
-                                            </div>
-                                        </div>
+                                        <span class="label label-important">NOTE!</span>
+                                        <span> Logo image must be less then  height 1024 px x  768px height and extension .png. please follow this link <a href="http://resizeyourimage.com" target="_blank">Image Resizer</a></span>
                                     </div>
                                 </div>
                             </div>

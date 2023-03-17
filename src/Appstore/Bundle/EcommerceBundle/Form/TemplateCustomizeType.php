@@ -19,6 +19,8 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('mobileShowLogo')
             ->add('otpLogin')
+            ->add('poweredBy','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter powered by')))
+            ->add('introTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter intro slogan')))
             ->add('contactEmail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter contact email')))
             ->add('facebookPixel','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Google Analytic ID')))
             ->add('fbMessenger','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Facebook Messenger ID')))
@@ -40,16 +42,6 @@ class TemplateCustomizeType extends AbstractType
                     'icon-square' => 'Icon Square',
                     'icon-circle' => 'Icon Circle',
                 ),
-            ))
-
-
-            ->add('logoHeight','text', array('attr'=>array(
-                'class'=>'m-wrap span10 numeric',
-                'placeholder'=>'')
-            ))
-            ->add('logoWidth','text', array('attr'=>array(
-                'class'=>'m-wrap span10 numeric',
-                'placeholder'=>'')
             ))
             ->add('playStore','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Play Store url')))
             ->add('appleStore','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Apple store url')))

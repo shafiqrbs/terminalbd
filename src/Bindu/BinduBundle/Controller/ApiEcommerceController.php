@@ -160,6 +160,13 @@ class ApiEcommerceController extends Controller
         }
     }
 
+    public function imageBase64($path){
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        return $base64;
+    }
+
     public function setupAction(Request $request)
     {
 
@@ -190,7 +197,6 @@ class ApiEcommerceController extends Controller
             $shippingCharge = $entity->getEcommerceConfig()->getShippingCharge();
             $cashOnDelivery = $entity->getEcommerceConfig()->isCashOnDelivery();
             $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
-            $path = $entity->getTemplateCustomize()->getWebPath('logo');
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
             $androidHeaderBg = (string) trim($entity->getTemplateCustomize()->getAndroidHeaderBg());
@@ -209,13 +215,25 @@ class ApiEcommerceController extends Controller
             $appAnchorHoverColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorHoverColor());
             $searchPageBgColor = (string) trim($entity->getTemplateCustomize()->getSearchPageBgColor());
             $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
+            $tawk = (string) trim($entity->getTemplateCustomize()->getTawk());
+            $pixel = (string) trim($entity->getTemplateCustomize()->getFacebookPixel());
+            $messenger = (string) trim($entity->getTemplateCustomize()->getFbMessenger());
+            $analytic = (string) trim($entity->getTemplateCustomize()->getGoogleAnalytic());
 
-            $data = array(
+
+           $logo = $entity->getTemplateCustomize()->getWebPath('logo');
+           $introImage = $entity->getTemplateCustomize()->getWebPath('androidLogo');
+
+           $data = array(
                     'setupId' => $entity->getId(),
                     'uniqueCode' => $entity->getUniqueCode(),
                     'name' => $entity->getName(),
                     'mobile' => $mobile,
-                    'email' => $entity->getEmail(),
+                    'tawk' => $tawk,
+                    'pixel' => $pixel,
+                    'messenger' => $messenger,
+                    'analytic' => $analytic,
+                    'email' => $this->stringNullChecker($entity->getEmail()),
                     'locationId' => $entity->getLocation()->getId(),
                     'address' => $this->stringNullChecker($address),
                     'locationName' => $this->stringNullChecker($entity->getLocation()->getName()),
@@ -233,6 +251,8 @@ class ApiEcommerceController extends Controller
                     'shippingCharge' => $shippingCharge,
                     'cashOnDelivery' => $cashOnDelivery,
                     'pickupLocation' =>  $this->numberNullChecker($pickupLocation),
+                    'poweredBy' => empty($entity->getTemplateCustomize()->getPoweredBy()) ? '' : "Powered By {$entity->getTemplateCustomize()->getPoweredBy()}",
+                    'introTitle' => empty($entity->getTemplateCustomize()->getIntroTitle()) ? '' : $entity->getTemplateCustomize()->getIntroTitle(),
                     'vatEnable' => $this->numberNullChecker($vatEnable),
                      'appHeaderBg' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($androidHeaderBg),
                      'appPrimaryColor' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appPrimaryColor),
@@ -251,7 +271,8 @@ class ApiEcommerceController extends Controller
                      'appAnchorHoverColor' => empty($appAnchorHoverColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appAnchorHoverColor) ,
                      'searchPageBgColor' => empty($searchPageBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($searchPageBgColor) ,
                      'morePageBgColor' => empty($morePageColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($morePageColor) ,
-                     'logo'      =>  "http://{$_SERVER['HTTP_HOST']}/{$path}"
+                     'logo'      =>  $this->imageBase64($logo),
+                     'intro'      =>  $this->imageBase64($introImage)
                 );
             }
 

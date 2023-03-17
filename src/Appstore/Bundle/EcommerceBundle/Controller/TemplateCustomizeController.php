@@ -155,6 +155,8 @@ class TemplateCustomizeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        /* @var $entity TemplateCustomize */
+
         $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=> $id));
         $data = $request->request->all();
         $file = $request->files->all();

@@ -105,7 +105,6 @@ class TemplateCustomizeRepository extends EntityRepository {
         $em = $this->_em;
         /* @var $entity TemplateCustomize */
         if(isset($file['logoFile'])){
-
              $img = $file['logoFile'];
              $fileName = $img->getClientOriginalName();
              $imgName =  uniqid(). '.' .$fileName;
