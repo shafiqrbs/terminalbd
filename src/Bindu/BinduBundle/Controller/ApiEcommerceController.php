@@ -144,6 +144,22 @@ class ApiEcommerceController extends Controller
         return '#' . $red . $green . $blue;
     }
 
+    public function stringNullChecker($var){
+        if (is_null($var)) {
+            return "";
+        } else {
+            return (string) $var;
+        }
+    }
+
+    public function numberNullChecker($var){
+        if (is_null($var)) {
+            return 0;
+        } else {
+            return (float) $var;
+        }
+    }
+
     public function setupAction(Request $request)
     {
 
@@ -174,7 +190,7 @@ class ApiEcommerceController extends Controller
             $shippingCharge = $entity->getEcommerceConfig()->getShippingCharge();
             $cashOnDelivery = $entity->getEcommerceConfig()->isCashOnDelivery();
             $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
-            $path = $entity->getEcommerceConfig()->getWebPath();
+            $path = $entity->getTemplateCustomize()->getWebPath('logo');
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
             $androidHeaderBg = (string) trim($entity->getTemplateCustomize()->getAndroidHeaderBg());
@@ -189,11 +205,10 @@ class ApiEcommerceController extends Controller
             $appPositiveColor =(string) trim( $entity->getTemplateCustomize()->getAppPositiveColor());
             $appNegativeColor = (string) trim($entity->getTemplateCustomize()->getAppNegativeColor());
             $appIconColor = (string) trim($entity->getTemplateCustomize()->getAndroidIconColor());
-            //$appAnchorColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
-            $appDiscountColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
+            $appAnchorColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
             $appAnchorHoverColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorHoverColor());
             $searchPageBgColor = (string) trim($entity->getTemplateCustomize()->getSearchPageBgColor());
-            $cartPageBgColor = (string) trim($entity->getTemplateCustomize()->getCartPageBgColor());
+            $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
 
             $data = array(
                     'setupId' => $entity->getId(),
@@ -202,23 +217,23 @@ class ApiEcommerceController extends Controller
                     'mobile' => $mobile,
                     'email' => $entity->getEmail(),
                     'locationId' => $entity->getLocation()->getId(),
-                    'address' => $address,
-                    'locationName' => $entity->getLocation()->getName(),
+                    'address' => $this->stringNullChecker($address),
+                    'locationName' => $this->stringNullChecker($entity->getLocation()->getName()),
                     'main_app' => $entity->getMainApp()->getId(),
                     'main_app_name' => $entity->getMainApp()->getSlug(),
-                    'appsManual' => $entity->getMainApp()->getApplicationManual(),
-                    'website' => $entity->getDomain(),
+                    'appsManual' => $this->stringNullChecker($entity->getMainApp()->getApplicationManual()),
+                    'website' => $this->stringNullChecker($entity->getDomain()),
                     'vatRegNo' => $vatRegNo,
                     'vatPercentage' => $vatPercentage,
                     'productColumn' => $productColumn,
                     'productFeatureColumn' => $productFeatureColumn,
                     'currency' => $currency,
-                    'preOrder' => $preOrder,
+                    'preOrder' => $this->numberNullChecker($preOrder),
                     'cartProcess' => $cartProcess,
                     'shippingCharge' => $shippingCharge,
                     'cashOnDelivery' => $cashOnDelivery,
-                    'pickupLocation' => $pickupLocation,
-                    'vatEnable' => $vatEnable,
+                    'pickupLocation' =>  $this->numberNullChecker($pickupLocation),
+                    'vatEnable' => $this->numberNullChecker($vatEnable),
                      'appHeaderBg' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($androidHeaderBg),
                      'appPrimaryColor' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appPrimaryColor),
                      'appSecondaryColor' => empty($appSecondaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appSecondaryColor),
@@ -232,8 +247,10 @@ class ApiEcommerceController extends Controller
                      'appNegativeColor' => empty($appNegativeColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appNegativeColor) ,
                      'appDiscountColor' => empty($appDiscountColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appDiscountColor) ,
                      'appIconColor' => empty($appIconColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appIconColor) ,
+                     'appAnchorColor' => empty($appAnchorColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appAnchorColor) ,
+                     'appAnchorHoverColor' => empty($appAnchorHoverColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appAnchorHoverColor) ,
                      'searchPageBgColor' => empty($searchPageBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($searchPageBgColor) ,
-                     'cartPageBgColor' => empty($cartPageBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($cartPageBgColor) ,
+                     'morePageBgColor' => empty($morePageColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($morePageColor) ,
                      'logo'      =>  "http://{$_SERVER['HTTP_HOST']}/{$path}"
                 );
             }
@@ -244,6 +261,8 @@ class ApiEcommerceController extends Controller
         $response->setStatusCode(Response::HTTP_OK);
         return $response;
     }
+
+
 
     public function configurationAction(Request $request)
     {
@@ -287,7 +306,7 @@ class ApiEcommerceController extends Controller
                 'mobile' => $mobile,
                 'email' => $entity->getEmail(),
                 'locationId' => $entity->getLocation()->getId(),
-                'address' => $address,
+                'address' => $this->stringNullChecker($address),
                 'locationName' => $entity->getLocation()->getName(),
                 'main_app' => $entity->getMainApp()->getId(),
                 'main_app_name' => $entity->getMainApp()->getSlug(),

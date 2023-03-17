@@ -979,7 +979,8 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Master Data']->addChild('Delivery Location', array('route' => 'ecommerce_location'));
             $menu['E-commerce']['Master Data']->addChild('Delivery Time', array('route' => 'ecommerce_delivertime'));
             $menu['E-commerce']['Master Data']->addChild('Category Attribute', array('route' => 'ecommerce_itemattribute'));
-        }
+            $menu['E-commerce']['Master Data']->addChild('Frontend Customize', array('route' => 'template_ecommerce_edit'));
+          }
         return $menu;
     }
 

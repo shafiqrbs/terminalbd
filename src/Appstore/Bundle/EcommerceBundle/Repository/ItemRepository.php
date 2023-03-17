@@ -769,6 +769,22 @@ class ItemRepository extends EntityRepository
         return $discountPrice;
     }
 
+    public function stringNullChecker($var){
+        if (is_null($var)) {
+            return "";
+        } else {
+            return (string) $var;
+        }
+    }
+
+    public function numberNullChecker($var){
+        if (is_null($var)) {
+            return 0;
+        } else {
+            return (float) $var;
+        }
+    }
+
 
     public function getApiProduct(GlobalOption $option,$data = array())
     {
@@ -810,36 +826,36 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['product_id']               = (int) $row['id'];
                 $data[$key]['item_id']                  = (int) rand(time(),10);
-                $data[$key]['name']                     = $row['name'];
-                $data[$key]['nameBn']                   = $row['nameBn'];
-                $data[$key]['quantity']                 = $row['quantity'];
-                $data[$key]['price']                    = $row['price'];
-                $data[$key]['discountPrice']            = $row['discountPrice'];
-                $data[$key]['categoryId']               = $row['categoryId'];
-                $data[$key]['category']                 = $row['categoryName'];
-                $data[$key]['categoryBn']               = $row['categoryNameBn'];
-                $data[$key]['brandId']                  = $row['brandId'];
-                $data[$key]['brand']                    = $row['brandName'];
-                $data[$key]['brandBn']                  = $row['brandNameBn'];
-                $data[$key]['discountId']               = $row['discountId'];
-                $data[$key]['discount']                 = $row['discountName'];
-                $data[$key]['discountBn']               = $row['discountNameBn'];
-                $data[$key]['discountType']             = $row['discountType'];
-                $data[$key]['discountAmount']           = $row['discountAmount'];
-                $data[$key]['promotionId']              = $row['promotionId'];
-                $data[$key]['promotion']                = $row['promotionName'];
-                $data[$key]['promotionBn']              = $row['promotionNameBn'];
-                $data[$key]['tag']                      = $row['tags'];
-                $data[$key]['tagBn']                    = $row['tagsBn'];
-                $data[$key]['colors']                   = $row['colors'];
-                $data[$key]['colorsBn']                 = $row['colorsBn'];
-                $data[$key]['country']                  = $row['country'];
-                $data[$key]['shortDescription']         = $row['shortContent'];
-                $data[$key]['shortDescriptionBn']       = $row['shortContentBn'];
-                $data[$key]['tagBn']                    = $row['tagNameBn'];
-                $data[$key]['unitName']                 = $row['unitName'];
-                $data[$key]['itemAssurance']                 = $row['itemAssurance'];
-                $data[$key]['warningLabel']                 = $row['warningLabel'];
+                $data[$key]['name']                     = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']                   = $this->stringNullChecker($row['nameBn']);
+                $data[$key]['quantity']                 = $this->numberNullChecker($row['quantity']);
+                $data[$key]['price']                    = $this->numberNullChecker($row['price']);
+                $data[$key]['discountPrice']            = $this->numberNullChecker($row['discountPrice']);
+                $data[$key]['categoryId']               = $this->numberNullChecker($row['categoryId']);
+                $data[$key]['category']                 = $this->stringNullChecker($row['categoryName']);
+                $data[$key]['categoryBn']               = $this->stringNullChecker($row['categoryNameBn']);
+                $data[$key]['brandId']                  = $this->numberNullChecker($row['brandId']);
+                $data[$key]['brand']                    = $this->stringNullChecker($row['brandName']);
+                $data[$key]['brandBn']                  = $this->stringNullChecker($row['brandNameBn']);
+                $data[$key]['discountId']               = $this->numberNullChecker($row['discountId']);
+                $data[$key]['discount']                 = $this->stringNullChecker($row['discountName']);
+                $data[$key]['discountBn']               = $this->stringNullChecker($row['discountNameBn']);
+                $data[$key]['discountType']             = $this->numberNullChecker($row['discountType']);
+                $data[$key]['discountAmount']           = $this->numberNullChecker($row['discountAmount']);
+                $data[$key]['promotionId']              = $this->numberNullChecker($row['promotionId']);
+                $data[$key]['promotion']                = $this->stringNullChecker($row['promotionName']);
+                $data[$key]['promotionBn']              = $this->stringNullChecker($row['promotionNameBn']);
+                $data[$key]['tag']                      = $this->stringNullChecker($row['tags']);
+                $data[$key]['tagBn']                    = $this->stringNullChecker($row['tagsBn']);
+                $data[$key]['colors']                   = $this->stringNullChecker($row['colors']);
+                $data[$key]['colorsBn']                 = $this->stringNullChecker($row['colorsBn']);
+                $data[$key]['country']                  = $this->stringNullChecker($row['country']);
+                $data[$key]['shortDescription']         = $this->stringNullChecker($row['shortContent']);
+                $data[$key]['shortDescriptionBn']       = $this->stringNullChecker($row['shortContentBn']);
+                $data[$key]['tagBn']                    = $this->stringNullChecker($row['tagNameBn']);
+                $data[$key]['unitName']                 = $this->stringNullChecker($row['unitName']);
+                $data[$key]['itemAssurance']            = $this->stringNullChecker($row['itemAssurance']);
+                $data[$key]['warningLabel']             = $this->stringNullChecker($row['warningLabel']);
                 $data[$key]['isFeatureBrand']           = ($row['isFeatureBrand']) ? 1 : 0;
                 $data[$key]['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
                 $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
@@ -1431,7 +1447,6 @@ class ItemRepository extends EntityRepository
         }
         return $data;
     }
-
 
     public function removeDiscount($config,$discount){
 
