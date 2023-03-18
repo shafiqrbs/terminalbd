@@ -7,21 +7,14 @@ use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItemSerial;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Terminalbd\PosBundle\Entity\Pos;
 use Terminalbd\PosBundle\Entity\PosItem;
 use Terminalbd\PosBundle\Form\PosType;
@@ -303,11 +296,15 @@ class PosController extends Controller
     }
 
 
-    private function getBracodeStockItem($cart,Item $product,$quantity = 1){
+    private function getBracodeStockItem($cart,Item $product,$quantity = 1,$price =0){
 
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         if($product){
-            $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+            if($price > 0){
+                $salesPrice = $price;
+            }else{
+                $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
+            }
             $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
             if ($config->isEmptySales() != 1 and $product->getRemainingQnt() > 0){
                 $data = array(
@@ -373,7 +370,7 @@ class PosController extends Controller
         }
         if($product){
             /* @var $product Item */
-            return new Response(json_encode(array('status'=>'In-stock','quantity' => $product->getRemainingQnt(),'purchase'=> $product->getPurchaseAvgPrice(),'price'=>$product->getPrice(),'purchaseItem' => $purchaseItemOption,'serialNo' => $serialOption)));
+            return new Response(json_encode(array('status'=>'In-stock','quantity' => $product->getRemainingQnt(),'purchase'=> $product->getPurchaseAvgPrice(),'price'=>$product->getSalesPrice(),'purchaseItem' => $purchaseItemOption,'serialNo' => $serialOption)));
         }else{
             return new Response(json_encode(array('status'=>'empty','quantity' => '','purchase'=>'','price'=>'')));
         }
@@ -388,6 +385,7 @@ class PosController extends Controller
         $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $serialNo = isset($data['serialNo']) ? $data['serialNo'] :'';
         $pItem = isset($data['purchaseItem']) ? $data['purchaseItem']:'';
+        $price = isset($data['price']) ? $data['price']:'';
         $item = $data['item'];
         $quantity = $data['quantity'];
         $product = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'id' => $item));
@@ -395,18 +393,18 @@ class PosController extends Controller
         if($serialNo){
             $serial = $this->getDoctrine()->getRepository(PurchaseItemSerial::class)->find($serialNo);
             if($serial) {
-                $data = $this->getBracodeStockPurchaseItemSerial($cart, $serial);
-                return new Response(json_encode($data));
+                $result = $this->getBracodeStockPurchaseItemSerial($cart, $serial);
+                return new Response(json_encode($result));
             }
         }elseif($pItem){
             $purchaseItem = $this->getDoctrine()->getRepository(PurchaseItem::class)->find($pItem);
             $purchaseItemQuantity = $this->getDoctrine()->getRepository(PurchaseItem::class)->getPurchaseItemRemaining($pItem);
             if ($purchaseItem and $purchaseItemQuantity > 0) {
-                $data = $this->getBracodeStockPurchaseItem($cart, $purchaseItem,$quantity);
-                return new Response(json_encode($data));
+                $result = $this->getBracodeStockPurchaseItem($cart, $purchaseItem,$quantity);
+                return new Response(json_encode($result));
             }
         }elseif($product) {
-            $data = $this->getBracodeStockItem($cart,$product,$quantity);
+            $data = $this->getBracodeStockItem($cart,$product,$quantity,$price);
             return new Response(json_encode($data));
         }
         return new Response(json_encode(array('status'=>'in-valid')));

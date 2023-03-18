@@ -1025,14 +1025,6 @@ class Order
     }
 
     /**
-     * @return mixed
-     */
-    public function getAccountOnlineOrder()
-    {
-        return $this->accountOnlineOrder;
-    }
-
-    /**
      * @return Coupon
      */
     public function getCoupon()
@@ -1518,6 +1510,40 @@ class Order
     {
         $this->description = $description;
     }
+
+    /**
+     * @return \Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress
+     */
+    public function getCustomerAddress()
+    {
+        return $this->customerAddress;
+    }
+
+    /**
+     * @param \Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress $customerAddress
+     */
+    public function setCustomerAddress($customerAddress)
+    {
+        $this->customerAddress = $customerAddress;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOrderPoint()
+    {
+        return $this->orderPoint;
+    }
+
+    /**
+     * @param float $orderPoint
+     */
+    public function setOrderPoint($orderPoint)
+    {
+        $this->orderPoint = $orderPoint;
+    }
+
+
 
 
 }

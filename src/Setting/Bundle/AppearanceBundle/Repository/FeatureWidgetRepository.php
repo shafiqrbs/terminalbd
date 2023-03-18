@@ -150,8 +150,7 @@ class FeatureWidgetRepository extends EntityRepository
                 $data[$key]['name'] = $row->getFeature()->getName();
                 $data[$key]['content'] = $row->getFeature()->getContent();
                 $data[$key]['buttonName'] = $row->getFeature()->getButtonName();
-                $data[$key]['buttonBg'] = ($row->getFeature()->getButtonBg()) ? $this->hex6ToHex8($row->getFeature()->getButtonBg()): $this->hex6ToHex8($this->random_color_code());
-                $data[$key]['captionBgColor'] = ($row->getFeature()->getCaptionBgColor()) ? $this->hex6ToHex8($row->getFeature()->getCaptionBgColor()): $this->hex6ToHex8($this->random_color_code());
+                $data[$key]['introBgColor'] = ($row->getFeature()->getCaptionBgColor()) ? $this->hex6ToHex8($row->getFeature()->getCaptionBgColor()): $this->hex6ToHex8($this->random_color_code());
                 $data[$key]['captionFontColor'] = ($row->getFeature()->getCaptionFontColor()) ? $this->hex6ToHex8($row->getFeature()->getCaptionFontColor()): $this->hex6ToHex8($this->random_color_code());
                 $data[$key]['url'] = $row->getFeature()->getCustomUrl();
                 if ( $row->getFeature()->getPath()) {

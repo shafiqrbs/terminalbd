@@ -462,15 +462,15 @@ class OrderRepository extends EntityRepository
     {
 
         $orderJson = json_decode($data['jsonOrder'],true);
-        $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
         $em = $this->_em;
 
         $userId        = empty($orderJson['userId']) ? '' : $orderJson['userId'];
-        $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
-
         $user = $em->getRepository(User::class)->find($userId);
-        $addressInfo = $em->getRepository(CustomerAddress::class)->find($addressId);
-
+        $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
+        $addressInfo = "";
+        if($addressId){
+            $addressInfo = $em->getRepository(CustomerAddress::class)->find($addressId);
+        }
         $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
         $location       = empty($orderJson['locationId']) ? '' : $orderJson['locationId'];
         $couponCode     = empty($orderJson['couponCode']) ? '' : $orderJson['couponCode'];
@@ -485,6 +485,7 @@ class OrderRepository extends EntityRepository
         $total          = empty($orderJson['total']) ? '' : $orderJson['total'];
         $shippingCharge = empty($orderJson['shippingCharge']) ? '' : $orderJson['shippingCharge'];
         $find = $this->findOneBy(array('globalOption' => $option->getId(),'orderId'=> $orderId));
+
         if(empty($find)){
             $order = new Order();
             $order->setGlobalOption($option);
@@ -494,6 +495,7 @@ class OrderRepository extends EntityRepository
                 $order->setCustomerMobile($addressInfo->getMobile());
                 $order->setCustomerName($addressInfo->getName());
                 $order->setCustomer($addressInfo->getCustomer());
+                $order->setCustomerAddress($addressInfo);
             }
             $order->setOrderId($orderId);
             if($location){

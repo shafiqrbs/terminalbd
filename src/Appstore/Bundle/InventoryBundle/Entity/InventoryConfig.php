@@ -1862,6 +1862,21 @@ class InventoryConfig
         $this->systemReset = $systemReset;
     }
 
+    /**
+     * @return bool
+     */
+    public function isShowSalesPrice()
+    {
+        return $this->showSalesPrice;
+    }
+
+    /**
+     * @param bool $showSalesPrice
+     */
+    public function setShowSalesPrice($showSalesPrice)
+    {
+        $this->showSalesPrice = $showSalesPrice;
+    }
 
 
 

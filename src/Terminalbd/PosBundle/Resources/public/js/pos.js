@@ -276,6 +276,8 @@ $(document).on('change', '#item', function() {
             $('#item-status').html(obj['status']);
             $('#purchaseItem').html(obj['purchaseItem']);
             $('#serialNo').html(obj['serialNo']);
+            $('#price').val(obj['price']);
+
         },
     })
 });
@@ -380,8 +382,42 @@ $(document).on('click', '.addToCart', function() {
     var url = $(this).attr('data-action');
     $.get(url, {quantity: quantity,price:price,purchaseItem:purchaseItem,serial:serialNo} , function(response){
         setTimeout(jsonResult(response),100);
+        $('#item').select2('open');
+        $('#price').val('');
     });
 });
+
+$('form#medicineStock').on('keypress', '.stockInput', function (e) {
+
+    if (e.which === 13) {
+        var inputs = $(this).parents("form#stockItem").eq(0).find("input,select");
+        var idx = inputs.index(this);
+
+        if (idx === inputs.length - 1) {
+            inputs[0].select()
+        } else {
+            inputs[idx + 1].focus(); //  handles submit buttons
+        }
+        switch (this.id) {
+
+            case 'item':
+                $('#price').focus();
+                break;
+
+            case 'price':
+                $('#quantity').focus();
+                break;
+
+            case 'quantity':
+                $('#addItem').click();
+                $('#item').focus();
+                break;
+
+        }
+        return false;
+    }
+});
+
 
 $(document).on('click', '.invoice-mode', function() {
     url = $(this).attr('data-action');
@@ -441,6 +477,7 @@ function resetInvoice(){
     $('.vat').html('');
     $('.due').html('');
     $('.discount').html('');
+    $('.invoice-change').val('');
 }
 
 $(".select2StockItem").select2({
@@ -659,7 +696,7 @@ $(document).on('change', '.invoice-change', function(e) {
         processData : false,
         contentType : false,
         success     : function(response){
-           // setTimeout(jsonResult(response),100);
+            setTimeout(jsonResult(response),100);
         }
     });
     e.preventDefault();

@@ -17,7 +17,7 @@
                             <form name="stockItem" id="stockItem" method="post" action="{{ path('pos_item_create') }}">
                                 <div class="input-prepend input-append span9">
                                     {% if globalOption.inventoryConfig.salesMode == "purchase-item" %}
-                                    <input type="text" id="item" name="item" class="span5 m-wrap m-wrap-bg sele select2StockItem" value="" autocomplete="off"  placeholder="Search product">
+                                    <input type="text" id="item" name="item" class="span5 m-wrap m-wrap-bg stockInput select2StockItem" value="" autocomplete="off"  placeholder="Search product">
                                     <select class="span3 m-wrap m-wrap-bg" style="height: 50px!important;" id="purchaseItem" name="purchaseItem">
                                         <option>Select Barcode</option>
                                     </select>
@@ -25,37 +25,37 @@
                                         <option>Select Serial No</option>
                                     </select>
                                     {% else %}
-                                    <input type="text" id="item" name="item" class="span7 m-wrap m-wrap-bg sele select2StockItem" value="" autocomplete="off"  placeholder="Search product">
+                                    <input type="text" id="item" name="item" class="span7 m-wrap m-wrap-bg stockInput select2StockItem" value="" autocomplete="off"  placeholder="Search product">
                                     {% endif %}
-                                    <input type="text" id="price" name="price" class="span2 m-wrap m-wrap-bg pull-center amount" value="" autocomplete="on"  placeholder="Price" >
-                                    <input type="text" id="quantity" name="quantity" class="span m-wrap m-wrap-bg pull-center amount" style="width: 80px;" value="1" autocomplete="on"  placeholder="QYT" >
+                                    <input type="text" id="price" name="price" class="span2 m-wrap m-wrap-bg stockInput pull-center amount" value="" autocomplete="on"  placeholder="Price" >
+                                    <input type="text" id="quantity" name="quantity" class="span m-wrap m-wrap-bg pull-center stockInput amount" style="width: 80px;" value="1" autocomplete="on"  placeholder="QYT" >
                                     <button type="submit" style="height: 50px" class="btn yellow big" id="addItem" name="addItem" value="addItem"><i class="icon-print"></i> Add Item</button>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <div class="row-fluid">
-                        <div class="span8">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr class="head-gray">
-                                        <th class="numeric product-list">Current Stock</th>
-                                        <th class="numeric product-list" id="current-stock"></th>
-                                        <th class="numeric product-list">Sales Price</th>
-                                        <th class="numeric product-list" id="sales-price"></th>
-                                        <th class="numeric product-list">Status</th>
-                                        <th class="numeric product-list" id="item-status"></th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
                 </div>
                 {% endif %}
+
                 <div class="row-fluid">
                     {% if invoiceMode == 'search' %}
                         <div class="span8">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr class="head-gray">
+                                            <th class="numeric product-list">Current Stock</th>
+                                            <th class="numeric product-list" id="current-stock"></th>
+                                            <th class="numeric product-list">Sales Price</th>
+                                            <th class="numeric product-list" id="sales-price"></th>
+                                            <th class="numeric product-list">Status</th>
+                                            <th class="numeric product-list" id="item-status"></th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
                             <div class="clearfix"></div>
                             <table class="table table-bordered">
                                 <thead class="flip-content ">
@@ -75,7 +75,7 @@
                                             <th>{{ loop.index }}.</th>
                                             <td class="numeric product-title">
                                                 {{ item.name }}
-                                                {% if item.serialNo is not empty %} <br/>IME/Serial no : {{ item.serialNo }}{% endif %}
+                                                {% if item.item.serial is defined and item.item.serial is not empty %} <br/>IME/Serial no : {{ item.serial }}{% endif %}
                                             </td>
                                             <td class="numeric product-price">
                                                 <input type="text" class="form-control inline-m-wrap updateProductPrice btn-qnt-particular" data-id="{{ item.rowid }}"  id="price-{{ item.rowid }}" name="price-{{ item.rowid }}"  value="{{ item.price }}" data-action="{{ path('pos_item_update',{'product':item.rowid}) }}" >
