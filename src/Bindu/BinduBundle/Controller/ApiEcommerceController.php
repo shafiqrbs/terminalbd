@@ -1291,27 +1291,28 @@ class ApiEcommerceController extends Controller
             $setup = $this->checkApiValidation($request);
             $name = $data['name'];
             $mobile = $data['mobile'];
-            $email = $data['email'];
+            $email = isset($data['email']) ? $data['email'] : '';
+            if(empty($email)){
+               $emailAdd = "{$mobile}@gmail.com";
+            }else{
+               $emailAdd = $email;
+            }
             $address = $data['address'];
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
             $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile));
-            $existEmail = $em->getRepository('UserBundle:User')->findOneBy(array('email'=> $email));
+            $existEmail = $em->getRepository('UserBundle:User')->findOneBy(array('email'=> $emailAdd));
 
             /* @var $user User */
 
-            if(empty($user) and !empty($email) and empty($existEmail)){
+            if(empty($user) and !empty($emailAdd) and empty($existEmail)){
 
                 $user = new User();
                 $a = mt_rand(1000,9999);
                 $user->setPlainPassword($a);
                 $user->setEnabled(true);
                 $user->setUsername($mobile);
-                if(empty($data['email'])){
-                    $user->setEmail($mobile.'@gmail.com');
-                }else{
-                    $user->setEmail($email);
-                }
+                $user->setEmail($emailAdd);
                 $user->setRoles(array('ROLE_CUSTOMER'));
                 $user->setUserGroup('customer');
                 $user->setGlobalOption($setup);
@@ -1357,7 +1358,7 @@ class ApiEcommerceController extends Controller
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($user,$setup));
 
-            }else{
+            }elseif($user){
 
                 $a = mt_rand(1000,9999);
                 $user->setPlainPassword($a);
