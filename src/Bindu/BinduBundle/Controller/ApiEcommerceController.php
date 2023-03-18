@@ -255,7 +255,7 @@ class ApiEcommerceController extends Controller
                     'introTitle' => empty($entity->getTemplateCustomize()->getIntroTitle()) ? '' : $entity->getTemplateCustomize()->getIntroTitle(),
                     'vatEnable' => $this->numberNullChecker($vatEnable),
                      'appHeaderBg' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($androidHeaderBg),
-                     'appPrimaryColor' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appPrimaryColor),
+                     'appPrimaryColor' => empty($appPrimaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appPrimaryColor),
                      'appSecondaryColor' => empty($appSecondaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appSecondaryColor),
                      'appBarColor' => empty($appBarColor) ? $this->hex6ToHex8($this->random_color_code()) :$this->hex6ToHex8($appBarColor) ,
                      'appTextTitle' => empty($appTextTitle)? $this->hex6ToHex8($this->random_color_code()) :$this->hex6ToHex8($appTextTitle) ,
@@ -1123,7 +1123,6 @@ class ApiEcommerceController extends Controller
             $data = array();
             /* @var $entity Page */
             foreach ($testimonial as $key => $entity){
-
                 $data[$key]['id'] = $entity->getId();
                 $data[$key]['name'] = $entity->getName();
                 $data[$key]['designation'] = $entity->getDesignation();

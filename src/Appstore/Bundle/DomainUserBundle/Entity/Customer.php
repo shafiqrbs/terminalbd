@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
-use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;

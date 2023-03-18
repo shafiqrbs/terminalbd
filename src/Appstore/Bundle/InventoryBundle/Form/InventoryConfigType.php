@@ -29,6 +29,7 @@ class InventoryConfigType extends AbstractType
             ->add('autoPayment')
             ->add('androidSales')
             ->add('emptySales')
+            ->add('showSalesPrice')
             ->add('file')
             ->add('usingBarcode',
                 'choice', array(

@@ -382,6 +382,13 @@ class InventoryConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="showSalesPrice", type="boolean",  nullable=true)
+     */
+    private $showSalesPrice = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="cartImage", type="boolean",  nullable=true)
      */
     private $cartImage = false;
