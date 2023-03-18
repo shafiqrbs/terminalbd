@@ -181,6 +181,11 @@ class Customer
      **/
     protected $checkedBy;
 
+      /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Designation")
+     **/
+    protected $designation;
+
     /**
      * @var integer
      *
@@ -1910,6 +1915,24 @@ class Customer
     {
         return $this->customerAddresses;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDesignation()
+    {
+        return $this->designation;
+    }
+
+    /**
+     * @param mixed $designation
+     */
+    public function setDesignation($designation)
+    {
+        $this->designation = $designation;
+    }
+
+
 
 
 

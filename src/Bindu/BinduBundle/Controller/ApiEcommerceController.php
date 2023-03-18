@@ -9,6 +9,7 @@ use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Gregwar\Image\Image;
 use Setting\Bundle\ContentBundle\Entity\Page;
+use Setting\Bundle\ToolBundle\Entity\Designation;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -1173,7 +1174,7 @@ class ApiEcommerceController extends Controller
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
             }
             if($user){
-                $returnData['user_id'] = (int) $user->getId();
+                $returnData['userId'] = (int) $user->getId();
                 $returnData['username'] = $user->getUsername();
                 $returnData['name'] = $user->getProfile()->getName();
                 $returnData['address'] = $user->getProfile()->getAddress();
@@ -1185,12 +1186,13 @@ class ApiEcommerceController extends Controller
                 $returnData['address'] = array();
                 if($addreses) {
                     /* @var $address CustomerAddress */
-                    foreach ($addreses as $address) {
-                        $returnData['address'][$address->getId()]['id'] = (integer)$address->getId();
-                        $returnData['address'][$address->getId()]['name'] = (string)$address->getName();
-                        $returnData['address'][$address->getId()]['mobile'] = (string)$address->getMobile();
-                        $returnData['address'][$address->getId()]['address'] = (string)$address->getAddress();
-                        $returnData['address'][$address->getId()]['mode'] = (string)$address->getMode();
+                    foreach ($addreses as $key => $address) {
+                        $returnData['address'][$key]['id'] = (integer)$address->getId();
+                        $returnData['address'][$key]['userId'] = (int) $user->getId();
+                        $returnData['address'][$key]['name'] = (string)$address->getName();
+                        $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                        $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                        $returnData['address'][$key]['mode'] = (string)$address->getMode();
                     }
                 }else{
                     $returnData['address'] = array();
@@ -1333,9 +1335,15 @@ class ApiEcommerceController extends Controller
                 $gender = isset($data['gender']) ? $data['gender'] : '';
                 $age = isset($data['age']) ? $data['age'] : '';
 
+
                 $customer = new Customer();
                 $customer->setUser($user->getId());
                 $customer->setGlobalOption($user->getGlobalOption());
+                $designationId = isset($data['designation']) ? $data['designation'] : '';
+                if($designationId){
+                    $designation = $this->getDoctrine()->getRepository(Designation::class)->find($designationId);
+                    $customer->setDesignation($designation);
+                }
                 $customer->setName($profile->getName());
                 $customer->setMobile($user->getUsername());
                 $customer->setAddress($profile->getAddress());
@@ -1366,7 +1374,8 @@ class ApiEcommerceController extends Controller
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
             }
-            $returnData['user_id'] = (int) $user->getId();
+            $returnData = array();
+            $returnData['userId'] = (int) $user->getId();
             $returnData['username'] = $user->getUsername();
             $returnData['password'] = $a;
             $returnData['name'] = $user->getProfile()->getName();
@@ -1375,15 +1384,15 @@ class ApiEcommerceController extends Controller
 
             $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
             $addreses = $customer->getCustomerAddresses();
-            $returnData['address'] = array();
             if($addreses) {
                 /* @var $address CustomerAddress */
-                foreach ($addreses as $address) {
-                    $returnData['address'][$address->getId()]['id'] = (integer)$address->getId();
-                    $returnData['address'][$address->getId()]['name'] = (string)$address->getName();
-                    $returnData['address'][$address->getId()]['mobile'] = (string)$address->getMobile();
-                    $returnData['address'][$address->getId()]['address'] = (string)$address->getAddress();
-                    $returnData['address'][$address->getId()]['mode'] = (string)$address->getMode();
+                foreach ($addreses as $key => $address) {
+                    $returnData['address'][$key]['id'] = (integer)$address->getId();
+                    $returnData['address'][$key]['userId'] = (int) $user->getId();
+                    $returnData['address'][$key]['name'] = (string)$address->getName();
+                    $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                    $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                    $returnData['address'][$key]['mode'] = (string)$address->getMode();
                 }
             }else{
                 $returnData['address'] = array();
@@ -1453,7 +1462,7 @@ class ApiEcommerceController extends Controller
                 $em->flush();
             }
 
-            $returnData['user_id'] = (int) $user->getId();
+            $returnData['userId'] = (int) $user->getId();
             $returnData['username'] = $user->getUsername();
             $returnData['name'] = $user->getProfile()->getName();
             $returnData['email'] = $user->getProfile()->getEmail();
@@ -1464,12 +1473,13 @@ class ApiEcommerceController extends Controller
             $returnData['address'] = array();
             if($addreses) {
                 /* @var $address CustomerAddress */
-                foreach ($addreses as $address) {
-                    $returnData['address'][$address->getId()]['id'] = (integer)$address->getId();
-                    $returnData['address'][$address->getId()]['name'] = (string)$address->getName();
-                    $returnData['address'][$address->getId()]['mobile'] = (string)$address->getMobile();
-                    $returnData['address'][$address->getId()]['address'] = (string)$address->getAddress();
-                    $returnData['address'][$address->getId()]['mode'] = (string)$address->getMode();
+                foreach ($addreses as $key => $address) {
+                    $returnData['address'][$key]['id'] = (integer)$address->getId();
+                    $returnData['address'][$key]['userId'] = (int) $user->getId();
+                    $returnData['address'][$key]['name'] = (string)$address->getName();
+                    $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                    $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                    $returnData['address'][$key]['mode'] = (string)$address->getMode();
                 }
             }else{
                 $returnData['address'] = array();
