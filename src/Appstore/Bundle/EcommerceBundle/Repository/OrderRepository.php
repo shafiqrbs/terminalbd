@@ -579,7 +579,7 @@ class OrderRepository extends EntityRepository
                 $orderItem->setPrice($row['price']);
                 $orderItem->setQuantity($row['orderedQuantity']);
                 $orderItem->setItemName($item->getName());
-                $orderItem->setSubTotal($row['price'] * $row['quantity']);
+                $orderItem->setSubTotal($row['price'] * $row['orderedQuantity']);
                 $em->persist($orderItem);
                 $em->flush();
             }
