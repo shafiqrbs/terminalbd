@@ -571,7 +571,7 @@ class OrderRepository extends EntityRepository
                 $orderItem->setOrder($order);
                 $orderItem->setOrderItemId($row['id']);
                 $orderItem->setOrderId($row['orderId']);
-                $quantity = isset($row['quantity']) ? $row['quantity'] : 1;
+                $quantity = (isset($row['quantity']) and $row['quantity'] > 0) ? $row['quantity'] : 1;
                 $price = isset($row['price']) ? $row['price'] : $item->getSalesPrice();
                 if($item){
                     $orderItem->setItem($item);
