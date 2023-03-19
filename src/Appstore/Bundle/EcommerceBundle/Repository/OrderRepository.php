@@ -565,8 +565,9 @@ class OrderRepository extends EntityRepository
         $orderItem = json_decode($data['jsonOrderItem'],true);
         foreach ($orderItem as $row){
             $find = $em->getRepository('EcommerceBundle:OrderItem')->findOneBy(array('order' => $order,'orderItemId'=>$row['id']));
-            if(empty($find)){
-                $item = $em->getRepository('EcommerceBundle:Item')->find($row['itemId']);
+            $itemId = (empty($row['itemId']) and $row['itemId'] == null) ? '' : $row['itemId'];
+            if(empty($find) and !empty($itemId)){
+                $item = $em->getRepository('EcommerceBundle:Item')->find($itemId);
                 $orderItem = new OrderItem();
                 $orderItem->setOrder($order);
                 $orderItem->setOrderItemId($row['id']);
@@ -578,15 +579,16 @@ class OrderRepository extends EntityRepository
                     if($item->getCategory()) {
                         $orderItem->setCategoryName($item->getCategory()->getName());
                     }
+                    $orderItem->setItemName($item->getName());
                     //if( $item->getBrand())
                     //$orderItem->setBrandName($item->getBrand()->getName());
+                    $orderItem->setPrice($price);
+                    $orderItem->setQuantity(1);
+                    $orderItem->setSubTotal($price * 1);
+                    $em->persist($orderItem);
+                    $em->flush();
                 }
-                $orderItem->setPrice($price);
-                $orderItem->setQuantity(1);
-                $orderItem->setItemName($item->getName());
-                $orderItem->setSubTotal($price * 1);
-                $em->persist($orderItem);
-                $em->flush();
+
             }
 
         }
