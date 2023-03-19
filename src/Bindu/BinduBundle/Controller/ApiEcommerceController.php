@@ -5,6 +5,7 @@ namespace Bindu\BinduBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Gregwar\Image\Image;
@@ -887,9 +888,21 @@ class ApiEcommerceController extends Controller
 
 
             $data = $request->request->all();
+
+
+
             /* @var $entity GlobalOption */
             $entity = $this->checkApiValidation($request);
-            $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
+         //   $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
+
+            $orderJson = json_decode($data['jsonOrder'],true);
+            $orderJsonItem = json_decode($data['orderJsonItem'],true);
+            $em = $this->getDoctrine()->getManager();
+            $order = new Order();
+            $order->setJsonOrder($orderJson);
+            $order->setJsonOrderItem($orderJsonItem);
+            $em->persist($order);
+            $em->flush();
             if($order){
                 $returnData = array('orderId'=>$order->getId(),'invoice'=>$order->getInvoice(),'status'=>'success');
             }else{

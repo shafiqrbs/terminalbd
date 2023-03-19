@@ -210,6 +210,19 @@ class Order
      */
     private $comment;
 
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="jsonOrder", type="text", nullable=true)
+     */
+    private $jsonOrder;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="jsonOrderItem", type="text", nullable=true)
+     */
+    private $jsonOrderItem;
 
 
     /**
@@ -1565,6 +1578,39 @@ class Order
     {
         $this->isDelete = $isDelete;
     }
+
+    /**
+     * @return text
+     */
+    public function getJsonOrder()
+    {
+        return $this->jsonOrder;
+    }
+
+    /**
+     * @param text $jsonOrder
+     */
+    public function setJsonOrder($jsonOrder)
+    {
+        $this->jsonOrder = $jsonOrder;
+    }
+
+    /**
+     * @return text
+     */
+    public function getJsonOrderItem()
+    {
+        return $this->jsonOrderItem;
+    }
+
+    /**
+     * @param text $jsonOrderItem
+     */
+    public function setJsonOrderItem($jsonOrderItem)
+    {
+        $this->jsonOrderItem = $jsonOrderItem;
+    }
+
 
 
 
