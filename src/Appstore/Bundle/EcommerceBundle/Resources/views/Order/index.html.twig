@@ -126,7 +126,7 @@
                                             <div class="btn-group">
                                             {% set postCondition = {'delivered': 'delivered' ,'cancel':'cancel','returend':'returend','delete':'delete'} %}
                                             {% if entity.process not in  postCondition|keys %}
-                                            <a  href="{{ path('customer_order_edit', { 'id': entity.id }) }}" class="btn blue mini " >Manage</a>
+                                                <a  href="{{ path('customer_order_edit', { 'id': entity.id }) }}" class="btn blue mini " >Manage</a>
                                             {% endif %}
                                             <a href="javascript:" data-title="Invoice No.{{ entity.invoice }}" data-action="{{ path('customer_order_show', { 'id': entity.id }) }}" class="btn green mini view" ><i class="icon-eye-open"></i>&nbsp;</a>
                                             <a  href="{{ path('customer_order_print_invoice',{id:entity.id}) }}" target="_blank" data-url=""  class="btn mini purple"><i class="icon-print"></i></a>

@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Coupon;
-use Appstore\Bundle\EcommerceBundle\Entity\CustomerAddress;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
@@ -464,13 +463,15 @@ class OrderRepository extends EntityRepository
         $orderJson = json_decode($data['jsonOrder'],true);
         $em = $this->_em;
 
+
         $userId        = empty($orderJson['userId']) ? '' : $orderJson['userId'];
         $user = $em->getRepository(User::class)->find($userId);
         $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
         $addressInfo = "";
         if($addressId){
-            $addressInfo = $em->getRepository(CustomerAddress::class)->find($addressId);
+            $addressInfo = $em->getRepository("DomainUserBundle:CustomerAddress")->find($addressId);
         }
+        $addressInfo = $em->getRepository("DomainUserBundle:CustomerAddress")->find(5);
         $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
         $location       = empty($orderJson['locationId']) ? '' : $orderJson['locationId'];
         $couponCode     = empty($orderJson['couponCode']) ? '' : $orderJson['couponCode'];

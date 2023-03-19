@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\Response;
 class OrderController extends Controller
 {
 
-
     public function paginate($entities)
     {
 
@@ -398,12 +397,13 @@ class OrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         $order->setShippingCharge($shippingCharge);
         $order->setDiscount($discount);
-        $total = ($order->getSubTotal() + $order->getVat() + $order->getShippingCharge() + $order->getDiscount());
+        $total = ($order->getSubTotal() + $order->getVat() + $order->getShippingCharge() - $order->getDiscount());
         $order->setTotal($total);
         $em->persist($order);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-        return new Response (json_encode(array('discount'=>$order->getDiscount(),'shippingCharge'=>$order->getShippingCharge(),'vat' => $order->getVat(),'total' => $order->getTotal(),'receive' => $order->getReceive(),'due' => ($order->getTotal() - $order->getReceive()))));
+        $data = array('discount'=>$order->getDiscount(),'shippingCharge'=>$order->getShippingCharge(),'vat' => $order->getVat(),'total' => $order->getTotal(),'receive' => $order->getReceive(),'due' => ($order->getTotal() - $order->getReceive()));
+        return new Response ( json_encode($data));
     }
 
     public function paymentProcessAction(Request $request ,Order $order)
@@ -768,6 +768,21 @@ class OrderController extends Controller
         }
         return new Response('success');
 
+    }
+
+    public function deleteAction(Order $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Expenditure entity.');
+        }
+        $entity->setIsDelete(1);
+        $em->persist($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
+        return new Response('success');
     }
 
 

@@ -161,8 +161,8 @@ class MedicinePurchaseItemRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("mv.companyName", "'%$vendor%'"  ));
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->groupBy('s.name');
-        $qb->orderBy('s.name','ASC');
+        $qb->orderBy('s.created','ASC');
+        $qb->addOrderBy('s.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         return  $result;
     }

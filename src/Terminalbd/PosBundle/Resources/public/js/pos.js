@@ -262,25 +262,7 @@ $(document).on('change', '#barcode', function() {
     })
 });
 
-$(document).on('change', '#item', function() {
-    var item = $(this).val();
-    $.ajax({
-        url: Routing.generate('pos_item_barcode_info'),
-        type: 'POST',
-        data:'item='+item+'&barcode=0',
-        success: function(response){
-            obj = JSON.parse(response);
-            $('#current-stock').html(obj['quantity']);
-            $('#avg-price').html(obj['purchase']);
-            $('#sales-price').html(obj['price']);
-            $('#item-status').html(obj['status']);
-            $('#purchaseItem').html(obj['purchaseItem']);
-            $('#serialNo').html(obj['serialNo']);
-            $('#price').val(obj['price']);
 
-        },
-    })
-});
 
 $(document).on('change', '#barcodeNo', function() {
 
@@ -367,6 +349,26 @@ function afterSelect2Submit(){
 
 }
 
+$(document).on('change', '#item', function() {
+    var item = $(this).val();
+    $.ajax({
+        url: Routing.generate('pos_item_barcode_info'),
+        type: 'POST',
+        data:'item='+item+'&barcode=0',
+        success: function(response){
+            obj = JSON.parse(response);
+            $('#current-stock').html(obj['quantity']);
+            $('#avg-price').html(obj['purchase']);
+            $('#sales-price').html(obj['price']);
+            $('#item-status').html(obj['status']);
+            $('#purchaseItem').html(obj['purchaseItem']);
+            $('#serialNo').html(obj['serialNo']);
+            $('#price').val(obj['price']);
+            $('#quantity').focus();
+
+        },
+    })
+});
 
 $(document).on('click', '.addToCart', function() {
 
@@ -387,7 +389,7 @@ $(document).on('click', '.addToCart', function() {
     });
 });
 
-$('form#medicineStock').on('keypress', '.stockInput', function (e) {
+$('form#stockItem').on('keypress', '.stockInput', function (e) {
 
     if (e.which === 13) {
         var inputs = $(this).parents("form#stockItem").eq(0).find("input,select");
@@ -399,18 +401,17 @@ $('form#medicineStock').on('keypress', '.stockInput', function (e) {
             inputs[idx + 1].focus(); //  handles submit buttons
         }
         switch (this.id) {
-
             case 'item':
-                $('#price').focus();
-                break;
-
-            case 'price':
                 $('#quantity').focus();
                 break;
 
             case 'quantity':
+                $('#price').focus();
+                break;
+
+            case 'price':
                 $('#addItem').click();
-                $('#item').focus();
+                $('#item').select2('open');
                 break;
 
         }

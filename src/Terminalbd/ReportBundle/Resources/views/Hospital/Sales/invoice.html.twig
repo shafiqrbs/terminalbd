@@ -101,7 +101,9 @@
                     </div>
                     <div class="col-md-1 margin-top">
                         <label>&nbsp;</label>
-                        <button type="button" class='btn btn-download btn-margin-left ajax-btn' value="search" name="submit" ><i class='fa fa-search'></i> Search</button>
+                        <button type="button" class='btn btn-download btn-margin-left ajax-btn' value="search" name="submit" ><i class='fa fa-search'></i></button>
+                        <button class="btn purple" onclick="exportExcel()" type="button"><i class="fa fa-file"></i></button>
+
                     </div>
                 </div>
 
@@ -112,4 +114,10 @@
     <div id="print-area">
         <div class="col-md-12" id="data-load"></div>
     </div>
+    <script>
+        function exportExcel() {
+            var table = document.querySelector('#downloadExcel');
+            TableToExcel.convert(table);
+        }
+    </script>
 {% endblock %}

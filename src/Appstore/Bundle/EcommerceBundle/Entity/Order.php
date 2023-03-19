@@ -429,6 +429,13 @@ class Order
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isDelete", type="boolean")
+     */
+    private $isDelete = 0;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="cashOnDelivery", type="boolean")
      */
     private $cashOnDelivery = false;
@@ -1543,6 +1550,21 @@ class Order
         $this->orderPoint = $orderPoint;
     }
 
+    /**
+     * @return bool
+     */
+    public function isDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param bool $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
+    }
 
 
 

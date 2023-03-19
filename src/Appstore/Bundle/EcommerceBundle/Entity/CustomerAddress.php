@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ItemBrand
  *
  * @ORM\Table("ecommerce_customer_address")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\TimePeriodRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\CustomerAddressRepository")
  */
 class CustomerAddress
 {

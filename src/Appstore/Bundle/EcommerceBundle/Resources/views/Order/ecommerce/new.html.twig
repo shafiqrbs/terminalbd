@@ -113,7 +113,7 @@
                         <div class="clearfix"><br/> </div>
                         {{ form_start(salesItem) }}
                         {{ form_row(salesItem._token) }}
-                        <div class="row-fluid particular-info" style="padding-left:15px!important" >
+                        <div class="row-fluid particular-info" style="padding-left:15px!important; margin-left: -10px!important;" >
                             <div class="span8">
                                 {{ form_widget(salesItem.itemName) }}
                                 {{ form_errors(salesItem.itemName) }}
@@ -121,10 +121,8 @@
                             <div class="span4">
                                 <div class="input-append">
                                     <div class="input-group">
-                                        {{ form_widget(salesItem.price) }}
-                                        {{ form_errors(salesItem.price) }}
                                         {{ form_widget(salesItem.quantity) }}
-                                        {{ form_errors(salesItem.quantity) }}
+                          \              {{ form_widget(salesItem.price) }}
                                         <button type="button" class="btn yellow" id="unit">Unit</button>
                                         <button type="button" class="btn blue" id="addOrderItem"> <span class="fa fa-shopping-cart"></span> Add</button>
                                     </div>
@@ -132,8 +130,6 @@
                             </div>
                         </div>
                         {{ form_end(salesItem) }}
-                        <div class="clearfix"><br/> </div>
-                        <div class="clearfix"> </div>
                         <form name="transactionUpdate" method="post" action="{{ path('customer_order_ajax_update',{'id':entity.id}) }}" id="transactionUpdate" novalidate="novalidate">
                         <div class="portlet-body flip-scroll">
                             <div class="clearfix">&nbsp;</div>
@@ -194,7 +190,7 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{{ orderItem.price }}</td>
-                                        <td class="numeric" >=&nbsp;{{ orderItem.subTotal }}</td>
+                                        <td class="numeric" ><strong>{{ orderItem.subTotal }}</strong></td>
                                         <td class="numeric" >
                                             {% if orderItem.status == 1 %}
                                                 <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
@@ -211,12 +207,12 @@
                                     </tr>
                                 {% endfor %}
                                 <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Total</span></td>
-                                    <td class="numeric" colspan="1" >=&nbsp;{{ entity.subTotal|number_format }}</td>
+                                    <td class="numeric" colspan="6" ><span class="pull-right"><strong>Total</strong></span></td>
+                                    <td class="numeric" colspan="1" ><strong>{{ entity.subTotal|number_format }}</strong></td>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
+                                    <td class="numeric" colspan="6" ><span class="pull-right"><strong>Delivery Charge</strong></span></td>
                                     <td class="numeric"><input type="text" name="shippingCharge" id="shippingCharge" class="m-wrap-custom span11 transactionProcess" value="{{ entity.shippingCharge }}"></td>
                                     <td></td>
                                 </tr>
@@ -228,7 +224,7 @@
                                     </tr>
                                 {% endif %}
                                 <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Discount</span></td>
+                                    <td class="numeric" colspan="6" ><span class="pull-right"><strong>Discount</strong></span></td>
                                     <td class="numeric"><input type="text" name="discount" id="discount" class="m-wrap-custom span11 transactionProcess" value="{{ entity.discount }}"></td>
                                     <td></td>
                                 </tr>
@@ -240,25 +236,25 @@
                                     </tr>
                                 {% endif %}
                                 <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
+                                    <td class="numeric" colspan="6" ><span class="pull-right"><strong>Grand Total</strong></span></td>
                                     <td class="numeric"><strong id="total">{{ ( entity.total)|number_format }}</strong></td>
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
+                                    <td class="numeric" colspan="6" ><span class="pull-right"><strong>Paid Amount</strong></span></td>
                                     <td class="numeric"><strong id="receive">{{ ( entity.paidAmount)|number_format }}</strong></td>
                                     <td></td>
                                 </tr>
                                 {% if entity.dueAmount  > 0 %}
                                     <tr>
-                                        <td class="numeric" colspan="6" ><span class="pull-right">Due Amount</span></td>
+                                        <td class="numeric" colspan="6" ><span class="pull-right"><strong>Due Amount</strong></span></td>
                                         <td class="numeric" >{{ ( entity.dueAmount)|number_format }}</td>
                                         <td></td>
                                     </tr>
                                 {% endif %}
                                 {% if entity.returnAmount  > 0 %}
                                     <tr>
-                                        <td class="numeric" colspan="6" ><span class="pull-right">Return Amount</span></td>
+                                        <td class="numeric" colspan="6" ><span class="pull-right"><strong>Return Amount</strong></span></td>
                                         <td class="numeric">{{ ( entity.returnAmount)|number_format }}</td>
                                         <td></td>
                                     </tr>
@@ -276,7 +272,7 @@
                         <div class="clearfix"><br/></div>
                         <table class="table table-bordered table-striped table-condensed flip-content ">
                             <thead class="flip-content ">
-                            <tr class="head-green">
+                            <tr class="head-yellow">
                                 <th class="numeric" >Date</th>
                                 <th class="numeric" >Transaction Type</th>
                                 <th class="numeric" >Payment Mobile</th>
@@ -320,8 +316,6 @@
 
                             </tbody>
                         </table>
-                        <div class="clearfix"> </div>
-
                         <div class="clearfix"><br/> </div>
                         {{ form_start(paymentForm) }}
                         {{ form_row(paymentForm._token) }}
