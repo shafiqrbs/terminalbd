@@ -552,7 +552,7 @@ class OrderRepository extends EntityRepository
             }
             $em->persist($order);
             $em->flush();
-        //    $this->insertJsonOrderItem($order,$data);
+            $this->insertJsonOrderItem($order,$data);
             return $order;
         }
         return false;
@@ -571,17 +571,20 @@ class OrderRepository extends EntityRepository
                 $orderItem->setOrder($order);
                 $orderItem->setOrderItemId($row['id']);
                 $orderItem->setOrderId($row['orderId']);
+                $quantity = isset($row['quantity']) ? $row['quantity'] : 1;
+                $price = isset($row['price']) ? $row['price'] : $item->getSalesPrice();
                 if($item){
                     $orderItem->setItem($item);
-                    if($item->getCategory())
-                    $orderItem->setCategoryName($item->getCategory()->getName());
-                    if( $item->getBrand())
-                    $orderItem->setBrandName($item->getBrand()->getName());
+                    if($item->getCategory()) {
+                        $orderItem->setCategoryName($item->getCategory()->getName());
+                    }
+                    //if( $item->getBrand())
+                    //$orderItem->setBrandName($item->getBrand()->getName());
                 }
-                $orderItem->setPrice($row['price']);
-                $orderItem->setQuantity($row['orderedQuantity']);
+                $orderItem->setPrice($price);
+                $orderItem->setQuantity($quantity);
                 $orderItem->setItemName($item->getName());
-                $orderItem->setSubTotal($row['price'] * $row['orderedQuantity']);
+                $orderItem->setSubTotal($price * $quantity);
                 $em->persist($orderItem);
                 $em->flush();
             }
