@@ -895,12 +895,12 @@ class ApiEcommerceController extends Controller
             $entity = $this->checkApiValidation($request);
          //   $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->insertAndroidOrder($entity,$data);
 
-            $orderJson = json_decode($data['jsonOrder'],true);
-            $orderJsonItem = json_decode($data['orderJsonItem'],true);
+          //  $orderJson = json_decode($data['jsonOrder'],true);
+          //  $orderJsonItem = json_decode($data['orderJsonItem'],true);
             $em = $this->getDoctrine()->getManager();
             $order = new Order();
-            $order->setJsonOrder($orderJson);
-            $order->setJsonOrderItem($orderJsonItem);
+            $order->setJsonOrder($data);
+            $order->setJsonOrderItem('xx');
             $em->persist($order);
             $em->flush();
             if($order){
