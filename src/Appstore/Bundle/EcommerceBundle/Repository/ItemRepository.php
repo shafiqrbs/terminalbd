@@ -796,6 +796,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
+        $qb->leftJoin('item.size','size');
         $qb->leftJoin('item.itemColors','color');
         $qb->leftJoin('item.country','c');
         $qb->leftJoin('item.itemAssurance','ia');
@@ -807,6 +808,7 @@ class ItemRepository extends EntityRepository
         $qb->addSelect("CASE WHEN (item.discountPrice IS NOT NULL) THEN item.discountPrice  ELSE  item.salesPrice END  as price");
         $qb->addSelect("CASE WHEN (item.discountPrice IS NOT NULL) THEN item.salesPrice  ELSE 0  END  as discountPrice");
         $qb->addSelect('c.name as country');
+        $qb->addSelect('size.name as unitSize');
         $qb->addSelect('productUnit.name as unitName');
         $qb->addSelect('ia.name as itemAssurance');
         $qb->addSelect('discount.name as discountName','discount.nameBn as discountNameBn','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
@@ -826,8 +828,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['productId']               = (int) $row['id'];
                 $data[$key]['itemId']                  = (int) rand(time(),10);
-                $data[$key]['name']                     = $this->stringNullChecker($row['name']);
-                $data[$key]['nameBn']                   = $this->stringNullChecker($row['nameBn']);
+                $data[$key]['name']                     = $this->stringNullChecker("{$row['name']} - {$row['unitSize']}");
+                $data[$key]['nameBn']                   = $this->stringNullChecker("{$row['nameBn']} - {$row['unitSize']}");
                 $data[$key]['quantity']                 = (int)($row['quantity']);
                 $data[$key]['price']                    = $this->numberNullChecker($row['price']);
                 $data[$key]['discountPrice']            = $this->numberNullChecker($row['discountPrice']);
