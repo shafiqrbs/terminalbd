@@ -463,7 +463,6 @@ class OrderRepository extends EntityRepository
         $orderJson = json_decode($data['jsonOrder'],true);
         $em = $this->_em;
 
-
         $userId        = empty($orderJson['userId']) ? '' : $orderJson['userId'];
         $user = $em->getRepository(User::class)->find($userId);
         $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
@@ -471,7 +470,6 @@ class OrderRepository extends EntityRepository
         if($addressId){
             $addressInfo = $em->getRepository("DomainUserBundle:CustomerAddress")->find($addressId);
         }
-        $addressInfo = $em->getRepository("DomainUserBundle:CustomerAddress")->find(5);
         $orderId        = empty($orderJson['id']) ? '' : $orderJson['id'];
         $location       = empty($orderJson['locationId']) ? '' : $orderJson['locationId'];
         $couponCode     = empty($orderJson['couponCode']) ? '' : $orderJson['couponCode'];
@@ -573,7 +571,9 @@ class OrderRepository extends EntityRepository
                 $orderItem->setOrderId($row['orderId']);
                 if($item){
                     $orderItem->setItem($item);
+                    if($item->getCategory())
                     $orderItem->setCategoryName($item->getCategory()->getName());
+                    if( $item->getBrand())
                     $orderItem->setBrandName($item->getBrand()->getName());
                 }
                 $orderItem->setPrice($row['price']);
