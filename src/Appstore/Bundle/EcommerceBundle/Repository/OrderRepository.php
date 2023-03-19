@@ -462,8 +462,8 @@ class OrderRepository extends EntityRepository
     {
 
         $orderJson = json_decode($data['jsonOrder'],true);
+        $orderJsonItem = json_decode($data['jsonOrderItem'],true);
         $em = $this->_em;
-
         $userId        = empty($orderJson['userId']) ? '' : $orderJson['userId'];
         $user = $em->getRepository(User::class)->find($userId);
         $addressId        = empty($orderJson['addressId']) ? '' : $orderJson['addressId'];
@@ -485,11 +485,12 @@ class OrderRepository extends EntityRepository
         $total          = empty($orderJson['total']) ? '' : $orderJson['total'];
         $shippingCharge = empty($orderJson['shippingCharge']) ? '' : $orderJson['shippingCharge'];
         $find = $this->findOneBy(array('globalOption' => $option->getId(),'orderId'=> $orderId));
-
         if(empty($find)){
             $order = new Order();
             $order->setGlobalOption($option);
             $order->setCreatedBy($user);
+            $order->setJsonOrder($data['jsonOrder']);
+            $order->setJsonOrderItem($data['jsonOrderItem']);
             if($addressInfo){
                 $order->setAddress($addressInfo->getAddress());
                 $order->setCustomerMobile($addressInfo->getMobile());
@@ -551,7 +552,7 @@ class OrderRepository extends EntityRepository
             }
             $em->persist($order);
             $em->flush();
-            $this->insertJsonOrderItem($order,$data);
+        //    $this->insertJsonOrderItem($order,$data);
             return $order;
         }
         return false;
