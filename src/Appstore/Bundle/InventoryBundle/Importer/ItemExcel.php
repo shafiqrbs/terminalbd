@@ -33,7 +33,7 @@ class ItemExcel
         foreach($this->data as $key => $item) {
 
             $name = ucfirst(strtolower($item['ProductName']));
-            $productID = $item['ProductID'];
+            $productID = $item['ProductId'];
 
             $productOld = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'webName' => $name));
             $productId = $this->getDoctrain()->getRepository('EcommerceBundle:Item')->findOneBy(array('ecommerceConfig' => $config,'id' => $productID));
@@ -44,7 +44,7 @@ class ItemExcel
                 $product->setEcommerceConfig($config);
                 $product->setName($name);
                 $product->setWebName($name);
-                $product->setProductBengalName($item['ProductBengalName']);
+                $product->setProductBengalName($item['ProductNameBn']);
                 $product->setQuantity($item['Quantity']);
                 $product->setMasterQuantity($item['Quantity']);
                 $product->setPurchasePrice($item['PurchasePrice']);
