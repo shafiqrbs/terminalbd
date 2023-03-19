@@ -819,6 +819,7 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('GROUP_CONCAT(color.name) as colors');
         $qb->addSelect('GROUP_CONCAT(color.nameBn) as colorsBn');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->andWhere('item.status =1');
         $this->handleApiSearchBetween($qb,$data);
         $qb->groupBy('item.id');
         $qb->orderBy('item.name','ASC');
