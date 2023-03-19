@@ -761,6 +761,8 @@ class ItemController extends Controller
                 $entity->setBrand(NULL);
             }
 		}else{
+
+           // $entity->setSalesPrice($data['value']);
             $entity->$setName($data['value']);
         }
 		$em->persist($entity);

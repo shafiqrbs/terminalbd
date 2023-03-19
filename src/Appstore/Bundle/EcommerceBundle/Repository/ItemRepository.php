@@ -819,7 +819,7 @@ class ItemRepository extends EntityRepository
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $this->handleApiSearchBetween($qb,$data);
         $qb->groupBy('item.id');
-        $qb->orderBy('item.webName','DESC');
+        $qb->orderBy('item.name','ASC');
         $result = $qb->getQuery()->getArrayResult();
         $data = array();
         if($result){

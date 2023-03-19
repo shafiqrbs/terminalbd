@@ -228,12 +228,11 @@ class Item
     private $subTotalPurchasePrice;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="salesPrice", type="decimal", nullable = true)
+     * @ORM\Column(name="salesPrice", type="float",  nullable=true)
      */
-    private $salesPrice;
-
+    private $salesPrice = 0;
     /**
      * @var string
      *
@@ -571,29 +570,6 @@ class Item
         return $this->purchasePrice;
     }
 
-    /**
-     * Set salesPrice
-     *
-     * @param string $salesPrice
-     *
-     * @return Item
-     */
-    public function setSalesPrice($salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get salesPrice
-     *
-     * @return string
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
-    }
 	
     /**
      * @param mixed $purchase
@@ -1669,6 +1645,24 @@ class Item
     {
         $this->contentBn = $contentBn;
     }
+
+    /**
+     * @return float
+     */
+    public function getSalesPrice()
+    {
+        return $this->salesPrice;
+    }
+
+    /**
+     * @param float $salesPrice
+     */
+    public function setSalesPrice($salesPrice)
+    {
+        $this->salesPrice = $salesPrice;
+    }
+
+
 
 }
 
