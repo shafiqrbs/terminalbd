@@ -577,7 +577,7 @@ class OrderRepository extends EntityRepository
                     $orderItem->setBrandName($item->getBrand()->getName());
                 }
                 $orderItem->setPrice($row['price']);
-                $orderItem->setQuantity($row['quantity']);
+                $orderItem->setQuantity($row['orderedQuantity']);
                 $orderItem->setItemName($item->getName());
                 $orderItem->setSubTotal($row['price'] * $row['quantity']);
                 $em->persist($orderItem);
