@@ -1305,7 +1305,7 @@ class ApiEcommerceController extends Controller
             $existEmail = $em->getRepository('UserBundle:User')->findOneBy(array('email'=> $emailAdd));
 
             /* @var $user User */
-
+            $returnData = array();
             if(empty($user) and !empty($emailAdd) and empty($existEmail)){
 
                 $user = new User();
@@ -1362,6 +1362,23 @@ class ApiEcommerceController extends Controller
                 $em->persist($customerAddress);
                 $em->flush();
 
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+                $addreses = $customer->getCustomerAddresses();
+                if($addreses) {
+                    /* @var $address CustomerAddress */
+                    foreach ($addreses as $key => $address) {
+                        $returnData['address'][$key]['id'] = (integer)$address->getId();
+                        $returnData['address'][$key]['userId'] = (int) $user->getId();
+                        $returnData['address'][$key]['name'] = (string)$address->getName();
+                        $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                        $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                        $returnData['address'][$key]['mode'] = (string)$address->getMode();
+                    }
+                }else{
+                    $returnData['address'] = array();
+                }
+                $returnData['msg'] = "valid";
+
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($user,$setup));
 
@@ -1370,33 +1387,32 @@ class ApiEcommerceController extends Controller
                 $a = mt_rand(1000,9999);
                 $user->setPlainPassword($a);
                 $this->get('fos_user.user_manager')->updateUser($user);
+                $returnData['userId'] = (int) $user->getId();
+                $returnData['username'] = $user->getUsername();
+                $returnData['password'] = $a;
+                $returnData['name'] = $user->getProfile()->getName();
+                $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+                $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
+
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+                $addreses = $customer->getCustomerAddresses();
+                if($addreses) {
+                    /* @var $address CustomerAddress */
+                    foreach ($addreses as $key => $address) {
+                        $returnData['address'][$key]['id'] = (integer)$address->getId();
+                        $returnData['address'][$key]['userId'] = (int) $user->getId();
+                        $returnData['address'][$key]['name'] = (string)$address->getName();
+                        $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                        $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                        $returnData['address'][$key]['mode'] = (string)$address->getMode();
+                    }
+                }else{
+                    $returnData['address'] = array();
+                }
+                $returnData['msg'] = "valid";
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
             }
-            $returnData = array();
-            $returnData['userId'] = (int) $user->getId();
-            $returnData['username'] = $user->getUsername();
-            $returnData['password'] = $a;
-            $returnData['name'] = $user->getProfile()->getName();
-            $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
-            $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
-
-            $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
-            $addreses = $customer->getCustomerAddresses();
-            if($addreses) {
-                /* @var $address CustomerAddress */
-                foreach ($addreses as $key => $address) {
-                    $returnData['address'][$key]['id'] = (integer)$address->getId();
-                    $returnData['address'][$key]['userId'] = (int) $user->getId();
-                    $returnData['address'][$key]['name'] = (string)$address->getName();
-                    $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
-                    $returnData['address'][$key]['address'] = (string)$address->getAddress();
-                    $returnData['address'][$key]['mode'] = (string)$address->getMode();
-                }
-            }else{
-                $returnData['address'] = array();
-            }
-            $returnData['msg'] = "valid";
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($returnData));

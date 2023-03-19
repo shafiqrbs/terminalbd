@@ -132,7 +132,7 @@ class ItemExcel
 
         $category = $categoryRepository->findOneBy(array(
             'globalOption'   => $global,
-            'name'              => $item
+            'name'              => $item,
         ));
         if($category){
             return $category;

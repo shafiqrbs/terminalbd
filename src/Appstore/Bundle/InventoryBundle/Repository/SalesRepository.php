@@ -207,7 +207,7 @@ class SalesRepository extends EntityRepository
 
     public function salesReport( User $user , $data)
     {
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.salesBy', 'u');
@@ -231,9 +231,6 @@ class SalesRepository extends EntityRepository
         $qb->setParameter('config', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
-        if(!empty($userBranch)){
-            $qb->andWhere("s.branches =".$userBranch);
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('s.id');
         $qb->orderBy('s.updated','DESC');
@@ -246,7 +243,7 @@ class SalesRepository extends EntityRepository
     public function salesUserReport( User $user , $data)
     {
 
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -264,9 +261,7 @@ class SalesRepository extends EntityRepository
         $qb->setParameter('config', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
-        if(!empty($userBranch)){
-            $qb->andWhere("s.branches =".$userBranch);
-        }
+
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('salesBy');
         $qb->orderBy('total','DESC');
@@ -278,7 +273,7 @@ class SalesRepository extends EntityRepository
 
     public function salesUserPurchasePriceReport(User $user,$data)
     {
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -290,9 +285,7 @@ class SalesRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
-        if(!empty($userBranch)){
-            $qb->andWhere("s.branches =".$userBranch);
-        }
+
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('totalPurchaseAmount','DESC');
         $qb->groupBy('salesBy');
@@ -363,7 +356,7 @@ class SalesRepository extends EntityRepository
     public function monthlySales(User $user , $data =array())
     {
 
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $compare = new \DateTime();
@@ -385,7 +378,7 @@ class SalesRepository extends EntityRepository
 	public function currentMonthSales(User $user , $data =array())
 	{
 
-		$userBranch = $user->getProfile()->getBranches();
+
 		$config =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
 		$compare = new \DateTime();
@@ -412,7 +405,7 @@ class SalesRepository extends EntityRepository
 	public function salesPurchasePriceReport(User $user,$data,$x)
     {
 
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $ids = array();
@@ -429,9 +422,7 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $qb->andWhere("s.id IN (:salesId)")->setParameter('salesId', $ids);
-        if(!empty($userBranch)){
-            $qb->andWhere("s.branches =".$userBranch);
-        }
+
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('totalPurchaseAmount','DESC');
         $qb->groupBy('salesId');
@@ -559,7 +550,7 @@ class SalesRepository extends EntityRepository
     public function reportSalesOverview(User $user ,$data)
     {
 
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -569,16 +560,11 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process IN (:process)');
         $qb->setParameter('process', array('Done','POS','Delivered'));
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
         return $qb->getQuery()->getOneOrNullResult();
     }
 
     public  function reportSalesItemPurchaseSalesOverview(User $user, $data = array()){
 
-        $userBranch = $user->getProfile()->getBranches();
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -592,10 +578,6 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
     }
@@ -603,7 +585,7 @@ class SalesRepository extends EntityRepository
     public function reportSalesTransactionOverview(User $user , $data = array())
     {
 
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -614,10 +596,7 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
+
         $qb->groupBy("s.transactionMethod");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
@@ -625,7 +604,7 @@ class SalesRepository extends EntityRepository
 
     public function reportSalesModeOverview(User $user,$data)
     {
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -635,10 +614,6 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
         $qb->groupBy("s.salesMode");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
@@ -647,7 +622,7 @@ class SalesRepository extends EntityRepository
     public function reportSalesProcessOverview(User $user,$data)
     {
 
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -655,9 +630,7 @@ class SalesRepository extends EntityRepository
         $qb->where('s.inventoryConfig = :inventory');
         $qb->setParameter('inventory', $inventory);
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branches = :branch")->setParameter('branch', $userBranch);
-        }
+
         $qb->groupBy("s.process");
         $res = $qb->getQuery();
         return $result = $res->getArrayResult();
@@ -665,7 +638,7 @@ class SalesRepository extends EntityRepository
 
     public  function reportSalesItem(User $user , $data = ''){
 
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         $qb->join('s.salesItems','si');
@@ -683,17 +656,13 @@ class SalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
         $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();
         return $result;
     }
 
     public  function reportSalesItemStockDetails(User $user, $data=''){
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:SalesItem','si');
@@ -727,7 +696,7 @@ class SalesRepository extends EntityRepository
     }
 
     public  function reportSalesItemPurchaseItemDetails(User $user, $data=''){
-        $userBranch = $user->getProfile()->getBranches();
+
         $inventory =  $user->getGlobalOption()->getInventoryConfig()->getId();
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:SalesItem','si');
@@ -764,7 +733,6 @@ class SalesRepository extends EntityRepository
     {
 
         $inventory = $user->getGlobalOption()->getInventoryConfig();
-        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->_em->createQueryBuilder();
         $datetime = new \DateTime("now");
@@ -781,10 +749,6 @@ class SalesRepository extends EntityRepository
             ->setParameter('mode', $mode)
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
-        if ($branch){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $qb->orderBy("s.invoice", 'DESC');
         return $qb->getQuery()->getResult();
     }

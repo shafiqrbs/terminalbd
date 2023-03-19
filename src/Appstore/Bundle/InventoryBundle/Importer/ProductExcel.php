@@ -103,12 +103,10 @@ class ProductExcel
         $config = $this->excelImport->getInventoryConfig();
         $global = $this->excelImport->getInventoryConfig()->getGlobalOption();
         $categoryRepository = $this->getCategoryRepository();
-
         $category = $categoryRepository->findOneBy(
             array(
                 'globalOption'   => $global,
                 'name' => $item,
-                'permission' => 'private',
             )
         );
         if($category){
