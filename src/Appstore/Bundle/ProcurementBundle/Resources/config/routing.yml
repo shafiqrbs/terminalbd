@@ -3,7 +3,7 @@ procurement_barnch-requsition:
     prefix:   /barnch-requsition
 
 procurement_purchase_requsition:
-    resource: "@ProcurementBundle/Resources/config/routing/purchaserequisition.yml"
+    resource: "@ProcurementBundle/Resources/config/routing/pro_requisition.yml"
     prefix:   /purchase-requsition
 
 procurement_purchase_order:

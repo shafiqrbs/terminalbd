@@ -3,10 +3,8 @@
 namespace Setting\Bundle\ToolBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ContentBundle\Form\ContactOpeningType;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
-use Setting\Bundle\ToolBundle\Form\SiteSettingType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Length;
@@ -33,7 +31,7 @@ class GlobalOptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $userID = (!empty($options['data'])) ? $options['data']->getId():0;
-        $syndicateId = (!empty($options['data'])) ? $options['data']->getSyndicate()->getParent()->getId():0;
+        $syndicateId = (!empty($options['data'])) ? $options['data']->getSyndicate()->getId():0;
         $optionID = (!empty($options['data'])) ? $options['data']->getId():0;
         if($userID > 0){
             parent::buildForm($builder, $options);

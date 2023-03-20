@@ -1,75 +1,75 @@
-pro_purchaserequisition:
+pro_requisition:
     path:     /
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:index" }
 
-pro_purchaserequisition_poissue:
+pro_requisition_poissue:
     path:     /po-issue-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:poIssue" }
 
-pro_purchaserequisition_stockissue:
+pro_requisition_stockissue:
     path:     /stock-issue-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:stockIssue" }
 
-pro_purchaserequisition_purchaseissue:
+pro_requisition_purchaseissue:
     path:     /purchase-issue-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:purchaseIssue" }
 
-pro_purchaserequisition_itemprocess:
+pro_requisition_itemprocess:
     path:     /{process}/po-issue-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:prItemProcess" }
 
-pro_purchaserequisition_show:
+pro_requisition_show:
     path:     /{id}/show
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:show" }
 
-pro_purchaserequisition_new:
+pro_requisition_new:
     path:     /new
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:new" }
 
-pro_purchaserequisition_edit:
+pro_requisition_edit:
     path:     /{id}/edit
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:edit" }
 
 
-pro_purchaserequisition_update:
+pro_requisition_update:
     path:     /{id}/update
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:update" }
     methods:  [POST, PUT]
 
-pro_purchaserequisition_create:
+pro_requisition_create:
     path:     /{purchase}/create
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:createPurchaseItem" }
     methods:  POST
 
-pro_purchaserequisition_approve:
+pro_requisition_approve:
     path:     /{id}/approve
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:approve" }
 
-pro_purchaserequisition_delete:
+pro_requisition_delete:
     path:     /{id}/delete
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:delete" }
 
-approved_pro_purchaserequisition_deleted:
-    path:     /{id}/approved-pro_PurchaseRequisition-deleted
+approved_pro_requisition_deleted:
+    path:     /{id}/approved-pro_requisition-deleted
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:approvedPurchaseDeleted" }
 
-pro_purchaserequisition_edit_approve:
+pro_requisition_edit_approve:
     path:     /{id}/edit-approve
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:editApprove" }
 
 
-pro_purchaserequisition_update_approve:
+pro_requisition_update_approve:
     path:      /{id}/update-approve
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:updateApprove" }
     methods:  [POST, PUT]
 
-pro_purchaserequisition_create_stock_item:
+pro_requisition_create_stock_item:
     path:      /create-new-stock-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:createStockItem" }
     methods:  [POST, PUT]
 
 
-pro_purchaserequisition_item_update:
+pro_requisition_item_update:
     path:      /{id}/update-requisition-item
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:updatePurchaseItem" }
     methods:  [POST]
@@ -77,19 +77,19 @@ pro_purchaserequisition_item_update:
             expose: true
 
 
-pro_purchaserequisition_item_delete:
+pro_requisition_item_delete:
     path:     /{purchase}/{id}/purchase-simple-item-delete
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:purchaseItemDelete" }
 
 
 pro_grn_search:
-    path:     /pro_PurchaseRequisition-auto-search
+    path:     /pro_requisition-auto-search
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:autoSearch" }
     options:
            expose: true
 
 pro_grn_name:
-    path:     /{grn}/pro_PurchaseRequisition-search-name
+    path:     /{grn}/pro_requisition-search-name
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:searchName" }
     options:
            expose: true

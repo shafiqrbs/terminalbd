@@ -2,16 +2,14 @@
 
 namespace Appstore\Bundle\ProcurementBundle\Controller;
 
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
 use Appstore\Bundle\ProcurementBundle\Entity\Requisition;
+use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionItemType;
 use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition;
-use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionItemType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -171,7 +169,7 @@ class PurchaseRequisitionController extends Controller
         if ($editForm->isValid()) {
 	        $entity->upload();
             $em->flush();
-	        return $this->redirect($this->generateUrl('pro_purchaserequisition'));
+	        return $this->redirect($this->generateUrl('pro_requisition'));
         }
         return $this->render('ProcurementBundle:PurchaseRequisition:new.html.twig', array(
             'entity'      => $entity,
