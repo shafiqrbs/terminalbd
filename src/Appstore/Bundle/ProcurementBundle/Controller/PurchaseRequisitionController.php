@@ -67,7 +67,7 @@ class PurchaseRequisitionController extends Controller
         $entity->upload();
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('pro_purchaserequisition_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('requisition_edit', array('id' => $entity->getId())));
 
     }
 
@@ -121,7 +121,7 @@ class PurchaseRequisitionController extends Controller
     {
         $inventoryConfig =  $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseRequisitionType($inventoryConfig), $entity, array(
-            'action' => $this->generateUrl('pro_purchaserequisition_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('requisition_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'id' => 'purchaseForm',
@@ -144,7 +144,7 @@ class PurchaseRequisitionController extends Controller
     {
         $inventoryConfig =  $this->getUser()->getGlobalOption()->getAssetsConfig();
         $form = $this->createForm(new PurchaseRequisitionItemType($inventoryConfig), $purchaseItem, array(
-            'action' => $this->generateUrl('pro_purchaserequisition_create', array('purchase' => $entity->getId())),
+            'action' => $this->generateUrl('requisition_create', array('purchase' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'purchaseItemForm',
@@ -172,7 +172,7 @@ class PurchaseRequisitionController extends Controller
         if ($editForm->isValid()) {
 	        $entity->upload();
             $em->flush();
-	        return $this->redirect($this->generateUrl('pro_requisition'));
+	        return $this->redirect($this->generateUrl('requisition'));
         }
         return $this->render('ProcurementBundle:PurchaseRequisition:new.html.twig', array(
             'entity'      => $entity,
@@ -439,7 +439,7 @@ class PurchaseRequisitionController extends Controller
 			if($process == 'rejected'){
 				$this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->prProcess('rejected',$data);
 			}
-			return $this->redirect($this->generateUrl('pro_purchaserequisition_poissue'));
+			return $this->redirect($this->generateUrl('requisition_poissue'));
 		}else{
 			$this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->prProcess('issued',$data);
 			$entities = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->getPoItem($data);
