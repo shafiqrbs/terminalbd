@@ -1,0 +1,34 @@
+requisition:
+    path:     /
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:index" }
+
+requisition_show:
+    path:     /{id}/show
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:show" }
+
+requisition_new:
+    path:     /new
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:new" }
+
+requisition_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:edit" }
+
+
+requisition_update:
+    path:     /{id}/update
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:update" }
+    methods:  [POST, PUT]
+
+requisition_create:
+    path:     /{purchase}/create
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:createPurchaseItem" }
+    methods:  POST
+    
+requisition_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:approve" }
+
+requisition_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:delete" }

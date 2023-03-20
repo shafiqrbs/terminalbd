@@ -76,6 +76,10 @@ class PosController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_POS")
+     */
+
     public function posItemsAction(Request $request){
 
         $response = new Response();
@@ -114,6 +118,10 @@ class PosController extends Controller
         );
         return new Response($html);
     }
+
+    /**
+     * @Secure(roles="ROLE_POS")
+     */
 
     public function posCategoryItemsAction(Request $request,$id){
 
@@ -171,6 +179,10 @@ class PosController extends Controller
         return new Response($html);
     }
 
+    /**
+     * @Secure(roles="ROLE_POS")
+     */
+
     public function productCartAction(Request $request,Item $product)
     {
 
@@ -200,6 +212,10 @@ class PosController extends Controller
         return new Response(json_encode($array));
 
     }
+
+    /**
+     * @Secure(roles="ROLE_POS")
+     */
 
     public function searchBarcodeAction(Request $request)
     {
@@ -231,7 +247,9 @@ class PosController extends Controller
 
     }
 
-
+    /**
+     * @Secure(roles="ROLE_POS")
+     */
 
     private function getBracodeStockPurchaseItemSerial($cart,PurchaseItemSerial $barcode){
 
