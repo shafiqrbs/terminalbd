@@ -4,9 +4,9 @@ namespace Appstore\Bundle\ProcurementBundle\Controller;
 
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
-use Appstore\Bundle\ProcurementBundle\Entity\Requisition;
 use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionItemType;
 use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
  * PurchaseRequisition controller.
  *
  */
+
+
 class PurchaseRequisitionController extends Controller
 {
 
@@ -32,9 +34,9 @@ class PurchaseRequisitionController extends Controller
     }
 
     /**
-     * Lists all PurchaseOrder entities.
-     *
+     * @Secure(roles="ROLE_PROCUREMENT, ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -53,6 +55,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Displays a form to create a new PurchaseRequisition entity.
+     * @Secure(roles="ROLE_PROCUREMENT, ROLE_DOMAIN")
      *
      */
     public function newAction()
@@ -70,7 +73,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Finds and displays a Purchase entity.
-     *
+     * @Secure(roles="ROLE_PROCUREMENT, ROLE_DOMAIN")
      */
     public function showAction($id)
     {
@@ -88,7 +91,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Displays a form to edit an existing Purchase entity.
-     *
+     * @Secure(roles="ROLE_PROCUREMENT_OFFICE, ROLE_DOMAIN")
      */
     public function editAction($id)
     {
@@ -155,7 +158,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Edits an existing Purchase entity.
-     *
+     * @Secure(roles="ROLE_PROCUREMENT_OFFICE, ROLE_DOMAIN")
      */
     public function updateAction(Request $request, $id)
     {
@@ -199,7 +202,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Deletes a Purchase entity.
-     *
+     * @Secure(roles="ROLE_PROCUREMENT_OFFICE, ROLE_DOMAIN")
      */
     public function deleteAction(PurchaseRequisition $purchase)
     {
