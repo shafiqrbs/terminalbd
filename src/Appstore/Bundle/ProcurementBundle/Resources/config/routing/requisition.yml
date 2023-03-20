@@ -8,12 +8,11 @@ requisition_show:
 
 requisition_new:
     path:     /new
-    defaults: { _controller: "ProcurementBundle:PurchaseRequisition:new" }
+    defaults: { _controller: "ProcurementBundle:PurchaseOrder:new" }
 
 requisition_edit:
     path:     /{id}/edit
     defaults: { _controller: "ProcurementBundle:PurchaseRequisition:edit" }
-
 
 requisition_update:
     path:     /{id}/update
