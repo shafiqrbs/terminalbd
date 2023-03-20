@@ -6,7 +6,6 @@ use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisition;
 use Appstore\Bundle\ProcurementBundle\Entity\PurchaseRequisitionItem;
 use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionItemType;
 use Appstore\Bundle\ProcurementBundle\Form\PurchaseRequisitionType;
-use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
  * PurchaseRequisition controller.
  *
  */
-
-
 class PurchaseRequisitionController extends Controller
 {
 
@@ -34,9 +31,9 @@ class PurchaseRequisitionController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_PROCUREMENT, ROLE_DOMAIN")
+     * Lists all PurchaseOrder entities.
+     *
      */
-
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -55,7 +52,6 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Displays a form to create a new PurchaseRequisition entity.
-     * @Secure(roles="ROLE_PROCUREMENT, ROLE_DOMAIN")
      *
      */
     public function newAction()
@@ -67,13 +63,13 @@ class PurchaseRequisitionController extends Controller
         $entity->upload();
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('requisition_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('pro_purchaserequisition_edit', array('id' => $entity->getId())));
 
     }
 
     /**
      * Finds and displays a Purchase entity.
-     * @Secure(roles="ROLE_PROCUREMENT, ROLE_DOMAIN")
+     *
      */
     public function showAction($id)
     {
@@ -91,7 +87,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Displays a form to edit an existing Purchase entity.
-     * @Secure(roles="ROLE_PROCUREMENT_OFFICE, ROLE_DOMAIN")
+     *
      */
     public function editAction($id)
     {
@@ -121,7 +117,7 @@ class PurchaseRequisitionController extends Controller
     {
         $inventoryConfig =  $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseRequisitionType($inventoryConfig), $entity, array(
-            'action' => $this->generateUrl('requisition_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('pro_purchaserequisition_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'id' => 'purchaseForm',
@@ -144,7 +140,7 @@ class PurchaseRequisitionController extends Controller
     {
         $inventoryConfig =  $this->getUser()->getGlobalOption()->getAssetsConfig();
         $form = $this->createForm(new PurchaseRequisitionItemType($inventoryConfig), $purchaseItem, array(
-            'action' => $this->generateUrl('requisition_create', array('purchase' => $entity->getId())),
+            'action' => $this->generateUrl('pro_purchaserequisition_create', array('purchase' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'purchaseItemForm',
@@ -158,7 +154,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Edits an existing Purchase entity.
-     * @Secure(roles="ROLE_PROCUREMENT_OFFICE, ROLE_DOMAIN")
+     *
      */
     public function updateAction(Request $request, $id)
     {
@@ -172,7 +168,7 @@ class PurchaseRequisitionController extends Controller
         if ($editForm->isValid()) {
 	        $entity->upload();
             $em->flush();
-	        return $this->redirect($this->generateUrl('requisition'));
+	        return $this->redirect($this->generateUrl('pro_purchaserequisition'));
         }
         return $this->render('ProcurementBundle:PurchaseRequisition:new.html.twig', array(
             'entity'      => $entity,
@@ -202,7 +198,7 @@ class PurchaseRequisitionController extends Controller
 
     /**
      * Deletes a Purchase entity.
-     * @Secure(roles="ROLE_PROCUREMENT_OFFICE, ROLE_DOMAIN")
+     *
      */
     public function deleteAction(PurchaseRequisition $purchase)
     {
@@ -439,7 +435,7 @@ class PurchaseRequisitionController extends Controller
 			if($process == 'rejected'){
 				$this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->prProcess('rejected',$data);
 			}
-			return $this->redirect($this->generateUrl('requisition_poissue'));
+			return $this->redirect($this->generateUrl('pro_purchaserequisition_poissue'));
 		}else{
 			$this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->prProcess('issued',$data);
 			$entities = $this->getDoctrine()->getRepository('ProcurementBundle:PurchaseRequisitionItem')->getPoItem($data);

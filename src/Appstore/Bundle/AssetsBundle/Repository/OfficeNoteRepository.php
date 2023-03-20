@@ -1,18 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\AssetsBundle\Repository;
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\AssetsBundle\Entity\Item;
 use Appstore\Bundle\AssetsBundle\Entity\Purchase;
 use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
-use Appstore\Bundle\AssetsBundle\Entity\Sales;
-use Appstore\Bundle\AssetsBundle\Entity\StockItem;
-use Core\UserBundle\Entity\User;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Setting\Bundle\ToolBundle\Event\Glo;
-use Symfony\Component\DependencyInjection\Container;
-
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Event\Glo;
 
 /**
  * ItemTypeGroupingRepository
@@ -95,8 +87,8 @@ class OfficeNoteRepository extends EntityRepository
     {
         $branch = isset($data['branch'])? $data['branch'] :'';
         $qb = $this->createQueryBuilder('e');
-        $qb->where("item.config = :config")->setParameter('config', $config);
-        $qb->orderBy('item.name','ASC');
+        $qb->where("e.config = :config")->setParameter('config', $config);
+        $qb->orderBy('e.created','ASC');
         $qb->getQuery();
         return  $qb;
 

@@ -148,7 +148,6 @@ class Builder extends ContainerAware
             $result = array_intersect($menuName, array('Assets'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_ASSETS')){
-                    $menu = $this->RequisitionMenu($menu);
                     $menu = $this->AssetsMenu($menu);
                 }
             }
@@ -709,6 +708,27 @@ class Builder extends ContainerAware
         $user = $securityContext->getToken()->getUser();
 
         $menu
+            ->addChild('Office Notes')
+            ->setAttribute('icon', 'icon-file')
+            ->setAttribute('dropdown', true);
+        $menu['Office Notes']->addChild("Office Notes List", array('route' => 'assets_officenote'));
+        $menu['Office Notes']->addChild("New Office Notes", array('route' => 'assets_officenote_new'));
+
+        $menu
+            ->addChild('Procurement')
+            ->setAttribute('icon', 'icon-shopping-cart')
+            ->setAttribute('dropdown', true);
+        $menu['Procurement']->addChild('Requisition', array('route' => 'pro_purchaserequisition'));
+        $menu['Procurement']->addChild('Requisition', array('route' => 'pro_purchaserequisition_new'));
+        $menu['Procurement']->addChild('Issue', array('route' => ''))->setAttribute('dropdown', true);
+        $menu['Procurement']['Issue']->addChild('PO Issue', array('route' => 'pro_purchaserequisition_poissue'));
+        $menu['Procurement']['Issue']->addChild('Stock Issue', array('route' => 'pro_purchaserequisition_stockissue'));
+        $menu['Procurement']['Issue']->addChild('Local Purchase Issue', array('route' => 'pro_purchaserequisition_purchaseissue'));
+        $menu['Procurement']->addChild("Purchase Order List", array('route' => 'pro_purchaseorder'));
+        $menu['Procurement']->addChild("Item Receive", array('route' => 'pro_receive'));
+        $menu['Procurement']->addChild("Receive Voucher", array('route' => 'pro_receive'));
+
+        $menu
             ->addChild('Stock Inventory')
             ->setAttribute('icon', 'icon-archive')
             ->setAttribute('dropdown', true);
@@ -763,38 +783,6 @@ class Builder extends ContainerAware
         $menu['Fixed Assets']->addChild('Asset Disposal')->setAttribute('dropdown', true);
         $menu['Fixed Assets']['Asset Disposal']->addChild("Disposal", array('route' => 'assets_disposal'));
         $menu['Fixed Assets']['Asset Disposal']->addChild("New Disposal", array('route' => 'assets_disposal_new'));
-        return $menu;
-
-    }
-
-    public function RequisitionMenu($menu)
-    {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
-        $menu
-            ->addChild('Office Notes')
-            ->setAttribute('icon', 'icon-file')
-            ->setAttribute('dropdown', true);
-        $menu['Office Notes']->addChild("Office Notes List", array('route' => 'assets_officenote'));
-        $menu['Office Notes']->addChild("New Office Notes", array('route' => 'assets_officenote_new'));
-
-        $menu
-            ->addChild('Procurement')
-            ->setAttribute('icon', 'icon-shopping-cart')
-            ->setAttribute('dropdown', true);
-        /*
-      $menu['Procurement']->addChild('Requisition', array('route' => 'requisition'));
-          $menu['Procurement']->addChild('New Requisition', array('route' => 'pro_requisition_new'));
-              $menu['Procurement']->addChild('Issue', array('route' => ''))->setAttribute('dropdown', true);
-              $menu['Procurement']['Issue']->addChild('PO Issue', array('route' => 'pro_requisition_poissue'));
-              $menu['Procurement']['Issue']->addChild('Stock Issue', array('route' => 'pro_requisition_stockissue'));
-              $menu['Procurement']['Issue']->addChild('Local Purchase Issue', array('route' => 'pro_requisition_purchaseissue'));
-              $menu['Procurement']->addChild("Purchase Order List", array('route' => 'pro_purchaseorder'));
-              $menu['Procurement']->addChild("Item Receive", array('route' => 'pro_receive'));
-              $menu['Procurement']->addChild("Receive Voucher", array('route' => 'pro_receive'));*/
-
         return $menu;
 
     }

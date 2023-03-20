@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('requisition') }}">Requisition</a>
+                        <a href="{{ path('pro_purchaserequisition') }}">Requisition</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Requisition Lists</a></li>
@@ -34,7 +34,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Requisition Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('requisition_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
+                                <a class="btn red" href="{{ path('pro_purchaserequisition_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create New</a>
                             </div>
                         </div>
                     </div>
@@ -105,19 +105,19 @@
                                         <td class="numeric pull-center" ><a title="Approve" href="javascript:" class="btn green disabled mini" >&nbsp;{{ entity.process|capitalize }}</a></td>
                                         <td class="numeric" id="action-{{ entity.id }}"  >
                                             {% if entity.approve in approves  %}
-                                                <a href="{{ path('requisition_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                <a href="{{ path('requisition_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                                <a  title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('requisition_delete', { 'id': entity.id }) }}" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                <a href="{{ path('pro_purchaserequisition_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                                <a href="{{ path('pro_purchaserequisition_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                                <a  title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('pro_purchaserequisition_delete', { 'id': entity.id }) }}" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if ( app.user.granted("ROLE_DOMAIN")  and entity.approve == 'checked' )  %}
-                                                <a href="{{ path('requisition_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                <a title="Approve" href="javascript:" data-url="{{ path('requisition_approve', { 'id': entity.id,'approve':'approved' }) }}" class="btn blue mini approve approved-{{ entity.id }}" data-title="{{ entity.id }}" id="" ><i class="icon-ok"></i>&nbsp;Approve</a>
+                                                <a href="{{ path('pro_purchaserequisition_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                                <a title="Approve" href="javascript:" data-url="{{ path('pro_purchaserequisition_approve', { 'id': entity.id,'approve':'approved' }) }}" class="btn blue mini approve approved-{{ entity.id }}" data-title="{{ entity.id }}" id="" ><i class="icon-ok"></i>&nbsp;Approve</a>
                                                 {% if entity.purchaseItems is empty %}
-                                                    <a href="{{ path('requisition_edit', { 'id': entity.id }) }}" class="btn green mini " ><i class="icon-edit"></i></a>
+                                                    <a href="{{ path('pro_purchaserequisition_edit', { 'id': entity.id }) }}" class="btn green mini " ><i class="icon-edit"></i></a>
                                                 {% endif %}
                                             {% endif %}
                                             {% if entity.approve == 'approved' %}
-                                                <a href="{{ path('requisition_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                                <a href="{{ path('pro_purchaserequisition_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
