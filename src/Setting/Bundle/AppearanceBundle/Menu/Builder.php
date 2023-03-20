@@ -784,15 +784,16 @@ class Builder extends ContainerAware
             ->addChild('Procurement')
             ->setAttribute('icon', 'icon-shopping-cart')
             ->setAttribute('dropdown', true);
-        $menu['Procurement']->addChild('Requisition', array('route' => 'requisition'));
-        /*        $menu['Procurement']->addChild('New Requisition', array('route' => 'pro_requisition_new'));
-                $menu['Procurement']->addChild('Issue', array('route' => ''))->setAttribute('dropdown', true);
-                $menu['Procurement']['Issue']->addChild('PO Issue', array('route' => 'pro_requisition_poissue'));
-                $menu['Procurement']['Issue']->addChild('Stock Issue', array('route' => 'pro_requisition_stockissue'));
-                $menu['Procurement']['Issue']->addChild('Local Purchase Issue', array('route' => 'pro_requisition_purchaseissue'));
-                $menu['Procurement']->addChild("Purchase Order List", array('route' => 'pro_purchaseorder'));
-                $menu['Procurement']->addChild("Item Receive", array('route' => 'pro_receive'));
-                $menu['Procurement']->addChild("Receive Voucher", array('route' => 'pro_receive'));*/
+        /*
+      $menu['Procurement']->addChild('Requisition', array('route' => 'requisition'));
+          $menu['Procurement']->addChild('New Requisition', array('route' => 'pro_requisition_new'));
+              $menu['Procurement']->addChild('Issue', array('route' => ''))->setAttribute('dropdown', true);
+              $menu['Procurement']['Issue']->addChild('PO Issue', array('route' => 'pro_requisition_poissue'));
+              $menu['Procurement']['Issue']->addChild('Stock Issue', array('route' => 'pro_requisition_stockissue'));
+              $menu['Procurement']['Issue']->addChild('Local Purchase Issue', array('route' => 'pro_requisition_purchaseissue'));
+              $menu['Procurement']->addChild("Purchase Order List", array('route' => 'pro_purchaseorder'));
+              $menu['Procurement']->addChild("Item Receive", array('route' => 'pro_receive'));
+              $menu['Procurement']->addChild("Receive Voucher", array('route' => 'pro_receive'));*/
 
         return $menu;
 
