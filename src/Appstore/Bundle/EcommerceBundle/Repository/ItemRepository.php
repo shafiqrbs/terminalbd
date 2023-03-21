@@ -827,10 +827,14 @@ class ItemRepository extends EntityRepository
         $data = array();
         if($result){
             foreach($result as $key => $row) {
+
+                $product = empty($row['unitSize']) ? $row['name'] : $row['name'] .' - '.$row['unitSize'];
+                $productBn = empty($row['unitSize']) ? $row['nameBn'] : $row['nameBn'] .' - '.$row['unitSize'];
+
                 $data[$key]['productId']               = (int) $row['id'];
                 $data[$key]['itemId']                  = (int) rand(time(),10);
-                $data[$key]['name']                     = $this->stringNullChecker("{$row['name']} - {$row['unitSize']}");
-                $data[$key]['nameBn']                   = $this->stringNullChecker("{$row['nameBn']} - {$row['unitSize']}");
+                $data[$key]['name']                     = $this->stringNullChecker($productBn);
+                $data[$key]['nameBn']                   = $this->stringNullChecker($productBn);
                 $data[$key]['quantity']                 = (int)($row['quantity']);
                 $data[$key]['price']                    = $this->numberNullChecker($row['price']);
                 $data[$key]['discountPrice']            = $this->numberNullChecker($row['discountPrice']);
@@ -1215,8 +1219,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['category_id']    = (int) $row['id'];
-                $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
+                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
@@ -1260,8 +1264,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['category_id']    = (int) $row['id'];
-                $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']         = $row['nameBn'];
+                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
+                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
                 $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
@@ -1292,8 +1296,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['brand_id']    = (int) $row['id'];
-                $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']         = $row['nameBn'];
+                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
+                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
@@ -1326,9 +1330,9 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['brand_id']       = (int) $row['id'];
-                $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']         = $row['nameBn'];
-                $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
+                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
+                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
+                $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){

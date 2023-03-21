@@ -239,6 +239,8 @@ class ApiEcommerceController extends Controller
                     'locationName' => $this->stringNullChecker($entity->getLocation()->getName()),
                     'main_app' => $entity->getMainApp()->getId(),
                     'main_app_name' => $entity->getMainApp()->getSlug(),
+                    'mainApp' => $entity->getMainApp()->getId(),
+                    'mainAppName' => $entity->getMainApp()->getSlug(),
                     'appsManual' => $this->stringNullChecker($entity->getMainApp()->getApplicationManual()),
                     'website' => $this->stringNullChecker($entity->getDomain()),
                     'vatRegNo' =>  $this->stringNullChecker($vatRegNo),
