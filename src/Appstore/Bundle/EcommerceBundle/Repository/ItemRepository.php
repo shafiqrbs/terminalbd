@@ -862,7 +862,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['isFeatureBrand']           = ($row['isFeatureBrand']) ? 1 : 0;
                 $data[$key]['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
                 $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
-                $data[$key]['maxQuantity']              = (int)($row['maxQuantity']) ? $row['maxQuantity']:'';
+                $data[$key]['maxQuantity']              = (int)($row['maxQuantity']) ? $row['maxQuantity']:0;
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}",400,400);
                     $data[$key]['imagePath']            =  $path;
