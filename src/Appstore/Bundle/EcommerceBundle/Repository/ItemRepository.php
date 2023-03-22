@@ -1105,8 +1105,8 @@ class ItemRepository extends EntityRepository
         if($row){
             $data['product_id']               = (int) $row['itemId'];
             $data['item_id']                  = (int) rand(time(),10);
-            $data['name']                     = $row['name'];
-            $data['nameBn']                   = $row['nameBn'];
+            $data['name']           = $this->stringNullChecker($row['name']);
+            $data['nameBn']         = $this->stringNullChecker($row['nameBn']);
             $data['quantity']                 = $row['quantity'];
             $data['price']                    = $row['price'];
             $data['discountPrice']            = ($row['discountPrice']) ? $row['discountPrice']:null;
@@ -1219,8 +1219,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['category_id']    = (int) $row['id'];
-                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
-                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
+                $data[$key]['name']           = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
@@ -1264,8 +1264,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['category_id']    = (int) $row['id'];
-                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
-                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
+                $data[$key]['name']           = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
@@ -1296,8 +1296,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['brand_id']    = (int) $row['id'];
-                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
-                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
+                $data[$key]['name']           = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
@@ -1330,8 +1330,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['brand_id']       = (int) $row['id'];
-                $data[$key]['brand']          = $this->stringNullChecker($row['brandName']);
-                $data[$key]['brandBn']        = $this->stringNullChecker($row['brandNameBn']);
+                $data[$key]['name']           = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
@@ -1370,8 +1370,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['promotion_id']    = (int) $row['id'];
-                $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['name']           = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
@@ -1404,8 +1404,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['tag_id']           = (int) $row['id'];
-                $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']           = $row['nameBn'];
+                $data[$key]['name']           = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
@@ -1436,8 +1436,8 @@ class ItemRepository extends EntityRepository
             foreach($result as $key => $row) {
                 $data[$key]['id']             = (int) $row['id'];
                 $data[$key]['discount_id']    = (int) $row['id'];
-                $data[$key]['name']           = $row['name'];
-                $data[$key]['nameBn']         = $row['nameBn'];
+                $data[$key]['name']           = $this->stringNullChecker($row['name']);
+                $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']    = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
