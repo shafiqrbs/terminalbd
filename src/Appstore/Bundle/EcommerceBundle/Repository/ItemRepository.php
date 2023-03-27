@@ -833,7 +833,7 @@ class ItemRepository extends EntityRepository
 
                 $data[$key]['productId']               = (int) $row['id'];
                 $data[$key]['itemId']                  = (int) rand(time(),10);
-                $data[$key]['name']                     = $this->stringNullChecker($productBn);
+                $data[$key]['name']                     = $this->stringNullChecker($product);
                 $data[$key]['nameBn']                   = $this->stringNullChecker($productBn);
                 $data[$key]['quantity']                 = (int)($row['quantity']);
                 $data[$key]['price']                    = $this->numberNullChecker($row['price']);
