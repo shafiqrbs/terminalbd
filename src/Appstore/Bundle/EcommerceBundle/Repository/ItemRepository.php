@@ -800,7 +800,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.itemColors','color');
         $qb->leftJoin('item.country','c');
         $qb->leftJoin('item.itemAssurance','ia');
-        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn',
+        $qb->select('item.id as id','item.name as name','item.nameBn as nameBn',
             'item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
             'item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory','item.warningLabel as warningLabel');
         $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
