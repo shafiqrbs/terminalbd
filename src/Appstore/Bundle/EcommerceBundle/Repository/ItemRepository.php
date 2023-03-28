@@ -800,7 +800,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.itemColors','color');
         $qb->leftJoin('item.country','c');
         $qb->leftJoin('item.itemAssurance','ia');
-        $qb->select('item.id as id','item.name as name','item.nameBn as nameBn',
+        $qb->select('item.id as id','item.name as name','item.nameBn as nameBn','item.slug as slug',
             'item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
             'item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory','item.warningLabel as warningLabel');
         $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
@@ -820,6 +820,14 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('GROUP_CONCAT(color.nameBn) as colorsBn');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
         $qb->andWhere('item.status =1');
+        $qb->andWhere($qb->expr()->andX(
+            $qb->expr()->eq('item.isFeatureCategory', ':isFeatureCategory'),
+            $qb->expr()->eq('item.isFeatureBrand', ':isFeatureBrand'),
+            $qb->expr()->isNull('item.discount'),
+            $qb->expr()->isNull('item.promotion')
+        ))
+            ->setParameter('isFeatureCategory', 0)
+            ->setParameter('isFeatureBrand', 0);
         $this->handleApiSearchBetween($qb,$data);
         $qb->groupBy('item.id');
         $qb->orderBy('item.name','ASC');
@@ -834,7 +842,119 @@ class ItemRepository extends EntityRepository
                 $data[$key]['productId']               = (int) $row['id'];
                 $data[$key]['itemId']                  = (int) rand(time(),10);
                 $data[$key]['name']                     = $this->stringNullChecker($product);
-                $data[$key]['nameBn']                   = $this->stringNullChecker($productBn);
+                if($productBn){
+                    $data[$key]['nameBn']                   = $this->stringNullChecker($productBn);
+                }else{
+                    $data[$key]['nameBn']                   = $this->stringNullChecker($product);
+                }
+                $data[$key]['slug']                   = $this->stringNullChecker($row['slug']);
+                $data[$key]['quantity']                 = (int)($row['quantity']);
+                $data[$key]['price']                    = $this->numberNullChecker($row['price']);
+                $data[$key]['discountPrice']            = $this->numberNullChecker($row['discountPrice']);
+                $data[$key]['categoryId']               = (int)($row['categoryId']);
+                $data[$key]['category']                 = $this->stringNullChecker($row['categoryName']);
+                $data[$key]['categoryBn']               = $this->stringNullChecker($row['categoryNameBn']);
+                $data[$key]['brandId']                  = (int)($row['brandId']);
+                $data[$key]['brand']                    = $this->stringNullChecker($row['brandName']);
+                $data[$key]['brandBn']                  = $this->stringNullChecker($row['brandNameBn']);
+                $data[$key]['discountId']               = (int)($row['discountId']);
+                $data[$key]['discount']                 = $this->stringNullChecker($row['discountName']);
+                $data[$key]['discountBn']               = $this->stringNullChecker($row['discountNameBn']);
+                $data[$key]['discountType']             = $this->stringNullChecker($row['discountType']);
+                $data[$key]['discountAmount']           = $this->numberNullChecker($row['discountAmount']);
+                $data[$key]['promotionId']              = (int)($row['promotionId']);
+                $data[$key]['promotion']                = $this->stringNullChecker($row['promotionName']);
+                $data[$key]['promotionBn']              = $this->stringNullChecker($row['promotionNameBn']);
+                $data[$key]['tag']                      = $this->stringNullChecker($row['tags']);
+                $data[$key]['tagBn']                    = $this->stringNullChecker($row['tagsBn']);
+                $data[$key]['colors']                   = $this->stringNullChecker($row['colors']);
+                $data[$key]['colorsBn']                 = $this->stringNullChecker($row['colorsBn']);
+                $data[$key]['country']                  = $this->stringNullChecker($row['country']);
+                $data[$key]['shortDescription']         = $this->stringNullChecker($row['shortContent']);
+                $data[$key]['shortDescriptionBn']       = $this->stringNullChecker($row['shortContentBn']);
+                $data[$key]['tagBn']                    = $this->stringNullChecker($row['tagNameBn']);
+                $data[$key]['unitName']                 = $this->stringNullChecker($row['unitName']);
+                $data[$key]['itemAssurance']            = $this->stringNullChecker($row['itemAssurance']);
+                $data[$key]['warningLabel']             = $this->stringNullChecker($row['warningLabel']);
+                $data[$key]['isFeatureBrand']           = ($row['isFeatureBrand']) ? 1 : 0;
+                $data[$key]['isFeatureCategory']        = ($row['isFeatureCategory']) ? 1 : 0;
+                $data[$key]['quantityApplicable']       = ($row['quantityApplicable']) ? 1 : 0;
+                $data[$key]['maxQuantity']              = (int)($row['maxQuantity']) ? $row['maxQuantity']:0;
+                if($row['path']){
+                    $path = $this->resizeFilter("uploads/domain/{$option->getId()}/ecommerce/product/{$row['path']}",400,400);
+                    $data[$key]['imagePath']            =  $path;
+                }else{
+                    $data[$key]['imagePath']            = "";
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public function getApiAllFeatureProduct(GlobalOption $option)
+    {
+        $config =$option->getEcommerceConfig()->getId();
+        $qb = $this->createQueryBuilder('item');
+        $qb->leftJoin('item.productUnit','productUnit');
+        $qb->leftJoin('item.category','category');
+        $qb->leftJoin('item.brand','brand');
+        $qb->leftJoin('item.discount','discount');
+        $qb->leftJoin('item.promotion','promotion');
+        $qb->leftJoin('item.tag','tag');
+        $qb->leftJoin('item.size','size');
+        $qb->leftJoin('item.itemColors','color');
+        $qb->leftJoin('item.country','c');
+        $qb->leftJoin('item.itemAssurance','ia');
+        $qb->select('item.id as id','item.name as name','item.nameBn as nameBn','item.slug as slug',
+            'item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
+            'item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory','item.warningLabel as warningLabel');
+        $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
+        $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
+        $qb->addSelect("CASE WHEN (item.discountPrice IS NOT NULL) THEN item.discountPrice  ELSE  item.salesPrice END  as price");
+        $qb->addSelect("CASE WHEN (item.discountPrice IS NOT NULL) THEN item.salesPrice  ELSE 0  END  as discountPrice");
+        $qb->addSelect('c.name as country');
+        $qb->addSelect('size.name as unitSize');
+        $qb->addSelect('productUnit.name as unitName');
+        $qb->addSelect('ia.name as itemAssurance');
+        $qb->addSelect('discount.name as discountName','discount.nameBn as discountNameBn','discount.id as discountId','discount.type as discountType','discount.discountAmount as discountAmount');
+        $qb->addSelect('promotion.name as promotionName','promotion.nameBn as promotionNameBn','promotion.id as promotionId');
+        $qb->addSelect('tag.name as tagName','tag.nameBn as tagNameBn','tag.id as tagId');
+        $qb->addSelect('GROUP_CONCAT(tag.name) as tags');
+        $qb->addSelect('GROUP_CONCAT(tag.nameBn) as tagsBn');
+        $qb->addSelect('GROUP_CONCAT(color.name) as colors');
+        $qb->addSelect('GROUP_CONCAT(color.nameBn) as colorsBn');
+        $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
+        $qb->andWhere('item.status =1');
+        $qb->andWhere($qb->expr()->orX(
+            $qb->expr()->eq('item.isFeatureCategory', ':isFeatureCategory'),
+            $qb->expr()->eq('item.isFeatureBrand', ':isFeatureBrand'),
+            $qb->expr()->gt('item.discount', ':discount'),
+            $qb->expr()->gt('item.promotion', ':promotion')
+        ))
+        ->setParameter('isFeatureCategory', 1)
+        ->setParameter('isFeatureBrand', 1)
+        ->setParameter('discount', 0)
+        ->setParameter('promotion', 0);
+        $qb->groupBy('item.id');
+        $qb->orderBy('item.name','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        if($result){
+            foreach($result as $key => $row) {
+
+                $product = empty($row['unitSize']) ? $row['name'] : $row['name'] .' - '.$row['unitSize'];
+                $productBn = empty($row['unitSize']) ? $row['nameBn'] : $row['nameBn'] .' - '.$row['unitSize'];
+
+                $data[$key]['productId']               = (int) $row['id'];
+                $data[$key]['itemId']                  = (int) rand(time(),10);
+                $data[$key]['name']                     = $this->stringNullChecker($product);
+                if($productBn){
+                    $data[$key]['nameBn']                   = $this->stringNullChecker($productBn);
+                }else{
+                    $data[$key]['nameBn']                   = $this->stringNullChecker($product);
+                }
+                $data[$key]['slug']                     = $this->stringNullChecker($row['slug']);
                 $data[$key]['quantity']                 = (int)($row['quantity']);
                 $data[$key]['price']                    = $this->numberNullChecker($row['price']);
                 $data[$key]['discountPrice']            = $this->numberNullChecker($row['discountPrice']);

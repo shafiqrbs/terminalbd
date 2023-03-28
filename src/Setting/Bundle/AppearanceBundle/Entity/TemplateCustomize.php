@@ -1146,6 +1146,22 @@ class TemplateCustomize
     private $appBorderColor;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="appBorderActiveColor", type="string", length=15, nullable=true)
+     */
+    private $appBorderActiveColor;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="appBorderInactiveColor", type="string", length=15, nullable=true)
+     */
+    private $appBorderInactiveColor;
+
+
     /**
      * @var string
      *
@@ -4034,6 +4050,40 @@ class TemplateCustomize
     {
         $this->introTitle = $introTitle;
     }
+
+    /**
+     * @return string
+     */
+    public function getAppBorderActiveColor()
+    {
+        return $this->appBorderActiveColor;
+    }
+
+    /**
+     * @param string $appBorderActiveColor
+     */
+    public function setAppBorderActiveColor($appBorderActiveColor)
+    {
+        $this->appBorderActiveColor = $appBorderActiveColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppBorderInactiveColor()
+    {
+        return $this->appBorderInactiveColor;
+    }
+
+    /**
+     * @param string $appBorderInactiveColor
+     */
+    public function setAppBorderInactiveColor($appBorderInactiveColor)
+    {
+        $this->appBorderInactiveColor = $appBorderInactiveColor;
+    }
+
+
 
 
 

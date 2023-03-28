@@ -198,6 +198,19 @@ class ApiEcommerceController extends Controller
             $shippingCharge = $entity->getEcommerceConfig()->getShippingCharge();
             $cashOnDelivery = $entity->getEcommerceConfig()->isCashOnDelivery();
             $pickupLocation = $entity->getEcommerceConfig()->getPickupLocation();
+
+            $showProductCategory = $entity->getEcommerceConfig()->isShowCategory();
+            $showProductBrand = $entity->getEcommerceConfig()->getShowBrand();
+            $customTheme = $entity->getEcommerceConfig()->isCustomTheme();
+            $productTheme = $entity->getEcommerceConfig()->getProductTheme();
+            $orderPoint = $entity->getEcommerceConfig()->isOrderPoint();
+            $uploadFile = $entity->getEcommerceConfig()->isUploadFile();
+            $homeFeatureCategory = $entity->getEcommerceConfig()->isAppHomeFeatureCategory();
+            $homeFeatureBrand = $entity->getEcommerceConfig()->isAppHomeFeatureBrand();
+            $homeFeatureDiscount = $entity->getEcommerceConfig()->isAppHomeFeatureDiscount();
+            $homeFeaturePromotion = $entity->getEcommerceConfig()->isAppHomeFeaturePromotion();
+
+
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
             $androidHeaderBg = (string) trim($entity->getTemplateCustomize()->getAndroidHeaderBg());
@@ -208,6 +221,8 @@ class ApiEcommerceController extends Controller
             $appTextColor = (string) trim($entity->getTemplateCustomize()->getAppTextColor());
             $appCartColor = (string) trim($entity->getTemplateCustomize()->getAppCartColor());
             $appMoreColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
+            $appBorderActiveColor =(string) trim( $entity->getTemplateCustomize()->getAppBorderActiveColor());
+            $appBorderInactiveColor =(string) trim( $entity->getTemplateCustomize()->getAppBorderInactiveColor());
             $appBorderColor =(string) trim( $entity->getTemplateCustomize()->getAppBorderColor());
             $appPositiveColor =(string) trim( $entity->getTemplateCustomize()->getAppPositiveColor());
             $appNegativeColor = (string) trim($entity->getTemplateCustomize()->getAppNegativeColor());
@@ -221,8 +236,10 @@ class ApiEcommerceController extends Controller
             $messenger = (string) trim($entity->getTemplateCustomize()->getFbMessenger());
             $analytic = (string) trim($entity->getTemplateCustomize()->getGoogleAnalytic());
 
-           $logo = empty($entity->getTemplateCustomize()->getWebPath('logo')) ? "" : $entity->getTemplateCustomize()->getWebPath('logo');
-           $introImage = empty($entity->getTemplateCustomize()->getWebPath('androidLogo')) ? '': $entity->getTemplateCustomize()->getWebPath('androidLogo');
+           //$logo = empty($entity->getTemplateCustomize()->getWebPath('logo')) ? "" : $entity->getTemplateCustomize()->getWebPath('logo');
+           //$introImage = empty($entity->getTemplateCustomize()->getWebPath('androidLogo')) ? '': $entity->getTemplateCustomize()->getWebPath('androidLogo');
+           $logo = '';
+           $introImage = '';
 
            $data = array(
                     'setupId' => $entity->getId(),
@@ -255,7 +272,17 @@ class ApiEcommerceController extends Controller
                     'pickupLocation' =>  $this->numberNullChecker($pickupLocation),
                     'poweredBy' => empty($entity->getTemplateCustomize()->getPoweredBy()) ? '' : "Powered By {$entity->getTemplateCustomize()->getPoweredBy()}",
                     'introTitle' => empty($entity->getTemplateCustomize()->getIntroTitle()) ? '' : $entity->getTemplateCustomize()->getIntroTitle(),
-                    'vatEnable' => $this->numberNullChecker($vatEnable),
+                    'showProductCategory' => ($showProductCategory) ? 1:0,
+                    'showProductBrand' => ($showProductBrand) ? 1:0,
+                    'customTheme' => ($customTheme) ? 1:0,
+                    'orderPoint' => ($orderPoint) ? 1:0,
+                    'uploadFile' => ($uploadFile) ? 1:0,
+                    'homeFeatureCategory' => ($homeFeatureCategory) ? 1:0,
+                    'homeFeatureBrand' => ($homeFeatureBrand) ? 1:0,
+                    'homeFeatureDiscount' => ($homeFeatureDiscount) ? 1:0,
+                    'homeFeaturePromotion' => ($homeFeaturePromotion) ? 1:0,
+                    'productTheme' => $productTheme,
+
                      'appHeaderBg' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($androidHeaderBg),
                      'appPrimaryColor' => empty($appPrimaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appPrimaryColor),
                      'appSecondaryColor' => empty($appSecondaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appSecondaryColor),
@@ -265,6 +292,8 @@ class ApiEcommerceController extends Controller
                      'appCartColor' => empty($appCartColor)? $this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appCartColor) ,
                      'appMoreColor' => empty($appMoreColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appMoreColor) ,
                      'appBorderColor' => empty($appBorderColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appBorderColor) ,
+                     'appBorderActiveColor' => empty($appBorderActiveColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appBorderActiveColor) ,
+                     'appBorderInactiveColor' => empty($appBorderInactiveColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appBorderInactiveColor) ,
                      'appPositiveColor' => empty($appPositiveColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appPositiveColor) ,
                      'appNegativeColor' => empty($appNegativeColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appNegativeColor) ,
                      'appDiscountColor' => empty($appDiscountColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appDiscountColor) ,
@@ -273,8 +302,10 @@ class ApiEcommerceController extends Controller
                      'appAnchorHoverColor' => empty($appAnchorHoverColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appAnchorHoverColor) ,
                      'searchPageBgColor' => empty($searchPageBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($searchPageBgColor) ,
                      'morePageBgColor' => empty($morePageColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($morePageColor) ,
-                     'logo'      =>  $this->imageBase64($logo),
-                     'intro'      =>  $this->imageBase64($introImage)
+                     //'logo'      =>  $this->imageBase64($logo),
+                     //'intro'      =>  $this->imageBase64($introImage)
+                     'intro'      =>  '',
+                     'logo'      =>  '',
                 );
             }
 
@@ -705,9 +736,8 @@ class ApiEcommerceController extends Controller
         }else{
 
             /* @var $entity GlobalOption */
-            $module = $_REQUEST['module'];
             $entity = $this->checkApiValidation($request);
-            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getFeatureWidgetProductAll($entity,$module);
+            $data = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiAllFeatureProduct($entity);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
             $response->setContent(json_encode($data));

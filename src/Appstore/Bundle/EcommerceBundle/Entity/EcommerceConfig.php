@@ -241,6 +241,36 @@ class EcommerceConfig
      */
     private $customTheme = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="appHomeFeatureCategory", type="boolean")
+     */
+    private $appHomeFeatureCategory = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="appHomeFeatureBrand", type="boolean")
+     */
+    private $appHomeFeatureBrand = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="appHomeFeatureDiscount", type="boolean")
+     */
+    private $appHomeFeatureDiscount = false;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="appHomeFeaturePromotion", type="boolean")
+     */
+    private $appHomeFeaturePromotion = false;
+
+
     /**
      * @var boolean
      *
@@ -1676,6 +1706,69 @@ class EcommerceConfig
         $this->stockApplication = $stockApplication;
     }
 
+    /**
+     * @return bool
+     */
+    public function isAppHomeFeatureCategory()
+    {
+        return $this->appHomeFeatureCategory;
+    }
+
+    /**
+     * @param bool $appHomeFeatureCategory
+     */
+    public function setAppHomeFeatureCategory($appHomeFeatureCategory)
+    {
+        $this->appHomeFeatureCategory = $appHomeFeatureCategory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAppHomeFeatureBrand()
+    {
+        return $this->appHomeFeatureBrand;
+    }
+
+    /**
+     * @param bool $appHomeFeatureBrand
+     */
+    public function setAppHomeFeatureBrand($appHomeFeatureBrand)
+    {
+        $this->appHomeFeatureBrand = $appHomeFeatureBrand;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAppHomeFeatureDiscount()
+    {
+        return $this->appHomeFeatureDiscount;
+    }
+
+    /**
+     * @param bool $appHomeFeatureDiscount
+     */
+    public function setAppHomeFeatureDiscount($appHomeFeatureDiscount)
+    {
+        $this->appHomeFeatureDiscount = $appHomeFeatureDiscount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAppHomeFeaturePromotion()
+    {
+        return $this->appHomeFeaturePromotion;
+    }
+
+    /**
+     * @param bool $appHomeFeaturePromotion
+     */
+    public function setAppHomeFeaturePromotion($appHomeFeaturePromotion)
+    {
+        $this->appHomeFeaturePromotion = $appHomeFeaturePromotion;
+    }
 
 
 
