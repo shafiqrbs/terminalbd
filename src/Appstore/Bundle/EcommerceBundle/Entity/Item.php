@@ -179,7 +179,7 @@ class Item
      *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="category"),
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
-     * }, fields={"webName","code"})
+     * }, fields={"name","code"})
      * @Doctrine\ORM\Mapping\Column(unique=false, nullable = true)
      */
     private $slug;

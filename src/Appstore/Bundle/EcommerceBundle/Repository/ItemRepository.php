@@ -28,7 +28,7 @@ class ItemRepository extends EntityRepository
     {
 
 
-        $webName            = isset($data['webName'])? $data['webName'] :'';
+        $name            = isset($data['name'])? $data['name'] :'';
         $name               = isset($data['keyword'])? $data['keyword'] :'';
         $category           = isset($data['category'])? $data['category'] :'';
         $categories         = isset($data['categories'])? $data['categories'] :'';
@@ -58,12 +58,12 @@ class ItemRepository extends EntityRepository
         $qb->setParameter('config', $config);
 
         if (!empty($name)) {
-            $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+            $qb->andWhere('product.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.$name.'%');
         }
-        if (!empty($webName)) {
-            $qb->andWhere('product.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm OR discount.name LIKE :searchTerm');
-            $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
+        if (!empty($name)) {
+            $qb->andWhere('product.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm OR discount.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($name).'%');
         }
 
         if (!empty($category)) {
@@ -129,7 +129,7 @@ class ItemRepository extends EntityRepository
         }
 
         if (empty($data['sortBy'])){
-            $qb->orderBy('product.webName', 'ASC');
+            $qb->orderBy('product.name', 'ASC');
         }else{
             $qb->orderBy($sort ,$order);
         }
@@ -143,7 +143,7 @@ class ItemRepository extends EntityRepository
 
     public function handleFrontendSearchBetween($qb,$data){
 
-        $name               = isset($data['webName'])? $data['webName'] :'';
+        $name               = isset($data['name'])? $data['name'] :'';
         $category           = isset($data['category'])? $data['category'] :'';
         $categories         = isset($data['categories'])? $data['categories'] :'';
         $brand              = isset($data['brand'])? $data['brand'] :'';
@@ -249,7 +249,7 @@ class ItemRepository extends EntityRepository
         $qb->setParameter('config', $config->getId());
         $this->handleFrontendSearchBetween($qb,$data);
         if (empty($data['sortBy'])){
-            $qb->orderBy('product.webName', 'ASC');
+            $qb->orderBy('product.name', 'ASC');
         }else{
             $qb->orderBy($sort ,$order);
         }
@@ -289,9 +289,9 @@ class ItemRepository extends EntityRepository
         }
 
         if (empty($data['sortBy'])){
-            $qb->orderBy('product.webName', 'ASC');
+            $qb->orderBy('product.name', 'ASC');
         }else{
-            $qb->orderBy('product.webName' ,'ASC');
+            $qb->orderBy('product.name' ,'ASC');
         }
         if($limit > 0 ) {
             $qb->setMaxResults($limit);
@@ -306,7 +306,7 @@ class ItemRepository extends EntityRepository
     {
         $em = $this->_em;
         $entity->setName($copyEntity->getName());
-        $entity->setWebName($copyEntity->getWebName());
+        $entity->setNameBn($copyEntity->getNameBn());
         $entity->setSubProduct(true);
         $entity->setQuantity($copyEntity->getQuantity());
         $entity->setMasterQuantity($copyEntity->getMasterQuantity());
@@ -332,12 +332,12 @@ class ItemRepository extends EntityRepository
         $em = $this->_em;
         if($copyEntity)
         $config = $copyEntity->getMedicineConfig()->getGlobalOption()->getEcommerceConfig();
-        $exist = $this->findOneBy(array('ecommerceConfig' => $config,'itemGroup'=> $copyEntity->getMode(), 'webName' => $copyEntity->getName()));
+        $exist = $this->findOneBy(array('ecommerceConfig' => $config,'itemGroup'=> $copyEntity->getMode(), 'name' => $copyEntity->getName()));
         if(empty($exist)){
             $entity = new Item();
             $entity->setEcommerceConfig($config);
             $entity->setName($copyEntity->getName());
-            $entity->setWebName($copyEntity->getName());
+            $entity->setNameBn($copyEntity->getName());
             $entity->setQuantity($copyEntity->getRemainingQuantity());
             $entity->setPurchasePrice($copyEntity->getPurchasePrice());
             $entity->setSalesPrice($copyEntity->getSalesPrice());
@@ -371,7 +371,6 @@ class ItemRepository extends EntityRepository
             $entity->setInventoryItem($copyEntity);
             $entity->setName($copyEntity->getName());
             $entity->setNameBn($copyEntity->getNameBn());
-            $entity->setWebName($copyEntity->getName());
             $entity->setCategory($copyEntity->getCategory());
             $entity->setPurchasePrice($copyEntity->getPurchasePrice());
             $entity->setSalesPrice($copyEntity->getSalesPrice());
@@ -392,7 +391,7 @@ class ItemRepository extends EntityRepository
         $em = $this->_em;
         if($copyEntity)
             $config = $copyEntity->getInventoryConfig()->getGlobalOption()->getEcommerceConfig();
-        $exist = $this->findOneBy(array('ecommerceConfig' => $config, 'webName' => $copyEntity->getName(), 'inventoryItem' => $copyEntity->getId()));
+        $exist = $this->findOneBy(array('ecommerceConfig' => $config, 'name' => $copyEntity->getName(), 'inventoryItem' => $copyEntity->getId()));
         if(empty($exist)){
             $entity = new Item();
             $entity->setEcommerceConfig($config);
@@ -400,7 +399,6 @@ class ItemRepository extends EntityRepository
             $entity->setCategory($copyEntity->getCategory());
             $entity->setName($copyEntity->getName());
             $entity->setNameBn($copyEntity->getNameBn());
-            $entity->setWebName($copyEntity->getName());
             $entity->setQuantity($copyEntity->getRemainingQuantity());
             $entity->setPurchasePrice($copyEntity->getPurchasePrice());
             $entity->setSalesPrice($copyEntity->getSalesPrice());
@@ -489,7 +487,7 @@ class ItemRepository extends EntityRepository
 
     public function handleSearchBetween($qb,$data){
 
-        $webName        = isset($data['name'])? $data['name'] :'';
+        $name        = isset($data['name'])? $data['name'] :'';
         $name           = isset($data['keyword'])? $data['keyword'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
@@ -514,18 +512,18 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('discount', $discount);
         }
         if (!empty($name)) {
-            $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+            $qb->andWhere('item.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
             $qb->setParameter('searchTerm', '%'.$name.'%');
         }
-        if (!empty($webName)) {
-            $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
-            $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
+        if (!empty($name)) {
+            $qb->andWhere('item.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+            $qb->setParameter('searchTerm', '%'.strtolower($name).'%');
         }
     }
 
     public function handleApiSearchBetween($qb,$data){
 
-        $webName        = isset($data['name'])? $data['name'] :'';
+        $name        = isset($data['name'])? $data['name'] :'';
         $name           = isset($data['keyword'])? $data['keyword'] :'';
         $cat            = isset($data['category'])? $data['category'] :'';
         $brand          = isset($data['brand'])? $data['brand'] :'';
@@ -553,12 +551,12 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('tagId', $tag);
         }
         if (!empty($name)) {
-           $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+           $qb->andWhere('item.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
                 $qb->setParameter('searchTerm', '%'.$name.'%');
         }
-        if (!empty($webName)) {
-           $qb->andWhere('item.webName LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
-                $qb->setParameter('searchTerm', '%'.strtolower($webName).'%');
+        if (!empty($name)) {
+           $qb->andWhere('item.name LIKE :searchTerm OR category.slug LIKE :searchTerm OR brand.name LIKE :searchTerm  OR promotion.name LIKE :searchTerm');
+                $qb->setParameter('searchTerm', '%'.strtolower($name).'%');
         }
     }
 
@@ -1010,7 +1008,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
+        $qb->select('item.id as id','item.name as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.nameBn as brandNameBn','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
@@ -1075,7 +1073,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.itemSubs','subProduct');
         $qb->leftJoin('subProduct.size','subSize');
         $qb->leftJoin('subProduct.productUnit','subUnit');
-        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn',
+        $qb->select('item.id as id','item.name as name','item.nameBn as nameBn',
             'item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity',
             'item.shortContent as shortContent','item.shortContentBn as shortContentBn','item.isFeatureBrand as isFeatureBrand','item.isFeatureCategory as isFeatureCategory','item.warningLabel as warningLabel','item.content as content','item.contentBn as contentBn');
         $qb->addSelect('category.name as categoryName','category.nameBn as categoryNameBn','category.id as categoryId');
@@ -1212,7 +1210,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.itemSubs','subProduct');
         $qb->leftJoin('subProduct.size','subSize');
         $qb->leftJoin('subProduct.productUnit','subUnit');
-        $qb->select('item.id as itemId','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.shortContent as shortContent','item.content as description','item.subProduct as subItemStatus','item.maxQuantity as maxQuantity');
+        $qb->select('item.id as itemId','item.name as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.shortContent as shortContent','item.content as description','item.subProduct as subItemStatus','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.id as categoryId','category.name as categoryName');
         $qb->addSelect('brand.id as brandId','brand.name as brandName');
         $qb->addSelect('productUnit.name as unitName');
@@ -2084,7 +2082,7 @@ class ItemRepository extends EntityRepository
         $qb->leftJoin('item.discount','discount');
         $qb->leftJoin('item.promotion','promotion');
         $qb->leftJoin('item.tag','tag');
-        $qb->select('item.id as id','item.webName as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
+        $qb->select('item.id as id','item.name as name','item.nameBn as nameBn','item.salesPrice as price','item.discountPrice as discountPrice','item.path as path','item.masterQuantity as quantity','item.quantityApplicable as quantityApplicable','item.maxQuantity as maxQuantity');
         $qb->addSelect('category.name as categoryName','category.id as categoryId');
         $qb->addSelect('brand.name as brandName','brand.id as brandId');
         $qb->addSelect('productUnit.name as unitName');
@@ -2099,7 +2097,7 @@ class ItemRepository extends EntityRepository
             $qb->andWhere("item.isFeatureBrand = 1");
         }
         $this->handleApiSearchBetween($qb,$search);
-        $qb->orderBy('item.webName','DESC');
+        $qb->orderBy('item.name','DESC');
         $qb->setMaxResults($limit);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
@@ -2133,8 +2131,8 @@ class ItemRepository extends EntityRepository
         $qb1->execute();
 
         $product = "INSERT INTO ecommerce_item
-                (`ecommerceConfig_id`, `webName`, `slug`,`quantity`, `purchasePrice`, `salesPrice`,`medicine_id`,`productUnit_id`,`source`,`itemGroup`,status,`brand_id`)
-                SELECT $commerceConfig, e.name ,CONCAT(REPLACE(REPLACE(LOWER(e.name), '/', '-'),' ','-'),'-','{$domainSlug}-',LPAD(FLOOR(RAND() * 999999.99), 6, '0')) ,`remainingQuantity`, `purchasePrice`,`salesPrice`, e.medicineBrand_id, `unit_id`,'medicine',CONCAT(UCASE(MID(e.mode,1,1)),MID(e.mode,2)) AS mode ,1,(case when (item_brand.id > 0) 
+                (`ecommerceConfig_id`, `name`, `slug`,`quantity`, `purchasePrice`, `salesPrice`,`medicine_id`,`productUnit_id`,`source`,`itemGroup`,status,`brand_id`)
+                SELECT $commerceConfig, e.name,CONCAT(REPLACE(REPLACE(LOWER(e.name), '/', '-'),' ','-'),'-','{$domainSlug}-',LPAD(FLOOR(RAND() * 999999.99), 6, '0')) ,`remainingQuantity`, `purchasePrice`,`salesPrice`, e.medicineBrand_id, `unit_id`,'medicine',CONCAT(UCASE(MID(e.mode,1,1)),MID(e.mode,2)) AS mode ,1,(case when (item_brand.id > 0) 
                  THEN
                       item_brand.id
                  END)
@@ -2282,8 +2280,8 @@ class ItemRepository extends EntityRepository
 
         $query = $this->createQueryBuilder('e');
         $query->select('e.id as id');
-        $query->addSelect('e.webName as text');
-        $query->where($query->expr()->like("e.webName", "'%$q%'"  ));
+        $query->addSelect('e.name as text');
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
         $query->andWhere("e.ecommerceConfig = :config");
         $query->setParameter('config', $config->getId());
         $query->groupBy('e.name');
@@ -2337,7 +2335,7 @@ class ItemRepository extends EntityRepository
         $qb1->execute();
 
         $product = "INSERT INTO ecommerce_item
-                (`ecommerceConfig_id`, `webName`, `slug`,`quantity`, `purchasePrice`, `salesPrice`,`medicine_id`,`productUnit_id`,`source`,`itemGroup`,status,`brand_id`)
+                (`ecommerceConfig_id`, `name`, `slug`,`quantity`, `purchasePrice`, `salesPrice`,`medicine_id`,`productUnit_id`,`source`,`itemGroup`,status,`brand_id`)
                 SELECT $commerceConfig, e.name ,CONCAT(REPLACE(REPLACE(LOWER(e.name), '/', '-'),' ','-'),'-','{$domainSlug}-',LPAD(FLOOR(RAND() * 999999.99), 6, '0')) ,`remainingQuantity`, `purchasePrice`,`salesPrice`, e.medicineBrand_id, `unit_id`,'medicine',CONCAT(UCASE(MID(e.mode,1,1)),MID(e.mode,2)) AS mode ,1,(case when (item_brand.id > 0) 
                  THEN
                       item_brand.id
@@ -2418,7 +2416,7 @@ class ItemRepository extends EntityRepository
     public function getEcommerceItem($config)
     {
 
-        $stockUpdate = "SELECT i.webName as ProductName,i.id as ProductID,i.productBengalName as ProductBengalName,u.name as ProductUnit
+        $stockUpdate = "SELECT i.name as ProductName,i.id as ProductID,i.productBengalName as ProductBengalName,u.name as ProductUnit
 ,b.name as Brand, c.name as Category,s.name as Size,pu.name as SizeUnit,i.quantity as Quantity, i.salesPrice as SalesPrice,i.purchasePrice as PurchasePrice,i.path as ImageLink FROM ecommerce_item as i
 LEFT JOIN ProductUnit AS u ON i.productUnit_id = u.id
 LEFT JOIN categories AS c ON i.category_id = c.id
