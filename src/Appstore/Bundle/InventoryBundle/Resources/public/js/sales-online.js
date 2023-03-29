@@ -157,10 +157,23 @@ var InventorySales = function(sales) {
         }, 2000)
     });
 
+    function resultDataLoad(data){
+        obj = JSON.parse(data);
+        $('.subTotal').html(obj['salesSubTotal']);
+        $('.discount').html(obj['discount']);
+        $('.vat').html(obj['salesVat']);
+        $('.salesTotal').html(obj['salesTotal']);
+        $('#paymentSubTotal').val(obj['salesTotal']);
+        $('#due').val(obj['due']);
+        $('.dueAmount').html(obj['due']);
+        $('#paymentTotal').val(obj['salesTotal']);
+        $('#wrongBarcode').html(obj['msg']);
+    }
+
     $(document).on('change', '#barcode', function(e) {
         e.preventDefault();
         var barcode = $('#barcode').val();
-        if(barcode == ''){
+        if(barcode === ''){
             $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
             return false;
         }
@@ -171,22 +184,13 @@ var InventorySales = function(sales) {
             success: function(response){
                 url = Routing.generate('inventory_sales_item_data');
                 $.get(url,{'id':sales},  // url
-                    function (data) {  // success callback
+                    function (response) {  // success callback
                         $('#barcode').focus().val('');
-                        obj = JSON.parse(data);
+                        obj = JSON.parse(response);
                         $('#salesItem').html(obj['salesItems']);
-                        $('#paymentSubTotal').val(obj['salesTotal']);
-                        $('.salesTotal').html(obj['salesTotal']);
-                        $('#due').val(obj['due']);
-                        $('.dueAmount').html(obj['due']);
-                        $('.subTotal').html(obj['salesSubTotal']);
-                        $('#vat').html(obj['salesVat']);
-                        $('#paymentTotal').val(obj['salesTotal']);
-                        $('#wrongBarcode').html(obj['msg']);
+                        resultDataLoad(response);
                         FormComponents.init();
                 });
-
-
             },
 
         })
@@ -207,15 +211,7 @@ var InventorySales = function(sales) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
+                resultDataLoad(response);
                 FormComponents.init();
             },
         })
@@ -236,15 +232,7 @@ var InventorySales = function(sales) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
+                resultDataLoad(response);
                 FormComponents.init();
             },
         })
@@ -265,15 +253,7 @@ var InventorySales = function(sales) {
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
+                resultDataLoad(response);
                 FormComponents.init();
             },
         })
@@ -282,7 +262,7 @@ var InventorySales = function(sales) {
     $(document).on('change', '#item', function() {
 
         var item = $('#item').val();
-        if(item == ''){
+        if(item === ''){
             $('#stockItemDetails').hide();
             return false;
         }
@@ -298,41 +278,6 @@ var InventorySales = function(sales) {
         })
     });
 
-    $(document).on("click", ".customPrice", function() {
-
-        var rel = $(this).attr('rel');
-        var estimatePrice = parseInt($('#estimatePrice-'+rel).val());
-        var quantity = parseInt($('#quantity-'+rel).val());
-        if($(this).is(':checked'))
-        {
-            $("#salesPrice-"+rel).attr("readonly", false).focus().val(estimatePrice);
-
-        }else{
-
-            var customPrice = 0;
-            $("#salesPrice-"+rel).attr("readonly", true).focus().val(estimatePrice);
-            var subTotal  = (quantity * estimatePrice);
-            $("#subTotalShow-"+rel).html(subTotal);
-            $.ajax({
-                url: Routing.generate('inventory_sales_item_update'),
-                type: 'POST',
-                data:'salesItemId='+rel+'&quantity='+quantity+'&salesPrice='+estimatePrice+'&customPrice='+customPrice,
-                success: function(response) {
-                    obj = JSON.parse(response);
-                    $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#due').val(obj['due']);
-                    $('.dueAmount').html(obj['due']);
-                    $('.subTotal').html(obj['salesSubTotal']);
-                    $('#vat').html(obj['salesVat']);
-                    $('#discount').html(obj['discount']);
-                    $('#paymentTotal').val(obj['salesTotal']);
-                    $('#wrongBarcode').html(obj['msg']);
-                },
-
-            })
-        }
-    });
 
     $(document).on('change', '.quantity , .salesPrice', function() {
 
@@ -340,29 +285,16 @@ var InventorySales = function(sales) {
 
         var quantity = parseFloat($('#quantity-'+rel).val());
         var price = parseFloat($('#salesPrice-'+rel).val());
-        if($('#customPrice-'+rel).is(':checked')){
-            var customPrice = 1;
-        }else{
-            var customPrice = 0;
-        }
         var subTotal  = (quantity * price);
         $("#subTotalShow-"+rel).html(subTotal);
         $.ajax({
             url: Routing.generate('inventory_sales_item_update'),
             type: 'POST',
-            data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price +'&customPrice='+ customPrice,
+            data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price +'&customPrice='+ price,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('#salesItem').html(obj['salesItems']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
+                resultDataLoad(response);
             },
 
         })
@@ -392,16 +324,8 @@ var InventorySales = function(sales) {
             success: function (response) {
                 $(event.target).closest('tr').remove();
                 obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#due').val(obj['due']);
-                    $('.dueAmount').html(obj['due']);
-                    $('.subTotal').html(obj['salesSubTotal']);
-                    $('#vat').html(obj['salesVat']);
-                    $('#discount').html(obj['discount']);
-                    $('#paymentTotal').val(obj['salesTotal']);
-                    $('#wrongBarcode').html(obj['msg']);
+                if ('success' === obj['success']) {
+                    resultDataLoad(response);
                 }
             },
         })
@@ -416,7 +340,7 @@ var InventorySales = function(sales) {
         };
     })();
 
-    $(document).on('keyup', '#sales_discountCalculation', function() {
+    $(document).on('change', '#sales_discountCalculation', function() {
 
         var discountType = $('#sales_discountType').val();
         var discount = parseFloat($('#sales_discountCalculation').val());
@@ -432,16 +356,7 @@ var InventorySales = function(sales) {
             type: 'POST',
             data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
             success: function(response) {
-                obj = JSON.parse(response);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
+                resultDataLoad(response);
             }
 
         })
@@ -464,16 +379,7 @@ var InventorySales = function(sales) {
             type: 'POST',
             data:'discount=' + discount+'&discountType='+discountType+'&sales='+invoice,
             success: function(response) {
-                obj = JSON.parse(response);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#due').val(obj['due']);
-                $('.dueAmount').html(obj['due']);
-                $('.subTotal').html(obj['salesSubTotal']);
-                $('#vat').html(obj['salesVat']);
-                $('#discount').html(obj['discount']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
+                resultDataLoad(response);
             }
 
         })
@@ -482,7 +388,7 @@ var InventorySales = function(sales) {
 
     $(document).on('keyup', '#sales_payment', function() {
 
-        var payment     = parseInt($('#sales_payment').val()  != '' ? $('#sales_payment').val() : 0 );
+        var payment     = parseInt($('#sales_payment').val()  !== '' ? $('#sales_payment').val() : 0 );
         var total =  parseInt($('#paymentTotal').val());
         var dueAmount = (total-payment);
         if(dueAmount > 0){
@@ -494,14 +400,13 @@ var InventorySales = function(sales) {
             $('#balance').html('Return TK.');
             $('.dueAmount').html(balance);
             $('#due').html(balance);
-
         }
 
     });
 
     $(document).on("click", ".receiveBtn", function() {
 
-        if ($('#paymentTotal').val().length == 0){
+        if ($('#paymentTotal').val().length === 0){
             alert('Please add sales item');
             $('input[name=barcode]').focus();
             return false;
@@ -520,10 +425,10 @@ var InventorySales = function(sales) {
     $(document).on('change', '#sales_transactionMethod', function() {
 
         var paymentMethod = $(this).val();
-        if( paymentMethod == 2){
+        if( paymentMethod === 2){
             $('#cartMethod').show();
             $('#bkashMethod').hide();
-        }else if( paymentMethod == 3){
+        }else if( paymentMethod === 3){
             $('#bkashMethod').show();
             $('#cartMethod').hide();
         }else{

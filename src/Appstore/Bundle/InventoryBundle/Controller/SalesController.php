@@ -2,26 +2,20 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItemSerial;
-use Appstore\Bundle\InventoryBundle\Entity\StockItem;
+use Appstore\Bundle\InventoryBundle\Form\SalesType;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
-use function GuzzleHttp\Psr7\str;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Form\SalesType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -573,18 +567,26 @@ class SalesController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        if (!$sales) {
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        if (!$sales and $config->getId() != $sales->getInventoryConfig()->getId()) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
-        if (!empty($sales->getSalesImport())) {
-            $salesImport = $sales->getSalesImport();
-            $em->remove($salesImport);
+        if($sales->getSalesItems()){
+            $template = $this->get('twig')->render('InventoryBundle:Reverse:salesReverse.html.twig', array(
+                'entity' => $sales,
+                'inventoryConfig' => $config,
+            ));
+            foreach ($sales->getSalesItems() as $item){
+                $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($item);
+            }
+            $sales->setRemark($template);
+            $sales->setIsDelete(true);
+            $em->persist($sales);
+            $em->flush();
+        }else{
+            $em->remove($sales);
+            $em->flush();
         }
-        foreach ($sales->getSalesItems() as $item){
-            $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($item);
-        }
-        $em->remove($sales);
-        $em->flush();
         return new Response('success');
     }
 
@@ -678,13 +680,27 @@ class SalesController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'process' => 'Created'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
-            $em->remove($entity);
-            $em->flush();
+            if ($entity->getSalesItems()){
+                $template = $this->get('twig')->render('InventoryBundle:Reverse:salesReverse.html.twig', array(
+                    'entity' => $entity,
+                    'inventoryConfig' => $inventory,
+                ));
+                foreach ($entity->getSalesItems() as $item) {
+                    $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($item);
+                }
+                $entity->setRemark($template);
+                $entity->setIsDelete(true);
+                $em->persist($entity);
+                $em->flush();
+            }else{
+                $em->remove($entity);
+                $em->flush();
+            }
         }
-        return $this->redirect($this->generateUrl('inventory_sales'));
+        return $this->redirect($this->generateUrl('inventory_salesonline'));
     }
 
     public function salesInlineUpdateAction(Request $request)

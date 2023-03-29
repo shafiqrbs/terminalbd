@@ -168,8 +168,8 @@ class SalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.customer', 'c');
         $qb->leftJoin('s.salesBy', 'u');
-        $qb->where("s.inventoryConfig = :config");
-        $qb->setParameter('config', $config);
+        $qb->where("s.inventoryConfig = :config")->setParameter('config', $config);
+        $qb->andWhere("s.isDelete IS NULL")->orWhere("s.isDelete = 0");
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();

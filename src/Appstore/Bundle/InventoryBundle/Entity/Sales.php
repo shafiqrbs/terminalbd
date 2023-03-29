@@ -348,6 +348,14 @@ class Sales
      */
     private $revised = false;
 
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDelete", type="boolean", nullable=true)
+     */
+    private $isDelete = 0;
+
     /**
      * @var boolean
      *
@@ -1192,6 +1200,24 @@ class Sales
     {
         $this->receive = $receive;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param bool $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
+    }
+
+
 
 
 }
