@@ -226,10 +226,26 @@ class PurchaseSimpleController extends Controller
      */
     public function deleteAction(Purchase $purchase)
     {
-        if($purchase){
+        if($purchase and $purchase->getInventoryConfig()->getId() == $this->getUser()->getGlobalOption()->getInventoryConfig()->getId()){
             $em = $this->getDoctrine()->getManager();
-            $em->remove($purchase);
-            $em->flush();
+            if($purchase->getPurchaseItems()){
+                $template = $this->get('twig')->render('InventoryBundle:Reverse:purchaseReverse.html.twig', array(
+                    'entity' => $purchase,
+                    'inventoryConfig' => $purchase->getInventoryConfig(),
+                ));
+                $exist = $this->getDoctrine()->getRepository(PurchaseItem::class)->findBy(array('purchase' => $purchase->getId()));
+                if($exist){
+                    $em->remove($exist);
+                    $em->flush();
+                }
+                $purchase->setContent($template);
+                $purchase->setIsDelete(true);
+                $em->persist($purchase);
+                $em->flush();
+            }else{
+                $em->remove($purchase);
+                $em->flush();
+            }
             return new Response('success');
         }else{
             return new Response('failed');

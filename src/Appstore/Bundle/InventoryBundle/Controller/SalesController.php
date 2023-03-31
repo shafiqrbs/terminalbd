@@ -579,7 +579,12 @@ class SalesController extends Controller
             foreach ($sales->getSalesItems() as $item){
                 $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($item);
             }
-            $sales->setRemark($template);
+            $exist = $this->getDoctrine()->getRepository(SalesItem::class)->findBy(array('sales' => $sales->getId()));
+            if($exist){
+                $em->remove($exist);
+                $em->flush();
+            }
+            $sales->setContent($template);
             $sales->setIsDelete(true);
             $em->persist($sales);
             $em->flush();
@@ -675,32 +680,6 @@ class SalesController extends Controller
         $data = '';
         $data .= '<img src="data:image/png;base64,' . $code . '" />';
         return $data;
-    }
-
-    public function deleteEmptyInvoiceAction()
-    {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'process' => 'Created'));
-        $em = $this->getDoctrine()->getManager();
-        foreach ($entities as $entity) {
-            if ($entity->getSalesItems()){
-                $template = $this->get('twig')->render('InventoryBundle:Reverse:salesReverse.html.twig', array(
-                    'entity' => $entity,
-                    'inventoryConfig' => $inventory,
-                ));
-                foreach ($entity->getSalesItems() as $item) {
-                    $this->getDoctrine()->getRepository(SalesItemSerial::class)->deleteSalesItemSerial($item);
-                }
-                $entity->setRemark($template);
-                $entity->setIsDelete(true);
-                $em->persist($entity);
-                $em->flush();
-            }else{
-                $em->remove($entity);
-                $em->flush();
-            }
-        }
-        return $this->redirect($this->generateUrl('inventory_salesonline'));
     }
 
     public function salesInlineUpdateAction(Request $request)

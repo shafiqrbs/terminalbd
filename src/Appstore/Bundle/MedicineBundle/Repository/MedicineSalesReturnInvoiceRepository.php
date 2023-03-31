@@ -141,4 +141,19 @@ class MedicineSalesReturnInvoiceRepository extends EntityRepository
         $em->flush();
         return $entity;
     }
+
+    public function updateTotalAmountMismatch()
+    {
+        $sql = "Update medicine_sales_return_invoice as sales
+            inner join (
+              select ele.medicineSalesReturnInvoice_id, ROUND(COALESCE(SUM(ele.quantity * ele.salesPrice),0),2) as subTotal
+              from medicine_sales_return as ele
+              where ele.medicineSalesReturnInvoice_id is not NULL
+              group by ele.medicineSalesReturnInvoice_id
+            ) as pa on sales.id = pa.medicineSalesReturnInvoice_id
+            set sales.subTotal = pa.subTotal";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->execute();
+
+    }
 }

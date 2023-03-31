@@ -342,6 +342,14 @@ class Sales
 	private $remark;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="revised", type="boolean")
@@ -1216,6 +1224,24 @@ class Sales
     {
         $this->isDelete = $isDelete;
     }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+
 
 
 

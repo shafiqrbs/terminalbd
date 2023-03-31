@@ -145,7 +145,7 @@ class MedicineSalesReturnRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.medicineSalesItem','si');
-        $qb->join('si.medicineSales','s');
+        $qb->join('e.medicineSalesReturnInvoice','s');
         $qb->select('SUM(e.quantity) AS quantity','si.id as salesId');
         $qb->where('s.customer = :customer')->setParameter('customer', $customer);
         $qb->groupBy('si.id');

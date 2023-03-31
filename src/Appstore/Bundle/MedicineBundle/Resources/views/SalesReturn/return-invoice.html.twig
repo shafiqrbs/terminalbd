@@ -1,4 +1,3 @@
-
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
@@ -70,6 +69,9 @@
                                                 {% endif %}
                                                     <a href="{{ path('medicine_sales_return_invoice_show', { 'id': entity.id }) }}"  class="btn mini blue"><i class="icon-eye-open"></i></a>
                                                     <a target="_blank" href="{{ path('medicine_sales_return_invoice_print', { 'id': entity.id }) }}"  class="btn mini yellow"><i class="icon-print"></i></a>
+                                                    {% if entity.process == 'approved' and app.user.granted("ROLE_DOMAIN") %}
+                                                        <a href="{{ path('medicine_sales_return_invoice_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                    {% endif %}
                                                 </div>
                                             </td>
                                         </tr>

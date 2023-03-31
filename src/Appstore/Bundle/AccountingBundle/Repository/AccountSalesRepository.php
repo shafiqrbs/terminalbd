@@ -1265,6 +1265,16 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function accountMedicineSalesReturnDelete(MedicineSalesReturnInvoice $entity)
+    {
+        $em = $this->_em;
+        $option = $entity->getMedicineConfig()->getGlobalOption()->getId();
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountSales e WHERE e.globalOption = '{$option}' AND e.sourceInvoice = '{$entity->getId()}' AND e.processHead = 'sales-return' ");
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+    }
+
 	public function accountMedicineSalesReverse(MedicineSales $entity)
 	{
 		$em = $this->_em;

@@ -96,6 +96,8 @@
                                         {% for entity in entities %}
                                             {% if returnItems[entity.id] is defined and returnItems[entity.id] is not empty %}
                                                 {% set returnItem = returnItems[entity.id].quantity %}
+                                            {% else %}
+                                                {% set returnItem = 0 %}
                                             {% endif %}
                                             <tr id="delete-{{ entity.id }}">
                                                 <td class="numeric" >{{ entity.medicineSales.created|date('d-m-Y') }}</td>
@@ -107,7 +109,7 @@
                                                 <td class="numeric">{{ returnItem }}</td>
                                                 <td class="numeric">
                                                     <input type="hidden" name="item[{{ entity.id }}]" id="item-{{ entity.id }}" value="{{ entity.id }}">
-                                                    <input type="text" class="numeric number returnQuantity" min="1" data-id="{{ entity.id }}" max="{{ (entity.quantity-returnItem) }}" name="quantity[{{ entity.id }}]" id="quantity-{{ entity.id }}" placeholder="{{ (entity.quantity-returnItem) }}" value="" /></td>
+                                                    <input type="text" class="numeric number returnQuantity" min="1" data-id="{{ entity.id }}" max="{{ (entity.quantity - returnItem) }}" name="quantity[{{ entity.id }}]" id="quantity-{{ entity.id }}" placeholder="{{ (entity.quantity-returnItem) }}" value="" /></td>
                                                  <td class="numeric">
                                                      <input type="text" class="numeric number returnPrice" data-id="{{ entity.id }}" autocomplete = "off" min="1" max="{{ entity.salesPrice }}"  id="price-{{ entity.id }}" name="price[{{ entity.id }}]" value="{{ entity.salesPrice }}" placeholder="{{ entity.salesPrice }}">
                                                  </td>

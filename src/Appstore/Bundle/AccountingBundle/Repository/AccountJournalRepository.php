@@ -446,7 +446,19 @@ class AccountJournalRepository extends EntityRepository
 
     }
 
-	public function insertEcommerceOrderPayable(OrderPayment $salesReturn)
+    public function accountMedicineSalesReturnDelete(MedicineSalesReturnInvoice $entity)
+    {
+        $em = $this->_em;
+        $journalSource = "Sales-Return-Invoice{$entity->getId()}";
+        $option = $entity->getMedicineConfig()->getGlobalOption()->getId();
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountJournal e WHERE e.globalOption = '{$option}' AND e.journalSource = '{$journalSource}' AND e.process = 'approved' ");
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+    }
+
+
+    public function insertEcommerceOrderPayable(OrderPayment $salesReturn)
 	{
 		$global = $salesReturn->getOrder()->getEcommerceConfig()->getGlobalOption();
 		$sales = $salesReturn->getOrder();

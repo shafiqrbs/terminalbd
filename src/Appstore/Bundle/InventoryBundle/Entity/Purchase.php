@@ -262,6 +262,13 @@ class Purchase
     private $asInvestment = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDelete", type="boolean", nullable=true)
+     */
+    private $isDelete = false;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="process", type="string", nullable=true)
@@ -274,6 +281,14 @@ class Purchase
      * @ORM\Column(name="grn", type="string", nullable=true)
      */
     private $grn;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
 
     /**
      * @var integer
@@ -1023,6 +1038,41 @@ class Purchase
     {
         $this->androidProcess = $androidProcess;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param bool $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+
+
 
 }
 

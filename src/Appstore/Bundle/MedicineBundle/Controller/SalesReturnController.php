@@ -79,7 +79,6 @@ class SalesReturnController extends Controller
         $customer = "";
         $balance = "";
         $returnItems = "";
-        $discountPercentLists = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->discountPercentList();
         if($customerMobile){
             $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $this->getUser()->getGlobalOption(),'mobile'=>$customerMobile));
             if($customer){
@@ -94,7 +93,7 @@ class SalesReturnController extends Controller
             'balance' => $balance,
             'returnItems' => $returnItems,
             'customer' => $customer,
-            'discountPercentLists' => $discountPercentLists,
+            'discountPercentLists' => '',
             'searchForm' => $data,
         ));
     }
@@ -321,6 +320,14 @@ class SalesReturnController extends Controller
             }
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales-return');
         }
+        if($return->getProcess() == 'approved'){
+            if($return->getAdjustment() > 0){
+                $em->getRepository('AccountingBundle:AccountSales')->accountMedicineSalesReturnDelete($return);
+            }
+            if($return->getPayment() > 0){
+                $em->getRepository('AccountingBundle:AccountJournal')->accountMedicineSalesReturnDelete($return);
+            }
+        }
         $em->remove($return);
         $em->flush();
         $this->get('session')->getFlashBag()->add(
@@ -350,6 +357,11 @@ class SalesReturnController extends Controller
         } else {
             return new Response('failed');
         }
+    }
+
+    public function updateTotalAmountMismatchAction(){
+
+        $this->getDoctrine()->getRepository(MedicineSalesReturnInvoice::class)->updateTotalAmountMismatch();
     }
 
 

@@ -1,9 +1,7 @@
 <?php
 namespace Appstore\Bundle\InventoryBundle\Repository;
-use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -66,6 +64,7 @@ class PurchaseRepository extends EntityRepository
         $qb = $this->createQueryBuilder('purchase');
         $qb->where("purchase.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
+        $qb->andWhere("purchase.isDelete IS NULL")->orWhere("purchase.isDelete = 0");
         if (!empty($receiveDate)) {
             $compareTo = new \DateTime($receiveDate);
             $receiveDate =  $compareTo->format('Y-m-d');
