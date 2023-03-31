@@ -55,7 +55,7 @@
                 {% set balance = (sales + entity.total) - (receive + entity.receive) %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td class="numeric" >{{ entity.updated|date('d-m-Y h:i A') }}</td>
+                    <td class="numeric" >{{ entity.created|date('d-m-Y h:i A') }}</td>
                     <td class="numeric" >{{ entity.createdUser }}</td>
                     <td class="numeric" >{{ entity.invoiceMode|capitalize }}</td>
                     <td>
