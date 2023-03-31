@@ -183,7 +183,7 @@ class InvoiceRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.process as name','count(e.id) as total');
+        $qb->select('e.process as name');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         $qb->andWhere("e.process IN (:process)")->setParameter('process', array('Done','In-progress','Release','Released','Dead','Death','Admitted'));
         $qb->groupBy('e.process');

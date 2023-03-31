@@ -1,4 +1,4 @@
-<div class="ruby-menu-demo-header">
+<div class="ruby-menu-demo-header ruby-menu-demo-color-2 ">
     {% set apps = app.user.globalOption.siteSetting.appModules %}
     <!-- ########################### -->
     <!-- START: RUBY HORIZONTAL MENU -->
@@ -127,11 +127,11 @@
                                             <ul>
                                                 <li><a href="{{ path('hms_report_dashboard') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Dashboard</a></li>
                                                 <li><a href="{{ path('hms_report_daily_sales_collection') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Sales & Collection </a></li>
-                                                <li><a href="{{ path('hms_report_hospital_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> All Invoice</a></li>
-                                                <li><a href="{{ path('hms_report_diagnostic_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Diagnostic Invoice</a></li>
+                                                <li><a href="{{ path('hms_report_hospital_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Invoices</a></li>
+                                    {#            <li><a href="{{ path('hms_report_diagnostic_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Diagnostic Invoice</a></li>
                                                 <li><a href="{{ path('hms_report_visit_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Visit Invoice</a></li>
                                                 <li><a href="{{ path('hms_report_admission_invoice') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Admission Invoice</a></li>
-                                             </ul>
+                                  #}           </ul>
                                         </div>
                                     </div>
                                 </div>

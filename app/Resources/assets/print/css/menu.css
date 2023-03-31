@@ -291,8 +291,8 @@ div.ruby-menu-demo-download > span > span {
 }
 
 button.ruby-btn {
-    background: #19ad86;
-    border: 2px solid #19ad86;
+    background: #0052cc;
+    border: 2px solid #0052cc;
     color: #fff;
     border-radius: 0;
     padding: 10px 25px;
@@ -303,7 +303,7 @@ button.ruby-btn {
 
 button.ruby-btn:hover {
     background: #fff;
-    color: #19ad86
+    color: #0052cc
 }
 
 .switch {
@@ -973,7 +973,7 @@ ul.ruby-menu > li > a:only-child {
 }
 
 ul.ruby-menu > li > a:hover,ul.ruby-menu > li:hover > a,ul.ruby-menu > li.ruby-active-menu-item > a:hover,ul.ruby-menu > li.ruby-active-menu-item:hover > a {
-    background: #19ad86
+    background: #0052cc
 }
 
 ul.ruby-menu > li > a:only-child:after,ul.ruby-menu > li:hover > a:only-child:after {
@@ -981,7 +981,7 @@ ul.ruby-menu > li > a:only-child:after,ul.ruby-menu > li:hover > a:only-child:af
 }
 
 ul.ruby-menu > li.ruby-active-menu-item > a {
-    background: #17a47d
+    background: #0052cc
 }
 
 ul.ruby-menu > li > a .fa {
@@ -1074,11 +1074,11 @@ ul.ruby-menu.ruby-vertical.ruby-menu-dividers > li:first-child > a {
 }
 
 ul.ruby-menu.ruby-menu-dividers > li > a:hover,ul.ruby-menu.ruby-menu-dividers > li:hover > a {
-    border-right: 1px solid #19ad86
+    border-right: 1px solid #0052cc
 }
 
 ul.ruby-menu.ruby-vertical.ruby-menu-dividers > li > a:hover,ul.ruby-menu.ruby-vertical.ruby-menu-dividers > li:hover > a {
-    border-bottom: 1px solid #19ad86
+    border-bottom: 1px solid #0052cc
 }
 
 ul.ruby-menu.ruby-menu-dividers > li.ruby-active-menu-item > a {
@@ -1094,7 +1094,7 @@ ul.ruby-menu > li > ul,ul.ruby-menu > li > ul > li > ul,ul.ruby-menu > li > ul >
     -webkit-box-shadow: 0 8px 24px -5px #ccc;
     -moz-box-shadow: 0 8px 24px -5px #ccc;
     box-shadow: 0 8px 24px -5px #ccc;
-    border-top: 4px solid #19ad86
+    border-top: 4px solid #0052cc
 }
 
 ul.ruby-menu > li > ul > li,ul.ruby-menu > li > ul > li > ul > li {
@@ -1147,7 +1147,7 @@ ul.ruby-menu > li.ruby-menu-mega > div,ul.ruby-menu > li.ruby-menu-mega-blog > d
     top: 50px;
     left: 0;
     background: #fff;
-    border-top: 4px solid #19ad86;
+    border-top: 4px solid #0052cc;
     overflow: hidden;
     -webkit-box-shadow: 0 8px 24px -5px #ccc;
     -moz-box-shadow: 0 8px 24px -5px #ccc;
@@ -1463,7 +1463,7 @@ span.ruby-c-date,span.ruby-c-date a {
 }
 
 span.ruby-c-category a:hover,span.ruby-c-date a:hover {
-    color: #19ad86
+    color: #0052cc
 }
 
 div.ruby-c-inline {
@@ -1585,7 +1585,7 @@ span.ruby-c-content {
         height: 1px;
         position: absolute;
         content: '';
-        background-color: #19ad86;
+        background-color: #0052cc;
         width: 0
     }
 
@@ -1702,7 +1702,7 @@ span.ruby-c-content {
 
     ul.ruby-menu > li > a {
         padding: 0 65px;
-        background: #19ad86
+        background: #0052cc
     }
 
     ul.ruby-menu > li > a:only-child {
@@ -2059,7 +2059,7 @@ span.ruby-c-content {
     }
 
     .c-hamburger--htx {
-        background-color: #19ad86
+        background-color: #0052cc
     }
 
     .c-hamburger--htx span {

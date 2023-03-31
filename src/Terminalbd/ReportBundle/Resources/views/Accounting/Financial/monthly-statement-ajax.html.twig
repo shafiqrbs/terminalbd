@@ -1,43 +1,84 @@
-<thead>
-<tr>
-    {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
-    {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
-    {% if startDate is not empty %}
-        <th colspan="3">
-            <span class="pull-right">Period&nbsp;&nbsp;{{ startDate }} To {{ endDate }}</span>
-        </th>
-    {% endif %}
-</tr>
-<tr class="head-green">
-    <th>Particular</th>
-    <th class="numeric" >Cost</th>
-    <th class="numeric" >Income</th>
-</tr>
-</thead>
-<tbody>
+<table class="table table-bordered table-striped table-condensed flip-content downloadExcel">
+    <thead class="flip-content ">
+    {% set month = searchForm.month is defined ? searchForm.month :"now"|date("F") %}
+    {% set year = searchForm.year is defined ? searchForm.year :"now"|date("Y") %}
+    <tr>
+        <th class="pull-center" colspan="9"><h3><strong>DATE WISE STATEMENT SHEET: {{ month|capitalize }} , {{ year }}</strong></h3></th>
+    </tr>
+    <tr class="head-green">
+        <th>Date</th>
+        <th>Opening</th>
+        <th>Sales</th>
+        <th>Purchase</th>
+        <th>P.Commission</th>
+        <th>Expense</th>
+        <th>Dr.</th>
+        <th>Cr.</th>
+        <th>Closing</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set fullDate =  date(year~'-'~month~'-1')|date('Y-m-d') %}
+    {% set month =  date(year~'-'~month~'-1')|date('Y-m-') %}
+    {% set max =  fullDate|date("t") %}
+    {% set sales = 0 %}
+    {% set purchase = 0 %}
+    {% set purchaseCommission = 0 %}
+    {% set expenditure = 0 %}
+    {% set purchaseExpenditure = 0 %}
+    {% set journal = 0 %}
+    {% set opening = app.session.get('opening') %}
+    {% set balance = 0 %}
+    {% set closing = 0 %}
+    {% set totalSales = 0 %}
+    {% set totalPurchase = 0 %}
+    {% set totalPurchaseCommission = 0 %}
+    {% set totalExpenditure = 0 %}
+    {% set totalJournalDebit = 0 %}
+    {% set totalJournalCredit = 0 %}
 
-<tr><th>Sales</th><td></td><td class="numeric" >{{ overview.salesAmount|number_format }}</td></tr>
-<tr><th>Goods Purchase</th><td class="numeric" >({{ overview.purchasePrice|number_format }})</td><td></td></tr>
-<tr><th>Sales Vat</th><td class="numeric" >({{ overview.salesVat|number_format }})</td><td></td></tr>
-<tr><td colspan="2" ><span class="pull-right">Gross Profit</span></td><td class="numeric" >{{ (overview.salesAmount - overview.purchasePrice - overview.salesVat)|number_format }}</td></tr>
-{% set totalCredit = 0 %}
-{% set totalDebit = 0 %}
-{% if overview.revenues is not empty %}
-    <tr><th colspan="3">Operating Revenue</th></tr>
-    {% for revenue in overview.revenues %}
-        {% set totalCredit = totalCredit + revenue.credit  %}
-        {% set totalDebit = totalDebit + revenue.debit  %}
-        <tr><td>{{ revenue.name }}</td><td class="numeric" >{% if revenue.toIncrease == 'Debit' %}{{ revenue.debit|number_format }}{% endif %}</td><td class="numeric" >{% if revenue.toIncrease == 'Credit' %}{{ revenue.credit|number_format }}{% endif %}</td></tr>
+    {% for i in 1..max %}
+        {% set blackO               = date(month~i)|date('d-m-Y') %}
+        {% set openingBalance       = openingBalanceTrans[blackO] is defined and openingBalanceTrans[blackO] is not empty ? openingBalanceTrans[blackO] : 0  %}
+        {% set sales                = salesTrans[blackO] is defined and salesTrans[blackO] is not empty ? salesTrans[blackO].debit : 0  %}
+
+
+        {% set purchase             = purchaseTrans[blackO] is defined and purchaseTrans[blackO] is not empty ? purchaseTrans[blackO].credit : 0  %}
+        {% set commission           = purchaseCommissionTrans[blackO] is defined and purchaseCommissionTrans[blackO] is not empty ? purchaseCommissionTrans[blackO].debit : 0  %}
+        {% set expenditure          = expenditureTrans[blackO] is defined and expenditureTrans[blackO] is not empty ? expenditureTrans[blackO].credit : 0  %}
+        {% set journalDebit         = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].debit : 0  %}
+        {% set journalCredit        = journalTrans[blackO] is defined and journalTrans[blackO] is not empty ? journalTrans[blackO].credit : 0  %}
+        {% set closing              = ((openingBalance + sales + commission + journalDebit) - (purchase + expenditure + journalCredit))|default(0)|number_format  %}
+
+        {% set totalSales = totalSales + sales %}
+        {% set totalPurchase = totalPurchase + purchase %}
+        {% set totalExpenditure = totalExpenditure + expenditure %}
+        {% set totalPurchaseCommission = totalPurchaseCommission + commission %}
+        {% set totalJournalDebit = totalJournalDebit + journalDebit %}
+        {% set totalJournalCredit = totalJournalCredit + journalCredit %}
+
+        <tr>
+            <td>{{ blackO }}</td>
+            <td>{{ openingBalance }}</td>
+            <td>{{ sales }}</td>
+            <td>{{ purchase }}</td>
+            <td>{{ commission }}</td>
+            <td>{{ expenditure }}</td>
+            <td>{{ journalDebit }}</td>
+            <td>{{ journalCredit }}</td>
+            <td>{{ closing }}</td>
+        </tr>
     {% endfor %}
-    <tr><th>Grand Total Revenue</th><th class="numeric" >{{ totalDebit|number_format }}</th><th class="numeric" >{{ totalCredit|number_format }}</th></tr>
-{% endif %}
-<tr><th colspan="3">Operating Expense</th></tr>
-{% set totalExpense = 0 %}
-{% for expense in overview.expenditures %}
-    {% set totalExpense = totalExpense + expense.amount  %}
-    <tr><td>{{ expense.name }}</td><td class="numeric" >{{ expense.amount|number_format }}</td><td></td></tr>
-{% endfor %}
-<tr><th>Grand Total Expense</th><td class="numeric" >({{ totalExpense|number_format }})</td><td></td></tr>
-{% set grandTotal = (overview.salesAmount + totalCredit ) - (overview.purchasePrice + totalExpense + overview.salesVat + totalDebit ) %}
-<tr><td colspan="2"><span class="pull-right">Grand Profit/Loss</span></td><td class="numeric" >{{ grandTotal|number_format }}</td></tr>
-</tbody>
+    </tbody>
+    <tfoot>
+    <tr><th colspan="2">Summary</th>
+        <th>{{ totalSales|number_format }}</th>
+        <th>{{ totalPurchase|number_format }}</th>
+        <th>{{ totalPurchaseCommission|number_format }}</th>
+        <th>{{ totalExpenditure|number_format }}</th>
+        <th>{{ totalJournalDebit|number_format }}</th>
+        <th>{{ totalJournalCredit|number_format }}</th>
+        <th></th>
+    </tr>
+    </tfoot>
+</table>

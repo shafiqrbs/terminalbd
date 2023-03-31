@@ -3,19 +3,17 @@
     <div class="row">
         <div class="col-md-12 print-bar">
             <form name="searchForm" id="searchForm" action="{{ ajaxPath }}" method="post">
-                <div class="row">
-                    <div class="col-md-5 margin-top"></div>
-                    <div class="col-md-3 margin-top">
+                <div class="grid-container">
+                    <div class="grid-item">
                         <label>Name of Month</label>
-                        {% set months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'} %}
-                        <select class="span12 m-wrap" name="startMonth" id='startMonth'>
-                            {% for key,month in months %}
-                                <option value='{{ key }}' {% if (searchForm.month is defined and searchForm.month == key) or (searchForm.month is defined and searchForm.month is empty and key == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
+                        {%  set months = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
+                        <select class="span12 m-wrap" name="month" id='month'>
+                            {% for month in months %}
+                                <option value='{{ month }}' {% if (searchForm.month is defined and searchForm.month == key) or (searchForm.month is defined and searchForm.month is empty and month == currentMonth) %} selected="selected" {% endif %} >{{ month }}</option>
                             {% endfor %}
                         </select>
-
                     </div>
-                    <div class="col-md-3 margin-top">
+                    <div class="grid-item">
                         <label>Name of Year</label>
                         {% set years = [2018,2019,2020,2021,2022,2023,2024,2025] %}
                         <select class="span11 m-wrap" name="year" id='year'>
@@ -24,11 +22,10 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-1 margin-top">
-                        <label>&nbsp;</label>
-                        <div class="col-md-1 margin-top">
-                            <label>&nbsp;</label>
-                            <button type="button" class='btn btn-download btn-margin-left ajax-btn' value="search" name="submit" ><i class='fa fa-search'></i> Search</button>
+                    <div class="grid-item">
+                        <div class="col-md-12 margin-top-15" >
+                            <button type="button" class='btn btn-download btn-margin-left ajax-btn' value="search" name="submit" ><i class='fa fa-search'></i></button>
+                            <button class="btn purple" onclick="exportExcel()" type="button"><i class="fa fa-file"></i></button>
                         </div>
                     </div>
                 </div>
@@ -46,12 +43,17 @@
             <div class="col-md-4 text-right">Printed: {{ "now"|date('d-m-Y') }}</div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <table class="table" id="data-load">
-                </table>
+            <div class="col-md-12" id="data-load">
+
             </div>
         </div>
     </div>
+    <script>
+        function exportExcel() {
+            var table = document.querySelector('.downloadExcel');
+            TableToExcel.convert(table);
+        }
+    </script>
 {% endblock %}
 
 

@@ -1,28 +1,28 @@
 {% extends '::base-report.html.twig' %}
 {% block body %}
     <div class="row">
-        <div class="col-md-12 print-bar">
+        <div class="print-bar">
             <form action="" method="get">
-                <div class="row">
-                    <div class="col-md-5 margin-top">
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <label>Start Date</label><br/>
+                        <input type="datetime-local" class="m-wrap span12 datepicker" required="required"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                     </div>
-                    <div class="col-md-2 margin-bottom-5">
-                        <label>Start Date</label>
-                        <input type="datetime-local" class="m-wrap datepicker"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                    <div class="grid-item">
+                        <label>End Date</label><br/>
+                        <input type="datetime-local" class="m-wrap span12 datepicker m-wrap" required="required"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>
-                    <div class="col-md-2 margin-bottom-5">
-                        <label>End Date</label>
-                        <input type="datetime-local" class="m-wrap datepicker"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
-                    </div>
-                    <div class="col-md-1 margin-top">
-                        <label>&nbsp;</label>
-                        <button class='btn btn-download btn-margin-left' ><i class='fa fa-search'></i> Search</button>
+                    <div class="grid-item">
+                        <div class="col-md-12 margin-top-15" >
+                            <button type="submit" class='btn btn-download btn-margin-left ajax-btn' value="search" name="submit" ><i class='fa fa-search'></i></button>
+                            <button class="btn purple" onclick="exportExcel()" type="button"><i class="fa fa-file"></i></button>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div id="print-area">
+    <div id="print-area" class="downloadExcel">
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center">
@@ -47,7 +47,8 @@
                         <col>
                         <col>
                     </colgroup>
-                    <tbody><tr>
+                    <tbody>
+                    <tr class="head-green">
                         <th>SI.</th>
                         <th>Name</th>
                         <th>Mobile</th>
@@ -80,4 +81,10 @@
             </div>
         </div>
     </div>
+    <script>
+        function exportExcel() {
+            var table = document.querySelector('.downloadExcel');
+            TableToExcel.convert(table);
+        }
+    </script>
 {% endblock %}

@@ -3,36 +3,36 @@
     <div class="row">
         <div class="col-md-12 print-bar">
             <form action="" method="get">
-                <div class="row">
-                    <div class="col-md-3 margin-top">
-                    </div>
-                    <div class="col-md-2 margin-top">
-                        <label>Process</label>
+                <div class="grid-container-4">
+                    <div class="grid-item">
+                        <label>Invoice Mode</label>
                         <select class="search-input span12 m-wrap" id="mode" name="mode">
-                            <option value="">--Select Invoice Mode--</option>
+                            <option value="">--Invoice Mode--</option>
                             {% set modes = {'diagnostic':'Diagnostic','admission':'Admission','visit':'Visit'} %}
                             {% for key,mode in modes %}
                                 <option {% if searchForm.mode is defined and searchForm.mode == key %} selected="selected" {% endif %} value="{{ key }}">{{ mode }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-2 margin-bottom-5">
-                        <label>Start Date</label>
-                        <input type="datetime-local" class="search-input span12 m-wrap" required="required" id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
+                    <div class="grid-item">
+                        <label>Start Date</label><br/>
+                        <input type="datetime-local" class="m-wrap span12 datepicker" required="required"  id="startDate" name="startDate" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}">
                     </div>
-                    <div class="col-md-2 margin-bottom-5">
-                        <label>End Date</label>
-                        <input type="datetime-local" class="search-input span12 m-wrap" required="required" id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
+                    <div class="grid-item">
+                        <label>End Date</label><br/>
+                        <input type="datetime-local" class="m-wrap span12 datepicker m-wrap" required="required"  id="endDate" name="endDate" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}">
                     </div>
-                    <div class="col-md-1 margin-top">
-                        <label>&nbsp;</label>
-                        <button class='btn btn-download btn-margin-left' ><i class='fa fa-search'></i> Search</button>
+                    <div class="grid-item">
+                        <div class="col-md-12 margin-top-15" >
+                            <button type="submit" class='btn btn-download btn-margin-left ajax-btn' value="search" name="submit" ><i class='fa fa-search'></i></button>
+                            <button class="btn purple" onclick="exportExcel()" type="button"><i class="fa fa-file"></i></button>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div id="print-area">
+    <div id="print-area" class="downloadExcel"  >
         <div class="row print-header">
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center">
@@ -692,6 +692,12 @@
             height: 100px;
         }
     </style>
+    <script>
+        function exportExcel() {
+            var table = document.querySelector('.downloadExcel');
+            TableToExcel.convert(table);
+        }
+    </script>
 {% endblock %}
 
 

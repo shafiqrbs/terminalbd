@@ -101,12 +101,45 @@ class ReportController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
         $data = $_REQUEST;
-        if(isset($data['startDate']) and $data['startDate'] and isset($data['endDate']) and $data['endDate'] ) {
-            $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportSalesIncome($this->getUser(),$data);
+        if(isset($data['month']) and $data['month'] and isset($data['year']) and $data['year'] ) {
+            $user = $this->getUser();
+            if(empty($data)){
+                $compare = new \DateTime();
+                $end =  $compare->format('j');
+                $data['monthYear'] = $compare->format('Y-m-d');
+                $data['month'] =  $compare->format('F');
+                $data['year'] = $compare->format('Y');
+            }else{
+                $month = $data['month'];
+                $year = $data['year'];
+                $compare = new \DateTime("{$year}-{$month}-01");
+                $end =  $compare->format('t');
+                $data['monthYear'] = $compare->format('Y-m-d');
+            }
+            $openingBalance = [];
+            for ($i = 1; $end >= $i ; $i++ ){
+                $no = sprintf("%s", str_pad($i,2, '0', STR_PAD_LEFT));
+                $start =  $compare->format("Y-m-{$no}");
+                $day =  $compare->format("{$no}-m-Y");
+                $data['startDate'] = $start;
+                $openingBalance[$day] = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->openingBalanceGroup($user,'',$data);
+            }
+            $sales = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Sales',$data);
+            $purchase = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase',$data);
+            $purchaseCommission = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Purchase-Commission',$data);
+            $expenditure = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Expenditure',$data);
+            $journal = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->dailyProcessHead($user,'Journal',$data);
+
             $htmlProcess = $this->renderView(
-                'ReportBundle:Accounting/Financial:income-ajax.html.twig', array(
-                    'overview' => $overview,
+                'ReportBundle:Accounting/Financial:monthly-statement-ajax.html.twig', array(
                     'searchForm' => $data,
+                    'globalOption'                  => $this->getUser()->getGlobalOption(),
+                    'openingBalanceTrans'           => $openingBalance,
+                    'salesTrans'                    => $sales,
+                    'purchaseTrans'                 => $purchase,
+                    'purchaseCommissionTrans'       => $purchaseCommission,
+                    'expenditureTrans'              => $expenditure,
+                    'journalTrans'                  => $journal,
                 )
             );
             return new Response($htmlProcess);
@@ -114,6 +147,7 @@ class ReportController extends Controller
         }
         return new Response('Record Does not found');
     }
+
 
     /**
      * @Route("/customer-outstanding", methods={"GET", "POST"}, name="accounting_report_sales_outstanding")
