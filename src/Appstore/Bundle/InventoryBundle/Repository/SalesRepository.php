@@ -155,8 +155,7 @@ class SalesRepository extends EntityRepository
     {
 
         /* @var InventoryConfig $config */
-        $config = $user->getGlobalOption()->getInventoryConfig();
-        $branch = $user->getProfile()->getBranches();
+        $config = $user->getGlobalOption()->getInventoryConfig()->getId();
         $existArray = array(
             'ROLE_DOMAIN_INVENTORY_MANAGER',
             'ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER',
@@ -168,8 +167,17 @@ class SalesRepository extends EntityRepository
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.customer', 'c');
         $qb->leftJoin('s.salesBy', 'u');
-        $qb->where("s.inventoryConfig = :config")->setParameter('config', $config);
-        $qb->andWhere("s.isDelete IS NULL")->orWhere("s.isDelete = 0");
+        $qb->where("s.id IS NOT NULL");
+        $qb->andWhere($qb->expr()->andX(
+            $qb->expr()->eq('s.inventoryConfig', ':inventoryConfig'),
+            $qb->expr()->isNull('s.isDelete')
+        ))->setParameter('inventoryConfig', $config)
+          ->orWhere($qb->expr()->andX(
+                $qb->expr()->eq('s.inventoryConfig', ':inventoryConfigId'),
+                $qb->expr()->eq('s.isDelete', ':isDelete')
+          ))
+          ->setParameter('inventoryConfigId', $config)
+          ->setParameter('isDelete', 0);
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();
