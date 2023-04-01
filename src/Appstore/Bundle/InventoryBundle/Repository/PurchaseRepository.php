@@ -56,15 +56,23 @@ class PurchaseRepository extends EntityRepository
 
 	public function findWithSearch($inventory,$data)
     {
-
+        $config = $inventory->getId();
         $receiveDate = isset($data['receiveDate']) ? $data['receiveDate'] :'';
         $memo = isset($data['memo'])? $data['memo'] :'';
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $qb = $this->createQueryBuilder('purchase');
-        $qb->where("purchase.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-        $qb->andWhere("purchase.isDelete IS NULL")->orWhere("purchase.isDelete = 0");
+        $qb->where("s.id IS NOT NULL");
+        $qb->andWhere($qb->expr()->andX(
+            $qb->expr()->eq('s.inventoryConfig', ':inventoryConfig'),
+            $qb->expr()->isNull('s.isDelete')
+        ))->setParameter('inventoryConfig', $config)
+            ->orWhere($qb->expr()->andX(
+                $qb->expr()->eq('s.inventoryConfig', ':inventoryConfigId'),
+                $qb->expr()->eq('s.isDelete', ':isDelete')
+            ))
+            ->setParameter('inventoryConfigId', $config)
+            ->setParameter('isDelete', 0);
         if (!empty($receiveDate)) {
             $compareTo = new \DateTime($receiveDate);
             $receiveDate =  $compareTo->format('Y-m-d');

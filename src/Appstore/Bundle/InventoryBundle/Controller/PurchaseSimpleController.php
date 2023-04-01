@@ -239,6 +239,7 @@ class PurchaseSimpleController extends Controller
                     $em->flush();
                 }
                 $purchase->setContent($template);
+                $purchase->setProcess("Delete");
                 $purchase->setIsDelete(true);
                 $em->persist($purchase);
                 $em->flush();

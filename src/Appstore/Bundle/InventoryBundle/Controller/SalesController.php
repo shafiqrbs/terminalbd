@@ -585,6 +585,7 @@ class SalesController extends Controller
                 $em->flush();
             }
             $sales->setContent($template);
+            $sales->setProcess("Delete");
             $sales->setIsDelete(true);
             $em->persist($sales);
             $em->flush();
