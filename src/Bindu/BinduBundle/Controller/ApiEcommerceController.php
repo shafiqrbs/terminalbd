@@ -222,6 +222,7 @@ class ApiEcommerceController extends Controller
             $appTextColor = (string) trim($entity->getTemplateCustomize()->getAppTextColor());
             $appCartColor = (string) trim($entity->getTemplateCustomize()->getAppCartColor());
             $appMoreColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
+            $appDiscountColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
             $appBorderActiveColor =(string) trim( $entity->getTemplateCustomize()->getAppBorderActiveColor());
             $appBorderInactiveColor =(string) trim( $entity->getTemplateCustomize()->getAppBorderInactiveColor());
             $appBorderColor =(string) trim( $entity->getTemplateCustomize()->getAppBorderColor());

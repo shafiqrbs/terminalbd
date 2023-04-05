@@ -1173,6 +1173,14 @@ class TemplateCustomize
      /**
      * @var string
      *
+     * @ORM\Column(name="appDiscountColor", type="string", length=15, nullable=true)
+     */
+    private $appDiscountColor;
+
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="appCartColor", type="string", length=15, nullable=true)
      */
     private $appCartColor;
@@ -4083,13 +4091,21 @@ class TemplateCustomize
         $this->appBorderInactiveColor = $appBorderInactiveColor;
     }
 
+    /**
+     * @return string
+     */
+    public function getAppDiscountColor()
+    {
+        return $this->appDiscountColor;
+    }
 
-
-
-
-
-
-
+    /**
+     * @param string $appDiscountColor
+     */
+    public function setAppDiscountColor($appDiscountColor)
+    {
+        $this->appDiscountColor = $appDiscountColor;
+    }
 
 }
 
