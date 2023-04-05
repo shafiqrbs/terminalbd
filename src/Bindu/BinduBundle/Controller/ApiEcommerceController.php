@@ -214,7 +214,7 @@ class ApiEcommerceController extends Controller
 
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
 
-            $androidHeaderBg = (string) trim($entity->getTemplateCustomize()->getAndroidHeaderBg());
+            $androidHeaderBg = (string) trim($entity->getTemplateCustomize()->getMobileHeaderBgColor());
             $appPrimaryColor = (string) trim($entity->getTemplateCustomize()->getAppPrimaryColor());
             $appSecondaryColor =(string) trim($entity->getTemplateCustomize()->getAppSecondaryColor());
             $appBarColor = (string) trim($entity->getTemplateCustomize()->getAppBarColor());
