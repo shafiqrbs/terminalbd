@@ -174,6 +174,8 @@ class EcommerceConfigType extends AbstractType
             ->add('cashOnDelivery')
             ->add('mobileFilter')
             ->add('cartSearch')
+            ->add('cartSearch')
+            ->add('appHomeSlider')
             ->add('productDetails')
             ->add('footerCategory')
             ->add('isAdditionalItem')
