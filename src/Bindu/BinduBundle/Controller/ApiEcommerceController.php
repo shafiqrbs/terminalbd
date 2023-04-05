@@ -205,6 +205,7 @@ class ApiEcommerceController extends Controller
             $productTheme = $entity->getEcommerceConfig()->getProductTheme();
             $orderPoint = $entity->getEcommerceConfig()->isOrderPoint();
             $uploadFile = $entity->getEcommerceConfig()->isUploadFile();
+            $homeFeatureSlider = $entity->getEcommerceConfig()->isAppHomeSlider();
             $homeFeatureCategory = $entity->getEcommerceConfig()->isAppHomeFeatureCategory();
             $homeFeatureBrand = $entity->getEcommerceConfig()->isAppHomeFeatureBrand();
             $homeFeatureDiscount = $entity->getEcommerceConfig()->isAppHomeFeatureDiscount();
@@ -230,7 +231,13 @@ class ApiEcommerceController extends Controller
             $appAnchorColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorColor());
             $appAnchorHoverColor = (string) trim($entity->getTemplateCustomize()->getAndroidAnchorHoverColor());
             $searchPageBgColor = (string) trim($entity->getTemplateCustomize()->getSearchPageBgColor());
+            $appFooterBgColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterBgColor());
+            $appFooterIconBgColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorBg());
+            $appFooterIconColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColor());
+            $appFooterIconColorHover = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
             $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
+
+
             $tawk = (string) trim($entity->getTemplateCustomize()->getTawk());
             $pixel = (string) trim($entity->getTemplateCustomize()->getFacebookPixel());
             $messenger = (string) trim($entity->getTemplateCustomize()->getFbMessenger());
@@ -277,6 +284,7 @@ class ApiEcommerceController extends Controller
                     'customTheme' => ($customTheme) ? 1:0,
                     'orderPoint' => ($orderPoint) ? 1:0,
                     'uploadFile' => ($uploadFile) ? 1:0,
+                    'homeSlider' => ($homeFeatureSlider) ? 1:0,
                     'homeFeatureCategory' => ($homeFeatureCategory) ? 1:0,
                     'homeFeatureBrand' => ($homeFeatureBrand) ? 1:0,
                     'homeFeatureDiscount' => ($homeFeatureDiscount) ? 1:0,
@@ -302,6 +310,10 @@ class ApiEcommerceController extends Controller
                      'appAnchorHoverColor' => empty($appAnchorHoverColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appAnchorHoverColor) ,
                      'searchPageBgColor' => empty($searchPageBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($searchPageBgColor) ,
                      'morePageBgColor' => empty($morePageColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($morePageColor) ,
+                     'appFooterBgColor' => empty($appFooterBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterBgColor) ,
+                     'appFooterIconBgColor' => empty($appFooterIconBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterIconBgColor) ,
+                     'appFooterIconColor' => empty($appFooterIconColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterIconColor) ,
+                     'appFooterIconColorHover' => empty($appFooterIconColorHover)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterIconColorHover) ,
                      //'logo'      =>  $this->imageBase64($logo),
                      //'intro'      =>  $this->imageBase64($introImage)
                      'intro'      =>  '',

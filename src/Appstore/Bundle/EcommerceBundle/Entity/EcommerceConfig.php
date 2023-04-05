@@ -349,6 +349,13 @@ class EcommerceConfig
      */
     private $showCategory = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="appHomeSlider", type="boolean")
+     */
+    private $appHomeSlider = false;
+
 
 
     /**
@@ -1769,6 +1776,24 @@ class EcommerceConfig
     {
         $this->appHomeFeaturePromotion = $appHomeFeaturePromotion;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAppHomeSlider()
+    {
+        return $this->appHomeSlider;
+    }
+
+    /**
+     * @param bool $appHomeSlider
+     */
+    public function setAppHomeSlider($appHomeSlider)
+    {
+        $this->appHomeSlider = $appHomeSlider;
+    }
+
+
 
 
 
