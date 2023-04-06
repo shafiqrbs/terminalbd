@@ -5,13 +5,8 @@ namespace Frontend\FrontentBundle\Controller;
 use Appstore\Bundle\DomainUserBundle\Event\AssociationSmsEvent;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerRegisterType;
-use Core\UserBundle\Form\SignupType;
 use Frontend\FrontentBundle\Service\MobileDetect;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use Setting\Bundle\ToolBundle\Entity\AppModule;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -285,6 +280,11 @@ class WebServiceCustomerController extends Controller
         }
     }
 
+    public function validateMobile($mobile)
+    {
+        return preg_match('/^[0-9]{11}+$/', $mobile);
+    }
+
     public function insertMemberAction($subdomain, Request $request)
     {
 
@@ -292,16 +292,17 @@ class WebServiceCustomerController extends Controller
         $entity = new User();
         $data = $request->request->all();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
-        if($globalOption) {
-            $intlMobile = $data['registration_mobile'];
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $intlMobile = isset($data['registration_mobile']) and !empty($data['registration_mobile']) ? $data['registration_mobile'] : "";
+        $email = isset($data['registration_email']) and !empty($data['registration_email']) ? $data['registration_email'] : "";
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        if($globalOption and $this->validateMobile($mobile)) {
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
-            if (empty($data['registration_email'])) {
-                $entity->setEmail($mobile.'@gmail.com');
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $entity->setEmail($email);
             } else {
-                $entity->setEmail($data['registration_email']);
+                $entity->setEmail($mobile.'@gmail.com');
             }
             $entity->setGlobalOption($globalOption);
             $entity->setRoles(array('ROLE_CUSTOMER','ROLE_MEMBER'));
