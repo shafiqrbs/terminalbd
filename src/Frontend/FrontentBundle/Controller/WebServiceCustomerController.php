@@ -314,7 +314,7 @@ class WebServiceCustomerController extends Controller
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if ($email and filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $entity->setEmail($email);
             } else {
                 $entity->setEmail($mobile.'@gmail.com');
