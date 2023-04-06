@@ -1206,6 +1206,8 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity GlobalOption */
 
+            $option = $this->checkApiValidation($request);
+
             $intlMobile =$data['mobile'];
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
@@ -1226,9 +1228,9 @@ class ApiEcommerceController extends Controller
                 $returnData['name'] = $user->getProfile()->getName();
                 $returnData['address'] = $user->getProfile()->getAddress();
                 $returnData['email'] = $user->getProfile()->getEmail();
-                $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+                $returnData['mobile'] = $user->getProfile()->getMobile();
                 $returnData['password'] = $a;
-                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=>$option,'user' => $user->getId()));
                 $addreses = $customer->getCustomerAddresses();
                 $returnData['address'] = array();
                 if($addreses) {
@@ -1274,7 +1276,6 @@ class ApiEcommerceController extends Controller
 
 
             $option = $this->checkApiValidation($request);
-            $option->getId();
 
             $intlMobile =$data['mobile'];
             $em = $this->getDoctrine()->getManager();
@@ -1325,6 +1326,7 @@ class ApiEcommerceController extends Controller
                     }else{
                         $returnData['address'] = array();
                     }
+
                 }else{
 
                     $customerAddress = new CustomerAddress();
@@ -1342,7 +1344,6 @@ class ApiEcommerceController extends Controller
                     $returnData['email'] = $user->getProfile()->getEmail();
                     $returnData['mobile'] = $user->getProfile()->getMobile();
                     $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $option,'user' => $user->getId()));
-
                     $addreses = $customer->getCustomerAddresses();
                     $returnData['address'] = array();
                     if($addreses) {
