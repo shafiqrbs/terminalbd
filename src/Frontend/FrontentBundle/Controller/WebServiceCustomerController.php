@@ -307,8 +307,11 @@ class WebServiceCustomerController extends Controller
         $entity = new User();
         $data = $request->request->all();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
-        $intlMobile = isset($data['registration_mobile']) and !empty($data['registration_mobile']) ? $data['registration_mobile'] : "";
-        $email = isset($data['registration_email']) and !empty($data['registration_email']) ? $data['registration_email'] : "";
+        echo $intlMobile = (isset($data['registration_mobile']) and !empty($data['registration_mobile'])) ? $data['registration_mobile'] : "";
+        $email = (isset($data['registration_email']) and !empty($data['registration_email'])) ? $data['registration_email'] : "";
+
+        echo $this->validateMobile($intlMobile);
+        exit;
         if($globalOption and $this->validateMobile($intlMobile) == true) {
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $entity->setPlainPassword("1234");
