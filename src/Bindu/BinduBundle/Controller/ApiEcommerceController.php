@@ -1272,6 +1272,10 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity GlobalOption */
 
+
+            $option = $this->checkApiValidation($request);
+            $option->getId();
+
             $intlMobile =$data['mobile'];
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
@@ -1280,14 +1284,14 @@ class ApiEcommerceController extends Controller
             if(empty($user)){
                 $data['msg'] = "invalid";
             }else{
-                $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->findOneBy(array('globalOption'=>$user->getGlobalOption(),'mobile'=>$user->getUsername()));
+                $customer = $this->getDoctrine()->getRepository("DomainUserBundle:Customer")->findOneBy(array('globalOption'=> $option,'user'=> $user->getId()));
                 if(empty($customer)){
                     $customer = new Customer();
                     $customer->setUser($user->getId());
-                    $customer->setGlobalOption($user->getGlobalOption());
-                    $customer->setName($user->getProfile()->getName());
-                    $customer->setMobile($user->getUsername());
-                    $customer->setAddress($user->getProfile()->getAddress());
+                    $customer->setGlobalOption($option);
+                    $customer->setName($data['name']);
+                    $customer->setMobile($data['mobile']);
+                    $customer->setAddress($data['address']);
                     $em->persist($customer);
                     $em->flush();
 
@@ -1300,6 +1304,27 @@ class ApiEcommerceController extends Controller
                     $em->persist($customerAddress);
                     $em->flush();
 
+                    $returnData['userId'] = (int) $user->getId();
+                    $returnData['username'] = $user->getUsername();
+                    $returnData['name'] = $user->getProfile()->getName();
+                    $returnData['email'] = $user->getProfile()->getEmail();
+                    $returnData['mobile'] = $user->getProfile()->getMobile();
+                    $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $option,'user' => $user->getId()));
+                    $addreses = $customer->getCustomerAddresses();
+                    $returnData['address'] = array();
+                    if($addreses) {
+                        /* @var $address CustomerAddress */
+                        foreach ($addreses as $key => $address) {
+                            $returnData['address'][$key]['id'] = (integer)$address->getId();
+                            $returnData['address'][$key]['userId'] = (int) $user->getId();
+                            $returnData['address'][$key]['name'] = (string)$address->getName();
+                            $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                            $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                            $returnData['address'][$key]['mode'] = (string)$address->getMode();
+                        }
+                    }else{
+                        $returnData['address'] = array();
+                    }
                 }else{
 
                     $customerAddress = new CustomerAddress();
@@ -1310,7 +1335,29 @@ class ApiEcommerceController extends Controller
                     $customerAddress->setMobile($data['mobile']);
                     $em->persist($customerAddress);
                     $em->flush();
-                    $returnData['address_id'] = $customerAddress->getId();
+
+                    $returnData['userId'] = (int) $user->getId();
+                    $returnData['username'] = $user->getUsername();
+                    $returnData['name'] = $user->getProfile()->getName();
+                    $returnData['email'] = $user->getProfile()->getEmail();
+                    $returnData['mobile'] = $user->getProfile()->getMobile();
+                    $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $option,'user' => $user->getId()));
+
+                    $addreses = $customer->getCustomerAddresses();
+                    $returnData['address'] = array();
+                    if($addreses) {
+                        /* @var $address CustomerAddress */
+                        foreach ($addreses as $key => $address) {
+                            $returnData['address'][$key]['id'] = (integer)$address->getId();
+                            $returnData['address'][$key]['userId'] = (int) $user->getId();
+                            $returnData['address'][$key]['name'] = (string)$address->getName();
+                            $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                            $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                            $returnData['address'][$key]['mode'] = (string)$address->getMode();
+                        }
+                    }else{
+                        $returnData['address'] = array();
+                    }
                 }
                 $returnData['msg'] = "valid";
             }

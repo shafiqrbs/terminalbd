@@ -62,14 +62,14 @@ class PurchaseRepository extends EntityRepository
         $grn = isset($data['grn'])? $data['grn'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $qb = $this->createQueryBuilder('purchase');
-        $qb->where("s.id IS NOT NULL");
+        $qb->where("purchase.id IS NOT NULL");
         $qb->andWhere($qb->expr()->andX(
-            $qb->expr()->eq('s.inventoryConfig', ':inventoryConfig'),
-            $qb->expr()->isNull('s.isDelete')
+            $qb->expr()->eq('purchase.inventoryConfig', ':inventoryConfig'),
+            $qb->expr()->isNull('purchase.isDelete')
         ))->setParameter('inventoryConfig', $config)
             ->orWhere($qb->expr()->andX(
-                $qb->expr()->eq('s.inventoryConfig', ':inventoryConfigId'),
-                $qb->expr()->eq('s.isDelete', ':isDelete')
+                $qb->expr()->eq('purchase.inventoryConfig', ':inventoryConfigId'),
+                $qb->expr()->eq('purchase.isDelete', ':isDelete')
             ))
             ->setParameter('inventoryConfigId', $config)
             ->setParameter('isDelete', 0);
