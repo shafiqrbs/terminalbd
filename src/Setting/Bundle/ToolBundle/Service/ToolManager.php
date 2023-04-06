@@ -2,14 +2,8 @@
 
 namespace Setting\Bundle\ToolBundle\Service;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\DBAL\Connection;
-
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Symfony\Component\Debug\Debug;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * RequestManager
@@ -127,7 +121,7 @@ class ToolManager
     public function specialExpClean($string) {
 
         $string = str_replace(' ', '', $string); // Replaces all spaces with hyphens.
-        $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+        $string = preg_replace('/[^0-9,.]/', '', $string); // Removes special chars.
         return preg_replace('/-+/', '', $string); // Replaces multiple hyphens with single one.
     }
 

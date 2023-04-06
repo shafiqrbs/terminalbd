@@ -309,8 +309,9 @@ class WebServiceCustomerController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         $intlMobile = (isset($data['registration_mobile']) and !empty($data['registration_mobile'])) ? $data['registration_mobile'] : "";
         $email = (isset($data['registration_email']) and !empty($data['registration_email'])) ? $data['registration_email'] : "";
-        if($globalOption and $this->validateMobile($intlMobile) == true) {
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $exist = $this->getDoctrine()->getRepository(User::class)->findOneBy(array('globalOption' => $globalOption,'username' => $mobile));
+        if($globalOption and empty($exist) and $this->validateMobile($mobile) == true) {
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
@@ -331,9 +332,11 @@ class WebServiceCustomerController extends Controller
             $this->get('session')->set('_security_main', serialize($token));
             $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertStudentMember($this->getUser() , $data);
             $msg = "Your account has been created, User name:{$this->getUser()}. Thank you. Be with www.{$this->getUser()->getGlobalOption()->getDomain()}";
-            $dispatcher = $this->container->get('event_dispatcher');
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'user'=>$entity->getId()));
-            $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($customer, $msg));
+            if($customer->getCompany()){
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('appstore.customer.post.member_sms', new AssociationSmsEvent($customer, $msg));
+            }
             $redirect = $this->generateUrl('domain_customer_homepage',array('shop' => $globalOption->getSlug()));
             return new Response($redirect);
         }
