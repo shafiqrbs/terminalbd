@@ -280,9 +280,24 @@ class WebServiceCustomerController extends Controller
         }
     }
 
-    public function validateMobile($mobile)
+    public function validateMobilex($mobile)
     {
         return preg_match('/^[0-9]{11}+$/', $mobile);
+    }
+
+    function validateMobile($phone)
+    {
+        // Allow +, - and . in phone number
+        $filtered_phone_number = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+        // Remove "-" from number
+        $phone_to_check = str_replace("-", "", $filtered_phone_number);
+        // Check the lenght of number
+        // This can be customized if you want phone number from a specific country
+        if (strlen($phone_to_check) < 10 || strlen($phone_to_check) > 14) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function insertMemberAction($subdomain, Request $request)
@@ -294,8 +309,8 @@ class WebServiceCustomerController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         $intlMobile = isset($data['registration_mobile']) and !empty($data['registration_mobile']) ? $data['registration_mobile'] : "";
         $email = isset($data['registration_email']) and !empty($data['registration_email']) ? $data['registration_email'] : "";
-        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-        if($globalOption and $this->validateMobile($mobile)) {
+        if($globalOption and $this->validateMobile($intlMobile) == true) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
