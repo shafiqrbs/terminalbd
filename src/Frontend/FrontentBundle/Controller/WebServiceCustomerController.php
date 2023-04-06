@@ -294,9 +294,9 @@ class WebServiceCustomerController extends Controller
         // Check the lenght of number
         // This can be customized if you want phone number from a specific country
         if (strlen($phone_to_check) < 10 || strlen($phone_to_check) > 14) {
-            return false;
+            return "false";
         } else {
-            return true;
+            return "true";
         }
     }
 
