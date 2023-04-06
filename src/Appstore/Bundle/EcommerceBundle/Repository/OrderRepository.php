@@ -572,7 +572,7 @@ class OrderRepository extends EntityRepository
                 $orderItem->setOrder($order);
                 $orderItem->setOrderItemId($row['id']);
                 $orderItem->setOrderId($row['orderId']);
-                $quantity = (isset($row['quantity']) and $row['quantity'] > 0) ? $row['quantity'] : 1;
+                $quantity = (isset($row['orderedQuantity']) and $row['orderedQuantity'] > 0) ? $row['orderedQuantity'] : 1;
                 $price = isset($row['price']) ? $row['price'] : $item->getSalesPrice();
                 if($item){
                     $orderItem->setItem($item);
@@ -580,11 +580,12 @@ class OrderRepository extends EntityRepository
                         $orderItem->setCategoryName($item->getCategory()->getName());
                     }
                     $orderItem->setItemName($item->getName());
-                    //if( $item->getBrand())
-                    //$orderItem->setBrandName($item->getBrand()->getName());
+                    if( $item->getBrand()){
+                        $orderItem->setBrandName($item->getBrand()->getName());
+                    }
                     $orderItem->setPrice($price);
-                    $orderItem->setQuantity(1);
-                    $orderItem->setSubTotal($price * 1);
+                    $orderItem->setQuantity($quantity);
+                    $orderItem->setSubTotal($price * $quantity);
                     $em->persist($orderItem);
                     $em->flush();
                 }
