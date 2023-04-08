@@ -64,6 +64,17 @@ class Order
     private  $courier;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="order" )
+     **/
+    private  $inventorySales;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", inversedBy="order" )
+     **/
+    private  $medicineSales;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="order"  , cascade={"persist", "remove"} )
      **/
     private  $orderItems;
@@ -1610,6 +1621,24 @@ class Order
     {
         $this->jsonOrderItem = $jsonOrderItem;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getInventorySales()
+    {
+        return $this->inventorySales;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMedicineSales()
+    {
+        return $this->medicineSales;
+    }
+
+
 
 
 

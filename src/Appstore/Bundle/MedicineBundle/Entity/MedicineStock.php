@@ -4,10 +4,10 @@ namespace Appstore\Bundle\MedicineBundle\Entity;
 
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * MedicineBrand
@@ -75,6 +75,13 @@ class MedicineStock
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineConfig", inversedBy="medicineStock")
      **/
     private $medicineConfig;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="medicineItem" , cascade={"remove"} )
+     */
+    protected $ecommerceItem;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="medicineStocks")
@@ -1210,8 +1217,13 @@ class MedicineStock
         $this->updated = $updated;
     }
 
-
-
+    /**
+     * @return mixed
+     */
+    public function getEcommerceItem()
+    {
+        return $this->ecommerceItem;
+    }
 
 }
 

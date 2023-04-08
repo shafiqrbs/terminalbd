@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
@@ -91,6 +92,11 @@ class Item
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", inversedBy="ecommerceItem")
      */
     protected $inventoryItem;
+
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", inversedBy="ecommerceItem")
+     */
+    protected $medicineItem;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductColor")
@@ -1662,8 +1668,21 @@ class Item
         $this->salesPrice = $salesPrice;
     }
 
+    /**
+     * @return MedicineStock
+     */
+    public function getMedicineItem()
+    {
+        return $this->medicineItem;
+    }
 
-
+    /**
+     * @param MedicineStock $medicineItem
+     */
+    public function setMedicineItem($medicineItem)
+    {
+        $this->medicineItem = $medicineItem;
+    }
 
 
 }

@@ -45,6 +45,11 @@ class MedicineSales
     private $branch;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="medicineSales" )
+     **/
+    private $order;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicineSales" , cascade={"remove"} )
      **/
     private  $medicineSalesItems;
@@ -214,6 +219,13 @@ class MedicineSales
      */
     private $paymentStatus = "Pending";
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=50, nullable=true)
+     */
+    private $mode = "Web";
+
     /**
      * @var float
      *
@@ -228,6 +240,14 @@ class MedicineSales
      * @ORM\Column(name="discount", type="float", nullable=true)
      */
     private $discount = 0;
+
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="deliveryCharge", type="float", nullable=true)
+     */
+    private $deliveryCharge = 0;
 
 
     /**
@@ -1122,6 +1142,54 @@ class MedicineSales
     public function setPrintWithoutDiscount($printWithoutDiscount)
     {
         $this->printWithoutDiscount = $printWithoutDiscount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDeliveryCharge()
+    {
+        return $this->deliveryCharge;
+    }
+
+    /**
+     * @param float $deliveryCharge
+     */
+    public function setDeliveryCharge($deliveryCharge)
+    {
+        $this->deliveryCharge = $deliveryCharge;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 

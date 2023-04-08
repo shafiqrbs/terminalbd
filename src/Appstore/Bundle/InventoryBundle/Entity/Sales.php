@@ -46,8 +46,12 @@ class Sales
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="sales" )
      **/
-
     private $branches;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="inventorySales" )
+     **/
+    private $order;
 
 
     /**
@@ -1241,8 +1245,21 @@ class Sales
         $this->content = $content;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
 
-
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
 
 
 

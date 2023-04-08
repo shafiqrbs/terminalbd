@@ -2,12 +2,13 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -1124,6 +1125,74 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
                     }
                 }
             endforeach;
+        }
+
+    }
+
+    public function insertEcommerceDirectOrder(Order $order)
+    {
+        $em = $this->_em;
+        $option = $order->getGlobalOption();
+
+        $sales = new MedicineSales();
+        $sales->setMedicineConfig($option->getMedicineConfig());
+        $sales->setDeviceSalesId($order->getInvoice());
+        $sales->setOrder($order);
+        $sales->setSubTotal($order->getSubTotal());
+        $sales->setDiscount($order->getDiscount());
+        $sales->setNetTotal($order->getTotal());
+        $sales->setPayment($order->getReceive());
+        $sales->setPayment($order->getReceive());
+        $sales->setVat($order->getVat());
+        $sales->setDeliveryCharge($order->getShippingCharge());
+        $sales->setDue($order->getDue());
+        $sales->setTransactionMethod($order->getTransactionMethod());
+        $sales->setTransactionId($order->getTransaction());
+        $sales->setPaymentMobile($order->getPaymentMobile());
+        if($order->getAccountMobileBank()){
+            $sales->setAccountMobileBank($order->getAccountMobileBank());
+        }
+        $sales->setCreatedBy($order->getProcessBy());
+        $sales->setCustomer($order->getCustomer());
+        $sales->setCreated($order->getCreated());
+        $sales->setUpdated($order->getUpdated());
+        $sales->setSalesBy($order->getProcessBy());
+        $sales->setProcess("In-progress");
+        $sales->setProcess("Ecommerce");
+        $em->persist($sales);
+        $em->flush();
+        $this->insertEcommerecSalesItem($sales,$order);
+
+    }
+
+    private function insertEcommerecSalesItem(MedicineSales $sales,Order $order)
+    {
+        $em = $this->_em;
+        if($order->getOrderItems()){
+
+            /* @var $item OrderItem */
+
+            foreach ($order->getOrderItems() as $item):
+
+                $salesItem = new MedicineSalesItem();
+                $salesItem->setMedicineSales($sales);
+                $stockId = $item->getItem()->getMedicineItem();
+                if ($stockId) {
+                    /* @var MedicineStock $stockId */
+                    $salesItem->setMedicineStock($stockId);
+                    $salesItem->setStockName($stockId);
+                    $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
+                }
+                $salesItem->setQuantity($item->getQuantity());
+                $salesItem->setMrpPrice(floatval($item->getPrice()));
+                $salesItem->setSalesPrice(floatval($item->getPrice()));
+                $salesItem->setSubTotal($salesItem->getQuantity() * $salesItem->getSalesPrice());
+                $em->persist($salesItem);
+                $em->flush();
+                $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity($stockId, 'sales' );
+
+            endforeach;
+
         }
 
     }

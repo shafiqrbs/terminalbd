@@ -875,6 +875,7 @@ class SalesRepository extends EntityRepository
 
         $sales = new Sales();
         $sales->setInventoryConfig($option->getInventoryConfig());
+        $sales->setOrder($order);
         $sales->setDeviceSalesId($order->getInvoice());
         $sales->setSubTotal($order->getSubTotal());
         $sales->setDiscount($order->getDiscount());

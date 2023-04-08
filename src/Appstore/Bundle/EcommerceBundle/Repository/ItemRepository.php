@@ -342,6 +342,7 @@ class ItemRepository extends EntityRepository
             $entity->setPurchasePrice($copyEntity->getPurchasePrice());
             $entity->setSalesPrice($copyEntity->getSalesPrice());
             $entity->setItemGroup($copyEntity->getMode());
+            $entity->setMedicineItem($copyEntity);
             if($copyEntity->getBrandName()){
                 $brand  = $em->getRepository('EcommerceBundle:ItemBrand')->insertBrand($copyEntity);
                 $entity->setBrand($brand);

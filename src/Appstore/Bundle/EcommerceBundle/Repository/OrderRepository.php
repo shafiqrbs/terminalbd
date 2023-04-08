@@ -391,7 +391,9 @@ class OrderRepository extends EntityRepository
         }
         $em->flush();
         if($order->getEcommerceConfig()->isOrderDirectProcess() == 1 and $order->getEcommerceConfig()->getStockApplication()->getSlug() == "miss"){
-
+            $em->getRepository("MedicineBundle:MedicineSales")->insertEcommerceDirectOrder($order);
+        }
+        if($order->getEcommerceConfig()->isOrderDirectProcess() == 1 and $order->getEcommerceConfig()->getStockApplication()->getSlug() == "inventory"){
             $em->getRepository("InventoryBundle:Sales")->insertEcommerceDirectOrder($order);
         }
     }
