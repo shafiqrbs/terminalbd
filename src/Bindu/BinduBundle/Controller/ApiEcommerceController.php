@@ -236,6 +236,10 @@ class ApiEcommerceController extends Controller
             $appFooterIconBgColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorBg());
             $appFooterIconColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColor());
             $appFooterIconColorHover = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
+
+            $appSuccessColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
+            $appNoticeColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
+
             $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
 
 
@@ -244,7 +248,7 @@ class ApiEcommerceController extends Controller
             $messenger = (string) trim($entity->getTemplateCustomize()->getFbMessenger());
             $analytic = (string) trim($entity->getTemplateCustomize()->getGoogleAnalytic());
 
-           //$logo = empty($entity->getTemplateCustomize()->getWebPath('logo')) ? "" : $entity->getTemplateCustomize()->getWebPath('logo');
+            $logo = empty($entity->getTemplateCustomize()->getWebPath('logo')) ? "" : $entity->getTemplateCustomize()->getWebPath('logo');
            //$introImage = empty($entity->getTemplateCustomize()->getWebPath('androidLogo')) ? '': $entity->getTemplateCustomize()->getWebPath('androidLogo');
            $logo = '';
            $introImage = '';
@@ -315,10 +319,11 @@ class ApiEcommerceController extends Controller
                      'appFooterIconBgColor' => empty($appFooterIconBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterIconBgColor) ,
                      'appFooterIconColor' => empty($appFooterIconColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterIconColor) ,
                      'appFooterIconColorHover' => empty($appFooterIconColorHover)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterIconColorHover) ,
-                     //'logo'      =>  $this->imageBase64($logo),
-                     //'intro'      =>  $this->imageBase64($introImage)
-                     'intro'      =>  '',
+                     'appSuccessColor' => empty($appSuccessColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8( $appSuccessColor) ,
+                     'appNoticeColor' => empty($appNoticeColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appNoticeColor) ,
+                    // 'logo'      =>  $this->imageBase64($logo),
                      'logo'      =>  '',
+                     'intro'      =>  '',
                 );
             }
 

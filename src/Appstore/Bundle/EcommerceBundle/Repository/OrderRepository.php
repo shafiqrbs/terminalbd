@@ -390,6 +390,10 @@ class OrderRepository extends EntityRepository
             $order->setDueAmount($due);
         }
         $em->flush();
+        if($order->getEcommerceConfig()->isOrderDirectProcess() == 1 and $order->getEcommerceConfig()->getStockApplication()->getSlug() == "miss"){
+
+            $em->getRepository("InventoryBundle:Sales")->insertEcommerceDirectOrder($order);
+        }
     }
 
     public function updateOrderPayment(Order $entity)

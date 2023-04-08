@@ -520,6 +520,20 @@ class TemplateCustomize
      */
     private $headerBorderColor;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="appSuccessColor", type="string", length=20, nullable=true)
+     */
+    private $appSuccessColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appNoticeColor", type="string", length=20, nullable=true)
+     */
+    private $appNoticeColor;
+
     /**
      * @var string
      *
@@ -4106,6 +4120,40 @@ class TemplateCustomize
     {
         $this->appDiscountColor = $appDiscountColor;
     }
+
+    /**
+     * @return string
+     */
+    public function getAppSuccessColor()
+    {
+        return $this->appSuccessColor;
+    }
+
+    /**
+     * @param string $appSuccessColor
+     */
+    public function setAppSuccessColor($appSuccessColor)
+    {
+        $this->appSuccessColor = $appSuccessColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppNoticeColor()
+    {
+        return $this->appNoticeColor;
+    }
+
+    /**
+     * @param string $appNoticeColor
+     */
+    public function setAppNoticeColor($appNoticeColor)
+    {
+        $this->appNoticeColor = $appNoticeColor;
+    }
+
+
 
 }
 

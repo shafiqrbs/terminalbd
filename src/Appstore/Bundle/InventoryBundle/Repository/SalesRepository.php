@@ -868,6 +868,41 @@ class SalesRepository extends EntityRepository
 
     }
 
+    public function insertEcommerceDirectOrder(Order $order)
+    {
+        $em = $this->_em;
+        $option = $order->getGlobalOption();
+
+        $sales = new Sales();
+        $sales->setInventoryConfig($option->getInventoryConfig());
+        $sales->setDeviceSalesId($order->getInvoice());
+        $sales->setSubTotal($order->getSubTotal());
+        $sales->setDiscount($order->getDiscount());
+        $sales->setTotal($order->getTotal());
+        $sales->setPayment($order->getReceive());
+        $sales->setReceive($order->getReceive());
+        $sales->setVat($order->getVat());
+        $sales->setDeliveryCharge($order->getShippingCharge());
+        $sales->setDue($order->getDue());
+        $sales->setTransactionMethod($order->getTransactionMethod());
+        $sales->setTransactionId($order->getTransaction());
+        $sales->setPaymentMobile($order->getPaymentMobile());
+        if($order->getAccountMobileBank()){
+            $sales->setAccountMobileBank($order->getAccountMobileBank());
+        }
+        $sales->setCreatedBy($order->getProcessBy());
+        $sales->setCustomer($order->getCustomer());
+        $sales->setCreated($order->getCreated());
+        $sales->setUpdated($order->getUpdated());
+        $sales->setSalesBy($order->getProcessBy());
+        $sales->setProcess("In-progress");
+        $sales->setSalesMode("Ecommerce");
+        $em->persist($sales);
+        $em->flush();
+        $this->insertEcommerecSalesItem($sales,$order);
+
+    }
+
     private function insertEcommerecSalesItem(Sales $sales,Order $order)
     {
         $em = $this->_em;

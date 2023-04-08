@@ -57,7 +57,15 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
-            ->add('mobileFooterAnchorColor','text', array('attr'=>array(
+            ->add('appNoticeColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+             ->add('appSuccessColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+             ->add('mobileFooterAnchorColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))

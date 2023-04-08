@@ -244,6 +244,13 @@ class EcommerceConfig
      /**
      * @var boolean
      *
+     * @ORM\Column(name="orderDirectProcess", type="boolean")
+     */
+    private $orderDirectProcess = false;
+
+     /**
+     * @var boolean
+     *
      * @ORM\Column(name="appHomeFeatureCategory", type="boolean")
      */
     private $appHomeFeatureCategory = false;
@@ -1792,6 +1799,24 @@ class EcommerceConfig
     {
         $this->appHomeSlider = $appHomeSlider;
     }
+
+    /**
+     * @return bool
+     */
+    public function isOrderDirectProcess()
+    {
+        return $this->orderDirectProcess;
+    }
+
+    /**
+     * @param bool $orderDirectProcess
+     */
+    public function setOrderDirectProcess($orderDirectProcess)
+    {
+        $this->orderDirectProcess = $orderDirectProcess;
+    }
+
+
 
 
 
