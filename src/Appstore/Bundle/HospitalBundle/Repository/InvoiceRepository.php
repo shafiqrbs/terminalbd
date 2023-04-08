@@ -212,11 +212,12 @@ class InvoiceRepository extends EntityRepository
     public function getBookingCabinLists($hospital)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('c.id as cabin','p.name as customer','e.created as created','e.invoice as invoice','p.mobile as mobile');
+        $qb->select('c.id as cabin','p.name as customer','e.created as created','e.invoice as invoice','e.id as invoiceId','p.mobile as mobile');
         $qb->join('e.cabin','c');
         $qb->leftJoin('e.customer','p');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         $qb->andWhere('c.status = 1');
+        $qb->andWhere('e.isDelete != 1');
         $qb->andWhere('e.process IN (:process)')->setParameter('process', array('Admitted','Created','Release'));
         $result = $qb->getQuery()->getArrayResult();
         $array = array();
