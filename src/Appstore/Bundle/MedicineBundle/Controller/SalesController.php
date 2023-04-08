@@ -44,6 +44,8 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
+        var_dump($user->getRoles());
+        exit;
         $entities = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->invoiceLists($this->getUser(),$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
@@ -717,6 +719,10 @@ class SalesController extends Controller
         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->androidDeviceSalesProcess($device);
         exit;
     }
+
+    /**
+     * @Secure(roles="ROLE_MEDICINE")
+     */
 
     public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
     {
