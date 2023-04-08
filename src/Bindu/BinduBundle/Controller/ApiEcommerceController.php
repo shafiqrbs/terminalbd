@@ -237,8 +237,9 @@ class ApiEcommerceController extends Controller
             $appFooterIconColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColor());
             $appFooterIconColorHover = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
 
-            $appSuccessColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
-            $appNoticeColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
+            $appSuccessColor = (string) trim($entity->getTemplateCustomize()->getAppSuccessColor());
+            $appNoticeColor = (string) trim($entity->getTemplateCustomize()->getAppNoticeColor());
+            $appCloseColor = (string) trim($entity->getTemplateCustomize()->getAppCloseColor());
 
             $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
 
@@ -321,6 +322,7 @@ class ApiEcommerceController extends Controller
                      'appFooterIconColorHover' => empty($appFooterIconColorHover)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appFooterIconColorHover) ,
                      'appSuccessColor' => empty($appSuccessColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8( $appSuccessColor) ,
                      'appNoticeColor' => empty($appNoticeColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appNoticeColor) ,
+                     'appCloseColor' => empty($appCloseColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appCloseColor) ,
                     // 'logo'      =>  $this->imageBase64($logo),
                      'logo'      =>  '',
                      'intro'      =>  '',
