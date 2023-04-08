@@ -1154,7 +1154,6 @@ class AccountSalesRepository extends EntityRepository
 	public function insertMedicineAccountInvoice(MedicineSales $entity)
     {
         $em = $this->_em;
-        //$purchasePrice = $this->_em->getRepository('MedicineBundle:MedicineSalesItem')->getInvoicePurchasePrice($entity->getId());
         $accountSales = new AccountSales();
         $accountSales->setAccountBank($entity->getAccountBank());
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
@@ -1168,6 +1167,7 @@ class AccountSalesRepository extends EntityRepository
         }else{
             $accountSales->setAmount(0);
         }
+        $accountSales->setCreatedBy($entity->getCreatedBy());
         $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setMedicineSales($entity);
         $accountSales->setSourceInvoice($entity->getInvoice());
@@ -1183,7 +1183,6 @@ class AccountSalesRepository extends EntityRepository
         if($accountSales->getAmount() > 0){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         }
-
         return $accountSales;
 
     }
