@@ -61,6 +61,10 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
+            ->add('appCloseColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
              ->add('appSuccessColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')

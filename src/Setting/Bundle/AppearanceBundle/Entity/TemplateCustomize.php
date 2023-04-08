@@ -537,6 +537,13 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="appCloseColor", type="string", length=20, nullable=true)
+     */
+    private $appCloseColor;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="headerBorderHeight", type="string", length=5, nullable=true)
      */
     private $headerBorderHeight;
@@ -4152,6 +4159,24 @@ class TemplateCustomize
     {
         $this->appNoticeColor = $appNoticeColor;
     }
+
+    /**
+     * @return string
+     */
+    public function getAppCloseColor()
+    {
+        return $this->appCloseColor;
+    }
+
+    /**
+     * @param string $appCloseColor
+     */
+    public function setAppCloseColor($appCloseColor)
+    {
+        $this->appCloseColor = $appCloseColor;
+    }
+
+
 
 
 
