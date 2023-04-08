@@ -720,8 +720,9 @@ class SalesController extends Controller
         exit;
     }
 
+
     /**
-     * @Secure(roles="ROLE_MEDICINE")
+     * @Secure(roles="ROLE_MEDICINE,ROLE_DOMAIN,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
      */
 
     public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
