@@ -19,7 +19,7 @@ hms_sales_android_process:
     options:
             expose: true
 
-medicine_device_sales_import:
+hms_medicine_device_sales_import:
     path:      /device-sales-delete-import/{android}
     defaults: { _controller: "HospitalBundle:Sales:insertGroupApiSalesImport" }
 

@@ -658,6 +658,10 @@ class SalesController extends Controller
         ));
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
+     */
+
     public function reverseAction(MedicineSales $sales)
     {
 
@@ -697,6 +701,9 @@ class SalesController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
+     */
 
     public function androidSalesAction()
     {
@@ -710,6 +717,10 @@ class SalesController extends Controller
         ));
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
+     */
+
     public function androidSalesProcessAction($device)
     {
         set_time_limit(0);
@@ -720,7 +731,7 @@ class SalesController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_MEDICINE,ROLE_DOMAIN,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
+     * @Secure(roles="ROLE_DOMAIN,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
      */
 
     public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
