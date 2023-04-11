@@ -411,7 +411,6 @@ class ApiEcommerceController extends Controller
 
             $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
 
-
             $tawk = (string) trim($entity->getTemplateCustomize()->getTawk());
             $pixel = (string) trim($entity->getTemplateCustomize()->getFacebookPixel());
             $messenger = (string) trim($entity->getTemplateCustomize()->getFbMessenger());
@@ -422,7 +421,7 @@ class ApiEcommerceController extends Controller
             $logo = '';
             $introImage = '';
 
-            $data[] = array(
+            $data = array(
                 'setupId' => $entity->getId(),
                 'uniqueCode' => $entity->getUniqueCode(),
                 'name' => $entity->getName(),
