@@ -2,6 +2,10 @@ api_ecommerce_setup:
     path:     /setup
     defaults: { _controller: BinduBundle:ApiEcommerce:setup }
 
+api_ecommerce_setup_splash:
+    path:     /splash
+    defaults: { _controller: BinduBundle:ApiEcommerce:splash }
+
 api_ecommerce_config:
     path:     /configuration
     defaults: { _controller: BinduBundle:ApiEcommerce:configuration }

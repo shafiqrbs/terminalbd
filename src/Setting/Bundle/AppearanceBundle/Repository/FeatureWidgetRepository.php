@@ -82,7 +82,7 @@ class FeatureWidgetRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.menu', 'm');
         $qb->where('e.globalOption = :option');
-        $qb->setParameter('option', $option);
+        $qb->setParameter('option', $option->getId());
         $qb->andWhere('e.position = :position');
         $qb->setParameter('position', "mobile");
         $qb->andWhere('m.menu = :menu');
