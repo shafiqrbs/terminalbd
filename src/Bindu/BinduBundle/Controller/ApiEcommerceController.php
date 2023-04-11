@@ -518,7 +518,7 @@ class ApiEcommerceController extends Controller
             'slides' => $slides,
             'categories' => $categories,
             'brands' => $brands,
-            'promotion' => $promotions,
+            'promotions' => $promotions,
             'discounts' => $discounts,
             'products' => $products,
         );
