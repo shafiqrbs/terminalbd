@@ -1416,11 +1416,12 @@ class ApiEcommerceController extends Controller
             if(empty($user)){
                 $data['msg'] = "invalid";
             }else{
-                $a = mt_rand(1000,9999).' Dr2PGY2W+Oy';
+                $a = mt_rand(1000,9999);
+                $otp = $a." Dr2PGY2W+Oy";
                 $user->setPlainPassword($a);
                 $this->get('fos_user.user_manager')->updateUser($user);
                 $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$a));
+                $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$otp));
             }
             if($user){
                 $returnData['userId'] = (int) $user->getId();
