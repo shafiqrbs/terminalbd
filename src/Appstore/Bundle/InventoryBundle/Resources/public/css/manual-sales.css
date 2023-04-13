@@ -203,15 +203,16 @@ input[class*="span"].m-wrap  {
 .select2-results .select2-result-label {
     margin: 0;
     cursor: pointer;
-    min-height: 2em;
+    min-height:1.5em;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 2em;
+    font-size: 12px;
+    line-height: 1.5em;
+    border-bottom: 1px solid #ddd;
+
 }
 
 .select2-results .select2-highlighted {
@@ -223,7 +224,7 @@ input[class*="span"].m-wrap  {
     width: 100%;
     margin: 0;
     outline: 0;
-    border: 5px solid #e5e5e5;
+    border: 1px solid #e5e5e5;
     color: #333333;
     height: auto !important;
     min-height:42px;

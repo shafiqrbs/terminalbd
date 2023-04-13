@@ -96,7 +96,7 @@ $('form#salesForm').on('keypress', '.inputs', function (e) {
         var inputs = $(this).parents("form").eq(0).find("input,select");
         var idx = inputs.index(this);
 
-        if (idx == inputs.length - 1) {
+        if (idx === inputs.length - 1) {
             inputs[0].select()
         } else {
             inputs[idx + 1].focus(); //  handles submit buttons
@@ -133,7 +133,7 @@ var InventorySales = function(sales) {
 
     $('form.horizontal-form').on('keypress', 'input', function (e) {
 
-        if (e.which == 13) {
+        if (e.which === 13) {
             e.preventDefault();
 
             switch (this.id) {
@@ -194,12 +194,24 @@ var InventorySales = function(sales) {
             },
 
         })
+        $.ajax({
+            url: Routing.generate('pos_item_barcode_info'),
+            type: 'POST',
+            data:'item=0&barcode='+barcode,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#current-stock').html(obj['quantity']);
+                $('#avg-price').html(obj['purchase']);
+                $('#sales-price').html(obj['price']);
+                $('#item-status').html(obj['status']);
+            },
+        })
     });
 
     $(document).on('change', '#barcodeNo', function(e) {
 
         var barcode = $('#barcodeNo').val();
-        if(barcode == ''){
+        if(barcode === ''){
             $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
             return false;
         }
@@ -215,12 +227,24 @@ var InventorySales = function(sales) {
                 FormComponents.init();
             },
         })
+        $.ajax({
+            url: Routing.generate('pos_item_barcode_info'),
+            type: 'POST',
+            data:'item=0&barcode='+barcode,
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#current-stock').html(obj['quantity']);
+                $('#avg-price').html(obj['purchase']);
+                $('#sales-price').html(obj['price']);
+                $('#item-status').html(obj['status']);
+            },
+        })
     });
 
     $(document).on('click', '.addSales', function() {
 
         var barcode = $(this).attr('id');
-        if(barcode == ''){
+        if(barcode === ''){
             $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
             return false;
         }
@@ -237,6 +261,29 @@ var InventorySales = function(sales) {
             },
         })
     });
+
+    $( "#stockItem" ).submit(function( event ) {
+
+        var stockItem = $('#item').val();
+        if(stockItem === ''){
+            alert('Please try again correct product.');
+            return false;
+        }
+        $.ajax({
+            url         : Routing.generate('pos_item_create'),
+            type        : 'POST',
+            data        : new FormData($('form#stockItem')[0]),
+            processData : false,
+            contentType : false,
+            success     : function(response){
+                $('#quantity').val(1);
+                $('#item').select2('open');
+                jsonResult(response);
+            }
+        });
+        event.preventDefault();
+    });
+
 
     $(document).on('click', '.addPurchaseItemSales', function() {
 
@@ -259,6 +306,59 @@ var InventorySales = function(sales) {
         })
     });
 
+    $(document).on('change', '#salesitem_item', function() {
+
+        var item = $(this).val();
+        $.ajax({
+            url: Routing.generate('pos_item_barcode_info'),
+            type: 'POST',
+            data:'item='+item+'&barcode=0',
+            success: function(response){
+                obj = JSON.parse(response);
+                $('#current-stock').html(obj['quantity']);
+                $('#avg-price').html(obj['purchase']);
+                $('#sales-price').html(obj['price']);
+                $('#item-status').html(obj['status']);
+                $('.purchaseItem').html(obj['purchaseItem']);
+                $('#serialNo').html(obj['serialNo']);
+                $('#price').val(obj['price']);
+                $('#quantity').focus();
+
+            },
+        })
+    });
+
+    $('form#salesitem').on('keypress', '.stockInput', function (e) {
+
+        if (e.which === 13) {
+            var inputs = $(this).parents("form#stockItem").eq(0).find("input,select");
+            var idx = inputs.index(this);
+
+            if (idx === inputs.length - 1) {
+                inputs[0].select()
+            } else {
+                inputs[idx + 1].focus(); //  handles submit buttons
+            }
+            switch (this.id) {
+                case 'item':
+                    $('#quantity').focus();
+                    break;
+
+                case 'quantity':
+                    $('#salesPrice').focus();
+                    break;
+
+                case 'salesPrice':
+                    $('#addItem').click();
+                    $('#item').select2('open');
+                    break;
+
+            }
+            return false;
+        }
+    });
+
+
     $(document).on('change', '#item', function() {
 
         var item = $('#item').val();
@@ -276,6 +376,7 @@ var InventorySales = function(sales) {
                 $(".editable").editable();
             },
         })
+
     });
 
 

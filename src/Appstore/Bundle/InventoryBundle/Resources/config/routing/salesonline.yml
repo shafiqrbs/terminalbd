@@ -17,8 +17,6 @@ inventory_salesonline_show_preview:
     options:
             expose: true
 
-
-
 inventory_salesonline_new:
     path:     /new
     defaults: { _controller: "InventoryBundle:SalesOnline:new" }

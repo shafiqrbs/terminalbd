@@ -46,38 +46,33 @@
                         <div class="clearfix">&nbsp;</div>
 
                         <div class="row-fluid">
-                            <div class="row-fluid particular-info" >
+                            <div class="row-fluid particular-info" style="padding-bottom: 2px!important;" >
                                 <div class="span2">
                                     <input type="text" style="text-align:center; margin-left:15px;height: 42px!important;" class="m-wrap span12 form-control"  id="barcode" name="barcode" data-id="{{ entity.id }}" placeholder="Barcode"  value="" >
                                 </div>
                                 {{ form_start(itemForm) }}
                                 {{ form_row(itemForm._token) }}
-                                    <div class="span3">
+                                    <div class="span4">
                                         {{ form_widget(itemForm.item) }}
                                         {{ form_errors(itemForm.item) }}
                                     </div>
-                                    <div class="span3">
-                                        <select style="height: 42px!important;" class="m-wrap span12 form-control" name="subItem" id="subItem">
-                                            <option>Select sub-item</option>
+                                    <div class="span2">
+                                        <select style="height: 42px!important;" class="m-wrap span12 form-control purchaseItem stockItem" name="subItem" id="subItem">
+                                            <option>Select Barcode</option>
                                         </select>
                                     </div>
                                     <div class="span4">
-                                    <div class="input-append span12" style="margin-bottom:0!important">
+                                    <div class="input-append span12" style="margin-bottom:0!important;margin-left: -15px;!important;">
                                         <div class="input-group">
                                                 <span class="input-group-btn">
-                                                <button href="javascript:" class="btn btn-large black">Tk.</button>
-                                                <input type="text" style="text-align:center;height: 42px!important;" class="m-wrap span2 form-control"  id="salesPrice" name="salesPrice"  value="" >
-                                                <input type="hidden" name="purchasePrice" id="purchasePrice" value="">
+                                                     <button href="javascript:" class="btn btn-large yellow">QTY</button>
+                                                        <input type="text" style="text-align:center; width:80px; height: 42px!important;" class="m-wrap number span5 form-control stockItem btn-qnt-particular" id="quantity" name="quantity" value="1" min="1" max="100">
                                                 </span>
-                                            <span class="input-group-btn">
-                                                   <a href="javascript:" class="btn yellow btn-large btn-qnt-particular" data-type="minus" data-field="quantity">
-                                                            <span class="fa fa-minus"></span>
-                                                   </a>
-                                                <input type="number" style="text-align:center; width:80px; height: 42px!important;" class="m-wrap span5 form-control btn-qnt-particular" id="quantity" name="quantity" value="1" min="1" max="100">
-                                                <a href="javascript:" class="btn btn-large green btn-qnt-particular"  data-type="plus" data-field="quantity">
-                                                    <span class="fa fa-plus"></span>
-                                                </a>
-                                                    <button type="button" style="width:55px" class="btn btn-large black unit">-</button>
+                                                <span class="input-group-btn">
+                                                 <button href="javascript:" class="btn btn-large red">Tk.</button>
+                                                <input type="text" style="text-align:center;height: 42px!important;" class="m-wrap span3 form-control stockItem"  id="salesPrice" name="salesPrice"  value="" >
+                                                <input type="hidden" name="purchasePrice" id="purchasePrice" value="">
+                                                <button type="button" style="width:55px" class="btn btn-large black unit">-</button>
                                                 <button type="button" class="btn btn-large blue" id="addItem" data-url="{{ path('inventory_salesmanual_insert_item',{'sales':entity.id}) }}" ><i class="icon-shopping-cart"></i> <strong>Add</strong></button>
                                                 </span>
                                         </div>
@@ -85,7 +80,20 @@
                                 </div>
                                 {{ form_end(itemForm) }}
                             </div>
-                            <div class="row-fluid text-left" style="background: #DDDDDD; min-height: 30px; line-height: 30px" >List of serial No</div>
+                            <div class="row-fluid text-left" style="background: #DDDDDD; min-height: 30px; line-height: 30px;" >
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr class="head-gray">
+                                        <th class="numeric product-list">Current Stock</th>
+                                        <th class="numeric product-list" id="current-stock"></th>
+                                        <th class="numeric product-list">Sales Price</th>
+                                        <th class="numeric product-list" id="sales-price"></th>
+                                        <th class="numeric product-list">Status</th>
+                                        <th class="numeric product-list" id="item-status"></th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
 
                         <div class="clearfix">&nbsp;</div>
@@ -318,6 +326,17 @@
         }
         table.dataTable tbody th, table.dataTable tbody td {
             padding: 1px 10px!important;
+        }
+        .table th.product-list, .table td.product-list {
+            font-size: 12px;
+            height: 30px;
+            text-align: left;
+            padding-right: 5px;
+            line-height: 12px;
+            font-weight: bold;
+            padding-left: 15px;
+            color: #e61212!important;
+
         }
 
     </style>

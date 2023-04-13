@@ -324,6 +324,7 @@ class PosController extends Controller
                 $salesPrice = $product->getDiscountPrice() > 0 ? $product->getDiscountPrice() : $product->getSalesPrice();
             }
             $productUnit = ($product->getMasterItem()) ? $product->getMasterItem()->getUnit() : '';
+            $data = array();
             if ($config->isEmptySales() != 1 and $product->getRemainingQnt() > 0){
                 $data = array(
                     'id' => $product->getId(),
