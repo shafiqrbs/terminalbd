@@ -213,7 +213,7 @@ class ApiEcommerceController extends Controller
 
 
             $mobile = empty($entity->getHotline()) ? $entity->getMobile() : $entity->getHotline();
-
+            $bodyBg = (string) trim($entity->getTemplateCustomize()->getBodyColor());
             $androidHeaderBg = (string) trim($entity->getTemplateCustomize()->getMobileHeaderBgColor());
             $appPrimaryColor = (string) trim($entity->getTemplateCustomize()->getAppPrimaryColor());
             $appSecondaryColor =(string) trim($entity->getTemplateCustomize()->getAppSecondaryColor());
@@ -297,6 +297,7 @@ class ApiEcommerceController extends Controller
                     'homeFeaturePromotion' => ($homeFeaturePromotion) ? 1:0,
                     'productTheme' => $productTheme,
 
+                     'bodyBg' => empty($bodyBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($bodyBg),
                      'appHeaderBg' => empty($androidHeaderBg) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($androidHeaderBg),
                      'appPrimaryColor' => empty($appPrimaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appPrimaryColor),
                      'appSecondaryColor' => empty($appSecondaryColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($appSecondaryColor),
