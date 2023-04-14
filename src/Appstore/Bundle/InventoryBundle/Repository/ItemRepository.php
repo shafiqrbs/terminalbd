@@ -40,6 +40,7 @@ class ItemRepository extends EntityRepository
         $sort = isset($data['sort'])? $data['sort'] :'item.name';
         $direction = isset($data['direction'])? $data['direction'] :'ASC';
         $item = isset($data['item'])? $data['item'] :'';
+        $keyword = isset($data['keyword'])? $data['keyword'] :'';
         $color = isset($data['color'])? $data['color'] :'';
         $size = isset($data['size'])? $data['size'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
@@ -78,13 +79,16 @@ class ItemRepository extends EntityRepository
             $qb->leftJoin('m.category', 'c');
             $qb->andWhere($qb->expr()->like("c.name", "'%$category%'"  ));
         }
+         if (!empty($keyword)) {
+             $qb->andWhere('item.name LIKE :searchTerm OR item.skuSlug LIKE :searchTerm OR item.skuWebSlug LIKE :searchTerm  OR item.slug LIKE :searchTerm OR item.barcode LIKE :searchTerm');
+             $qb->setParameter('searchTerm', '%'.strtolower($keyword).'%');
+        }
+
         if (!empty($unit)) {
             $qb->leftJoin('m.productUnit', 'u');
             $qb->andWhere("u.name = :unit");
             $qb->setParameter('unit', $unit);
         }
-        $qb->orderBy("{$sort}",$direction);
-        $qb->getQuery();
         return  $qb;
 
     }

@@ -58,17 +58,11 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                        <div class="span3">
+                                        <div class="span6">
                                             <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
                                         </div>
-                                        <div class="span3">
-                                            <input type="text" id="unit" name="unit"  class="span12 select2Unit" value="{% if searchForm.unit is defined %}{{ searchForm.unit }}{% endif %}"  autocomplete="off" placeholder="Enter unit name ">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" id="size" name="size"  class="span12 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
-                                        </div>
-                                        <div class="span3">
-                                            <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
+                                        <div class="span6">
+                                            <input type="text" id="keyword" name="keyword"  class="span12 m-wrap" value="{% if searchForm.keyword is defined %}{{ searchForm.keyword }}{% endif %}"  autocomplete="off" placeholder="Enter item keyword ">
                                         </div>
                                     </div>
                                     <br>

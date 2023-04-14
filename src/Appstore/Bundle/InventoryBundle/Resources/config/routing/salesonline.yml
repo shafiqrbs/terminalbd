@@ -62,4 +62,11 @@ inventory_salesonline_discount_update:
     defaults: { _controller: "InventoryBundle:SalesOnline:salesDiscountUpdate" }
     methods:  POST
     options:
-        expose: true
+            expose: true
+
+inventory_salesonline_item_create:
+    path:     /{id}/create-item
+    defaults: { _controller: "InventoryBundle:SalesOnline:createItem" }
+    methods:  POST
+    options:
+            expose: true

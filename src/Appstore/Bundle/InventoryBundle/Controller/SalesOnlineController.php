@@ -4,22 +4,21 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\InventoryBundle\Form\SalesGeneralType;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Form\SalesItemType;
 use Appstore\Bundle\InventoryBundle\Form\SalesOnlineType;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
-use Mike42\Escpos\Printer;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Symfony\Component\HttpFoundation\Response;
 use Hackzilla\BarcodeBundle\Utility\Barcode;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Mike42\Escpos\Printer;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Sales controller.
  *
@@ -149,9 +148,10 @@ class SalesOnlineController extends Controller
     private function createItemForm(SalesItem $item , Sales $entity)
     {
         $form = $this->createForm(new SalesItemType($entity->getInventoryConfig()), $item, array(
-            'action' => $this->generateUrl('inventory_salesmanual_insert_item', array('sales' => $entity->getId())),
+            'action' => $this->generateUrl('inventory_salesonline_item_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
+                'id' => 'stockItem',
                 'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
@@ -953,7 +953,98 @@ class SalesOnlineController extends Controller
     }
 
 
+    public function createItemAction($id,Request $request)
+    {
 
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $pItem = isset($data['purchaseItem']) ? $data['purchaseItem']:'';
+        $price = isset($data['salesPrice']) ? $data['salesPrice']:'';
+        $item = $data['salesitem']['item'];
+        $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
+
+
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $sales = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory,'id'=>$id));
+
+        /* @var $itemStock Item */
+        $itemStock = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findOneBy(array('inventoryConfig' => $config,'id' => $item));
+        $purchaseItem = '';
+        if(empty($pItem)){
+            $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,trim($pItem));
+        }
+
+        if($purchaseItem){
+
+            /* @var $purchaseItem PurchaseItem */
+
+            $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkPurchaseItemSalesQuantity($purchaseItem);
+            $itemStock = $purchaseItem->getQuantity();
+            if(!empty($purchaseItem) and $itemStock > 0 and  $itemStock > $checkQuantity) {
+                $data = array('quantity'=> $quantity ,'salesPrice'=> $price ,'purchasePrice' => $itemStock->getPurchasePrice());
+                $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertOnlineSalesPurchaseItem($sales, $purchaseItem,$data);
+                $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = 'success';
+            } else {
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = 'invalid';
+            }
+            $data = $this->returnResultData($sales,$msg);
+            return new Response(json_encode($data));
+
+        }elseif($itemStock) {
+
+            $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($itemStock);
+            if($itemStock->getRemainingQnt() > 0 and  $itemStock->getRemainingQnt() > $checkQuantity) {
+                $data = array('quantity'=> $quantity ,'salesPrice'=> $price ,'purchasePrice' => $itemStock->getPurchasePrice());
+                $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $itemStock,$data);
+                $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = 'success';
+            } else {
+                $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+                $msg = 'invalid';
+            }
+            $data = $this->returnResultData($sales,$msg);
+            return new Response(json_encode($data));
+        }
+        return new Response(json_encode(array('status'=>'in-valid')));
+    }
+
+    public function returnResultData($sales,$msg=''){
+
+        //$salesItems = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+        $config = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $config,'id' => $sales));
+        /*
+         * $salesItems = $this->renderView('InventoryBundle:Sales:item.html.twig', array(
+            'entity' => $entity
+        ));
+        */
+        $salesItems = $this->renderView('InventoryBundle:Sales:sales-pos-item.html.twig', array(
+            'entity' => $entity
+        ));
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
+        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $due = $entity->getDue();
+        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+        $data = array(
+            'msg' => $msg,
+            'salesSubTotal' => $subTotal,
+            'salesTotal' => $netTotal,
+            'payment' => $payment ,
+            'due' => $due,
+            'discount' => $discount,
+            'vat' => $vat,
+            'salesItems' => $salesItems ,
+            'success' => 'success'
+        );
+        return $data;
+
+    }
 
 
 

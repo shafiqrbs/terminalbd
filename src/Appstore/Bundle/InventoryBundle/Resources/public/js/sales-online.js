@@ -262,26 +262,29 @@ var InventorySales = function(sales) {
         })
     });
 
-    $( "#stockItem" ).submit(function( event ) {
+    $("#stockItem").submit(function(e) {
 
-        var stockItem = $('#item').val();
-        if(stockItem === ''){
+        var item = $('#salesitem_item').val();
+        var url =  $('#stockItem').attr("action");
+        if(item === ''){
             alert('Please try again correct product.');
             return false;
         }
         $.ajax({
-            url         : Routing.generate('pos_item_create'),
+            url         : url,
             type        : 'POST',
             data        : new FormData($('form#stockItem')[0]),
             processData : false,
             contentType : false,
             success     : function(response){
+                obj = JSON.parse(response);
                 $('#quantity').val(1);
                 $('#item').select2('open');
-                jsonResult(response);
+                $('#salesItem').html(obj['salesItems']);
+                resultDataLoad(response);
             }
         });
-        event.preventDefault();
+        e.preventDefault();
     });
 
 
@@ -328,7 +331,7 @@ var InventorySales = function(sales) {
         })
     });
 
-    $('form#salesitem').on('keypress', '.stockInput', function (e) {
+    $('form#stockItem').on('keypress', '.stockItem', function (e) {
 
         if (e.which === 13) {
             var inputs = $(this).parents("form#stockItem").eq(0).find("input,select");

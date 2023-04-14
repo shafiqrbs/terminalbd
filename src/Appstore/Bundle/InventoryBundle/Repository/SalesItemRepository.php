@@ -9,7 +9,6 @@ use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItemSerial;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * SalesItemRepository
@@ -213,12 +212,14 @@ class SalesItemRepository extends EntityRepository
     {
 
     	$em = $this->_em;
+
         $existEntity = $this->findOneBy(array('sales'=> $sales,'item'=> $item));
+        $price = empty($data['salesPrice']) ? $item->getSalesPrice() : $data['salesPrice'];
         if(!empty($existEntity)){
 
-            $curQuantity =  $existEntity->getQuantity() + $data['quantity'];
+            $curQuantity = $data['quantity'];
             $existEntity->setQuantity($curQuantity);
-            $existEntity->setSubTotal($data['salesPrice'] * $curQuantity);
+            $existEntity->setSubTotal($existEntity->getSalesPrice() * $existEntity->getQuantity());
             $em->persist($existEntity);
 
         }else{
@@ -226,13 +227,42 @@ class SalesItemRepository extends EntityRepository
             $entity = new SalesItem();
             $entity->setSales($sales);
             $entity->setItem($item);
-            $entity->setSalesPrice($data['salesPrice']);
+            $entity->setSalesPrice($price);
             $entity->setEstimatePrice($item->getSalesPrice());
+            $entity->setQuantity($data['quantity']);
+            $entity->setPurchasePrice($item->getPurchasePrice());
+            $entity->setCustomPrice($price);
+            $entity->setSubTotal($entity->getSalesPrice() * $data['quantity']);
+            $em->persist($entity);
+        }
+        $em->flush();
+    }
+
+    public function insertOnlineSalesPurchaseItem(Sales $sales,PurchaseItem $purchaseItem,$data)
+    {
+
+        $em = $this->_em;
+        $existEntity = $this->findOneBy(array('sales'=> $sales,'purchaseItem'=> $purchaseItem));
+        if(!empty($existEntity)){
+
+            $existEntity->setQuantity($data['quantity']);
+            $existEntity->setSubTotal($existEntity->getSalesPrice() * $existEntity->getQuantity());
+            $em->persist($existEntity);
+
+        }else{
+
+            $entity = new SalesItem();
+            $entity->setSales($sales);
+            $entity->setPurchaseItem($purchaseItem);
+            $entity->setItem($purchaseItem->getItem());
+            $entity->setSalesPrice($data['salesPrice']);
+            $entity->setEstimatePrice($purchaseItem->getItem()->getSalesPrice());
             $entity->setQuantity($data['quantity']);
             $entity->setPurchasePrice($data['purchasePrice']);
             $entity->setCustomPrice($data['salesPrice']);
             $entity->setSubTotal($data['salesPrice'] * $data['quantity']);
             $em->persist($entity);
+
         }
         $em->flush();
     }

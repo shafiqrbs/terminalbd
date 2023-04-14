@@ -97,6 +97,7 @@ function ApproveProcess(){
         },
         allowClear: true,
         minimumInputLength:1
+
     });
 
     $(".selectAllItem").select2({

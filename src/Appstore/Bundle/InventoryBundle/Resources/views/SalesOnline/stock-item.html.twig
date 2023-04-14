@@ -57,7 +57,7 @@
                                         {{ form_errors(itemForm.item) }}
                                     </div>
                                     <div class="span2">
-                                        <select style="height: 42px!important;" class="m-wrap span12 form-control purchaseItem stockItem" name="subItem" id="subItem">
+                                        <select style="height: 42px!important;" class="m-wrap span12 form-control purchaseItem stockItem" name="purchaseItem" id="purchaseItem">
                                             <option>Select Barcode</option>
                                         </select>
                                     </div>
@@ -66,14 +66,14 @@
                                         <div class="input-group">
                                                 <span class="input-group-btn">
                                                      <button href="javascript:" class="btn btn-large yellow">QTY</button>
-                                                        <input type="text" style="text-align:center; width:80px; height: 42px!important;" class="m-wrap number span5 form-control stockItem btn-qnt-particular" id="quantity" name="quantity" value="1" min="1" max="100">
+                                                     <input type="text" style="text-align:center; width:80px; height: 42px!important;" class="m-wrap number span5 form-control stockItem btn-qnt-particular" id="quantity" name="quantity" value="1" min="1" max="100">
                                                 </span>
                                                 <span class="input-group-btn">
-                                                 <button href="javascript:" class="btn btn-large red">Tk.</button>
-                                                <input type="text" style="text-align:center;height: 42px!important;" class="m-wrap span3 form-control stockItem"  id="salesPrice" name="salesPrice"  value="" >
-                                                <input type="hidden" name="purchasePrice" id="purchasePrice" value="">
-                                                <button type="button" style="width:55px" class="btn btn-large black unit">-</button>
-                                                <button type="button" class="btn btn-large blue" id="addItem" data-url="{{ path('inventory_salesmanual_insert_item',{'sales':entity.id}) }}" ><i class="icon-shopping-cart"></i> <strong>Add</strong></button>
+                                                    <button href="javascript:" class="btn btn-large red">Tk.</button>
+                                                    <input type="text" style="text-align:center;height: 42px!important;" class="m-wrap span3 form-control stockItem"  id="salesPrice" name="salesPrice"  value="" >
+                                                    <input type="hidden" name="purchasePrice" id="purchasePrice" value="">
+                                                    <button type="button" style="width:55px" class="btn btn-large black unit">-</button>
+                                                    <button type="submit" class="btn btn-large blue" id="addItem"><i class="icon-shopping-cart"></i> <strong>Add</strong></button>
                                                 </span>
                                         </div>
                                     </div>
@@ -179,7 +179,7 @@
                                             <div class="span8"><strong>NET-TOTAL TK.</strong></div>
                                             <div class="span4"><strong class="salesTotal">{{ entity.total|number_format(2)    }}</strong></div>
                                         </div>
-                                        <div class="row-fluid">
+                                        <div class="row-fluid" id="dueReturn">
                                             <div class="span8"><strong id="balance">DUE TK.</strong></div>
                                             <div class="span4"><strong class="dueAmount">{{ entity.due }}</strong></div>
                                         </div>
@@ -337,6 +337,15 @@
             padding-left: 15px;
             color: #e61212!important;
 
+        }
+        #dueReturn{
+            background: red;
+            color: #fff;
+            line-height: 45px;
+            margin-left: -15px!important;
+            padding-left: 15px;
+            margin-right: 16px!important;
+            margin-bottom: 10px;
         }
 
     </style>

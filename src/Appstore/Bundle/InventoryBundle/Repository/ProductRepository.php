@@ -62,7 +62,8 @@ class ProductRepository extends EntityRepository
         $query->join('e.inventoryConfig', 'ic');
         $query->select('e.name as id');
         $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->where($query->expr()->like("e.name", "'%$q%'"  ));
+        $query->orWhere($query->expr()->like("e.slug", "'%$q%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('e.id');
