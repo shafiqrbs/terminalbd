@@ -736,8 +736,8 @@ class OrderRepository extends EntityRepository
                 $data['orderItem'][$i]['name'] = (string)$subs->getItemName();
                 $data['orderItem'][$i]['price'] = (integer)$subs->getPrice();
                 $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
-                $data['orderItem'][$i]['category'] = (integer)$subs->getCategoryName();
-                $data['orderItem'][$i]['brand'] = (integer)$subs->getBrandName();
+                $data['orderItem'][$i]['category'] = (string)$subs->getCategoryName();
+                $data['orderItem'][$i]['brand'] = (string)$subs->getBrandName();
                 $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
                 $data['orderItem'][$i]['size'] = (string)$subs->getSize();
                 $data['orderItem'][$i]['color'] = (string)$subs->getColor();
