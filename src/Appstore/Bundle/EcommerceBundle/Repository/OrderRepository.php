@@ -618,10 +618,12 @@ class OrderRepository extends EntityRepository
         $data = array();
         /* @var $row Order */
         foreach ($result as $key => $row){
+
             $data[$key]['order_id'] = (int)$row->getId();
             $data[$key]['invoice'] = $row->getInvoice();
-            $data[$key]['customerName'] = $row->getCustomerName();
-            $data[$key]['customerMobile'] = $row->getCustomerMobile();
+            $data[$key]['customerName'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getName() : $row->getCustomerName();
+            $data[$key]['customerMobile'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getMobile() : $row->getCustomerMobile();
+            $data[$key]['customerAddress'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getAddress() : $row->getCustomer()->getAddress();
             $data[$key]['created'] = $row->getCreated()->format('Y-m-d H:i');
             $data[$key]['createdTime'] = $row->getCreated()->format('g:i A');
             $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d H:i');
@@ -663,11 +665,13 @@ class OrderRepository extends EntityRepository
         $data = array();
         /* @var $row Order */
         foreach ($result as $key => $row){
-            $data[$key]['order_id'] = (int)$row->getId();
             $data[$key]['invoice'] = $row->getInvoice();
-            $data[$key]['created'] = $row->getCreated()->format('d-m-Y');
+            $data[$key]['customerName'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getName() : $row->getCustomerName();
+            $data[$key]['customerMobile'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getMobile() : $row->getCustomerMobile();
+            $data[$key]['customerAddress'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getAddress() : $row->getCustomer()->getAddress();
+            $data[$key]['created'] = $row->getCreated()->format('Y-m-d H:i');
             $data[$key]['createdTime'] = $row->getCreated()->format('g:i A');
-            $data[$key]['updated'] = $row->getUpdated()->format('d-m-Y');
+            $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d H:i');
             $data[$key]['updatedTime'] = $row->getUpdated()->format('g:i A');
             $data[$key]['subTotal'] = $row->getSubTotal();
             $data[$key]['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
@@ -680,7 +684,7 @@ class OrderRepository extends EntityRepository
             $data[$key]['address'] = $row->getAddress();
             $data[$key]['transactionId'] = ($row->getTransaction()) ? $row->getTransaction() :'';
             $data[$key]['paymentMobile'] = ($row->getPaymentMobile()) ? $row->getPaymentMobile() : '';
-            $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y');
+            $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
             $data[$key]['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
             $data[$key]['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
             $data[$key]['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
@@ -699,9 +703,13 @@ class OrderRepository extends EntityRepository
         $data = array();
         $data['order_id'] = (int)$row->getId();
         $data['invoice'] = $row->getInvoice();
-        $data['created'] = $row->getCreated()->format('d-m-Y');
+        $data['invoice'] = $row->getInvoice();
+        $data['customerName'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getName() : $row->getCustomerName();
+        $data['customerMobile'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getMobile() : $row->getCustomerMobile();
+        $data['customerAddress'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getAddress() : $row->getCustomer()->getAddress();
+        $data['created'] = $row->getCreated()->format('Y-m-d H:i');
         $data['createdTime'] = $row->getCreated()->format('g:i A');
-        $data['updated'] = $row->getUpdated()->format('d-m-Y');
+        $data['updated'] = $row->getUpdated()->format('Y-m-d H:i');
         $data['updatedTime'] = $row->getUpdated()->format('g:i A');
         $data['subTotal'] = $row->getSubTotal();
         $data['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
@@ -712,12 +720,13 @@ class OrderRepository extends EntityRepository
         $data['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
         $data['process'] = $row->getProcess();
         $data['address'] = $row->getAddress();
-        $data['transactionId'] = $row->getTransaction();
-        $data['paymentMobile'] = $row->getPaymentMobile();
-        $data['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y');
+        $data['transactionId'] = ($row->getTransaction()) ? $row->getTransaction() :'';
+        $data['paymentMobile'] = ($row->getPaymentMobile()) ? $row->getPaymentMobile() : '';
+        $data['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
         $data['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
         $data['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
         $data['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
+
         $orderItems = $row->getOrderItems();
         if ($orderItems) {
             /* @var $subs OrderItem */
@@ -727,6 +736,9 @@ class OrderRepository extends EntityRepository
                 $data['orderItem'][$i]['name'] = (string)$subs->getItemName();
                 $data['orderItem'][$i]['price'] = (integer)$subs->getPrice();
                 $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
+                $data['orderItem'][$i]['category'] = (string)$subs->getCategoryName();
+                $data['orderItem'][$i]['brand'] = (string)$subs->getBrandName();
+                $data['orderItem'][$i]['color'] = (string)$subs->getColor();
                 $data['orderItem'][$i]['size'] = (string)$subs->getSize();
                 $data['orderItem'][$i]['color'] = (string)$subs->getColor();
                 $data['orderItem'][$i]['imagePath'] = (string)$subs->getImagePath();
