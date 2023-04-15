@@ -610,7 +610,7 @@ class OrderRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :option")->setParameter('option', $option->getId());
         $qb->andWhere("e.createdBy = :user")->setParameter('user', $user);
-        if($process){
+        if($process and $process != "all"){
             $qb->andWhere("e.process =:process")->setParameter('process', $process);
         }
         $qb->orderBy('e.created','DESC');
@@ -620,6 +620,9 @@ class OrderRepository extends EntityRepository
         foreach ($result as $key => $row){
             $data[$key]['order_id'] = (int)$row->getId();
             $data[$key]['invoice'] = $row->getInvoice();
+            $data[$key]['customerName'] = $row->getCustomerName();
+            $data[$key]['customerMobile'] = $row->getCustomerMobile();
+            $data[$key]['invoice'] = $row->getCustomerName();
             $data[$key]['created'] = $row->getCreated()->format('Y-m-d H:i');
             $data[$key]['createdTime'] = $row->getCreated()->format('g:i A');
             $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d H:i');
