@@ -410,8 +410,9 @@ class ApiEcommerceController extends Controller
             $appSuccessColor = (string) trim($entity->getTemplateCustomize()->getAppSuccessColor());
             $appNoticeColor = (string) trim($entity->getTemplateCustomize()->getAppNoticeColor());
             $appCloseColor = (string) trim($entity->getTemplateCustomize()->getAppCloseColor());
-
             $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
+            $inputBgColor = (string) trim($entity->getTemplateCustomize()->getInputBgColor());
+            $inputBgFocusColor = (string) trim($entity->getTemplateCustomize()->getInputBgFocusColor());
 
             $tawk = (string) trim($entity->getTemplateCustomize()->getTawk());
             $pixel = (string) trim($entity->getTemplateCustomize()->getFacebookPixel());
@@ -493,6 +494,8 @@ class ApiEcommerceController extends Controller
                 'appSuccessColor' => empty($appSuccessColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8( $appSuccessColor) ,
                 'appNoticeColor' => empty($appNoticeColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appNoticeColor) ,
                 'appCloseColor' => empty($appCloseColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($appCloseColor) ,
+                'inputBgColor' => empty($inputBgColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($inputBgColor) ,
+                'inputBgFocusColor' => empty($inputBgFocusColor)?$this->hex6ToHex8($this->random_color_code()):$this->hex6ToHex8($inputBgFocusColor) ,
                 // 'logo'      =>  $this->imageBase64($logo),
                 'logo'      =>  '',
                 'intro'      =>  '',
