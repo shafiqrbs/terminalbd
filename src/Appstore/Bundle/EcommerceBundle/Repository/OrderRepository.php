@@ -622,7 +622,6 @@ class OrderRepository extends EntityRepository
             $data[$key]['invoice'] = $row->getInvoice();
             $data[$key]['customerName'] = $row->getCustomerName();
             $data[$key]['customerMobile'] = $row->getCustomerMobile();
-            $data[$key]['invoice'] = $row->getCustomerName();
             $data[$key]['created'] = $row->getCreated()->format('Y-m-d H:i');
             $data[$key]['createdTime'] = $row->getCreated()->format('g:i A');
             $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d H:i');
