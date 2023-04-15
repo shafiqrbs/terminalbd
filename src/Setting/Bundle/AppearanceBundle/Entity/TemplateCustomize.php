@@ -1063,7 +1063,22 @@ class TemplateCustomize
     private $bodyColor;
 
 
-     /**
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="inputBgColor", type="string", length=50, nullable=true)
+     */
+    private $inputBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="inputBgFocusColor", type="string", length=50, nullable=true)
+     */
+    private $inputBgFocusColor;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="sidebarColor", type="string", length=50, nullable=true)
@@ -4176,6 +4191,37 @@ class TemplateCustomize
         $this->appCloseColor = $appCloseColor;
     }
 
+    /**
+     * @return string
+     */
+    public function getInputBgColor()
+    {
+        return $this->inputBgColor;
+    }
+
+    /**
+     * @param string $inputBgColor
+     */
+    public function setInputBgColor($inputBgColor)
+    {
+        $this->inputBgColor = $inputBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInputBgFocusColor()
+    {
+        return $this->inputBgFocusColor;
+    }
+
+    /**
+     * @param string $inputBgFocusColor
+     */
+    public function setInputBgFocusColor($inputBgFocusColor)
+    {
+        $this->inputBgFocusColor = $inputBgFocusColor;
+    }
 
 
 

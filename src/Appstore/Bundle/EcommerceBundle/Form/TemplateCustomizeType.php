@@ -53,6 +53,14 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
+            ->add('inputBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('inputBgFocusColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('mobileFooterBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')

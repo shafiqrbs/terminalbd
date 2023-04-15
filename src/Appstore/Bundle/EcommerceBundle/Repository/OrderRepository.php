@@ -710,7 +710,7 @@ class OrderRepository extends EntityRepository
         $data['createdTime'] = $row->getCreated()->format('g:i A');
         $data['updated'] = $row->getUpdated()->format('Y-m-d H:i');
         $data['updatedTime'] = $row->getUpdated()->format('g:i A');
-        $data['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y');
+        $data['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
         $data['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
         $data['subTotal'] = $row->getSubTotal();
         $data['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
@@ -735,6 +735,9 @@ class OrderRepository extends EntityRepository
                 $data['orderItem'][$i]['orderId'] = (int)$row->getId();
                 $data['orderItem'][$i]['name'] = (string)$subs->getItemName();
                 $data['orderItem'][$i]['price'] = (integer)$subs->getPrice();
+                $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
+                $data['orderItem'][$i]['category'] = (integer)$subs->getCategoryName();
+                $data['orderItem'][$i]['brand'] = (integer)$subs->getBrandName();
                 $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
                 $data['orderItem'][$i]['size'] = (string)$subs->getSize();
                 $data['orderItem'][$i]['color'] = (string)$subs->getColor();
