@@ -620,9 +620,9 @@ class OrderRepository extends EntityRepository
         foreach ($result as $key => $row){
             $data[$key]['order_id'] = (int)$row->getId();
             $data[$key]['invoice'] = $row->getInvoice();
-            $data[$key]['created'] = $row->getCreated()->format('Y-m-d h:i');
+            $data[$key]['created'] = $row->getCreated()->format('Y-m-d H:i');
             $data[$key]['createdTime'] = $row->getCreated()->format('g:i A');
-            $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d h:i');
+            $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d H:i');
             $data[$key]['updatedTime'] = $row->getUpdated()->format('g:i A');
             $data[$key]['subTotal'] = $row->getSubTotal();
             $data[$key]['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
@@ -635,7 +635,7 @@ class OrderRepository extends EntityRepository
             $data[$key]['address'] = $row->getAddress();
             $data[$key]['transactionId'] = ($row->getTransaction()) ? $row->getTransaction() :'';
             $data[$key]['paymentMobile'] = ($row->getPaymentMobile()) ? $row->getPaymentMobile() : '';
-            $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d h:i ');
+            $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i ');
             $data[$key]['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
             $data[$key]['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
             $data[$key]['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
