@@ -636,7 +636,7 @@ class OrderRepository extends EntityRepository
             $data[$key]['timePeriod'] = ($row->getTimePeriod()) ? $row->getTimePeriod()->getName():'';
             $data[$key]['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
             $data[$key]['process'] = $row->getProcess();
-            $data[$key]['address'] = $row->getAddress();
+            $data[$key]['pickupAddress'] = $row->getAddress();
             $data[$key]['transactionId'] = ($row->getTransaction()) ? $row->getTransaction() :'';
             $data[$key]['paymentMobile'] = ($row->getPaymentMobile()) ? $row->getPaymentMobile() : '';
             $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
@@ -681,7 +681,7 @@ class OrderRepository extends EntityRepository
             $data[$key]['timePeriod'] = ($row->getTimePeriod()) ? $row->getTimePeriod()->getName():'';
             $data[$key]['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
             $data[$key]['process'] = $row->getProcess();
-            $data[$key]['address'] = $row->getAddress();
+            $data[$key]['pickupAddress'] = $row->getAddress();
             $data[$key]['transactionId'] = ($row->getTransaction()) ? $row->getTransaction() :'';
             $data[$key]['paymentMobile'] = ($row->getPaymentMobile()) ? $row->getPaymentMobile() : '';
             $data[$key]['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
@@ -705,7 +705,7 @@ class OrderRepository extends EntityRepository
         $data['invoice'] = $row->getInvoice();
         $data['customerName'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getName() : $row->getCustomerName();
         $data['customerMobile'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getMobile() : $row->getCustomerMobile();
-        $data['customerAddress'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getAddress() : $row->getCustomer()->getAddress();
+        $data['customerAddress'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getAddress() : $row->getAddress();
         $data['created'] = $row->getCreated()->format('Y-m-d H:i');
         $data['createdTime'] = $row->getCreated()->format('g:i A');
         $data['updated'] = $row->getUpdated()->format('Y-m-d H:i');
@@ -720,7 +720,7 @@ class OrderRepository extends EntityRepository
         $data['timePeriod'] = ($row->getTimePeriod()) ? $row->getTimePeriod()->getName():'';
         $data['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
         $data['process'] = $row->getProcess();
-        $data['address'] = $row->getAddress();
+        $data['pickupAddress'] = $row->getAddress();
         $data['transactionId'] = $row->getTransaction();
         $data['paymentMobile'] = $row->getPaymentMobile();
         $data['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
