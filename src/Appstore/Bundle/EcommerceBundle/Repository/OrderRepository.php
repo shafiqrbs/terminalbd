@@ -703,7 +703,6 @@ class OrderRepository extends EntityRepository
         $data = array();
         $data['order_id'] = (int)$row->getId();
         $data['invoice'] = $row->getInvoice();
-        $data['invoice'] = $row->getInvoice();
         $data['customerName'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getName() : $row->getCustomerName();
         $data['customerMobile'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getMobile() : $row->getCustomerMobile();
         $data['customerAddress'] = ($row->getCustomerAddress()) ? $row->getCustomerAddress()->getAddress() : $row->getCustomer()->getAddress();
@@ -711,6 +710,8 @@ class OrderRepository extends EntityRepository
         $data['createdTime'] = $row->getCreated()->format('g:i A');
         $data['updated'] = $row->getUpdated()->format('Y-m-d H:i');
         $data['updatedTime'] = $row->getUpdated()->format('g:i A');
+        $data['deliveryDate'] = $row->getDeliveryDate()->format('d-m-Y');
+        $data['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
         $data['subTotal'] = $row->getSubTotal();
         $data['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
         $data['shippingCharge'] = ($row->getShippingCharge()) ? $row->getShippingCharge():'';
@@ -720,12 +721,11 @@ class OrderRepository extends EntityRepository
         $data['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
         $data['process'] = $row->getProcess();
         $data['address'] = $row->getAddress();
-        $data['transactionId'] = ($row->getTransaction()) ? $row->getTransaction() :'';
-        $data['paymentMobile'] = ($row->getPaymentMobile()) ? $row->getPaymentMobile() : '';
-        $data['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
-        $data['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
+        $data['transactionId'] = $row->getTransaction();
+        $data['paymentMobile'] = $row->getPaymentMobile();
         $data['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
         $data['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
+
 
         $orderItems = $row->getOrderItems();
         if ($orderItems) {
@@ -736,9 +736,6 @@ class OrderRepository extends EntityRepository
                 $data['orderItem'][$i]['name'] = (string)$subs->getItemName();
                 $data['orderItem'][$i]['price'] = (integer)$subs->getPrice();
                 $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
-                $data['orderItem'][$i]['category'] = (string)$subs->getCategoryName();
-                $data['orderItem'][$i]['brand'] = (string)$subs->getBrandName();
-                $data['orderItem'][$i]['color'] = (string)$subs->getColor();
                 $data['orderItem'][$i]['size'] = (string)$subs->getSize();
                 $data['orderItem'][$i]['color'] = (string)$subs->getColor();
                 $data['orderItem'][$i]['imagePath'] = (string)$subs->getImagePath();
