@@ -4,7 +4,6 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
@@ -16,13 +15,12 @@ use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseManualType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseOpeningType;
 use Appstore\Bundle\MedicineBundle\Form\PurchaseType;
-use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -1328,8 +1326,17 @@ class PurchaseController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        if($msg == "valid"){
+            $android->setStatus(true);
+            $em->persist($android);
+            $em->flush();
+            return new Response('success');
+        }else{
+            return new Response('failed');
+        }
 
-        $removeSales = $em->createQuery("DELETE MedicineBundle:MedicinePurchase e WHERE e.androidProcess= {$android->getId()}");
+        /*
+         $removeSales = $em->createQuery("DELETE MedicineBundle:MedicinePurchase e WHERE e.androidProcess= {$android->getId()}");
         if(!empty($removeSales)){
             $removeSales->execute();
         }
@@ -1342,6 +1349,8 @@ class PurchaseController extends Controller
         }else{
             return new Response('failed');
         }
+
+        */
     }
 
     public function autoPurchaseStockItemSearchAction(Request $request)
