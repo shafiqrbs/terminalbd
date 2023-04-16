@@ -731,7 +731,7 @@ class SalesController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
+     * @Secure(roles="ROLE_DOMAIN,ROLE_MEDICINE,ROLE_MEDICINE_SALES,ROLE_MEDICINE_MANAGER");
      */
 
     public function insertGroupApiSalesImportAction(MedicineAndroidProcess $android)
@@ -741,6 +741,7 @@ class SalesController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        return new Response('failed');
 
         $removeSales = $em->createQuery("DELETE MedicineBundle:MedicineSales e WHERE e.androidProcess= {$android->getId()}");
         if(!empty($removeSales)){

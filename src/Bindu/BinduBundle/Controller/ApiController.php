@@ -3,15 +3,12 @@
 namespace Bindu\BinduBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -539,7 +536,7 @@ class ApiController extends Controller
             /* @var $entity GlobalOption */
 
             $entity = $this->checkApiValidation($request);
-            $data = array('offset'=>0,'limit'=>2000);
+            $data = array('offset' => 0,'limit' => 2000);
             $data = $this->getDoctrine()->getRepository('MedicineBundle:MedicineBrand')->getApiDims($entity,$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');

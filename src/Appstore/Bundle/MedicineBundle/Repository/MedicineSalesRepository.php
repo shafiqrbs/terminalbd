@@ -886,7 +886,6 @@ class MedicineSalesRepository extends EntityRepository
                     $em->flush();
 
                 endforeach;
-
                 $this->insertApiSalesItem( $option, $process);
             }
     }

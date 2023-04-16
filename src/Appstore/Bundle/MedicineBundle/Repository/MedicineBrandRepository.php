@@ -70,7 +70,7 @@ class MedicineBrandRepository extends EntityRepository
     {
         $offset = (int)$data['offset'];
         $limit = (int)$data['limit'];
-
+        return $data = array();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.medicineCompany','b');
         $qb->leftJoin('e.medicineGeneric','g');
