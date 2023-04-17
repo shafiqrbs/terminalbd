@@ -1414,7 +1414,8 @@ class ApiEcommerceController extends Controller
 
             $option = $this->checkApiValidation($request);
 
-            $intlMobile =$data['mobile'];
+            $intlMobile = $data['mobile'];
+            $deviceHash = $data['deviceHash'];
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
@@ -1423,7 +1424,7 @@ class ApiEcommerceController extends Controller
                 $data['msg'] = "invalid";
             }else{
                 $a = mt_rand(1000,9999);
-                $otp = $a." Dr2PGY2W+Oy";
+                $otp = $a." {$deviceHash}";
                 $user->setPlainPassword($a);
                 $this->get('fos_user.user_manager')->updateUser($user);
                 $dispatcher = $this->container->get('event_dispatcher');
