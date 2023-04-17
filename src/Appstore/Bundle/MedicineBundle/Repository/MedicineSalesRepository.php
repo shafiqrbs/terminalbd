@@ -794,9 +794,7 @@ class MedicineSalesRepository extends EntityRepository
 
             $items = json_decode($process->getJsonItem(),true);
             $config = $option->getMedicineConfig()->getId();
-            $subItems = json_decode($process->getJsonSubItem(),true);
-            $this->insertApiSalesManual($option,$process,$items,$subItems);
-exit;
+
             if($items){
                 foreach ($items as $item):
                     $sales = new MedicineSales();
