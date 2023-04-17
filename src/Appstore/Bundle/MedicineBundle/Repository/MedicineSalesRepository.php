@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
@@ -792,6 +793,10 @@ class MedicineSalesRepository extends EntityRepository
         $em = $this->_em;
 
             $items = json_decode($process->getJsonItem(),true);
+            $config = $option->getMedicineConfig()->getId();
+            $subItems = json_decode($process->getJsonSubItem(),true);
+            $this->insertApiSalesManual($option,$process,$items,$subItems);
+exit;
             if($items){
                 foreach ($items as $item):
                     $sales = new MedicineSales();
@@ -944,16 +949,147 @@ class MedicineSalesRepository extends EntityRepository
             inner join (
               select ele.medicineSales_id, ROUND(COALESCE(SUM(ele.quantity * ele.purchasePrice),0),2) as purchasePrice
               from medicine_sales_item as ele
-              where ele.medicineSales_id is not NULL
+              where ele.medicineSales_id is not NULL AND sales.androidProcess_id =:android
               group by ele.medicineSales_id
             ) as pa on sales.id = pa.medicineSales_id
-            inner JOIN account_sales as aSales ON sales.id = aSales.medicine_sales_id
-            set sales.purchasePrice = pa.purchasePrice , aSales.purchasePrice = pa.purchasePrice
-            WHERE sales.androidProcess_id =:android";
+            set sales.purchasePrice = pa.purchasePrice";
         $qb = $this->getEntityManager()->getConnection()->prepare($sql);
         $qb->bindValue('android', $android);
         $qb->execute();
     }
+
+    public function insertApiSalesManual(GlobalOption $option,MedicineAndroidProcess $process)
+    {
+        $em = $this->_em;
+
+        $items = json_decode($process->getJsonItem(),true);
+        $subItems = json_decode($process->getJsonSubItem(),true);
+
+        $em = $this->_em;
+        $rows = '';
+        $config = $option->getMedicineConfig()->getId();
+        $androidProcess_id = $process->getId();
+        $androidDevice_id = $process->getAndroidDevice()->getId();
+        $optionId = $option->getId();
+
+
+
+        $default = $em->getRepository(Customer::class)->findOneBy(array('globalOption'=>$option,'name'=>'Default'));
+        $numItems = count($items);
+        $i = 0;
+        $comma =',';
+
+        foreach ($items as $item):
+            if(isset($item['transactionMethod']) and $item['transactionMethod'] == 'cash'){
+                $method = 1;
+            }elseif(isset($item['transactionMethod']) and $item['transactionMethod'] == 'bank'){
+                $method = 2;
+            }elseif(isset($item['transactionMethod']) and $item['transactionMethod'] == 'mobile'){
+                $method = 3;
+            }else{
+                $method = null;
+            }
+            $accountBank = (isset($item['bankAccount']) and $item['bankAccount']) ?  $item['bankAccount'] : 'NULL';
+            $mobileBankAccount = (isset($item['mobileBankAccount']) and $item['mobileBankAccount']) ?  $item['mobileBankAccount'] : 'NULL';
+            $paymentCard = (isset($item['paymentCard']) and $item['paymentCard']) ?  $item['paymentCard'] : 'NULL';
+            $customer = ($item['customerId']) ? $item['customerId'] : $customer = $default->getId();
+            if(++$i === $numItems) { $comma =  ""; }
+            $device ="Done";
+            $flat ="flat";
+            $rows .='('.(int)$config.',"'.(string)$item['created'].'","'.(string)$item['created'].'",'.(string)$item['invoiceId'].','.(string)$item['invoiceId'].','.(int)$customer.','.(int)$item['createdBy'].','.(int)$item['salesBy'].','.(int)$item['createdBy'].','.(int)$method.','.(float)$item['subTotal'].','.(float)$item['discount'].','.(float)$item['total'].','.(float)$item['receive'].',"'.(string)$flat.'",'.(int)$item['discountCalculation'].','.$accountBank.','.$mobileBankAccount.','.$paymentCard.','.(int)$androidProcess_id.','.(int)$androidDevice_id.',"'.(string)$device.'")'.$comma;
+        endforeach;
+        $sql = "INSERT INTO medicine_sales (medicineConfig_id,created,updated,invoice,deviceSalesId,customer_id,createdBy_id,salesBy_id,approvedBy_id,transactionMethod_id,subTotal,discount,netTotal,received,discountType,discountCalculation,accountBank_id,accountMobileBank_id,cardNo,androidProcess_id,androidDevice_id,process) VALUES {$rows}";
+        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+        $qb->execute();
+
+        $subs = '';
+        $x = 0;
+        $comma1 =',';
+        $numSubItems = count($subItems);
+        foreach ($subItems as $sub):
+            if(++$x === $numSubItems) { $comma1 =  ""; }
+            $subs .='('.(int)$androidProcess_id.','.(int)$sub['salesId'].','.(int)$sub['stockId'].','.(int)$sub['quantity'].','.(float)$sub['unitPrice'].','.(float)$sub['subTotal'].')'.$comma1;
+        endforeach;
+        $sqlSub = "INSERT INTO medicine_sales_item (androidProcess_id,deviceSalesId,medicineStock_id,quantity,salesPrice,subTotal) VALUES {$subs}";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($sqlSub);
+        $qb1->execute();
+
+        $sqlSales = "Update medicine_sales_item as salesItem
+            inner JOIN medicine_sales as s ON salesItem.deviceSalesId = s.deviceSalesId
+            set salesItem.medicineSales_id = s.id
+            WHERE salesItem.androidProcess_id =:androidProcess";
+        $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlSales);
+        $qb2->bindValue('androidProcess', $androidProcess_id);
+        $qb2->execute();
+
+        $sqlStock = "Update medicine_sales_item as salesItem
+            inner JOIN medicine_stock as ms ON salesItem.medicineStock_id = ms.id
+            set salesItem.purchasePrice = ms.purchasePrice
+            WHERE salesItem.androidProcess_id =:androidProcess";
+        $qb3 = $this->getEntityManager()->getConnection()->prepare($sqlStock);
+        $qb3->bindValue('androidProcess', $androidProcess_id);
+        $qb3->execute();
+
+        $sqlStockRemin = "UPDATE medicine_stock as stock
+            inner join (
+              select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
+              from medicine_sales_item as ele
+              join medicine_stock  as ms ON  ele.medicineStock_id = ms.id
+              where ele.medicineStock_id is not NULL AND ms.medicineConfig_id = {$config}
+              group by ele.medicineStock_id
+            ) as pa on stock.id = pa.medicineStock_id
+    SET stock.remainingQuantity = ((stock.openingQuantity + stock.purchaseQuantity + stock.salesReturnQuantity + stock.bonusQuantity + stock.bonusAdjustment + stock.adjustmentQuantity) - (pa.salesQuantity + stock.purchaseReturnQuantity + stock.damageQuantity)),
+        stock.salesQuantity = pa.salesQuantity";
+        $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockRemin);
+        $qb5->execute();
+
+
+        $sqlPurchasePrice = "Update medicine_sales as sales
+            inner join (
+              select ele.medicineSales_id, ROUND(COALESCE(SUM(ele.quantity * ele.purchasePrice),0),2) as purchasePrice
+              from medicine_sales_item as ele
+              where ele.medicineSales_id is not NULL AND ele.androidProcess_id = {$androidProcess_id}
+              group by ele.medicineSales_id
+            ) as pa on sales.id = pa.medicineSales_id
+            set sales.purchasePrice = pa.purchasePrice";
+        $qbPurchasePrice = $this->getEntityManager()->getConnection()->prepare($sqlPurchasePrice);
+        $qbPurchasePrice->execute();
+
+
+        $accountCash = $em->createQuery("DELETE AccountingBundle:AccountSales e WHERE e.globalOption = '{$optionId}' AND e.androidProcessId = '{$androidProcess_id}' AND e.processHead = 'medicine' AND e.processType = 'sales' ");
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+
+        $elem = "INSERT INTO account_sales
+    (`globalOption_id`,medicine_sales_id,transactionMethod_id,`accountBank_id`,`accountMobileBank_id`,`customer_id`,`totalAmount`,`purchasePrice`, `amount`,`createdBy_id`, `approvedBy_id`,`sourceInvoice`,`processHead`,`processType`,`process`,`created`,updated,accountRefNo,androidProcessId)
+  SELECT
+    $optionId,id,transactionMethod_id,accountBank_id,accountMobileBank_id,customer_id,netTotal, `purchasePrice`,received,`createdBy_id`, `approvedBy_id`, `invoice`, 'medicine', 'sales', 'approved',`created`,`updated`,invoice,$androidProcess_id
+  FROM medicine_sales
+  WHERE medicineConfig_id ={$config} AND androidProcess_id={$androidProcess_id}";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->execute();
+
+        $elem1 = "INSERT INTO AccountCash
+    (`globalOption_id`,accountSales_id,transactionMethod_id,`accountBank_id`,`accountMobileBank_id`,`debit`,`createdBy_id`, `accountRefNo`,`processHead`,`created`,updated,accountHead_id)
+  SELECT 
+    $optionId,id,transactionMethod_id,accountBank_id,accountMobileBank_id,amount,`createdBy_id`, `accountRefNo`, 'Sales', `created`,`updated`,
+    (case when (account_sales.transactionMethod_id > 1 ) THEN 10 ELSE  30  END) as head
+  FROM account_sales
+  WHERE globalOption_id ={$optionId} AND androidProcessId={$androidProcess_id}";
+        $qbCash = $this->getEntityManager()->getConnection()->prepare($elem1);
+        $qbCash->execute();
+
+        $total = $em->createQueryBuilder()
+            ->from('MedicineBundle:MedicineSales','si')
+            ->select('count(si.id) as totalCount')
+            ->where("si.androidProcess={$androidProcess_id}")
+            ->getQuery()->getSingleResult();
+        return $total['totalCount'];
+
+
+    }
+
 
     public function countNumberSalesItem($batch)
     {

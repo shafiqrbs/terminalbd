@@ -8,7 +8,6 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -230,6 +229,13 @@ class AccountSales
      * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
      */
     private $accountRefNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="androidProcessId", type="string", length=50, nullable=true)
+     */
+    private $androidProcessId;
 
     /**
      * @var integer
@@ -904,6 +910,24 @@ class AccountSales
     {
         $this->smsAlert = $smsAlert;
     }
+
+    /**
+     * @return string
+     */
+    public function getAndroidProcessId()
+    {
+        return $this->androidProcessId;
+    }
+
+    /**
+     * @param string $androidProcessId
+     */
+    public function setAndroidProcessId($androidProcessId)
+    {
+        $this->androidProcessId = $androidProcessId;
+    }
+
+
 
 
 }

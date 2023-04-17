@@ -741,18 +741,19 @@ class SalesController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        return new Response('failed');
 
+        $removeSalesItem = $em->createQuery("DELETE MedicineBundle:MedicineSalesItem e WHERE e.androidProcess= {$android->getId()}");
+        if(!empty($removeSalesItem)){
+            $removeSalesItem->execute();
+        }
         $removeSales = $em->createQuery("DELETE MedicineBundle:MedicineSales e WHERE e.androidProcess= {$android->getId()}");
         if(!empty($removeSales)){
             $removeSales->execute();
         }
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
-
-        /* @var $sales MedicineSales */
-
-        $salses = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->findBy(array('androidProcess' => $android));
-        foreach ($salses as $sales){
+     //   $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
+        /*
+         $salses = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->findBy(array('androidProcess' => $android));
+          foreach ($salses as $sales){
             if($sales->getProcess() == "Device"){
                 $sales->setProcess('Done');
                 $sales->setUpdated($sales->getCreated());
@@ -762,13 +763,13 @@ class SalesController extends Controller
                 $msg = "valid";
             }
         }
-        if($msg == "valid"){
+        */
+        $status = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSalesManual($config->getGlobalOption(),$android);
+        if($status > 0 ){
             $android->setStatus(true);
             $em->persist($android);
             $em->flush();
-            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateApiSalesPurchasePrice($android->getId());
-        }
-        if($msg == "valid"){
+            //$this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateApiSalesPurchasePrice($android->getId());
             return new Response('success');
         }else{
             return new Response('failed');

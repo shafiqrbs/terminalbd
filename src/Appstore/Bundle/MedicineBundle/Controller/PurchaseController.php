@@ -1326,17 +1326,7 @@ class PurchaseController extends Controller
         ignore_user_abort(true);
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
-        if($msg == "valid"){
-            $android->setStatus(true);
-            $em->persist($android);
-            $em->flush();
-            return new Response('success');
-        }else{
-            return new Response('failed');
-        }
-
-        /*
-         $removeSales = $em->createQuery("DELETE MedicineBundle:MedicinePurchase e WHERE e.androidProcess= {$android->getId()}");
+        $removeSales = $em->createQuery("DELETE MedicineBundle:MedicinePurchase e WHERE e.androidProcess= {$android->getId()}");
         if(!empty($removeSales)){
             $removeSales->execute();
         }
@@ -1349,8 +1339,6 @@ class PurchaseController extends Controller
         }else{
             return new Response('failed');
         }
-
-        */
     }
 
     public function autoPurchaseStockItemSearchAction(Request $request)

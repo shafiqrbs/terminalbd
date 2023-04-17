@@ -2,10 +2,8 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
-use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * MedicineSalesItem
@@ -53,6 +51,13 @@ class MedicineSalesItem
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", inversedBy="medicineSalesItem" )
      **/
     private  $androidProcess;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="deviceSalesId", type="integer",nullable=true)
+     */
+    private $deviceSalesId;
 
     /**
      * @var string
@@ -466,6 +471,24 @@ class MedicineSalesItem
     {
         $this->itemPercent = $itemPercent;
     }
+
+    /**
+     * @return int
+     */
+    public function getDeviceSalesId()
+    {
+        return $this->deviceSalesId;
+    }
+
+    /**
+     * @param int $deviceSalesId
+     */
+    public function setDeviceSalesId($deviceSalesId)
+    {
+        $this->deviceSalesId = $deviceSalesId;
+    }
+
+
 
 
 }
