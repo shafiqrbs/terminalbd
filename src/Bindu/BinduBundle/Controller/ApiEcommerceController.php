@@ -1415,7 +1415,7 @@ class ApiEcommerceController extends Controller
             $option = $this->checkApiValidation($request);
 
             $intlMobile = $data['mobile'];
-            $deviceHash = $data['deviceHash'];
+            $deviceHash = isset($data['deviceHash']) and $data['deviceHash'] ? $data['deviceHash'] : '';
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
