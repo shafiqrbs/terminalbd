@@ -1004,7 +1004,9 @@ class MedicineSalesRepository extends EntityRepository
         $x = 0;
         $comma1 =',';
         $numSubItems = count($subItems);
+        $stockIds = array();
         foreach ($subItems as $sub):
+            $stockIds[] = $sub['stockId'];
             if(++$x === $numSubItems) { $comma1 =  ""; }
             $subs .='('.(int)$androidProcess_id.','.(int)$sub['salesId'].','.(int)$sub['stockId'].','.(int)$sub['quantity'].','.(float)$sub['unitPrice'].','.(float)$sub['subTotal'].')'.$comma1;
         endforeach;
@@ -1028,19 +1030,19 @@ class MedicineSalesRepository extends EntityRepository
         $qb3->bindValue('androidProcess', $androidProcess_id);
         $qb3->execute();
 
+        $array = implode(",",$stockIds);
         $sqlStockRemin = "UPDATE medicine_stock as stock
             inner join (
               select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
               from medicine_sales_item as ele
               join medicine_stock  as ms ON  ele.medicineStock_id = ms.id
-              where ele.medicineStock_id is not NULL AND ms.medicineConfig_id = {$config}
+              where ele.medicineStock_id IN ({$array}) AND ms.medicineConfig_id = {$config}
               group by ele.medicineStock_id
             ) as pa on stock.id = pa.medicineStock_id
     SET stock.remainingQuantity = ((stock.openingQuantity + stock.purchaseQuantity + stock.salesReturnQuantity + stock.bonusQuantity + stock.bonusAdjustment + stock.adjustmentQuantity) - (pa.salesQuantity + stock.purchaseReturnQuantity + stock.damageQuantity)),
         stock.salesQuantity = pa.salesQuantity";
         $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockRemin);
         $qb5->execute();
-
 
         $sqlPurchasePrice = "Update medicine_sales as sales
             inner join (
@@ -1052,7 +1054,6 @@ class MedicineSalesRepository extends EntityRepository
             set sales.purchasePrice = pa.purchasePrice";
         $qbPurchasePrice = $this->getEntityManager()->getConnection()->prepare($sqlPurchasePrice);
         $qbPurchasePrice->execute();
-
 
         $accountCash = $em->createQuery("DELETE AccountingBundle:AccountSales e WHERE e.globalOption = '{$optionId}' AND e.androidProcessId = '{$androidProcess_id}' AND e.processHead = 'medicine' AND e.processType = 'sales' ");
         if(!empty($accountCash)){
