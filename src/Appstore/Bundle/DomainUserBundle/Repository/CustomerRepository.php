@@ -104,23 +104,18 @@ class CustomerRepository extends EntityRepository
 
     function validateMobile($phone)
     {
-        // Allow +, - and . in phone number
+
         $filtered_phone_number = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
-        // Remove "-" from number
-        $phone_to_check = str_replace("-", "", $filtered_phone_number);
-        // Check the lenght of number
-        // This can be customized if you want phone number from a specific country
-        if (strlen($phone_to_check) < 10 || strlen($phone_to_check) > 14) {
-            return "false";
-        } else {
-            return "true";
-        }
+        return $phone_to_check = str_replace("-", "", $filtered_phone_number);
+
     }
+
+
     public function newExistingCustomerForMedicineSales($globalOption,$phone,$data)
     {
         $em = $this->_em;
         $mobile = $this->validateMobile($phone);
-        if(strlen($mobile)  == 11){
+        if(strlen($mobile)  > 0){
             $name = $data['customerName'];
             $address = isset($data['customerAddress']) ? $data['customerAddress']:'';
             $email = isset($data['customerEmail']) ? $data['customerEmail']:'';
