@@ -206,6 +206,35 @@ class CustomerRepository extends EntityRepository
         }
     }
 
+    public function findExistingEcommerceCustomer(GlobalOption $option , User $user)
+    {
+        $em = $this->_em;
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option ,'mobile' => $user->getUsername()));
+        if($entity){
+            return $entity;
+        }else{
+            $customer = new Customer();
+            $customer->setMobile($user->getUsername());
+            $customer->setName($user->getProfile()->getName());
+            $customer->setAddress($user->getProfile()->getAddress());
+            $customer->setGlobalOption($option);
+            $customer->setUser($user->getId());
+            $em->persist($customer);
+            $em->flush();
+
+            $customerAddress = new CustomerAddress();
+            $customerAddress->setCustomer($customer);
+            $customerAddress->setName($customer->getName());
+            $customerAddress->setMode('Home');
+            $customerAddress->setAddress($customer->getAddress());
+            $customerAddress->setMobile($customer->getMobile());
+            $em->persist($customerAddress);
+            $em->flush();
+
+            return $customer;
+        }
+    }
+
     public function findHmsExistingCustomer($globalOption, $mobile,$data)
     {
         $em = $this->_em;

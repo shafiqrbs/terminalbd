@@ -1434,25 +1434,29 @@ class ApiEcommerceController extends Controller
                 $returnData['userId'] = (int) $user->getId();
                 $returnData['username'] = $user->getUsername();
                 $returnData['name'] = $user->getProfile()->getName();
-                $returnData['address'] = $user->getProfile()->getAddress();
                 $returnData['email'] = $user->getProfile()->getEmail();
                 $returnData['mobile'] = $user->getProfile()->getMobile();
                 $returnData['password'] = $a;
-                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=>$option,'user' => $user->getId()));
-                $addreses = $customer->getCustomerAddresses();
-                $returnData['address'] = array();
-                if($addreses) {
-                    /* @var $address CustomerAddress */
-                    foreach ($addreses as $key => $address) {
-                        $returnData['address'][$key]['id'] = (integer)$address->getId();
-                        $returnData['address'][$key]['userId'] = (int) $user->getId();
-                        $returnData['address'][$key]['name'] = (string)$address->getName();
-                        $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
-                        $returnData['address'][$key]['address'] = (string)$address->getAddress();
-                        $returnData['address'][$key]['mode'] = (string)$address->getMode();
-                    }
-                }else{
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findExistingEcommerceCustomer($option,$user);
+                if($customer){
+                    $add = $this->getDoctrine()->getRepository(Customer::class)->find($customer);
+                    $addreses = $add->getCustomerAddresses();
                     $returnData['address'] = array();
+                    if($addreses) {
+
+                        /* @var $address CustomerAddress */
+
+                        foreach ($addreses as $key => $address) {
+                            $returnData['address'][$key]['id'] = (integer)$address->getId();
+                            $returnData['address'][$key]['userId'] = (int) $user->getId();
+                            $returnData['address'][$key]['name'] = (string)$address->getName();
+                            $returnData['address'][$key]['mobile'] = (string)$address->getMobile();
+                            $returnData['address'][$key]['address'] = (string)$address->getAddress();
+                            $returnData['address'][$key]['mode'] = (string)$address->getMode();
+                        }
+                    }else{
+                        $returnData['address'] = array();
+                    }
                 }
                 $returnData['msg'] = "valid";
             }else{
