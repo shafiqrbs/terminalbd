@@ -115,7 +115,7 @@ class CustomerRepository extends EntityRepository
     {
         $em = $this->_em;
         $mobile = $this->validateMobile($phone);
-        if(strlen($mobile)  > 0){
+        if(strlen($mobile) > 0){
             $name = $data['customerName'];
             $address = isset($data['customerAddress']) ? $data['customerAddress']:'';
             $email = isset($data['customerEmail']) ? $data['customerEmail']:'';
