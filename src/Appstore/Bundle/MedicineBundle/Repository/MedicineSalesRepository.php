@@ -990,7 +990,8 @@ class MedicineSalesRepository extends EntityRepository
             $accountBank = (isset($item['bankAccount']) and $item['bankAccount']) ?  $item['bankAccount'] : 'NULL';
             $mobileBankAccount = (isset($item['mobileBankAccount']) and $item['mobileBankAccount']) ?  $item['mobileBankAccount'] : 'NULL';
             $paymentCard = (isset($item['paymentCard']) and $item['paymentCard']) ?  $item['paymentCard'] : 'NULL';
-            $customer = ($item['customerId']) ? $item['customerId'] : $customer = $default->getId();
+
+            $customer = ($item['customerId']) ? $item['customerId'] : $default->getId();
             if(++$i === $numItems) { $comma =  ""; }
             $device ="Done";
             $flat ="flat";

@@ -744,11 +744,11 @@ class SalesController extends Controller
 
         $removeSalesItem = $em->createQuery("DELETE MedicineBundle:MedicineSalesItem e WHERE e.androidProcess= {$android->getId()}");
         if(!empty($removeSalesItem)){
-            $removeSalesItem->execute();
+           // $removeSalesItem->execute();
         }
         $removeSales = $em->createQuery("DELETE MedicineBundle:MedicineSales e WHERE e.androidProcess= {$android->getId()}");
         if(!empty($removeSales)){
-            $removeSales->execute();
+           // $removeSales->execute();
         }
      //   $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
         /*
@@ -765,6 +765,7 @@ class SalesController extends Controller
         }
         */
         $status = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSalesManual($config->getGlobalOption(),$android);
+        exit;
         if($status > 0 ){
             $android->setStatus(true);
             $em->persist($android);

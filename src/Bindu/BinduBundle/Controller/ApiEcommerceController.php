@@ -1443,9 +1443,7 @@ class ApiEcommerceController extends Controller
                     $addreses = $add->getCustomerAddresses();
                     $returnData['address'] = array();
                     if($addreses) {
-
                         /* @var $address CustomerAddress */
-
                         foreach ($addreses as $key => $address) {
                             $returnData['address'][$key]['id'] = (integer)$address->getId();
                             $returnData['address'][$key]['userId'] = (int) $user->getId();
@@ -1490,10 +1488,12 @@ class ApiEcommerceController extends Controller
             $option = $this->checkApiValidation($request);
 
             $intlMobile =$data['mobile'];
+            $userid =$data['user_id'];
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-            $user = $em->getRepository('UserBundle:User')->findOneBy(array('username'=> $mobile,'userGroup'=> 'customer','enabled'=>1));
+            $user = $em->getRepository('UserBundle:User')->findOneBy(array('id'=> $userid,'userGroup'=> 'customer','enabled'=>1));
             /* @var $user User */
+            $returnData = array();
             if(empty($user)){
                 $data['msg'] = "invalid";
             }else{
