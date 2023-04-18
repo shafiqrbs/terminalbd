@@ -970,14 +970,12 @@ class MedicineSalesRepository extends EntityRepository
         $androidDevice_id = $process->getAndroidDevice()->getId();
         $optionId = $option->getId();
 
-
-
         $default = $em->getRepository(Customer::class)->findOneBy(array('globalOption'=>$option,'name'=>'Default'));
         $numItems = count($items);
         $i = 0;
         $comma =',';
-
         foreach ($items as $item):
+
             if(isset($item['transactionMethod']) and $item['transactionMethod'] == 'cash'){
                 $method = 1;
             }elseif(isset($item['transactionMethod']) and $item['transactionMethod'] == 'bank'){
@@ -985,13 +983,21 @@ class MedicineSalesRepository extends EntityRepository
             }elseif(isset($item['transactionMethod']) and $item['transactionMethod'] == 'mobile'){
                 $method = 3;
             }else{
-                $method = null;
+                $method = 'NULL';
             }
+
             $accountBank = (isset($item['bankAccount']) and $item['bankAccount']) ?  $item['bankAccount'] : 'NULL';
             $mobileBankAccount = (isset($item['mobileBankAccount']) and $item['mobileBankAccount']) ?  $item['mobileBankAccount'] : 'NULL';
             $paymentCard = (isset($item['paymentCard']) and $item['paymentCard']) ?  $item['paymentCard'] : 'NULL';
 
-            $customer = ($item['customerId']) ? $item['customerId'] : $default->getId();
+            if($item['customerName'] == 'Default'){
+                $customer = $default->getId();
+            }elseif(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item)->getId();
+            }else{
+                $customer = $default->getId();
+            }
+
             if(++$i === $numItems) { $comma =  ""; }
             $device ="Done";
             $flat ="flat";

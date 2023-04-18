@@ -83,10 +83,10 @@ $(document).on( "click", ".androidProcess", function( e ) {
                 },
                 success:  function (response) {
                   if(response === "success"){
-                    //  location.reload();
+                      location.reload();
                   }else{
                       alert('Data does not import successfully, Please try now');
-                     // location.reload();
+                      location.reload();
                   }
                 }
             });
