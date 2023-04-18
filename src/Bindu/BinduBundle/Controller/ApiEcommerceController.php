@@ -1701,8 +1701,8 @@ class ApiEcommerceController extends Controller
                 $returnData['name'] = $user->getProfile()->getName();
                 $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
                 $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
-
                 $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $entity,'user' => $user->getId()));
+
                 $addreses = $customer->getCustomerAddresses();
                 if($addreses) {
                     /* @var $address CustomerAddress */
@@ -1794,10 +1794,10 @@ class ApiEcommerceController extends Controller
             $returnData['email'] = $user->getProfile()->getEmail();
             $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
             $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
-            $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $setup,'user' => $user->getId()));
-            $addreses = $customer->getCustomerAddresses();
-            $returnData['address'] = array();
-            if($addreses) {
+            $customer = $this->getDoctrine()->getRepository(Customer::class)->findExistingEcommerceCustomer($setup,$user);
+            if($customer){
+                $addreses = $customer->getCustomerAddresses();
+                $returnData['address'] = array();
                 /* @var $address CustomerAddress */
                 foreach ($addreses as $key => $address) {
                     $returnData['address'][$key]['id'] = (integer)$address->getId();
