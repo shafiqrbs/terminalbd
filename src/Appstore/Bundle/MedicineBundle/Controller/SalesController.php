@@ -765,7 +765,6 @@ class SalesController extends Controller
         }
         */
         $status = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSalesManual($config->getGlobalOption(),$android);
-        exit;
         if($status > 0 ){
             $android->setStatus(true);
             $em->persist($android);

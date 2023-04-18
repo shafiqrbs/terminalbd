@@ -1642,7 +1642,7 @@ class ApiEcommerceController extends Controller
                 $gender = isset($data['gender']) ? $data['gender'] : '';
                 $age = isset($data['age']) ? $data['age'] : '';
 
-
+                $option = $user->getGlobalOption();
                 $customer = new Customer();
                 $customer->setUser($user->getId());
                 $customer->setGlobalOption($user->getGlobalOption());
@@ -1670,7 +1670,7 @@ class ApiEcommerceController extends Controller
                 $em->persist($customerAddress);
                 $em->flush();
 
-                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $option,'user' => $user->getId()));
                 $addreses = $customer->getCustomerAddresses();
                 if($addreses) {
                     /* @var $address CustomerAddress */
@@ -1702,7 +1702,7 @@ class ApiEcommerceController extends Controller
                 $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
                 $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
 
-                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $option,'user' => $user->getId()));
                 $addreses = $customer->getCustomerAddresses();
                 if($addreses) {
                     /* @var $address CustomerAddress */
@@ -1754,6 +1754,7 @@ class ApiEcommerceController extends Controller
             $em = $this->getDoctrine()->getManager();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
             $user = $em->getRepository('UserBundle:User')->find($user);
+            $option = $user->getGlobalOption();
 
             /* @var $user User */
 
@@ -1791,7 +1792,7 @@ class ApiEcommerceController extends Controller
             $returnData['email'] = $user->getProfile()->getEmail();
             $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
             $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
-            $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('user' => $user->getId()));
+            $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $option,'user' => $user->getId()));
             $addreses = $customer->getCustomerAddresses();
             $returnData['address'] = array();
             if($addreses) {

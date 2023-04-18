@@ -113,11 +113,10 @@ class CustomerRepository extends EntityRepository
         if (strlen($phone_to_check) < 10 || strlen($phone_to_check) > 14) {
             return "false";
         } else {
-            return $phone_to_check;
+            return "true";
         }
     }
-
-    public function newExistingCustomerForSales($globalOption,$phone,$data)
+    public function newExistingCustomerForMedicineSales($globalOption,$phone,$data)
     {
         $em = $this->_em;
         $mobile = $this->validateMobile($phone);
@@ -146,6 +145,31 @@ class CustomerRepository extends EntityRepository
             return $default = $em->getRepository(Customer::class)->findOneBy(array('globalOption'=>$globalOption,'name'=>'Default'));
         }
 
+    }
+
+    public function newExistingCustomerForSales($globalOption,$mobile,$data)
+    {
+        $em = $this->_em;
+        $name = $data['customerName'];
+        $address = isset($data['customerAddress']) ? $data['customerAddress']:'';
+        $email = isset($data['customerEmail']) ? $data['customerEmail']:'';
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
+        if($entity){
+            $entity->setAddress($address);
+            if($email){ $entity->setEmail($email); }
+            $em->flush($entity);
+            return $entity;
+        }else{
+            $entity = new Customer();
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setAddress($address);
+            if($email){$entity->setEmail($email); }
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
     }
 
     public function newExistingCustomerForHotel($globalOption,$mobile,$data)

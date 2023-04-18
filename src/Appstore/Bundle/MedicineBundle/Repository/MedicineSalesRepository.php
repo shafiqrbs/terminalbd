@@ -993,7 +993,7 @@ class MedicineSalesRepository extends EntityRepository
             if($item['customerName'] == 'Default'){
                 $customer = $default->getId();
             }elseif(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
-                $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($option,$item['customerMobile'],$item)->getId();
+                $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForMedicineSales($option,$item['customerMobile'],$item)->getId();
             }else{
                 $customer = $default->getId();
             }
