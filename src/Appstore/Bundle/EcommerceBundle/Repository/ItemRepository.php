@@ -818,15 +818,15 @@ class ItemRepository extends EntityRepository
         $qb->addSelect('GROUP_CONCAT(color.name) as colors');
         $qb->addSelect('GROUP_CONCAT(color.nameBn) as colorsBn');
         $qb->where("item.ecommerceConfig = :config")->setParameter('config', $config);
-        $qb->andWhere('item.status =1');
-        $qb->andWhere($qb->expr()->andX(
+      //  $qb->andWhere('item.status =1');
+        /*$qb->andWhere($qb->expr()->andX(
             $qb->expr()->eq('item.isFeatureCategory', ':isFeatureCategory'),
             $qb->expr()->eq('item.isFeatureBrand', ':isFeatureBrand'),
             $qb->expr()->isNull('item.discount'),
             $qb->expr()->isNull('item.promotion')
         ))
             ->setParameter('isFeatureCategory', 0)
-            ->setParameter('isFeatureBrand', 0);
+            ->setParameter('isFeatureBrand', 0);*/
         $this->handleApiSearchBetween($qb,$data);
         $qb->groupBy('item.id');
         $qb->orderBy('item.name','ASC');
