@@ -751,6 +751,7 @@ class SalesController extends Controller
             $removeSales->execute();
         }
 
+
      //   $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
         /*
          $salses = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->findBy(array('androidProcess' => $android));
