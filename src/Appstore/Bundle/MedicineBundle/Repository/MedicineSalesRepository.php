@@ -1048,9 +1048,12 @@ class MedicineSalesRepository extends EntityRepository
         $comma1 =',';
         $stockIds = array();
             foreach ($subItems as $sub):
-                $stockIds[] = $sub['stockId'];
+                $stockId = (isset($sub['stockId']) and $sub['stockId'] > 0 ) ? $sub['stockId']:'NULL';
+                if($stockId > 0){
+                    $stockIds[] = $sub['stockId'];
+                }
                 if(++$x === $numSubItems) { $comma1 =  ""; }
-                $subs .='('.(int)$androidProcess_id.','.(int)$sub['salesId'].','.(int)$sub['stockId'].','.(int)$sub['quantity'].','.(float)$sub['unitPrice'].','.(float)$sub['subTotal'].')'.$comma1;
+                $subs .='('.(int)$androidProcess_id.','.(int)$sub['salesId'].','.$stockId.','.(int)$sub['quantity'].','.(float)$sub['unitPrice'].','.(float)$sub['subTotal'].')'.$comma1;
             endforeach;
 
             $sqlSub = "INSERT INTO medicine_sales_item (androidProcess_id,deviceSalesId,medicineStock_id,quantity,salesPrice,subTotal) VALUES {$subs}";
