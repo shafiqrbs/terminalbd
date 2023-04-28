@@ -985,16 +985,18 @@ class MedicineSalesRepository extends EntityRepository
                 $mobileBankAccount = (isset($item['mobileBankAccount']) and $item['mobileBankAccount']) ?  $item['mobileBankAccount'] : 'NULL';
                 $paymentCard = (isset($item['paymentCard']) and $item['paymentCard']) ?  $item['paymentCard'] : 'NULL';
                 $flat = (isset($item['discountType']) and $item['discountType']) ?  $item['discountType'] : 'flat';
+                $receive = (isset($item['receive']) and $item['receive']) ?  $item['receive'] : 0;
                 $due = 0;
                 $cardCommission = 0;
                 if(isset($item['transactionMethod']) and $item['transactionMethod'] == 'cash'){
                     $method = 1;
                     $discount = ($item['discount']);
                     $total = ($item['total']);
-                    $received = ($item['receive']);
-                    $due = ($item['total'] -  $item['receive']);
-                    if($due > 0 ){
-                        $due = $due;
+                    if($item['total'] < $receive){
+                        $received = ($item['total']);
+                    }else{
+                        $received = $receive;
+                        $due = ($item['total'] - $receive);
                     }
                 }elseif(isset($item['transactionMethod']) and $item['transactionMethod'] == 'bank'){
                     $method = 2;
