@@ -250,6 +250,14 @@ class MedicineSales
     private $deliveryCharge = 0;
 
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="cardCommission", type="float", nullable=true)
+     */
+    private $cardCommission = 0;
+
+
     /**
      * @var float
      *
@@ -1191,6 +1199,24 @@ class MedicineSales
     {
         $this->mode = $mode;
     }
+
+    /**
+     * @return float
+     */
+    public function getCardCommission()
+    {
+        return $this->cardCommission;
+    }
+
+    /**
+     * @param float $cardCommission
+     */
+    public function setCardCommission($cardCommission)
+    {
+        $this->cardCommission = $cardCommission;
+    }
+
+
 
 
 }

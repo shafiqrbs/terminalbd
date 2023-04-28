@@ -294,9 +294,8 @@
     jqueryTemporaryLoad();
     jqueryInstantTemporaryLoad();
     $('#salesTemporaryItem_stockName').focus();
-
+    {% if ( app.user.granted("ROLE_DOMAIN_MEDICINE_MANAGER") or  app.user.granted("ROLE_DOMAIN") ) %}
     window.onload = function () {
-
     var optionsUserSales = {
     animationEnabled: true,
     title: {
@@ -406,9 +405,8 @@
     ]
     }]
     };
-
     $("#optionsYearlyMonthlyDailyHourlySales").CanvasJSChart(optionsYearlyMonthlyDailyHourlySales);
 }
-
-
+    {% endif %}
 {% endblock %}
+
