@@ -5,27 +5,21 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 
 
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
-use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
-use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
-use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemSalesType;
-use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemType;
-use Appstore\Bundle\MedicineBundle\Form\PurchaseItemType;
-use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesTemporary;
+use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
+use Appstore\Bundle\MedicineBundle\Form\MedicineStockItemSalesType;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryItemType;
 use Appstore\Bundle\MedicineBundle\Form\SalesTemporaryType;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
+use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use Core\UserBundle\Entity\User;
+use Mike42\Escpos\Printer;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Mike42\Escpos\Printer;
 
 /**
  * Invoice controller.
@@ -176,6 +170,7 @@ class MedicineSalesTemporaryController extends Controller
 
     public function createAction(Request $request)
     {
+        set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
         if( 0 == $data['salesSubTotal']){
@@ -184,6 +179,7 @@ class MedicineSalesTemporaryController extends Controller
 	                      'success' => 'invalid');
 	        return new Response(json_encode($data));
         }
+
         $entity = New MedicineSales();
         $user = $this->getUser();
 

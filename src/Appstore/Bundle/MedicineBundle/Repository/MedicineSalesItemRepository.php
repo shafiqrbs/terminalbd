@@ -184,7 +184,6 @@ class MedicineSalesItemRepository extends EntityRepository
     {
         $em = $this->_em;
         $entities = $user->getMedicineSalesTemporary();
-
         foreach ($entities as $item) {
 
 	        /* @var  $item MedicineSalesTemporary */
@@ -213,6 +212,7 @@ class MedicineSalesItemRepository extends EntityRepository
 	            }
 		        $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $item->getMedicineStock(), 'sales' );
             }
+
     }
 
     public function itemDiscountPrice(MedicineSales $sales,$price)
