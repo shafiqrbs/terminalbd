@@ -3,24 +3,21 @@
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
 
+use Appstore\Bundle\HospitalBundle\Form\SalesItemType;
+use Appstore\Bundle\HospitalBundle\Form\SalesType;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
-use Appstore\Bundle\HospitalBundle\Form\SalesItemType;
-use Appstore\Bundle\HospitalBundle\Form\SalesType;
 use Appstore\Bundle\MedicineBundle\Service\PosItemManager;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use Mike42\Escpos\Printer;
-use Proxies\__CG__\Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
-use Proxies\__CG__\Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 
 class SalesController extends Controller
@@ -567,7 +564,6 @@ class SalesController extends Controller
             'config' => $sales->getMedicineConfig(),
         ));
         $em->getRepository('MedicineBundle:MedicineReverse')->insertMedicineSales($sales, $template);
-        $em->getRepository('AccountingBundle:AccountJournal')->removePatientMedicine($sales);
         return $this->redirect($this->generateUrl('hms_sales_edit',array('id' => $sales->getId())));
     }
 
