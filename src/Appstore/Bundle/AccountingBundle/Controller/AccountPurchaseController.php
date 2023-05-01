@@ -2,14 +2,13 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Form\AccountPurchaseType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -153,7 +152,7 @@ class AccountPurchaseController extends Controller
                 $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
                 $entity->setProcessHead('accounting');
             }
-            if(in_array($entity->getProcessType(),array("Credit"))){
+            if( in_array($entity->getProcessType(),array("Outstanding","Opening","Adjustment","Credit"))  and $entity->getPayment() > 0 ){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
                 $entity->setTransactionMethod(null);
@@ -182,7 +181,6 @@ class AccountPurchaseController extends Controller
             ($form->isValid() && $method == 'mobile' && $entity->getAccountMobileBank())
         ) {
             $em = $this->getDoctrine()->getManager();
-
             $entity->setGlobalOption($global);
             if($global->getMainApp()->getSlug() == 'miss'){
                 $entity->setProcessHead('medicine');
@@ -231,7 +229,7 @@ class AccountPurchaseController extends Controller
                 $entity->setCompanyName($entity->getAccountVendor()->getCompanyName());
                 $entity->setProcessHead('accounting');
             }
-            if( in_array($entity->getProcessType(),array("Outstanding","Opening","Adjustment"))  or $entity->getPayment() < 0 ){
+            if( in_array($entity->getProcessType(),array("Outstanding","Opening","Adjustment","Credit"))  and $entity->getPayment() > 0 ){
                 $entity->setPurchaseAmount(abs($entity->getPayment()));
                 $entity->setPayment(0);
                 $entity->setTransactionMethod(null);
