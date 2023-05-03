@@ -15,8 +15,6 @@ class TemplateCustomizeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
-
             ->add('mobileShowLogo')
             ->add('otpLogin')
             ->add('poweredBy','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter powered by')))
@@ -28,6 +26,8 @@ class TemplateCustomizeType extends AbstractType
             ->add('liveChat','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter Live Chat ID')))
             ->add('googleAnalytic','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter google analytic ID')))
             ->add('powr','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter POWR ID')))
+            ->add('siteTermsCondition','textarea', array('attr'=>array('class'=>'m-wrap span12','row' => 12,'placeholder'=>'Enter terms & condition')))
+            ->add('siteTermsConditionbn','textarea', array('attr'=>array('class'=>'m-wrap span12','row' => 12,'placeholder'=>'Enter terms & condition')))
             ->add('siteLanguage', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('english' => 'English',  'bangoli' => 'Bangoli'),

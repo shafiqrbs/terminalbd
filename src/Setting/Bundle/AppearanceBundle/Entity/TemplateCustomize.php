@@ -455,6 +455,21 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="siteTermsCondition", type="text" , nullable=true)
+     */
+    private $siteTermsCondition;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siteTermsConditionBn", type="text" , nullable=true)
+     */
+    private $siteTermsConditionbn;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="cssStyleMobile", type="text" , nullable=true)
      */
     private $cssStyleMobile;
@@ -4223,7 +4238,37 @@ class TemplateCustomize
         $this->inputBgFocusColor = $inputBgFocusColor;
     }
 
+    /**
+     * @return string
+     */
+    public function getSiteTermsCondition()
+    {
+        return $this->siteTermsCondition;
+    }
 
+    /**
+     * @param string $siteTermsCondition
+     */
+    public function setSiteTermsCondition($siteTermsCondition)
+    {
+        $this->siteTermsCondition = $siteTermsCondition;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteTermsConditionbn()
+    {
+        return $this->siteTermsConditionbn;
+    }
+
+    /**
+     * @param string $siteTermsConditionbn
+     */
+    public function setSiteTermsConditionbn($siteTermsConditionbn)
+    {
+        $this->siteTermsConditionbn = $siteTermsConditionbn;
+    }
 
 
 }
