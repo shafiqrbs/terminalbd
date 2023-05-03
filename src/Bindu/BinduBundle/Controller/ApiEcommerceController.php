@@ -455,6 +455,8 @@ class ApiEcommerceController extends Controller
                 'pickupLocation' =>  $this->numberNullChecker($pickupLocation),
                 'poweredBy' => empty($entity->getTemplateCustomize()->getPoweredBy()) ? '' : "Powered By {$entity->getTemplateCustomize()->getPoweredBy()}",
                 'introTitle' => empty($entity->getTemplateCustomize()->getIntroTitle()) ? '' : $entity->getTemplateCustomize()->getIntroTitle(),
+                'siteTermsCondition' => empty($entity->getTemplateCustomize()->getSiteTermsCondition()) ? '' : $entity->getTemplateCustomize()->getSiteTermsCondition(),
+                'siteTermsConditionBn' => empty($entity->getTemplateCustomize()->getSiteTermsConditionBn()) ? '' : $entity->getTemplateCustomize()->getSiteTermsConditionBn(),
                 'showProductCategory' => ($showProductCategory) ? 1:0,
                 'showProductBrand' => ($showProductBrand) ? 1:0,
                 'customTheme' => ($customTheme) ? 1:0,
