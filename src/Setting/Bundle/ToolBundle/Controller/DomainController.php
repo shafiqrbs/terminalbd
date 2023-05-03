@@ -98,7 +98,7 @@ class DomainController extends Controller
 
         $DBUSER="root";
         $DBPASSWD="+Hq3#Q)ixsVN.jV}";
-        $DATABASE="terminalbd";
+        $DATABASE="alexabd";
 
         $filename = "terminaldb-" . date("d-m-Y") . ".sql.gz";
         $mime = "application/x-gzip";
