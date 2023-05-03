@@ -1699,7 +1699,7 @@ class ApiEcommerceController extends Controller
                 $returnData['username'] = $user->getUsername();
                 $returnData['password'] = $a;
                 $returnData['name'] = $user->getProfile()->getName();
-                $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+                $returnData['mobile'] = $user->getProfile()->getMobile();
                 $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
                 $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $entity,'user' => $user->getId()));
 
@@ -1748,7 +1748,7 @@ class ApiEcommerceController extends Controller
 
             $user = $data['user_id'];
             $name = $data['name'];
-            $mobile = isset($data['phone']) ? $data['phone'] :'';
+            $mobile = isset($data['mobile']) ? $data['mobile'] :'';
             $email = isset($data['email']) ? $data['email'] :'';
             $address = $data['address'];
             $location = isset($data['location']) ? $data['location'] : '';
@@ -1792,7 +1792,7 @@ class ApiEcommerceController extends Controller
             $returnData['username'] = $user->getUsername();
             $returnData['name'] = $user->getProfile()->getName();
             $returnData['email'] = $user->getProfile()->getEmail();
-            $returnData['phone'] = $user->getProfile()->getAdditionalPhone();
+            $returnData['mobile'] = $user->getProfile()->getMobile();
             $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
             $customer = $this->getDoctrine()->getRepository(Customer::class)->findExistingEcommerceCustomer($setup,$user);
             if($customer){
