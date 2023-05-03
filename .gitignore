@@ -24,7 +24,7 @@ app/config/parameters.yml
 app/config/routing.yml
 src/Core/UserBundle/Resources/views/Security/login.html.twig
 src/Core/UserBundle/Resources/views/Security/Mobile/login.html.twig
-src/Setting/Bundle/ToolBundle/Controller/DomainController.php
+#src/Setting/Bundle/ToolBundle/Controller/DomainController.php
 web/.htaccess
 
 # Composer
