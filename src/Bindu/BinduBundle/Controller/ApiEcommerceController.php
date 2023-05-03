@@ -1670,7 +1670,7 @@ class ApiEcommerceController extends Controller
                 $em->persist($customerAddress);
                 $em->flush();
 
-                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $option,'user' => $user->getId()));
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $setup,'user' => $user->getId()));
                 $addreses = $customer->getCustomerAddresses();
                 if($addreses) {
                     /* @var $address CustomerAddress */
@@ -1701,7 +1701,7 @@ class ApiEcommerceController extends Controller
                 $returnData['name'] = $user->getProfile()->getName();
                 $returnData['mobile'] = $user->getProfile()->getMobile();
                 $returnData['location'] = empty($user->getProfile()->getDeliveryLocation()) ? '' : $user->getProfile()->getDeliveryLocation()->getName();
-                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $entity,'user' => $user->getId()));
+                $customer = $this->getDoctrine()->getRepository(Customer::class)->findOneBy(array('globalOption'=> $setup,'user' => $user->getId()));
 
                 $addreses = $customer->getCustomerAddresses();
                 if($addreses) {
