@@ -504,12 +504,12 @@ class ApiEcommerceController extends Controller
             );
         }
 
-        $slides = '';
+        $slides = array();
         $feature = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->getFeatureWidget($entity,"Home");
         if($feature){
             $slides = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->getFeatureSlider($feature);
         }
-        $introPages = '';
+        $introPages = array();
         $featureIntor = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findOneBy(array('globalOption' => $entity, 'position'=> 'mobile-intro'));
         if($featureIntor){
             $introPages = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->getAppIntroSlider($featureIntor);
