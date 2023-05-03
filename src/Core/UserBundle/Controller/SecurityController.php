@@ -15,9 +15,9 @@ use Frontend\FrontentBundle\Service\MobileDetect;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class SecurityController extends Controller
 {
@@ -95,12 +95,12 @@ class SecurityController extends Controller
         $detect = new MobileDetect();
 	    if( $detect->isMobile() OR  $detect->isTablet() ) {
 		    $theme = 'Security/Mobile';
-		    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
+		    return $this->render('UserBundle:'.$theme.':maintenance.html.twig', $data);
 	    }else{
 		   // $theme = 'Frontend/Desktop';
 		   // return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
             $theme = 'Security';
-            return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
+            return $this->render('UserBundle:'.$theme.':maintenance.html.twig', $data);
 	    }
 
     }
