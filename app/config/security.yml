@@ -329,4 +329,4 @@ security:
         - { path: ^/business,           role: ROLE_BUSINESS }
         - { path: ^/hotel-restaurant,   role: ROLE_HOTEL }
         - { path: ^/appsetting,         role: ROLE_APP_SETTING }
-        - { path: ^/,                   role: ROLE_USER }
+        - { path: ^/,                   role: IS_AUTHENTICATED_ANONYMOUSLY }
