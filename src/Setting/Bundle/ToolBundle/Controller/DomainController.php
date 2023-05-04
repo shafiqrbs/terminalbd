@@ -97,8 +97,8 @@ class DomainController extends Controller
         error_reporting(E_ALL);
 
         $DBUSER="root";
-        $DBPASSWD="+Hq3#Q)ixsVN.jV}";
-        $DATABASE="alexabd";
+        $DBPASSWD="*rbs*terminalbd#";
+        $DATABASE="poskeeepr";
 
         $filename = "terminaldb-" . date("d-m-Y") . ".sql.gz";
         $mime = "application/x-gzip";
