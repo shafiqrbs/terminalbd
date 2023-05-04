@@ -2,10 +2,6 @@ parameters:
     docudex.user.permission.security_provider.class: Core\UserBundle\Permission\Provider\SecurityPermissionProvider
     docudex.user.permission_builder.class: Core\UserBundle\Permission\PermissionBuilder
 
-services:
-#    user.example:
-#        class: %user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
 
 
 services:
@@ -38,3 +34,11 @@ services:
         arguments: [%fos_user.model.group.class%, @docudex.user.permission_builder]
         tags:
             - { name: form.type, alias: fos_user_group }
+
+    app.listener.redirect_404_to_homepage:
+        class: Core\UserBundle\EventListener\Redirect404ToHomepageListener
+        arguments:
+            - "@router"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
