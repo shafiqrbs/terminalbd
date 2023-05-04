@@ -21,7 +21,7 @@
                     <div class="btn-group span12">
                         {% if ( app.user.granted("ROLE_MEDICINE_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                            {# <a class="btn blue  big span6"  href="{{ path('medicine_sales_temporary_new') }}"><i class="icon-shopping-cart"></i> Sales</a>#}
-                            <a class="btn blue  big span6"  href="{{ path('medicine_sales_new') }}"><i class="icon-shopping-cart"></i> Sales</a>
+                           {# <a class="btn blue  big span6"  href="{{ path('medicine_sales_new') }}"><i class="icon-shopping-cart"></i> Sales</a>#}
                         {% endif %}
                         {% if ( app.user.granted("ROLE_DOMAIN_ACCOUNTING_SALES") or  app.user.granted("ROLE_DOMAIN") ) %}
                             <a href="{{ path('account_sales_new') }}" class="btn yellow big span6"><i class="icon-money"></i> Receive</a>
