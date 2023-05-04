@@ -10,6 +10,7 @@ medicine_sales_copy:
     path:     /{id}/copy
     defaults: { _controller: "MedicineBundle:Sales:copy" }
 
+
 medicine_sales_android:
     path:     /android
     defaults: { _controller: "MedicineBundle:Sales:androidSales" }

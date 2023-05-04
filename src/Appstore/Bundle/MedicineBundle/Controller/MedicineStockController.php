@@ -668,6 +668,7 @@ class MedicineStockController extends Controller
 
     public function autoSearchAction(Request $request)
     {
+        set_time_limit(0);
         $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
@@ -678,6 +679,7 @@ class MedicineStockController extends Controller
 
     public function autoPurchaseStockSearchAction(Request $request)
     {
+        set_time_limit(0);
         $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
@@ -688,6 +690,7 @@ class MedicineStockController extends Controller
 
     public function autoNameSearchAction(Request $request)
     {
+        set_time_limit(0);
         $item = trim($_REQUEST['q']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
@@ -698,6 +701,7 @@ class MedicineStockController extends Controller
 
     public function autoGenericSearchAction(Request $request)
     {
+        set_time_limit(0);
         $item = trim($_REQUEST['pram']);
         if ($item) {
             $inventory = $this->getUser()->getGlobalOption()->getMedicineConfig();
