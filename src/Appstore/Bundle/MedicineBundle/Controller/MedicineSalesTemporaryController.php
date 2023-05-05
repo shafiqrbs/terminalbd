@@ -31,7 +31,7 @@ class MedicineSalesTemporaryController extends Controller
     public function newAction()
     {
 
-        return $this->redirect($this->generateUrl('medicine_homepage'));
+      //  return $this->redirect($this->generateUrl('medicine_homepage'));
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getMedicineConfig();
         $entity = new MedicineSales();
@@ -187,95 +187,97 @@ class MedicineSalesTemporaryController extends Controller
         $user = $this->getUser();
 
         /* @var $global GlobalOption */
-
         $global = $user->getGlobalOption();
-        $config = $global->getMedicineConfig();
 
+        $config = $global->getMedicineConfig();
         $editForm = $this->createCreateForm($entity);
         $editForm->handleRequest($request);
-        $entity->setMedicineConfig($config);
-        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($user->getGlobalOption());
-        $entity->setCustomer($customer);
-        $globalOption = $this->getUser()->getGlobalOption();
-        if (!empty($data['customerMobile'])) {
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
-            $entity->setCustomer($customer);
-        } elseif (!empty($data['mobile'])) {
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
-            $entity->setCustomer($customer);
-        }
+        $invoice = $entity->getInvoice();
         $tempTotal = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->getSubTotalAmount($user);
-        $purchaseTotal = floor($tempTotal['purchaseSubTotal']);
-        $entity->setPurchasePrice(round($purchaseTotal));
-        $entity->setSubTotal(round($data['salesSubTotal']));
-        $entity->setNetTotal(round($data['salesNetTotal']));
-        if($entity->getTransactionMethod()->getSlug() == 'mobile' and !empty($entity->getAccountMobileBank()) and !empty($entity->getAccountMobileBank()->getServiceCharge())){
-            $serviceCharge = $entity->getAccountMobileBank()->getServiceCharge();
-            $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
-            $discount = ($entity -> getDiscount() + $totalServiceCharge);
-            $entity->setDiscount($discount);
-            $entity->setNetTotal($data['salesSubTotal'] - $discount);
-            $entity->setReceived($data['salesSubTotal'] - $discount);
-        }elseif($entity->getTransactionMethod()->getSlug() == 'bank' and !empty($entity->getAccountBank()) and !empty($entity->getAccountBank()->getServiceCharge())){
-            $serviceCharge = $entity->getAccountBank()->getServiceCharge();
-            $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge)/100);
-            $discount = ($entity -> getDiscount() + $totalServiceCharge);
-            $entity->setDiscount($discount);
-            $entity->setNetTotal($data['salesSubTotal'] - $discount);
-            $entity->setReceived($data['salesSubTotal'] - $discount);
-        }
-
-        if ($entity->getMedicineConfig()->isAutoPayment() == 1 and empty($entity->getReceived())) {
-            $entity->setReceived($entity->getNetTotal());
-            $entity->setPaymentStatus('Paid');
-            $entity->setDue(0);
-        }elseif($entity->getNetTotal() <= $entity->getReceived()) {
-            $entity->setReceived($entity->getNetTotal());
-            $entity->setPaymentStatus('Paid');
-            $entity->setDue(0);
-        }else{
-            $entity->setPaymentStatus('Due');
-            $entity->setDue($entity->getNetTotal() - $entity->getReceived());
-        }
-        if (isset($data['process']) and ($data['process'] == 'Hold')) {
-            $entity->setProcess('Hold');
-        }else{
-            $entity->setProcess('Done');
-        }
-        if (isset($data['printWithoutDiscount']) and ($data['printWithoutDiscount'] == 1)) {
-            $entity->setPrintWithoutDiscount(1);
-        }
-        $entity->setApprovedBy($this->getUser());
-        if(empty($entity->getSalesBy())){
-            $entity->setSalesBy($this->getUser());
-        }
-        $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
-        if($accountConfig == 1){
-            $datetime = new \DateTime("yesterday 23:30:30");
-            $entity->setCreated($datetime);
-            $entity->setUpdated($datetime);
-        }
-        $em->persist($entity);
-        $em->flush();
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->temporarySalesInsert($user, $entity);
-        $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
-        if ($entity->getProcess() == 'Done'){
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
-        }
+        $exist = $this->getDoctrine()->getRepository(MedicineSales::class)->findOneBy(array('medicineConfig' => $config, 'invoice' => $invoice));
         $btn = $request->request->get('buttonType');
-        if($btn == "posBtn" and $entity->getProcess() == 'Done'){
-            $invoiceParticulars = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->findBy(array('medicineSales' => $entity->getId()));
-            if(!empty($invoiceParticulars)){
-                $pos = $this->posPrint($entity,$invoiceParticulars);
-                return new Response($pos);
+        if ($editForm->isValid() and empty($exist) and round($data['salesSubTotal']) > 0 and round($tempTotal['subTotal']) > 0 ) {
+            $entity->setMedicineConfig($config);
+            $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($user->getGlobalOption());
+            $entity->setCustomer($customer);
+            $globalOption = $this->getUser()->getGlobalOption();
+            if (!empty($data['customerMobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customerMobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomerForSales($globalOption, $mobile, $data);
+                $entity->setCustomer($customer);
+            } elseif (!empty($data['mobile'])) {
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
+                $entity->setCustomer($customer);
             }
-        }
-        if($btn == "regularBtn" and $entity->getProcess() == 'Done'){
+            $purchaseTotal = floor($tempTotal['purchaseSubTotal']);
+            $entity->setPurchasePrice(round($purchaseTotal));
+            $entity->setSubTotal(round($data['salesSubTotal']));
+            $entity->setNetTotal(round($data['salesNetTotal']));
+            if ($entity->getTransactionMethod()->getSlug() == 'mobile' and !empty($entity->getAccountMobileBank()) and !empty($entity->getAccountMobileBank()->getServiceCharge())) {
+                $serviceCharge = $entity->getAccountMobileBank()->getServiceCharge();
+                $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge) / 100);
+                $discount = ($entity->getDiscount() + $totalServiceCharge);
+                $entity->setDiscount($discount);
+                $entity->setNetTotal($data['salesSubTotal'] - $discount);
+                $entity->setReceived($data['salesSubTotal'] - $discount);
+            } elseif ($entity->getTransactionMethod()->getSlug() == 'bank' and !empty($entity->getAccountBank()) and !empty($entity->getAccountBank()->getServiceCharge())) {
+                $serviceCharge = $entity->getAccountBank()->getServiceCharge();
+                $totalServiceCharge = (($entity->getNetTotal() * $serviceCharge) / 100);
+                $discount = ($entity->getDiscount() + $totalServiceCharge);
+                $entity->setDiscount($discount);
+                $entity->setNetTotal($data['salesSubTotal'] - $discount);
+                $entity->setReceived($data['salesSubTotal'] - $discount);
+            }
+
+            if ($entity->getMedicineConfig()->isAutoPayment() == 1 and empty($entity->getReceived())) {
+                $entity->setReceived($entity->getNetTotal());
+                $entity->setPaymentStatus('Paid');
+                $entity->setDue(0);
+            } elseif ($entity->getNetTotal() <= $entity->getReceived()) {
+                $entity->setReceived($entity->getNetTotal());
+                $entity->setPaymentStatus('Paid');
+                $entity->setDue(0);
+            } else {
+                $entity->setPaymentStatus('Due');
+                $entity->setDue($entity->getNetTotal() - $entity->getReceived());
+            }
+            if (isset($data['process']) and ($data['process'] == 'Hold')) {
+                $entity->setProcess('Hold');
+            } else {
+                $entity->setProcess('Done');
+            }
+            if (isset($data['printWithoutDiscount']) and ($data['printWithoutDiscount'] == 1)) {
+                $entity->setPrintWithoutDiscount(1);
+            }
+            $entity->setApprovedBy($this->getUser());
+            if (empty($entity->getSalesBy())) {
+                $entity->setSalesBy($this->getUser());
+            }
+            $accountConfig = $this->getUser()->getGlobalOption()->getAccountingConfig()->isAccountClose();
+            if ($accountConfig == 1) {
+                $datetime = new \DateTime("yesterday 23:30:30");
+                $entity->setCreated($datetime);
+                $entity->setUpdated($datetime);
+            }
+            $em->persist($entity);
+            $em->flush();
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesItem')->temporarySalesInsertManual($user, $entity);
+           // $this->getDoctrine()->getRepository('MedicineBundle:MedicineSalesTemporary')->removeSalesTemporary($this->getUser());
+            if ($entity->getProcess() == 'Done') {
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertMedicineAccountInvoice($entity);
+            }
+            if ($btn == "regularBtn" and $entity->getProcess() == 'Done') {
+                return new Response($entity->getId());
+            }else if ($btn == "receiveBtn" and $entity->getProcess() == 'Done') {
+                return new Response('success');
+            }
+        }elseif($exist and $btn == "regularBtn" and $exist->getProcess() == 'Done'){
             return new Response($entity->getId());
+        }elseif($exist and $exist->getProcess() == 'Done'){
+            return new Response('success');
         }
-        return new Response('success');
+        return new Response('failed');
 
     }
 

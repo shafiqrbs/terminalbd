@@ -294,7 +294,7 @@ function jqueryTemporaryLoad() {
         if (e.which === 13) {
             var inputs = $(this).parents("form").eq(0).find("input,select");
             var idx = inputs.index(this);
-            if (idx == inputs.length - 1) {
+            if (idx === inputs.length - 1) {
                 inputs[0].select()
             } else {
                 inputs[idx + 1].focus(); //  handles submit buttons
@@ -327,7 +327,7 @@ function jqueryTemporaryLoad() {
             var inputs = $(this).parents("form").eq(0).find("input,select");
             var idx = inputs.index(this);
 
-            if (idx == inputs.length - 1) {
+            if (idx === inputs.length - 1) {
                 inputs[0].select()
             } else {
                 inputs[idx + 1].focus(); //  handles submit buttons
@@ -756,7 +756,9 @@ function jqueryTemporaryLoad() {
                         $(".select2TemporaryCustomer").select2("val", "");
                         $(".customer").hide();
                         $('#cartMethod , #bkashMethod').css("display","none");
-
+                        if(response === "failed" ){
+                             setTimeout(pageReload, 3000);
+                        }
                     }
                 });
             }
@@ -793,7 +795,12 @@ function jqueryTemporaryLoad() {
                         $(".select2TemporaryCustomer").select2("val", "");
                         $(".customer").hide();
                         $('#cartMethod , #bkashMethod').css("display","none");
-                        window.open('/medicine/sales/'+response+'/print', '_blank');
+                        if(response > 0 ){
+                            window.open('/medicine/sales/'+response+'/print', '_blank');
+                        }
+                        if(response === "failed"){
+                            setTimeout(pageReload, 3000);
+                        }
 
                     }
                 });
@@ -801,6 +808,10 @@ function jqueryTemporaryLoad() {
         });
 
     });
+
+    function pageReload() {
+        location.reload();
+    }
 
     $(document).on("click", "#posBtn", function() {
 
@@ -831,7 +842,12 @@ function jqueryTemporaryLoad() {
                         $('#cartMethod , #bkashMethod').css("display","none");
                         $(".select2TemporaryCustomer").select2("val", "");
                         $(".customer").hide();
-                        jsPostPrint(response);
+                        if(response !== "failed" ){
+                            jsPostPrint(response);
+                        }else{
+                            setTimeout(pageReload, 3000);
+                        }
+
                     }
                 });
             }

@@ -186,32 +186,68 @@ class MedicineSalesItemRepository extends EntityRepository
         $entities = $user->getMedicineSalesTemporary();
         foreach ($entities as $item) {
 
-	        /* @var  $item MedicineSalesTemporary */
-	        	$entity = new MedicineSalesItem();
-		        $entity->setMedicineSales( $sales );
-		        $entity->setMedicineStock( $item->getMedicineStock() );
-		        $entity->setQuantity($item->getQuantity() );
-		        $entity->setMrpPrice($item->getMedicineStock()->getSalesPrice());
-		        $entity->setItemPercent( $item->getItemPercent() );
-		        $entity->setSalesPrice( $item->getSalesPrice() );
-		        $entity->setSubTotal($item->getSubTotal());
-	            $entity->setPurchasePrice( $item->getPurchasePrice() );
-	            $entity->setIsShort($item->isShort());
-	            if($item->getMedicinePurchaseItem()) {
-		            $entity->setMedicinePurchaseItem( $item->getMedicinePurchaseItem() );
-		        }
-		        if ( $sales->getDiscountType() == 'percentage' ) {
-			        $entity->setDiscountPrice( $this->itemDiscountPrice( $sales, $item->getSalesPrice() ) );
-		        } else {
-			        $entity->setDiscountPrice( $item->getSalesPrice() );
-		        }
-		        $em->persist( $entity );
-		        $em->flush();
-	            if($item->getMedicinePurchaseItem()) {
-		            $em->getRepository( 'MedicineBundle:MedicinePurchaseItem' )->updateRemovePurchaseItemQuantity( $item->getMedicinePurchaseItem(), 'sales' );
-	            }
-		        $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $item->getMedicineStock(), 'sales' );
+            /* @var  $item MedicineSalesTemporary */
+            $entity = new MedicineSalesItem();
+            $entity->setMedicineSales( $sales );
+            $entity->setMedicineStock( $item->getMedicineStock() );
+            $entity->setQuantity($item->getQuantity() );
+            $entity->setMrpPrice($item->getMedicineStock()->getSalesPrice());
+            $entity->setItemPercent( $item->getItemPercent() );
+            $entity->setSalesPrice( $item->getSalesPrice() );
+            $entity->setSubTotal($item->getSubTotal());
+            $entity->setPurchasePrice( $item->getPurchasePrice() );
+            $entity->setIsShort($item->isShort());
+            if($item->getMedicinePurchaseItem()) {
+                $entity->setMedicinePurchaseItem( $item->getMedicinePurchaseItem() );
             }
+            if ( $sales->getDiscountType() == 'percentage' ) {
+                $entity->setDiscountPrice( $this->itemDiscountPrice( $sales, $item->getSalesPrice() ) );
+            } else {
+                $entity->setDiscountPrice( $item->getSalesPrice() );
+            }
+            $em->persist( $entity );
+            $em->flush();
+            if($item->getMedicinePurchaseItem()) {
+                $em->getRepository( 'MedicineBundle:MedicinePurchaseItem' )->updateRemovePurchaseItemQuantity( $item->getMedicinePurchaseItem(), 'sales' );
+            }
+            $em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $item->getMedicineStock(), 'sales' );
+        }
+
+    }
+
+    public function temporarySalesInsertManual(User $user, MedicineSales $sales)
+    {
+        $em = $this->_em;
+        $salesId = $sales->getId();
+        $userId = $user->getId();
+
+        $stock = $em->createQuery('DELETE MedicineBundle:MedicineSalesItem e WHERE e.medicineSales = '.$salesId);
+        if($stock){
+            $stock->execute();
+        }
+
+        $elem = "INSERT INTO medicine_sales_item (medicineStock_id,quantity,salesPrice,purchaseprice,mrpPrice,discountPrice,subTotal,medicineSales_id)
+  SELECT `medicineStock_id`, quantity, salesPrice,purchasePrice,salesPrice as mrp,salesPrice as discount,subTotal,$salesId
+  FROM medicine_sales_temporary
+  WHERE user_id =:user";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($elem);
+        $qb1->bindValue('user', $userId);
+        $qb1->execute();
+
+        $sqlStockRemin = "UPDATE medicine_stock as stock
+            inner join (
+              select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
+              from medicine_sales_item as ele
+              join medicine_stock  as ms ON  ele.medicineStock_id = ms.id
+              group by ele.medicineStock_id
+            ) as pa on stock.id = pa.medicineStock_id
+  SET stock.remainingQuantity = ((COALESCE(stock.openingQuantity,0) + COALESCE(stock.purchaseQuantity,0) + COALESCE(stock.salesReturnQuantity,0)+ COALESCE(stock.bonusQuantity,0)+ COALESCE(stock.bonusAdjustment,0)+ COALESCE(stock.adjustmentQuantity,0)) - (COALESCE(pa.salesQuantity,0) + COALESCE(stock.purchaseReturnQuantity,0) + COALESCE(stock.damageQuantity,0)))
+ , stock.salesQuantity = pa.salesQuantity";
+        $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockRemin);
+        $qb5->execute();
+
+        $DoctorInvoice = $em->createQuery('DELETE MedicineBundle:MedicineSalesTemporary e WHERE e.user = '.$user->getId());
+        $DoctorInvoice->execute();
 
     }
 

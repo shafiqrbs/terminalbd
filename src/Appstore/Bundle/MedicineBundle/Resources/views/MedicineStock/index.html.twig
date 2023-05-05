@@ -199,8 +199,8 @@
                                                     {{ entity.openingQuantity }}
                                                 {% endif %}
                                         </td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity }}</td>
-                                        <td class="numeric" >{{ entity.salesQuantity }}</td>
+                                        <td class="numeric" >{{ entity.purchaseQuantity + entity.salesReturnQuantity  }}</td>
+                                        <td class="numeric" >{{ entity.salesQuantity  + entity.purchaseReturnQuantity  + entity.damageQuantity }}</td>
                                         <td class="numeric" >{% if entity.adjustmentQuantity > 0 %}{{ entity.adjustmentQuantity }}{% else %}({{ entity.adjustmentQuantity|abs }}){% endif %}</td>
                                         <td class="numeric" >{{ entity.bonusQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
