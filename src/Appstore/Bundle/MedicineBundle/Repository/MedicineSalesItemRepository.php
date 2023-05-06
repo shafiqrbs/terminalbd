@@ -234,7 +234,7 @@ class MedicineSalesItemRepository extends EntityRepository
         $qb1->bindValue('user', $userId);
         $qb1->execute();
 
-        $sqlStockRemin = "UPDATE medicine_stock as stock
+        echo $sqlStockRemin = "UPDATE medicine_stock as stock
             inner join (
               select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
               from medicine_sales_item as ele
@@ -243,6 +243,8 @@ class MedicineSalesItemRepository extends EntityRepository
             ) as pa on stock.id = pa.medicineStock_id
   SET stock.remainingQuantity = ((COALESCE(stock.openingQuantity,0) + COALESCE(stock.purchaseQuantity,0) + COALESCE(stock.salesReturnQuantity,0)+ COALESCE(stock.bonusQuantity,0)+ COALESCE(stock.bonusAdjustment,0)+ COALESCE(stock.adjustmentQuantity,0)) - (COALESCE(pa.salesQuantity,0) + COALESCE(stock.purchaseReturnQuantity,0) + COALESCE(stock.damageQuantity,0)))
  , stock.salesQuantity = pa.salesQuantity";
+        exit;
+
         $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockRemin);
         $qb5->execute();
 
