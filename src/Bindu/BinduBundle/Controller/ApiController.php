@@ -421,7 +421,7 @@ class ApiController extends Controller
             'categories' => $categories,
             'vendors' => $vendors,
             'stocks' => $stocks,
-            'methods' => $methods,
+            'transaction_methods' => $methods,
             'cards' => $cards,
             'bank_accounts' => $banks,
             'mobile_accounts' => $mobiles,
