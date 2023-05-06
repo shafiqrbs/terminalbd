@@ -158,7 +158,8 @@ class ApiController extends Controller
 
     public function splashAction(Request $request)
     {
-
+        set_time_limit(0);
+        ignore_user_abort(true);
         $formData = $request->request->all();
         $key =  $this->getParameter('x-api-key');
         $value =  $this->getParameter('x-api-value');
