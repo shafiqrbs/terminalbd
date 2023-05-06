@@ -1,17 +1,15 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
+use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
-use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Gregwar\Image\Image;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -758,6 +756,51 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function getApiSpalshStock(GlobalOption $option)
+    {
+        $config = $option->getMedicineConfig();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.medicineBrand','brand');
+        $qb->leftJoin('e.unit','u');
+        $qb->select('e.id as stockId','e.barcode as barcode','e.name as name','e.remainingQuantity as remainingQuantity','e.salesPrice as salesPrice','e.purchasePrice as purchasePrice','e.printHide as printHidden','e.path as path');
+        $qb->addSelect('e.name as brandName','brand.strength as strength');
+        $qb->addSelect('u.id as unitId','u.name as unitName');
+        $qb->where('e.medicineConfig = :config')->setParameter('config', $config->getId()) ;
+        if($config->isActiveQuantity() == 1){
+            $qb->andWhere('e.purchaseQuantity > :searchTerm OR e.openingQuantity > :searchTerm')->setParameter('searchTerm', 0);
+        }
+        if($config->isRemainingQuantity() == 1){
+            $qb->andWhere('e.remainingQuantity > :searchTerm')->setParameter('searchTerm', 0);
+        }
+        $qb->andWhere('e.status = 1');
+        $qb->orderBy('e.sku','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $key => $row) {
+
+            $data[$key]['global_id']            = (int) $option->getId();
+            $data[$key]['item_id']              = (int) $row['stockId'];
+            $printName = trim($row['name']);
+            $data[$key]['category_id']      = 0;
+            $data[$key]['categoryName']     = '';
+            $data[$key]['barcode']          = $row['barcode'];
+            $data[$key]['unit']             = ($row['unitName']) ? $row['unitName'] : "";
+            $data[$key]['name']                 = $row['name'];
+            $data[$key]['printName']            = $printName;
+            $data[$key]['quantity']             = $row['remainingQuantity'];
+            $data[$key]['salesPrice']           = $row['salesPrice'];
+            $data[$key]['purchasePrice']        = $row['purchasePrice'];
+            $data[$key]['printHidden']          = ($row['printHidden']) ? $row['printHidden'] : ""; $row['printHidden'];
+            if($row['path']){
+                $path = $this->resizeFilter("uploads/domain/{$option->getId()}/product/{$row['path']}");
+                $data[$key]['imagePath']            =  $path;
+            }else{
+                $data[$key]['imagePath']            = "";
+            }
+
+        }
+        return $data;
+    }
 
     public function getApiStock(GlobalOption $option)
     {

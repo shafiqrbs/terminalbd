@@ -38,8 +38,7 @@ class ApiController extends Controller
         $value =  $this->getParameter('x-api-value');
         $uniqueCode = $formData['uniqueCode'];
         $mobile = $formData['mobile'];
-        $device = $this->getDoctrine()->getRepository('SettingToolBundle:AndroidDeviceSetup')->insert($entity,$deviceId);
-
+        $deviceId = $formData['deviceId'];
         $data = array();
         $entity = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $uniqueCode,'mobile' => $mobile,'status'=>1));
         if (empty($entity) and $request->headers->get('X-API-KEY') == $key and $request->headers->get('X-API-VALUE') == $value) {
@@ -334,7 +333,7 @@ class ApiController extends Controller
             $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->getApiCustomer($entity);
 
             if($entity->getMainApp()->getSlug() == 'miss'){
-                $stocks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiStock($entity);
+                $stocks = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->getApiSpalshStock($entity);
             }elseif($entity->getMainApp()->getSlug() == 'restaurant'){
                 $stocks = $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->getApiStock($entity);
             }elseif($entity->getMainApp()->getSlug() == 'inventory'){
