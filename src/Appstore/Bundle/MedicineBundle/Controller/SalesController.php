@@ -281,26 +281,34 @@ class SalesController extends Controller
        $itemPercent = ($data['salesitem']['itemPercent']);
        $salesPrice = ($data['salesitem']['salesPrice']);
        $quantity = ( $data['salesitem']['quantity'] > 0 ) ?  $data['salesitem']['quantity'] :1;
+
+       /* @var $stock MedicineStock */
        $stock = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->find($stockItem);
-       $entity->setMedicineStock($stock);
-       $entity->setQuantity($quantity);
-       if($itemPercent > 0){
-           $initialDiscount = round(($salesPrice *  $itemPercent)/100);
-           $initialGrandTotal = round($salesPrice  - $initialDiscount);
-           $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+       if($stock){
+           $entity->setMedicineStock($stock);
+           $entity->setQuantity($quantity);
+           if($itemPercent > 0){
+               $initialDiscount = round(($salesPrice *  $itemPercent)/100);
+               $initialGrandTotal = round($salesPrice  - $initialDiscount);
+               $entity->setSalesPrice( round( $initialGrandTotal, 2 ) );
+           }else{
+               $entity->setSalesPrice( round( $salesPrice, 2 ) );
+           }
+           $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
+           $entity->setMrpPrice($stock->getSalesPrice());
+           $entity->setPurchasePrice($stock->getAveragePurchasePrice());
+           $em->persist($entity);
+           $em->flush();
+           $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
+           $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
+           $msg = 'Medicine added successfully';
+           $result = $this->returnResultData($invoice,$msg);
+           return new Response(json_encode($result));
        }else{
-           $entity->setSalesPrice( round( $salesPrice, 2 ) );
+           $data = array( 'success' => 'success');
+           return new Response(json_encode($data));
        }
-       $entity->setSubTotal($entity->getSalesPrice() * $entity->getQuantity());
-       $entity->setMrpPrice($stock->getSalesPrice());
-       $entity->setPurchasePrice($stock->getAveragePurchasePrice());
-       $em->persist($entity);
-       $em->flush();
-       $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->updateRemovePurchaseQuantity($stock,'sales');
-       $invoice = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateMedicineSalesTotalPrice($invoice);
-       $msg = 'Medicine added successfully';
-       $result = $this->returnResultData($invoice,$msg);
-       return new Response(json_encode($result));
+
 
    }
 
