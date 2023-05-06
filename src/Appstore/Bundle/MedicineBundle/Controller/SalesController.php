@@ -109,6 +109,7 @@ class SalesController extends Controller
     public function newAction()
     {
 
+        return $this->redirect($this->generateUrl('medicine_sales'));
         $em = $this->getDoctrine()->getManager();
         $entity = new MedicineSales();
         $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
