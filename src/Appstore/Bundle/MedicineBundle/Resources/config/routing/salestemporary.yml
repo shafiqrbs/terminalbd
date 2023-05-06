@@ -41,7 +41,6 @@ medicine_sales_barcode_search:
 medicine_sales_temporary_search:
     path:     /live-search-add-stock
     defaults: { _controller: "MedicineBundle:MedicineSalesTemporary:liveSearchSales" }
-    methods:  POST
     options:
             expose: true
 
