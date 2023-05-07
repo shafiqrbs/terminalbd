@@ -234,7 +234,7 @@ class MedicineSalesItemRepository extends EntityRepository
         $qb1->bindValue('user', $userId);
         $qb1->execute();
 
-        $sqlStockRemin = "UPDATE medicine_stock as stock
+       /* $sqlStockRemin = "UPDATE medicine_stock as stock
             inner join (
               select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
               from medicine_sales_item as ele
@@ -245,7 +245,7 @@ class MedicineSalesItemRepository extends EntityRepository
  , stock.salesQuantity = pa.salesQuantity";
 
         $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockRemin);
-        $qb5->execute();
+        $qb5->execute();*/
 
         $DoctorInvoice = $em->createQuery('DELETE MedicineBundle:MedicineSalesTemporary e WHERE e.user = '.$user->getId());
         $DoctorInvoice->execute();

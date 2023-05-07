@@ -416,12 +416,12 @@ class ApiController extends Controller
 
         }
         $jsonData = array(
-            'setup' => $data,
-            'users' => $users,
-            'customers' => $customers,
-            'categories' => $categories,
-            'vendors' => $vendors,
-            'stocks' => $stocks,
+            'setup'             => $data,
+            'users'             => $users,
+            'customers'         => $customers,
+            'categories'        => $categories,
+            'vendors'           => $vendors,
+            'stocks'            => $stocks,
             'transaction_methods' => $methods,
             'payment_cards' => $cards,
             'bank_accounts' => $banks,
