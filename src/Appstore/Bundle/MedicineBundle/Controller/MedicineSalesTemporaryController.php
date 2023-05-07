@@ -31,7 +31,7 @@ class MedicineSalesTemporaryController extends Controller
     public function newAction()
     {
 
-        return $this->redirect($this->generateUrl('medicine_homepage'));
+       // return $this->redirect($this->generateUrl('medicine_homepage'));
         $user = $this->getUser();
         $config = $user->getGlobalOption()->getMedicineConfig();
         $entity = new MedicineSales();
