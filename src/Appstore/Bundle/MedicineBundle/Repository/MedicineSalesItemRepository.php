@@ -234,18 +234,18 @@ class MedicineSalesItemRepository extends EntityRepository
         $qb1->bindValue('user', $userId);
         $qb1->execute();
 
-       /* $sqlStockRemin = "UPDATE medicine_stock as stock
+        $sqlStockRemin = "UPDATE medicine_stock as stock
             inner join (
-              select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
-              from medicine_sales_item as ele
-              join medicine_stock  as ms ON  ele.medicineStock_id = ms.id
-              group by ele.medicineStock_id
+              SELECT ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
+              FROM medicine_sales_item as ele 
+              WHERE ele.medicineSales_id = {$salesId}
+              GROUP BY ele.medicineStock_id
             ) as pa on stock.id = pa.medicineStock_id
   SET stock.remainingQuantity = ((COALESCE(stock.openingQuantity,0) + COALESCE(stock.purchaseQuantity,0) + COALESCE(stock.salesReturnQuantity,0)+ COALESCE(stock.bonusQuantity,0)+ COALESCE(stock.bonusAdjustment,0)+ COALESCE(stock.adjustmentQuantity,0)) - (COALESCE(pa.salesQuantity,0) + COALESCE(stock.purchaseReturnQuantity,0) + COALESCE(stock.damageQuantity,0)))
  , stock.salesQuantity = pa.salesQuantity";
 
         $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockRemin);
-        $qb5->execute();*/
+        $qb5->execute();
 
         $DoctorInvoice = $em->createQuery('DELETE MedicineBundle:MedicineSalesTemporary e WHERE e.user = '.$user->getId());
         $DoctorInvoice->execute();
