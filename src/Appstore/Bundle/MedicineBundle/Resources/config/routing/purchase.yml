@@ -126,7 +126,7 @@ medicine_stock_item_create:
             expose: true
 
 medicine_purchase_discount_update:
-    path:     /purchase/dicount-update
+    path:     /discount-update
     defaults: { _controller: "MedicineBundle:Purchase:invoiceDiscountUpdate" }
     methods:  POST
     options:
