@@ -324,7 +324,7 @@ class PurchaseController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new PurchaseManualType($globalOption), $entity, array(
             'action' => $this->generateUrl('medicine_purchase_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => '[POST,PUT]',
             'attr' => array(
                 'class' => 'form-horizontal',
                 'id' => 'purchaseForm',
