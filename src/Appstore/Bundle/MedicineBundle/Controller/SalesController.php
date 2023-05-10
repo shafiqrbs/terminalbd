@@ -760,7 +760,8 @@ class SalesController extends Controller
             $removeSales->execute();
         }
       //  $this->androidProcessSymfony($android);
-        $this->androidProcessMysql($android);
+        $status = $this->androidProcessMysql($android);
+        return new Response($status);
 
 
     }
@@ -792,9 +793,9 @@ class SalesController extends Controller
             $android->setStatus(true);
             $em->persist($android);
             $em->flush();
-            return new Response('success');
+            return 'success';
         }else{
-            return new Response('failed');
+            return 'failed';
         }
     }
 
