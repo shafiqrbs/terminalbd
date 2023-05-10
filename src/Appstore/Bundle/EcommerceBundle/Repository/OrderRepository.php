@@ -629,7 +629,7 @@ class OrderRepository extends EntityRepository
             $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d H:i');
             $data[$key]['updatedTime'] = $row->getUpdated()->format('g:i A');
             $data[$key]['subTotal'] = (double) $row->getSubTotal();
-            $data[$key]['discount'] = (double) ($row->getDiscount()) ? $row->getDiscount():'';
+            $data[$key]['discount'] = (double) ($row->getDiscount());
             $data[$key]['shippingCharge'] = (double) ($row->getShippingCharge()) ? $row->getShippingCharge():'';
             $data[$key]['vat'] = (double) $row->getVat();
             $data[$key]['total'] = (double) $row->getTotal();
