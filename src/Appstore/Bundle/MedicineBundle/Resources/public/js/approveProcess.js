@@ -86,7 +86,6 @@ $(document).on( "click", ".androidProcess", function( e ) {
                       location.reload();
                   }else{
                       alert('Data does not import successfully, Please try now');
-                      location.reload();
                   }
                 }
             });

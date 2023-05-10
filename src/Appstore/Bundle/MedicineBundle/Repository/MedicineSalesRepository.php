@@ -792,11 +792,9 @@ class MedicineSalesRepository extends EntityRepository
 
     public function insertApiSales(GlobalOption $option,MedicineAndroidProcess $process)
     {
-        $em = $this->_em;
-
+            $em = $this->_em;
             $items = json_decode($process->getJsonItem(),true);
             $config = $option->getMedicineConfig()->getId();
-
             if($items){
                 foreach ($items as $item):
                     $sales = new MedicineSales();
@@ -901,7 +899,9 @@ class MedicineSalesRepository extends EntityRepository
         $conf = $option->getMedicineConfig();
 
         $items = json_decode($process->getJsonSubItem(),true);
-        if($items) {
+        $numSubItems = count($items);
+        $em = $this->_em;
+        if($items  and $numSubItems > 0 ) {
             foreach ($items as $item):
 
                 $deviceSalesId = $item['salesId'];
@@ -929,18 +929,16 @@ class MedicineSalesRepository extends EntityRepository
                 }
             endforeach;
         }
-
-        /*$countRecords = $this->countNumberSalesSubItem($process->getId());
-        if($process->getItemCount() == $countRecords){
-            $this->insertApiSalesItem( $option, $process);
-        }elseif( $countRecords > 0 and $process->getItemCount() != $countRecords){
+        $countRecords = $this->countNumberSalesSubItem($process->getId());
+        if( $countRecords > 0 and $process->getItemCount() != $countRecords){
             $batch = $process->getId();
             $remove = $em->createQuery("DELETE MedicineBundle:MedicineSalesItem e WHERE e.androidProcess = {$batch}");
             $remove->execute();
-        }else{
-            return "Failed";
-        }*/
-
+            return "failed";
+        }elseif(empty($items) and $numSubItems == 0 ) {
+            return "failed";
+        }
+        return "success";
     }
 
     public function updateApiSalesPurchasePrice($android)
@@ -1061,7 +1059,7 @@ class MedicineSalesRepository extends EntityRepository
             $qb1->execute();
 
             $sqlSales = "Update medicine_sales_item as salesItem
-            inner JOIN medicine_sales as s ON salesItem.deviceSalesId = s.deviceSalesId
+            inner JOIN medicine_sales as s ON salesItem.androidProcess_id = s.androidProcess_id
             set salesItem.medicineSales_id = s.id
             WHERE salesItem.androidProcess_id =:androidProcess";
             $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlSales);

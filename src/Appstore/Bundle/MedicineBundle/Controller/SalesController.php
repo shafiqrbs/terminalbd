@@ -759,10 +759,17 @@ class SalesController extends Controller
         if(!empty($removeSales)){
             $removeSales->execute();
         }
+      //  $this->androidProcessSymfony($android);
+        $this->androidProcessMysql($android);
 
 
-     //   $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
-        /*
+    }
+
+
+    public function androidProcessSymfony($android){
+        $em = $this->getDoctrine()->getManager();
+
+         $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSales($config->getGlobalOption(),$android);
          $salses = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->findBy(array('androidProcess' => $android));
           foreach ($salses as $sales){
             if($sales->getProcess() == "Device"){
@@ -774,20 +781,27 @@ class SalesController extends Controller
                 $msg = "valid";
             }
         }
-        */
+
+    }
+
+    public function androidProcessMysql($android){
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $em = $this->getDoctrine()->getManager();
         $status = $this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->insertApiSalesManual($config->getGlobalOption(),$android);
         if($status > 0 ){
             $android->setStatus(true);
             $em->persist($android);
             $em->flush();
-            //$this->getDoctrine()->getRepository('MedicineBundle:MedicineSales')->updateApiSalesPurchasePrice($android->getId());
             return new Response('success');
         }else{
             return new Response('failed');
-	    }
+        }
     }
 
-    public function groupReverseAction()
+
+
+
+public function groupReverseAction()
     {
         set_time_limit(0);
         ignore_user_abort(true);
