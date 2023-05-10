@@ -628,11 +628,11 @@ class OrderRepository extends EntityRepository
             $data[$key]['createdTime'] = $row->getCreated()->format('g:i A');
             $data[$key]['updated'] = $row->getUpdated()->format('Y-m-d H:i');
             $data[$key]['updatedTime'] = $row->getUpdated()->format('g:i A');
-            $data[$key]['subTotal'] = $row->getSubTotal();
-            $data[$key]['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
-            $data[$key]['shippingCharge'] = ($row->getShippingCharge()) ? $row->getShippingCharge():'';
-            $data[$key]['vat'] = $row->getVat();
-            $data[$key]['total'] = $row->getTotal();
+            $data[$key]['subTotal'] = (double) $row->getSubTotal();
+            $data[$key]['discount'] = (double) ($row->getDiscount()) ? $row->getDiscount():'';
+            $data[$key]['shippingCharge'] = (double) ($row->getShippingCharge()) ? $row->getShippingCharge():'';
+            $data[$key]['vat'] = (double) $row->getVat();
+            $data[$key]['total'] = (double) $row->getTotal();
             $data[$key]['timePeriod'] = ($row->getTimePeriod()) ? $row->getTimePeriod()->getName():'';
             $data[$key]['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
             $data[$key]['process'] = $row->getProcess();

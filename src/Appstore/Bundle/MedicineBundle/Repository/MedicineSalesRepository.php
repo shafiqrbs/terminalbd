@@ -1037,15 +1037,12 @@ class MedicineSalesRepository extends EntityRepository
                 $rows .='('.(int)$config.',"'.(string)$item['created'].'","'.(string)$item['created'].'",'.(string)$item['invoiceId'].','.(string)$item['invoiceId'].','.(int)$customer.','.(int)$item['createdBy'].','.(int)$item['salesBy'].','.(int)$item['createdBy'].','.(int)$method.','.(float)$item['subTotal'].','.(float)$discount.','.(float)$total.','.(float)$received.','.(float)$due.',"'.(string)$flat.'",'.(int)$item['discountCalculation'].','.$cardCommission.','.$accountBank.','.$mobileBankAccount.','.$paymentCard.','.(int)$androidProcess_id.','.(int)$androidDevice_id.',"'.(string)$device.'")'.$comma;
 
             endforeach;
-
-        $sql = "INSERT INTO medicine_sales (medicineConfig_id,created,updated,invoice,deviceSalesId,customer_id,createdBy_id,salesBy_id,approvedBy_id,transactionMethod_id,subTotal,discount,netTotal,received,due,discountType,discountCalculation,cardCommission,accountBank_id,accountMobileBank_id,cardNo,androidProcess_id,androidDevice_id,process) VALUES {$rows}";
-        $qb = $this->getEntityManager()->getConnection()->prepare($sql);
-        $qb->execute();
-
-        $subs = '';
-        $x = 0;
-        $comma1 =',';
-        $stockIds = array();
+         //   $pdo = new POD
+         //   $pdo->beginTransaction();
+            $subs = '';
+            $x = 0;
+            $comma1 =',';
+            $stockIds = array();
             foreach ($subItems as $sub):
                 $stockId = (isset($sub['stockId']) and $sub['stockId'] > 0 ) ? $sub['stockId']:'NULL';
                 if($stockId > 0){
@@ -1054,6 +1051,10 @@ class MedicineSalesRepository extends EntityRepository
                 if(++$x === $numSubItems) { $comma1 =  ""; }
                 $subs .='('.(int)$androidProcess_id.','.(int)$sub['salesId'].','.$stockId.','.(int)$sub['quantity'].','.(float)$sub['unitPrice'].','.(float)$sub['subTotal'].')'.$comma1;
             endforeach;
+
+            $sql = "INSERT INTO medicine_sales (medicineConfig_id,created,updated,invoice,deviceSalesId,customer_id,createdBy_id,salesBy_id,approvedBy_id,transactionMethod_id,subTotal,discount,netTotal,received,due,discountType,discountCalculation,cardCommission,accountBank_id,accountMobileBank_id,cardNo,androidProcess_id,androidDevice_id,process) VALUES {$rows}";
+            $qb = $this->getEntityManager()->getConnection()->prepare($sql);
+            $qb->execute();
 
             $sqlSub = "INSERT INTO medicine_sales_item (androidProcess_id,deviceSalesId,medicineStock_id,quantity,salesPrice,subTotal) VALUES {$subs}";
             $qb1 = $this->getEntityManager()->getConnection()->prepare($sqlSub);
@@ -1075,7 +1076,7 @@ class MedicineSalesRepository extends EntityRepository
             $qb3->bindValue('androidProcess', $androidProcess_id);
             $qb3->execute();
 
-            /*$array = implode(",",$stockIds);
+            $array = implode(",",$stockIds);
             $sqlStockRemin = "UPDATE medicine_stock as stock
             inner join (
               select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
@@ -1098,7 +1099,7 @@ class MedicineSalesRepository extends EntityRepository
             ) as pa on sales.id = pa.medicineSales_id
             set sales.purchasePrice = pa.purchasePrice";
             $qbPurchasePrice = $this->getEntityManager()->getConnection()->prepare($sqlPurchasePrice);
-            $qbPurchasePrice->execute();*/
+            $qbPurchasePrice->execute();
 
             $accountCash = $em->createQuery("DELETE AccountingBundle:AccountSales e WHERE e.globalOption = '{$optionId}' AND e.androidProcessId = '{$androidProcess_id}' AND e.processHead = 'medicine' AND e.processType = 'sales' ");
             if(!empty($accountCash)){
