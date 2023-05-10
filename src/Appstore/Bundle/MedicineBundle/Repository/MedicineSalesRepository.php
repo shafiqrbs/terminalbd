@@ -980,7 +980,6 @@ class MedicineSalesRepository extends EntityRepository
         $comma =',';
             foreach ($items as $item):
 
-
                 $accountBank = (isset($item['bankAccount']) and $item['bankAccount']) ?  $item['bankAccount'] : 'NULL';
                 $mobileBankAccount = (isset($item['mobileBankAccount']) and $item['mobileBankAccount']) ?  $item['mobileBankAccount'] : 'NULL';
                 $paymentCard = (isset($item['paymentCard']) and $item['paymentCard']) ?  $item['paymentCard'] : 'NULL';
@@ -1076,7 +1075,7 @@ class MedicineSalesRepository extends EntityRepository
             $qb3->bindValue('androidProcess', $androidProcess_id);
             $qb3->execute();
 
-            $array = implode(",",$stockIds);
+            /*$array = implode(",",$stockIds);
             $sqlStockRemin = "UPDATE medicine_stock as stock
             inner join (
               select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
@@ -1099,7 +1098,7 @@ class MedicineSalesRepository extends EntityRepository
             ) as pa on sales.id = pa.medicineSales_id
             set sales.purchasePrice = pa.purchasePrice";
             $qbPurchasePrice = $this->getEntityManager()->getConnection()->prepare($sqlPurchasePrice);
-            $qbPurchasePrice->execute();
+            $qbPurchasePrice->execute();*/
 
             $accountCash = $em->createQuery("DELETE AccountingBundle:AccountSales e WHERE e.globalOption = '{$optionId}' AND e.androidProcessId = '{$androidProcess_id}' AND e.processHead = 'medicine' AND e.processType = 'sales' ");
             if(!empty($accountCash)){
