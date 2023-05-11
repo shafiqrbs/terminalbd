@@ -903,7 +903,6 @@ class MedicineSalesRepository extends EntityRepository
         $em = $this->_em;
         if($items  and $numSubItems > 0 ) {
             foreach ($items as $item):
-
                 $deviceSalesId = $item['salesId'];
                 $sales = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig' => $conf, 'deviceSalesId' => $deviceSalesId));
                 if ($sales) {
@@ -1023,7 +1022,7 @@ class MedicineSalesRepository extends EntityRepository
                     $method = 'NULL';
                 }
 
-                if($item['customerName'] == 'Default'){
+                if(isset($item['customerName'])  and $item['customerName'] == 'Default'){
                     $customer = $default->getId();
                 }elseif(isset($item['customerName']) and $item['customerName'] and isset($item['customerMobile']) and $item['customerMobile']){
                     $customer = $em->getRepository('DomainUserBundle:Customer')->newExistingCustomerForMedicineSales($option,$item['customerMobile'],$item)->getId();
@@ -1035,44 +1034,39 @@ class MedicineSalesRepository extends EntityRepository
                 $rows .='('.(int)$config.',"'.(string)$item['created'].'","'.(string)$item['created'].'",'.(string)$item['invoiceId'].','.(string)$item['invoiceId'].','.(int)$customer.','.(int)$item['createdBy'].','.(int)$item['salesBy'].','.(int)$item['createdBy'].','.(int)$method.','.(float)$item['subTotal'].','.(float)$discount.','.(float)$total.','.(float)$received.','.(float)$due.',"'.(string)$flat.'",'.(int)$item['discountCalculation'].','.$cardCommission.','.$accountBank.','.$mobileBankAccount.','.$paymentCard.','.(int)$androidProcess_id.','.(int)$androidDevice_id.',"'.(string)$device.'")'.$comma;
 
             endforeach;
-         //   $pdo = new POD
-         //   $pdo->beginTransaction();
-            $subs = '';
-            $x = 0;
-            $comma1 =',';
-            $stockIds = array();
-            foreach ($subItems as $sub):
-                $stockId = (isset($sub['stockId']) and $sub['stockId'] > 0 ) ? $sub['stockId']:'NULL';
-                if($stockId > 0){
-                    $stockIds[] = $sub['stockId'];
-                }
-                if(++$x === $numSubItems) { $comma1 =  ""; }
-                $subs .='('.(int)$androidProcess_id.','.(int)$sub['salesId'].','.$stockId.','.(int)$sub['quantity'].','.(float)$sub['unitPrice'].','.(float)$sub['subTotal'].')'.$comma1;
-            endforeach;
 
             $sql = "INSERT INTO medicine_sales (medicineConfig_id,created,updated,invoice,deviceSalesId,customer_id,createdBy_id,salesBy_id,approvedBy_id,transactionMethod_id,subTotal,discount,netTotal,received,due,discountType,discountCalculation,cardCommission,accountBank_id,accountMobileBank_id,cardNo,androidProcess_id,androidDevice_id,process) VALUES {$rows}";
             $qb = $this->getEntityManager()->getConnection()->prepare($sql);
             $qb->execute();
 
-            $sqlSub = "INSERT INTO medicine_sales_item (androidProcess_id,deviceSalesId,medicineStock_id,quantity,salesPrice,subTotal) VALUES {$subs}";
-            $qb1 = $this->getEntityManager()->getConnection()->prepare($sqlSub);
-            $qb1->execute();
+            $stockIds = array();
+            if($subItems  and $numSubItems > 0 ) {
+                foreach ($subItems as $sub):
+                    $deviceSalesId = $sub['salesId'];
+                    $sales = $em->getRepository('MedicineBundle:MedicineSales')->findOneBy(array('medicineConfig' => $config, 'deviceSalesId' => $deviceSalesId));
+                    if ($sales) {
+                        $salesItem = new MedicineSalesItem();
+                        $salesItem->setAndroidProcess($process);
+                        $salesItem->setMedicineSales($sales);
+                        $stockId = $em->getRepository('MedicineBundle:MedicineStock')->find($sub['stockId']);
+                        if ($stockId) {
+                            $stockIds[] = $stockId->getId();
+                            $salesItem->setMedicineStock($stockId);
+                            $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
+                            $salesItem->setMrpPrice($stockId->getSalesPrice());
+                        }
+                        $salesItem->setQuantity($sub['quantity']);
+                        if (isset($item['unitPrice']) and $sub['unitPrice']) {
+                            $salesItem->setSalesPrice(floatval($sub['unitPrice']));
+                        }
+                        $salesItem->setSubTotal($sub['subTotal']);
+                        $em->persist($salesItem);
 
-            $sqlSales = "Update medicine_sales_item as salesItem
-            inner JOIN medicine_sales as s ON salesItem.androidProcess_id = s.androidProcess_id
-            set salesItem.medicineSales_id = s.id
-            WHERE salesItem.androidProcess_id =:androidProcess";
-            $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlSales);
-            $qb2->bindValue('androidProcess', $androidProcess_id);
-            $qb2->execute();
+                    }
+                endforeach;
+                $em->flush();
+            }
 
-            $sqlStock = "Update medicine_sales_item as salesItem
-            inner JOIN medicine_stock as ms ON salesItem.medicineStock_id = ms.id
-            set salesItem.purchasePrice = ms.purchasePrice
-            WHERE salesItem.androidProcess_id =:androidProcess";
-            $qb3 = $this->getEntityManager()->getConnection()->prepare($sqlStock);
-            $qb3->bindValue('androidProcess', $androidProcess_id);
-            $qb3->execute();
 
             $array = implode(",",$stockIds);
             $sqlStockRemin = "UPDATE medicine_stock as stock

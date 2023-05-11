@@ -802,6 +802,36 @@ class MedicineStockRepository extends EntityRepository
         return $data;
     }
 
+    public function updateRemainingQuantityReset($config)
+    {
+        $sqlStockPurchase = "UPDATE medicine_stock as stock
+            
+             inner join (select pi.medicineStock_id, ROUND(COALESCE(SUM(pi.quantity),0),2) as purchaseQuantity
+              from medicine_purchase_item as pi
+              join medicine_stock  as ms ON  pi.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config}
+              group by pi.medicineStock_id) as pa on stock.id = pa.medicineStock_id
+  SET stock.purchaseQuantity = pa.purchaseQuantity";
+        $qb4 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchase);
+        $qb4->execute();
+
+        $sqlStockRemin = "UPDATE medicine_stock as stock
+             inner join (
+              select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
+              from medicine_sales_item as ele
+              join medicine_stock  as ms ON  ele.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config}
+              group by ele.medicineStock_id
+            ) as pa on stock.id = pa.medicineStock_id
+  SET stock.remainingQuantity = ((COALESCE(stock.openingQuantity,0) + COALESCE(stock.purchaseQuantity,0) + COALESCE(stock.salesReturnQuantity,0)+ COALESCE(stock.bonusQuantity,0)+ COALESCE(stock.bonusAdjustment,0)+ COALESCE(stock.adjustmentQuantity,0)) - (COALESCE(pa.salesQuantity,0) + COALESCE(stock.purchaseReturnQuantity,0) + COALESCE(stock.damageQuantity,0)))
+ , stock.salesQuantity = pa.salesQuantity";
+        $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockRemin);
+        $qb5->execute();
+
+
+    }
+
+
     public function getApiStock(GlobalOption $option)
     {
         $config = $option->getMedicineConfig();

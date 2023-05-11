@@ -5,13 +5,10 @@ namespace Appstore\Bundle\MedicineBundle\Controller;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineParticular;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchaseItem;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
-use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
 use Dompdf\Dompdf;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
@@ -244,6 +241,15 @@ class DefaultController extends Controller
             'entity' => '',
         ));
     }
+
+    public function updateRemainingQuantityAction(){
+
+        set_time_limit(0);
+        ignore_user_abort(true);
+	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+	    $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->updateRemainingQuantityReset($config);
+        return $this->redirect($this->generateUrl('medicine_stock'));
+	}
 
     public function vendorPaymentReceiveAction($vendor)
     {

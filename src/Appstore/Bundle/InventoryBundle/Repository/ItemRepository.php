@@ -569,6 +569,7 @@ class ItemRepository extends EntityRepository
 
     }
 
+
     public function getItemUpdatePriceQnt(Purchase $purchase){
 
         $em = $this->_em;

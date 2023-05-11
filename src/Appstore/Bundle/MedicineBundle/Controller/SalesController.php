@@ -761,6 +761,7 @@ class SalesController extends Controller
         }
       //  $this->androidProcessSymfony($android);
         $status = $this->androidProcessMysql($android);
+
         return new Response($status);
 
 

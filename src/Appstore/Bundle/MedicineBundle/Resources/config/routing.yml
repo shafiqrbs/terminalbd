@@ -118,6 +118,10 @@ medicine_report_vendor_sales:
     path:     /vendor-purchase-sales
     defaults: { _controller: "MedicineBundle:Default:vendorCustomerAccount" }
 
+medicine_update_remaining_quantity:
+    path:     /update-remaining-quantity
+    defaults: { _controller: "MedicineBundle:Default:updateRemainingQuantity" }
+
 medicine_report_vendor_sales_medicine:
     path:     /vendor-purchase-sales-medicine
     defaults: { _controller: "MedicineBundle:Default:vendorCustomerMedicine" }
