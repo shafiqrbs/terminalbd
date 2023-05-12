@@ -106,8 +106,6 @@ class SecurityController extends Controller
             }else{
                 return $this->render('UserBundle:Security:login.html.twig', $data);
             }
-
-
 	    }
 
     }
