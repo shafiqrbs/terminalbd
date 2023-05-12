@@ -1054,9 +1054,10 @@ class MedicineSalesRepository extends EntityRepository
                             $salesItem->setMedicineStock($stockId);
                             $salesItem->setPurchasePrice($stockId->getAveragePurchasePrice());
                             $salesItem->setMrpPrice($stockId->getSalesPrice());
+                            $salesItem->setSalesPrice($stockId->getSalesPrice());
                         }
                         $salesItem->setQuantity($sub['quantity']);
-                        if (isset($item['unitPrice']) and $sub['unitPrice']) {
+                        if (isset($sub['unitPrice']) and $sub['unitPrice']) {
                             $salesItem->setSalesPrice(floatval($sub['unitPrice']));
                         }
                         $salesItem->setSubTotal($sub['subTotal']);

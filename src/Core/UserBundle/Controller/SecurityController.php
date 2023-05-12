@@ -93,14 +93,21 @@ class SecurityController extends Controller
     {
 
         $detect = new MobileDetect();
+        $currentDomain = $_SERVER['SERVER_NAME'];
 	    if( $detect->isMobile() OR  $detect->isTablet() ) {
-		    $theme = 'Security/Mobile';
-		    return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
+            if($currentDomain == 'www.poskeeper.com') {
+                return $this->render('BinduBundle:Frontend/Mobile:index.html.twig', $data);
+            }else{
+                return $this->render('UserBundle:Security/Mobile:login.html.twig', $data);
+            }
 	    }else{
-		   // $theme = 'Frontend/Desktop';
-		   // return $this->render('BinduBundle:'.$theme.':index.html.twig', $data);
-            $theme = 'Security';
-            return $this->render('UserBundle:'.$theme.':login.html.twig', $data);
+	        if($currentDomain == 'www.poskeeper.com'){
+                return $this->render('BinduBundle:Frontend/Desktop:index.html.twig', $data);
+            }else{
+                return $this->render('UserBundle:Security:login.html.twig', $data);
+            }
+
+
 	    }
 
     }
