@@ -184,8 +184,9 @@ class MedicineSalesItemRepository extends EntityRepository
     {
         $em = $this->_em;
         $entities = $user->getMedicineSalesTemporary();
+        $stockIds = array();
         foreach ($entities as $item) {
-
+            $stockIds[] = $item->getMedicineStock()->getId();
             /* @var  $item MedicineSalesTemporary */
             $entity = new MedicineSalesItem();
             $entity->setMedicineSales( $sales );
@@ -212,13 +213,12 @@ class MedicineSalesItemRepository extends EntityRepository
             //$em->getRepository( 'MedicineBundle:MedicineStock' )->updateRemovePurchaseQuantity( $item->getMedicineStock(), 'sales' );
         }
         $em->flush();
-
-        $salesId = $sales->getId();
+        $array = implode(",",$stockIds);
         $sqlStockRemin = "UPDATE medicine_stock as stock
             inner join (
               SELECT ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
               FROM medicine_sales_item as ele 
-              WHERE ele.medicineSales_id = {$salesId}
+              WHERE ele.medicineStock_id IN ({$array})
               GROUP BY ele.medicineStock_id
             ) as pa on stock.id = pa.medicineStock_id
   SET stock.remainingQuantity = ((COALESCE(stock.openingQuantity,0) + COALESCE(stock.purchaseQuantity,0) + COALESCE(stock.salesReturnQuantity,0)+ COALESCE(stock.bonusQuantity,0)+ COALESCE(stock.bonusAdjustment,0)+ COALESCE(stock.adjustmentQuantity,0)) - (COALESCE(pa.salesQuantity,0) + COALESCE(stock.purchaseReturnQuantity,0) + COALESCE(stock.damageQuantity,0)))
