@@ -713,7 +713,7 @@ class OrderRepository extends EntityRepository
         $data['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
         $data['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
         $data['subTotal'] = (double)$row->getSubTotal();
-        $data['discount'] = (double) ($row->getDiscount()) ? $row->getDiscount():'';
+        $data['discount'] = (double) ($row->getDiscount());
         $data['shippingCharge'] = (double) $row->getShippingCharge();
         $data['vat'] = (double) $row->getVat();
         $data['total'] =(double) $row->getTotal();
