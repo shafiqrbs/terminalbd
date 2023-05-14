@@ -712,11 +712,11 @@ class OrderRepository extends EntityRepository
         $data['updatedTime'] = $row->getUpdated()->format('g:i A');
         $data['deliveryDate'] = $row->getDeliveryDate()->format('Y-m-d H:i');
         $data['deliveryTime'] = $row->getDeliveryDate()->format('g:i A');
-        $data['subTotal'] = $row->getSubTotal();
-        $data['discount'] = ($row->getDiscount()) ? $row->getDiscount():'';
-        $data['shippingCharge'] = ($row->getShippingCharge()) ? $row->getShippingCharge():'';
-        $data['vat'] = $row->getVat();
-        $data['total'] = $row->getTotal();
+        $data['subTotal'] = (double)$row->getSubTotal();
+        $data['discount'] = (double) ($row->getDiscount()) ? $row->getDiscount():'';
+        $data['shippingCharge'] = (double) $row->getShippingCharge();
+        $data['vat'] = (double) $row->getVat();
+        $data['total'] =(double) $row->getTotal();
         $data['timePeriod'] = ($row->getTimePeriod()) ? $row->getTimePeriod()->getName():'';
         $data['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
         $data['process'] = $row->getProcess();
@@ -734,8 +734,8 @@ class OrderRepository extends EntityRepository
                 $data['orderItem'][$i]['itemId'] = (integer)$subs->getId();
                 $data['orderItem'][$i]['orderId'] = (int)$row->getId();
                 $data['orderItem'][$i]['name'] = (string)$subs->getItemName();
-                $data['orderItem'][$i]['price'] = (integer)$subs->getPrice();
-                $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
+                $data['orderItem'][$i]['price'] = (double)$subs->getPrice();
+                $data['orderItem'][$i]['quantity'] = (double)$subs->getQuantity();
                 $data['orderItem'][$i]['category'] = (string)$subs->getCategoryName();
                 $data['orderItem'][$i]['brand'] = (string)$subs->getBrandName();
                 $data['orderItem'][$i]['quantity'] = (integer)$subs->getQuantity();
