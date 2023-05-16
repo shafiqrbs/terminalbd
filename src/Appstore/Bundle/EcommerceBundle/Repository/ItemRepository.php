@@ -1343,6 +1343,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
                 $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+               //// $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
@@ -1357,6 +1358,10 @@ class ItemRepository extends EntityRepository
 
     function hex6ToHex8($hex6) {
         return str_replace("#","0xFF",$hex6);
+    }
+
+    function hex6ToHex8Default() {
+        return "0xFFddd9c3";
     }
 
     function random_color_code() {
@@ -1386,7 +1391,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $this->stringNullChecker($row['name']);
                 $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->hex6ToHex8Default()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/files/category/{$row['path']}");
@@ -1419,7 +1424,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->hex6ToHex8Default()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
@@ -1452,7 +1457,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $this->stringNullChecker($row['name']);
                 $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->hex6ToHex8Default()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/brand/{$row['path']}");
@@ -1492,7 +1497,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $this->stringNullChecker($row['name']);
                 $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->hex6ToHex8Default()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
 
                 if($row['path']){
@@ -1526,7 +1531,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['name']           = $this->stringNullChecker($row['name']);
                 $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->hex6ToHex8Default()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/promotion/{$row['path']}");
@@ -1559,7 +1564,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']        = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']    = ($row['featureItem']) ? $row['featureItem'] : 12;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->hex6ToHex8Default()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
                     $path = $this->resizeFilter("uploads/domain/{$option->getId()}/discount/{$row['path']}");

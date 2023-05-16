@@ -721,7 +721,7 @@ class OrderRepository extends EntityRepository
         $data['location'] = ($row->getLocation()) ? $row->getLocation()->getName():'';
         $data['process'] = $row->getProcess();
         $data['pickupAddress'] = $row->getAddress();
-        $data['transactionId'] = $row->getTransaction();
+        $data['transactionId'] = (int) $row->getTransaction();
         $data['paymentMobile'] = $row->getPaymentMobile();
         $data['method'] = ($row->getTransactionMethod()) ? $row->getTransactionMethod()->getName() :'';
         $data['cashOnDelivery'] = ($row->isCashOnDelivery() == true) ? 1 :0;
