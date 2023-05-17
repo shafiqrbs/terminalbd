@@ -638,7 +638,35 @@ class ApiEcommerceController extends Controller
         }
     }
 
-    public function pageMenuAction(Request $request)
+    public function dashboardAction(Request $request)
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        if( $this->checkApiValidation($request) == 'invalid') {
+
+            return new Response('Unauthorized access.', 401);
+
+        }else{
+
+            /* @var $entity GlobalOption */
+
+
+            $entity = $this->checkApiValidation($request);
+            $result = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->OrderDashboard($entity);
+            $response = new Response();
+            $data = array(
+                'totalOrder' => ($result['totalOrder']) ? (int) $result['totalOrder'] : 0,
+                'subTotal' => ($result['subTotal']) ? (int) $result['subTotal'] : 0,
+                'total' => ($result['total']) ? (int) $result['total'] : 0,
+            );
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent(json_encode($data));
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+        }
+    }
+
+     public function pageMenuAction(Request $request)
     {
         set_time_limit(0);
         ignore_user_abort(true);

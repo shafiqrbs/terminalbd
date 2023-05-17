@@ -117,6 +117,17 @@ class OrderRepository extends EntityRepository
 
     }
 
+    public function OrderDashboard($option)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('MAX(e.code) as totalOrder','e.subTotal as subTotal','e.total as total')
+            ->where('e.globalOption = :option') ->setParameter('option', $option)
+            ->andWhere("e.process != :head")->setParameter('head', "Delete");
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+
+    }
+
 
     public function findWithArchive($option, $data)
     {
