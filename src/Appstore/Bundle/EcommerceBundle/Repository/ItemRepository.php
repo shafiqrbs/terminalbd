@@ -1342,7 +1342,7 @@ class ItemRepository extends EntityRepository
                 $data[$key]['nameBn']         = $this->stringNullChecker($row['nameBn']);
                 $data[$key]['feature']           = ($row['feature']) ? 1 : 0;
                 $data[$key]['featureItem']           = ($row['featureItem']) ? $row['featureItem'] : 12;
-                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
+                $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->hex6ToHex8Default()) : $this->hex6ToHex8($row['bgcolor']);
                //// $data[$key]['appBgcolor']     = (string)empty($row['bgcolor']) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($row['bgcolor']);
                 $data[$key]['bgcolor']        = (string)empty($row['bgcolor']) ? $this->random_color_code() : $row['bgcolor'];
                 if($row['path']){
@@ -1361,7 +1361,7 @@ class ItemRepository extends EntityRepository
     }
 
     function hex6ToHex8Default() {
-        return "0xFFddd9c3";
+        return "#ddd9c3";
     }
 
     function random_color_code() {
