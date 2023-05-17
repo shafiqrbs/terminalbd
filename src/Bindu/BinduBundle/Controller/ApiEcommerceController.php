@@ -650,9 +650,9 @@ class ApiEcommerceController extends Controller
 
             /* @var $entity GlobalOption */
 
-
+            $user = $_REQUEST['user_id'];
             $entity = $this->checkApiValidation($request);
-            $result = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->OrderDashboard($entity);
+            $result = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->OrderDashboard($entity,$user);
             $response = new Response();
             $data = array(
                 'totalOrder' => ($result['totalOrder']) ? (int) $result['totalOrder'] : 0,
@@ -1325,11 +1325,14 @@ class ApiEcommerceController extends Controller
                 $em->flush();
                 $msg = "success";
             }else{
-                $msg = 'Failed';
+                $msg = 'failed';
             }
+            $data = array(
+                'status' => $msg,
+            );
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($msg));
+            $response->setContent(json_encode($data));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }

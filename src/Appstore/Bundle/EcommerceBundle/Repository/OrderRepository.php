@@ -117,14 +117,38 @@ class OrderRepository extends EntityRepository
 
     }
 
-    public function OrderDashboard($option)
+    public function OrderDashboard($option,$user)
     {
         $qb = $this->createQueryBuilder('e');
         $qb->select('MAX(e.code) as totalOrder','SUM(e.subTotal) as subTotal','SUM(e.total) as total')
             ->where('e.globalOption = :option') ->setParameter('option', $option)
+            ->andWhere('e.createdBy = :user') ->setParameter('user', $user)
             ->andWhere("e.process != :head")->setParameter('head', "Delete");
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
+
+    }
+
+
+    public function customerOrders($option,$customers)
+    {
+        $cus = array();
+        foreach ($customers as $customer){
+            $cus[] = $customer->getId();
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('c.id as customerId','MAX(e.code) as totalOrder','SUM(e.subTotal) as subTotal','SUM(e.receive) as receive','SUM(e.total) as total')
+            ->join('e.customer','c')
+            ->where('e.globalOption = :option') ->setParameter('option', $option)
+            ->andWhere("e.process != :head")->setParameter('head', "Delete")
+            ->andWhere("e.customer IN (:customers)")->setParameter('customers', $cus)
+            ->groupBy("e.customer");
+        $results = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach ($results as $result){
+            $data[$result['customerId']] = $result;
+        }
+        return $data;
 
     }
 

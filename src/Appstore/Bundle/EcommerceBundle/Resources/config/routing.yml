@@ -2,7 +2,11 @@ ecommerce_ecommercehome:
     resource: "@EcommerceBundle/Resources/config/routing/ecommercehome.yml"
     prefix:   /home
 
-ecommerce_templatecustomize:
+ecommerce_customer:
+    resource: "@EcommerceBundle/Resources/config/routing/customer.yml"
+    prefix:   /customer
+
+eecommerce_templatecustomize:
     resource: "@EcommerceBundle/Resources/config/routing/templatecustomize.yml"
     prefix:   /template
 
