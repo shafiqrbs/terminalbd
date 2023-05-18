@@ -54,6 +54,7 @@ class GlobalOptionRepository extends EntityRepository
 	    $qb->select('e');
         $qb->leftJoin('e.mainApp','m');
 	    $qb->where('e.location is not null');
+	    $qb->andWhere('e.status =1');
 	    $this->searchHandle($qb,$data);
 	    $qb->orderBy("{$sort}",$direction);
 	    $result = $qb->getQuery();
