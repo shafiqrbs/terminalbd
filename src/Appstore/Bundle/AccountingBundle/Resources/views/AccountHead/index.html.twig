@@ -33,14 +33,11 @@
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Account Head</div>
-                        {% if app.user.granted("ROLE_SUPER_ADMIN") or app.user.granted("ROLE_DOMAIN_ACCOUNTING_JOURNAL") or app.user.granted("ROLE_DOMAIN_ACCOUNTING") %}
-                            <div class="actions">
-                                <div class="btn-group">
-                                    <a class="btn red" href="{{ path('accounthead_new') }}"><i class="icon-plus"></i>&nbsp; New Sub-head</a>
-                                    <a class="btn" href="{{ path('account_double_entry_new') }}"><i class="icon-th-list"></i>&nbsp; Add Double Entry</a>
-                                </div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn red" href="{{ path('accounthead_new') }}"><i class="icon-plus"></i>&nbsp; New Head</a>
                             </div>
-                        {% endif %}
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">

@@ -22,7 +22,8 @@ class AccountHeadSubType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('parent', 'entity', [
+            ->add('code','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter account head code'),))
+            ->add('parent', 'entity', array(
                 'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
                 'group_by'  => 'parent.name',
                 'property'  => 'name',
@@ -30,12 +31,10 @@ class AccountHeadSubType extends AbstractType
                 'choice_translation_domain' => true,
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->join("e.parent",'c')
                         ->where("e.status = 1")
-                        ->andWhere("c.isParent =1")
                         ->orderBy("e.name", "ASC");
                 }
-            ])
+            ))
             ->add('status');
     }
     
