@@ -301,6 +301,66 @@ class DomainController extends Controller
         return $this->redirect($this->generateUrl('tools_domain'));
     }
 
+    public function statusDeleteAction(GlobalOption $option)
+    {
+        $em = $this->getDoctrine()->getManager();
+        set_time_limit(0);
+        exit;
+        $dir = WEB_PATH . "/uploads/domain/" . $option->getId();
+        $a = new Filesystem();
+        $a->remove($dir);
+        $a->mkdir($dir);
+        $this->getDoctrine()->getRepository('PosBundle:Pos')->posReset($option);
+        if(!empty($option->getAccountingConfig()) and $option->getAccountingConfig()){
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
+        }
+        if(!empty($option->getEcommerceConfig()) and $option->getEcommerceConfig()) {
+            $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
+        }
+        if(!empty($option->getInventoryConfig()) and $option->getInventoryConfig()) {
+            $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
+        }
+        if(!empty($option->getDpsConfig()) and $option->getDmsConfig()) {
+            $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsConfig')->dpsReset($option);
+        }
+
+        if(!empty($option->getHospitalConfig()) and $option->getHospitalConfig()) {
+            $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalDelete($option);
+        }
+
+        if(!empty($option->getHotelConfig()) and $option->getHotelConfig()) {
+            $this->getDoctrine()->getRepository('HotelBundle:HotelConfig')->hotelReset($option);
+        }
+
+        if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
+            $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineDelete($option);
+        }
+        if(!empty($option->getBusinessConfig()) and $option->getBusinessConfig()) {
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessConfig')->businessDelete($option);
+        }
+        if(!empty($option->getRestaurantConfig()) and $option->getRestaurantConfig()) {
+            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->delete($option);
+        }
+        if(!empty($option->getDmsConfig()) and $option->getDmsConfig()) {
+            $this->getDoctrine()->getRepository('DmsBundle:DmsConfig')->reset($option);
+        }
+        if($option->getAssetsConfig()) {
+            $this->getDoctrine()->getRepository('AssetsBundle:AssetsConfig')->reset($option);
+        }
+
+        $em->remove($option);
+        $em->flush();
+
+        /* Menu, Application Setting, website, module, apps , user*/
+
+        $this->get('session')->getFlashBag()->add(
+            'success',"Successfully reset data"
+        );
+        return $this->redirect($this->generateUrl('tools_domain'));
+    }
+
+
+
     public function androidDataCleanAction()
     {
         $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->androidDataClean();

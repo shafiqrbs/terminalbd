@@ -105,7 +105,7 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{% if entity.location %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
+                                        <td class="numeric" >{#{% if entity.location %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}#}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric" >{{ entity.uniqueCode }}</td>

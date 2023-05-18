@@ -32,6 +32,7 @@ class AccountHeadSubType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
+                        ->andWhere("e.globalOption IS NULL")
                         ->orderBy("e.name", "ASC");
                 }
             ))
