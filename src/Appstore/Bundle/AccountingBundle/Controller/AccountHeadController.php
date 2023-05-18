@@ -2,14 +2,13 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Form\AccountHeadSubType;
+use Appstore\Bundle\AccountingBundle\Form\AccountHeadType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
-use Appstore\Bundle\AccountingBundle\Form\AccountHeadType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -63,6 +62,7 @@ class AccountHeadController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($global);
+            $entity->setCode($entity->getCode());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
