@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * HotelOption
  *
  * @ORM\Table( name = "hotel_option")
- * @ORM\Entity(repositoryClass="")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HotelBundle\Repository\HotelOptionRepository")
  */
 class HotelOption
 {

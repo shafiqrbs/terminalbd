@@ -33,6 +33,7 @@ class Invoice
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="invoices")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $restaurantConfig;
 

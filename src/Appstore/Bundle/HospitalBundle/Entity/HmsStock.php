@@ -2,18 +2,9 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHmsStockOut;
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\Bank;
-use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * HmsStock
@@ -34,6 +25,7 @@ class HmsStock
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $hospitalConfig;
 

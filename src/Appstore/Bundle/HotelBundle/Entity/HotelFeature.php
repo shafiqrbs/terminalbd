@@ -24,6 +24,7 @@ class HotelFeature
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="hotelFeature" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hotelParticulars;
 

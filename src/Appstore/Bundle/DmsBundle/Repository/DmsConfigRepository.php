@@ -32,7 +32,5 @@ class DmsConfigRepository extends EntityRepository
         $hmsPurchase = $em->createQuery('DELETE DmsBundle:DmsService e WHERE e.dmsConfig = '.$config);
         $hmsPurchase->execute();
 
-
-
     }
 }

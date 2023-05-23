@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ElectionCommitteeMember
@@ -25,6 +24,7 @@ class ElectionCommitteeMember
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", inversedBy="members" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $committee;
 

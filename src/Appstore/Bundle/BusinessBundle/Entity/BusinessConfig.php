@@ -37,6 +37,11 @@ class BusinessConfig
     private $businessInvoices;
 
 	 /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger", mappedBy="businessConfig")
+     **/
+    private $storeLedgers;
+
+	 /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess", mappedBy="businessConfig")
      **/
     private $androidProcess;

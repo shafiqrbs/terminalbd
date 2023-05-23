@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\HotelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * HotelCategory
@@ -25,6 +24,7 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelConfig", inversedBy="categories" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $hotelConfig;
 

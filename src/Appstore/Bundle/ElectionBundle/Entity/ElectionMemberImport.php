@@ -27,6 +27,7 @@ class ElectionMemberImport
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="imports" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	private  $electionConfig;
 	

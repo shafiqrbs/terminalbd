@@ -29,6 +29,7 @@ class OrderPayment
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="orderPayments"  )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $order;
 

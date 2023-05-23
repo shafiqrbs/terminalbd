@@ -112,7 +112,6 @@ class MedicineConfigRepository extends EntityRepository
         $MedicineVendor = $em->createQuery('DELETE MedicineBundle:MedicineVendor e WHERE e.medicineConfig = '.$config);
         $MedicineVendor->execute();
 
-
     }
 
     public function discountPercentList()

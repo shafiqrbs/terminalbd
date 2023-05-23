@@ -23,5 +23,6 @@ class DpsConfigRepository extends EntityRepository
         $DoctorInvoice = $em->createQuery('DELETE DoctorPrescriptionBundle:DpsInvoice e WHERE e.dpsConfig = '.$config);
         $DoctorInvoice->execute();
 
+
     }
 }

@@ -30,6 +30,7 @@ class ElectionLocation
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="locations" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $electionConfig;
 
@@ -79,6 +80,7 @@ class ElectionLocation
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="locations")
+     * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	private $locationType;
 

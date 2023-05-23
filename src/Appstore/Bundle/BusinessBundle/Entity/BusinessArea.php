@@ -4,7 +4,6 @@ namespace Appstore\Bundle\BusinessBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * BusinessWearHouse
@@ -26,6 +25,7 @@ class BusinessArea
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="area" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessConfig;
 

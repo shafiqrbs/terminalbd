@@ -4,6 +4,7 @@ namespace Appstore\Bundle\ElectionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * ElectionParticularMaster
  *
@@ -24,7 +25,8 @@ class ElectionParticularMaster
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticularType", inversedBy="particularMasters")
-	 */
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
 	protected $particularType;
 
 

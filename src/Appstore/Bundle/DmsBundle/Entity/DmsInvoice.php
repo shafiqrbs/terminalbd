@@ -5,9 +5,7 @@ namespace Appstore\Bundle\DmsBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +13,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\PaymentCard;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Invoice
@@ -73,6 +70,7 @@ class DmsInvoice
    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceAccessories", mappedBy="dmsInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $dmsInvoiceAccessories;
 
@@ -84,6 +82,7 @@ class DmsInvoice
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsReverse", mappedBy="dmsInvoice" , cascade={"remove"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $dmsReverse;
 
@@ -96,16 +95,19 @@ class DmsInvoice
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="dmsInvoices" ,cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $customer;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsInvoice", cascade={"persist"}  )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $referredDoctor;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="assignDoctorInvoices", cascade={"persist"}  )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $assignDoctor;
 

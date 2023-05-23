@@ -2,17 +2,8 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
-use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\LocationBundle\Entity\Location;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\PaymentType;
-use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * OrderReturn
@@ -33,12 +24,14 @@ class OrderReturn
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="orders")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $ecommerceConfig;
 
    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="orders")
-     */
+    * @ORM\JoinColumn(onDelete="CASCADE")
+    */
     protected $globalOption;
 
 

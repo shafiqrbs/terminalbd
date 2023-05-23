@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +26,7 @@ class SalesReturn implements CodeAwareEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="salesReturn" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $inventoryConfig;
 
@@ -65,11 +65,13 @@ class SalesReturn implements CodeAwareEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesReturn" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $sales;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesReturnAdjustment" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $salesAdjustmentInvoice;
 

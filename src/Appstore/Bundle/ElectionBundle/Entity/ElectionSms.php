@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -26,7 +25,8 @@ class ElectionSms
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="sms" , cascade={"detach","merge"} )
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	private  $electionConfig;
 
 	/**

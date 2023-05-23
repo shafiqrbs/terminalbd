@@ -5,6 +5,7 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * HmsReverse
  *
@@ -24,6 +25,7 @@ class HmsReverse
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsReverses")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $hospitalConfig;
 

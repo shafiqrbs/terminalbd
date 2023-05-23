@@ -24,6 +24,7 @@ class PreOrderItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", inversedBy="preOrderItems"  )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $preOrder;
 

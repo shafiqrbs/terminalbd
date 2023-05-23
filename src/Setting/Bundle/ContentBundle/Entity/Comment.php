@@ -41,6 +41,7 @@ class Comment extends BaseComment implements SignedCommentInterface
      *
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      * @var User
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $author;
 

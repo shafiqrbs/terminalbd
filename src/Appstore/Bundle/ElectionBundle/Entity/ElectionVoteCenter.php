@@ -26,13 +26,15 @@ class ElectionVoteCenter
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="voteCenters" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $electionConfig;
 
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="votecenters")
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $location;
 
 	/**
@@ -47,7 +49,8 @@ class ElectionVoteCenter
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="votecenters")
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $electionSetup;
 
 	/**

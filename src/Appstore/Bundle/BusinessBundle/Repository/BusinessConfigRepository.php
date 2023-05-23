@@ -183,15 +183,18 @@ class BusinessConfigRepository extends EntityRepository
         $sales = $em->createQuery('DELETE BusinessBundle:BusinessInvoice e WHERE e.businessConfig = '.$config);
         $sales->execute();
 
-        $items = $this->_em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig'=>$config));
+        $stores = $this->_em->getRepository('BusinessBundle:BusinessStore')->findBy(array('businessConfig'=>$config));
 
         /* @var BusinessStore $item */
 
-        foreach ($items as $item){
+        foreach ($stores as $item){
             $item->setBalance(0);
             $this->_em->flush($item);
         }
         $particular = $em->createQuery('DELETE BusinessBundle:BusinessParticular e WHERE e.businessConfig = '.$config);
+        $particular->execute();
+
+        $particular = $em->createQuery('DELETE BusinessBundle:Category e WHERE e.businessConfig = '.$config);
         $particular->execute();
 
     }

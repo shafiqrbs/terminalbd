@@ -24,6 +24,7 @@ class HotelRoomGallery
 
 	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", inversedBy="roomGalleries" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $particular;
 

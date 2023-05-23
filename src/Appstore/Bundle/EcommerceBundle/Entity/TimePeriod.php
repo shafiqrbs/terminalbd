@@ -23,7 +23,8 @@ class TimePeriod
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="brands" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="timePeriods" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $ecommerceConfig;
 

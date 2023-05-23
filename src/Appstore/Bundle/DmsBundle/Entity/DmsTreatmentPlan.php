@@ -4,15 +4,12 @@ namespace Appstore\Bundle\DmsBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
-use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\PaymentCard;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * HmsPurchaseItem
  *
@@ -32,6 +29,7 @@ class DmsTreatmentPlan
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", inversedBy="dmsTreatmentPlans" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $dmsParticular;
 

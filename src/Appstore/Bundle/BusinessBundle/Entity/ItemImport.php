@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
-use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -29,6 +28,7 @@ class ItemImport
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="itemImports" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $businessConfig;
 

@@ -2,9 +2,7 @@
 
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * ElectionVoteCount
@@ -25,18 +23,21 @@ class ElectionVoteMatrix
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCandidate", inversedBy="voteMatrix")
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $candidate;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="voteMatrix")
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $electionSetup;
 
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionVoteCenter", inversedBy="voteMatrix")
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $voteCenter;
 
 	/**

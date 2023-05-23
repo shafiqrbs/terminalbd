@@ -25,6 +25,7 @@ class BusinessDamage
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="businessDamages")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $businessConfig;
 

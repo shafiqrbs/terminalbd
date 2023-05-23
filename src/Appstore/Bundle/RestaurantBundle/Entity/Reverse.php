@@ -5,6 +5,7 @@ namespace Appstore\Bundle\RestaurantBundle\Entity;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * HmsReverse
  *
@@ -24,6 +25,7 @@ class Reverse
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="reverses")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $restaurantConfig;
 

@@ -301,15 +301,21 @@ class DomainController extends Controller
         return $this->redirect($this->generateUrl('tools_domain'));
     }
 
-    public function statusDeleteAction(GlobalOption $option)
+    public function statusDeleteAction()
     {
         $em = $this->getDoctrine()->getManager();
         set_time_limit(0);
-        exit;
+        $data = $_REQUEST;
+        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList($data);
+        $entities = $this->paginate($entities);
+        foreach ($entities as $option):
+            echo $option->getName();
+      /*
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId();
         $a = new Filesystem();
         $a->remove($dir);
         $a->mkdir($dir);
+      */
         $this->getDoctrine()->getRepository('PosBundle:Pos')->posReset($option);
         if(!empty($option->getAccountingConfig()) and $option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
@@ -318,7 +324,7 @@ class DomainController extends Controller
             $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
         }
         if(!empty($option->getInventoryConfig()) and $option->getInventoryConfig()) {
-            $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
+            $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryDelete($option);
         }
         if(!empty($option->getDpsConfig()) and $option->getDmsConfig()) {
             $this->getDoctrine()->getRepository('DoctorPrescriptionBundle:DpsConfig')->dpsReset($option);
@@ -350,6 +356,7 @@ class DomainController extends Controller
 
         $em->remove($option);
         $em->flush();
+        endforeach;
 
         /* Menu, Application Setting, website, module, apps , user*/
 

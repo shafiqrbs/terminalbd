@@ -2,13 +2,14 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Entity;
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * DmsParticular
  *
@@ -28,6 +29,7 @@ class Particular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="particulars")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $restaurantConfig;
 

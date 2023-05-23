@@ -172,17 +172,19 @@ class Customer
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="approvedCustomers")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $approvedBy;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="checkedCustomers")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $checkedBy;
 
-      /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Designation")
-     **/
+    /**
+    * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Designation")
+    **/
     protected $designation;
 
     /**

@@ -67,6 +67,7 @@ class HotelConfig
      **/
     private $hotelParticulars;
 
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelDamage", mappedBy="hotelConfig")
      **/

@@ -3,12 +3,7 @@
 namespace Appstore\Bundle\HotelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Core\UserBundle\Entity\User;
-use Setting\Bundle\LocationBundle\Entity\Location;
-use Setting\Bundle\ToolBundle\Entity\ProductUnit;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * HotelParticularMeta
  *
@@ -29,7 +24,8 @@ class HotelParticularMeta
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", inversedBy="particularMetas" )
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $particular;
 
 

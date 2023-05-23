@@ -3,13 +3,14 @@
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * Particular
  *
@@ -30,6 +31,7 @@ class Particular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="particulars")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hospitalConfig;
 
@@ -62,6 +64,7 @@ class Particular
 
 	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="particulars" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $serviceGroup;
@@ -129,6 +132,7 @@ class Particular
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $surgeryDepartment;
 

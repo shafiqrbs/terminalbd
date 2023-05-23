@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -26,16 +25,18 @@ class ElectionSetup
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="electionSetups" , cascade={"detach","merge"} )
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	private  $electionConfig;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="setup" , cascade={"detach","merge"} )
+	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="setup")
 	 **/
 	private  $dashboard;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="electionSetup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	protected $location;
 

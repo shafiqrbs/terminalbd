@@ -3,16 +3,11 @@
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHmsPurchase;
+use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
@@ -34,6 +29,7 @@ class HmsPurchase
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="purchases" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $hospitalConfig;
 

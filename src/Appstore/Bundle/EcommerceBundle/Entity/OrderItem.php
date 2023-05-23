@@ -2,12 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
-use Appstore\Bundle\InventoryBundle\Entity\ItemColor;
-use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\ProductColor;
-use Setting\Bundle\ToolBundle\Entity\ProductSize;
 
 /**
  * OrderItem
@@ -34,7 +29,8 @@ class OrderItem
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item",cascade={"detach","merge"},inversedBy="orderItems")
+      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $item;
 

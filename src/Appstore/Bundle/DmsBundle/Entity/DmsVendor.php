@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DmsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * DmsVendor
  *
@@ -23,6 +24,7 @@ class DmsVendor
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsVendors")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $dmsConfig;
 

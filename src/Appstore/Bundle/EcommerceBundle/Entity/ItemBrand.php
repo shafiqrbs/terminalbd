@@ -30,6 +30,7 @@ class ItemBrand  implements CodeAwareEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="brands" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $ecommerceConfig;
 

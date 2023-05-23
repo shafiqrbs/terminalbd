@@ -2,15 +2,10 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
-use Setting\Bundle\AppearanceBundle\Entity\Feature;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Coupon
  *
@@ -32,6 +27,7 @@ class Coupon
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="coupons")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $ecommerceConfig;
 

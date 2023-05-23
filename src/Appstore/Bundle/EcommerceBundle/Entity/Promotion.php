@@ -31,6 +31,7 @@ class Promotion
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="promotions")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $ecommerceConfig;
 

@@ -2,13 +2,9 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
-use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 
 /**
  * DpsInvoiceParticular
@@ -29,6 +25,7 @@ class HmsAdmissionTodoParticular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="medications" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $admission;
 

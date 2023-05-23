@@ -26,12 +26,14 @@ class ElectionCommittee
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="committees" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $electionConfig;
 
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\electionLocation", inversedBy="committees")
+     * @ORM\JoinColumn(onDelete="CASCADE")
 	 **/
 	protected $location;
 
@@ -42,7 +44,7 @@ class ElectionCommittee
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommitteeMember", mappedBy="committee")
-	 **/
+     **/
 	protected $members;
 
 
@@ -54,7 +56,8 @@ class ElectionCommittee
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="electionCommittees")
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $electionSetup;
 
     /**
@@ -71,6 +74,7 @@ class ElectionCommittee
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="politicalWings" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $politicalWing;
 

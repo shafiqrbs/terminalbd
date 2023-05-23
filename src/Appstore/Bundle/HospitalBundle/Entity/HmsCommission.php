@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * HmsCommission
@@ -30,6 +29,7 @@ class HmsCommission
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsCommissions" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $hospitalConfig;
 

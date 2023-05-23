@@ -24,6 +24,7 @@ class ItemCategoryGrouping
 
     /**
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="parentGroup" , cascade={"detach","merge"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\OrderBy({"name" = "ASC"})
      **/
 

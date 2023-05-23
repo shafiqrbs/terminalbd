@@ -4,7 +4,6 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * HmsCategory
@@ -27,6 +26,7 @@ class HmsCategory
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="category" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $particulars;
 
@@ -42,11 +42,13 @@ class HmsCategory
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="department" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $particularDepartments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="department" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $hmsInvoices;
 

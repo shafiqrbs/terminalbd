@@ -24,12 +24,14 @@ class ItemAttribute
 
     /**
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="itemAttributes" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $category;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="itemAttributes" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $ecommerceConfig;
 

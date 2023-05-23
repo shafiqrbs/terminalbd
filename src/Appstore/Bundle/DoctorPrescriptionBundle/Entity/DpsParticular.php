@@ -2,13 +2,14 @@
 
 namespace Appstore\Bundle\DoctorPrescriptionBundle\Entity;
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * DpsParticular
  *
@@ -28,6 +29,7 @@ class DpsParticular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig", inversedBy="dpsParticulars")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dpsConfig;
 

@@ -5,6 +5,7 @@ namespace Appstore\Bundle\DmsBundle\Entity;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * DmsReverse
  *
@@ -24,6 +25,7 @@ class DmsReverse
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsReverses")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $dmsConfig;
 

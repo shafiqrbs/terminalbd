@@ -23,11 +23,11 @@ class HotelConfigRepository extends EntityRepository
 	    $sales = $em->createQuery('DELETE HotelBundle:HotelInvoice e WHERE e.hotelConfig = '.$config);
 	    $sales->execute();
 
-	    $purchase = $em->createQuery('DELETE HotelBundle:HotelPurchase e WHERE e.hotelConfig = '.$config);
-	    $purchase->execute();
-
         $stock = $em->createQuery('DELETE HotelBundle:HotelOption e WHERE e.hotelConfig = '.$config);
         $stock->execute();
+
+	    $purchase = $em->createQuery('DELETE HotelBundle:HotelPurchase e WHERE e.hotelConfig = '.$config);
+	    $purchase->execute();
 
 	    $stock = $em->createQuery('DELETE HotelBundle:HotelParticular e WHERE e.hotelConfig = '.$config);
         $stock->execute();

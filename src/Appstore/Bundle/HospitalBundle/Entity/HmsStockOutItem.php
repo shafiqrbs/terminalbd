@@ -2,12 +2,8 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * HmsStockOutItem
  *
@@ -27,6 +23,7 @@ class HmsStockOutItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="stockOutItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $particular;
 

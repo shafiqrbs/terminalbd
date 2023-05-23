@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
-use Appstore\Bundle\ElectionBundle\Form\ParticularType;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -26,18 +25,21 @@ class ElectionCampaignAnalysis
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", inversedBy="campaignAnalysis" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $electionConfig;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="campaignAnalysisType" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $analysisType;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="campaigns")
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	protected $electionSetup;
 
 	/**

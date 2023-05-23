@@ -36,7 +36,6 @@ class EcommerceConfig
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AppModule")
      **/
-
     private $stockApplication;
 
     /**
@@ -48,7 +47,6 @@ class EcommerceConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemImport", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
      */
     protected $itemImports;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="ecommerceConfig"  , cascade={"persist", "remove"} )
@@ -64,6 +62,18 @@ class EcommerceConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
      */
     protected $orders;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\DeliveryLocation", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $locations;
+
+
+      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\TimePeriod", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $timePeriods;
 
 
      /**

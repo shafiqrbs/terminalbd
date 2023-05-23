@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * HmsDoctorVisitMode
@@ -25,11 +24,13 @@ class HmsDoctorVisitMode
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="visitModes")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $doctor;
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $service;
 

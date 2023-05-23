@@ -26,6 +26,7 @@ class RestaurantAndroidProcess
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="androidProcesses")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $restaurantConfig;
 

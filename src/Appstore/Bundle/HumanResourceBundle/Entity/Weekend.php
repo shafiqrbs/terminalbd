@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HumanResourceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
@@ -22,10 +23,12 @@ class Weekend
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="weekend")
-     **/
 
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="weekend" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
     protected $globalOption;
 
     /**

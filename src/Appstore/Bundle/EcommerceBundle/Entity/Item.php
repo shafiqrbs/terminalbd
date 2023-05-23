@@ -35,6 +35,7 @@ class Item
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="items" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $ecommerceConfig;
 
@@ -68,6 +69,11 @@ class Item
     protected $itemGalleries;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="item" , cascade={"remove"} )
+     */
+    protected $orderItems;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="items", cascade={"detach","merge"} )
      * @ORM\JoinColumn(nullable=true)
      */
@@ -94,7 +100,8 @@ class Item
     protected $inventoryItem;
 
      /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", inversedBy="ecommerceItem")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", inversedBy="ecommerceItem" ,cascade={"detach","merge"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $medicineItem;
 
@@ -115,27 +122,28 @@ class Item
     private  $sizeUnit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="items" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount",inversedBy="items",cascade={"detach","merge"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $discount;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="itemTags" )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion" ,cascade={"detach","merge"})
      **/
     private  $tag;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="itemPromotions" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", cascade={"detach","merge"})
      **/
     private  $promotion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="item" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit",cascade={"detach","merge"})
      **/
     private  $productUnit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemAssurance", inversedBy="item" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ItemAssurance",cascade={"detach","merge"})
      **/
     private  $itemAssurance;
 

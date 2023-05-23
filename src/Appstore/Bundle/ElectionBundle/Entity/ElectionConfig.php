@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -79,8 +78,9 @@ class ElectionConfig
 	private $electionSetups;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", inversedBy="dashboard")
-	 **/
+	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionSetup", mappedBy="electionSetups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	private $setup;
 
 

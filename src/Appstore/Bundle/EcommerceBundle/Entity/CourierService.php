@@ -3,12 +3,6 @@
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
-use Setting\Bundle\AppearanceBundle\Entity\Feature;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 /**
@@ -30,6 +24,7 @@ class CourierService
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="brands" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $ecommerceConfig;
 

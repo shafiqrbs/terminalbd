@@ -24,6 +24,7 @@ class DpsService
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig", inversedBy="dpsServices")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dpsConfig;
 

@@ -40,6 +40,7 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="categories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $globalOption;
 
@@ -50,6 +51,7 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="categories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $ecommerceConfig;
 

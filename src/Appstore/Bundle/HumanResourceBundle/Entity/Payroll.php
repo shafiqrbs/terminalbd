@@ -4,8 +4,9 @@ namespace Appstore\Bundle\HumanResourceBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+
 /**
  * Payroll
  * @ORM\Table("hr_payroll")
@@ -23,6 +24,7 @@ class Payroll
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="payroll")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $globalOption;
 

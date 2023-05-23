@@ -29,6 +29,7 @@ class ItemImport
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="itemImports" , cascade={"detach","merge"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $ecommerceConfig;
     
@@ -154,7 +155,7 @@ class ItemImport
     public function removeUpload()
     {
 
-        if ($file = $this->getAbsolutePath()) {
+        if ($file = $this->getAbsolutePath() and file_exists( $this->getAbsolutePath())) {
             unlink($file);
         }
     }

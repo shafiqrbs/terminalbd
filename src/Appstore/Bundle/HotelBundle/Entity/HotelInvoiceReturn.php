@@ -25,6 +25,7 @@ class HotelInvoiceReturn
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelConfig", inversedBy="hotelInvoiceReturns")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hotelConfig;
 

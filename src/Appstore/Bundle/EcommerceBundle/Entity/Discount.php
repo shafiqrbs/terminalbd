@@ -31,25 +31,29 @@ class Discount
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="discounts")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $ecommerceConfig;
 
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="discounts")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $brand;
 
     /**
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="discounts")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $category;
 
-
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="discount" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="discount",cascade={"persist", "remove"} )
+
      */
     protected $items;
+
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="discount" , cascade={"remove"})

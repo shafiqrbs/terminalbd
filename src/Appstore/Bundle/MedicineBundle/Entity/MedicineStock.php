@@ -43,7 +43,6 @@ class MedicineStock
      **/
     private $medicinePrepurchaseItems;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicineStock")
      **/

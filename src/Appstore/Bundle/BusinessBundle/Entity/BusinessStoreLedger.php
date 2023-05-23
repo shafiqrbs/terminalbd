@@ -3,8 +3,8 @@
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
@@ -27,7 +27,8 @@ class BusinessStoreLedger
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessConfig", inversedBy="storeLedgers", cascade={"detach","merge"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $businessConfig;
 

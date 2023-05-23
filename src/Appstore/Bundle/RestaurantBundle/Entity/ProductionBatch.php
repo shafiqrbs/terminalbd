@@ -4,8 +4,8 @@ namespace Appstore\Bundle\RestaurantBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Terminalbd\InventoryBundle\Entity\Item;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Terminalbd\InventoryBundle\Entity\Item;
 
 /**
  * ProductionBatch
@@ -26,6 +26,7 @@ class ProductionBatch
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="productionBatch")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $restaurantConfig;
 

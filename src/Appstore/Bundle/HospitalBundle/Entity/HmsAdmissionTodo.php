@@ -4,7 +4,6 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * HmsAdmissionAttribute
@@ -25,13 +24,15 @@ class HmsAdmissionTodo
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="admissionInvestigations" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $admission;
 
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsAdmissionTodoParticular", mappedBy="todo" )
-     **/
+      * @ORM\JoinColumn(onDelete="CASCADE")
+      **/
     private  $todoParticulars;
 
 
@@ -44,6 +45,7 @@ class HmsAdmissionTodo
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="ipdVisits" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $doctor;
 

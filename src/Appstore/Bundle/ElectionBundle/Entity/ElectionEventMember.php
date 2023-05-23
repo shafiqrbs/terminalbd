@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ElectionEventGuest
@@ -25,7 +24,8 @@ class ElectionEventMember
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionEvent", inversedBy="eventMembers" , cascade={"detach","merge"} )
-	 **/
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
 	private  $event;
 
 	/**

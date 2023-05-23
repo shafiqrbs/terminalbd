@@ -4,6 +4,7 @@ namespace Appstore\Bundle\RestaurantBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * HmsPurchaseItem
  *
@@ -28,6 +29,7 @@ class ProductionElement
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="productionItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $item;
 

@@ -4,7 +4,6 @@ namespace Appstore\Bundle\HumanResourceBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * PayrollParticular
@@ -25,6 +24,7 @@ class EmployeePayrollParticular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", inversedBy="employeePayrollParticulars" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $employeePayroll;
 

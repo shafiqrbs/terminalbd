@@ -29,7 +29,7 @@ class DpsConfig
     private $globalOption;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="dpsConfig")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="dpsConfig", cascade={"persist", "remove"})
      **/
     private $dpsInvoices;
 

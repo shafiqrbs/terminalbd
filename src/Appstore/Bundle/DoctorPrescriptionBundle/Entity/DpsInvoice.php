@@ -5,9 +5,7 @@ namespace Appstore\Bundle\DoctorPrescriptionBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\MedicineBundle\Entity\DiagnosticReport;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Core\UserBundle\Entity\User;
@@ -16,7 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\PaymentCard;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Invoice
@@ -43,7 +40,7 @@ class DpsInvoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="dpsInvoice",cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="dpsInvoice", cascade={"persist"} )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hmsInvoice;

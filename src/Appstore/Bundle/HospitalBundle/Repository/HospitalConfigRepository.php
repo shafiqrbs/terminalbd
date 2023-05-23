@@ -61,8 +61,14 @@ class HospitalConfigRepository extends EntityRepository
         $hmsPurchase = $em->createQuery('DELETE HospitalBundle:HmsPurchase e WHERE e.hospitalConfig = '.$config);
         $hmsPurchase->execute();
 
+        $HmsServiceGroup = $em->createQuery('DELETE HospitalBundle:HmsServiceGroup e WHERE e.hospitalConfig = '.$config);
+        $HmsServiceGroup->execute();
+
         $Particular = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
         $Particular->execute();
+
+        $HmsServiceGroup = $em->createQuery('DELETE HospitalBundle:HmsServiceGroup e WHERE e.hospitalConfig = '.$config);
+        $HmsServiceGroup->execute();
 
     }
 }

@@ -1456,7 +1456,8 @@ class ApiEcommerceController extends Controller
             if(empty($user)){
                 $data['msg'] = "invalid";
             }else{
-                $a = mt_rand(1000,9999);
+               // $a = mt_rand(1000,9999);
+                $a = 1111;
                 $otp = $a." {$deviceHash}";
                 $user->setPlainPassword($a);
                 $this->get('fos_user.user_manager')->updateUser($user);

@@ -125,6 +125,12 @@ class GlobalOption
     protected $payroll;
 
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Weekend", mappedBy="globalOption" )
+     **/
+    protected $weekend;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll", mappedBy="globalOption" )
      **/

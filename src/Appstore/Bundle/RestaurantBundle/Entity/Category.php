@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\RestaurantBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -26,6 +25,7 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", inversedBy="categories")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $restaurantConfig;
 

@@ -24,11 +24,13 @@ class HotelProductionElement
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", inversedBy="productionElements" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $hotelParticular;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", inversedBy="production" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $particular;
 

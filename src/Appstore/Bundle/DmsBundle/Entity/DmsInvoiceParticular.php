@@ -3,10 +3,8 @@
 namespace Appstore\Bundle\DmsBundle\Entity;
 
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -42,6 +40,7 @@ class DmsInvoiceParticular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="invoiceParticular", cascade={"persist"} )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dmsService;
 

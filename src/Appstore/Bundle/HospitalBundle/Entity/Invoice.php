@@ -33,6 +33,7 @@ class Invoice
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsInvoices")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hospitalConfig;
 

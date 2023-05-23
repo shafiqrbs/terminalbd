@@ -3,10 +3,10 @@
 namespace Appstore\Bundle\ElectionBundle\Entity;
 
 use Core\UserBundle\Entity\User;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -71,12 +71,14 @@ class ElectionMember
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="electionMembers")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     protected $location;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", inversedBy="centerMembers")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     protected $voteCenter;
@@ -95,6 +97,7 @@ class ElectionMember
 
 	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionParticular", inversedBy="memberPoliticalParty")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $oldPoliticalParty;
 

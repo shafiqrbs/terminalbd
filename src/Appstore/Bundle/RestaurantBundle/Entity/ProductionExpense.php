@@ -4,8 +4,8 @@ namespace Appstore\Bundle\RestaurantBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Terminalbd\InventoryBundle\Entity\Item;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Terminalbd\InventoryBundle\Entity\Item;
 
 /**
  * ProductionElement
@@ -53,6 +53,7 @@ class ProductionExpense
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="productionExpenseItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $particular;
 

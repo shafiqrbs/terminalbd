@@ -4,12 +4,6 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
-use Setting\Bundle\AppearanceBundle\Entity\Feature;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
-use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 /**
@@ -30,7 +24,8 @@ class DeliveryLocation
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="brands" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="locations" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $ecommerceConfig;
 

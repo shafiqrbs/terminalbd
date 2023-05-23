@@ -25,6 +25,7 @@ class RestaurantDamage
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $restaurantConfig;
 
