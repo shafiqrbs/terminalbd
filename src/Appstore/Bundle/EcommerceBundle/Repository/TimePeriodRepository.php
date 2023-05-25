@@ -1,7 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -15,7 +14,7 @@ class TimePeriodRepository extends EntityRepository
     public function getApiTimePeriod($config)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.id as id','e.name as name');
+        $qb->select('e.id as id','e.name as name','e.name as nameBn');
         $qb->where("e.ecommerceConfig = :option")->setParameter('option', $config->getId());
         $result = $qb->getQuery()->getArrayResult();
         return $result;

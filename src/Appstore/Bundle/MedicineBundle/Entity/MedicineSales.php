@@ -19,7 +19,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 /**
  * Invoice
  *
- * @ORM\Table( name ="medicine_sales")
+ * @ORM\Table(name="medicine_sales")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\MedicineBundle\Repository\MedicineSalesRepository")
  */
 class MedicineSales
