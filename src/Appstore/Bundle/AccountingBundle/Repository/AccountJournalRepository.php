@@ -30,8 +30,6 @@ class AccountJournalRepository extends EntityRepository
     public function findWithSearch(User $user,$data = '')
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
-
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.accountHeadDebit','accountHeadDebit');
         $qb->leftJoin('e.accountHeadCredit','accountHeadCredit');
@@ -54,10 +52,6 @@ class AccountJournalRepository extends EntityRepository
         $qb->addSelect('ab.accountNo as accountNo');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
         $result = $qb->getQuery();
@@ -97,7 +91,6 @@ class AccountJournalRepository extends EntityRepository
     public function accountCashOverview(User $user,$type,$data)
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
@@ -107,10 +100,6 @@ class AccountJournalRepository extends EntityRepository
         $qb->andWhere("e.process = 'approved'");
         $qb->andWhere("e.transactionType = :transactionType");
         $qb->setParameter('transactionType', $type);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         $amount =  $result['amount'];

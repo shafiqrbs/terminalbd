@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
@@ -65,6 +66,11 @@ class AccountJournal
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountJournalCredits" )
      **/
     private  $accountHeadCredit;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\VoucherType")
+     **/
+    private  $voucherType;
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -157,6 +163,14 @@ class AccountJournal
      * @ORM\Column(name="code", type="integer",  nullable=true)
      */
     private $code;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="voucherNo", type="string",  nullable=true)
+     */
+    private $voucherNo;
 
 
     /**
@@ -269,7 +283,7 @@ class AccountJournal
     }
 
     /**
-     * @param CoreUser $toUser
+     * @param User $toUser
      */
     public function setToUser($toUser)
     {
@@ -577,6 +591,40 @@ class AccountJournal
     {
         return $this->transactions;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getVoucherType()
+    {
+        return $this->voucherType;
+    }
+
+    /**
+     * @param mixed $voucherType
+     */
+    public function setVoucherType($voucherType)
+    {
+        $this->voucherType = $voucherType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVoucherNo()
+    {
+        return $this->voucherNo;
+    }
+
+    /**
+     * @param string $voucherNo
+     */
+    public function setVoucherNo($voucherNo)
+    {
+        $this->voucherNo = $voucherNo;
+    }
+
+
 
 
 }

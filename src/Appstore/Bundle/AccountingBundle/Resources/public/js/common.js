@@ -25,6 +25,30 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0"
 });
 
+$( ".date-picker" ).datepicker({
+    dateFormat: "dd-mm-yy"
+});
+
+$( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+});
+
+$(".number , .amount, .numeric").inputFilter(function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); });
+
+
+$('.amount').change(function(){
+    this.value = parseFloat(this.value).toFixed(2);
+});
+
+function financial(val) {
+    var number =  Number.parseFloat(val).toFixed(2);
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
 
 function CommonJs(){
 
@@ -138,8 +162,8 @@ function CommonJs(){
     $(document).on('keyup', ".debit", function() {
         var sum = 0;
         $(".debit").each(function(){
-            crVal = ($(this).val() === "NaN" ) ? 0 : $(this).val();
-            sum += +parseFloat(crVal);
+            crVal = ($(this).val() === "" ) ? 0 : Math.abs($(this).val());
+            sum += +parseFloat(Math.abs(crVal));
         });
         $(".totalDebit").html(sum);
         $(".totalDebit").val(sum);
@@ -158,8 +182,8 @@ function CommonJs(){
     $(document).on('keyup', ".credit", function() {
         var sum = 0;
         $(".credit").each(function(){
-            crVal = ($(this).val() === "NaN" ) ? 0 : $(this).val();
-            sum += +parseFloat(crVal);
+            crVal = ($(this).val() === "" ) ? 0 : Math.abs($(this).val());
+            sum += +parseFloat(Math.abs(crVal));
         });
         $(".totalCredit").html(sum);
         $(".totalCredit").val(sum);

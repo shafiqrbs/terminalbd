@@ -2,21 +2,20 @@
 
 namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
-use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Knp\Snappy\Pdf;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Form\InvoiceType;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Knp\Snappy\Pdf;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -245,15 +244,7 @@ class InvoiceController extends Controller
                 $entity->setApprovedBy($this->getUser());
             }
             $entity->setTotal(round($entity->getTotal(),2));
-            if($entity->getTotal() <= $entity->getReceived()){
-                $entity->setReceived(round($entity->getTotal()));
-                $entity->setDue(0);
-                $entity->setPaymentStatus('Paid');
-            }else{
-                $entity->setPaymentStatus('Due');
-                $due = round($entity->getTotal() - $entity->getReceived()- $entity->getTloPrice());
-                $entity->setDue($due);
-            }
+
             if($entity->getReceived()){
 	            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getReceived());
 	            $entity->setPaymentInWord($amountInWords);
@@ -262,6 +253,25 @@ class InvoiceController extends Controller
                 $entity->setIsCondition(true);
             }else{
                 $entity->setIsCondition(false);
+            }
+            if($entity->getBusinessConfig()->getVatPercent() > 0){
+                $vatAmount =$this-> getTaxTariffCalculation($entity->getSubTotal(),$entity->getBusinessConfig()->getVatPercent());
+                $entity->setVat($vatAmount);
+            }
+            if($entity->getBusinessConfig()->getAitPercent() > 0){
+                $vatAmount =$this-> getTaxTariffCalculation($entity->getSubTotal(),$entity->getBusinessConfig()->getAitPercent());
+                $entity->setAit($vatAmount);
+            }
+            $total = round($vatAmount + $entity->getSubTotal() + $entity->getAit() - $entity->getDiscount());
+            $entity->setTotal($total);
+            if($entity->getTotal() <= $entity->getReceived()){
+                $entity->setReceived(round($entity->getTotal()));
+                $entity->setDue(0);
+                $entity->setPaymentStatus('Paid');
+            }else{
+                $entity->setPaymentStatus('Due');
+                $due = round($entity->getTotal() - $entity->getReceived()- $entity->getTloPrice());
+                $entity->setDue($due);
             }
 	        $em->flush();
             if(in_array($entity->getProcess(), $done) and $entity->getBusinessConfig()->getBusinessModel() == 'distribution') {
@@ -307,6 +317,14 @@ class InvoiceController extends Controller
             'form' => $editForm->createView(),
         ));
 
+    }
+
+
+    private function getTaxTariffCalculation($subTotal,$tariff)
+    {
+        $value = 0;
+        $value = (($subTotal * $tariff)/100);
+        return $value;
     }
 
     private function getErrorsFromForm(FormInterface $form)

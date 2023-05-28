@@ -1,13 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
-use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
-use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
-use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
-use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Doctrine\ORM\EntityRepository;
 use Proxies\__CG__\Appstore\Bundle\DomainUserBundle\Entity\PaymentSalary;
+use Setting\Bundle\ToolBundle\Service\DatabaseArchive;
 
 /**
  * AccountBankRepository
@@ -18,7 +14,45 @@ use Proxies\__CG__\Appstore\Bundle\DomainUserBundle\Entity\PaymentSalary;
 class AccountBankRepository extends EntityRepository
 {
 
+    public function selectBankRecords(){
 
+        $DbBackup = new DatabaseArchive();
+
+        //  $DbBackup->insertSalesData();
+        $conn = $DbBackup->backupDatabaseConnection();
+
+        $servername = "127.0.0.1";
+        $username = "root";
+        $password = "dhaka123";
+
+        try {
+            $conn = new \PDO("mysql:host=$servername;dbname=alexabd",  $username, $password);
+            // set the PDO error mode to exception
+            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        }
+        catch(\PDOException $e)
+        {
+            return "failed";
+        }
+
+        if (!$conn) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+        $stmt = "SELECT id FROM account_bank";
+        $result = mysqli_query($conn, $stmt);
+        var_dump($result);
+        exit;
+        if (mysqli_num_rows($result) > 0) {
+            // output data of each row
+            while($row = mysqli_fetch_assoc($result)) {
+                echo "id: " . $row["id"]. "<br>";
+            }
+        } else {
+            echo "0 results";
+        }
+
+        exit;
+    }
 
     public function findWithSearch($globalOption,$data = '')
     {

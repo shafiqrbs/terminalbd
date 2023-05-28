@@ -2,15 +2,12 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
-use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Form\AccountBankType;
-use Symfony\Component\HttpFoundation\Response;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * AccountBank controller.
@@ -31,6 +28,8 @@ class AccountBankController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('AccountingBundle:AccountBank')->findWithSearch($globalOption,$data);
+
+       // $this->getDoctrine()->getRepository(AccountBank::class)->selectBankRecords();
         return $this->render('AccountingBundle:AccountBank:index.html.twig', array(
             'entities' => $entities,
             'searchForm' => $data,

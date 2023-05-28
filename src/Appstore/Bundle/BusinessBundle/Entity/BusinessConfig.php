@@ -144,6 +144,20 @@ class BusinessConfig
     /**
      * @var smallint
      *
+     * @ORM\Column(name="vatPercent", type="smallint",  nullable=true)
+     */
+    private $vatPercent;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="aitPercent", type="smallint",  nullable=true)
+     */
+    private $aitPercent;
+
+    /**
+     * @var smallint
+     *
      * @ORM\Column(name="fontSizeLabel", type="smallint",  nullable=true)
      */
     private $fontSizeLabel;
@@ -1670,6 +1684,40 @@ class BusinessConfig
     {
         $this->systemReset = $systemReset;
     }
+
+    /**
+     * @return smallint
+     */
+    public function getVatPercent()
+    {
+        return $this->vatPercent;
+    }
+
+    /**
+     * @param smallint $vatPercent
+     */
+    public function setVatPercent($vatPercent)
+    {
+        $this->vatPercent = $vatPercent;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getAitPercent()
+    {
+        return $this->aitPercent;
+    }
+
+    /**
+     * @param smallint $aitPercent
+     */
+    public function setAitPercent($aitPercent)
+    {
+        $this->aitPercent = $aitPercent;
+    }
+
+
 
 
 

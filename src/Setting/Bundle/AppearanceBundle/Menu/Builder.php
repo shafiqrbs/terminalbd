@@ -625,7 +625,13 @@ class Builder extends ContainerAware
             $menu['Accounting']->addChild('Journal', array('route' => 'account_transaction'))
                 
                 ->setAttribute('dropdown', true);
-            $menu['Accounting']['Journal']->addChild('Double Entry', array('route' => 'account_double_entry'));
+            $accounting = array('inventory');
+            $result = array_intersect($arrSlugs, array('hms'));
+            if (!empty($result)) {
+                $menu['Accounting']['Journal']->addChild('Journal Voucher', array('route' => 'journal_voucher'));
+            }else{
+                $menu['Accounting']['Journal']->addChild('Double Entry', array('route' => 'account_double_entry'));
+            }
             $menu['Accounting']['Journal']->addChild('Journal', array('route' => 'account_journal'));
             $menu['Accounting']['Journal']->addChild('Contra Account', array('route' => 'account_balancetransfer'));
             $menu['Accounting']['Journal']->addChild('Profit Withdrawal', array('route' => 'account_profit_withdrawal'));

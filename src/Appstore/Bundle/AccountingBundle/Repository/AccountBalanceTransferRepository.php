@@ -1,7 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
-use Appstore\Bundle\AccountingBundle\Entity\AccountBalanceTransfer;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
@@ -24,15 +23,11 @@ class AccountBalanceTransferRepository extends EntityRepository
     public function findWithSearch(User $user,$data = '')
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
+
 
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $result = $qb->getQuery();
@@ -60,7 +55,6 @@ class AccountBalanceTransferRepository extends EntityRepository
     public function accountCashOverview(User $user,$type,$data)
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.toTransactionMethod','to');
@@ -69,10 +63,6 @@ class AccountBalanceTransferRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = 'approved'");
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         $amount =  $result['amount'];

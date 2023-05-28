@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\BusinessBundle\Form;
 
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -87,6 +86,8 @@ class ConfigType extends AbstractType
             ->add('printOutstanding')
             ->add('removeImage')
             ->add('file')
+            ->add('vatPercent','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('aitPercent','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('invoiceWidth','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))

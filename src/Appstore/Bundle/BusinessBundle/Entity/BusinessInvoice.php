@@ -14,7 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\PaymentCard;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Invoice
@@ -253,6 +252,13 @@ class BusinessInvoice
      * @ORM\Column(name="vat", type="float", nullable=true)
      */
     private $vat;
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="ait", type="float", nullable=true)
+     */
+    private $ait;
 
     /**
      * @var float
@@ -1229,6 +1235,24 @@ class BusinessInvoice
     {
         return $this->conditionLedger;
     }
+
+    /**
+     * @return float
+     */
+    public function getAit()
+    {
+        return $this->ait;
+    }
+
+    /**
+     * @param float $ait
+     */
+    public function setAit($ait)
+    {
+        $this->ait = $ait;
+    }
+
+
 
 }
 

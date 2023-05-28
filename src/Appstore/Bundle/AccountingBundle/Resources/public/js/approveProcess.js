@@ -452,12 +452,14 @@ $(document).on( "click", ".androidProcess", function( e ) {
         var $cloneBlock = $('#clone-block');
         var $clone = $cloneBlock.find('.clone:eq(0)').clone();
         $clone.find('[id]').each(function(){this.id+='someotherpart'});
+        $clone.find('.select2' ).val("").select();
         $clone.find(':text,textarea' ).val("");
         $clone.find('.debit' ).val(0);
         $clone.find('.credit' ).val(0);
         $clone.attr('id', "added"+(++count));
         $clone.find('.remove').removeClass('hidden');
-        $cloneBlock.prepend($clone);
+        $cloneBlock.append($clone);
+        $clone.children("select").select2();
         $('.numeric').numeric();
     });
 
@@ -473,7 +475,7 @@ $(document).on( "click", ".androidProcess", function( e ) {
             url: url,
             type: 'GET',
             success: function (response) {
-                if ('success' == response) {
+                if ('success' === response) {
                     location.reload();
                 }
             },

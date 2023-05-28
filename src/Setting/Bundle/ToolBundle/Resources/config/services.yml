@@ -28,6 +28,10 @@ services:
         class: Setting\Bundle\ToolBundle\Service\ToolManager
         arguments: [@doctrine]
 
+  settong_archive_db:
+        class: Setting\Bundle\ToolBundle\Service\DatabaseArchive
+        arguments: [@doctrine]
+
   setting_tool.sms_gateWay:
        class: Setting\Bundle\ToolBundle\Service\SmsGateWay
        arguments: [%sms_username%, %sms_password%, @guzzle.client.api_crm]

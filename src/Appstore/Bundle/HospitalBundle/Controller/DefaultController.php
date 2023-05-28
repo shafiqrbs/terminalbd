@@ -4,10 +4,9 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Setting\Bundle\ToolBundle\Entity\AppModule;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class DefaultController extends Controller
 {
@@ -23,7 +22,6 @@ class DefaultController extends Controller
         $datetime = new \DateTime("now");
         $data['startDate'] = $datetime->format('Y-m-d');
         $data['endDate'] = $datetime->format('Y-m-d');
-        $income = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMedicineIncome($this->getUser(),$data);
         $user = $this->getUser();
         $salesCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->userBaseSalesOverview($user,$data,array('diagnostic','visit'));
         $salesCashAdmission = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($user,$data,array('admission'));
@@ -48,7 +46,6 @@ class DefaultController extends Controller
         $diagonesticProcesses = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'diagnostic',$data);
         $admissionProcesses = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'admission',$data);
         $visitProcesses = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->getAdmissionProcess($hospital,'visit',$data);
-
 
         return $this->render('HospitalBundle:Default:dashboard.html.twig', array(
             'option'                            => $user->getGlobalOption() ,

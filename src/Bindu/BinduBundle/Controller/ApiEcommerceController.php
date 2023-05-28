@@ -236,13 +236,11 @@ class ApiEcommerceController extends Controller
             $appFooterIconBgColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorBg());
             $appFooterIconColor = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColor());
             $appFooterIconColorHover = (string) trim($entity->getTemplateCustomize()->getMobileFooterAnchorColorHover());
-
             $appSuccessColor = (string) trim($entity->getTemplateCustomize()->getAppSuccessColor());
             $appNoticeColor = (string) trim($entity->getTemplateCustomize()->getAppNoticeColor());
             $appCloseColor = (string) trim($entity->getTemplateCustomize()->getAppCloseColor());
 
             $morePageColor = (string) trim($entity->getTemplateCustomize()->getAppMoreColor());
-
 
             $tawk = (string) trim($entity->getTemplateCustomize()->getTawk());
             $pixel = (string) trim($entity->getTemplateCustomize()->getFacebookPixel());

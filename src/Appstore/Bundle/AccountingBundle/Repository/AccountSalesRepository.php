@@ -172,16 +172,11 @@ class AccountSalesRepository extends EntityRepository
 	public function receiveModeOverview(User $user,$data)
 	{
 		$globalOption = $user->getGlobalOption()->getId();
-		$branch = $user->getProfile()->getBranches();
 		$qb = $this->createQueryBuilder('e');
 		$qb->leftJoin('e.transactionMethod','t');
 		$qb->select('e.processHead, COALESCE(SUM(e.totalAmount),0) AS total,COALESCE(SUM(e.amount),0) AS receive, count(e.id) AS totalCount');
 		$qb->where("e.globalOption = :globalOption");
 		$qb->setParameter('globalOption', $globalOption);
-		if (!empty($branch)){
-			$qb->andWhere("e.branches = :branch");
-			$qb->setParameter('branch', $branch);
-		}
 		$qb->andWhere("e.process = 'approved'");
 		$this->handleSearchBetween($qb,$data);
 		$qb->groupBy('e.processHead');
@@ -194,7 +189,6 @@ class AccountSalesRepository extends EntityRepository
 	public function salesOverview(User $user,$data, $process = [])
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
@@ -202,10 +196,6 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($process)){
             $qb->andWhere("e.processHead IN (:process)");
             $qb->setParameter('process', $process);
-        }
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
         }
         $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
@@ -219,7 +209,6 @@ class AccountSalesRepository extends EntityRepository
     public function userBaseSalesOverview(User $user,$data, $process = [])
     {
         $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('e');
         $qb->select('COALESCE(SUM(e.totalAmount),0) AS totalAmount, COALESCE(SUM(e.amount),0) AS receiveAmount, COALESCE(SUM(e.amount),0) AS dueAmount, COALESCE(SUM(e.amount),0) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
@@ -227,10 +216,6 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($process)){
             $qb->andWhere("e.processHead IN (:process)");
             $qb->setParameter('process', $process);
-        }
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
         }
         $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
@@ -261,7 +246,6 @@ class AccountSalesRepository extends EntityRepository
     public function findWithSearch(User $user,$data = '',$process = '')
     {
         $globalOption = $user->getGlobalOption()->getId();
-        $branch = $user->getProfile()->getBranches();
 
 	    $sort = isset($data['sort'])? $data['sort'] :'e.created';
 	    $direction = isset($data['direction'])? $data['direction'] :'DESC';
@@ -280,10 +264,6 @@ class AccountSalesRepository extends EntityRepository
         $qb->addSelect('e.id as id','e.created as updated','e.accountRefNo as accountRefNo','e.totalAmount as totalAmount','e.amount as amount','e.balance as balance','e.sourceInvoice as sourceInvoice','e.processHead as processHead','e.process as process','e.remark');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.id','DESC');
 	    $qb->addOrderBy("{$sort}",$direction);

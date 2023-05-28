@@ -330,7 +330,6 @@ class MedicineSalesRepository extends EntityRepository
     public function reportSalesOverview(User $user ,$data)
     {
 
-        $userBranch = $user->getProfile()->getBranches();
         $config =  $user->getGlobalOption()->getMedicineConfig()->getId();
 
         $qb = $this->createQueryBuilder('s');
@@ -340,10 +339,6 @@ class MedicineSalesRepository extends EntityRepository
         $qb->andWhere('s.process = :process');
         $qb->setParameter('process', 'Done');
         $this->handleSearchBetween($qb,$data);
-        if ($userBranch){
-            $qb->andWhere("s.branch = :branch");
-            $qb->setParameter('branch', $userBranch);
-        }
         return $qb->getQuery()->getOneOrNullResult();
     }
 

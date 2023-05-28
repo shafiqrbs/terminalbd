@@ -941,8 +941,10 @@ class User extends BaseUser
 	}
 
 	public function getUserFullName(){
-
-		return $this->profile->getName();
+        if($this->profile){
+            return $this->profile->getName();
+        }
+        return false;
 	}
 
 	public function userDoctor(){
