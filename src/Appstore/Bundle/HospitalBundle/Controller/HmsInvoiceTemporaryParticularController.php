@@ -4,17 +4,11 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceTemporaryParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
-use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Core\UserBundle\Entity\User;
-use Frontend\FrontentBundle\Service\MobileDetect;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -91,6 +85,8 @@ class HmsInvoiceTemporaryParticularController extends Controller
         if($admissionId){
             $admission = $this->getDoctrine()->getRepository(Invoice::class)->findOneBy(array('hospitalConfig' => $hospital,'invoice'=>$admissionId));
             $entity->setParent($admission);
+            $entity->setMarketingExecutive($admission->getMarketingExecutive());
+            $entity->setReferredDoctor($admission->getReferredDoctor());
         }
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
