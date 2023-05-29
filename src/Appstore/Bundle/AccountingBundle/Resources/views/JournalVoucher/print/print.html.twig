@@ -172,21 +172,7 @@
                     position: relative;
                     min-height: 80px;
                 }
-                .grid-item-bottom img{
-                    height: 50px;
-                }
 
-                .frame {
-                    height: 80px;      /* Equals maximum image height */
-                    line-height: 80px;
-                    text-align: center;
-                }
-                .frame .img {
-                    background: #3A6F9A;
-                    vertical-align: middle;
-                    max-height: 25px;
-                    max-width: 160px;
-                }
                 .header-logo{
                 }
                 .address{
@@ -200,7 +186,7 @@
             </style>
         <div id="print-container">
                 <span class="">
-                      {% if entity.globalOption.webPath('logo') is not empty %}<img class="img" style="max-width: 100%!important; max-height:80px" src="/{{ entity.globalOption.webPath('logo') }}">{% endif %}
+                      {% if entity.globalOption.webPath('logo') is not empty %}<img class="img" style="width:1024px!important; max-height:80px" src="/{{ entity.globalOption.webPath('logo') }}">{% endif %}
                 </span>
             <table class="table table-border" >
                 <tr class="print-header">

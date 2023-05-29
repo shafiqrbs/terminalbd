@@ -623,10 +623,8 @@ class Builder extends ContainerAware
 
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
             $menu['Accounting']->addChild('Journal', array('route' => 'account_transaction'))
-                
                 ->setAttribute('dropdown', true);
-            $accounting = array('inventory');
-            $result = array_intersect($arrSlugs, array('hms'));
+            $result = array_intersect($arrSlugs, array('accounting'));
             if (!empty($result)) {
                 $menu['Accounting']['Journal']->addChild('Journal Voucher', array('route' => 'journal_voucher'));
             }else{

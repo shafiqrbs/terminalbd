@@ -21,7 +21,7 @@ class JournalVoucherType extends AbstractType
     {
         $builder
 
-            ->add('voucherNo','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Voucher no'),
+            ->add('voucherNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Voucher no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please enter voucher no'))
                 )))
