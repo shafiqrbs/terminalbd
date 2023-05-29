@@ -233,7 +233,7 @@
                     <td>
                         <table class="inner-table">
                             <tr>
-                                <th>Sl No</th>
+                                <th width="60">Sl No</th>
                                 <th>Account Head</th>
                                 <th>Sub Head</th>
                                 <th>Narration</th>
@@ -242,7 +242,7 @@
                             </tr>
                             {% for item in entity.accountJournalItems  %}
                                 <tr>
-                                    <td>{{ loop.index }}</td>
+                                    <td align="center">{{ loop.index }}</td>
                                     <td>{{ item.accountHead.name }}</td>
                                     <td>{% if item.accountSubHead is not empty  %}{{ item.accountSubHead.name }}{% endif %}</td>
                                     <td>{{ item.narration|raw }}</td>
@@ -293,11 +293,11 @@
 </div>
 {#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
 <script type="text/javascript">
-    /*       window.print();
+           window.print();
            setTimeout(function () {
                window.open('', '_self', '');
                window.close();
-           }, 2000);*/
+           }, 2000);
 </script>
 </body>
 </html>

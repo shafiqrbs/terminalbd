@@ -3,13 +3,10 @@
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Knp\Snappy\Pdf;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Transaction controller.
@@ -32,9 +29,9 @@ class TransactionController extends Controller
 
 
     /**
-     * Lists all Transaction entities.
-     *
+     * @Secure(roles="ROLE_ACCOUNTING, ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -64,7 +61,6 @@ class TransactionController extends Controller
 	 */
 	public function accountCashAction()
 	{
-
 
 	    $em = $this->getDoctrine()->getManager();
 		$data = $_REQUEST;

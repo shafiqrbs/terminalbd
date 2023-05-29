@@ -2,12 +2,9 @@
 
 namespace Core\UserBundle\Controller;
 
-use Doctrine\Common\Util\Debug;
 use Setting\Bundle\ToolBundle\Entity\AppModule;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -92,7 +89,7 @@ class DefaultController extends Controller
               return $this->redirect($this->generateUrl('agentclient'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER')) {
               return $this->redirect($this->generateUrl('customer'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_ACCOUNTING') && $enable == 1 ) {
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_ACCOUNTING') && $enable == 1 ) {
             return $this->redirect($this->generateUrl('account_transaction_cash_overview'));
         }elseif (!empty($user) && $enable == 2 ) {
             return $this->redirect($this->generateUrl('domain_pendig'));
