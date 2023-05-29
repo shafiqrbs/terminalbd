@@ -540,7 +540,7 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.invoiceTransactions','ip');
+        $qb->leftJoin('e.invoiceTransactions','ip');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $qb->andWhere('e.commissionApproved = 1');
@@ -1126,6 +1126,7 @@ class InvoiceRepository extends EntityRepository
         $discountedBy = isset($data['discountedBy'])? $data['discountedBy'] :'';
         $marketingUser = isset($data['marketingUser'])? $data['marketingUser'] :'';
         $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.doctorInvoices','di');
         $qb->leftJoin('e.customer','c');
         $qb->leftJoin('e.department','dep');
         $qb->leftJoin('e.diseasesProfile','dp');
@@ -1136,6 +1137,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('me.marketingExecutive','mu');
         $qb->select('e.id as id','e.created as created','e.updated as updated','e.invoice as invoice','e.invoiceMode as invoiceMode','e.process as process','e.subTotal as subTotal','e.discount as discount','e.total as total','e.payment as receive','e.discountRequestedBy as discountRequestedBy');
         $qb->addSelect('c.name as name','c.mobile as mobile');
+        $qb->addSelect('SUM(di.payment) as commission');
         $qb->addSelect('d.name as assignDoctor');
         $qb->addSelect('ad.name as anesthesiaDoctor');
         $qb->addSelect('rd.name as referred');
@@ -1197,6 +1199,7 @@ class InvoiceRepository extends EntityRepository
         if(!empty($process)){
             $qb->andWhere("e.process = :process")->setParameter('process', $process);
         }
+        $qb->groupBy('e.id');
         $qb->orderBy('e.updated','ASC');
         $qb->addOrderBy('e.invoiceMode','ASC');
         $result = $qb->getQuery()->getArrayResult();

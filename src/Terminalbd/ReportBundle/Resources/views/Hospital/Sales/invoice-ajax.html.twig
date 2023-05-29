@@ -39,6 +39,7 @@
                 <th class="text-right">Discount</th>
                 <th class="text-right">Total</th>
                 <th class="text-right">Receive</th>
+                <th class="text-right">Commission</th>
                 <th class="text-right">Balance</th>
                 <th class="text-right">Discounted By</th>
             </tr>
@@ -48,11 +49,13 @@
             {% set balance = 0 %}
             {% set sales = 0 %}
             {% set receive = 0 %}
+            {% set commission = 0 %}
             {% for entity in entities %}
                 {% set subTotal = subTotal + entity.subTotal %}
                 {% set discount = discount + entity.discount %}
                 {% set sales = sales + entity.total %}
                 {% set receive = receive + entity.receive %}
+                {% set commission = commission + entity.commission %}
                 {% set balance = (sales + entity.total) - (receive + entity.receive) %}
                 <tr>
                     <td>{{ loop.index }}</td>
@@ -78,7 +81,8 @@
                     <td class="text-right" >{{ entity.discount|number_format(2) }}</td>
                     <td class="text-right" >{{ entity.total|number_format(2) }}</td>
                     <td class="text-right" >{{ entity.receive|number_format(2) }}</td>
-                    <td class="text-right" >{{ (entity.total-entity.receive)|number_format(2) }}</td>
+                    <td class="text-right" >{{ entity.commission|number_format(2) }}</td>
+                    <td class="text-right" >{{ (entity.total - entity.receive)|number_format(2) }}</td>
                     <td class="text-right" >{{ entity.discountRequestedBy }}</td>
                 </tr
             {% endfor %}
@@ -90,6 +94,7 @@
                 <th class="text-right">{{ discount|number_format(2) }}</th>
                 <th class="text-right">{{ sales|number_format(2) }}</th>
                 <th class="text-right">{{ receive|number_format(2) }}</th>
+                <th class="text-right">{{ commission|number_format(2) }}</th>
                 <th class="text-right">{{ balance|number_format(2) }}</th>
                 <th class="text-right"></th>
             </tr>
