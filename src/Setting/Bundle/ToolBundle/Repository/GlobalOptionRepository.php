@@ -53,15 +53,30 @@ class GlobalOptionRepository extends EntityRepository
 	    $qb =  $this->createQueryBuilder('e');
 	    $qb->select('e');
         $qb->leftJoin('e.mainApp','m');
-	 //   $qb->where('e.location is not null');
-	 //   $qb->andWhere('e.status !=1');
 	    $qb->andWhere('e.mainApp=3');
-	 //   $qb->andWhere('e.mainApp=272');
 	    $qb->andWhere('e.id != 3');
 	    $this->searchHandle($qb,$data);
 	    $qb->orderBy("{$sort}",$direction);
 	    $result = $qb->getQuery();
 	    return $result;
+    }
+
+    function getRemoveList($data) {
+
+        $sort = isset($data['sort'])? $data['sort'] :'e.created';
+        $direction = isset($data['direction'])? $data['direction'] :'DESC';
+        $qb =  $this->createQueryBuilder('e');
+        $qb->select('e');
+        $qb->leftJoin('e.mainApp','m');
+        //   $qb->where('e.location is not null');
+        //   $qb->andWhere('e.status !=1');
+        $qb->andWhere('e.mainApp=3');
+        //   $qb->andWhere('e.mainApp=272');
+        $qb->andWhere('e.id != 3');
+        $this->searchHandle($qb,$data);
+        $qb->orderBy("{$sort}",$direction);
+        $result = $qb->getQuery();
+        return $result;
     }
 
 

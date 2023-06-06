@@ -518,6 +518,8 @@ class ApiEcommerceController extends Controller
         $brands = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiAllBrand($entity);
         $promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiPromotion($entity);
         $discounts = $this->getDoctrine()->getRepository('EcommerceBundle:Item')->getApiDiscount($entity);
+        $pages = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->getPages($entity);
+
         $jsonData = array(
             'setup' => $data,
             'introPages' => $introPages,
@@ -527,6 +529,7 @@ class ApiEcommerceController extends Controller
             'promotions' => $promotions,
             'discounts' => $discounts,
             'products' => $products,
+            'pages' => $pages,
         );
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');

@@ -814,6 +814,7 @@ class MedicineStockRepository extends EntityRepository
   SET stock.purchaseQuantity = pa.purchaseQuantity";
         $qb4 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchase);
         $qb4->execute();
+        
 
         $sqlStockRemin = "UPDATE medicine_stock as stock
              inner join (

@@ -306,7 +306,7 @@ class DomainController extends Controller
         $em = $this->getDoctrine()->getManager();
         set_time_limit(0);
         $data = $_REQUEST;
-        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList($data);
+        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getRemoveList($data);
         $entities = $this->paginate($entities);
         foreach ($entities as $option):
             echo $option->getName();

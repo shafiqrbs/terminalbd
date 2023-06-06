@@ -149,8 +149,8 @@
                                     <th class="numeric" >Avg MRP</th>
                                     <th class="numeric" >MRP</th>
                                     <th class="numeric" >Opening</th>
-                                    <th class="numeric" >PP QTY</th>
-                                    <th class="numeric" >Sales QTY</th>
+                                    <th class="numeric" >In (+)</th>
+                                    <th class="numeric" >Out (-)</th>
                                     <th class="numeric" >Adj. QTY</th>
                                     <th class="numeric" >Bonus QTY</th>
                                     <th {% if pagination.isSorted('e.remainingQuantity') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Stock', 'e.remainingQuantity') }}{% if( direction == 'desc' and sort == 'e.rack') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
@@ -200,8 +200,8 @@
                                                     {{ entity.openingQuantity }}
                                                 {% endif %}
                                         </td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity + entity.salesReturnQuantity  }}</td>
-                                        <td class="numeric" >{{ entity.salesQuantity  + entity.purchaseReturnQuantity  + entity.damageQuantity }}</td>
+                                        <td class="numeric"><a data-trigger="hover" class="tooltips" data-original-title="Purchase : {{ entity.purchaseQuantity}} , Sales Return : {{ entity.salesReturnQuantity}}" href="javascript:">{{ entity.purchaseQuantity + entity.salesReturnQuantity  }}</a></td>
+                                        <td class="numeric"><a data-trigger="hover" class="tooltips" data-original-title="Sales : {{ entity.salesQuantity}} , Purchase Return : {{ entity.purchaseReturnQuantity}}, Damage : {{ entity.damageQuantity }}" href="javascript:">{{ entity.salesQuantity  + entity.purchaseReturnQuantity  + entity.damageQuantity }}</a></td>
                                         <td class="numeric" >{% if entity.adjustmentQuantity > 0 %}{{ entity.adjustmentQuantity }}{% else %}({{ entity.adjustmentQuantity|abs }}){% endif %}</td>
                                         <td class="numeric" >{{ entity.bonusQuantity }}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
