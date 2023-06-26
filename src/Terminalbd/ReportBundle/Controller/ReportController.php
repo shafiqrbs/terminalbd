@@ -1617,4 +1617,58 @@ class ReportController extends Controller
         return new Response($htmlProcess);
     }
 
+    /**
+     * @Route("/miss-system-dashboard", methods={"GET", "POST"}, name="miss_system_overview")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function missDashboardAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
+        $customers = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getSalesCustomers($globalOption);
+        $users = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->getCreatedUsers($globalOption);
+        return $this->render('ReportBundle:Inventory/SalesItem:index.html.twig', array(
+            'transactionMethods' => $transactionMethods,
+            'customers' => $customers,
+            'searchForm' => $data,
+            'users' => $users,
+            'option' => $globalOption,
+        ));
+    }
+
+    /**
+     * @Route("/miss-stock-report", methods={"GET", "POST"}, name="miss_stock_report")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function missStockReportAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        return $this->render('ReportBundle:Medicine/Stock:stock.html.twig', array(
+            'option' => $globalOption,
+        ));
+    }
+
+    /**
+     * @Route("/miss-stock-report-ajax-load", methods={"GET", "POST"}, name="miss_stock_report_ajax_load")
+     * @Secure(roles="ROLE_REPORT,ROLE_REPORT_OPERATION_SALES, ROLE_DOMAIN")
+     */
+    public function missStockReportAjaxLoadAction()
+    {
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $config = $this->getUser()->getGlobalOption()->getMedicineConfig();
+        $pagination = $this->getDoctrine()->getRepository('MedicineBundle:MedicineStock')->misRemainingStock($config);
+        $htmlProcess = $this->renderView(
+            'ReportBundle:Medicine/Stock:stock-item-price-data.html.twig', array(
+                'entities' => $pagination,
+            )
+        );
+        return new Response($htmlProcess);
+    }
 }

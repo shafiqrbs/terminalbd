@@ -3,8 +3,12 @@ api_poskeeper_login:
     defaults: { _controller: BinduBundle:ApiPoskeeper:login }
 
 api_poskeeper_setup:
-    path:     /keeper-setup
+    path:     /setup
     defaults: { _controller: BinduBundle:ApiPoskeeper:setup }
+
+api_poskeeper_splash:
+    path:     /splash
+    defaults: { _controller: BinduBundle:ApiPoskeeper:splash }
 
 api_poskeeper_app:
     path:     /shop-type
@@ -231,6 +235,20 @@ api_system_expense:
     path:     /expense
     defaults: { _controller: BinduBundle:Api:apiExpense }
     methods:  POST
+    options:
+        expose: true
+
+api_system_sales_list:
+    path:     /online-sales-list
+    defaults: { _controller: BinduBundle:ApiPoskeeper:apiOnlineSalesList }
+    methods:  POST
+    options:
+        expose: true
+
+api_system_sales_details:
+    path:     /online-sales-details
+    defaults: { _controller: BinduBundle:ApiPoskeeper:apiOnlineSalesDetails }
+    methods:  GET
     options:
         expose: true
 

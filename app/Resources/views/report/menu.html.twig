@@ -260,6 +260,26 @@
                         <span class="ruby-dropdown-toggle"></span>
                     </li>
                 {% endif %}
+                {% if app.moduleClass == "Miss" %}
+                    <li class="ruby-menu-mega"><a href="{{ path('miss_system_overview')}}">Medicine</a>
+                        <div class="ruby-grid ruby-grid-lined">
+                            <div class="ruby-row">
+                                <div class="ruby-col-4">
+                                    <h3 class="ruby-list-heading">Summary Reports</h3>
+                                    <div class="ruby-row">
+                                        <div class="ruby-col-6 ruby-col-6-md">
+                                            <ul>
+                                                <li><a href="{{ path('miss_system_overview') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Dashboard</a></li>
+                                                <li><a href="{{ path('miss_stock_report') }}"><i class="fa fa-arrow-right" aria-hidden="true"></i> Stock Summary</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="ruby-dropdown-toggle"></span>
+                    </li>
+                {% endif %}
             {% endfor %}
             <li class="ruby-menu-right">
                 <a class='btn-print print'><i class='fa fa-print'></i> Print</a>

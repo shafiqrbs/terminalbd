@@ -352,6 +352,8 @@ class MedicineSales
      */
     private $deviceApproved = false;
 
+
+
     /**
      * @var string
      *

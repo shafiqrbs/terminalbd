@@ -339,12 +339,31 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function misRemainingStock($config)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id ,e.brandName as brandName , e.name as name','e.purchasePrice as purchasePrice' ,'e.averagePurchasePrice as averagePurchasePrice' ,'e.salesPrice as salesPrice', 'e.averageSalesPrice as averageSalesPrice','SUM(mpi.quantity) as remainingQuantity' , 'e.openingQuantity as openingQuantity','SUM(e.purchaseQuantity + e.salesReturnQuantity) as purchaseQuantity','SUM(e.salesQuantity + e.purchaseReturnQuantity+ e.damageQuantity) as salesQuantity','e.adjustmentQuantity as adjustmentQuantity','e.bonusQuantity as bonusQuantity','e.pack as pack');
+        $qb->leftJoin('e.medicineSalesItems', 'msi');
+        $qb->leftJoin('msi.medicineSales', 'ms');
+        $qb->leftJoin('e.medicinePurchaseItems', 'mpi');
+        $qb->leftJoin('mpi.medicinePurchase', 'mp');
+        $qb->where("e.medicineConfig = :config")->setParameter('config', $config);
+        $qb->andWhere('e.openingQuantity >= :searchTerm OR e.purchaseQuantity >= :searchTerm');
+        $qb->setParameter('searchTerm', 0);
+      //  $qb->orWhere($qb->expr()->orX('mp.created BETWEEN :startDate AND :endDate'));
+       // $qb->setParameter('startDate', '2023-01-01 00:00:00')->setParameter('endDate', '2023-01-30 23:59:59');
+        $qb->orderBy('e.brandName', 'ASC')->addOrderBy('e.name', 'ASC');
+        $qb->groupBy('e.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return  $result;
+    }
+
+
 
     public function findWithSelectedItems($config,$ids)
     {
-
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.id as id ,e.brandName as brandName , e.name as name','e.minQuantity as minQuantity , e.salesPrice as salesPrice','e.remainingQuantity as remainingQuantity , e.pack as pack');
+        $qb->select('e.id as id ,e.brandName as brandName , e.name as name','e.minQuantity as minQuantity , e.salesPrice as salesPrice','e.remainingQuantity as remainingQuantity , e.pack as pack',"SELECT salesSub.meddicineStock_id, SUM(quantity)");
         $qb->addSelect('u.name as unit');
         $qb->join("e.unit",'u');
         $qb->where("e.medicineConfig = :config");

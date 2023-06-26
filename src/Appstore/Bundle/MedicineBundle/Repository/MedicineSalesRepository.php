@@ -1233,48 +1233,7 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
         $qb->execute();
     }
 
-    public function getApiSalesInvoice(GlobalOption $option, $invoice)
-    {
-        $em     = $this->_em;
-        /* @var $entity MedicineSales */
-        $entity = $this->findOneBy(array('medicineConfig'=> $option->getMedicineConfig(),'invoice'=>$invoice));
-        $data = array();
-        if($entity) {
 
-            $data['id'] = (int)$entity->getId();
-            $data['created'] = $entity->getCreated()->format('d-m-Y h:i A');
-            $data['invoice'] = $entity->getInvoice();
-            $data['customer'] = $entity->getCustomer()->getName();
-            $data['customerMobile'] = $entity->getCustomer()->getMobile();
-            $data['address'] = $entity->getCustomer()->getAddress();
-            $data['method'] = $entity->getTransactionMethod()->getName();
-            $data['salesBy'] = $entity->getSalesBy()->getUsername();
-            $data['subTotal'] = $entity->getSubTotal();
-            $data['discount'] = $entity->getDiscount();
-            $data['total'] = $entity->getNetTotal();
-            $data['payment'] = $entity->getReceived();
-            $data['vat'] = $entity->getVat();
-            $data['sd'] = 0;
-            if ($entity->getMedicineSalesItems()) {
-                /* @var $item MedicineSalesItem */
-                foreach ($entity->getMedicineSalesItems() as $i => $item) {
-                    $data['orderItem'][$i]['subItemId'] = (integer)$item->getId();
-                    $data['orderItem'][$i]['name'] = (string)$item->getMedicineStock()->getName();
-                    $data['orderItem'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
-                    $data['orderItem'][$i]['price'] = (integer)$item->getQuantity();
-                    $data['orderItem'][$i]['quantity'] = (integer)$item->getQuantity();
-                    $data['orderItem'][$i]['bonus'] = 0;
-                    $data['orderItem'][$i]['totalQuantity'] = 0;
-                    $data['orderItem'][$i]['subTotal'] = (integer)$item->getSubTotal();
-                }
-
-            } else {
-                $data['orderItem'] = array();
-            }
-            return $data;
-        }
-
-    }
 
     public function androidMissingSalesImport(MedicineConfig $conf,MedicineSales $sales , MedicineAndroidProcess $process){
 
@@ -1374,6 +1333,201 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
         }
 
     }
+
+
+    public function apiSalesLists(GlobalOption $option, $search)
+    {
+        $em = $this->_em;
+        $customer = $search['customer'];
+        $config = $option->getMedicineConfig()->getId();
+        $qb = $this->createQueryBuilder('s');
+        //  $qb->from(MedicineSales::class,'s');
+        // $qb->select('s.invoice');
+        $qb->where('s.medicineConfig = :config')->setParameter('config', $config) ;
+        $qb->join('s.customer','c');
+        //   $qb->andWhere("s.customer = :customer")->setParameter('customer', $customer);
+        // $this->handleSearchBetween($qb,$search);
+        $qb->setMaxResults(100);
+        $qb->orderBy('s.created','DESC');
+        $entities = $qb->getQuery()->getResult();
+        $data = array();
+        /* @var $entity MedicineSales */
+        foreach ($entities as $key => $entity):
+            if($entity) {
+                $data[$key]['sales_id'] = (string)$entity->getId();
+                $data[$key]['customer_id'] = (int) $entity->getCustomer()->getId();
+                $data[$key]['bankId'] = (int) 0;
+                $data[$key]['invoiceFor'] = (string)$entity->getInvoiceFor();
+                $data[$key]['deviceSalesId'] = (int)$entity->getDeviceSalesId();
+                $data[$key]['cardNo'] = (int)$entity->getCardNo();
+                $data[$key]['paymentMobile'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getName():'';
+                $data[$key]['paymentInWord'] = '';
+                $data[$key]['process'] = $entity->getProcess();
+                $data[$key]['discountType'] = $entity->getDiscountType();
+                $data[$key]['transactionId'] = $entity->getTransactionId();
+                $data[$key]['invoice'] = $entity->getInvoice();
+                $data[$key]['subTotal'] = (Double) $entity->getSubTotal();
+                $data[$key]['discount'] = (Double) $entity->getDiscount();
+                $data[$key]['discountCalculation'] = (Double) $entity->getDiscountCalculation();
+                $data[$key]['total'] = (Double) $entity->getNetTotal();
+                $data[$key]['purchasePrice'] = (Double) $entity->getPurchasePrice();
+                $data[$key]['received'] =(Double) $entity->getReceived();
+                $data[$key]['due'] = (Double) $entity->getDue();
+                $data[$key]['revised'] = (int) $entity->getRevised();
+                $data[$key]['printWithoutDiscount'] = (int) $entity->isPrintWithoutDiscount();
+                $data[$key]['customer_name'] = $entity->getCustomer()->getName();
+                $data[$key]['customer_mobile'] = $entity->getCustomer()->getMobile();
+                $data[$key]['customer_address'] = $entity->getCustomer()->getAddress();
+                $data[$key]['created'] = $entity->getCreated()->format('d-m-Y h:i A');
+                $data[$key]['updated'] = $entity->getUpdated()->format('d-m-Y h:i A');
+                $data[$key]['medicineConfigId'] = (int) 0;
+                $data[$key]['transactionMethod'] = ($entity->getTransactionMethod()) ? $entity->getTransactionMethod()->getName():0;
+                $data[$key]['transactionMethodId'] = ($entity->getTransactionMethod()) ? $entity->getTransactionMethod()->getId():0;
+                $data[$key]['salesBy'] = $entity->getSalesBy()->getUserFullName();
+                $data[$key]['salesBy_id'] = $entity->getSalesBy()->getId();
+                $data[$key]['createdBy_id'] = $entity->getCreatedBy()->getId();
+                $data[$key]['createdBy'] = $entity->getCreatedBy()->getUserFullName();
+                $data[$key]['approvedBy_id'] = $entity->getCreatedBy()->getId();
+                $data[$key]['accountBank_id'] = ($entity->getAccountBank()) ? $entity->getAccountBank()->getId():0;
+                $data[$key]['accountBank_name'] = ($entity->getAccountBank()) ? $entity->getAccountBank()->getName():'';
+                $data[$key]['accountMobileBank_id'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getId():0;
+                $data[$key]['accountMobileBank_name'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getName():'';
+                $data[$key]['paymentCard_id'] = (int) ($entity->getPaymentCard()) ? $entity->getPaymentCard()->getId():0;
+                $data[$key]['paymentCard_name'] = ($entity->getPaymentCard()) ? $entity->getPaymentCard()->getName():'';
+                $data[$key]['mode'] = (string) $entity->getMode();
+                $data[$key]['deliveryCharge'] = (int) $entity->getDeliveryCharge();
+                $data[$key]['cardCommission'] = (double) $entity->getCardCommission();
+                $data[$key]['isHold'] = (int) 0;
+                $data[$key]['vat'] = (Double)$entity->getVat();
+                $data[$key]['sd'] = 0;
+            }
+            endforeach;
+            return $data;
+
+    }
+
+    public function apiSalesInvoiceDetails(GlobalOption $option, $id)
+    {
+        $em     = $this->_em;
+        /* @var $entity MedicineSales */
+        $entity = $this->findOneBy(array('medicineConfig'=> $option->getMedicineConfig(),'id' => $id));
+        $data = array();
+        if($entity) {
+
+            $data['sales_id'] = (string)$entity->getId();
+            $data['customer_id'] = (int) $entity->getCustomer()->getId();
+            $data['bankId'] = (int) 0;
+            $data['invoiceFor'] = (string)$entity->getInvoiceFor();
+            $data['deviceSalesId'] = (int)$entity->getDeviceSalesId();
+            $data['cardNo'] = (int)$entity->getCardNo();
+            $data['paymentMobile'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getName():'';
+            $data['paymentInWord'] = '';
+            $data['process'] = $entity->getProcess();
+            $data['discountType'] = $entity->getDiscountType();
+            $data['transactionId'] = $entity->getTransactionId();
+            $data['invoice'] = $entity->getInvoice();
+            $data['subTotal'] = (Double) $entity->getSubTotal();
+            $data['discount'] = (Double) $entity->getDiscount();
+            $data['discountCalculation'] = (Double) $entity->getDiscountCalculation();
+            $data['total'] = (Double) $entity->getNetTotal();
+            $data['purchasePrice'] = (Double) $entity->getPurchasePrice();
+            $data['received'] = (double) $entity->getReceived();
+            $data['due'] = (Double) $entity->getDue();
+            $data['revised'] = (int) $entity->getRevised();
+            $data['printWithoutDiscount'] = (int) $entity->isPrintWithoutDiscount();
+            $data['customer_name'] = $entity->getCustomer()->getName();
+            $data['customer_mobile'] = $entity->getCustomer()->getMobile();
+            $data['customer_address'] = $entity->getCustomer()->getAddress();
+            $data['created'] = $entity->getCreated()->format('d-m-Y h:i A');
+            $data['updated'] = $entity->getUpdated()->format('d-m-Y h:i A');
+            $data['medicineConfigId'] = (int) 0;
+            $data['transactionMethod'] = ($entity->getTransactionMethod()) ? $entity->getTransactionMethod()->getName():0;
+            $data['transactionMethodId'] = ($entity->getTransactionMethod()) ? $entity->getTransactionMethod()->getId():0;
+            $data['salesBy'] = $entity->getSalesBy()->getUserFullName();
+            $data['salesBy_id'] = $entity->getSalesBy()->getId();
+            $data['createdBy_id'] = $entity->getCreatedBy()->getId();
+            $data['createdBy'] = $entity->getCreatedBy()->getUserFullName();
+            $data['approvedBy_id'] = $entity->getCreatedBy()->getId();
+            $data['accountBank_id'] = ($entity->getAccountBank()) ? $entity->getAccountBank()->getId():0;
+            $data['accountBank_name'] = ($entity->getAccountBank()) ? $entity->getAccountBank()->getName():'';
+            $data['accountMobileBank_id'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getId():0;
+            $data['accountMobileBank_name'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getName():'';
+            $data['paymentCard_id'] = (int) ($entity->getPaymentCard()) ? $entity->getPaymentCard()->getId():0;
+            $data['paymentCard_name'] = ($entity->getPaymentCard()) ? $entity->getPaymentCard()->getName():'';
+            $data['mode'] = (string) $entity->getMode();
+            $data['deliveryCharge'] = (int) $entity->getDeliveryCharge();
+            $data['cardCommission'] = (double) $entity->getCardCommission();
+            $data['isHold'] = (int) 0;
+            $data['vat'] = (Double) $entity->getVat();
+            $data['sd'] = 0;
+            if ($entity->getMedicineSalesItems()) {
+                /* @var $item MedicineSalesItem */
+                foreach ($entity->getMedicineSalesItems() as $i => $item) {
+                    $data['orderItem'][$i]['subItemId'] = (integer)$item->getId();
+                    $data['orderItem'][$i]['salesId'] = (int)$entity->getId();
+                    $data['orderItem'][$i]['name'] = (string)$item->getMedicineStock()->getName();
+                    $data['orderItem'][$i]['brandName'] = (string)$item->getMedicineStock()->getBrandName();
+                    $data['orderItem'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
+                    $data['orderItem'][$i]['mrp'] = (integer)$item->getMrpPrice();
+                    $data['orderItem'][$i]['price'] = (integer)$item->getSalesPrice();
+                    $data['orderItem'][$i]['purchasePrice'] = (integer)$item->getPurchasePrice();
+                    $data['orderItem'][$i]['itemPercent'] = (integer)$item->getItemPercent();
+                    $data['orderItem'][$i]['quantity'] = (integer)$item->getQuantity();
+                    $data['orderItem'][$i]['subTotal'] = (integer)$item->getSubTotal();
+
+                }
+
+            } else {
+                $data['orderItem'] = array();
+            }
+            return $data;
+        }
+
+    }
+
+    public function getApiSalesInvoice(GlobalOption $option, $invoice)
+    {
+        $em     = $this->_em;
+        /* @var $entity MedicineSales */
+        $entity = $this->findOneBy(array('medicineConfig'=> $option->getMedicineConfig(),'invoice'=>$invoice));
+        $data = array();
+        if($entity) {
+
+            $data['id'] = (int)$entity->getId();
+            $data['created'] = $entity->getCreated()->format('d-m-Y h:i A');
+            $data['invoice'] = $entity->getInvoice();
+            $data['customer'] = $entity->getCustomer()->getName();
+            $data['customerMobile'] = $entity->getCustomer()->getMobile();
+            $data['address'] = $entity->getCustomer()->getAddress();
+            $data['method'] = $entity->getTransactionMethod()->getName();
+            $data['salesBy'] = $entity->getSalesBy()->getUsername();
+            $data['subTotal'] = $entity->getSubTotal();
+            $data['discount'] = $entity->getDiscount();
+            $data['total'] = $entity->getNetTotal();
+            $data['payment'] = $entity->getReceived();
+            $data['vat'] = $entity->getVat();
+            $data['sd'] = 0;
+            if ($entity->getMedicineSalesItems()) {
+                /* @var $item MedicineSalesItem */
+                foreach ($entity->getMedicineSalesItems() as $i => $item) {
+                    $data['orderItem'][$i]['subItemId'] = (integer)$item->getId();
+                    $data['orderItem'][$i]['name'] = (string)$item->getMedicineStock()->getName();
+                    $data['orderItem'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
+                    $data['orderItem'][$i]['price'] = (integer)$item->getQuantity();
+                    $data['orderItem'][$i]['quantity'] = (integer)$item->getQuantity();
+                    $data['orderItem'][$i]['bonus'] = 0;
+                    $data['orderItem'][$i]['totalQuantity'] = 0;
+                    $data['orderItem'][$i]['subTotal'] = (integer)$item->getSubTotal();
+                }
+
+            } else {
+                $data['orderItem'] = array();
+            }
+            return $data;
+        }
+
+    }
+
 
 
 }

@@ -174,7 +174,7 @@ class GlobalOptionRepository extends EntityRepository
             $address = $entity->getInventoryConfig()->getAddress();
             $vatPercentage = $entity->getInventoryConfig()->getVatPercentage();
             $vatRegNo = $entity->getInventoryConfig()->getVatRegNo();
-            $vatEnable = $entity->getRestaurantConfig()->getVatEnable();
+            $vatEnable = $entity->getInventoryConfig()->getVatEnable();
             $currency = ($entity->getInventoryConfig()->getCurrency()) ? $entity->getInventoryConfig()->getCurrency()->getSymbol():'৳';
             $autoPayment = $entity->getInventoryConfig()->isAutoPayment();
             $vatMode = $entity->getInventoryConfig()->getVatMode();
