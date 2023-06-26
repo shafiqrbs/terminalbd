@@ -1662,7 +1662,7 @@ class ApiPoskeeperController extends Controller
         }else{
             $entity = $this->checkApiValidation($request);
             $deviceId = $request->headers->get('X-DEVICE-ID');
-            $data = $_REQUEST['filter'];
+            $data = '';
             $entities = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->apiSalesLists($entity,$data);
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');

@@ -1338,7 +1338,7 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
     public function apiSalesLists(GlobalOption $option, $search)
     {
         $em = $this->_em;
-        $customer = $search['customer'];
+     //   $customer = $search['customer'];
         $config = $option->getMedicineConfig()->getId();
         $qb = $this->createQueryBuilder('s');
         //  $qb->from(MedicineSales::class,'s');
@@ -1359,7 +1359,7 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
                 $data[$key]['bankId'] = (int) 0;
                 $data[$key]['invoiceFor'] = (string)$entity->getInvoiceFor();
                 $data[$key]['deviceSalesId'] = (int)$entity->getDeviceSalesId();
-                $data[$key]['cardNo'] = (int)$entity->getCardNo();
+                $data[$key]['cardNo'] = (string)$entity->getCardNo();
                 $data[$key]['paymentMobile'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getName():'';
                 $data[$key]['paymentInWord'] = '';
                 $data[$key]['process'] = $entity->getProcess();
@@ -1419,7 +1419,7 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
             $data['bankId'] = (int) 0;
             $data['invoiceFor'] = (string)$entity->getInvoiceFor();
             $data['deviceSalesId'] = (int)$entity->getDeviceSalesId();
-            $data['cardNo'] = (int)$entity->getCardNo();
+            $data['cardNo'] = (string)$entity->getCardNo();
             $data['paymentMobile'] = ($entity->getAccountMobileBank()) ? $entity->getAccountMobileBank()->getName():'';
             $data['paymentInWord'] = '';
             $data['process'] = $entity->getProcess();
