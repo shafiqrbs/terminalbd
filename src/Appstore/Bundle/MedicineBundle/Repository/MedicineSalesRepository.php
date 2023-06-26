@@ -1474,7 +1474,6 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
                     $data['orderItem'][$i]['itemPercent'] = (integer)$item->getItemPercent();
                     $data['orderItem'][$i]['quantity'] = (integer)$item->getQuantity();
                     $data['orderItem'][$i]['subTotal'] = (integer)$item->getSubTotal();
-
                 }
 
             } else {
