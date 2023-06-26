@@ -1463,17 +1463,19 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
             if ($entity->getMedicineSalesItems()) {
                 /* @var $item MedicineSalesItem */
                 foreach ($entity->getMedicineSalesItems() as $i => $item) {
-                    $data['orderItem'][$i]['subItemId'] = (integer)$item->getId();
-                    $data['orderItem'][$i]['salesId'] = (int)$entity->getId();
-                    $data['orderItem'][$i]['name'] = (string)$item->getMedicineStock()->getName();
+                    $data['orderItem'][$i]['sales_id'] = (string)$item->getId();
+                    $data['orderItem'][$i]['barcode'] = (string)$entity->getId();
+                    $data['orderItem'][$i]['stockName'] = (string)$item->getMedicineStock()->getName();
                     $data['orderItem'][$i]['brandName'] = (string)$item->getMedicineStock()->getBrandName();
                     $data['orderItem'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
-                    $data['orderItem'][$i]['mrp'] = (integer)$item->getMrpPrice();
-                    $data['orderItem'][$i]['price'] = (integer)$item->getSalesPrice();
-                    $data['orderItem'][$i]['purchasePrice'] = (integer)$item->getPurchasePrice();
-                    $data['orderItem'][$i]['itemPercent'] = (integer)$item->getItemPercent();
-                    $data['orderItem'][$i]['quantity'] = (integer)$item->getQuantity();
-                    $data['orderItem'][$i]['subTotal'] = (integer)$item->getSubTotal();
+                    $data['orderItem'][$i]['mrpPrice'] = (Double)$item->getMrpPrice();
+                    $data['orderItem'][$i]['salesPrice'] = (Double)$item->getSalesPrice();
+                    $data['orderItem'][$i]['discountPrice'] = (Double)$item->getDiscountPrice();
+                    $data['orderItem'][$i]['purchasePrice'] = (Double)$item->getPurchasePrice();
+                    $data['orderItem'][$i]['itemPercent'] = (Double)$item->getItemPercent();
+                    $data['orderItem'][$i]['customPrice'] = (Double)$item->getDiscountPrice();
+                    $data['orderItem'][$i]['quantity'] = (Double)$item->getQuantity();
+                    $data['orderItem'][$i]['subTotal'] = (Double)$item->getSubTotal();
                 }
 
             } else {
