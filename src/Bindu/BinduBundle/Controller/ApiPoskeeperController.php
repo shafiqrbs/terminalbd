@@ -1664,13 +1664,9 @@ class ApiPoskeeperController extends Controller
             $deviceId = $request->headers->get('X-DEVICE-ID');
             $data = $_REQUEST['filter'];
             $entities = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->apiSalesLists($entity,$data);
-            $data = array(
-                'globalOption'              => $entity->getId(),
-                'entities'       => $entities ,
-            );
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode($entities));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
@@ -1686,13 +1682,9 @@ class ApiPoskeeperController extends Controller
             $deviceId = $request->headers->get('X-DEVICE-ID');
             $salesId = $_REQUEST['id'];
             $entities = $this->getDoctrine()->getRepository("MedicineBundle:MedicineSales")->apiSalesInvoiceDetails($entity,$salesId);
-            $data = array(
-                'globalOption'              => $entity->getId(),
-                'entities'       => $entities ,
-            );
             $response = new Response();
             $response->headers->set('Content-Type', 'application/json');
-            $response->setContent(json_encode($data));
+            $response->setContent(json_encode($entities));
             $response->setStatusCode(Response::HTTP_OK);
             return $response;
         }
