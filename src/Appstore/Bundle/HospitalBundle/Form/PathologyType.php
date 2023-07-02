@@ -43,6 +43,21 @@ class PathologyType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
+            ->add('accountHead', 'entity', array(
+                'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
+                'group_by'  => 'parent.name',
+                'property'  => 'name',
+                'empty_value' => '---Choose a account---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'choice_translation_domain' => true,
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.parent",'c')
+                        ->where("e.status = 1")
+                        ->andWhere("c.isParent =1")
+                        ->orderBy("e.name", "ASC");
+                }
+            ))
             ->add('sepcimen','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sample collection')))
             ->add('testDuration')
             ->add('reportFormat')

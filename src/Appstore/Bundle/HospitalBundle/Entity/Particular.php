@@ -63,6 +63,12 @@ class Particular
     private $service;
 
 	/**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+     private $accountHead;
+
+	/**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="particulars" )
      * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\OrderBy({"sorting" = "ASC"})
@@ -2029,8 +2035,21 @@ class Particular
         $this->marketingExecutive = $marketingExecutive;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAccountHead()
+    {
+        return $this->accountHead;
+    }
 
-
+    /**
+     * @param mixed $accountHead
+     */
+    public function setAccountHead($accountHead)
+    {
+        $this->accountHead = $accountHead;
+    }
 
 }
 

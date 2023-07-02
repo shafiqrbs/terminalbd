@@ -162,6 +162,17 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
+                                <label class="control-label" for="room">Account Head</label>
+                                <div class="controls">
+                                    {{ form_widget(form.accountHead) }}
+                                    {{ form_errors(form.accountHead) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
                                 <label class="control-label" for="name">{{ form_widget(form.isReportContent) }} Report Content</label>
                             </div>
                         </div>

@@ -6,7 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
+use Appstore\Bundle\EcommerceBundle\Entity\sales_item;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -1305,11 +1305,11 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
     private function insertEcommerecSalesItem(MedicineSales $sales,Order $order)
     {
         $em = $this->_em;
-        if($order->getOrderItems()){
+        if($order->getsales_items()){
 
-            /* @var $item OrderItem */
+            /* @var $item sales_item */
 
-            foreach ($order->getOrderItems() as $item):
+            foreach ($order->getsales_items() as $item):
 
                 $salesItem = new MedicineSalesItem();
                 $salesItem->setMedicineSales($sales);
@@ -1463,23 +1463,23 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
             if ($entity->getMedicineSalesItems()) {
                 /* @var $item MedicineSalesItem */
                 foreach ($entity->getMedicineSalesItems() as $i => $item) {
-                    $data['orderItem'][$i]['sales_id'] = (string)$item->getId();
-                    $data['orderItem'][$i]['barcode'] = (string)$entity->getId();
-                    $data['orderItem'][$i]['stockName'] = (string)$item->getMedicineStock()->getName();
-                    $data['orderItem'][$i]['brandName'] = (string)$item->getMedicineStock()->getBrandName();
-                    $data['orderItem'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
-                    $data['orderItem'][$i]['mrpPrice'] = (Double)$item->getMrpPrice();
-                    $data['orderItem'][$i]['salesPrice'] = (Double)$item->getSalesPrice();
-                    $data['orderItem'][$i]['discountPrice'] = (Double)$item->getDiscountPrice();
-                    $data['orderItem'][$i]['purchasePrice'] = (Double)$item->getPurchasePrice();
-                    $data['orderItem'][$i]['itemPercent'] = (Double)$item->getItemPercent();
-                    $data['orderItem'][$i]['customPrice'] = (Double)$item->getDiscountPrice();
-                    $data['orderItem'][$i]['quantity'] = (Double)$item->getQuantity();
-                    $data['orderItem'][$i]['subTotal'] = (Double)$item->getSubTotal();
+                    $data['sales_item'][$i]['sales_id'] = (string)$item->getId();
+                    $data['sales_item'][$i]['barcode'] = (string)$entity->getId();
+                    $data['sales_item'][$i]['stockName'] = (string)$item->getMedicineStock()->getName();
+                    $data['sales_item'][$i]['brandName'] = (string)$item->getMedicineStock()->getBrandName();
+                    $data['sales_item'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
+                    $data['sales_item'][$i]['mrpPrice'] = (Double)$item->getMrpPrice();
+                    $data['sales_item'][$i]['salesPrice'] = (Double)$item->getSalesPrice();
+                    $data['sales_item'][$i]['discountPrice'] = (Double)$item->getDiscountPrice();
+                    $data['sales_item'][$i]['purchasePrice'] = (Double)$item->getPurchasePrice();
+                    $data['sales_item'][$i]['itemPercent'] = (Double)$item->getItemPercent();
+                    $data['sales_item'][$i]['customPrice'] = (Double)$item->getDiscountPrice();
+                    $data['sales_item'][$i]['quantity'] = (Double)$item->getQuantity();
+                    $data['sales_item'][$i]['subTotal'] = (Double)$item->getSubTotal();
                 }
 
             } else {
-                $data['orderItem'] = array();
+                $data['sales_item'] = array();
             }
             return $data;
         }
@@ -1511,18 +1511,18 @@ WHERE  salesItem.`medicineSales_id` IS NULL AND sales.androidProcess_id =:androi
             if ($entity->getMedicineSalesItems()) {
                 /* @var $item MedicineSalesItem */
                 foreach ($entity->getMedicineSalesItems() as $i => $item) {
-                    $data['orderItem'][$i]['subItemId'] = (integer)$item->getId();
-                    $data['orderItem'][$i]['name'] = (string)$item->getMedicineStock()->getName();
-                    $data['orderItem'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
-                    $data['orderItem'][$i]['price'] = (integer)$item->getQuantity();
-                    $data['orderItem'][$i]['quantity'] = (integer)$item->getQuantity();
-                    $data['orderItem'][$i]['bonus'] = 0;
-                    $data['orderItem'][$i]['totalQuantity'] = 0;
-                    $data['orderItem'][$i]['subTotal'] = (integer)$item->getSubTotal();
+                    $data['sales_item'][$i]['subItemId'] = (integer)$item->getId();
+                    $data['sales_item'][$i]['name'] = (string)$item->getMedicineStock()->getName();
+                    $data['sales_item'][$i]['unit'] = ($item->getMedicineStock()->getUnit()) ? (string)$item->getMedicineStock()->getUnit()->getName() : '';
+                    $data['sales_item'][$i]['price'] = (integer)$item->getQuantity();
+                    $data['sales_item'][$i]['quantity'] = (integer)$item->getQuantity();
+                    $data['sales_item'][$i]['bonus'] = 0;
+                    $data['sales_item'][$i]['totalQuantity'] = 0;
+                    $data['sales_item'][$i]['subTotal'] = (integer)$item->getSubTotal();
                 }
 
             } else {
-                $data['orderItem'] = array();
+                $data['sales_item'] = array();
             }
             return $data;
         }

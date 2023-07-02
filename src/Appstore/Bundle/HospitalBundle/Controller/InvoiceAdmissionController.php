@@ -371,6 +371,9 @@ class InvoiceAdmissionController extends Controller
     }
 
 
+
+
+
     public function patientInvoiceAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -1131,6 +1134,23 @@ class InvoiceAdmissionController extends Controller
         $em->persist($entity);
         $em->flush();
         exit;
+
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_ADMISSION,ROLE_DOMAIN_HOSPITAL_VISIT");
+     */
+    public function finalBillAction(Invoice $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
+        if ($inventory == $entity->getHospitalConfig()->getId()) {
+            return $this->render('HospitalBundle:InvoiceAdmission:finalbill.html.twig', array(
+                'entity' => $entity,
+            ));
+        } else {
+            return $this->redirect($this->generateUrl('hms_invoice_admission'));
+        }
 
     }
 }

@@ -125,10 +125,11 @@ class InvoiceParticular
      */
     private $customPrice = false;
 
+
     /**
      * @var float
      *
-     * @ORM\Column(name="subTotal", type="float")
+     * @ORM\Column(name="subTotal", type="float", nullable=true)
      */
     private $subTotal;
 
@@ -629,6 +630,24 @@ class InvoiceParticular
     {
         $this->admissionPatientParticular = $admissionPatientParticular;
     }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPrice()
+    {
+        return $this->discountPrice;
+    }
+
+    /**
+     * @param float $discountPrice
+     */
+    public function setDiscountPrice($discountPrice)
+    {
+        $this->discountPrice = $discountPrice;
+    }
+
+
 
 
 

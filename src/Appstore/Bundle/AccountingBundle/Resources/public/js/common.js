@@ -187,11 +187,8 @@ function CommonJs(){
         });
         $(".totalCredit").html(sum);
         $(".totalCredit").val(sum);
-
         dabeitVal = $("#totalDebit").val();
         creditVal = $("#totalCredit").val();
-        console.log(dabeitVal);
-        console.log(creditVal);
         if(creditVal ===  dabeitVal){
             console.log(creditVal);
             $("#submitBtn").attr("disabled", false);

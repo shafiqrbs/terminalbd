@@ -40,6 +40,10 @@ hms_invoice_admitted_patient:
     path:     /{id}/patient-admission
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admittedPatient" }
 
+hms_invoice_admission_finalbill:
+    path:     /{id}/patient-final-bill
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:finalBill" }
+
 hms_invoice_admitted_patient_edit:
     path:     /{id}/patient-admission-edit
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admittedPatientUpdate" }

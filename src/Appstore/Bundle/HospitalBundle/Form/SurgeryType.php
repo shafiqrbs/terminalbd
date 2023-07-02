@@ -5,9 +5,7 @@ namespace Appstore\Bundle\HospitalBundle\Form;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
-use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -36,6 +34,21 @@ class SurgeryType extends AbstractType
                         new NotBlank(array('message'=>'Please enter cabin name'))
                     ))
             )
+            ->add('accountHead', 'entity', array(
+                'class'     => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
+                'group_by'  => 'parent.name',
+                'property'  => 'name',
+                'empty_value' => '---Choose a account---',
+                'attr'=>array('class'=>'span12 m-wrap select2'),
+                'choice_translation_domain' => true,
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join("e.parent",'c')
+                        ->where("e.status = 1")
+                        ->andWhere("c.isParent =1")
+                        ->orderBy("e.name", "ASC");
+                }
+            ))
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter content')))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter fees'),

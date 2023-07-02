@@ -44,12 +44,21 @@
                             {{ form_row(form._token) }}
                             <div class="row-fluid">
                                 <!--/span-->
-                                <div class="span6">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" for="name">Bed/Cabin/Ward <span class="required">*</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.serviceGroup) }}
                                             {{ form_errors(form.serviceGroup) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="room">Account Head</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.accountHead) }}
+                                            {{ form_errors(form.accountHead) }}
                                         </div>
                                     </div>
                                 </div>
