@@ -347,6 +347,7 @@ class ApiPoskeeperController extends Controller
                     'inputBgColor' => empty($inputBgColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($inputBgColor),
                     'inputBgFocusColor' => empty($inputBgFocusColor) ? $this->hex6ToHex8($this->random_color_code()) : $this->hex6ToHex8($inputBgFocusColor),
                     // 'logo'      =>  $this->imageBase64($logo),
+                    'printFooter' => $printFooter,
                     'logo' => '',
                     'intro' => '',
                 );
