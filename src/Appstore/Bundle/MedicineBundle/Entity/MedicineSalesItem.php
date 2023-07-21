@@ -48,7 +48,8 @@ class MedicineSalesItem
     private $medicineSalesReturns;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess", inversedBy="medicineSalesItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineAndroidProcess")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $androidProcess;
 

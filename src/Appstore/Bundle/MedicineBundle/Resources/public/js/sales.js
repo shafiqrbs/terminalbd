@@ -43,6 +43,7 @@ $(document).on('change', '.transactionMethod', function() {
 $(document).on('change', '#salesitem_stockName', function() {
 
     var medicine = $('#salesitem_stockName').val();
+    if(medicine === ""){ return false }
     $.ajax({
         url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',

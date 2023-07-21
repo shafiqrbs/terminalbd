@@ -15,9 +15,9 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\DeliveryLocation;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Designation;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
 
@@ -439,9 +439,9 @@ class Profile
      */
     public function removeUpload()
     {
-        if ($file = $this->getAbsolutePath()) {
+       /* if ($file = $this->getAbsolutePath()) {
             unlink($file);
-        }
+        }*/
     }
 
     public function getAbsolutePath()
@@ -1086,9 +1086,9 @@ class Profile
      */
     public function removeSignatureUpload()
     {
-        if ($file = $this->getAbsoluteSignaturePath()) {
+       /* if ($file = $this->getAbsoluteSignaturePath()) {
             unlink($file);
-        }
+        }*/
     }
 
     public function signatureUpload()

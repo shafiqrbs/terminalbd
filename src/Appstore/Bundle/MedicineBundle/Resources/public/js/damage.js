@@ -80,6 +80,7 @@ $(".select2StockMedicine").select2({
 $(document).on('change', '#damage_medicineStock', function() {
 
     var medicine = $('#damage_medicineStock').val();
+    if(medicine === ""){ return false }
     $.ajax({
         url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',

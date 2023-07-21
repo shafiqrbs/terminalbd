@@ -120,9 +120,12 @@ class DomainController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+      //  $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList($data);
         $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList($data);
         $entities = $this->paginate($entities);
         $apps = $this->getDoctrine()->getRepository('SettingToolBundle:AppModule')->findBy(array('status'=>1),array('name'=>"ASC"));
+        //$this->statusDeleteAction();
+       // exit;
         return $this->render('SettingToolBundle:Domain:index.html.twig', array(
             'entities' => $entities,
             'apps' => $apps,
@@ -310,6 +313,7 @@ class DomainController extends Controller
         $entities = $this->paginate($entities);
         foreach ($entities as $option):
             echo $option->getName();
+            echo $option->getId();
       /*
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId();
         $a = new Filesystem();

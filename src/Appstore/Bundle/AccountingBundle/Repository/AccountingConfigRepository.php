@@ -67,6 +67,12 @@ class AccountingConfigRepository extends EntityRepository
         $profit = $em->createQuery('DELETE AccountingBundle:AccountProfit e WHERE e.globalOption = '.$option);
         $profit->execute();
 
+        $accountingconfig = $em->createQuery('DELETE AccountingBundle:AccountingConfig e WHERE e.globalOption = '.$option);
+        $accountingconfig->execute();
+
+        $profit = $em->createQuery('DELETE AccountingBundle:AccountHead e WHERE e.globalOption = '.$option);
+        $profit->execute();
+
         $loanLedger = $em->createQuery('DELETE AccountingBundle:AccountLoanLedger e WHERE e.globalOption = '.$option);
         $loanLedger->execute();
 

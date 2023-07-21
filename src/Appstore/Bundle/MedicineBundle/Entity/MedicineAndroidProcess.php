@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\AndroidDeviceSetup;
@@ -39,12 +38,6 @@ class MedicineAndroidProcess
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="androidProcess" )
      **/
     private  $medicineSales;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="androidProcess" )
-     **/
-    private  $medicineSalesItem;
 
 
    /**

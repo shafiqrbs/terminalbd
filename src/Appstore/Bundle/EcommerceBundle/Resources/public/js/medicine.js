@@ -35,6 +35,7 @@ $(".select2StockMedicine").select2({
 $(document).on('change', '#orderItem_itemName', function() {
 
     var medicine = $(this).val();
+    if(medicine === ""){ return false }
     $.ajax({
         url: Routing.generate('order_item_stock_details',{'id': medicine}),
         type: 'GET',

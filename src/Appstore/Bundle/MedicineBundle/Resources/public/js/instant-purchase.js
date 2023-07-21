@@ -8,6 +8,7 @@ function jqueryInstantLoad(){
     $(document).on('change', '#medicineName', function() {
 
         var medicine = $('#medicineName').val();
+        if(medicine === ""){ return false }
         $.ajax({
             url: Routing.generate('medicine_purchase_particular_search',{'id':medicine}),
             type: 'GET',

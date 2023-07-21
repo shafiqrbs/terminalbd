@@ -344,6 +344,7 @@ function brandMedicineSearch(purchase){
     $(document).on('change', '#purchaseItem_stockName', function() {
 
         var medicine = $('#purchaseItem_stockName').val();
+        if(medicine === ""){ return false }
         $.ajax({
             url: Routing.generate('medicine_purchase_particular_search',{'id':medicine,'purchase':purchase}),
             type: 'GET',

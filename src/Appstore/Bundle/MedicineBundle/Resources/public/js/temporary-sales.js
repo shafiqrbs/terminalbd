@@ -153,6 +153,7 @@ $(document).on('click', '#temporarySales', function() {
 $(document).on('change', '#salesitem_stockName', function() {
 
     var medicine = $('#salesitem_stockName').val();
+    if(medicine === ""){ return false }
     $.ajax({
         url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
         type: 'GET',
@@ -369,6 +370,7 @@ function jqueryTemporaryLoad() {
     $(document).on('change', '#salesTemporaryItem_stockName', function() {
 
         var medicine = $('#salesTemporaryItem_stockName').val();
+        if(medicine === ""){ return false }
         $.ajax({
             url: Routing.generate('medicine_sales_stock_search',{'id':medicine}),
             type: 'GET',
@@ -959,6 +961,7 @@ function jqueryInstantTemporaryLoad(){
     $(document).on('change', '#medicineName', function() {
 
         var medicine = $('#medicineName').val();
+        if(medicine === ""){ return false }
         $.ajax({
             url: Routing.generate('medicine_purchase_particular_search',{'id':medicine}),
             type: 'GET',
