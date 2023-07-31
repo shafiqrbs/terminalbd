@@ -85,7 +85,7 @@ class OfficeNoteRepository extends EntityRepository
 
     public function findWithSearch($config,$data)
     {
-        $branch = isset($data['branch'])? $data['branch'] :'';
+
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.config = :config")->setParameter('config', $config);
         $qb->orderBy('e.created','ASC');

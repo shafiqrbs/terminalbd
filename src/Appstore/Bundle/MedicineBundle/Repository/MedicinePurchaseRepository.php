@@ -807,4 +807,23 @@ class MedicinePurchaseRepository extends EntityRepository
         $purchase->execute();
     }
 
+    public function getMissingPurchaseItem($config)
+    {
+        $elem1 = "SELECT medicine_purchase.id as id
+FROM `medicine_purchase`
+LEFT JOIN medicine_purchase_item as si ON medicine_purchase.id = si.medicinePurchase_id
+WHERE medicineConfig_id=236
+GROUP BY medicine_purchase.id 
+HAVING COUNT(si.id) = 0";
+        $qb = $this->getEntityManager()->getConnection()->prepare($elem1);
+        $qb->execute();
+        $result =  $qb->fetchAll();
+        $ids = array();
+        foreach ($result as $row){
+            $ids[] = $row['id'];
+        }
+        var_dump($ids);
+        exit;
+    }
+
 }

@@ -247,7 +247,10 @@ class DefaultController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
+	    //$this->getDoctrine()->getRepository("MedicineBundle:MedicinePurchase")->getMissingPurchaseItem($config);
+	   // exit;
 	    $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->updateRemainingQuantityReset($config);
+
         return $this->redirect($this->generateUrl('medicine_stock'));
 	}
 
