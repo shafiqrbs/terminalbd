@@ -496,10 +496,6 @@ class InvoiceRepository extends EntityRepository
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        if(in_array('ROLE_DOMAIN_HOSPITAL_DOCTOR',$user->getRoles()) and $user->getParticularDoctor()) {
-            $id = $user->getParticularDoctor()->getId();
-            $qb->andWhere('e.assignDoctor = :doctor')->setParameter('doctor', $id) ;
-        }
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         if($mode == "diagnostic"){
             $process = (isset($data['process']) and $data['process']) ? $data['process']:'In-progress';
