@@ -12,6 +12,7 @@ echo "Removing old cache if any"
 rm -rf app/cache/*
 rm -rf app/logs/*
 
+
 echo "(Re)Creating assets symlink"
 rm web/assets
 ln -s ../app/Resources/assets/ web/assets
