@@ -51,7 +51,6 @@
                                     <th class="numeric">Mobile</th>
                                     <th class="numeric">Group</th>
                                     <th class="numeric">Location</th>
-                                    <th class="numeric">Address</th>
                                     <th class="numeric">Mode</th>
                                     <th class="numeric">Action</th>
                                 </tr>
@@ -64,14 +63,15 @@
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                         <td>{{ entity.userGroup|capitalize }}</td>
                                         <td class="numeric">{% if entity.locationName is not empty %}{{ entity.locationName }}{% endif %}</td>
-                                        <td>{{ entity.address|raw }}</td>
                                         <td>{{ entity.userMode|capitalize }}</td>
                                         <td class="numeric">
+                                            <div class="btn-group">
                                             {% if (app.user.granted("ROLE_DOMAIN")) or (app.user.granted("ROLE_CRM_MANAGER"))  %}
                                                 <a class="btn mini green" href="{{ path('account_user_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                                                 <a class="btn mini delete red" href="javascript:" data-url="{{ path('account_user_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                                 <a class="btn mini yellow" href="{{ path('account_user_user_mode', { 'id': entity.id }) }}" >Change Mode </a>
                                              {% endif %}
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
