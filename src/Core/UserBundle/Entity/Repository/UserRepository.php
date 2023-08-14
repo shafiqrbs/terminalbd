@@ -467,7 +467,7 @@ class UserRepository extends EntityRepository
         $qb->leftJoin('e.employeePayroll','ep');
         $qb->leftJoin('p.designation','d');
         $qb->leftJoin('ep.approvedBy','epa');
-        $qb->select('e.id as id','e.username as username');
+        $qb->select('e.id as id','e.username as username','e.userGroup as userMode');
         $qb->addSelect('d.name as designationName');
         $qb->addSelect('l.name as locationName');
         $qb->addSelect('epa.id as epaId','epa.username as epaUsername');

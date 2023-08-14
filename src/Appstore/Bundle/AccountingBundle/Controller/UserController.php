@@ -2,17 +2,14 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
-use Appstore\Bundle\AccountingBundle\Form\CustomerType;
 use Appstore\Bundle\AccountingBundle\Form\UserType;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -238,9 +235,8 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
         try {
-
-            $em->remove($entity);
-            $em->flush();
+            $entity->setIsDelete(true);
+            $entity->setEnabled(false);
             $this->get('session')->getFlashBag()->add(
                 'error',"Data has been deleted successfully"
             );
@@ -252,6 +248,23 @@ class UserController extends Controller
         }
         return $this->redirect($this->generateUrl('account_user'));
     }
+
+
+    public function changeUserModeAction(User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if($user->getUserGroup() == "account" ){
+            $user->setUserGroup('user');
+            $user->setEnabled(true);
+        }else{
+            $user->setUserGroup('account');
+        }
+        $em->persist($user);
+        $em->flush();
+        return $this->redirect($this->generateUrl('account_user'));
+    }
+
+
 
 
 

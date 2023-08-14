@@ -86,7 +86,7 @@ class Invoice
     private  $accountSales;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="hmsInvoices" ,cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="hmsInvoices", cascade={"persist"} )
      **/
     private  $customer;
 

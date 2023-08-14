@@ -20,6 +20,10 @@ account_user_edit:
     path:     /{id}/edit
     defaults: { _controller: "AccountingBundle:User:edit" }
 
+account_user_user_mode:
+    path:     /{id}/change-user-mode
+    defaults: { _controller: "AccountingBundle:User:changeUserMode" }
+
 account_user_update:
     path:     /{id}/update
     defaults: { _controller: "AccountingBundle:User:update" }
