@@ -43,7 +43,7 @@ class AccountingConfigRepository extends EntityRepository
         $transfer = $em->createQuery('DELETE AccountingBundle:AccountBalanceTransfer e WHERE e.globalOption = '.$option);
         $transfer->execute();
 
-         $PaymentSalary = $em->createQuery('DELETE AccountingBundle:PaymentSalary e WHERE e.globalOption = '.$option);
+        $PaymentSalary = $em->createQuery('DELETE AccountingBundle:PaymentSalary e WHERE e.globalOption = '.$option);
         $PaymentSalary->execute();
 
         $SalarySetting = $em->createQuery('DELETE AccountingBundle:SalarySetting e WHERE e.globalOption = '.$option);

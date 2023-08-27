@@ -2,6 +2,10 @@ account_config_manage:
     path:     /manage
     defaults: { _controller: "AccountingBundle:AccountConfig:manage" }
 
+account_config_reset:
+    path:     /reset
+    defaults: { _controller: "AccountingBundle:AccountConfig:reset" }
+
 account_config_update:
     path:     /update
     defaults: { _controller: "AccountingBundle:AccountConfig:update" }

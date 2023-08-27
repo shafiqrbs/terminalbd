@@ -2,16 +2,14 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerEditType;
-use Core\UserBundle\Form\CustomerEditProfileType;
+use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -285,8 +283,6 @@ class CustomerController extends Controller
                 'notice',"Data has been relation another Table"
             );
         }
-        exit;
-
         return $this->redirect($this->generateUrl('customer'));
     }
 

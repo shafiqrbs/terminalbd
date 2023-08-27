@@ -6,10 +6,9 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\BusinessConfig;
 use Appstore\Bundle\AccountingBundle\Form\AccountConfigType;
 use Appstore\Bundle\AccountingBundle\Form\ConfigType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * BusinessConfigController.
@@ -35,10 +34,22 @@ class AccountConfigController extends Controller
         ));
     }
 
+    public function resetAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->getUser()->getGlobalOption()->getAccountingConfig();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
+        }
+        $globalOption = $this->getUser()->getGlobalOption();
+        $this->getDoctrine()->getRepository(AccountingConfig::class)->accountingReset($globalOption);
+        return $this->redirect($this->generateUrl('account_config_manage'));
+    }
+
     /**
      * Creates a form to edit a Invoice entity.wq
      *
-     * @param Invoice $entity The entity
+     * @param AccountingConfig $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */

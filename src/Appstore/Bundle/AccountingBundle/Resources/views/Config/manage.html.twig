@@ -29,6 +29,13 @@
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Configuration Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                {% if app.user.granted("ROLE_DOMAIN") %}
+                                <a class="btn red" href="{{ path('account_config_reset') }}">Reset</a>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                     <div class="portlet-body form">
                         {% include('flash-message.html.twig')  %}

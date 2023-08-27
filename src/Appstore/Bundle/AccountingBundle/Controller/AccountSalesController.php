@@ -2,14 +2,13 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Form\AccountSalesInvoiceType;
+use Appstore\Bundle\AccountingBundle\Form\AccountSalesType;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\AccountingBundle\Form\AccountSalesType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -331,9 +330,11 @@ class AccountSalesController extends Controller
         }
         $template = ($entity->getGlobalOption()->getAccountingConfig()->isCustomPrint() == 1) ? $entity->getGlobalOption()->getSubDomain():'print';
         $amountInWord = $this->get('settong.toolManageRepo')->intToWords($entity->getAmount());
+        $outstanding = $this->getDoctrine()->getRepository("AccountingBundle:AccountSales")->customerSingleOutstanding($entity->getGlobalOption(),$entity->getCustomer());
         return $this->render("AccountingBundle:AccountSales:{$template}.html.twig", array(
             'entity'           => $entity,
             'config'           => $entity->getGlobalOption()->getAccountingConfig(),
+            'outstanding'     => $outstanding,
             'amountInWord'     => $amountInWord,
         ));
     }
