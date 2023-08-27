@@ -106,6 +106,13 @@ class InvoiceParticular
     /**
      * @var float
      *
+     * @ORM\Column(name="discountPrice", type="float")
+     */
+    private $discountPrice;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="commission", type="float", nullable=true)
      */
     private $commission;
@@ -646,12 +653,5 @@ class InvoiceParticular
     {
         $this->discountPrice = $discountPrice;
     }
-
-
-
-
-
-
-
 }
 

@@ -126,7 +126,9 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        {% set finalTotal = 0 %}
                                         {% for item in entity.invoiceParticulars %}
+                                            {% set finalTotal = (finalTotal + (item.quantity * item.discountPrice)) %}
                                             <tr id="remove-{{ item.id }}">
                                                 <td  class="span1">{{ loop.index }}</td>
                                                 <td  class="span1">{{ item.particular.particularCode }}</td>
@@ -135,15 +137,12 @@
                                                 <td class="span1">{{ item.salesPrice }}</td>
                                                 <td class="span1">{{ item.particular.minimumPrice }}</td>
                                                 <td class="span1">
-                                                   {# {% if item.particular.minimumPrice is not empty %}#}
-                                                        <input type="hidden" name="quantity[]" id="quantity-{{ item.id }}" min="{{ item.particular.minimumPrice }}" value="{{ item.quantity }}"  >
-                                                        <input name="salesPrice[]" class="inline-m-wrap salesPrice" data-id="{{ item.id }}" id="salesPrice-{{ item.id }}"/>
-                                                    {#{% endif %}#}
+                                                    <a  class="editable" data-name="TotalAmount" href="javascript:"  data-url="{{ path('hms_patient_final_bill_inline_update') }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Change your amount">{{ item.discountPrice }}</a>
                                                 </td>
                                                 <td class="span1">{{ item.quantity }}</td>
                                                 <td class="span1">{{ item.subTotal|number_format }}</td>
                                                 <td class="span1" id="billTotal-{{ item.id }}">
-                                                    {{ item.subTotal|number_format }}
+                                                    {{ (item.quantity * item.discountPrice)|number_format }}
                                                 </td>
                                                 <input type="hidden" class="finalSubTotal" name="subTotal[]" id="subTotal-{{ item.id }}"  value="{{ item.subTotal }}">
 
@@ -172,7 +171,7 @@
                                         <tr>
                                             <td colspan="8" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
                                             <td class="span2"><strong id="vat">{{ entity.total|number_format }}</strong></td>
-                                            <td class="span2"><strong id="finalTotal">{{ entity.total|number_format }}</strong></td>
+                                            <td class="span2"><strong id="finalTotal">{{ finalTotal|number_format }}</strong></td>
                                         </tr>
                                         <tr>
                                             <td colspan="8" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
@@ -192,7 +191,7 @@
                                                 <input type="hidden" name="discount" id="discount" value="{{ entity.discount }}">
                                             </td>
                                             <td></td>
-                                            <td class="span2"><button class="btn blue" id="submitBtn"><i class="icon-save"></i>&nbsp; Final Bill</button></td>
+                                            <td class="span2">{#<button class="btn blue" id="submitBtn"><i class="icon-save"></i>&nbsp; Final Bill</button>#}</td>
 
                                         </tr>
 
@@ -298,12 +297,14 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    EditableInit();
     $(document).on('change', '.salesPrice', function() {
         var id = $(this).attr('data-id');
         var quantity = Math.abs(parseFloat($('#quantity-'+id).val()));

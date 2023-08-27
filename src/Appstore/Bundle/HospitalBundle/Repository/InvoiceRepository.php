@@ -1466,7 +1466,7 @@ class InvoiceRepository extends EntityRepository
         $qb->addSelect('p.name as particular');
         $qb->addSelect('e.invoice as invoice','e.created as created','e.updated as updated','e.process as process');
         $qb->addSelect('c.id as customerId','c.name as customer','c.mobile as mobile');
-        $qb->addSelect('ip.quantity as quantity','ip.salesPrice as price');
+        $qb->addSelect('ip.quantity as quantity','ip.salesPrice as price','ip.discountPrice as discountPrice');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', 'admission') ;
         $qb->andWhere("e.process IN (:process)");

@@ -127,13 +127,15 @@
                         <th>Surgery Department</th>
                         <th>Particular</th>
                         <th>Process</th>
-                        <th>Quantity</th>
                         <th class="text-right">Amount</th>
+                        <th class="text-right">Discount Price</th>
                     </tr>
                     {% set subTotal =0 %}
+                    {% set totalDiscountPrice =0 %}
                     <tbody>
                         {% for entity in entities %}
-                            {% set subTotal = subTotal+entity.price %}
+                            {% set subTotal = subTotal + entity.price %}
+                            {% set totalDiscountPrice = (totalDiscountPrice + (entity.discountPrice > 0 ? entity.discountPrice :entity.price * entity.quantity )) %}
                             <tr>
                                 <td>{{ loop.index }}</td>
                                 <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
@@ -146,15 +148,21 @@
                                 <td class="numeric" >{{ entity.surgeryDepartment }}</td>
                                 <td class="numeric" >{{ entity.particular }}</td>
                                 <td class="numeric" >{{ entity.process }}</td>
-                                <td class="numeric" >{{ entity.quantity }}</td>
                                 <th class="text-right" >{{ entity.price|number_format(2) }}</th>
+                                <th class="text-right" >{{ (entity.discountPrice > 0 ? entity.discountPrice : entity.price * entity.quantity)|number_format(2) }}</th>
                             </tr
                         {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th colspan="12" class="text-right">Grand Total</th>
+                        <th colspan="11" class="text-right">Grand Total</th>
                         <th class="text-right">{{ subTotal|number_format(2) }}</th>
+                        <th class="text-right">{{ totalDiscountPrice|number_format(2) }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="11" class="text-right">Discount Total</th>
+                        <th class="text-right">{{ (subTotal - totalDiscountPrice)|number_format(2) }}</th>
+                        <th class="text-right"></th>
                     </tr>
                     </tfoot>
                 </table>

@@ -237,6 +237,22 @@ class PatientController extends Controller
 
     }
 
+    public function inlinePatientFinalBillUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository(InvoiceParticular::class)->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find entity.');
+        }
+        $setValue = $data['value'];
+        $entity->setDiscountPrice($setValue);
+        $em->persist($entity);
+        $em->flush();
+        return new Response('success');
+
+    }
+
 
 
 }
