@@ -99,16 +99,16 @@ class InvoiceParticular
     /**
      * @var float
      *
-     * @ORM\Column(name="salesPrice", type="float")
+     * @ORM\Column(name="salesPrice", type="float", nullable=true)
      */
     private $salesPrice;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="discountPrice", type="float")
+     * @ORM\Column(name="discountPrice", type="float", nullable=true)
      */
-    private $discountPrice;
+    private $discountPrice = 0;
 
     /**
      * @var float
