@@ -552,8 +552,6 @@ class MedicineStockRepository extends EntityRepository
         $query->join('e.medicineConfig', 'ic');
         $query->leftJoin('e.rackNo', 'rack');
         $query->leftJoin('e.unit', 'unit');
-        // $query->leftJoin('e.medicineBrand', 'brand');
-        // $query->leftJoin('brand.medicineGeneric', 'generic');
         $query->select('e.id as id');
         if($config->getItemSearch() == "Brand"){
             $query->addSelect("CASE WHEN (e.brandName IS NULL) THEN CONCAT(e.name,' [',e.remainingQuantity, '] ','- Tk.', e.salesPrice)  ELSE CONCAT(e.name,' [',e.remainingQuantity, '] ', e.brandName , '- Tk.', e.salesPrice)  END as text");

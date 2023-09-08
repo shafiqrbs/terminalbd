@@ -567,11 +567,6 @@ class MedicineSalesTemporaryController extends Controller
         $printer -> text($subTotal);
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-       /* if($vat){
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-            $printer->text($vat);
-            $printer->setEmphasis(false);
-        }*/
         $printer -> text("---------------------------------------------------------------\n");
         $printer->text($discount);
         $printer -> setEmphasis(false);
@@ -593,17 +588,10 @@ class MedicineSalesTemporaryController extends Controller
         }
       //  $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer->text("\n");
-        //$printer -> feed();
-        //$printer->text($transaction);
-        //$printer->selectPrintMode();
-        /* Barcode Print */
         $printer -> feed();
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
-        /*if($website){
-            $printer -> text("Please visit www.".$website."\n");
-        }*/
         $printer -> text($date . "\n");
         if($printMessage){
             $printer->text("{$printMessage}\n");

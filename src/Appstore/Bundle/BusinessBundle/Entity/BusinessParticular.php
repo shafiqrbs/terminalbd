@@ -1287,5 +1287,7 @@ class BusinessParticular
         $this->avgPurchasePrice = $avgPurchasePrice;
     }
 
+
+
 }
 

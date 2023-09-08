@@ -254,6 +254,7 @@ class InvoiceController extends Controller
             }else{
                 $entity->setIsCondition(false);
             }
+            $vatAmount = 0;
             if($entity->getBusinessConfig()->getVatPercent() > 0){
                 $vatAmount =$this-> getTaxTariffCalculation($entity->getSubTotal(),$entity->getBusinessConfig()->getVatPercent());
                 $entity->setVat($vatAmount);
