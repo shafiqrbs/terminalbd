@@ -42,8 +42,7 @@ class CustomerForDmsType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Patient age')),
             )))
-            ->add('weight','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'Enter weight')))
-             ->add('ageType', 'choice', array(
+            ->add('ageType', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom inputs ageType'),
                 'expanded'      =>false,
                 'multiple'      =>false,
