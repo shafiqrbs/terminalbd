@@ -37,7 +37,7 @@ class PrescriptionController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_DOCTOR");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_DOCTOR,ROLE_DOMAIN_HOSPITAL_VISIT");
      */
 
     public function indexAction()
@@ -66,7 +66,7 @@ class PrescriptionController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR");
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN,ROLE_DOMAIN_HOSPITAL_OPERATOR,ROLE_DOMAIN_HOSPITAL_DOCTOR,ROLE_DOMAIN_HOSPITAL_VISIT");
      */
 
     public function newAction()
