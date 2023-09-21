@@ -28,15 +28,17 @@ class MarketingType extends AbstractType
                         new NotBlank(array('message'=>'Please enter designation'))
                     ))
             )
-            ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter company name'),
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter company name'))
-                    ))
-            )
             ->add('mobileNo','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter mobile no'))
                     ))
+            )
+             ->add('monthlySales','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Monthly sales'),
+                    )
+            )
+             ->add('yearlySales','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Yearly sales'),
+                    ))
+             ->add('discount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Discount Percent'),)
             )
             ->add('joiningDate', 'date', array(
                 'widget' => 'choice',

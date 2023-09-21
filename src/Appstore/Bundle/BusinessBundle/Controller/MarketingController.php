@@ -71,8 +71,21 @@ class MarketingController extends Controller
             'entities' => $entities,
             'form'   => $form->createView(),
         ));
+    }
 
-
+    public function updateSalesTargetAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        foreach ($data['user'] as $key => $value){
+            $user = $this->getDoctrine()->getRepository(Marketing::class)->find($value);
+            $user->setMonthlySales($data['monthlySales'][$key]);
+            $user->setYearlySales($data['yearlySales'][$key]);
+            $user->setDiscount($data['discount'][$key]);
+            $em->persist($user);
+        }
+        $em->flush();
+        return $this->redirect($request->headers->get('referer'));
     }
 
 
@@ -99,7 +112,7 @@ class MarketingController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('business_marketing', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('business_marketing'));
         }
         return $this->render('BusinessBundle:Marketing:index.html.twig', array(
             'entity' => $entity,

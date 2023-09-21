@@ -7,6 +7,11 @@ business_marketing_create:
     defaults: { _controller: "BusinessBundle:Marketing:create" }
     methods:  POST
 
+business_marketing_sales_target:
+    path:     /sales-target
+    defaults: { _controller: "BusinessBundle:Marketing:updateSalesTarget" }
+    methods:  POST
+
 business_marketing_edit:
     path:     /{id}/edit
     defaults: { _controller: "BusinessBundle:Marketing:edit" }

@@ -62,6 +62,27 @@ class Marketing
      */
     private $companyName;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="monthlySales", type="float",nullable=true)
+     */
+    private $monthlySales;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="yearlySales", type="float",nullable=true)
+     */
+    private $yearlySales;
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="discount", type="float",nullable=true)
+     */
+    private $discount;
+
     /**
      * @var \DateTime
      * @ORM\Column(name="joiningDate", type="datetime",  nullable=true)
@@ -207,6 +228,56 @@ class Marketing
     {
         $this->status = $status;
     }
+
+    /**
+     * @return float
+     */
+    public function getMonthlySales()
+    {
+        return $this->monthlySales;
+    }
+
+    /**
+     * @param float $monthlySales
+     */
+    public function setMonthlySales($monthlySales)
+    {
+        $this->monthlySales = $monthlySales;
+    }
+
+    /**
+     * @return float
+     */
+    public function getYearlySales()
+    {
+        return $this->yearlySales;
+    }
+
+    /**
+     * @param float $yearlySales
+     */
+    public function setYearlySales($yearlySales)
+    {
+        $this->yearlySales = $yearlySales;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param float $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+    }
+
+
 
 
 }

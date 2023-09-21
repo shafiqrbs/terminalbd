@@ -214,6 +214,13 @@ class BusinessConfig
      */
     private $conditionSales = false;
 
+      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isMarketingExecutive", type="boolean",  nullable=true)
+     */
+    private $isMarketingExecutive = false;
+
      /**
      * @var boolean
      *
@@ -1717,9 +1724,21 @@ class BusinessConfig
         $this->aitPercent = $aitPercent;
     }
 
+    /**
+     * @return bool
+     */
+    public function isMarketingExecutive()
+    {
+        return $this->isMarketingExecutive;
+    }
 
-
-
+    /**
+     * @param bool $isMarketingExecutive
+     */
+    public function setIsMarketingExecutive($isMarketingExecutive)
+    {
+        $this->isMarketingExecutive = $isMarketingExecutive;
+    }
 
 }
 

@@ -50,53 +50,40 @@
                                     <div class="span12">
                                         <div class="clearfix">&nbsp;</div>
                                         <form class="stockInvoice" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="row-fluid particular-info" >
-                                                        <div class="span8" >Item Description</div>
-                                                        <div class="span2" >Quantity</div>
-                                                        <div class="span2" >Price</div>
-                                                    </div>
-                                                    <div class="row-fluid particular-info" >
-                                                        <div class="span8" >
-                                                            <div class="row-fluid">
-                                                                <div class="span12" >
-                                                                    <select id="particular" name="particular" data-url="{{ path('business_invoice_particular_search',{'invoice':entity.id}) }}" class="span12 m-wrap select2 input" style="margin-left: 15px">
-                                                                        <option value="">--- Select Stock Product ---- </option>
-                                                                        {% for particular in particulars %}
-                                                                            {% if particular.category is not empty %}
-                                                                            <option value="{{ particular.id }}">{{ particular.name }} - {{ particular.category.name }} => [{{ (particular.remainingQuantity) }}] {{ particular.unit }}</option>
-                                                                            {% else %}
-                                                                            <option value="{{ particular.id }}">{{ particular.name }} => [{{ (particular.remainingQuantity) }}] {{ particular.unit }}</option>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            {% if entity.businessConfig.isDescription == 1 %}
-                                                                <div class="row-fluid">
-                                                                    <div class="span12" style="margin-left: 15px; margin-top: 15px">
-                                                                        <input type="text"  class="m-wrap span12 form-control" autocomplete="off" id="description" name="description" placeholder="Description" value=""  >
-                                                                    </div>
-                                                                </div>
-                                                            {% endif %}
+                                            <div class="row-fluid" style="background: #dde3e6; padding-bottom: 15px; border: 2px solid #4b8df8">
+                                                <div class="span6">
+                                                    <div class="control-group">
+                                                        <label class="control-label" style="padding-left: 20px; font-size: 12px; text-transform: uppercase; font-weight: bold" for="name">Select Product Name<span class="required">*</span></label>
+                                                        <div class="controls">
+                                                            <select id="particular" name="particular" data-url="{{ path('business_invoice_particular_search',{'invoice':entity.id}) }}" class="span12 m-wrap select2 input" style="margin-left: 15px">
+                                                                <option value="">--- Select Stock Product ---- </option>
+                                                                {% for particular in particulars %}
+                                                                    {% if particular.category is not empty %}
+                                                                        <option value="{{ particular.id }}">{{ particular.name }} - {{ particular.category.name }} => [{{ (particular.remainingQuantity) }}] {{ particular.unit }}</option>
+                                                                    {% else %}
+                                                                        <option value="{{ particular.id }}">{{ particular.name }} => [{{ (particular.remainingQuantity) }}] {{ particular.unit }}</option>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </select>
                                                         </div>
-                                                        <div class="span4">
-                                                            <div class="input-append span12" style="margin-bottom:0!important">
-                                                                <div class="input-group">
-                                                                    <input type="number" class="m-wrap span4 form-control input-number input" id="quantity" name="quantity" value="1" min="1">
-                                                                    <input type="text" class="m-wrap span3 form-control input-number input" id="salesPrice" name="salesPrice" placeholder="Price" value="" min="">
-                                                                    <button type="button" class="btn yellow"  id="unit" >Unit</button>
-                                                                    <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
-                                                                </div>
+                                                    </div>
+                                                </div>
+                                                <div class="span2"></div>
+                                                <div class="span4">
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="name" style="padding-left: 10px; font-size: 12px; text-transform: uppercase; font-weight: bold" >Quantity & Price<span class="required">*</span></label>
+                                                        <div class="input-append span12" style="margin-bottom:0!important">
+                                                            <div class="input-group">
+                                                                <input type="number" class="m-wrap span4 form-control input-number input" id="quantity" name="quantity" value="1" min="1">
+                                                                <input type="text" class="m-wrap span3 form-control input-number input" id="salesPrice" name="salesPrice" placeholder="Price" value="" min="">
+                                                                <button type="button" class="btn yellow"  id="unit" >Unit</button>
+                                                                <button type="submit" class="btn blue" id="addAccessories" ><i class="icon-save"></i> Add</button>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </form>
-                                        <div class="clearfix">&nbsp;</div>
                                     </div>
                                 </div>
                                 <div class="clearfix">&nbsp;</div>
@@ -111,7 +98,7 @@
                                             </div>
                                         </div>
                                         <div class="clearfix">&nbsp;</div>
-                                        <form class="" id="customInvoice" name="customInvoice" action="{{ path('business_invoice_particular_add',{'invoice':entity.id}) }}" method="post">
+                                        <form class="form-horizontal" id="customInvoice" name="customInvoice" action="{{ path('business_invoice_particular_add',{'invoice':entity.id}) }}" method="post">
                                             <div class="row-fluid particular-info">
                                                 <div class="span8">
                                                     <div class="form-control" style="margin-left: 15px">
@@ -264,6 +251,21 @@
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
+                                    {% if entity.businessConfig.isMarketingExecutive == 1 %}
+                                    <div class="row-fluid">
+                                        <div class="span12" >
+                                            <select name="marketing" id="marketing" class="span12 m-wrap">
+                                                <option>--Select one Marketing Executive</option>
+                                                {% if marketings is not empty %}
+                                                    {% for marketing in marketings %}
+                                                        <option {% if entity.marketing is not empty and entity.marketing.id ==  marketing.id %} selected="selected" {% endif %} value="{{ marketing.id }}">{{ marketing.name }}</option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    {% endif %}
                                     {% if entity.businessConfig.isConditionSales == 1 %}
                                     <div class="row-fluid">
                                         <div class="span12" >

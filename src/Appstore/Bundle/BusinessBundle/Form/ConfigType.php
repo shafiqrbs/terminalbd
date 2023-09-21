@@ -70,6 +70,7 @@ class ConfigType extends AbstractType
             ->add('customInvoicePrint')
             ->add('customInvoice')
             ->add('bonusFromStock')
+            ->add('isMarketingExecutive')
             ->add('isInvoiceTitle')
             ->add('showStock')
             ->add('isPrintHeader')

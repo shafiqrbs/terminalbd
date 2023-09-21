@@ -48,8 +48,6 @@ class SalesUserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $data = $request->request->all();
-
-
         foreach ($data['user'] as $key => $value){
             $user = $this->getDoctrine()->getRepository('UserBundle:User')->find($value);
             $domainUser = $this->getDoctrine()->getRepository('DomainUserBundle:DomainUser')->findOneBy(array('user' => $user->getId()));
