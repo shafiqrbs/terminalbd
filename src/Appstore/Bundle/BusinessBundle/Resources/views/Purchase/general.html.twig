@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="row-fluid particular-info" >
-                        <div class="span7" style="margin-left:15px">
+                        <div class="span4" style="margin-left:15px">
                             <select id="particular" name="particular" class="span12 select2">
                                 <option value="">--- Select product name ---</option>
                                 {% for particular in particulars %}
@@ -72,6 +72,16 @@
                                 {% endfor %}
                             </select>
                         </div>
+                       {% if ("wearhouse" in config.stockFormat) %}
+                        <div class="span3" style="margin-left:15px">
+                            <select id="wearhouse" name="wearhouse" class="m-wrap span12 form-control">
+                                <option value="">--- Select wearhouse name ---</option>
+                                {% for wearhouse in wearhouses %}
+                                    <option value="{{ wearhouse.id }}">{{ wearhouse.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
                         <div class="span3">
                             <div class="input-append">
                                 <div class="input-group">
@@ -99,6 +109,7 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Code</th>
                             <th class="span3">Name</th>
+                            <th class="span1">Wearhouse</th>
                             <th class="span1">Sales Price</th>
                             <th class="span1">Purchase Price</th>
                             <th class="span1">Qnt</th>
@@ -114,6 +125,7 @@
                                     <td  class="span1">{{ loop.index }}</td>
                                     <td  class="span1">{{ item.businessParticular.particularCode }}</td>
                                     <td class="span3">{{ item.businessParticular.name }}</td>
+                                    <td class="span1">{% if item.wearhouse %}{{ item.wearhouse.name }}{% endif %}</td>
                                     <td class="span1">{{ item.businessParticular.salesPrice }}</td>
                                     <td class="span1"><input type="text" class="numeric td-inline-input-qnt itemUpdate" autocomplete="off" id="price-{{ item.id }}" name="price-{{ item.id }}" data-id="{{ item.id }}" value="{{ item.purchasePrice }}" placeholder="0"></td>
                                     <td class="span1"><input type="text" class="numeric td-inline-input-qnt itemUpdate" autocomplete="off" id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" data-id="{{ item.id }}" value="{{ item.quantity }}" placeholder="0"></td>
@@ -126,20 +138,20 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="9" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="10" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="7" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                            <td colspan="8" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="7" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td colspan="8" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                             <td class="span2"><strong id="discount">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="7" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
+                            <td colspan="8" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="netTotal">{{ entity.netTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>

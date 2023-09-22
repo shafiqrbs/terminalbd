@@ -49,6 +49,11 @@ class BusinessPurchaseItem
      **/
     private  $unit;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
+     **/
+    private  $wearhouse;
+
 
     /**
      * @var float
@@ -637,6 +642,24 @@ class BusinessPurchaseItem
     {
         $this->bonusQuantity = $bonusQuantity;
     }
+
+    /**
+     * @return WearHouse
+     */
+    public function getWearhouse()
+    {
+        return $this->wearhouse;
+    }
+
+    /**
+     * @param WearHouse $wearhouse
+     */
+    public function setWearhouse($wearhouse)
+    {
+        $this->wearhouse = $wearhouse;
+    }
+
+
 
 
 }

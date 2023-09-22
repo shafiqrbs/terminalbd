@@ -6,6 +6,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\WearHouse;
 use Appstore\Bundle\BusinessBundle\Form\InvoiceType;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
@@ -162,8 +163,12 @@ class InvoiceController extends Controller
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindStockItem($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
         $returnQty = $em->getRepository('BusinessBundle:BusinessDistributionReturnItem')->returnRemainingStock($config->getId());
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        $wearhouses = $this->getDoctrine()->getRepository(WearHouse::class)->findBy(array('businessConfig' => $config),array('name'=>'ASC'));
+
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
+            'config' => $config,
             'entity' => $entity,
+            'wearhouses' => $wearhouses,
             'vendors' => $vendors,
             'balance' => $balance,
             'customers' => $customers,
@@ -306,12 +311,15 @@ class InvoiceController extends Controller
         $customers = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findBy(array('globalOption' => $this->getUser()->getGlobalOption()),array('name'=>"ASC"));
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config, $type = array('production','stock','service','virtual','pre-production','post-production'));
         $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
+        $wearhouses = $this->getDoctrine()->getRepository(WearHouse::class)->findBy(array('businessConfig' => $config),array('name'=>'ASC'));
         return $this->render("BusinessBundle:Invoice/{$view}:new.html.twig", array(
+            'config' => $config,
             'entity' => $entity,
             'vendors' => $vendors,
             'areas' => $areas,
             'couriers' => $couriers,
             'stores' => $stores,
+            'wearhouses' => $wearhouses,
             'customers' => $customers,
             'marketings' => $marketings,
             'particulars' => $particulars,
@@ -405,7 +413,6 @@ class InvoiceController extends Controller
         if ($config->getId() == $entity->getBusinessConfig()->getId()) {
 
             $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'default';
-
             return $this->render("BusinessBundle:Invoice/{$view}:show.html.twig", array(
                 'entity' => $entity,
             ));
@@ -534,12 +541,15 @@ class InvoiceController extends Controller
     public function addParticularAction(Request $request, BusinessInvoice $invoice)
     {
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $wearhouse = (isset($data['wearhouse']) and $data['wearhouse']) ? $data['wearhouse']:'';
         $particular = $request->request->get('customParticular');
         $price = $request->request->get('price');
         $unit = $request->request->get('unit');
         $quantity = $request->request->get('quantity');
         $description = $request->request->get('description');
-        $invoiceItems = array('particular' => $particular, 'quantity' => $quantity,'price' => $price,'unit' => $unit,'description' => $description);
+
+        $invoiceItems = array('particular' => $particular, 'quantity' => $quantity,'price' => $price,'unit' => $unit,'description' => $description,'wearhouse' => $wearhouse);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertInvoiceParticular($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
         $msg = 'Particular added successfully';
@@ -720,12 +730,14 @@ class InvoiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $wearhouse = (isset($data['wearhouse']) and $data['wearhouse']) ? $data['wearhouse']:'';
         $particular = $request->request->get('particular');
         $quantity = $request->request->get('quantity');
         $price = $request->request->get('salesPrice');
         $description = $request->request->get('description');
         if(!empty($particular)){
-            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'price' => $price,'description' => $description);
+            $invoiceItems = array('accessories' => $particular ,'quantity' => $quantity,'price' => $price,'description' => $description,'wearhouse' => $wearhouse);
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertStockItem($invoice,$invoiceItems);
             $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
             $msg = 'Particular added successfully';

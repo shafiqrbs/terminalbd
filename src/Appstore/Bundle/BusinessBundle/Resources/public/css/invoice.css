@@ -94,6 +94,9 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     height: 23px!important;
     width: 140px!important;
 }
+.select2-container .select2-choice {
+    border: 1px solid #8a8a8a!important;
+}
 .select2-search{
     padding-left: 0;
     padding-right: 0;

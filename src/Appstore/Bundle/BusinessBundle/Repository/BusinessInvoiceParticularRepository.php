@@ -68,6 +68,10 @@ class BusinessInvoiceParticularRepository extends EntityRepository
             $unit = $this->_em->getRepository('SettingToolBundle:ProductUnit')->find($data['unit']);
             $entity->setUnit($unit);
         }
+        $wearhouse = $this->_em->getRepository('BusinessBundle:WearHouse')->find($data['wearhouse']);
+        if($wearhouse){
+            $entity->setWearhouse($wearhouse);
+        }
         $em->persist($entity);
         $em->flush();
 
@@ -205,6 +209,10 @@ class BusinessInvoiceParticularRepository extends EntityRepository
         $em = $this->_em;
         $entity = new BusinessInvoiceParticular();
         $quantity = !empty($data['quantity']) ? $data['quantity'] :1;
+        $wearhouse = $this->_em->getRepository('BusinessBundle:WearHouse')->find($data['wearhouse']);
+        if($wearhouse){
+            $entity->setWearhouse($wearhouse);
+        }
         $entity->setQuantity($quantity);
 	    $entity->setTotalQuantity($quantity);
 	    $accessoriesId = $data['accessories'];
@@ -332,10 +340,14 @@ class BusinessInvoiceParticularRepository extends EntityRepository
                 $subQuantity = $entity->getHeight().' x '.$entity->getWidth().' = '.$entity->getSubQuantity();
             }
 	        $subQnt = ( $entity->getSubQuantity() == '' ) ? 1 : $entity->getSubQuantity();
+            $wearhouse = $entity->getWearhouse() ? $entity->getWearhouse()->getName():'';
 
             $data .= "<tr id='remove-{$entity->getId()}'>";
             $data .= "<td>{$i}.</td>";
             $data .= "<td>{$entity->getParticular()}<br/>{$entity->getDescription()}</td>";
+            if(in_array('wearhouse',$sales->getBusinessConfig()->getStockFormat())) {
+                $data .= "<td>{$wearhouse}</td>";
+            }
             if($sales->getBusinessConfig()->getBusinessModel() == 'sign') {
             $data .= "<td>{$subQuantity}</td>";
             }

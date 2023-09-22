@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
+use Appstore\Bundle\BusinessBundle\Entity\WearHouse;
 use Appstore\Bundle\BusinessBundle\Form\PurchaseOpeningType;
 use Appstore\Bundle\BusinessBundle\Form\PurchaseType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -142,9 +143,12 @@ class PurchaseController extends Controller
         $particulars = $em->getRepository('BusinessBundle:BusinessParticular')->getFindWithParticular($config,$type = array('consumable','stock'));
 	    $view = !empty($config->getBusinessModel()) ? $config->getBusinessModel() : 'new';
         $vendors = $this->getDoctrine()->getRepository(AccountVendor::class)->findBy(array('globalOption'=>$this->getUser()->getGlobalOption()));
+        $wearhouses = $this->getDoctrine()->getRepository(WearHouse::class)->findBy(array('businessConfig' => $config),array('name'=>'ASC'));
 	    return $this->render("BusinessBundle:Purchase:{$view}.html.twig", array(
             'entity' => $entity,
+            'config' => $config,
             'vendors' => $vendors,
+            'wearhouses' => $wearhouses,
             'id' => 'purchase',
             'particulars' => $particulars,
             'form' => $editForm->createView(),
@@ -231,14 +235,16 @@ class PurchaseController extends Controller
     public function addParticularAction(Request $request, BusinessPurchase $invoice)
     {
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
+        $wearhouse = (isset($data['wearhouse']) and $data['wearhouse']) ? $data['wearhouse']:'';
         if($invoice->getBusinessConfig()->isUnitPrice() == 1){
             $price = $request->request->get('unitPrice');
         }else{
             $price = $request->request->get('purchasePrice');
         }
-        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price);
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price,'wearhouse' => $wearhouse);
         $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
         $result = $this->returnResultData($invoice);

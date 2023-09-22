@@ -54,6 +54,11 @@ class BusinessInvoiceParticular
     private $vendorStockItem;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
+     **/
+    private $wearhouse;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="unit", type="string", length=225, nullable=true)
@@ -643,5 +648,23 @@ class BusinessInvoiceParticular
     {
         $this->srCommissionTotal = $srCommissionTotal;
     }
+
+    /**
+     * @return WearHouse
+     */
+    public function getWearhouse()
+    {
+        return $this->wearhouse;
+    }
+
+    /**
+     * @param WearHouse $wearhouse
+     */
+    public function setWearhouse($wearhouse)
+    {
+        $this->wearhouse = $wearhouse;
+    }
+
+
 }
 

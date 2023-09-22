@@ -91,9 +91,6 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                    <th class="numeric" >Name</th>
-                                    {% if 'wearhouse' in config.stockFormat %}
-                                    <th class="numeric" >Wearhouse</th>
-                                    {% endif %}
                                     <th class="numeric" >Barcode</th>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Brand</th>
@@ -117,9 +114,6 @@
                                 {% for entity in pagination %}
                                     <tr>
                                         <td class="numeric" ><a href="{{ path('business_stock_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        {% if 'wearhouse' in config.stockFormat %}
-                                        <td class="numeric" >{% if entity.wearHouse is not empty %}{{ entity.wearHouse.name }}{% endif %}</td>
-                                        {% endif %}
                                         <td class="numeric" >
                                             <a  class="editable" data-name="particularCode" href="#"  data-url="{{ path('business_stock_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change SKU/Barcode">{{ entity.particularCode }}</a>
                                         </td>

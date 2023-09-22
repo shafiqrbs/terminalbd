@@ -51,7 +51,7 @@
                                         <div class="clearfix">&nbsp;</div>
                                         <form class="stockInvoice" id="stockInvoice" name="stockInvoice" action="{{ path('business_invoice_accessories_add',{'invoice':entity.id}) }}" method="post">
                                             <div class="row-fluid" style="background: #dde3e6; padding-bottom: 15px; border: 2px solid #4b8df8">
-                                                <div class="span6">
+                                                <div class="span5">
                                                     <div class="control-group">
                                                         <label class="control-label" style="padding-left: 20px; font-size: 12px; text-transform: uppercase; font-weight: bold" for="name">Select Product Name<span class="required">*</span></label>
                                                         <div class="controls">
@@ -68,7 +68,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="span2"></div>
+                                                {% if ("wearhouse" in config.stockFormat) %}
+                                                    <div class="span3" style="margin-left:15px">
+                                                        <div class="control-group">
+                                                            <label class="control-label" style="padding-left: 20px; font-size: 12px; text-transform: uppercase; font-weight: bold" for="name">Select Product Name<span class="required">*</span></label>
+                                                            <div class="controls" style="margin-left:15px">
+                                                                <select id="wearhouse" name="wearhouse" class="m-wrap span12 form-control">
+                                                                    <option value="">--- Select wearhouse name ---</option>
+                                                                    {% for wearhouse in wearhouses %}
+                                                                        <option value="{{ wearhouse.id }}">{{ wearhouse.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
                                                 <div class="span4">
                                                     <div class="control-group">
                                                         <label class="control-label" for="name" style="padding-left: 10px; font-size: 12px; text-transform: uppercase; font-weight: bold" >Quantity & Price<span class="required">*</span></label>
@@ -135,6 +149,7 @@
                                             <tr>
                                                 <th class="span1"> Si/No</th>
                                                 <th class="span4">Particular</th>
+                                                <th class="span2">Wearhouse</th>
                                                 <th class="span2">Unit Price</th>
                                                 <th class="span1">Qnt</th>
                                                 <th class="span1">Amount</th>
@@ -146,6 +161,7 @@
                                                 <tr id="remove-{{ item.id }}">
                                                     <td  class="">{{ loop.index }}.</td>
                                                     <td class="">{{ item.particular }}<br/>{{ item.description|raw }}</td>
+                                                    <td class="">{% if item.wearhouse %}{{ item.wearhouse.name }}{% endif %}</td>
                                                     <td class="">
                                                         <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                                                         <input type="hidden" id="subQuantity-{{ item.id }}" name="subQuantity[]" value="{{ item.subQuantity }}" >
@@ -164,25 +180,25 @@
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="6" class="span12" style="border: 1px double #000"></td>
+                                                <td colspan="7" class="span12" style="border: 1px double #000"></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                                                 <td class="span1"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                                                 <td class="span1"></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                                                 <td class="span1"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                                                 <td class="span1"></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                                                 <td class="span1"><strong class="discount">{{ entity.discount|number_format }}</strong></td>
                                                 <td class="span1"></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                                                <td colspan="5" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
                                                 <td class="span1"><strong class="netTotal">{{ entity.total|number_format }}</strong></td>
                                                 <td class="span1"></td>
                                             </tr>

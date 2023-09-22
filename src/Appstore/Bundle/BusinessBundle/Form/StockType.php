@@ -27,24 +27,6 @@ class StockType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-
-         if (in_array("wearhouse", $this->option->getBusinessConfig()->getStockFormat())) {
-
-	            $builder->add( 'wearHouse', 'entity', array(
-			    'required'      => false,
-			    'class'         => 'Appstore\Bundle\BusinessBundle\Entity\WearHouse',
-			    'property'      => 'name',
-			    'empty_value'   => 'Choose a wearhouse',
-			    'attr'          => array( 'class' => 'span12 m-wrap' ),
-			    'query_builder' => function ( EntityRepository $er ) {
-				    return $er->createQueryBuilder( 'e' )
-				              ->where( "e.status = 1" )
-				              ->andWhere( "e.businessConfig ={$this->option->getBusinessConfig()->getId()}" )
-				              ->orderBy( "e.sorting", "ASC" );
-			    }
-	        ));
-	    }
-
 	    $builder
 	    ->add('name','text', array('attr'=>array('class'=>'m-wrap span8','placeholder'=>'Enter product name'),
                 'constraints' =>array(

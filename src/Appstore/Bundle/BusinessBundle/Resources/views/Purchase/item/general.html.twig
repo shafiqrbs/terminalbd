@@ -4,6 +4,7 @@
             <td  class="span1">{{ loop.index }}</td>
             <td  class="span1">{{ item.businessParticular.particularCode }}</td>
             <td class="span3">{{ item.businessParticular.name }}</td>
+            <td class="span1">{% if item.wearhouse %}{{ item.wearhouse.name }}{% endif %}</td>
             <td class="span1">{{ item.businessParticular.salesPrice }}</td>
             <td class="span1"><input type="text" class="numeric td-inline-input-qnt itemUpdate" autocomplete="off" id="price-{{ item.id }}" name="price-{{ item.id }}" data-id="{{ item.id }}" value="{{ item.purchasePrice }}" placeholder="0"></td>
             <td class="span1"><input type="text" class="numeric td-inline-input-qnt itemUpdate" autocomplete="off" id="quantity-{{ item.id }}" name="quantity-{{ item.id }}" data-id="{{ item.id }}" value="{{ item.quantity }}" placeholder="0"></td>

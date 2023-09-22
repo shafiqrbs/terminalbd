@@ -86,7 +86,7 @@ class BusinessWearHouseController extends Controller
             'action' => $this->generateUrl('business_wearhouse_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));
