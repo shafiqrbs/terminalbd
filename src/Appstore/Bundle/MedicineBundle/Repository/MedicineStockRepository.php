@@ -849,6 +849,96 @@ class MedicineStockRepository extends EntityRepository
 
     }
 
+    public function yearlyStockLedgerReport($config,$data = [])
+    {
+
+        $sqlStockPurchase = "UPDATE medicine_stock as stock
+             inner join (select pi.medicineStock_id, ROUND(COALESCE(SUM(pi.quantity),0),2) as purchaseQuantity
+              from medicine_purchase_item as pi
+              join medicine_purchase  as pr ON  pi.medicinePurchase_id = pr.id
+              join medicine_stock  as ms ON  pi.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config}  AND pr.updated <= '2023-01-01'
+              group by pi.medicineStock_id) as pa on stock.id = pa.medicineStock_id
+              SET stock.purchaseQuantity = pa.purchaseQuantity";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchase);
+        $qb1->execute();
+
+
+        exit;
+
+        $sqlStockPurchaseReturn = "UPDATE medicine_stock as stock
+             inner join (select pi.medicineStock_id, ROUND(COALESCE(SUM(pi.quantity),0),2) as purchaseQuantity
+              from medicine_purchase_return_item as pi
+              join medicine_purchase_return  as pr ON  pi.medicinePurchaseReturn_id = pr.id
+              join medicine_stock  as ms ON  pi.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config} AND pr.upadted <= '2023-01-01'
+              group by pi.medicineStock_id) as pa on stock.id = pa.medicineStock_id
+  SET stock.purchaseQuantity = pa.purchaseQuantity";
+        $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchaseReturn);
+        $qb2->execute();
+
+
+
+        $sqlStockSales = "UPDATE medicine_stock as stock
+             inner join (
+              select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
+              from medicine_sales_item as ele
+              join medicine_stock  as ms ON  ele.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config}
+              group by ele.medicineStock_id
+            ) as pa on stock.id = pa.medicineStock_id
+  SET stock.remainingQuantity = ((COALESCE(stock.openingQuantity,0) + COALESCE(stock.purchaseQuantity,0) + COALESCE(stock.salesReturnQuantity,0)+ COALESCE(stock.bonusQuantity,0)+ COALESCE(stock.bonusAdjustment,0)+ COALESCE(stock.adjustmentQuantity,0)) - (COALESCE(pa.salesQuantity,0) + COALESCE(stock.purchaseReturnQuantity,0) + COALESCE(stock.damageQuantity,0)))
+ , stock.salesQuantity = pa.salesQuantity";
+        $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlStockSales);
+        $qb2->execute();
+
+    }
+
+    public function monthlyStockLedgerReport($config,$data = [])
+    {
+        echo $config;
+        exit;
+        $sqlStockPurchase = "UPDATE medicine_stock as stock
+             inner join (select pi.medicineStock_id, ROUND(COALESCE(SUM(pi.quantity),0),2) as purchaseQuantity
+              from medicine_purchase_item as pi
+              join medicine_purchase  as pr ON  pi.medicinePurchase_id = pr.id
+              join medicine_stock  as ms ON  pi.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config}  AND pr.updated >= '2023-01-01' AND pr.updated <= '2023-01-31'
+              group by pi.medicineStock_id) as pa on stock.id = pa.medicineStock_id
+  SET stock.purchaseQuantity = pa.purchaseQuantity";
+        $qb1 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchase);
+        $qb1->execute();
+
+        exit;
+
+        $sqlStockPurchaseReturn = "UPDATE medicine_stock as stock
+             inner join (select pi.medicineStock_id, ROUND(COALESCE(SUM(pi.quantity),0),2) as purchaseQuantity
+              from medicine_purchase_return_item as pi
+              join medicine_purchase_return  as pr ON  pi.medicinePurchaseReturn_id = pr.id
+              join medicine_stock  as ms ON  pi.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config} AND pr.upadted >= '2023-01-01' AND pr.upadted <= '2023-01-31'
+              group by pi.medicineStock_id) as pa on stock.id = pa.medicineStock_id
+  SET stock.purchaseQuantity = pa.purchaseQuantity";
+        $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchaseReturn);
+        $qb2->execute();
+
+
+
+        $sqlStockSales = "UPDATE medicine_stock as stock
+             inner join (
+              select ele.medicineStock_id, ROUND(COALESCE(SUM(ele.quantity),0),2) as salesQuantity
+              from medicine_sales_item as ele
+              join medicine_stock  as ms ON  ele.medicineStock_id = ms.id
+              where  ms.medicineConfig_id = {$config}
+              group by ele.medicineStock_id
+            ) as pa on stock.id = pa.medicineStock_id
+  SET stock.remainingQuantity = ((COALESCE(stock.openingQuantity,0) + COALESCE(stock.purchaseQuantity,0) + COALESCE(stock.salesReturnQuantity,0)+ COALESCE(stock.bonusQuantity,0)+ COALESCE(stock.bonusAdjustment,0)+ COALESCE(stock.adjustmentQuantity,0)) - (COALESCE(pa.salesQuantity,0) + COALESCE(stock.purchaseReturnQuantity,0) + COALESCE(stock.damageQuantity,0)))
+ , stock.salesQuantity = pa.salesQuantity";
+        $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlStockSales);
+        $qb2->execute();
+
+    }
+
 
     public function getApiStock(GlobalOption $option)
     {
