@@ -52,7 +52,6 @@ SET stock.purchaseQuantity = pa.purchaseQuantity";
         $qb1->execute();
 
 
-
         $sqlStockPurchaseReturn = "UPDATE medicine_stock as stock
              inner join (select pi.medicineStock_id, ROUND(COALESCE(SUM(pi.quantity),0),2) as purchaseQuantity
               from medicine_purchase_return_item as pi
