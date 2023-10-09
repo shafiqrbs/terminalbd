@@ -12,7 +12,6 @@
 namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\EcommerceBundle\Entity\DeliveryLocation;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Designation;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -55,11 +54,6 @@ class Profile
      **/
     protected $employeePayroll;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="employee")
-     **/
-    protected $distributionUser;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Designation", inversedBy="designationProfiles")
@@ -75,13 +69,6 @@ class Profile
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="employeeProfiles" )
      */
     protected $employeeBranch;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\DeliveryLocation", inversedBy="profiles" )
-     */
-    protected $deliveryLocation;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\HrDepartment")

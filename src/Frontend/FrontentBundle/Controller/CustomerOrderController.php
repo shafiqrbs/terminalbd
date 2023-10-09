@@ -3,8 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 
 
-use Appstore\Bundle\EcommerceBundle\Entity\Item;
-use Appstore\Bundle\EcommerceBundle\Entity\ItemSub;
+
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;

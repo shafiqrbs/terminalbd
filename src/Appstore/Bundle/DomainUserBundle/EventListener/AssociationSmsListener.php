@@ -1,7 +1,6 @@
 <?php
 namespace  Appstore\Bundle\DomainUserBundle\EventListener;
 use Appstore\Bundle\DomainUserBundle\Event\AssociationSmsEvent;
-use Appstore\Bundle\ElectionBundle\Event\ElectionSmsEvent;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Setting\Bundle\ToolBundle\Entity\SmsSender;

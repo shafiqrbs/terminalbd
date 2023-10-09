@@ -213,9 +213,7 @@ class DomainController extends Controller
         if($option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
         }
-        if($option->getEcommerceConfig()) {
-            $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
-        }
+
         if($option->getInventoryConfig()) {
            $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
         }
@@ -231,9 +229,6 @@ class DomainController extends Controller
         }
         if($option->getBusinessConfig()) {
             $this->getDoctrine()->getRepository('BusinessBundle:BusinessConfig')->businessReset($option);
-        }
-        if($option->getAssetsConfig()) {
-            $this->getDoctrine()->getRepository('AssetsBundle:AssetsConfig')->reset($option);
         }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
         $a = new Filesystem();
@@ -259,9 +254,7 @@ class DomainController extends Controller
         if(!empty($option->getAccountingConfig()) and $option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
         }
-        if(!empty($option->getEcommerceConfig()) and $option->getEcommerceConfig()) {
-            $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
-        }
+
         if(!empty($option->getInventoryConfig()) and $option->getInventoryConfig()) {
             $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
         }
@@ -273,9 +266,6 @@ class DomainController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalDelete($option);
         }
 
-         if(!empty($option->getHotelConfig()) and $option->getHotelConfig()) {
-            $this->getDoctrine()->getRepository('HotelBundle:HotelConfig')->hotelReset($option);
-        }
 
         if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineDelete($option);
@@ -285,12 +275,6 @@ class DomainController extends Controller
         }
          if(!empty($option->getRestaurantConfig()) and $option->getRestaurantConfig()) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->delete($option);
-        }
-        if(!empty($option->getDmsConfig()) and $option->getDmsConfig()) {
-            $this->getDoctrine()->getRepository('DmsBundle:DmsConfig')->reset($option);
-        }
-        if($option->getAssetsConfig()) {
-            $this->getDoctrine()->getRepository('AssetsBundle:AssetsConfig')->reset($option);
         }
 
         $em->remove($option);
@@ -324,9 +308,7 @@ class DomainController extends Controller
         if(!empty($option->getAccountingConfig()) and $option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
         }
-        if(!empty($option->getEcommerceConfig()) and $option->getEcommerceConfig()) {
-            $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
-        }
+
         if(!empty($option->getInventoryConfig()) and $option->getInventoryConfig()) {
             $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryDelete($option);
         }
@@ -338,10 +320,6 @@ class DomainController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalDelete($option);
         }
 
-        if(!empty($option->getHotelConfig()) and $option->getHotelConfig()) {
-            $this->getDoctrine()->getRepository('HotelBundle:HotelConfig')->hotelReset($option);
-        }
-
         if(!empty($option->getMedicineConfig()) and $option->getMedicineConfig()) {
             $this->getDoctrine()->getRepository('MedicineBundle:MedicineConfig')->medicineDelete($option);
         }
@@ -350,12 +328,6 @@ class DomainController extends Controller
         }
         if(!empty($option->getRestaurantConfig()) and $option->getRestaurantConfig()) {
             $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->delete($option);
-        }
-        if(!empty($option->getDmsConfig()) and $option->getDmsConfig()) {
-            $this->getDoctrine()->getRepository('DmsBundle:DmsConfig')->reset($option);
-        }
-        if($option->getAssetsConfig()) {
-            $this->getDoctrine()->getRepository('AssetsBundle:AssetsConfig')->reset($option);
         }
 
         $em->remove($option);

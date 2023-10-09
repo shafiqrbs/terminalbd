@@ -22,14 +22,6 @@ class ItemWarning
      */
     private $id;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="itemWarning" )
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private  $item;
-
-
     /**
      * @var string
      *

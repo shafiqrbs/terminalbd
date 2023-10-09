@@ -623,7 +623,6 @@ class MedicineStockController extends Controller
             $entity->setIsWeb(0);
         } else{
             $entity->setIsWeb(1);
-            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->insertCopyMedicineItem($entity);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(

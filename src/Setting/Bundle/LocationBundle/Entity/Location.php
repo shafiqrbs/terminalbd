@@ -5,9 +5,6 @@ namespace Setting\Bundle\LocationBundle\Entity;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
-use Appstore\Bundle\ElectionBundle\Entity\ElectionLocation;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,43 +33,11 @@ class Location
     private $id;
 
 
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="location")
-     */
-    protected $education;
-
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="district")
-     */
-    protected $election;
-
-
-      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="geoLocation")
-     */
-    protected $committees;
-
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionLocation", mappedBy="district")
-     */
-    protected $electionLocations;
-
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", mappedBy="location")
      */
     protected $globalOptions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="location")
-     */
-    protected $orders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="location")
-     */
-    protected $preOrders;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="location")
@@ -114,10 +79,6 @@ class Location
      */
     protected $particulars;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="location")
-     */
-    protected $dmsParticulars;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular", mappedBy="location")

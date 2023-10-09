@@ -169,8 +169,7 @@ class DefaultController extends Controller
         set_time_limit(0);
         ignore_user_abort(true);
         $option = $this->getUser()->getGlobalOption();
-        $this->getDoctrine()->getRepository('EcommerceBundle:Item')->copyStockToEcommerce($option);
-        return new Response('success');
+       return new Response('success');
 
     }
 

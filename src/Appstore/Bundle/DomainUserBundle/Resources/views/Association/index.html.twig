@@ -149,8 +149,8 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@ElectionBundle/Resources/public/css/style.css'
-    '@ElectionBundle/Resources/public/css/messagebox.css'
+    '@DomainUserBundle/Resources/public/css/style.css'
+    '@DomainUserBundle/Resources/public/css/messagebox.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -158,7 +158,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@ElectionBundle/Resources/public/js/messagebox.js'
+    '@DomainUserBundle/Resources/public/js/messagebox.js'
     '@DomainUserBundle/Resources/public/js/editable.js'
     '@DomainUserBundle/Resources/public/js/approveProcess.js'
     '@DomainUserBundle/Resources/public/js/association.js'

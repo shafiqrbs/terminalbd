@@ -6,18 +6,11 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
-use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Bank;
@@ -108,11 +101,6 @@ class AccountMobileBank
      **/
     private  $purchases;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="accountMobileBank" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $serviceSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="accountMobileBank"  )
@@ -157,25 +145,10 @@ class AccountMobileBank
     protected $restaurantPurchase;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="accountMobileBank" )
-     */
-    protected $dmsInvoices;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="accountMobileBank" )
      */
     protected $dpsInvoices;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountMobileBank" )
-     */
-    protected $dmsDoctorInvoices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="accountMobileBank" )
-     */
-    protected $dmsPurchases;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="accountMobileBank" )
@@ -193,11 +166,6 @@ class AccountMobileBank
     protected $medicineSales;
 
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="accountMobileBank" )
-     */
-    protected $dmsTreatmentPlans;
-
       /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="accountMobileBank" )
      */
@@ -208,15 +176,6 @@ class AccountMobileBank
      */
     protected $businessInvoice;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="accountMobileBank" )
-     */
-    protected $hotelPurchases;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="accountMobileBank" )
-     */
-    protected $hotelInvoice;
 
     /**
      * @var string
@@ -498,13 +457,6 @@ class AccountMobileBank
         $this->mobile = $mobile;
     }
 
-    /**
-     * @return ServiceSales
-     */
-    public function getServiceSales()
-    {
-        return $this->serviceSales;
-    }
 
     /**
      * @return Purchase

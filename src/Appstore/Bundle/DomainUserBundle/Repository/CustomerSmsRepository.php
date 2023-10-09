@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\DomainUserBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\CustomerSms;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
-use Appstore\Bundle\ElectionBundle\Entity\ElectionSms;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 

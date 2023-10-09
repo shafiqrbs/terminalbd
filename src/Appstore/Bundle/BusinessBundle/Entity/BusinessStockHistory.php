@@ -72,6 +72,19 @@ class BusinessStockHistory
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\Marketing")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $marketing;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $wearHouse;
+
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
@@ -172,6 +185,20 @@ class BusinessStockHistory
      * @ORM\Column(type="float", nullable=true)
      */
     private $spoilQuantity = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $salesPrice = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $purchasePrice = 0;
 
 
 
@@ -528,6 +555,90 @@ class BusinessStockHistory
     {
         $this->bonusSalesQuantity = $bonusSalesQuantity;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMarketing()
+    {
+        return $this->marketing;
+    }
+
+    /**
+     * @param mixed $marketing
+     */
+    public function setMarketing($marketing)
+    {
+        $this->marketing = $marketing;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWearHouse()
+    {
+        return $this->wearHouse;
+    }
+
+    /**
+     * @param mixed $wearHouse
+     */
+    public function setWearHouse($wearHouse)
+    {
+        $this->wearHouse = $wearHouse;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalesPrice()
+    {
+        return $this->salesPrice;
+    }
+
+    /**
+     * @param float $salesPrice
+     */
+    public function setSalesPrice($salesPrice)
+    {
+        $this->salesPrice = $salesPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param float $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+    }
+
+
+
+
 
 
 }

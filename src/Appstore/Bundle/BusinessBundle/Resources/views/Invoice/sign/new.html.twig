@@ -60,7 +60,8 @@
                                                     <table class="table table-bordered table-striped table-condensed table-fixed">
                                                         <thead class="flip-content ">
                                                         <tr class="head-green">
-                                                            <th class="span6">Particular</th>
+                                                            <th class="span2">Barcode</th>
+                                                            <th class="span4">Particular</th>
                                                             <th class="span3">Size(Width x Height)</th>
                                                             <th class="span1">Unit Price</th>
                                                             <th class="span2">Quantity</th>
@@ -68,6 +69,16 @@
                                                         </thead>
                                                         <tbody>
                                                         <tr>
+                                                        <td>
+                                                            <div class="row-fluid">
+                                                                <div class="span12" style="margin-top: 12px" >
+                                                                        <span class="input-group" >
+                                                                            <input type="text" class="m-wrap span12 form-control input-number" placeholder="Enter barcode" id="barcode" name="barcode" value="" >
+                                                                            <input type="hidden"   id="invoiceId" name="invoiceId" value="{{ entity.id }}" >
+                                                                        </span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                         <td>
                                                             <div class="row-fluid">
                                                                 <div class="span12" >
@@ -116,14 +127,13 @@
                                                         </td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="3">
+                                                            <td colspan="5">
                                                                 <div class="row-fluid">
                                                                     <div class="span12" style="margin-top: 12px" >
                                                                         <input type="text"  class="m-wrap span12 form-control" autocomplete="off" id="description" name="description" placeholder="Description" value=""  >
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>

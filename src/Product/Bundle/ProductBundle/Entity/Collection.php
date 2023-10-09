@@ -45,12 +45,6 @@ class Collection
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="collections" )
-     **/
-    protected $megaMenu;
-
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

@@ -2,8 +2,7 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Form\OrderType;
+
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\AgentProfileType;

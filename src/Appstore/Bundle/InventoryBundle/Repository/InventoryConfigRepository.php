@@ -53,8 +53,6 @@ class InventoryConfigRepository extends EntityRepository
         $Purchase = $em->createQuery('DELETE InventoryBundle:Purchase e WHERE e.inventoryConfig = '.$config);
         $Purchase->execute();
 
-        $ServiceSales = $em->createQuery('DELETE InventoryBundle:ServiceSales e WHERE e.inventoryConfig = '.$config);
-        $ServiceSales->execute();
 
         $stockAdjustment = $em->createQuery('DELETE InventoryBundle:ItemStockAdjustment e WHERE e.config = '.$config);
         $stockAdjustment->execute();
@@ -144,8 +142,6 @@ class InventoryConfigRepository extends EntityRepository
         $Purchase = $em->createQuery('DELETE InventoryBundle:Purchase e WHERE e.inventoryConfig = '.$config);
         $Purchase->execute();
 
-        $ServiceSales = $em->createQuery('DELETE InventoryBundle:ServiceSales e WHERE e.inventoryConfig = '.$config);
-        $ServiceSales->execute();
 
         $stockAdjustment = $em->createQuery('DELETE InventoryBundle:ItemStockAdjustment e WHERE e.config = '.$config);
         $stockAdjustment->execute();

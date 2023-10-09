@@ -7,11 +7,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStoreLedger;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -839,38 +835,9 @@ class AccountSalesRepository extends EntityRepository
 
     /* =============   Assets Module ================= */
 
-    public function insertAccountSalesTally(\Appstore\Bundle\AssetsBundle\Entity\Sales $entity) {
+    public function insertAccountSalesTally ($entity) {
 
-        $em = $this->_em;
-        $accountSales = new AccountSales();
-        $accountSales->setAccountBank( $entity->getAccountBank() );
-        $accountSales->setAccountMobileBank( $entity->getAccountMobileBank() );
-        $accountSales->setGlobalOption( $entity->getConfig()->getGlobalOption() );
-        $accountSales->setAssetsSales( $entity );
-        $accountSales->setSourceInvoice( $entity->getInvoice() );
-        $accountSales->setCustomer( $entity->getCustomer() );
-        $accountSales->setTotalAmount( $entity->getNetTotal() );
-        if ($entity->getPayment() > 0){
-            $accountSales->setAmount($entity->getPayment());
-        }else{
-            $accountSales->setAmount(0);
-        }
-        if ( $entity->getPayment() > 0 ) {
-            $accountSales->setTransactionMethod( $entity->getTransactionMethod() );
-        }
-        $accountSales->setApprovedBy($entity->getApprovedBy());
-        $accountSales->setProcessHead('Assets');
-        $accountSales->setProcessType('Sales');
-        $accountSales->setProcess('approved');
-        $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getCreated());
-        $em->persist($accountSales);
-        $em->flush();
-        $sales = $this->updateCustomerBalance($accountSales);
-        if($accountSales->getAmount() > 0 ){
-            $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-        }
-        return $sales;
+        return '';
 
     }
 
@@ -1436,84 +1403,6 @@ class AccountSalesRepository extends EntityRepository
 		}
 	}
 
-
-	/* =============  Hotel Module ================= */
-	/* Start Account sales for Hotel Module */
-
-	public function insertHotelAccountInvoice(HotelInvoiceTransaction $entity)
-	{
-		/*
-		 * Hotel Invoice if check-in/Booked => Advance
-		 * Restaurant Invoice always Sales & Receive
-		 * Hotel Invoice if check-out => Sales
-		 * */
-
-		$em = $this->_em;
-        $purchasePrice = $em->getRepository('HotelBundle:HotelInvoiceParticular')->getInvoicePurchasePrice($entity->getId());
-		$accountSales = new AccountSales();
-		$accountSales->setAccountBank($entity->getAccountBank());
-		$accountSales->setAccountMobileBank($entity->getAccountMobileBank());
-		$accountSales->setGlobalOption($entity->getHotelInvoice()->getHotelConfig()->getGlobalOption());
-		$accountSales->setHotelInvoice($entity->getHotelInvoice());
-		$accountSales->setSourceInvoice($entity->getHotelInvoice()->getInvoice());
-		$accountSales->setCustomer($entity->getHotelInvoice()->getCustomer());
-		$accountSales->setTransactionMethod($entity->getTransactionMethod());
-		$arrs= array('check-in','booked');
-		if(in_array($entity->getHotelInvoice()->getProcess(),$arrs)  and $entity->getHotelInvoice()->getInvoiceFor() == 'hotel' and $entity->getProcess() == 'done' ){
-			$accountSales->setAmount($entity->getReceived());
-			$accountSales->setProcessType('Advance');
-		}elseif($entity->getHotelInvoice()->getInvoiceFor() == 'hotel' and $entity->getHotelInvoice()->getProcess() == 'check-out' ){
-
-			$accountSales->setTotalAmount($entity->getHotelInvoice()->getTotal());
-			$accountSales->setAmount($entity->getReceived());
-			$accountSales->setPurchasePrice($purchasePrice);
-			$accountSales->setProcessType('Sales');
-		}elseif($entity->getHotelInvoice()->getInvoiceFor() == 'restaurant'){
-			$accountSales->setTotalAmount($entity->getHotelInvoice()->getTotal());
-			$accountSales->setAmount($entity->getReceived());
-            $accountSales->setPurchasePrice($purchasePrice);
-			$accountSales->setProcessType('Sales');
-		}
-		$accountSales->setApprovedBy($entity->getCreatedBy());
-		$accountSales->setProcessHead($entity->getHotelInvoice()->getInvoiceFor());
-		$accountSales->setProcess('approved');
-        $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getCreated());
-
-        $em->persist($accountSales);
-		$em->flush();
-		if($entity->getReceived() > 0 ){
-			$this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-		}
-		return $accountSales;
-
-	}
-
-	public function checkOutHotelAccountInvoice(HotelInvoice $entity)
-	{
-		$em = $this->_em;
-		$accountSales = new AccountSales();
-		$accountSales->setGlobalOption($entity->getHotelConfig()->getGlobalOption());
-		$accountSales->setCustomer($entity->getCustomer());
-		$accountSales->setHotelInvoice($entity);
-		$accountSales->setSourceInvoice($entity->getInvoice());
-		$accountSales->setTransactionMethod(NUll);
-		$accountSales->setTotalAmount($entity->getTotal());
-		$accountSales->setAmount(0);
-		$accountSales->setApprovedBy($entity->getCreatedBy());
-		$accountSales->setProcessHead('hotel');
-		$accountSales->setProcessType('Sales');
-		$accountSales->setProcess('approved');
-        $accountSales->setCreated($entity->getCreated());
-        $accountSales->setUpdated($entity->getCreated());
-        $em->persist($accountSales);
-		$em->flush();
-		$this->updateCustomerBalance($accountSales);
-		return $accountSales;
-
-	}
-
-	/* End Account sales for Hotel Module */
 
 
 	/* =============  All Sales Reverse Module ================= */

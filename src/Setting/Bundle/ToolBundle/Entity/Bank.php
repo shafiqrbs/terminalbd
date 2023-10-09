@@ -4,10 +4,8 @@ namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
@@ -71,11 +69,6 @@ class Bank
 	protected $invoiceTransactions;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="bank" )
-	 */
-	protected $dmsInvoices;
-
-	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="bank" )
 	 */
 	protected $dpsInvoices;
@@ -94,16 +87,6 @@ class Bank
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="bank" )
 	 */
 	protected $businessInvoice;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="bank" )
-	 */
-	protected $hotelInvoice;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="bank" )
-	 */
-	protected $dmsTreatmentPlans;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="bank" )

@@ -3,12 +3,8 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
-use Appstore\Bundle\BusinessBundle\Entity\BusinessVendor;
-use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
-use Appstore\Bundle\DmsBundle\Entity\DmsVendor;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
-use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
@@ -75,11 +71,6 @@ use Symfony\Component\Validator\Constraints as Assert;
          **/
         private  $hmsPurchase;
 
-        /**
-         * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", inversedBy="accountPurchase" )
-         * @ORM\JoinColumn(name="hotelPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-         **/
-        private  $hotelPurchase;
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsVendor", inversedBy="accountPurchase" )
@@ -98,17 +89,6 @@ use Symfony\Component\Validator\Constraints as Assert;
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", inversedBy="accountPurchase" )
          **/
         private  $businessPurchase;
-
-        /**
-         * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", inversedBy="accountPurchase" )
-         * @ORM\JoinColumn(name="dmsPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-         **/
-        private  $dmsPurchase;
-
-        /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsVendor", inversedBy="accountPurchases" )
-         **/
-        private  $dmsVendor;
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineVendor", inversedBy="accountPurchases" )

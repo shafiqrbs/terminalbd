@@ -503,7 +503,6 @@ class AccountSalesController extends Controller
         $em->remove($entity);
         $em->flush();
         return new Response('success');
-        exit;
     }
 
 
@@ -556,7 +555,6 @@ class AccountSalesController extends Controller
 	    }
         $taka = number_format($balance).' Taka';
 	    return new Response($taka);
-	    exit;
 
     }
 
@@ -573,7 +571,6 @@ class AccountSalesController extends Controller
         }
         $taka = number_format($balance).' Taka';
         return new Response($taka);
-        exit;
 
     }
 

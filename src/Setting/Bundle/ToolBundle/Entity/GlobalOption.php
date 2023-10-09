@@ -10,26 +10,17 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
-use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
-use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
-use Appstore\Bundle\EducationBundle\Entity\EducationConfig;
-use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
-use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
-use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
@@ -114,10 +105,6 @@ class GlobalOption
      **/
     protected $payrollSetting;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig", mappedBy="globalOption" )
-     **/
-    protected $procurementConfig;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Payroll", mappedBy="globalOption" )
@@ -177,11 +164,6 @@ class GlobalOption
      **/
     protected $pages;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"sorting" = "ASC"})
-     **/
-    protected $ecommerceMenus;
 
    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -198,15 +180,6 @@ class GlobalOption
      **/
     protected $features;
 
-   /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureBrand", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $featureBrands;
-
-   /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $featureCategories;
 
    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -217,10 +190,7 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $moduleCategories;
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Blackout", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $blackout;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -254,11 +224,6 @@ class GlobalOption
      **/
     protected $location;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AdvertismentBundle\Entity\Advertisment", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     */
-    protected $advertisment;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountingConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -381,34 +346,6 @@ class GlobalOption
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $ecommerceConfig;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="globalOption" , cascade={"persist", "remove"})
-     * @ORM\OrderBy({"updated" = "DESC"})
-     */
-    protected $orders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="globalOption" , cascade={"persist", "remove"})
-     * @ORM\OrderBy({"updated" = "DESC"})
-     */
-    protected $preOrders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="mall" , cascade={"persist", "remove"})
-     */
-    protected $shops;
-
-    /* This part using for Appstore bundle under Accounting module */
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $mallConnects;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $employeeLeave;
@@ -477,11 +414,6 @@ class GlobalOption
     private $monthlyAmount;
 
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="globalOptions" , cascade={"persist", "remove"} )
-     **/
-
-    private $megaMenu;
 
     /**
      * @var string
@@ -840,24 +772,9 @@ class GlobalOption
     private $hospitalConfig;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-    private $dmsConfig;
-
-
-    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $restaurantConfig;
-
-
-
-    /*================================= HOTEL BUNDLE===========================================*/
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-    private $hotelConfig;
 
 
      /*================================= OFFICE BUNDLE===========================================*/
@@ -868,28 +785,12 @@ class GlobalOption
     private $businessConfig;
 
 
-     /*================================= OFFICE BUNDLE===========================================*/
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-    private $electionConfig;
-
-
     /*================================= PRESCRIPTION BUNDLE===========================================*/
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $dpsConfig;
-
-
-     /*================================= PRESCRIPTION BUNDLE===========================================*/
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-    private $educationConfig;
 
 
      /*================================= MEDICINE BUNDLE===========================================*/
@@ -906,11 +807,6 @@ class GlobalOption
 
 
     /* ===================      Fixed Assets      =======================================  */
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\AssetsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-    private $assetsConfig;
 
     /**
      * @var \DateTime
@@ -1264,21 +1160,6 @@ class GlobalOption
         return $this->siteSetting;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAdvertisment()
-    {
-        return $this->advertisment;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMegaMenu()
-    {
-        return $this->megaMenu;
-    }
 
     /**
      * @return mixed
@@ -1739,22 +1620,6 @@ class GlobalOption
 
 
     /**
-     * @return MallConnect
-     */
-    public function getShops()
-    {
-        return $this->shops;
-    }
-
-    /**
-     * @return MallConnect
-     */
-    public function getMallConnects()
-    {
-        return $this->mallConnects;
-    }
-
-    /**
      * @return PhotoGallery
      */
     public function getPhotoGalleries()
@@ -1941,13 +1806,6 @@ class GlobalOption
         $this->instagramPageUrl = $instagramPageUrl;
     }
 
-    /**
-     * @return EcommerceMenu
-     */
-    public function getEcommerceMenus()
-    {
-        return $this->ecommerceMenus;
-    }
 
     /**
      * @return HospitalConfig

@@ -42,14 +42,6 @@ inventory_food_product:
     resource: "@InventoryBundle/Resources/config/routing/foodproduct.yml"
     prefix:   /food/product
 
-inventory_service_item:
-    resource: "@InventoryBundle/Resources/config/routing/serviceitem.yml"
-    prefix:   /service/item
-
-inventory_service_sales:
-    resource: "@InventoryBundle/Resources/config/routing/servicesales.yml"
-    prefix:   /service/sales
-
 inventory_goods:
     resource: "@InventoryBundle/Resources/config/routing/goods.yml"
     prefix:   /ecommerce/product

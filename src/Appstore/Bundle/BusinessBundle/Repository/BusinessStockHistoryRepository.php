@@ -64,7 +64,7 @@ class BusinessStockHistoryRepository extends EntityRepository
             $openingQnt = $this->getItemOpeningQuantity($item->getBusinessParticular());
         }
 
-        /* @var  $entity BusinessParticular */
+        /* @var  $entity BusinessStockHistory */
 
         $entity = new BusinessStockHistory();
 
@@ -98,6 +98,9 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setQuantity("-{$item->getTotalQuantity()}");
             $entity->setSalesQuantity($item->getTotalQuantity());
             $entity->setBonusSalesQuantity($item->getBonusQnt());
+            $entity->setWearHouse($item->getWearhouse());
+            $entity->setMarketing($item->getBusinessInvoice()->getMarketing());
+            $entity->setSalesPrice($item->getPrice());
             $entity->setItem($item->getBusinessParticular());
             $entity->setSalesItem($item);
             $entity->setProcess('sales');
@@ -107,9 +110,10 @@ class BusinessStockHistoryRepository extends EntityRepository
             /* @var $item BusinessInvoiceReturnItem */
 
             $entity->setQuantity($item->getQuantity());
-            $entity->setSalesQuantity($item->getQuantity());
-            $entity->setItem($item->getBusinessParticular());
-            $entity->setSalesItem($item);
+            $entity->setSalesQuantity("-{$item->getQuantity()}");
+            $entity->setItem($item->getParticular());
+            $entity->setSalesItem($item->getInvoiceParticular());
+            $entity->setSalesPrice($item->getInvoiceParticular()->getPrice());
             $entity->setProcess('sales-return');
 
         }elseif($fieldName == 'damage') {

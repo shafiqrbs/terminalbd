@@ -1,8 +1,0 @@
-ecommerce_product:
-    path:     /
-    defaults: { _controller: "EcommerceBundle:EcommerceConfig:index" }
-
-ecommerce_home:
-    path:     /home
-    defaults: { _controller: "EcommerceBundle:EcommerceConfig:update" }
-

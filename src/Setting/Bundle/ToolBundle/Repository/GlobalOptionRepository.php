@@ -3,22 +3,13 @@
 namespace Setting\Bundle\ToolBundle\Repository;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
-use Appstore\Bundle\AssetsBundle\Entity\AssetsConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
-use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
-use Appstore\Bundle\EducationBundle\Entity\EducationConfig;
-use Appstore\Bundle\ElectionBundle\Entity\ElectionConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
-use Appstore\Bundle\HotelBundle\Entity\HotelConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineConfig;
-use Appstore\Bundle\OfficeBundle\Entity\OfficeConfig;
-use Appstore\Bundle\ProcurementBundle\Entity\ProcurementConfig;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
-use Appstore\Bundle\TicketBundle\Entity\TicketConfig;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -495,13 +486,7 @@ class GlobalOptionRepository extends EntityRepository
             $this->_em->persist($config);
         }
 
-        $commerce = $this->_em->getRepository('EcommerceBundle:EcommerceConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($commerce)){
-            $config = new EcommerceConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
 
-        }
 
         $hospital = $this->_em->getRepository('HospitalBundle:HospitalConfig')->findOneBy(array('globalOption'=>$globalOption));
         if(empty($hospital)){
@@ -510,12 +495,6 @@ class GlobalOptionRepository extends EntityRepository
             $this->_em->persist($config);
         }
 
-        $dms = $this->_em->getRepository('DmsBundle:DmsConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($dms)){
-            $config = new DmsConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
 
         $restaurantConfig = $this->_em->getRepository('RestaurantBundle:RestaurantConfig')->findOneBy(array('globalOption'=>$globalOption));
         if(empty($restaurantConfig)){
@@ -544,38 +523,6 @@ class GlobalOptionRepository extends EntityRepository
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
-        $hotelConfig = $this->_em->getRepository('HotelBundle:HotelConfig')->findOneBy(array('globalOption' => $globalOption));
-        if(empty($hotelConfig)){
-            $config = new HotelConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
-        $electionConfig = $this->_em->getRepository('ElectionBundle:ElectionConfig')->findOneBy(array('globalOption' => $globalOption));
-        if(empty($electionConfig)){
-            $config = new ElectionConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
-        $instituteConfig = $this->_em->getRepository('EducationBundle:EducationConfig')->findOneBy(array('globalOption' => $globalOption));
-        if(empty($instituteConfig)){
-            $config = new EducationConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
-
-        $assetsConfig = $this->_em->getRepository('AssetsBundle:AssetsConfig')->findOneBy(array('globalOption' => $globalOption));
-        if(empty($assetsConfig)){
-            $config = new AssetsConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
-        $ProcurementConfig = $this->_em->getRepository('ProcurementBundle:ProcurementConfig')->findOneBy(array('globalOption' => $globalOption));
-        if(empty($ProcurementConfig)){
-            $config = new ProcurementConfig();
-            $config->setGlobalOption($globalOption);
-            $this->_em->persist($config);
-        }
-        $this->_em->flush();
 
     }
 

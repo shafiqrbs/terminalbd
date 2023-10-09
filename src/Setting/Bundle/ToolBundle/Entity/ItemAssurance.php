@@ -26,12 +26,6 @@ class ItemAssurance
      */
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="itemAssurance")
-     */
-    protected $item;
-
-
 
     /**
      * @var string

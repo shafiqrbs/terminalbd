@@ -86,11 +86,6 @@ class Branding
 
     private $categories;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="brands" )
-     **/
-    protected $megaMenu;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Product", mappedBy="brand")

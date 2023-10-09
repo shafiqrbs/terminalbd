@@ -3,7 +3,6 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
-use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
@@ -13,7 +12,7 @@ use Appstore\Bundle\MedicineBundle\Entity\MedicineStock;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ContentBundle\Entity\Page;
-use Setting\Bundle\ContentBundle\Entity\TradeItem;
+
 
 /**
  * ProductUnit

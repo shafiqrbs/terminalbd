@@ -16,11 +16,8 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
-use Appstore\Bundle\AssetsBundle\Entity\DepreciationBatch;
-use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
@@ -2834,43 +2831,9 @@ class TransactionRepository extends EntityRepository
     }
 
 
-    public function insertOpeningFixedAssets(\Appstore\Bundle\AssetsBundle\Entity\PurchaseItem $item,AccountJournal $journal)
+    public function insertOpeningFixedAssets($item,$journal)
     {
 
-        if($item->getItem()->getCategory()->getCategoryType() == "Assets"){
-
-            $accountHead = $item->getItem()->getCategory()->getAccountHead();
-            $transaction = new Transaction();
-            $transaction->setGlobalOption($journal->getGlobalOption());
-            $transaction->setAccountRefNo($journal->getAccountRefNo());
-            $transaction->setProcessHead('Assets');
-            $transaction->setProcess('Depreciation');
-            /* Assets Account - Capital Assets */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find($accountHead));
-            if($item->getStakeholder()){
-                $subAccount = $this->_em->getRepository('AccountingBundle:AccountHead')->insertCapitalAssetsAccount($journal->getGlobalOption(),$item);
-                $transaction->setSubAccountHead($subAccount);
-            }
-            $transaction->setAmount($item->getSubTotal());
-            $transaction->setDebit($item->getSubTotal());
-            $this->_em->persist($transaction);
-            $this->_em->flush();
-
-        }elseif($item->getItem()->getCategory()->getCategoryType() == "Inventory"){
-
-            $accountHead = $item->getItem()->getCategory()->getAccountHead();
-            $transaction = new Transaction();
-            $transaction->setGlobalOption($journal->getGlobalOption());
-            $transaction->setAccountRefNo($journal->getAccountRefNo());
-            $transaction->setProcessHead('Expense');
-            $transaction->setProcess('Expense');
-            /* Assets Account - Capital Assets */
-            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find($accountHead));
-            $transaction->setAmount($item->getSubTotal());
-            $transaction->setDebit($item->getSubTotal());
-            $this->_em->persist($transaction);
-            $this->_em->flush();
-        }
 
     }
 
@@ -2899,42 +2862,7 @@ class TransactionRepository extends EntityRepository
 
     }
 
-    public function insertDepreciation(DepreciationBatch $entity,$data)
-    {
-        $option = $entity->getConfig()->getGlobalOption();
-        $em = $this->_em;
-        $transaction = new Transaction();
-        $transaction->setGlobalOption($option);
-        $transaction->setProcessHead('Depreciation');
-        $transaction->setProcess('Depreciation');
-        $transaction->setAccountRefNo($entity->getId());
-        $transaction->setUpdated($entity->getUpdated());
-        $transaction->setAmount($entity->getAmount());
-        $transaction->setDebit($entity->getAmount());
-        $transaction->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(42));
-        $em->persist($transaction);
-        $em->flush();
 
-        foreach ($data as  $value){
-
-            $item = $em->getRepository('AssetsBundle:Item')->find($value['itemId']);
-            $accountHead = $item->getCategory()->getAccountHead();
-
-            $transaction = new Transaction();
-            $transaction->setGlobalOption($option);
-            $transaction->setProcessHead('Fixed Assets');
-            $transaction->setProcess($accountHead->getParent()->getName());
-            $transaction->setAccountRefNo($entity->getId());
-            $transaction->setUpdated($entity->getUpdated());
-            $transaction->setAccountHead($accountHead);
-            $transaction->setAmount('-'.$value['amount']);
-            $transaction->setCredit($value['amount']);
-            /* Fixed Assets */
-            $transaction->setSubAccountHead($item->getAccountHead());
-            $em->persist($transaction);
-            $em->flush();
-        }
-    }
     /** =========================== SERVICE MANAGEMENT SYSTEM    =========================== */
 
     public function serviceTransaction($accountSales)

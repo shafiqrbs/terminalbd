@@ -2,8 +2,6 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\Discount;
-use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;

@@ -101,10 +101,6 @@ class Item
      */
     protected $deliveryReturns;
 
-   /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="inventoryItem" , cascade={"remove"} )
-     */
-    protected $ecommerceItem;
 
     /**
      * @var string

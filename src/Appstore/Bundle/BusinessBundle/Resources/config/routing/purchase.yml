@@ -15,6 +15,12 @@ business_purchase_opening_create:
     defaults: { _controller: "BusinessBundle:Purchase:openingCreate" }
     methods:  [POST, PUT]
 
+business_purchase_particular_barcode:
+    path:     /purchase-particular-barcode
+    defaults: { _controller: "BusinessBundle:Purchase:addBarcodeProduct" }
+    options:
+        expose: true
+
 business_purchase_show:
     path:     /{id}/show
     defaults: { _controller: "BusinessBundle:Purchase:show" }

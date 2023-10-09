@@ -276,7 +276,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@ElectionBundle/Resources/public/css/messagebox.css'
+    '@MedicineBundle/Resources/public/css/messagebox.css'
     '@MedicineBundle/Resources/public/css/invoice.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -285,7 +285,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@ElectionBundle/Resources/public/js/messagebox.js'
+    '@MedicineBundle/Resources/public/js/messagebox.js'
     '@MedicineBundle/Resources/public/js/editable.js'
     '@MedicineBundle/Resources/public/js/approveProcess.js'
     %}

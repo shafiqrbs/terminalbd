@@ -131,11 +131,6 @@ class InventoryConfig
      */
     protected $branchInvoices;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
-     */
-    protected $serviceSales;
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesImport", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
@@ -886,13 +881,6 @@ class InventoryConfig
         return $this->purchaseVendorItems;
     }
 
-    /**
-     * @return ServiceSales
-     */
-    public function getServiceSales()
-    {
-        return $this->serviceSales;
-    }
 
     /**
      * @return boolean

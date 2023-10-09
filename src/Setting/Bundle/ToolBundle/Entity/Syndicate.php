@@ -129,10 +129,6 @@ class Syndicate
      */
     protected $homePages;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="syndicates")
-     */
-    protected $megaMenus;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="syndicate")

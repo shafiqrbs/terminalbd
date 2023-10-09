@@ -3,10 +3,6 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

@@ -58,15 +58,6 @@ class Menu
      */
     protected $menuGrouping;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="menu" , cascade={"persist", "remove"})
-     */
-    protected $ecommerceMenu;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="childMenus" , cascade={"persist", "remove"})
-     */
-    protected $ecommerceChildMenu;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageModule", mappedBy="menu" , cascade={"persist", "remove"})

@@ -2,8 +2,7 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Form\OrderType;
+
 use Frontend\FrontentBundle\Service\Cart;
 use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

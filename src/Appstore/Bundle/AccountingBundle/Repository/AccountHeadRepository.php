@@ -8,7 +8,6 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountLoan;
 use Appstore\Bundle\AccountingBundle\Entity\AccountLoanUser;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
-use Appstore\Bundle\AssetsBundle\Entity\PurchaseItem;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;

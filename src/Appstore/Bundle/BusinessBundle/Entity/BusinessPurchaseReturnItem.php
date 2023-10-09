@@ -36,6 +36,13 @@ class BusinessPurchaseReturnItem
      **/
     private  $businessParticular;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $wearHouse;
+
+
 
     /**
      * @var integer
@@ -313,6 +320,22 @@ class BusinessPurchaseReturnItem
     public function setDistributionReturnItem($distributionReturnItem)
     {
         $this->distributionReturnItem = $distributionReturnItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWearHouse()
+    {
+        return $this->wearHouse;
+    }
+
+    /**
+     * @param mixed $wearHouse
+     */
+    public function setWearHouse($wearHouse)
+    {
+        $this->wearHouse = $wearHouse;
     }
 
 

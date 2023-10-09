@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\Item;
+
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -40,20 +40,13 @@ class MedicineBrand
      **/
     private $medicineCompany;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine", mappedBy="medicine")
-     **/
-    private $invoiceMedicine;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="medicineBrand")
      **/
     private $medicineStock;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="medicine")
-     **/
-    private $items;
+
 
     /**
      * @var string

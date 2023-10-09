@@ -5,15 +5,10 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
-use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
@@ -110,11 +105,6 @@ class AccountBank
      **/
     private  $accountSalesAdjustment;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="accountBank" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $serviceSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="accountBank"  )
@@ -151,30 +141,13 @@ class AccountBank
      */
     protected $invoiceTransactions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="accountBank" )
-     */
-    protected $dmsInvoices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="accountBank" )
-     */
-    protected $dmsPurchases;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessPurchase", mappedBy="accountBank" )
      */
     protected $businessPurchases;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="accountBank" )
-     */
-    protected $hotelPurchases;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="accountBank" )
-     */
-    protected $hotelInvoice;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSales", mappedBy="accountBank" )
@@ -186,10 +159,6 @@ class AccountBank
      */
     protected $medicinePurchases;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="accountBank" )
-     */
-    protected $dmsDoctorInvoices;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="accountBank" )
@@ -201,11 +170,6 @@ class AccountBank
      */
     protected $restaurantPurchase;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="accountBank" )
-     */
-    protected $dmsTreatmentPlans;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="accountBank" )
@@ -538,13 +502,6 @@ class AccountBank
         $this->accountOwner = $accountOwner;
     }
 
-    /**
-     * @return ServiceSales
-     */
-    public function getServiceSales()
-    {
-        return $this->serviceSales;
-    }
 
     /**
      * @return Purchase

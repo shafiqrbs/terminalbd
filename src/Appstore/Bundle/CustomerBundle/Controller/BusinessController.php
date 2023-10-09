@@ -4,8 +4,6 @@ namespace Appstore\Bundle\CustomerBundle\Controller;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
 use Appstore\Bundle\BusinessBundle\Form\CustomerInvoiceType;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Frontend\FrontentBundle\Service\Cart;
 use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

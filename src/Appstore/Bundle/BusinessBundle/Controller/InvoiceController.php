@@ -533,7 +533,31 @@ class InvoiceController extends Controller
 
     }
 
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+    public function addBarcodeProductAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $wearhouse = '';
+        $data = $_REQUEST;
+        $id = $data['invoice'];
+        $barcode = $data['barcode'];
+        $invoice =  $this->getDoctrine()->getRepository(BusinessInvoice::class)->find($id);
+        $stock = $this->getDoctrine()->getRepository(BusinessParticular::class)->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'particularCode'=>$barcode));
+        $particular = $stock->getId();
+        $price = $stock->getPrice();
+        $unit = ($stock->getUnit()) ? $stock->getUnit()->getName():'';
+        $quantity = 1;
+        $description = '';
+        $invoiceItems = array('particular' => $particular, 'quantity' => $quantity,'price' => $price,'unit' => $unit,'description' => $description,'wearhouse' => $wearhouse);
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceParticular')->insertInvoiceParticular($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository( 'BusinessBundle:BusinessInvoice' )->updateInvoiceTotalPrice($invoice);
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($invoice,$msg);
+        return new Response(json_encode($result));
 
+    }
 
     /**
      * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
@@ -1035,7 +1059,6 @@ class InvoiceController extends Controller
         foreach ($pagination as $entity):
             $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
         endforeach;
-
         exit;
     }
 

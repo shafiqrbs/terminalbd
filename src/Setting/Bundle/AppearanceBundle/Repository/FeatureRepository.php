@@ -3,7 +3,6 @@
 namespace Setting\Bundle\AppearanceBundle\Repository;
 
 
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 

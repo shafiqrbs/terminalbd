@@ -44,10 +44,6 @@ class MedicineSales
      **/
     private $branch;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="medicineSales" )
-     **/
-    private $order;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineSalesItem", mappedBy="medicineSales" , cascade={"remove"} )

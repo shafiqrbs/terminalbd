@@ -156,7 +156,7 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $price = $data['price'];
         $itemProcess = $data['itemProcess'];
         foreach ($itemIds as $key  => $itemId):
-            $exist = $em->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->findOneBy(array('invoiceReturn'=>$entity,'particular'=>$itemId));
+            $exist = $em->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->findOneBy(array('invoiceReturn'=>$entity,'invoiceParticular'=>$itemId));
             if($exist){
                 $exist->setQuantity($quantity[$key]);
                 $exist->setBonusQuantity($bonusQuantity[$key]);
@@ -167,10 +167,11 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
                 $em->flush();
             }else{
             if($quantity[$key] > 0 ){
-                $product = $em->getRepository('BusinessBundle:BusinessParticular')->find($itemId);
+                $product = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->find($itemId);
                 $item = new BusinessInvoiceReturnItem();
                 $item->setInvoiceReturn($entity);
-                $item->setParticular($product);
+                $item->setInvoiceParticular($product);
+                $item->setParticular($product->getParticular());
                 $item->setQuantity($quantity[$key]);
                 $item->setBonusQuantity($bonusQuantity[$key]);
                 $item->setPrice($price[$key]);

@@ -84,7 +84,7 @@ class BusinessParticularRepository extends EntityRepository
     public function findWithSearch($config, $data){
 
         $name = isset($data['name'])? $data['name'] :'';
-        $sku = isset($data['sku'])? $data['sku'] :'';
+        $particularCode = isset($data['particularCode'])? $data['particularCode'] :'';
         $category = isset($data['category'])? $data['category'] :'';
         $type = isset($data['type'])? $data['type'] :'';
         $qb = $this->createQueryBuilder('e');
@@ -92,8 +92,8 @@ class BusinessParticularRepository extends EntityRepository
         if (!empty($name)) {
             $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
         }
-        if (!empty($sku)) {
-            $qb->andWhere($qb->expr()->like("e.sku", "'%$sku%'"  ));
+        if (!empty($particularCode)) {
+            $qb->andWhere($qb->expr()->like("e.particularCode", "'%$particularCode%'"  ));
         }
         if(!empty($category)){
         	$qb->andWhere("e.category = :category");

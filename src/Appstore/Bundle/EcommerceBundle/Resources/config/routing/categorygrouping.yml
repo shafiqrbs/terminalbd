@@ -1,8 +1,0 @@
-ecommerce_grouping:
-    path:     /
-    defaults: { _controller: "EcommerceBundle:ItemCategoryGrouping:edit" }
-
-ecommerce_grouping_create:
-    path:     /create
-    defaults: { _controller: "EcommerceBundle:ItemCategoryGrouping:create" }
-    methods:  POST

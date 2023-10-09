@@ -76,11 +76,6 @@ class MedicineStock
     private $medicineConfig;
 
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="medicineItem" , cascade={"remove"} )
-     */
-    protected $ecommerceItem;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="medicineStocks")

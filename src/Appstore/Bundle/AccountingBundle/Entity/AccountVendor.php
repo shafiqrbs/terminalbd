@@ -40,27 +40,6 @@ class AccountVendor
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="vendor" )
-     **/
-    private  $items;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemImport", mappedBy="vendor" , cascade={"persist", "remove"})
-     */
-    protected $itemImports;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Product", mappedBy="vendor" )
-     **/
-    private  $products;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\StockItem", mappedBy="vendor" )
-     **/
-    private  $stockItems;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountVendor")
      */
     protected $accountPurchases;
@@ -76,20 +55,12 @@ class AccountVendor
      */
     protected $medicinePurchases;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="vendor")
-     */
-    protected $hotelPurchases;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Purchase", mappedBy="vendor")
      */
     protected $restaurantPurchases;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchaseReturn", mappedBy="vendor")
-     */
-    protected $hotelPurchasesReturns;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="vendors")

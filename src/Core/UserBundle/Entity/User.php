@@ -6,17 +6,11 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesAdjustment;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessAndroidProcess;
-use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\HmsInvoiceReturn;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\HumanResourceBundle\Entity\EmployeePayroll;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
@@ -24,7 +18,6 @@ use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
-use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineReverse;
@@ -253,24 +246,6 @@ class User extends BaseUser
 	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="branchManager"  , cascade={"persist", "remove"})
 	 */
 	protected $branches;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 **/
-	protected $distributionCreate;
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="checkedBy" , cascade={"persist", "remove"})
-	 **/
-	protected $distributionCheckedBy;
-
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Distribution", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 **/
-	protected $distributionApprovedBy;
-
 
 
 	/* ----------------------------------inventory------------------*/
@@ -577,26 +552,6 @@ class User extends BaseUser
 	 */
 	protected $employeeLeaveApprove;
 
-
-	/**
-	 *  =========================================== Service Sales System============================================
-	 */
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="createdBy"  )
-	 **/
-	private  $serviceSales;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="assignTo"  )
-	 **/
-	private  $serviceSalesBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="approvedBy"  )
-	 **/
-	private  $serviceApprovedBy;
-
 	/* ==================================== HMS =========================================**/
 
 	/**
@@ -629,47 +584,6 @@ class User extends BaseUser
 	 */
 	protected $userAttendance;
 
-	/*========================= DMS USER =======================================================*/
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $dmsInvoiceCreatedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $dmsInvoiceApprovedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="assignOperator" , cascade={"persist", "remove"})
-	 */
-	protected $dmsParticularOperator;
-
-	/**
-	 * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
-	 */
-	protected $dmsParticularDoctor;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $dmsPurchase;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $dmsPurchasesApprovedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $dmsDoctorInvoiceCreatedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $dmsDoctorInvoiceApprovedBy;
 
 	/*=========================== DPS Bundle =========================================*/
 
@@ -826,64 +740,9 @@ class User extends BaseUser
 	 */
 	protected $businessPurchasesApprovedBy;
 
-	/*=========================== HOTEL BUNDLE ====================================*/
 
 
 	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $hotelInvoiceCreatedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $hotelInvoiceApprovedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $hotelPurchase;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="approvedBy" , cascade={"persist", "remove"})
-	 */
-	protected $hotelPurchasesApprovedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelDamage", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $hotelDamage;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelTemporaryInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
-	 */
-	protected $hotelTemporary;
-
-	/**
-	 *  =========================================== Election System============================================
-	 */
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="createdBy"  )
-	 **/
-	private  $members;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionMember", mappedBy="approvedBy"  )
-	 **/
-	private  $memberApprove;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="createdBy"  )
-	 **/
-	private  $committeeCreatedBy;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\ElectionBundle\Entity\ElectionCommittee", mappedBy="approvedBy"  )
-	 **/
-	private  $committeeApprovedBy;
-
-    /**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="approvedBy"  )
 	 **/
 	private  $approvedCustomers;
@@ -1050,22 +909,6 @@ class User extends BaseUser
 	}
 
 
-	/**
-	 * @param mixed $education
-	 */
-	public function setEducation($education)
-	{
-		$education->setUser($this);
-		$this->education = $education;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getEducation()
-	{
-		return $this->education;
-	}
 
 	/**
 	 * @return mixed
@@ -1181,23 +1024,6 @@ class User extends BaseUser
 	/**
 	 * @return mixed
 	 */
-	public function getStudyAbroad()
-	{
-		return $this->studyAbroad;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getTutor()
-	{
-		return $this->tutor;
-	}
-
-
-	/**
-	 * @return mixed
-	 */
 	public function getSalesUser()
 	{
 		return $this->salesUser;
@@ -1252,21 +1078,7 @@ class User extends BaseUser
 		return $this->salesReturn;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getPattyCash()
-	{
-		return $this->pattyCash;
-	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getPettyCashApprove()
-	{
-		return $this->pettyCashApprove;
-	}
 
 	/**
 	 * @return mixed
@@ -1340,42 +1152,6 @@ class User extends BaseUser
 		return $this->stockItems;
 	}
 
-	/**
-	 * @return Order
-	 */
-	public function getOrders()
-	{
-		return $this->orders;
-	}
-
-	/**
-	 * @return PreOrder
-	 */
-	public function getPreOrders()
-	{
-		return $this->preOrders;
-	}
-
-	public function getCheckRoleEcommercePreorder($role = NULL)
-	{
-
-		$roles = array(
-			'ROLE_DOMAIN_INVENTORY_ECOMMERCE',
-			'ROLE_DOMAIN_INVENTORY_ECOMMERCE_MANAGER',
-			'ROLE_DOMAIN_INVENTORY_MANAGER',
-			'ROLE_DOMAIN_INVENTORY_APPROVE',
-			'ROLE_DOMAIN_MANAGER',
-			'ROLE_DOMAIN'
-		);
-
-		if(in_array($role,$roles)){
-			return true;
-		}else{
-			return false;
-		}
-
-	}
-
 
 	public function getCheckRoleGlobal($existRole = NULL)
 	{
@@ -1399,21 +1175,6 @@ class User extends BaseUser
         }
 
     }
-	/**
-	 * @return PreOrder
-	 */
-	public function getPreOrderProcess()
-	{
-		return $this->preOrderProcess;
-	}
-
-	/**
-	 * @return PreOrder
-	 */
-	public function getPreOrderApproved()
-	{
-		return $this->preOrderApproved;
-	}
 
 	/**
 	 * @return Damage
@@ -1431,46 +1192,6 @@ class User extends BaseUser
 		return $this->damage;
 	}
 
-	/**
-	 * @return Order
-	 */
-	public function getOrderProcess()
-	{
-		return $this->orderProcess;
-	}
-
-	/**
-	 * @return Order
-	 */
-	public function getOrderApproved()
-	{
-		return $this->orderApproved;
-	}
-
-
-	/**
-	 * @return ServiceSales
-	 */
-	public function getServiceSales()
-	{
-		return $this->serviceSales;
-	}
-
-	/**
-	 * @return ServiceSales
-	 */
-	public function getServiceSalesBy()
-	{
-		return $this->serviceSalesBy;
-	}
-
-	/**
-	 * @return ServiceSales
-	 */
-	public function getServiceApprovedBy()
-	{
-		return $this->serviceApprovedBy;
-	}
 
 	/**
 	 * @return Branches
@@ -1560,98 +1281,9 @@ class User extends BaseUser
 		$this->agent = $agent;
 	}
 
-	/**
-	 * @return Particular
-	 */
-	public function getParticularOperator()
-	{
-		return $this->particularOperator;
-	}
-
-	/**
-	 * @return InvoiceParticular
-	 */
-	public function getHmsInvoiceParticularCollected()
-	{
-		return $this->hmsInvoiceParticularCollected;
-	}
-
-	/**
-	 * @return DailyAttendance
-	 */
-	public function getUserAttendance()
-	{
-		return $this->userAttendance;
-	}
 
 
-	/**
-	 * @return DailyAttendance
-	 */
-	public function getUserAttendanceMonth($year,$month)
-	{
-		$attendances = $this->getUserAttendance();
 
-		/* @var DailyAttendance $attendance */
-
-		$presentDays = array();
-		foreach ($attendances as $attendance){
-			if($attendance->getYear() == $year and $attendance->getMonth() == $month ){
-				$presentDays[] = $attendance->getPresentDay();
-			}
-		}
-		return $presentDays;
-	}
-
-	/**
-	 * @return HrAttendanceMonth
-	 */
-	public function getMonthlyPresentDay($year,$month)
-	{
-		$attendances = $this->getUserAttendance();
-
-		/* @var HrAttendanceMonth $attendance */
-
-		$presentDays = array();
-		foreach ($attendances as $attendance){
-			if($attendance->getYear() == $year and $attendance->getMonth() == $month ){
-				$presentDays[] = $attendance->getPresentDay();
-			}
-		}
-		return count($presentDays);
-	}
-
-	/**
-	 * @return OrderPayment
-	 */
-	public function getOrderPayments()
-	{
-		return $this->orderPayments;
-	}
-
-	/**
-	 * @return PreOrderPayment
-	 */
-	public function getPreOrderPayments()
-	{
-		return $this->preOrderPayments;
-	}
-
-	/**
-	 * @return DmsParticular
-	 */
-	public function getDmsParticularDoctor()
-	{
-		return $this->dmsParticularDoctor;
-	}
-
-	/**
-	 * @return HmsInvoiceTemporaryParticular
-	 */
-	public function getHmsInvoiceTemporaryParticulars()
-	{
-		return $this->hmsInvoiceTemporaryParticulars;
-	}
 
 	/**
 	 * @return MedicineReverse
@@ -1709,12 +1341,7 @@ class User extends BaseUser
 		return $this->domainUser;
 	}
 
-	/**
-	 * @return CustomerInvoice
-	 */
-	public function getCustomerInvoice() {
-		return $this->customerInvoice;
-	}
+
 
 	/**
 	 * @return bool
@@ -1723,12 +1350,7 @@ class User extends BaseUser
 		return $this->enabled;
 	}
 
-	/**
-	 * @return HotelTemporaryInvoice
-	 */
-	public function getHotelTemporary() {
-		return $this->hotelTemporary;
-	}
+
 
 	/**
 	 * @return AccountCash
@@ -1737,21 +1359,7 @@ class User extends BaseUser
 		return $this->accountCashes;
 	}
 
-    /**
-     * @return HmsInvoiceReturn
-     */
-    public function getHmsInvoiceReturnCreatedBy()
-    {
-        return $this->hmsInvoiceReturnCreatedBy;
-    }
 
-    /**
-     * @return HmsInvoiceReturn
-     */
-    public function getHmsInvoiceReturnApprovedBy()
-    {
-        return $this->hmsInvoiceReturnApprovedBy;
-    }
 
     /**
      * @return RestaurantTemporary
@@ -1866,16 +1474,6 @@ class User extends BaseUser
     {
         return $this->businessAndroidProcess;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getParticularDoctor()
-    {
-        return $this->particularDoctor;
-    }
-
-
 
 
 

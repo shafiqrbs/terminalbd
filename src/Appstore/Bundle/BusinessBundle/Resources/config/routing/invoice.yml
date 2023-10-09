@@ -42,6 +42,12 @@ business_invoice_particular_search:
     options:
             expose: true
 
+business_invoice_particular_barcode:
+    path:     /invoice-particular-barcode
+    defaults: { _controller: "BusinessBundle:Invoice:addBarcodeProduct" }
+    options:
+            expose: true
+
 business_item_unit_search:
     path:     /item-unit-search
     defaults: { _controller: "BusinessBundle:Invoice:autoUnitSearch" }

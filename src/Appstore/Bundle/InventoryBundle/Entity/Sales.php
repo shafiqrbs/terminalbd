@@ -49,12 +49,6 @@ class Sales
     private $branches;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="inventorySales" )
-     **/
-    private $order;
-
-
-    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesImport", inversedBy="sales" )
      **/
     private $salesImport;

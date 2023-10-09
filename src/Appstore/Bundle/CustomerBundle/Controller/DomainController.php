@@ -2,11 +2,9 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Form\OrderType;
+
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerEditProfileType;
-use Core\UserBundle\Form\MemberEditProfileType;
 use Frontend\FrontentBundle\Service\Cart;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Form\DomainSearchType;
@@ -60,15 +58,6 @@ class DomainController extends Controller
 
     public function domainBookmarkAction($generated)
     {
-        $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode'=>$generated));
-        $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user), array('updated' => 'desc'));
-        $pagination = $this->paginate($entities);
-        return $this->render('CustomerBundle:Customer:domainBookmark.html.twig', array(
-            'entities' => $pagination,
-            'globalOption' => $globalOption,
-        ));
 
     }
 

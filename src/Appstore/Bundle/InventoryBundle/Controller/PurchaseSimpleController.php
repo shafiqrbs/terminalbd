@@ -213,9 +213,6 @@ class PurchaseSimpleController extends Controller
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
         }
         $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($purchase);
-        if( $this->getUser()->getGlobalOption()->getEcommerceConfig()->isInventoryStock() == 1) {
-            $this->getDoctrine()->getRepository(\Appstore\Bundle\EcommerceBundle\Entity\Item::class)->updatePurchaseInventoryItem($purchase);
-        }
         return new Response(json_encode(array('success'=>'success')));
 
     }

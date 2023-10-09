@@ -2,9 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\Discount;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
@@ -47,10 +45,7 @@ class PurchaseVendorItem
      **/
     private  $purchaseItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSalesItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
-     **/
-    private  $serviceSalesItems;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
@@ -1080,13 +1075,6 @@ class PurchaseVendorItem
         $this->ageGroup = $ageGroup;
     }
 
-    /**
-     * @return ServiceSalesItem
-     */
-    public function getServiceSalesItems()
-    {
-        return $this->serviceSalesItems;
-    }
 
     public function stockReminigQnt(){
         $stockQnt = 0;

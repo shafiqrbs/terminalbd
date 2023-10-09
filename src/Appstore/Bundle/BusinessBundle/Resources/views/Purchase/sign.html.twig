@@ -47,7 +47,10 @@
             <!-- BEGIN FORM-->
             <form class="" id="purchaseItem" name="purchaseItem" method="post" action="{{ path('business_purchase_particular_sign',{'invoice':entity.id}) }}">
                 <div class="row-fluid particular-info" >
-                    <div class="span6" style="margin-left:15px">
+                    <div class="span2" style="margin-left:15px">
+                        <label>Barcode</label>
+                    </div>
+                     <div class="span6" style="margin-left:15px">
                         <label>Select Stock Item Name</label>
                     </div>
                     <div class="span1">
@@ -67,7 +70,13 @@
                 <div class="row-fluid">
                 <div class="span12">
                     <div class="row-fluid particular-info" >
-                        <div class="span6" style="margin-left:15px">
+                        <div class="span2" style="margin-top: 12px" >
+                            <span class="input-group" >
+                                <input type="text" class="m-wrap span12 form-control input-number" placeholder="Enter barcode" id="barcode" name="barcode" value="" >
+                                <input type="hidden"   id="invoiceId" name="invoiceId" value="{{ entity.id }}" >
+                            </span>
+                        </div>
+                        <div class="span4" style="margin-left:15px">
                             <select id="particular" name="particular" class="span12 select2">
                                 <option value="">--- Select product name ---</option>
                                 {% for particular in particulars %}
@@ -92,7 +101,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

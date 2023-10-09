@@ -1,7 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;

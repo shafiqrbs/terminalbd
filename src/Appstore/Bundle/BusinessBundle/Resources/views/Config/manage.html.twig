@@ -397,16 +397,4 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $('.sortable').sortable({
-    handle: 'span'
-    });
-    $( ".sortable" ).on( "sortupdate", function( event, ui ) {
-    var serialized = $(".sortable").sortable("serialize");
-    $.ajax({
-    url: '{{ path('dms_service_sorted',{'fieldName':'serviceSorting'}) }}',
-    type: "POST",
-    data: serialized
-    });
-    })
-
 {% endblock %}

@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoiceMedicine;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;

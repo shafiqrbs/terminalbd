@@ -7,7 +7,6 @@ use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,21 +33,12 @@ class PaymentCard
 	 */
 	protected $sales;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="paymentCard" )
-	 * @ORM\OrderBy({"id" = "DESC"})
-	 **/
-	private  $serviceSales;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="paymentCard")
 	 */
 	protected $hmsInvoices;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="paymentCard")
-	 */
-	protected $dmsInvoices;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="paymentCard")
@@ -65,10 +55,6 @@ class PaymentCard
 	 */
 	protected $medicineSales;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="paymentCard")
-	 */
-	protected $dmsTreatmentPlans;
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="paymentCard")
@@ -79,11 +65,6 @@ class PaymentCard
 	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="paymentCard" )
 	 */
 	protected $businessInvoice;
-
-	/**
-	 * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="paymentCard" )
-	 */
-	protected $hotelInvoice;
 
 
 	/**

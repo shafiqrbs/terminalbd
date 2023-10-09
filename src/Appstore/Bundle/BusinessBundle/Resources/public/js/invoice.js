@@ -123,6 +123,34 @@ $("#isCondition").click(function(){
     $( "#condition" ).slideToggle( "slow" );
 });
 
+$(document).on('change', '#barcode', function() {
+
+    var barcode = $('#barcode').val();
+    var sales = $('#invoiceId').val();
+    if(barcode === ''){
+        $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
+        return false;
+    }
+    $.ajax({
+        url: Routing.generate('business_invoice_particular_barcode'),
+        type: 'POST',
+        data:'barcode='+barcode+'&invoice='+ sales,
+        success: function(response) {
+            $('#barcode').focus().val('');
+            obj = JSON.parse(response);
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#due').val(obj['due']);
+            $('.due').html(obj['due']);
+            $('.payment').html(obj['payment']);
+            $('.discount').html(obj['discount']);
+            $('#customInvoice')[0].reset();
+        },
+    })
+});
+
 var form = $("#customInvoice").validate({
 
     rules: {

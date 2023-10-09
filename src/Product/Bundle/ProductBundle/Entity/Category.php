@@ -2,8 +2,7 @@
 
 namespace Product\Bundle\ProductBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
-use Appstore\Bundle\EcommerceBundle\Entity\ItemCategoryGrouping;
+
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
@@ -49,11 +48,6 @@ class Category
      **/
     protected $inventoryConfig;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="categories")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    protected $ecommerceConfig;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="category" )
@@ -92,16 +86,6 @@ class Category
      **/
     protected $products;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", mappedBy="category")
-     */
-    protected $discounts;
-
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="categories" )
-     **/
-    protected $mallConnects;
 
     /**
      * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Product", mappedBy="parentCategory" )
@@ -115,22 +99,6 @@ class Category
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemCategoryGrouping", mappedBy="categories" )
-     **/
-    protected $parentGroup;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="category" )
-     **/
-    protected $template;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="categories" )
-     **/
-    protected $ecommerceMenus;
-
-    /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="category" )
      **/
     protected $featureWidgets;
@@ -140,20 +108,12 @@ class Category
      **/
     protected $features;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="category" )
-     **/
-    protected $featureCategory;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Branding", mappedBy="categories" )
      **/
     protected $branding;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="categories", cascade={"remove"} )
-     **/
-    protected $megaMenu;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="category" )

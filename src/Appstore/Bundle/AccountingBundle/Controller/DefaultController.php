@@ -77,23 +77,6 @@ class DefaultController extends Controller
 			$em->flush();
 		}
 
-		$entities4 = $this->getDoctrine()->getRepository('DmsBundle:DmsVendor')->findAll();
-		foreach ($entities4 as $vendor ){
-
-			$entity = new AccountVendor();
-			$entity->setGlobalOption($vendor->getDmsConfig()->getGlobalOption());
-			$entity->setCompanyName($vendor->getCompanyName());
-			$entity->setName($vendor->getName());
-			$entity->setVendorCode($vendor->getVendorCode());
-			$entity->setMobile($vendor->getMobile());
-			$entity->setEmail($vendor->getEmail());
-			$entity->setAddress($vendor->getAddress());
-			$entity->setMode($vendor->getMode());
-			$entity->setOldId($vendor->getId());
-			$entity->setModule('dental');
-			$em->persist($entity);
-			$em->flush();
-		}
 
 		$entities5 = $this->getDoctrine()->getRepository('RestaurantBundle:Vendor')->findAll();
 		foreach ($entities5 as $vendor ){

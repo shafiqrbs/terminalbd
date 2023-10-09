@@ -37,10 +37,6 @@ class Country
      */
     protected $purchaseVendorItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="country")
-     */
-    protected $items;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="country")
@@ -51,12 +47,6 @@ class Country
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="country")
      */
     protected $stockItems;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="country")
-     */
-    protected $assetsItems;
-
 
     /**
      * @var string

@@ -7,13 +7,7 @@
  */
 
 namespace Setting\Bundle\ToolBundle\Repository;
-
-
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
-use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;

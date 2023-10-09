@@ -4,8 +4,6 @@ namespace Setting\Bundle\LocationBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
-use Appstore\Bundle\EcommerceBundle\Entity\ShippingCharge;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -41,10 +39,6 @@ class GpLocation
      */
     protected $profiles;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="gpLocation" , cascade={"persist", "remove"} )
-     */
-    protected $orders;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="gpLocation" , cascade={"persist", "remove"} )

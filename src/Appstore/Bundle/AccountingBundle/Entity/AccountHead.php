@@ -2,11 +2,9 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
-use Appstore\Bundle\AssetsBundle\Entity\Item;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineVendor;
-use Appstore\Bundle\TallyBundle\Entity\Category;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -53,11 +51,6 @@ class AccountHead
      **/
     private  $expendituries;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Category", mappedBy="accountHead" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $assetsCategories;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountHead" )
@@ -166,25 +159,6 @@ class AccountHead
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $subTransactions;
-
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="accountHeadDebit" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $depreciationModelDebit;
-
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\DepreciationModel", mappedBy="accountHeadCredit" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $depreciationModelCredit;
-
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", inversedBy="accountHead" )
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-     **/
-    private  $assetsItem;
 
     /**
 	 * @var string
@@ -658,38 +632,6 @@ class AccountHead
         $this->inventoryVendor = $inventoryVendor;
     }
 
-
-    /**
-     * @return Category
-     */
-    public function getTallyCategories()
-    {
-        return $this->tallyCategories;
-    }
-
-    /**
-     * @return \Appstore\Bundle\AssetsBundle\Entity\Category
-     */
-    public function getAssetsCategories()
-    {
-        return $this->assetsCategories;
-    }
-
-    /**
-     * @return Item
-     */
-    public function getAssetsItem()
-    {
-        return $this->assetsItem;
-    }
-
-    /**
-     * @param Item $assetsItem
-     */
-    public function setAssetsItem($assetsItem)
-    {
-        $this->assetsItem = $assetsItem;
-    }
 
     /**
      * @return AccountCondition

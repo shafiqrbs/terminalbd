@@ -223,6 +223,9 @@ class InvoiceReturnController extends Controller
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->approveSalesReturnItem($row);
             }
         }
+        if($entity->getBusinessConfig()->isStockHistory() == 1 ){
+            $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertSalesReturnItem($entity);
+        }
         return new Response('success');
 
     }

@@ -137,10 +137,6 @@ class ItemController extends Controller
                 // $entity->upload();
                 $em->persist($entity);
                 $em->flush();
-                if( $this->getUser()->getGlobalOption()->getEcommerceConfig()->isInventoryStock() == 1 and $entity->getIsWeb() == 1){
-                    $this->getDoctrine()->getRepository(\Appstore\Bundle\EcommerceBundle\Entity\Item::class)->insertCopyInventoryItem($entity);
-
-                }
                 $this->get('session')->getFlashBag()->add(
                     'success', "Item has been added successfully"
                 );
@@ -565,7 +561,6 @@ class ItemController extends Controller
             $entity->setIsWeb(0);
         } else{
             $entity->setIsWeb(1);
-            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->insertCopyInventoryItem($entity);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(

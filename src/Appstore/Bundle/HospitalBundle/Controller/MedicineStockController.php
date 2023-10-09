@@ -547,12 +547,6 @@ class MedicineStockController extends Controller
             throw $this->createNotFoundException('Unable to find District entity.');
         }
         $status = $entity->isWeb();
-        if($status == 1){
-            $entity->setIsWeb(0);
-        } else{
-            $entity->setIsWeb(1);
-            $this->getDoctrine()->getRepository('EcommerceBundle:Item')->insertCopyMedicineItem($entity);
-        }
         $em->flush();
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"

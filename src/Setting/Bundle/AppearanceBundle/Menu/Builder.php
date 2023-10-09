@@ -78,12 +78,7 @@ class Builder extends ContainerAware
                 }
             }
 
-            $result = array_intersect($menuName, array('Dms'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_DMS')){
-                    $menu = $this->DmsMenu($menu);
-                }
-            }
+
 
             $result = array_intersect($menuName, array('Miss'));
             if (!empty($result)) {

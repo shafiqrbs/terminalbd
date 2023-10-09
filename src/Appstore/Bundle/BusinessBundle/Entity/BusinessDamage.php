@@ -49,6 +49,11 @@ class BusinessDamage
      **/
     private  $createdBy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $wearHouse;
 
 
     /**
@@ -284,6 +289,22 @@ class BusinessDamage
 	public function setProcess( string $process ) {
 		$this->process = $process;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getWearHouse()
+    {
+        return $this->wearHouse;
+    }
+
+    /**
+     * @param mixed $wearHouse
+     */
+    public function setWearHouse($wearHouse)
+    {
+        $this->wearHouse = $wearHouse;
+    }
 
 
 }

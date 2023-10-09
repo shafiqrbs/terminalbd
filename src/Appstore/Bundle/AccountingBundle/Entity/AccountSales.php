@@ -3,12 +3,9 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Entity\User;
@@ -73,24 +70,12 @@ class AccountSales
      **/
     private  $customer;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order")
-     * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-     **/
-    private  $ecommerce;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="accountSales" )
      * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $sales;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Sales", inversedBy="accountSales" )
-     * @ORM\JoinColumn(name="assets_sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-     **/
-    private  $assetsSales;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountSales" )
@@ -114,11 +99,6 @@ class AccountSales
      **/
     private  $hmsInvoices;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="accountSales" )
-     * @ORM\JoinColumn(name="dmsInvoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
-     **/
-    private  $dmsInvoices;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", inversedBy="accountSales" )
@@ -143,10 +123,6 @@ class AccountSales
      **/
     private  $businessInvoice;
 
-	/**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", inversedBy="accountSales" )
-     **/
-    private  $hotelInvoice;
 
     /**
      * @var string

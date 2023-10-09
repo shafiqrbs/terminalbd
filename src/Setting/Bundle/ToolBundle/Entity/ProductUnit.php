@@ -3,7 +3,6 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
-use Appstore\Bundle\DmsBundle\Entity\DmsParticular;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
@@ -43,11 +42,6 @@ class ProductUnit
      */
     protected $goodsItem;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Item", mappedBy="productUnit")
-     */
-    protected $item;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="productUnit")
@@ -64,10 +58,6 @@ class ProductUnit
      **/
     private $particulars;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsParticular", mappedBy="unit" , cascade={"persist", "remove"})
-     **/
-    private $dmsParticulars;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicineStock", mappedBy="unit" , cascade={"persist", "remove"})
@@ -105,26 +95,11 @@ class ProductUnit
      **/
     private $dpsParticulars;
 
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelParticular", mappedBy="unit" , cascade={"persist", "remove"})
-     **/
-    private $hotelParticulars;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", mappedBy="unit" , cascade={"persist", "remove"})
      **/
     private $restaurantProduct;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EducationBundle\Entity\EducationStock", mappedBy="unit" , cascade={"persist", "remove"})
-     **/
-    private $educationStocks;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AssetsBundle\Entity\Item", mappedBy="productUnit" , cascade={"persist", "remove"})
-     **/
-    private $assetsItems;
 
 
     /**

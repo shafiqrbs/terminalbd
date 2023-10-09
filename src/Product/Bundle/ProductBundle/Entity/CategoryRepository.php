@@ -2,7 +2,7 @@
 
 namespace Product\Bundle\ProductBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
+
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 

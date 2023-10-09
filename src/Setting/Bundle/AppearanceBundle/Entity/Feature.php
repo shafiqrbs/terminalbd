@@ -55,30 +55,6 @@ class Feature
      **/
     private  $category;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featurePromotions" )
-     **/
-    private  $promotion;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureTags" )
-     **/
-    private  $tag;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="features" )
-     **/
-    private  $discount;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="features")
-     */
-    protected $brand;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="features")
-     */
-    protected $ecommerceMenu;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="features")

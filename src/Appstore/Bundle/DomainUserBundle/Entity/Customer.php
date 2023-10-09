@@ -5,11 +5,8 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Entity\AccountVendor;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Core\UserBundle\Doctrine\DQL\Date;
@@ -60,11 +57,7 @@ class Customer
 	 */
 	protected $accountVendor;
 
-	/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="customer")
-     * @ORM\OrderBy({"id" = "DESC"})
-     */
-    protected $orders;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerAddress", mappedBy="customer")
@@ -85,11 +78,6 @@ class Customer
      */
     protected $hmsInvoices;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="customer")
-     * @ORM\OrderBy({"id" = "DESC"})
-     */
-    protected $dmsInvoices;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice", mappedBy="customer")
@@ -140,18 +128,6 @@ class Customer
      **/
     protected $sales;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="customer" , cascade={"remove"})
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    protected $hotelInvoices;
-
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="customer" , cascade={"persist", "remove"})
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $serviceSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="customer")

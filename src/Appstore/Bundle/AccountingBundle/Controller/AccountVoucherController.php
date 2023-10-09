@@ -77,7 +77,7 @@ class AccountVoucherController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getId();
         $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(array('globalOption' => $config , 'id' => $id));
-        $products = $em->getRepository('AssetsBundle:ProductGroup')->findAll(array('globalOption' => $config));
+        $products = '';
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
@@ -248,8 +248,6 @@ class AccountVoucherController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->updateVendorBalance($purchase);
             $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseExpenditureCash($purchase);
-         //   $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseExpenditureTransaction($purchase);
-            $this->getDoctrine()->getRepository('AssetsBundle:ProductGroup')->getPurchaseUpdateQnt($purchase);
             return new Response('success');
         } else {
             return new Response('failed');

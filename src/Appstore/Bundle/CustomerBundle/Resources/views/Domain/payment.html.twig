@@ -358,7 +358,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@EcommerceBundle/Resources/public/css/style.css'
+    '@CustomerBundle/Resources/public/css/style.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -366,8 +366,8 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@EcommerceBundle/Resources/public/js/*'
-    '@EcommerceBundle/Resources/public/js/approveProcess.js'
+    '@CustomerBundle/Resources/public/js/*'
+    '@CustomerBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

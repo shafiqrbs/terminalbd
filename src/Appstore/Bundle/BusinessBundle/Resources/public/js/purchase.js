@@ -100,6 +100,32 @@ $('form#purchaseItem').on('keypress', '.stockInput', function (e) {
 $('#purchasePrice').click(function() {
     $(this).attr('value', '');
 });
+
+$(document).on('change', '#barcode', function() {
+
+    var barcode = $('#barcode').val();
+    var invoiceId = $('#invoiceId').val();
+    if(barcode === ''){
+        $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
+        return false;
+    }
+    $.ajax({
+        url: Routing.generate('business_purchase_particular_barcode'),
+        type: 'POST',
+        data:'barcode='+barcode+'&invoice='+ invoiceId,
+        success: function(response) {
+            $('#barcode').focus().val('');
+            obj = JSON.parse(response);
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('#subTotal').html(obj['subTotal']);
+            $('#netTotal').html(obj['netTotal']);
+            $('#paymentTotal').val(obj['netTotal']);
+            $('#discount').html(obj['discount']);
+            $('#due').html(obj['due']);
+        },
+    })
+});
+
 var form = $("#purchaseItem").validate({
 
     rules: {

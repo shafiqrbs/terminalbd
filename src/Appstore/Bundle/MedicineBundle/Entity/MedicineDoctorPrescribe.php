@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\MedicineBundle\Entity;
 
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineBrand;
 use Core\UserBundle\Entity\User;
@@ -32,12 +31,6 @@ class MedicineDoctorPrescribe
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $dpsInvoice;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", inversedBy="medicineDoctorPrescribes")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private $dmsInvoice;
 
 
     /**

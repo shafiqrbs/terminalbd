@@ -1,7 +1,6 @@
 <?php
 
 namespace Appstore\Bundle\MedicineBundle\Repository;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsInvoice;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineDoctorPrescribe;
 use Core\UserBundle\Entity\User;

@@ -31,6 +31,11 @@ class BusinessInvoiceReturnItem
      **/
     private  $particular;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $invoiceParticular;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", inversedBy="invoiceReturnItems" )
@@ -44,6 +49,12 @@ class BusinessInvoiceReturnItem
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $invoiceReturn;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $wearHouse;
 
 
     /**
@@ -250,6 +261,40 @@ class BusinessInvoiceReturnItem
     {
         $this->bonusQuantity = $bonusQuantity;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getWearHouse()
+    {
+        return $this->wearHouse;
+    }
+
+    /**
+     * @param mixed $wearHouse
+     */
+    public function setWearHouse($wearHouse)
+    {
+        $this->wearHouse = $wearHouse;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceParticular()
+    {
+        return $this->invoiceParticular;
+    }
+
+    /**
+     * @param mixed $invoiceParticular
+     */
+    public function setInvoiceParticular($invoiceParticular)
+    {
+        $this->invoiceParticular = $invoiceParticular;
+    }
+
+
 
 
 }

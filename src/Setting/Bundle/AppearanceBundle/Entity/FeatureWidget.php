@@ -73,44 +73,6 @@ class FeatureWidget
     private  $moduleCategory;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetPromotions")
-     * @ORM\JoinTable(name="feature_widget_promotion",
-     *      joinColumns={@ORM\JoinColumn(name="feature_widget_id", referencedColumnName="id",onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
-     * )
-     **/
-    private  $promotion;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetTags")
-     * @ORM\JoinTable(name="feature_widget_tag",
-     *      joinColumns={@ORM\JoinColumn(name="feature_widget_id", referencedColumnName="id",onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
-     * )
-     */
-    private  $tag;
-
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="featureWidgets" )
-     * @ORM\JoinTable(name="feature_widget_discount",
-     *      joinColumns={@ORM\JoinColumn(name="feature_widget_id", referencedColumnName="id",onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="discount_id", referencedColumnName="id")}
-     * )
-     **/
-    private  $discount;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\ItemBrand", inversedBy="featureWidgets")
-     * @ORM\JoinTable(name="feature_widget_brand",
-     *      joinColumns={@ORM\JoinColumn(name="feature_widget_id", referencedColumnName="id",onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="brand_id", referencedColumnName="id")}
-     * )
-     */
-    protected $brand;
-
-
-    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="featureWidgets")
      */
     protected $menu;

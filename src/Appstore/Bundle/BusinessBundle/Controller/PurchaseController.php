@@ -232,6 +232,30 @@ class PurchaseController extends Controller
 
     }
 
+
+    /**
+     * @Secure(roles="ROLE_BUSINESS_INVOICE,ROLE_DOMAIN");
+     */
+    public function addBarcodeProductAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $wearhouse = '';
+        $data = $_REQUEST;
+        $id = $data['invoice'];
+        $barcode = $data['barcode'];
+        $invoice =  $this->getDoctrine()->getRepository(BusinessPurchase::class)->find($id);
+        $stock = $this->getDoctrine()->getRepository(BusinessParticular::class)->findOneBy(array('businessConfig' => $invoice->getBusinessConfig(),'particularCode'=>$barcode));
+        $particularId = $stock->getId();
+        $price = $stock->getPrice();
+        $quantity = 1;
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price,'wearhouse' => $wearhouse);
+        $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->updatePurchaseTotalPrice($invoice);
+        $result = $this->returnResultData($invoice);
+        return new Response(json_encode($result));
+
+    }
+
     public function addParticularAction(Request $request, BusinessPurchase $invoice)
     {
         $em = $this->getDoctrine()->getManager();

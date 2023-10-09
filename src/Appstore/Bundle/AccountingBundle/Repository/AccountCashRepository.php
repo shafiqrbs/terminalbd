@@ -16,7 +16,6 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
-use Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 

@@ -33,12 +33,6 @@ class CustomerAddress
     private $customer;
 
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="customerAddresses" )
-     **/
-    private $orders;
-
-
     /**
      * @var string
      *

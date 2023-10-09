@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\RestaurantBundle\EventListener;
 
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 

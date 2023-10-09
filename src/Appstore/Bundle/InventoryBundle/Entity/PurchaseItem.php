@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

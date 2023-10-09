@@ -2,7 +2,6 @@
 
 namespace Appstore\Bundle\AccountingBundle\Form;
 
-use Appstore\Bundle\AssetsBundle\Repository\AssetsCategoryRepository;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;

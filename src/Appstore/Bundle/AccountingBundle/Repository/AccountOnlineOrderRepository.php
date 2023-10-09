@@ -1,9 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
-use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
-use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Doctrine\ORM\EntityRepository;

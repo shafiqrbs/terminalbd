@@ -10,19 +10,11 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice;
-use Appstore\Bundle\DmsBundle\Entity\DmsInvoice;
-use Appstore\Bundle\DmsBundle\Entity\DmsPurchase;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
-use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\HotelBundle\Entity\HotelInvoice;
-use Appstore\Bundle\HotelBundle\Entity\HotelPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
-use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase;
 use Appstore\Bundle\MedicineBundle\Entity\MedicineSales;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,23 +58,6 @@ class TransactionMethod
      */
     protected $purchase;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="transactionMethod" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $serviceSales;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelInvoice", mappedBy="transactionMethod" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $hotelInvoice;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HotelBundle\Entity\HotelPurchase", mappedBy="transactionMethod" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $hotelPurchase;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -171,25 +146,12 @@ class TransactionMethod
      */
     protected $invoiceTransactions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="transactionMethod" )
-     */
-    protected $dmsInvoice;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsPurchase", mappedBy="transactionMethod" )
-     */
-    protected $dmsPurchase;
 
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\MedicineBundle\Entity\MedicinePurchase", mappedBy="transactionMethod" )
      */
     protected $medicinePurchase;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsDoctorInvoice", mappedBy="transactionMethod" )
-     */
-    protected $dmsDoctorInvoices;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="transactionMethod" )
@@ -210,12 +172,6 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoice", mappedBy="transactionMethod" )
      */
     protected $businessInvoice;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsTreatmentPlan", mappedBy="transactionMethod" )
-     */
-    protected $dmsTreatmentPlans;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DoctorPrescriptionBundle\Entity\DpsTreatmentPlan", mappedBy="transactionMethod" )
@@ -418,13 +374,6 @@ class TransactionMethod
         return $this->accountPurchaseReturns;
     }
 
-    /**
-     * @return ServiceSales
-     */
-    public function getServiceSales()
-    {
-        return $this->serviceSales;
-    }
 
     /**
      * @return Purchase
