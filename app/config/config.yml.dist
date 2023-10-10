@@ -45,7 +45,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [UserBundle,FOSCommentBundle,InventoryBundle,HospitalBundle,AssetsBundle, AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle,FrontendBundle,SettingContentBundle,CustomerBundle,HumanResourceBundle,DmsBundle,BusinessBundle,MedicineBundle,RestaurantBundle,EducationBundle,HotelBundle,DoctorPrescriptionBundle,MedicineBundle,ElectionBundle,PosBundle,ProcurementBundle,ReportBundle]
+    bundles:        [UserBundle,FOSCommentBundle,InventoryBundle,HospitalBundle,AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle, FrontendBundle,SettingContentBundle,CustomerBundle,HumanResourceBundle,BusinessBundle,MedicineBundle,RestaurantBundle,DoctorPrescriptionBundle,MedicineBundle,PosBundle,ReportBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -133,15 +133,3 @@ doctrine:
                 group_concat:   Setting\Bundle\ToolBundle\DQL\GroupConcat
                 date_format:  Setting\Bundle\ToolBundle\DQL\DateFormat
                 random:  Setting\Bundle\ToolBundle\DQL\Random
-
-    dbal:
-        default_connection: default
-            connections:
-            database2:
-                driver:   pdo_mysql
-                host:     localhost
-                port:     null
-                dbname:   alexabd
-                user:     root
-                password: dhaka123
-                charset:  UTF8

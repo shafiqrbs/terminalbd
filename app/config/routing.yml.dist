@@ -26,21 +26,14 @@ android_sales_api:
     resource: "@BinduBundle/Resources/config/apiSales.yml"
     prefix:   /android-api
 
-android_ecommerce_api:
-    resource: "@BinduBundle/Resources/config/apiEcommerce.yml"
-    prefix:   /android-api-ecommerce
-
-organization_committee:
-    resource: "@ElectionBundle/Resources/config/routingcommittee.yml"
-    prefix:   /organization-committe
-
-hotel:
-    resource: "@HotelBundle/Resources/config/routing.yml"
-    prefix:   /hotel-restaurant
+poskeeper_portal_api:
+    resource: "@BinduBundle/Resources/config/apiPoskeeper.yml"
+    prefix:   /flutter-api
 
 doctor_prescription:
     resource: "@DoctorPrescriptionBundle/Resources/config/routing.yml"
     prefix:   /doctor-prescription
+
 
 business:
     resource: "@BusinessBundle/Resources/config/routing.yml"
@@ -80,7 +73,6 @@ domain_user:
 appstore_inventory:
     resource: "@InventoryBundle/Resources/config/routing.yml"
     prefix:   /inventory
-
 
 
 product_product:
