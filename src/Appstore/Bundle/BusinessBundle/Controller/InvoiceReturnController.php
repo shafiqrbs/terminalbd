@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem;
+use Appstore\Bundle\BusinessBundle\Entity\WearHouse;
 use Appstore\Bundle\BusinessBundle\Form\InvoiceReturnType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -159,8 +160,12 @@ class InvoiceReturnController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $result = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->customerSingleOutstanding($globalOption,$entity->getCustomer());
         $balance = empty($result) ? 0 : $result;
+        $wearhouses = $this->getDoctrine()->getRepository(WearHouse::class)->findBy(array('businessConfig' => $config),array('name'=>'ASC'));
+
         return $this->render("BusinessBundle:InvoiceReturn:edit.html.twig", array(
             'entity' => $entity,
+            'config' => $config,
+            'wearhouses' => $wearhouses,
             'id' => 'purchase',
             'balance' => $balance,
             'particulars' => $particulars,
@@ -207,7 +212,7 @@ class InvoiceReturnController extends Controller
     public function approvedAction(BusinessInvoiceReturn $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity->setProcess('Approved');
+      //  $entity->setProcess('Approved');
         $em->flush();
         $vendor = $em->getRepository('AccountingBundle:AccountVendor')->insertSalesReturnVendor($entity->getBusinessConfig()->getGlobalOption());
         if($vendor and $entity->getPayment() > 0){

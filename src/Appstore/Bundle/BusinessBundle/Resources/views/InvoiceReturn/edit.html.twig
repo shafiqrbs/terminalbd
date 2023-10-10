@@ -49,6 +49,7 @@
                                     <tr class="head-blue">
                                         <th class="numeric" >Product Name </th>
                                         <th class="numeric" >Price</th>
+                                        <th class="numeric" >Wearhouse</th>
                                         <th class="numeric" >QTY</th>
                                         <th class="numeric" >Bonus QTY</th>
                                         <th class="numeric" >Total QTY</th>
@@ -71,11 +72,23 @@
                                                 <input type="hidden" name="itemId[]" value="{{ particular.itemId }}">
                                             </th>
                                             <td class="numeric" > {{ particular.salesPrice }}</td>
+                                            <td class="numeric" >
+                                                {% if ("wearhouse" in config.stockFormat) %}
+                                                    <select id="wearhouse" name="wearhouse[]" class="m-wrap span12 form-control">
+                                                        <option value="">-Select wearhouse -</option>
+                                                        {% for wearhouse in wearhouses %}
+                                                            <option value="{{ wearhouse.id }}">{{ wearhouse.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                {% endif %}
+                                            </td>
                                             <td class="numeric" > {{ particular.quantity }}</td>
                                             <td class="numeric" > {{ particular.bonusQuantity }}</td>
                                             <td class="numeric" > {{ particular.quantity+particular.bonusQuantity }}</td>
                                             <td class="numeric" > {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %} {{ returnItems[particular.itemId].quantity }}{% endif %}</td>
                                             <td class="numeric" > {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %} {{ returnItems[particular.itemId].bonusQuantity }}{% endif %}</td>
+
+
                                             <td class="numeric" >
                                                 {% if returnItems[particular.itemId] is defined and returnItems[particular.itemId] is not empty  %}
                                                     {% set remain  = particular.quantity - returnItems[particular.itemId].quantity %}

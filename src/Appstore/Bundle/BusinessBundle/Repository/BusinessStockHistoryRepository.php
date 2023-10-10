@@ -77,6 +77,9 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setQuantity($item->getQuantity());
             $entity->setPurchaseQuantity($item->getQuantity());
             $entity->setItem($item->getBusinessParticular());
+            if($item->getWearhouse()){
+                $entity->setWearHouse($item->getWearhouse());
+            }
             $entity->setPurchaseItem($item);
             $entity->setProcess('purchase');
 
@@ -88,6 +91,9 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setQuantity("-{$item->getQuantity()}");
             $entity->setPurchaseReturnQuantity($item->getQuantity());
             $entity->setItem($item->getBusinessParticular());
+            if($item->getWearhouse()){
+                $entity->setWearHouse($item->getWearhouse());
+            }
             $entity->setPurchaseReturnItem($item);
             $entity->setProcess('purchase-return');
 
@@ -98,8 +104,12 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setQuantity("-{$item->getTotalQuantity()}");
             $entity->setSalesQuantity($item->getTotalQuantity());
             $entity->setBonusSalesQuantity($item->getBonusQnt());
-            $entity->setWearHouse($item->getWearhouse());
-            $entity->setMarketing($item->getBusinessInvoice()->getMarketing());
+            if($item->getWearhouse()){
+                $entity->setWearHouse($item->getWearhouse());
+            }
+            if($item->getBusinessInvoice()->getMarketing()) {
+                $entity->setMarketing($item->getBusinessInvoice()->getMarketing());
+            }
             $entity->setSalesPrice($item->getPrice());
             $entity->setItem($item->getBusinessParticular());
             $entity->setSalesItem($item);
@@ -112,8 +122,14 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setQuantity($item->getQuantity());
             $entity->setSalesQuantity("-{$item->getQuantity()}");
             $entity->setItem($item->getParticular());
-            $entity->setSalesItem($item->getInvoiceParticular());
-            $entity->setSalesPrice($item->getInvoiceParticular()->getPrice());
+            $entity->setSalesReturnItem($item);
+            if($item->getWearhouse()){
+                $entity->setWearHouse($item->getWearhouse());
+            }
+           /* if($item->getInvoiceParticular()->getBusinessInvoice()->getMarketing()) {
+                $entity->setMarketing($item->getInvoiceParticular()->getBusinessInvoice()->getMarketing());
+            }*/
+            $entity->setSalesPrice($item->getPrice());
             $entity->setProcess('sales-return');
 
         }elseif($fieldName == 'damage') {

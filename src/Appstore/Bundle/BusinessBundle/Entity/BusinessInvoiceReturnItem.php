@@ -31,6 +31,12 @@ class BusinessInvoiceReturnItem
      **/
     private  $particular;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private  $businessParticular;
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceParticular")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -293,6 +299,24 @@ class BusinessInvoiceReturnItem
     {
         $this->invoiceParticular = $invoiceParticular;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getBusinessParticular()
+    {
+        return $this->businessParticular;
+    }
+
+    /**
+     * @param mixed $businessParticular
+     */
+    public function setBusinessParticular($businessParticular)
+    {
+        $this->businessParticular = $businessParticular;
+    }
+
+
 
 
 

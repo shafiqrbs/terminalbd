@@ -287,6 +287,9 @@ class InvoiceController extends Controller
                     $this->getDoctrine()->getRepository('BusinessBundle:BusinessPurchase')->insertCommissionPurchase($entity);
                 }
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->insertBusinessAccountInvoice($entity);
+                if($entity->getBusinessConfig()->isStockHistory() == 1 ) {
+                    $this->getDoctrine()->getRepository('BusinessBundle:BusinessStockHistory')->processInsertSalesItem($entity);
+                }
             }
             if(in_array($entity->getProcess(), array('Condition','In-progress','Delivered'))) {
                 $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticular')->insertInvoiceProductItem($entity);

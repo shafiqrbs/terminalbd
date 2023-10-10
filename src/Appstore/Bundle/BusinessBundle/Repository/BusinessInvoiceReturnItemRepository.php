@@ -10,6 +10,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem;
+use Appstore\Bundle\BusinessBundle\Entity\WearHouse;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -107,8 +108,8 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $mode  = strtolower($store->getItemProcess());
         if($mode == 'stock-return'){
             $arrs = array("damage-return",'stock-return');
-            $returnQuantity = $this->returnSalesReturnQuantity($store->getParticular(),$arrs);
-            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getParticular(),$returnQuantity);
+            $returnQuantity = $this->returnSalesReturnQuantity($store->getBusinessParticular(),$arrs);
+            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getBusinessParticular(),$returnQuantity);
         }elseif($mode == "damage-return"){
             $em->getRepository("BusinessBundle:BusinessDistributionReturnItem")->insertSalesDamageReturnItem($store);
         }elseif($mode == "damage"){
@@ -124,8 +125,8 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $mode  = strtolower($store->getItemProcess());
         if($mode == 'stock-return'){
             $arrs = array("damage-return",'stock-return');
-            $returnQuantity = $this->returnSalesReturnQuantity($store->getParticular(),$arrs);
-            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getParticular(),$returnQuantity);
+            $returnQuantity = $this->returnSalesReturnQuantity($store->getBusinessParticular(),$arrs);
+            $em->getRepository("BusinessBundle:BusinessParticular")->updateSalesReturnQuantity($store->getBusinessParticular(),$returnQuantity);
         }elseif($mode == "damage-return"){
             $em->getRepository("BusinessBundle:BusinessDistributionReturnItem")->deleteSalesDamageReturnItem($store);
         }elseif($mode == "damage"){
@@ -155,23 +156,32 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
         $bonusQuantity = $data['bonusQuantity'];
         $price = $data['price'];
         $itemProcess = $data['itemProcess'];
+        $wearhouse = (isset($data['wearhouse']) and $data['wearhouse']) ? $data['wearhouse'] : '';
+        var_dump($wearhouse);
         foreach ($itemIds as $key  => $itemId):
-            $exist = $em->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->findOneBy(array('invoiceReturn'=>$entity,'invoiceParticular'=>$itemId));
-            if($exist){
+            $exist = $em->getRepository('BusinessBundle:BusinessInvoiceReturnItem')->findOneBy(array('invoiceReturn'=>$entity,'businessParticular'=>$itemId));
+            if($exist and $quantity[$key] > 0){
                 $exist->setQuantity($quantity[$key]);
                 $exist->setBonusQuantity($bonusQuantity[$key]);
                 $exist->setPrice($price[$key]);
+                if($wearhouse){
+                    $house = $em->getRepository(WearHouse::class)->find($wearhouse[$key]);
+                    $exist->setWearHouse($house);
+                }
                 $exist->setItemProcess($itemProcess[$key]);
                 $exist->setSubTotal($price[$key] * $quantity[$key]);
                 $em->persist($exist);
                 $em->flush();
-            }else{
-            if($quantity[$key] > 0 ){
-                $product = $em->getRepository('BusinessBundle:BusinessInvoiceParticular')->find($itemId);
+            }elseif($quantity[$key] > 0 ){
+                $product = $em->getRepository('BusinessBundle:BusinessParticular')->find($itemId);
                 $item = new BusinessInvoiceReturnItem();
                 $item->setInvoiceReturn($entity);
-                $item->setInvoiceParticular($product);
-                $item->setParticular($product->getParticular());
+                if($wearhouse){
+                    $house = $em->getRepository(WearHouse::class)->find($wearhouse[$key]);
+                    $item->setWearHouse($house);
+                }
+                $item->setParticular($product);
+                $item->setBusinessParticular($product);
                 $item->setQuantity($quantity[$key]);
                 $item->setBonusQuantity($bonusQuantity[$key]);
                 $item->setPrice($price[$key]);
@@ -180,11 +190,9 @@ class BusinessInvoiceReturnItemRepository extends EntityRepository
                 $em->persist($item);
                 $em->flush();
             }
-            }
-
-
         endforeach;
     }
+
 
 
 }

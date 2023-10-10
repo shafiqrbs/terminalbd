@@ -58,7 +58,7 @@ class BusinessStockHistory
 
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturn")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessInvoiceReturnItem")
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $salesReturnItem;
@@ -635,10 +635,6 @@ class BusinessStockHistory
     {
         $this->purchasePrice = $purchasePrice;
     }
-
-
-
-
 
 
 }
