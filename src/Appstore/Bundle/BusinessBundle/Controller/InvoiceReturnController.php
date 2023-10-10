@@ -212,7 +212,7 @@ class InvoiceReturnController extends Controller
     public function approvedAction(BusinessInvoiceReturn $entity)
     {
         $em = $this->getDoctrine()->getManager();
-      //  $entity->setProcess('Approved');
+        $entity->setProcess('Approved');
         $em->flush();
         $vendor = $em->getRepository('AccountingBundle:AccountVendor')->insertSalesReturnVendor($entity->getBusinessConfig()->getGlobalOption());
         if($vendor and $entity->getPayment() > 0){
