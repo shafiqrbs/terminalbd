@@ -104,6 +104,9 @@
                                     <th class="numeric" >PP Ret QTY</th>
                                     <th class="numeric" >Sales Ret QTY</th>
                                     <th class="numeric" >Damage QTY</th>
+                                    {% for house in wearhouses %}
+                                    <th class="numeric" >{{ house.name }}</th>
+                                    {% endfor %}
                                     <th class="numeric" >Remain QTY</th>
                                     <th class="numeric" >Min. QTY</th>
                                     <th class="numeric" >Unit</th>
@@ -137,6 +140,10 @@
                                         <td class="numeric" >{{ entity.purchaseReturnQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesReturnQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.damageQuantity|number_format }}</td>
+                                        {% for house in wearhouses %}
+                                            {% set wearId = entity.id~'-'~house.id %}
+                                        <th class="numeric" >{{ wearHouseStock[wearId] is defined and wearHouseStock[wearId] is not empty ? wearHouseStock[wearId]['quantity']:0 }}</th>
+                                        {% endfor %}
                                         <td class="numeric" >
                                             {% if entity.businessConfig.bonusFromStock == 1 %}
                                                 {{ (entity.remainingQuantity) }}

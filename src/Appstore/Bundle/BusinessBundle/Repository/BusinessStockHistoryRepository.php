@@ -34,6 +34,33 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 class BusinessStockHistoryRepository extends EntityRepository
 {
 
+
+    public function getWearHouseStocks($pagination){
+
+        $arrs = array();
+        foreach ($pagination as $row){
+            $arrs[] = $row->getId();
+        }
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.item','i');
+        $qb->join('e.wearHouse','wh');
+        $qb->select('(COALESCE(SUM(e.quantity),0) AS quantity');
+        $qb->addSelect('i.id as itemId','i.name');
+        $qb->addSelect('wh.id as wearHouseId','wh.name as wearHouse');
+        $qb->where('i.id IN (:config)')->setParameter('config', $arrs) ;
+        $qb->orderBy('i.name','ASC');
+        $qb->groupBy('wh.id','i.id');
+        $result = $qb->getQuery()->getArrayResult();
+        $array = array();
+        foreach ($result as $row){
+            $group = "{$row['itemId']}-{$row['wearHouseId']}";
+            $array[$group] = $row;
+
+        }
+        return $array;
+
+    }
+
     public function getItemOpeningQuantity(BusinessParticular $item){
         $em = $this->_em;
         $qb = $this->createQueryBuilder('e');
@@ -220,7 +247,7 @@ class BusinessStockHistoryRepository extends EntityRepository
 
             foreach($entity->getBusinessInvoiceParticulars() as $item ){
                 $em->createQuery("DELETE BusinessBundle:BusinessStockHistory e WHERE e.salesItem = '{$item->getId()}'")->execute();
-                if($item->getTotalQuantity() > 0){
+                if($item->getBusinessParticular() and $item->getTotalQuantity() > 0){
                     $this->processStockQuantity($item,"sales");
                 }
             }

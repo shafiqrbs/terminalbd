@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\BusinessBundle\Controller;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
+use Appstore\Bundle\BusinessBundle\Entity\BusinessStockHistory;
+use Appstore\Bundle\BusinessBundle\Entity\WearHouse;
 use Appstore\Bundle\BusinessBundle\Form\StockType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Knp\Snappy\Pdf;
@@ -47,8 +49,13 @@ class StockController extends Controller
         $type = $this->getDoctrine()->getRepository('BusinessBundle:BusinessParticularType')->findBy(array('status'=>1));
         $category = $this->getDoctrine()->getRepository('BusinessBundle:Category')->findBy(array('businessConfig' => $config ,'status'=>1));
         $selected = explode(',', $request->cookies->get('barcodes', ''));
+        $wearHouseStocks = $this->getDoctrine()->getRepository(BusinessStockHistory::class)->getWearHouseStocks($pagination);
+        $wearhouses = $this->getDoctrine()->getRepository(WearHouse::class)->findBy(array('businessConfig' => $config),array('name'=>'ASC'));
+
         return $this->render('BusinessBundle:Stock:index.html.twig', array(
             'pagination' => $pagination,
+            'wearhouses' => $wearhouses,
+            'wearHouseStock' => $wearHouseStocks,
             'types' => $type,
             'selected' => $selected,
             'categories' => $category,
