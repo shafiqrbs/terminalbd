@@ -863,7 +863,7 @@ class InvoiceController extends Controller
               //  $template = 'invoice-'.$config->getGlobalOption()->getId();
                 $template = $config->getGlobalOption()->getSubDomain();
 	        }else{
-                $template = !empty($config->getInvoiceType()) ? $config->getInvoiceType():'print';
+                $template = 'print';
             }
             $amountInWords = '';
             if($entity->getProcess() == "Quotation"){

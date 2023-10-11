@@ -149,7 +149,9 @@
                                             <tr>
                                                 <th class="span1"> Si/No</th>
                                                 <th class="span4">Particular</th>
+                                                {% if ("wearhouse" in config.stockFormat) %}
                                                 <th class="span2">Wearhouse</th>
+                                                {% endif %}
                                                 <th class="span2">Unit Price</th>
                                                 <th class="span1">Qnt</th>
                                                 <th class="span1">Amount</th>
@@ -161,7 +163,9 @@
                                                 <tr id="remove-{{ item.id }}">
                                                     <td  class="">{{ loop.index }}.</td>
                                                     <td class="">{{ item.particular }}<br/>{{ item.description|raw }}</td>
+                                                    {% if ("wearhouse" in config.stockFormat) %}
                                                     <td class="">{% if item.wearhouse %}{{ item.wearhouse.name }}{% endif %}</td>
+                                                    {% endif %}
                                                     <td class="">
                                                         <input type="hidden" name="salesItem[]" value="{{ item.id }}" >
                                                         <input type="hidden" id="subQuantity-{{ item.id }}" name="subQuantity[]" value="{{ item.subQuantity }}" >
@@ -180,7 +184,7 @@
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="7" class="span12" style="border: 1px double #000"></td>
+                                                <td colspan="{{ ("wearhouse" in config.stockFormat) ? 7 : 6 }}" class="span12" style="border: 1px double #000"></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="5" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>

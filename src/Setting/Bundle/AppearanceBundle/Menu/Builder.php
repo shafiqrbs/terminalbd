@@ -375,19 +375,12 @@ class Builder extends ContainerAware
         }
         $menu[$business]->addChild( 'Notepad', array('route' => 'domain_notepad'));
 	    if ($securityContext->isGranted('ROLE_BUSINESS_MANAGER')) {
-
-		    $menu[$business]->addChild('Master Data')
-
-		                                ->setAttribute('dropdown', true);
+		    $menu[$business]->addChild('Master Data')->setAttribute('dropdown', true);
 		    if($config->isShowStock() == 1){
                 $menu[$business]['Master Data']->addChild('User Sales Setup', array('route' => 'business_sales_user'));
                 $menu[$business]['Master Data']->addChild('Wear House', array('route' => 'business_wearhouse'));
                 $menu[$business]['Master Data']->addChild('Brand', array('route' => 'business_brand'));
-                if($config->getBusinessModel() == 'distribution' || $config->isMarketingExecutive() == true ) {
-                  /*  $menu[$business]['Master Data']->addChild('Area', array('route' => 'business_area'));*/
-                    $menu[$business]['Master Data']->addChild('Marketing', array('route' => 'business_marketing'));
-                    $menu[$business]['Master Data']->addChild('Marketing Sales Target', array('route' => 'business_marketing_sales_target'));
-                }
+                $menu[$business]['Master Data']->addChild('Marketing', array('route' => 'business_marketing'));
                 $menu[$business]['Master Data']->addChild('Courier', array('route' => 'business_courier'));
             }
 		    $menu[$business]['Master Data']->addChild('Configuration', array('route' => 'business_config_manage'));

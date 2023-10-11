@@ -10,7 +10,7 @@ business_marketing_create:
 business_marketing_sales_target:
     path:     /sales-target
     defaults: { _controller: "BusinessBundle:Marketing:updateSalesTarget" }
-    methods:  POST
+    methods:  [POST, PUT]
 
 business_marketing_edit:
     path:     /{id}/edit
