@@ -20,4 +20,30 @@ use Doctrine\ORM\EntityRepository;
 class ProductTransferRepository extends EntityRepository
 {
 
+    public function findWithSearch($config, $data){
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $particularCode = isset($data['particularCode'])? $data['particularCode'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+        $type = isset($data['type'])? $data['type'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.businessConfig = :config')->setParameter('config', $config) ;
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("e.name", "'%$name%'"  ));
+        }
+        if (!empty($particularCode)) {
+            $qb->andWhere($qb->expr()->like("e.particularCode", "'%$particularCode%'"  ));
+        }
+        if(!empty($category)){
+            $qb->andWhere("e.category = :category");
+            $qb->setParameter('category', $category);
+        }
+        if(!empty($type)){
+            $qb->andWhere("e.businessParticularType = :type");
+            $qb->setParameter('type', $type);
+        }
+        $qb->orderBy('e.id','ASC');
+        $qb->getQuery();
+        return  $qb;
+    }
 }

@@ -18,6 +18,7 @@ use Appstore\Bundle\BusinessBundle\Entity\BusinessParticular;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturn;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessPurchaseReturnItem;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessStockHistory;
+use Appstore\Bundle\BusinessBundle\Entity\ProductTransfer;
 use Appstore\Bundle\RestaurantBundle\Entity\ProductionElement;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -176,6 +177,27 @@ class BusinessStockHistoryRepository extends EntityRepository
             $entity->setItem($item->getBusinessParticular());
             $entity->setProcess('opening');
 
+        }elseif($fieldName == 'from-transfer') {
+
+            /* @var $item ProductTransfer */
+
+            $entity->setQuantity("-{$item->getQuantity()}");
+            $entity->setTransferQuantity("-{$item->getQuantity()}");
+            $entity->setItemTransfer($item);
+            $entity->setItem($item->getBusinessParticular());
+            $entity->setWearHouse($item->getFromWearHouse());
+            $entity->setProcess('from-transfer');
+
+        }elseif($fieldName == 'to-transfer') {
+
+            /* @var $item ProductTransfer */
+            $entity->setQuantity("{$item->getQuantity()}");
+            $entity->setTransferQuantity($item->getQuantity());
+            $entity->setItemTransfer($item);
+            $entity->setItem($item->getBusinessParticular());
+            $entity->setWearHouse($item->getToWearHouse());
+            $entity->setProcess('to-transfer');
+
         }
         if($openingQnt){
             $entity->setOpeningQuantity(floatval($openingQnt));
@@ -188,6 +210,14 @@ class BusinessStockHistoryRepository extends EntityRepository
         $em->persist($entity);
         $em->flush();
 
+    }
+
+    public function stockTransfer(ProductTransfer $entity){
+
+        $em = $this->_em;
+        $em->createQuery("DELETE BusinessBundle:BusinessStockHistory e WHERE e.itemTransfer = '{$entity->getId()}'")->execute();
+        $this->processStockQuantity($entity,"from-transfer");
+        $this->processStockQuantity($entity,"to-transfer");
     }
 
     public function processInsertPurchaseItem(BusinessPurchase $entity){

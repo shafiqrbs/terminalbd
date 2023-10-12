@@ -85,6 +85,13 @@ class BusinessStockHistory
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\ProductTransfer")
+     * @ORM\OrderBy({"sorting" = "ASC"})
+     **/
+    private $itemTransfer;
+
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
      **/
@@ -149,6 +156,13 @@ class BusinessStockHistory
      * @ORM\Column(type="float", nullable=true)
      */
     private $salesQuantity = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $transferQuantity = 0;
 
     /**
      * @var float
@@ -635,6 +649,42 @@ class BusinessStockHistory
     {
         $this->purchasePrice = $purchasePrice;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getItemTransfer()
+    {
+        return $this->itemTransfer;
+    }
+
+    /**
+     * @param mixed $itemTransfer
+     */
+    public function setItemTransfer($itemTransfer)
+    {
+        $this->itemTransfer = $itemTransfer;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTransferQuantity()
+    {
+        return $this->transferQuantity;
+    }
+
+    /**
+     * @param float $transferQuantity
+     */
+    public function setTransferQuantity($transferQuantity)
+    {
+        $this->transferQuantity = $transferQuantity;
+    }
+
+
+
+
 
 
 }

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\BusinessBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * BusinessWearHouse
@@ -29,20 +30,33 @@ class ProductTransfer
     private  $businessConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="wearHouse")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular")
      **/
-    private $fromProduct;
+    private $businessParticular;
+
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\BusinessParticular", inversedBy="wearHouse")
+	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
 	 **/
-	private $toProduct;
+	private $fromWearHouse;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse", inversedBy="wearHouse")
-	 **/
-	private $wearHouse;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\BusinessBundle\Entity\WearHouse")
+     **/
+    private $toWearHouse;
+
+
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $createdBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User")
+     **/
+    private  $approvedBy;
 
     /**
      * @var integer
@@ -50,6 +64,36 @@ class ProductTransfer
      * @ORM\Column(name="quantity", type="integer", length=10, nullable=true)
      */
     private $quantity;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="text",nullable=true)
+     */
+    private $remark;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="process", type="text",nullable=true)
+     */
+    private $process="Created";
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
+
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
+
 
 
     /**
@@ -89,58 +133,16 @@ class ProductTransfer
 
 
 	/**
-	 * @return BusinessParticular
-	 */
-	public function getFromProduct() {
-		return $this->fromProduct;
-	}
-
-	/**
-	 * @param BusinessParticular $fromProduct
-	 */
-	public function setFromProduct( $fromProduct ) {
-		$this->fromProduct = $fromProduct;
-	}
-
-	/**
-	 * @return BusinessParticular
-	 */
-	public function getToProduct() {
-		return $this->toProduct;
-	}
-
-	/**
-	 * @param BusinessParticular $toProduct
-	 */
-	public function setToProduct( $toProduct ) {
-		$this->toProduct = $toProduct;
-	}
-
-	/**
-	 * @return WearHouse
-	 */
-	public function getWearHouse() {
-		return $this->wearHouse;
-	}
-
-	/**
-	 * @param WearHouse $wearHouse
-	 */
-	public function setWearHouse( $wearHouse ) {
-		$this->wearHouse = $wearHouse;
-	}
-
-	/**
 	 * @return int
 	 */
-	public function getQuantity(): int {
+	public function getQuantity(){
 		return $this->quantity;
 	}
 
 	/**
 	 * @param int $quantity
 	 */
-	public function setQuantity( int $quantity ) {
+	public function setQuantity($quantity ) {
 		$this->quantity = $quantity;
 	}
 
@@ -154,10 +156,153 @@ class ProductTransfer
 	/**
 	 * @param bool $status
 	 */
-	public function setStatus( bool $status ) {
+	public function setStatus($status ) {
 		$this->status = $status;
 	}
 
+    /**
+     * @return mixed
+     */
+    public function getBusinessParticular()
+    {
+        return $this->businessParticular;
+    }
+
+    /**
+     * @param mixed $businessParticular
+     */
+    public function setBusinessParticular($businessParticular)
+    {
+        $this->businessParticular = $businessParticular;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFromWearHouse()
+    {
+        return $this->fromWearHouse;
+    }
+
+    /**
+     * @param mixed $fromWearHouse
+     */
+    public function setFromWearHouse($fromWearHouse)
+    {
+        $this->fromWearHouse = $fromWearHouse;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToWearHouse()
+    {
+        return $this->toWearHouse;
+    }
+
+    /**
+     * @param mixed $toWearHouse
+     */
+    public function setToWearHouse($toWearHouse)
+    {
+        $this->toWearHouse = $toWearHouse;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemark()
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param string $remark
+     */
+    public function setRemark($remark)
+    {
+        $this->remark = $remark;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param mixed $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param mixed $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * @param string $process
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
 
 }
 

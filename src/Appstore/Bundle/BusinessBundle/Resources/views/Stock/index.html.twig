@@ -40,6 +40,9 @@
                             <a  href="{{ path('business_purchase_opening') }}" id="btn-create-barcode" class="btn purple" >
                                 <i class="icon-shopping-cart"></i> Opening</a>
                             {% endif %}
+                            {% if 'wearhouse' in config.stockFormat %}
+                                <a href="{{ path('business_stock_transfer') }}" class="btn red yellow" ><i class="icon-retweet"></i> Transfer</a>
+                            {% endif %}
                             <a href="{{ path('business_stock_new') }}" class=" btn red"><i class="icon-plus"></i> Add Stock</a>
                             <a target="_blank" href="{{ path('business_stock_excel') }}" class=" btn purple"><i class="icon-download"></i> Download Excel</a>
                             </div>
@@ -173,9 +176,7 @@
                                                 {% if entity.businessParticularType and entity.businessParticularType.slug == "pre-production" %}
                                                     <a href="{{ path('business_pre_production', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-plus"></i> Production</a>
                                                 {% endif %}
-                                                {% if 'wearhouse' in config.stockFormat %}
-                                                    <a href="{{ path('business_stock_transfer', { 'id': entity.id }) }}" class="btn red yellow mini" ><i class="icon-retweet"></i> Transfer</a>
-                                                {% endif %}
+
                                             </div>
                                         </td>
                                     </tr>
