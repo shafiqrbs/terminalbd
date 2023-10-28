@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Date;
 
 /**
@@ -167,7 +168,7 @@ class AttendanceController extends Controller
             }
         }
         $em->getRepository('HumanResourceBundle:Attendance')->leaveAttendance($leave,$blackoutdate);
-        exit;
+        return new Response('success');
     }
 
     public function employeeLeaveDeleteAction(EmployeeLeave $leave)
@@ -175,11 +176,8 @@ class AttendanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->remove($leave);
         $em->flush();
-        exit;
+        return new Response('success');
     }
-
-
-
 
     public function manualAttendanceAction()
     {

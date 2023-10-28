@@ -247,7 +247,8 @@ class DefaultController extends Controller
         ignore_user_abort(true);
 	    $config = $this->getUser()->getGlobalOption()->getMedicineConfig()->getId();
 	 //   $this->getDoctrine()->getRepository("MedicineBundle:MedicineStock")->updateRemainingQuantityReset($config);
-	    $this->getDoctrine()->getRepository("MedicineBundle:MedicineStockReport")->monthlyStockLedgerReport($config);
+	    $this->getDoctrine()->getRepository("MedicineBundle:MedicineStockReport")->yearlyStockLedgerReport($config);
+	   // $this->getDoctrine()->getRepository("MedicineBundle:MedicineStockReport")->monthlyStockLedgerReport($config);
         return $this->redirect($this->generateUrl('medicine_stock'));
 	}
 

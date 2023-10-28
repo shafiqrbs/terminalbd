@@ -53,6 +53,11 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
                 $allowance = $em->getRepository('HumanResourceBundle:EmployeePayroll')->getAllowanceDeductionParticular($employee->getId(),'allowance');
                 $deduction = $em->getRepository('HumanResourceBundle:EmployeePayroll')->getAllowanceDeductionParticular($employee->getId(),'deduction');
 
+                $allowanceAmount = $em->getRepository('HumanResourceBundle:EmployeePayroll')->getAllowanceDeduction($employee->getId(),'allowance');
+                $deductionAmount = $em->getRepository('HumanResourceBundle:EmployeePayroll')->getAllowanceDeduction($employee->getId(),'deduction');
+
+
+
                 $exist = $this->findOneBy(array('payroll' => $payroll,'employee' => $employee));
 
                 if(!empty($exist)){
@@ -96,6 +101,8 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
                     if($employee->getAdvanceAmount() > 0){
                         $entity->setAdvanceAmount($employee->getAdvanceAmount());
                     }
+                    $entity->setAllowanceAmount($allowanceAmount);
+                    $entity->setDeductionAmount($deductionAmount);
                     $entity->setBasicAmount($employee->getBasicAmount());
                     $entity->setParticularAllowance($allowance);
                     $entity->setParticularDeduction($deduction);
@@ -104,6 +111,25 @@ class PayrollSheetRepository extends \Doctrine\ORM\EntityRepository
                 }
             }
         endforeach;
+        $this->updatePayrollGenerateSummary($payroll) ;
+    }
+
+    public function updatePayrollGenerateSummary(Payroll $payroll){
+
+        $em = $this->_em;
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.basicAmount) as basicAmount','SUM(e.bonusAmount) as bonusAmount','SUM(e.arearAmount) as arearAmount','SUM(e.loanInstallment) as loanAmount','SUM(e.advanceAmount) as advanceAmount','SUM(e.allowanceAmount) as allowanceAmount','SUM(e.deductionAmount) as deductionAmount');
+        $qb->where("e.id ={$payroll->getId()}");
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $payroll->setBasicAmount($result['basicAmount']);
+        $payroll->setAllowanceAmount($result['allowanceAmount']);
+        $payroll->setDeductionAmount($result['deductionAmount']);
+        $payroll->setBonusAmount($result['bonusAmount']);
+        $payroll->setArearAmount($result['arearAmount']);
+        $payroll->setLoanReceive($result['loanAmount']);
+        $payroll->setAdvanceAmount($result['advanceAmount']);
+        $em->flush();
+
     }
 
     private function calculateAmount($basic,$unit){

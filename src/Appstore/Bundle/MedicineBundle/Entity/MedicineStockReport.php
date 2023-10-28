@@ -113,6 +113,13 @@ class MedicineStockReport
     /**
      * @var integer
      *
+     * @ORM\Column(name="quantity", type="integer", nullable=true)
+     */
+    private $quantity;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="bonusQuantity", type="integer", nullable=true)
      */
     private $bonusQuantity;
@@ -173,6 +180,8 @@ class MedicineStockReport
      * @ORM\Column(name="damageQuantity", type="integer", nullable=true)
      */
     private $damageQuantity = 0;
+
+
 
     /**
      * @var boolean
@@ -591,8 +600,21 @@ class MedicineStockReport
         $this->reportMonth = $reportMonth;
     }
 
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
 
-
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
 
 
 

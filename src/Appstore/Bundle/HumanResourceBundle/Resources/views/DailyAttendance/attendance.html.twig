@@ -90,9 +90,10 @@
                                             <td class="red" >&nbsp;</td>
                                         {% else %}
                                             <td>
-                                    <span class="row-fluid pull-center">
-                                    <input type="checkbox" data-id="{{ i }}" {% if i != today %} disabled {% endif %} id="{{ i }}" {% if i in entity.monthlyPresentDays %} checked="checked" {% endif %} class="attendance" data-url="{{ path('daily_attendance_add',{'id':entity.id}) }}" name="present"  value="{{ i }}" >
-                                    </span>
+                                            <span class="row-fluid pull-center">
+                                            {#<input type="checkbox" data-id="{{ i }}" {% if i != today %} disabled {% endif %} id="{{ i }}" {{ (entity.monthlyPresentDays and i in entity.monthlyPresentDays) ? "checked='checked'" : ''  }} class="attendance" data-url="{{ path('daily_attendance_add',{'id':entity.id}) }}" name="present"  value="{{ i }}" >#}
+                                            <input type="checkbox" data-id="{{ i }}"  id="{{ i }}" {{ (entity.monthlyPresentDays and i in entity.monthlyPresentDays) ? "checked='checked'" : ''  }} class="attendance" data-url="{{ path('daily_attendance_add',{'id':entity.id}) }}" name="present"  value="{{ i }}" >
+                                            </span>
                                             </td>
                                         {% endif %}
                                     {% endfor %}

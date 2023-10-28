@@ -100,6 +100,7 @@ class AttendanceRepository extends EntityRepository
         $year   = $datetime->format('Y');
 
         $qb = $this->createQueryBuilder('e');
+        
         $qb->where('e.globalOption='.$option->getId());
         $qb->andWhere('e.year = :year')->setParameter('year',$year);
         $qb->andWhere('e.month = :month')->setParameter('month',$month);

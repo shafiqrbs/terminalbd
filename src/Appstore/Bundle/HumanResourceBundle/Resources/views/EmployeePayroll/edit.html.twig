@@ -47,18 +47,6 @@
                         <div class="portlet-body flip-scroll">
                             <div class="span6">
                                 <div class="row-fluid" >
-                                    <!--/span-->
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label"  for="category" >User Group</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.userGroup) }}
-                                                {{ form_errors(form.userGroup) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="row-fluid" >
                                 <div class="row-fluid" >
                                     <!--/span-->
                                     <div class="span12">
@@ -343,58 +331,6 @@
                                 </div>
                             </div>
                         <div class="clearfix">&nbsp;</div>
-                        <div class="form-actions portlet box purple">
-                            <div class="portlet-title">
-                                <div class="caption"><i class="fa fa-sign-out"></i>User Login Information</div>
-                            </div>
-                        </div>
-                        <div class="clearfix"><br/></div>
-                        <div class="row-fluid" >
-
-                            <div class="span6">
-                                <div class="row-fluid" >
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label"  for="category" >Email Address<span class="required">*</span></label>
-                                            <div class="controls">
-                                                {{ form_widget(form.email) }}
-                                                {{ form_errors(form.email) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid" >
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label"><br/></label>
-                                            <div class="controls">
-                                                Enabled
-                                                {{ form_widget(form.enabled) }}
-                                                {{ form_errors(form.enabled) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="form-group">
-                                            <div for="{{ form.roles.vars.id }}">
-                                                Access Control Role:
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        {{ form_errors(form.roles) }}
-                                        {{ form_widget(form.roles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-actions portlet box green">
                             <div class="pull-right">
                                 <button type="button" class="btn red confirmSubmit"><i class="icon-save"></i> Save</button>

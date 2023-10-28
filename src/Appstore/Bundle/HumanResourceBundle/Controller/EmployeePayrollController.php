@@ -12,6 +12,7 @@ use Appstore\Bundle\HumanResourceBundle\Form\UserType;
 use Core\UserBundle\Entity\User;
 
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Setting\Bundle\ToolBundle\Entity\Designation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -133,7 +134,8 @@ class EmployeePayrollController extends Controller
         $option = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $user = $this->getDoctrine()->getRepository('UserBundle:User');
-        $form = $this->createForm(new EditUserType($user,$option,$location), $entity, array(
+        $designationRepository = $this->getDoctrine()->getRepository(Designation::class);
+        $form = $this->createForm(new EditUserType($user,$option,$location,$designationRepository), $entity, array(
             'action' => $this->generateUrl('employee_payroll_update',array('id'=> $entity->getId())),
             'method' => 'POST',
             'attr' => array(

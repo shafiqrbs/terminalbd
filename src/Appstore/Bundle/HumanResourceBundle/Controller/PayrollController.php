@@ -22,15 +22,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class PayrollController extends Controller
 {
 
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        $pagination->setTemplate('SettingToolBundle:Widget:pagination.html.twig');
+        return $pagination;
+    }
 
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('HumanResourceBundle:Payroll')->findWithSearch($globalOption->getId());
+        $pagination = $this->paginate($entities);
         return $this->render('HumanResourceBundle:Payroll:index.html.twig', array(
             'globalOption'  => $globalOption,
-            'entities'     => $entities,
+            'entities'     => $pagination,
         ));
     }
 
@@ -56,7 +69,6 @@ class PayrollController extends Controller
             $this->getDoctrine()->getRepository('HumanResourceBundle:PayrollSheet')->insertUpdateParticular($entity);
             return $this->redirect($this->generateUrl('payroll_sheet', array('id' => $entity->getId())));
         }
-
         return $this->render('HumanResourceBundle:Payroll:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -73,9 +85,6 @@ class PayrollController extends Controller
             'form'   => $form->createView(),
         ));
     }
-
-
-
 
     /**
      * Creates a form to create a Particular entity.
@@ -174,7 +183,6 @@ class PayrollController extends Controller
                 }
                 $data .= "<tr>";
                 $data .= "<td>{$sheet->getEmployee()->getEmployeeName()}</td>";
-                $data .= "<td>{$sheet->getEmployee()->getSalaryType()}</td>";
                 $data .= "<td>{$totalDay}</td>";
                 $data .= "<td>{$weekend}</td>";
                 $data .= "<td>{$absence}</td>";
@@ -206,7 +214,7 @@ class PayrollController extends Controller
 
         }
         return $this->render('HumanResourceBundle:Payroll:sheet.html.twig', array(
-            'payroll'        => $entity,
+            'entity'        => $entity,
             'particulars'   => $particulars,
             'data'   => $data,
         ));

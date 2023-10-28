@@ -32,25 +32,13 @@ class PayrollType extends AbstractType
 
         $builder
 
-           /* ->add('effectedMonth','text', array('attr'=>array('class'=>'m-wrap span8 datePickerMonth','placeholder'=>'Enter Effected Month','autocomplete'=>'off'),
+            ->add('effectedMonth','text', array('attr'=>array('class'=>'m-wrap span8 datePickerMonth','placeholder'=>'Enter Effected Month','autocomplete'=>'off'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input effected month')),
                 )
-            ))*/
+            ))
             ->add('bonusApplicable')
             ->add('arearApplicable')
-            ->add('branch', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Branches',
-                'empty_value' => '---Choose a Branch Name---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->global->getId())
-                        ->orderBy("e.name", "ASC");
-                },
-            ))
             ->add('salaryType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span8'),
                 'expanded'      =>false,

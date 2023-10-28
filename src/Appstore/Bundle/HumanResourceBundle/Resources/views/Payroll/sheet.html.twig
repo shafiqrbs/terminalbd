@@ -40,10 +40,37 @@
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content">
+                                <tr class="head-yellow">
+                                    <th class="numeric" ><strong>Account Type</strong></th>
+                                    <td>{{ entity.salaryType|capitalize }}</td>
+                                    <th class="numeric" ><strong>Basic</strong></th>
+                                    <td>{{ entity.basicAmount|number_format }}</td>
+                                    <th class="numeric" ><strong>Allowance</strong></th>
+                                    <td>{{ entity.allowanceAmount }}</td>
+                                    <th class="numeric" ><strong>Deduction</strong></th>
+                                    <td>{{ entity.deductionAmount }}</td>
+                                    <th class="numeric" ><strong>Total Amount</strong></th>
+                                    <td>{{ entity.totalAmount }}</td>
+                                </tr>
+                                <tr class="head-red">
+                                    <th class="numeric" ><strong>Month & Year</strong></th>
+                                    <td>{{ entity.effectedMonth }}</td>
+                                    <th class="numeric" ><strong>Loan Receive</strong></th>
+                                    <td>{{ entity.loanReceive|number_format }}</td>
+                                    <th class="numeric" ><strong>Advance</strong></th>
+                                    <td>{{ entity.advanceAmount|number_format }}</td>
+                                    <th class="numeric" ><strong>Arear</strong></th>
+                                    <td>{{ entity.arearAmount|number_format }}</td>
+                                    <th class="numeric" ><strong>Payables</strong></th>
+                                    <td>{{ entity.payableAmount|number_format }}</td>
+                                </tr>
+                                </thead>
+                            </table>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" >Employee </th>
-                                    <th class="numeric" >Salary Type </th>
                                     <th class="numeric" >Total Day</th>
                                     <th class="numeric" >Weekend</th>
                                     <th class="numeric" >Leave</th>

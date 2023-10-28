@@ -44,7 +44,7 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span6">
-                                        <select name="area" id="area" class="span12 m-wrap">
+                                        <select name="area" id="area" class="span12 m-wrap select2">
                                             <option value=""> ---Select Area --- </option>
                                             {% for executive in executives %}
                                                 <option {% if searchForm.area is defined and searchForm.area == executive.id %} selected="selected" {% endif %} value="{{ executive.id }}">{{ executive.name }}</option>
@@ -72,36 +72,29 @@
                             <tr class="head-blue">
                                 <th class="numeric" >S/N</th>
                                 <th class="numeric" >Name</th>
-                                <th class="numeric" >Invoice</th>
-                                <th class="numeric" >Total</th>
-                                <th class="numeric" >Received</th>
+                                <th class="numeric" >Quantity</th>
                                 <th class="numeric" >Balance</th>
                             </tr>
                             </thead>
                             <tbody id="sales">
                             {% set totalInvoice=0 %}
-                            {% set subTotal=0 %}
-                            {% set totalReceived=0 %}
+                            {% set quantity=0 %}
+                            {% set amount=0 %}
                             {% for entity in entities %}
-                                {% set totalInvoice = totalInvoice + entity.invoice %}
-                                {% set subTotal = subTotal + entity.total %}
-                                {% set totalReceived = totalReceived + entity.received %}
+                                {% set subTotal = quantity + entity.quantity %}
+                                {% set amount = amount + entity.amount %}
                                 <tr>
                                     <td class="numeric" >{{ loop.index }}.</td>
                                     <td class="numeric" >{{ entity.name }}</td>
-                                    <td class="numeric" >{{ entity.invoice }}</td>
-                                    <td class="numeric" >{{ entity.total|number_format(2)  }}</td>
-                                    <td class="numeric" >{{ entity.received|number_format(2)  }}</td>
-                                    <td class="numeric" >{{ (entity.total-entity.received)|number_format(2)  }}</td>
-
+                                    <td class="numeric" >{{ entity.quantity|number_format(2)  }}</td>
+                                    <td class="numeric" >{{ entity.amount|number_format(2)  }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
-                            <tfoot><tr><th colspan="2">Grand Total</th>
-                                <th>{{ totalInvoice }}</th>
-                                <th>{{ subTotal|number_format(2) }}</th>
-                                <th>{{ totalReceived|number_format(2) }}</th>
-                                <th>{{ (subTotal-totalReceived)|number_format(2) }}</th>
+                            <tfoot><tr>
+                                <th colspan="2">Grand Total</th>
+                                <th>{{ quantity|number_format(2) }}</th>
+                                <th>{{ amount|number_format(2) }}</th>
                                </tr>
                             </tfoot>
                         </table>

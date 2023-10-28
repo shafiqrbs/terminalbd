@@ -48,12 +48,12 @@ class EmployeeLeaveType extends AbstractType
                 }
             ))
 
-            ->add('startDate','text', array('attr'=>array('class'=>'m-wrap span12 dateLeavePicker','placeholder'=>'Enter start date'),
+            ->add('startDate','text', array('attr'=>array('class'=>'m-wrap span12 date-picker','placeholder'=>'Enter start date'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('endDate','text', array('attr'=>array('class'=>'m-wrap span12 dateLeavePicker','placeholder'=>'Enter end date'),
+            ->add('endDate','text', array('attr'=>array('class'=>'m-wrap span12 date-picker','placeholder'=>'Enter end date'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )

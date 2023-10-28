@@ -113,8 +113,8 @@
                                         <td class="numeric" >
                                             {% if entity.approvedBy is not empty %}{{ entity.approvedBy }}
                                             {% else %}
-                                                <a href="javascript:" class="btn mini blue approve" data-url="{{ path('attendance_leave_approve',{'id':entity.id}) }}"><i class="fa fa-refresh"></i> Waiting for approve</a>
-                                                <a href="javascript:" class="btn mini red approve" data-url="{{ path('attendance_leave_delete',{'id':entity.id}) }}"><i class="fa fa-close"></i> Cancel</a>
+                                                <a href="javascript:" class="btn mini blue confirm" data-url="{{ path('attendance_leave_approve',{'id':entity.id}) }}"><i class="fa fa-refresh"></i> Waiting for approve</a>
+                                                <a href="javascript:" class="btn mini red confirm" data-url="{{ path('attendance_leave_delete',{'id':entity.id}) }}"><i class="fa fa-close"></i> Cancel</a>
                                             {% endif %}
                                         </td>
                                     </tr>

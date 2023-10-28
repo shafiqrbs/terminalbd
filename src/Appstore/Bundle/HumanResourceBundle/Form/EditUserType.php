@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\HumanResourceBundle\Form;
 
-use Appstore\Bundle\DomainUserBundle\Form\EmployeeProfileType;
+
 use Core\UserBundle\Entity\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
@@ -27,11 +27,16 @@ class EditUserType extends AbstractType
     private $location;
 
 
-    function __construct( UserRepository $user , GlobalOption $option , LocationRepository $location)
+     /** @var  DesignationRepository */
+    private $designationRepository;
+
+
+    function __construct( UserRepository $user , GlobalOption $option , LocationRepository $location, DesignationRepository $designationRepository)
     {
         $this->location = $location;
         $this->user = $user;
         $this->option = $option;
+        $this->designationRepository = $designationRepository;
     }
 
 
@@ -41,32 +46,8 @@ class EditUserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-
-            ->add('email','email', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Mobile no'),
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter email address'))
-                    ))
-            )
-            ->add('enabled')
-            ->add('userGroup', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span8'),
-                'expanded'      => false,
-                'multiple'      => false,
-                'choices' => array(
-                    'employee' => 'employee',
-                    'user' => 'user'
-                ),
-            ))
-            ->add('roles', 'choice', array(
-                    'attr'=>array('class'=>'category form-control'),
-                    'required' => false,
-                    'multiple'    => true,
-                    'empty_data'  => null,
-                    'choices'   => $this->getAccessRoleGroup())
-            )
-        ;
-        $builder->add('profile', new EmployeeProfileType($this->user, $this->option,$this->location));
+        $builder->add('profile', new \Appstore\Bundle\DomainUserBundle\Form\EmployeeProfileType($this->user, $this->option,$this->location));
+      //  $builder->add('employeePayroll', new EmployeePayrollType($this->user, $this->option,$this->location));
     }
 
     public function getAccessRoleGroup(){

@@ -30,6 +30,7 @@ class MedicineStockReportRepository extends EntityRepository
         $month = "January";
         $year = "2023";
 
+
         $elem = "INSERT INTO medicine_stock_report(stockId,name,brandName,salesPrice,purchasePrice,averagePurchasePrice,configId,mode,reportMonth,reportYear,created,updated) 
 SELECT id,name,brandName,salesPrice,purchasePrice,averagePurchasePrice,medicineConfig_id,'month','January','2023',now(),now()
 FROM medicine_stock as ms 
@@ -39,17 +40,85 @@ AND NOT EXISTS ( SELECT 1 FROM medicine_stock_report d WHERE d.stockId = ms.id A
         $qb1->execute();
 
 
+
+
         $sqlStockPurchase = "UPDATE medicine_stock_report as stock
  inner join (
-select pi.medicineStock_id, DATE_FORMAT(pr.updated,'%M') as reportMonth,DATE_FORMAT(pr.updated,'%Y') as reportYear, ROUND(COALESCE(SUM(pi.quantity),0),2) as purchaseQuantity
+select pi.medicineStock_id, DATE_FORMAT(pr.updated,'%M') as reportMonth,DATE_FORMAT(pr.updated,'%Y') as reportYear, ROUND(COALESCE(SUM(pi.quantity),0),2) as quantity, ROUND(COALESCE(SUM(pi.bonusQuantity),0),2) as bonusQuantity
 from medicine_purchase_item as pi
 join medicine_purchase  as pr ON  pi.medicinePurchase_id = pr.id
 join medicine_stock_report as ms ON  pi.medicineStock_id = ms.stockId
 where ms.configId = {$config} AND DATE_FORMAT(pr.updated,'%M') = '{$month}' AND DATE_FORMAT(pr.updated,'%Y') = '{$year}'
 group by pi.medicineStock_id ) pa on stock.stockId = pa.medicineStock_id
-SET stock.purchaseQuantity = pa.purchaseQuantity";
-        $qb1 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchase);
-        $qb1->execute();
+SET stock.purchaseQuantity = pa.quantity , stock.bonusQuantity = pa.bonusQuantity";
+        $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchase);
+        $qb2->execute();
+
+
+
+        $sqlStockSales = "UPDATE medicine_stock_report as stock
+ inner join (
+select pi.medicineStock_id, DATE_FORMAT(pr.updated,'%M') as reportMonth,DATE_FORMAT(pr.updated,'%Y') as reportYear, ROUND(COALESCE(SUM(pi.quantity),0),2) as quantity
+from medicine_sales_item as pi
+join medicine_sales  as pr ON  pi.medicineSales_id = pr.id
+join medicine_stock_report as ms ON  pi.medicineStock_id = ms.stockId
+where ms.configId = {$config} AND DATE_FORMAT(pr.updated,'%M') = '{$month}' AND DATE_FORMAT(pr.updated,'%Y') = '{$year}'
+group by pi.medicineStock_id ) pa on stock.stockId = pa.medicineStock_id
+SET stock.salesQuantity = pa.quantity";
+        $qb3 = $this->getEntityManager()->getConnection()->prepare($sqlStockSales);
+        $qb3->execute();
+
+
+        $sqlStockSalesReturn = "UPDATE medicine_stock_report as stock
+ inner join (
+select pi.medicineStock_id, DATE_FORMAT(pi.updated,'%M') as reportMonth,DATE_FORMAT(pi.updated,'%Y') as reportYear, ROUND(COALESCE(SUM(pi.quantity),0),2) as quantity
+from medicine_sales_return as pi
+join medicine_stock_report as ms ON  pi.medicineStock_id = ms.stockId
+where ms.configId = {$config} AND DATE_FORMAT(pi.updated,'%M') = '{$month}' AND DATE_FORMAT(pi.updated,'%Y') = '{$year}'
+group by pi.medicineStock_id ) pa on stock.stockId = pa.medicineStock_id
+SET stock.salesReturnQuantity = pa.quantity, stock.quantity = pa.quantity";
+        $qb4 = $this->getEntityManager()->getConnection()->prepare($sqlStockSalesReturn);
+        $qb4->execute();
+
+
+        $sqlStockPurchaseReturn = "UPDATE medicine_stock_report as stock
+ inner join (
+select pi.medicineStock_id, DATE_FORMAT(pr.updated,'%M') as reportMonth,DATE_FORMAT(pr.updated,'%Y') as reportYear, ROUND(COALESCE(SUM(pi.quantity),0),2) as quantity
+from medicine_purchase_return_item as pi
+join medicine_purchase_return  as pr ON  pi.medicinePurchaseReturn_id = pr.id
+join medicine_stock_report as ms ON  pi.medicineStock_id = ms.stockId
+where ms.configId = {$config} AND DATE_FORMAT(pr.updated,'%M') = '{$month}' AND DATE_FORMAT(pr.updated,'%Y') = '{$year}'
+group by pi.medicineStock_id ) pa on stock.stockId = pa.medicineStock_id
+SET stock.purchaseReturnQuantity = pa.quantity, stock.quantity = -pa.quantity";
+        $qb5 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchaseReturn);
+        $qb5->execute();
+
+
+        $sqlStockAdjustment = "UPDATE medicine_stock_report as stock
+ inner join (
+select pi.medicineStock_id, DATE_FORMAT(pi.updated,'%M') as reportMonth,DATE_FORMAT(pi.updated,'%Y') as reportYear, ROUND(COALESCE(SUM(pi.quantity),0),2) as quantity, ROUND(COALESCE(SUM(pi.bonus),0),2) as bonusQuantity
+from medicine_stock_adjustment as pi
+join medicine_stock_report as ms ON  pi.medicineStock_id = ms.stockId
+where ms.configId = {$config} AND DATE_FORMAT(pi.updated,'%M') = '{$month}' AND DATE_FORMAT(pi.updated,'%Y') = '{$year}'
+group by pi.medicineStock_id ) pa on stock.stockId = pa.medicineStock_id
+SET stock.adjustmentQuantity = pa.quantity, stock.quantity = pa.quantity , stock.bonusQuantity = pa.bonusQuantity";
+        $qb6 = $this->getEntityManager()->getConnection()->prepare($sqlStockAdjustment);
+        $qb6->execute();
+
+
+        $sqlStockDamage = "UPDATE medicine_stock_report as stock
+ inner join (
+select pi.medicineStock_id, DATE_FORMAT(pi.updated,'%M') as reportMonth,DATE_FORMAT(pi.updated,'%Y') as reportYear, ROUND(COALESCE(SUM(pi.quantity),0),2) as quantity
+from medicine_damage as pi
+join medicine_stock_report as ms ON  pi.medicineStock_id = ms.stockId
+where ms.configId = {$config} AND DATE_FORMAT(pi.updated,'%M') = '{$month}' AND DATE_FORMAT(pi.updated,'%Y') = '{$year}'
+group by pi.medicineStock_id ) pa on stock.stockId = pa.medicineStock_id
+SET stock.adjustmentQuantity = pa.quantity, stock.quantity = pa.quantity";
+        $qb7 = $this->getEntityManager()->getConnection()->prepare($sqlStockDamage);
+        $qb7->execute();
+
+        exit;
+
 
 
         $sqlStockPurchaseReturn = "UPDATE medicine_stock as stock
@@ -59,7 +128,7 @@ SET stock.purchaseQuantity = pa.purchaseQuantity";
               join medicine_stock  as ms ON  pi.medicineStock_id = ms.id
               where  ms.medicineConfig_id = {$config} AND pr.upadted <= '2023-01-01'
               group by pi.medicineStock_id) as pa on stock.id = pa.medicineStock_id
-  SET stock.purchaseQuantity = pa.purchaseQuantity";
+  SET stock.purchaseQuantity = pa.purchaseQuantity , stock.quantity = - pa.purchaseQuantity";
         $qb2 = $this->getEntityManager()->getConnection()->prepare($sqlStockPurchaseReturn);
         $qb2->execute();
 
