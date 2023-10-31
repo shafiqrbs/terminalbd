@@ -10,7 +10,6 @@ namespace Setting\Bundle\AppearanceBundle\Menu;
 use Appstore\Bundle\BusinessBundle\Entity\BusinessConfig;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\MegaMenu;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -95,15 +94,6 @@ class Builder extends ContainerAware
                 }
             }
 
-
-            $result = array_intersect($menuName, array('Ecommerce'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_ECOMMERCE')){
-                    $menu = $this->EcommerceMenu($menu,$arrSlugs);
-                }
-            }
-
-
             $result = array_intersect($menuName, array('Restaurant'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_RESTAURANT')){
@@ -154,9 +144,9 @@ class Builder extends ContainerAware
                 }
             }
 
-		    $result = array_intersect($menuName, array('Website','Ecommerce'));
+		    $result = array_intersect($menuName, array('Website'));
 		    if (!empty($result)) {
-			    if ($securityContext->isGranted('ROLE_WEBSITE') || $securityContext->isGranted('ROLE_ECOMMERCE')){
+			    if ($securityContext->isGranted('ROLE_WEBSITE')){
 				    $menu = $this->WebsiteMenu($menu,$menuName);
 			    }
 		    }
@@ -456,9 +446,8 @@ class Builder extends ContainerAware
             $menu['Media']->addChild('Galleries', array('route' => 'gallery'));
         }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING') OR $securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_ADMIN')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
 
-            $result = array_intersect($menuName, array('Ecommerce'));
             $website = array_intersect($menuName, array('Website'));
             $menu
                 ->addChild('Manage Appearance')
@@ -472,9 +461,6 @@ class Builder extends ContainerAware
                 $menu['Manage Appearance']['Website']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'));
                 $menu['Manage Appearance']['Website']->addChild('Feature', array('route' => 'appearancefeature'));
 
-            }
-            if (!empty($result) and $securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_MENU') && $securityContext->isGranted('ROLE_ECOMMERCE')) {
-                $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'));
             }
             $menu['Manage Appearance']->addChild('Website Menu', array('route' => 'menu_manage'));
             if($website) {
@@ -913,69 +899,6 @@ class Builder extends ContainerAware
         }
         return $menu;
 
-    }
-
-    public function EcommerceMenu($menu,$apps)
-    {
-        $securityContext = $this->container->get('security.token_storage')->getToken()->getUser();
-        $menu
-            ->addChild('E-commerce')
-            ->setAttribute('icon', 'icon  icon-shopping-cart')
-            ->setAttribute('dropdown', true);
-
-
-
-        /*$menu['E-commerce']->addChild('Transaction', array('route' => ''))
-            ->setAttribute('icon','fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Transaction']->addChild('Order',        array('route' => 'customer_order'));
-        $menu['E-commerce']['Transaction']->addChild('Pre-order',    array('route' => 'customer_preorder'));
-        */
-
-        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_ORDER')) {
-
-            $menu['E-commerce']->addChild('Order', array('route' => ''))
-
-                ->setAttribute('dropdown', true);
-            $menu['E-commerce']['Order']->addChild('Order', array('route' => 'customer_order'));
-            $menu['E-commerce']['Order']->addChild('Customer', array('route' => 'ecommerce_customer'));
-            $menu['E-commerce']['Order']->addChild('New Order', array('route' => 'customer_order_new'));
-           /* $menu['E-commerce']['Order']->addChild('Order Return', array('route' => 'customer_order'));*/
-            $menu['E-commerce']['Order']->addChild('Pre-order', array('route' => 'customer_preorder'));
-
-        }
-
-        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_PRODUCT')) {
-            $menu['E-commerce']->addChild('Product', array('route' => ''))
-
-                ->setAttribute('dropdown', true);
-
-		    $menu['E-commerce']['Product']->addChild('Product', array('route' => 'ecommerce_item'));
-            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_MANAGER')) {
-                $menu['E-commerce']['Product']->addChild('Promotion', array('route' => 'ecommerce_promotion'));
-                $menu['E-commerce']['Product']->addChild('Discount', array('route' => 'ecommerce_discount'));
-                $menu['E-commerce']->addChild('Category', array('route' => 'ecommerce_category'));
-                $menu['E-commerce']->addChild('Brand', array('route' => 'ecommerce_brand'));
-                $menu['E-commerce']->addChild('Coupon', array('route' => 'ecommerce_coupon'));
-            }
-
-        }
-        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING') && $securityContext->isGranted('ROLE_ECOMMERCE')){
-            $menu['E-commerce']->addChild('Page Feature')->setAttribute('dropdown', true);
-            $menu['E-commerce']['Page Feature']->addChild('Widget', array('route' => 'appearancefeaturewidget'));
-            $menu['E-commerce']['Page Feature']->addChild('Feature', array('route' => 'appearancefeature'));
-        }
-        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING')) {
-            $menu['E-commerce']->addChild('Configuration', array('route' => 'ecommerce_config_modify'));
-            $menu['E-commerce']->addChild('Master Data', array('route' => ''))
-                ->setAttribute('dropdown', true);
-            $menu['E-commerce']['Master Data']->addChild('Product Import', array('route' => 'ecommerce_itemimporter'));
-            $menu['E-commerce']['Master Data']->addChild('Delivery Location', array('route' => 'ecommerce_location'));
-            $menu['E-commerce']['Master Data']->addChild('Delivery Time', array('route' => 'ecommerce_delivertime'));
-            $menu['E-commerce']['Master Data']->addChild('Category Attribute', array('route' => 'ecommerce_itemattribute'));
-            $menu['E-commerce']['Master Data']->addChild('Frontend Customize', array('route' => 'template_ecommerce_edit'));
-          }
-        return $menu;
     }
 
     public function AnonymousProductSalesMenu($menu)
@@ -2001,35 +1924,7 @@ class Builder extends ContainerAware
         return $menu;
     }
 
-    public function frontendEommerceMenu(FactoryInterface $factory, array $options)
-    {
 
-        $subdomain = $this->container->get('router')->getContext()->getParameter('subdomain');
-        $menu = $factory->createItem('root');
-        $menus = $this->container->get('doctrine')->getRepository('SettingAppearanceBundle:EcommerceMenu')->getActiveMenus($subdomain);
-
-        $categoryRepository = $this->container->get('doctrine')->getRepository('ProductProductBundle:Category');
-        foreach ($menus as $item) {
-
-            /** @var EcommerceMenu $item */
-
-            $menuName = $item->getName();
-            $menu
-                ->addChild($menuName)
-                ->setAttribute('dropdown', true);
-            $this->buildDomainCategoryMenus($menu[$menuName], $categoryRepository->buildCategoryGroup($item->getCategories()));
-            $this->buildDomainBrandMenu($menu[$menuName], $item->getBrands());
-            $this->buildDomainPromotionMenu($menu[$menuName], $item->getPromotions());
-            $this->buildDomainTagMenu($menu[$menuName], $item->getTags());
-            $this->buildDomainDiscountMenu($menu[$menuName], $item->getDiscounts());
-            $this->buildDomainFeatureMenu($menu[$menuName], $item->getFeatures());
-            // $this->buildDomainPromotionMenu($menu[$menuName], $item->getCollections($subdomain));
-            //$this->buildDomainTagMenu($menu[$menuName], $item->getCollections($subdomain));
-            // $this->buildBrandMenu($menu[$menuName], $item->getBrands());
-        }
-
-        return $menu;
-    }
 
     private function buildDomainCategoryMenus(ItemInterface $menu, $categories)
     {
