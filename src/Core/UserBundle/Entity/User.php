@@ -1475,6 +1475,16 @@ class User extends BaseUser
         return $this->businessAndroidProcess;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getHmsInvoiceTemporaryParticulars()
+    {
+        return $this->hmsInvoiceTemporaryParticulars;
+    }
+
+
+
 
 
 }
