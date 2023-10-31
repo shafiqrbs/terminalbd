@@ -550,7 +550,6 @@ class Builder extends ContainerAware
                 if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_EXPENDITURE_PURCHASE')) {
                     $menu['Accounting']['Bill & Expenditure']->addChild('Bill Voucher', array('route' => 'account_expense_purchase'));
                     $menu['Accounting']['Bill & Expenditure']->addChild('Account Vendor', array('route' => 'account_vendor'));
-
                 }
             }
             if ($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_REPORT')) {
